@@ -1,0 +1,337 @@
+//const webpack = require("webpack");
+const _ = require("lodash");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const path = require("path");
+const Promise = require("bluebird");
+import { DEFAULT_OPTIONS } from "./src/i18n/constants";
+
+const { createFilePath } = require(`gatsby-source-filesystem`);
+
+export const onCreateNode = ({ node, getNode, actions }) => {
+  const { createNodeField } = actions;
+  if (node.internal.type === `MarkdownRemark`) {
+    const slug = createFilePath({ node, getNode });
+    const fileNode = getNode(node.parent);
+    const source = fileNode.sourceInstanceName;
+    const separtorIndex = ~slug.indexOf("--") ? slug.indexOf("--") : 0;
+    const shortSlugStart = separtorIndex ? separtorIndex + 2 : 0;
+
+    const langFileNamePart = fileNode.relativePath.match(/(\w+)\.(\w+)\.(\w+)$/);
+
+    const langKey = langFileNamePart ? langFileNamePart[2] : "en";
+
+    if (source !== "parts") {
+      createNodeField({
+        node,
+        name: `slug`,
+        value: (`${separtorIndex ? "/" : ""}${slug.substring(shortSlugStart)}`).replace(`/index.${langKey}/`,"/")
+      });
+    }
+    createNodeField({
+      node,
+      name: `prefix`,
+      value: separtorIndex ? slug.substring(1, separtorIndex) : ""
+    });
+    createNodeField({
+      node,
+      name: `source`,
+      value: source
+    });
+    createNodeField({
+      node,
+      name: `langKey`,
+      value: langKey
+    });
+  }
+};
+
+export const createPages = ({ graphql, actions }) => {
+  const { createPage } = actions;
+
+  return new Promise((resolve, reject) => {
+    const postTemplate = path.resolve("./src/templates/PostTemplate.js");
+    const pageTemplate = path.resolve("./src/templates/PageTemplate.js");
+    const categoryTemplate = path.resolve("./src/templates/CategoryTemplate.js");
+    const { supportedLanguages } = DEFAULT_OPTIONS;
+
+    // // Create index pages for all supported languages
+    // supportedLanguages.forEach(langKey => {
+    //   createPage({
+    //     path: langKey === 'en' ? '/' : `/${langKey}/`,
+    //     component: postTemplate,
+    //     context: {
+    //       langKey,
+    //     },
+    //   });
+    // });
+
+    resolve(
+      graphql(
+        `
+          {
+            allMarkdownRemark(
+              filter: { fields: { slug: { ne: null } } }
+              sort: { fields: [fields___prefix], order: DESC }
+              limit: 1000
+            ) {
+              edges {
+                node {
+                  id
+                  fields {
+                    slug
+                    prefix
+                    source
+                    langKey
+                  }
+                  frontmatter {
+                    title
+                    category
+                  }
+                }
+              }
+            }
+          }
+        `
+      ).then(result => {
+        if (result.errors) {
+          console.log(result.errors);
+          reject(result.errors);
+        }
+
+        const items = result.data.allMarkdownRemark.edges;
+
+
+        supportedLanguages.forEach(langKey => {
+          // Create category list
+          const categorySet = new Set();
+          items
+            .filter(edge => edge.node.fields.langKey === langKey)
+            .forEach(edge => {
+              const {
+                node: {
+                  frontmatter: { category }
+                }
+              } = edge;
+
+              if (category && category !== null) {
+                categorySet.add(category);
+              }
+            });
+
+          // Create category pages
+          const categoryList = Array.from(categorySet);
+
+          categoryList.forEach(category => {
+            createPage({
+              path: `/category/${langKey}/${_.kebabCase(category)}/`,
+              component: categoryTemplate,
+              context: {
+                category,
+                lang: langKey,
+                langKey
+              }
+            });
+          });
+        });
+
+        // Create posts
+        const posts = items.filter(item => item.node.fields.source === "posts");
+        posts.forEach(({ node }, index) => {
+          const slug = node.fields.slug;
+          const langKey = node.fields.langKey;
+          const next = index === 0 ? undefined : posts[index - 1].node;
+          const prev = index === posts.length - 1 ? undefined : posts[index + 1].node;
+          const source = node.fields.source;
+          const path = `/${langKey}${slug}`;
+
+          createPage({
+            path,
+            component: postTemplate,
+            context: {
+              slug,
+              lang: langKey,
+              langKey,
+              prev,
+              next,
+              source
+            }
+          });
+        });
+
+        // and pages.
+        const pages = items.filter(item => item.node.fields.source === "pages");
+        pages.forEach(({ node }) => {
+          const slug = node.fields.slug;
+          const langKey = node.fields.langKey;
+          const source = node.fields.source;
+          const path = `/${langKey}${slug}`;
+
+          createPage({
+            path: path,
+            component: pageTemplate,
+            context: {
+              slug,
+              source,
+              lang: langKey,
+              langKey
+            }
+          });
+        });
+      })
+    );
+  });
+};
+
+
+/**
+ * Makes sure to create localized paths for each file in the /pages folder.
+ * For example, pages/404.js will be converted to /en/404.js and /el/404.js and
+ * it will be accessible from https:// .../en/404/ and https:// .../el/404/
+ */
+
+export const onCreatePage = async (
+  { page, actions: { createPage, deletePage, createRedirect } },
+  pluginOptions
+) => {
+  // // page.matchPath is a special key that's used for matching pages
+  // // only on the client.
+  // if (page.path.match(/^\/account/)) {
+  //   page.matchPath = "/account/*"
+  // }
+  const {
+    supportedLanguages,
+    defaultLanguage,
+    notFoundPage,
+    excludedPages,
+    deleteOriginalPages,
+  } = {
+    ...DEFAULT_OPTIONS,
+    ...pluginOptions,
+  };
+
+  const isEnvDevelopment = process.env.NODE_ENV === 'development';
+  const originalPath = page.path;
+  const is404 = originalPath.includes(notFoundPage);
+
+  // return early if page is exluded
+  if (excludedPages.includes(originalPath)) {
+    return;
+  }
+
+  // Always delete the original page (since we are gonna create localized versions of it) header
+  await deletePage(page);
+
+  // If the user didn't want to delete the original pages, we re-create them with the proper context
+  // (currently the only way to add new context to a page is to delete and re-create it
+  // https://www.gatsbyjs.org/docs/creating-and-modifying-pages/#pass-context-to-pages
+  if (!deleteOriginalPages) {
+    await createPage({
+      ...page,
+      context: {
+        ...page.context,
+        originalPath,
+        lang: defaultLanguage,
+        langKey: defaultLanguage
+      },
+    });
+  }
+
+  // Regardless of whether the original page was deleted or not, create the localized versions of
+  // the current page
+  await Promise.all(
+    supportedLanguages.map(async lang => {
+      const localizedPath = `/${lang}${page.path}`;
+
+      // create a redirect based on the accept-language header
+      createRedirect({
+        fromPath: originalPath,
+        toPath: localizedPath,
+        Language: lang,
+        isPermanent: false,
+        redirectInBrowser: isEnvDevelopment,
+        statusCode: is404 ? 404 : 301,
+      });
+
+      await createPage({
+        ...page,
+        path: localizedPath,
+        matchPath: page.matchPath ? `/${lang}${page.matchPath}` : undefined,
+        context: {
+          ...page.context,
+          originalPath,
+          lang,
+          langKey: lang
+        },
+      });
+    })
+  );
+
+  // Create a fallback redirect if the language is not supported or the
+  // Accept-Language header is missing for some reason.
+  // We only do that if the originalPath is not present anymore (i.e. the original page was deleted)
+  if (deleteOriginalPages) {
+    createRedirect({
+      fromPath: originalPath,
+      toPath: `/${defaultLanguage}${page.path}`,
+      isPermanent: false,
+      redirectInBrowser: isEnvDevelopment,
+      statusCode: is404 ? 404 : 301,
+    });
+  }
+}
+
+export const onCreateWebpackConfig = ({ stage, loaders, actions }, options) => {
+  switch (stage) {
+    case `build-javascript`:
+      actions.setWebpackConfig({
+        plugins: [
+          new BundleAnalyzerPlugin({
+            analyzerMode: "static",
+            reportFilename: "./report/treemap.html",
+            openAnalyzer: true,
+            logLevel: "error",
+            defaultSizes: "gzip"
+          })
+        ]
+      });
+      break;
+    case "build-html":
+      /*
+           * During the build step, `auth0-js` will break because it relies on
+           * browser-specific APIs. Fortunately, we don’t need it during the build.
+           * Using Webpack’s null loader, we’re able to effectively ignore `auth0-js`
+           * during the build. (See `src/utils/auth.js` to see how we prevent this
+           * from breaking the app.)
+           */
+      actions.setWebpackConfig({
+        module: {
+          rules: [
+            {
+              test: /auth0-js/,
+              use: loaders.null(),
+            },
+          ],
+        },
+      })
+      break;
+  }
+};
+
+export const onPreBuild = ({ actions: { createRedirect } }, pluginOptions) => {
+  const isEnvDevelopment = process.env.NODE_ENV === 'development';
+  const { notFoundPage } = { ...DEFAULT_OPTIONS, ...pluginOptions };
+
+  // we add a generic redirect to the "not found path" for every path that's not present in the app.
+  // This rule needs to be the last one (so that it only kicks in if nothing else matched before),
+  // thus it's added after all the page-related hooks have finished (hence "onPreBuild")
+
+  if (notFoundPage) {
+    createRedirect({
+      fromPath: '/*',
+      toPath: notFoundPage,
+      isPermanent: false,
+      redirectInBrowser: isEnvDevelopment,
+      statusCode: 302,
+    });
+  }
+};
