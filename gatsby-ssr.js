@@ -78,6 +78,7 @@ export const wrapPageElement = ({ element, props }, pluginOptions) => {
             key={supportedLang}
           />
         ))}
+         <script id='pixel-script-poptin' src='https://cdn.popt.in/pixel.js?id=ef33d55fc38ef' async='true'></script> 
       </Helmet>
       <PageContext.Provider value={contextValue}>{element}</PageContext.Provider>
     </React.Fragment>
