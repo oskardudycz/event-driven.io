@@ -2,5 +2,5 @@
 title: footnote
 ---
 
-*  © Oskar Dudycz 2019-2020
+*  © Oskar Dudycz 2020
 * 
