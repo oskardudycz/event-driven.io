@@ -7,7 +7,7 @@ From over 13 years, I'm creating software close to the business. I started my ca
 
 ![photo](bg-1.jpg)
 
-I like building well-designed systems, tools and frameworks that are used on production and making the people's life easier. I believe that using **Event Sourcing**, **CQRS**, and in general, **Event-Driven Architecture** are the good foundations to achieve that. Working on OSS and knowledge sharing is the huge motivation driver for me.
+I like building well-designed systems, tools and frameworks that are used on production and making the people's life easier. I believe that using **Event Sourcing**, **CQRS**, and in general, **Event-Driven Architecture** is the good foundation to achieve that. Working on OSS and knowledge sharing is the huge motivation driver for me.
 
 That's why I am:
 

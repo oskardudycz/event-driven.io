@@ -31,6 +31,7 @@ Some time ago, I wrote a vision of such a team for the project I was working. I 
 
 ---
 
+
 1. **Architecture team should be either group of people that are responsible for the shape of the whole system architecture or the advisory board.** In my opinion, the first option is prefered one, as the advisory board would make it confusing and blurred - eg. whether teams must or should apply the recommendation.
 
 2. **Architecture team should provide clear guidance and documentation** (written form, diagrams etc.) of the overall architecture vision and the assumptions that were taken into account while choosing the exact solution. Those decisions and vision should be transparent and openly available for all developers. Architecture team should review with the developers if the way of presenting that information is clear enough (eg. which database to chose, why and when using the event queue, how to write the acceptance tests etc.)
@@ -55,5 +56,6 @@ Some time ago, I wrote a vision of such a team for the project I was working. I 
 
 
 ---
+
 
 Thoughts?

@@ -50,7 +50,7 @@ const Post = props => {
         <Share post={post} theme={theme} />
         <Author note={authornote} theme={theme} />
         <NextPrev next={nextPost} prev={prevPost} theme={theme} />
-        {/* <DiscussionEmbed {...disqusConfig} /> */}
+        <DiscussionEmbed {...disqusConfig} />
       </footer>
     </React.Fragment>
   );
