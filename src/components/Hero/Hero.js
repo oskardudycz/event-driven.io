@@ -82,7 +82,7 @@ const Hero = props => {
           text-align: left;
           font-size: ${theme.hero.h2.size};
           margin: ${theme.space.stack.l};
-          margin-top: 30px;
+          margin-top: 10px;
           color: ${theme.hero.h2.color};
           line-height: ${theme.hero.h2.lineHeight};
           text-remove-gap: both 0 "Open Sans";
@@ -109,7 +109,7 @@ const Hero = props => {
           font-weight: 400;
           font-size: ${theme.hero.h3.size};
           margin: ${theme.space.stack.l};
-          margin-top: 30px;
+          margin-top: 10px;
           color: ${theme.hero.h3.color};
           line-height: ${theme.hero.h3.lineHeight};
           line-height: 1.8;
@@ -190,11 +190,13 @@ const Hero = props => {
 
           h2 {
             max-width: 95%;
+            margin-top: 30px;
             font-size: ${`calc(${theme.hero.h2.size} * 1.3)`};
           }
           
           h3 {
             max-width: 95%;
+            margin-top: 30px;
             font-size: ${`calc(${theme.hero.h3.size} * 1.3)`};
           }
 
@@ -217,11 +219,13 @@ const Hero = props => {
 
           h2 {
             max-width: 80%;
+            margin-top: 30px;
             font-size: ${`calc(${theme.hero.h2.size} * 1.5)`};
           }
 
           h3 {
             max-width: 80%;
+            margin-top: 30px;
             font-size: ${`calc(${theme.hero.h3.size} * 1.5)`};
           }
 

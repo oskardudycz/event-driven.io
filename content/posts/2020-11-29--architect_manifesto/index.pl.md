@@ -17,7 +17,7 @@ _"We have DevOps team."_
 
 Have you heard or made such statements? During the years we create an enormous set of the architect subtypes - _Software Architect_, _Enterprise Architect_, _Solution Architect_, _Chief Architect_, _DevOps Architect_, _Junior Architect_. I'm sure that there are already bullshit architect title generators somewhere on the web. This term was so bloated that I had a hard time calling myself an architect.
 
-For many of us, architects are just a bunch of middle-aged white dudes sitting in the Ivory Tower. Like a Mage Guild - throwing ideas out of context with the real development struggles.
+For many of us, architects are just a bunch of middle-aged white dudes sitting in the Ivory Tower. Like a Mage Guild - throwing ideas out of context. Dettached from the real development struggles.
 
 Some of us, following the microservice and DevOps movements, resigned from having architects. Now our teams are autonomous, making their own decisions.
 
@@ -25,11 +25,12 @@ That's a perfect world. Our world is rarely perfect, usually [it's a mad world](
 
 Some companies and people already found out that having distinct pieces is not always the best approach. Uber evolved from "rewrite everything" mode to ["Domain-Oriented Microservice Architecture"](https://eng.uber.com/microservice-architecture/). Matthew Skelton and Manuel Pais provided the concept of [Team Topologies](https://teamtopologies.com) to [reduce the cognitive load](https://www.youtube.com/watch?v=haejb5rzKsM) and impact of Conway Law.
 
-Having all of that, I still believe that having a software architect makes sense, even in the remote, DevOps, microservice development culture. We might not call them architects. We might just name them technical team leaders. In my vision, it should be a group of people that don't create bottlenecks.
+Having all of that, I still believe that having a software architect makes sense, even in the remote, DevOps, microservice development culture. We might not call them architects. We might just name them technical team leaders. In my vision, it should be rather a group of people than single indivudual to not create bottlenecks.
 
 Some time ago, I wrote a vision of such a team for the project I was working. I want to share it with you. It's my Architect Manifesto. It's a bit idealistic, maybe naive at some points, but in my opinion, it's a decent description of the direction we should aim.
 
 ---
+
 
 1. **Architecture team should be either group of people that are responsible for the shape of the whole system architecture or the advisory board.** In my opinion, the first option is prefered one, as the advisory board would make it confusing and blurred - eg. whether teams must or should apply the recommendation.
 
@@ -55,5 +56,6 @@ Some time ago, I wrote a vision of such a team for the project I was working. I 
 
 
 ---
+
 
 Thoughts?
