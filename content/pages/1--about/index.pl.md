@@ -30,3 +30,4 @@ Ciekawostki:
 - 📚 Moje ulubione książki to "[1984](https://www.goodreads.com/book/show/40961427-1984)" i "[Zabić drozda](https://www.goodreads.com/book/show/2657.To_Kill_a_Mockingbird)".
 - 🎥 Mój ukochany film to "[Eternal Sunshine of the Spotless Mind](https://www.imdb.com/title/tt0338013/)".
 - 👦 Jako dziecko chciałem być paleontologiem.
+- 🕹 Ciągle mam działającą Amigę 500.

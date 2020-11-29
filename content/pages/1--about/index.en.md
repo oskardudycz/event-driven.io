@@ -30,3 +30,4 @@ Trivia:
 - 📚 My favourite books are "[1984](https://www.goodreads.com/book/show/40961427-1984)" and "[Too Kill a Mockingbird](https://www.goodreads.com/book/show/2657.To_Kill_a_Mockingbird)".
 - 🎥 My beloved movie is "[Eternal Sunshine of the Spotless Mind](https://www.imdb.com/title/tt0338013/)".
 - 👦 As a child, I wanted to be a palaeontologist.
+- 🕹 I still have working Amiga 500.

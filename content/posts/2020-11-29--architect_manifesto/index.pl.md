@@ -7,4 +7,53 @@ author: oskar dudycz
 
 ![cover](2020-11-29-cover.png)
 
-Lorem ipsum
+_"Architects are not needed anymore. Those days are gone!"_
+
+_"We're agile - we're not doing waterfall, so we're not designing upfront."_
+
+_"We have autonomous teams that drive their design."_
+
+_"We have DevOps team."_
+
+Have you heard or made such statements? During the years we create an enormous set of the architect subtypes - _Software Architect_, _Enterprise Architect_, _Solution Architect_, _Chief Architect_, _DevOps Architect_, _Junior Architect_. I'm sure that there are already bullshit architect title generators somewhere on the web. This term was so bloated that I had a hard time calling myself an architect.
+
+For many of us, architects are just a bunch of middle-aged white dudes sitting in the Ivory Tower. Like a Mage Guild - throwing ideas out of context with the real development struggles.
+
+Some of us, following the microservice and DevOps movements, resigned from having architects. Now our teams are autonomous, making their own decisions.
+
+That's a perfect world. Our world is rarely perfect, usually [it's a mad world](https://www.youtube.com/watch?v=4N3N1MlvVc4). Teams are struggling with the Conway Law. Knowledge sharing rarely happens. It's challenging to maintain consistency. DevOps quite often appears to be just rebranded ops team or group of people holding CI tools.
+
+Some companies and people already found out that having distinct pieces is not always the best approach. Uber evolved from "rewrite everything" mode to ["Domain-Oriented Microservice Architecture"](https://eng.uber.com/microservice-architecture/). Matthew Skelton and Manuel Pais provided the concept of [Team Topologies](https://teamtopologies.com) to [reduce the cognitive load](https://www.youtube.com/watch?v=haejb5rzKsM) and impact of Conway Law.
+
+Having all of that, I still believe that having a software architect makes sense, even in the remote, DevOps, microservice development culture. We might not call them architects. We might just name them technical team leaders. In my vision, it should be a group of people that don't create bottlenecks.
+
+Some time ago, I wrote a vision of such a team for the project I was working. I want to share it with you. It's my Architect Manifesto. It's a bit idealistic, maybe naive at some points, but in my opinion, it's a decent description of the direction we should aim.
+
+---
+
+1. **Architecture team should be either group of people that are responsible for the shape of the whole system architecture or the advisory board.** In my opinion, the first option is prefered one, as the advisory board would make it confusing and blurred - eg. whether teams must or should apply the recommendation.
+
+2. **Architecture team should provide clear guidance and documentation** (written form, diagrams etc.) of the overall architecture vision and the assumptions that were taken into account while choosing the exact solution. Those decisions and vision should be transparent and openly available for all developers. Architecture team should review with the developers if the way of presenting that information is clear enough (eg. which database to chose, why and when using the event queue, how to write the acceptance tests etc.)
+
+3. **Architecture team should have strong authority and mandate from the management.** As company can have other strong skilled and experienced developers then it should be clearly expressed by the management and explained to developers what are the Architecture Team responsibilities. The interactions and rules should be clearly defined (so eg. said that dev teams are obliged to contact the architect team while doing the new design). That will reduce the chance for confusion and disagreements.
+
+4. **Architecture team shouldn't block the teams' creativity and not be a bottleneck in the design process.** Teams should be responsible for the design of the features, but they should consult in the early phases of the design architecture team to earlier catch some obvious flaws in the designs. If the design review is prepared then sometimes it's too late to reject the design as a lot of time was spent on that and it makes the confusion and put people into defensive mode. I think that having clear recommendation and best practices will help teams to provide their own design that is properly put into the architecture boundaries. If the designed feature is more complex then the architect may join the team to work with the team closely.
+
+5. **Architecture team should have an official time to work on the architecture.** The design needs to be made in focus and with patience. I think that at least one member of the architecture team should be made the head architect that's fully dedicated to the work on architecture. Rest may work part-time depending on the needs but they should have the set number of days that they can do to work on the architecture (they may be included into the regular feature work if the design is made for the development team). Work of all architecture team members should be planned and scheduled and transparent for the development teams. Architecture team should have also some dedicated time for the ongoing questions from the teams or management. It should be probably more than 1 day per week. Especially right now the main focus should be on reviewing the current state of the design and prioritize needed changes.
+
+6. **Architecture team should work closely with management, PMs, POs to understand the product priorities** (and potentially be able to help to shape them). Architecture is not created in the vacuum, without the context it's not possible to create good design. Architecture needs also thinking upfront, so without the knowledge of what will come next, it's not possible to provide durable architecture.
+
+7. **Architecture team should proactively work with the developers to understand their pain points, explain and present the architecture decisions** (eg. through the meetups). They should also actively ask for constructive criticism from the developers.
+
+8. **Architecture team should be responsible for continuously reviewing the application of the designed patterns.** They should review designs, verify the PRs and make random checks of the codebase (eg. to catch that there are multiple implementations of the Graph API code). Architecture team should also verify that features are properly documented (eg. common libraries, samples, features in the code).
+
+9. **Architecture team should not assume that once designed architecture will be always up to date.** Architecture team should reevaluate if the design assumptions are still applicable. They should make sure that architecture is evolving together with the business requirements.
+
+10. **Architecture team should also work on the business features** (at least once per some period of time). Architects that are not doing any regular work on designed by them architecture tend to not understand the struggles of the development team and not catch the pain points.
+
+11. **Architecture team should make sure (together with DevOps team) that continuous integration and delivery process are fluent** and it's helping to effectively deliver the new features (so if it's reliable, fast enough, secure, etc.). They should also work with the System Teams to understand the production systems configurations to be able to make recommendations and make sure that investigation of the production bugs is effective.
+
+
+---
+
+Thoughts?
