@@ -1,7 +1,7 @@
 module.exports = {
-  siteTitle: "Oskar Dudycz - Newsletter", // <title>
-  shortSiteTitle: "Oskar Dudycz", // <title> ending for posts and pages
-  siteDescription: "Oskar Dudycz - Newsletter",
+  siteTitle: "Event-Driven by Oskar Dudycz", // <title>
+  shortSiteTitle: "Event-Driven", // <title> ending for posts and pages
+  siteDescription: "Event-Driven by Oskar Dudycz",
   siteUrl: "https://event-driven.io",
   pathPrefix: "",
   siteImage: "preview.jpg",
