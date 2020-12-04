@@ -12,6 +12,7 @@ Lubię tworzyć dobrze przemyślane systemy, narzędzia i frameworki, które są
 Dlatego właśnie:
 
 - prowadzę warsztaty i szkolenia **Event Sourcing**, CQRS oraz architektur opartych o zdarzenia.
+- jestem *"DevAdvocate"* w [Event Store](https://www.eventstore.com/).
 - jestem jednym z maintainerów bibliotki OSS [Marten](https://martendb.io/), która pozwala na pracę z **Event Sourcing**.
 - tworzę przykłady i tutoriale rzeczywistego użycia Event Sourcing in real-world [moim repozytorium na Github](https://github.com/oskardudycz/EventSourcing.NetCore)
 - dzielę się moją wiedzą na blogu o tym jak tworzyć w praktyce dobre, modularne aplikacje.
