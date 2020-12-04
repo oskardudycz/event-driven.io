@@ -19,7 +19,8 @@ That's why I am:
 
 My main projects:
 
-- 🐿️ [Marten](https://martendb.io/) - .NET Transactional Document DB and Event Store on PostgreSQL - https://martendb.io/.
+- 🐉 [Event Store](https://www.eventstore.com/) - The stream database built for Event Sourcing.
+- 🐿️ [Marten](https://martendb.io/) - .NET Transactional Document DB and Event Store on PostgreSQL.
 - ⚡ [Event Sourcing in .NET](https://github.com/oskardudycz/EventSourcing.NetCore) - Practical samples, self-paced kits and tutorials of how to build Event-Sourced applications in .NET.
 - 🔧 [WebApi with .NET Core](https://github.com/oskardudycz/WebApiWith.NETCore) - Samples and resources of how to create well-designed WebApi in .NET.
 - 👁️ [GoldenEye](https://github.com/oskardudycz/GoldenEye) - The CQRS flavoured framework that will speed up your WebAPI and Microservices development.
