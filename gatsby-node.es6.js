@@ -101,11 +101,11 @@ export const createPages = ({ graphql, actions }) => {
         const items = result.data.allMarkdownRemark.edges;
 
 
-        supportedLanguages.forEach(langKey => {
+        supportedLanguages.forEach(supportedLangKey => {
           // Create category list
           const categorySet = new Set();
           items
-            .filter(edge => edge.node.fields.langKey === langKey)
+            .filter(edge => edge.node.fields.langKey === supportedLangKey)
             .forEach(edge => {
               const {
                 node: {
@@ -123,39 +123,39 @@ export const createPages = ({ graphql, actions }) => {
 
           categoryList.forEach(category => {
             createPage({
-              path: `/category/${langKey}/${_.kebabCase(category)}/`,
+              path: `/category/${supportedLangKey}/${_.kebabCase(category)}/`,
               component: categoryTemplate,
               context: {
                 category,
-                lang: langKey,
-                langKey
+                lang: supportedLangKey,
+                langKey: supportedLangKey
               }
             });
           });
-        });
 
-        // Create posts
-        const posts = items.filter(item => item.node.fields.source === "posts");
-        posts.forEach(({ node }, index) => {
-          const slug = node.fields.slug;
-          const langKey = node.fields.langKey;
-          const next = index === 0 ? undefined : posts[index - 1].node;
-          const prev = index === posts.length - 1 ? undefined : posts[index + 1].node;
-          const source = node.fields.source;
-          const path = `/${langKey}${slug}`;
+          // Create posts
+          const posts = items.filter(item => item.node.fields.source === "posts" && item.node.fields.langKey == supportedLangKey);
+          posts.forEach(({ node }, index) => {
+            const slug = node.fields.slug;
+            const langKey = node.fields.langKey;
+            const next = index === 0 ? undefined : posts[index - 1].node;
+            const prev = index === posts.length - 1 ? undefined : posts[index + 1].node;
+            const source = node.fields.source;
+            const path = `/${langKey}${slug}`;
 
-          createPage({
-            path,
-            component: postTemplate,
-            context: {
-              slug,
-              lang: langKey,
-              langKey,
-              prev,
-              next,
-              source
-            }
-          });
+            createPage({
+              path,
+              component: postTemplate,
+              context: {
+                slug,
+                lang: langKey,
+                langKey,
+                prev,
+                next,
+                source
+              }
+            });
+          });          
         });
 
         // and pages.
