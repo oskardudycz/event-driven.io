@@ -76,7 +76,7 @@ const Seo = props => {
         {
           rel: 'alternate',
           hrefLang: 'x-default',
-          href: `${host}${originalPath}`,
+          href: `${host}/${lang}${originalPath}`,
         },
         ...supportedLanguages.map(supportedLang => ({
           rel: 'alternate',

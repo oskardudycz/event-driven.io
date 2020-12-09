@@ -95,6 +95,7 @@ export const query = graphql`
           fields {
             slug
             prefix
+            langKey
           }
           frontmatter {
             title
