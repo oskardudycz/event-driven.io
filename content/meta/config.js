@@ -4,7 +4,7 @@ module.exports = {
   siteDescription: "Event-Driven by Oskar Dudycz",
   siteUrl: "https://event-driven.io",
   pathPrefix: "",
-  siteImage: "preview.jpg",
+  siteImage: "/preview.jpg",
   siteLanguage: "en",
   // author
   authorName: "Oskar Dudycz",

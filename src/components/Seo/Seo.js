@@ -13,14 +13,13 @@ const Seo = props => {
   const { data, facebook, meta } = props;
   const postTitle = ((data || {}).frontmatter || {}).title;
   const postDescription = ((data || {}).frontmatter || {}).description;
-  const postCover = ((data || {}).frontmatter || {}).cover;
-  const postSlug = ((data || {}).fields || {}).slug;
+  const postCover = ((data || {}).frontmatter || {}).cover || {};
+  const postSlug = ((data || {}).fields || {}).slug || "";
 
   const title = postTitle ? `${postTitle} - ${config.shortSiteTitle}` : config.siteTitle;
   const description = postDescription ? postDescription : (config.siteDescription || t('siteMetadata.description'));
-  const image = postCover ? postCover : config.siteImage;
-  const url = config.siteUrl + config.pathPrefix + postSlug;
   const host = config.siteUrl;
+  const image = ((postCover.childImageSharp  || {}).resize || {}).src || config.siteImage;
 
   return (
     <Helmet
@@ -41,7 +40,7 @@ const Seo = props => {
         },
         {
           property: `og:image`,
-          content: image,
+          content: `${host}${image}`,
         },
         {
           property: `og:type`,
@@ -61,27 +60,35 @@ const Seo = props => {
         },
         {
           property: `twitter:card`,
-          content: 'summary',
+          content: 'summary_large_image',
+        },
+        {
+          property: `twitter:site`,
+          content: config.authorTwitterAccount ? config.authorTwitterAccount : "",
         },
         {
           property: `twitter:creator`,
           content: config.authorTwitterAccount ? config.authorTwitterAccount : "",
-        }
+        },
+        {
+          property: `twitter:image`,
+          content: `${host}${image}`,
+        },
       ].concat(meta || [])}
       link={[
         {
           rel: 'canonical',
-          href: `${host}/${lang}${originalPath}`,
+          href: `${host}/${lang}${postSlug}`,
         },
         {
           rel: 'alternate',
           hrefLang: 'x-default',
-          href: `${host}/${lang}${originalPath}`,
+          href: `${host}/${lang}${postSlug}`,
         },
         ...supportedLanguages.map(supportedLang => ({
           rel: 'alternate',
           hrefLang: supportedLang,
-          href: `${host}/${supportedLang}${originalPath}`,
+          href: `${host}/${supportedLang}${postSlug}`,
         })),
       ]}
     />

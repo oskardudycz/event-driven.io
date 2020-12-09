@@ -44,8 +44,7 @@ export const pageQuery = graphql`
       id
       html
       frontmatter {
-        title,
-        langKey
+        title
       }
     }
     site {
