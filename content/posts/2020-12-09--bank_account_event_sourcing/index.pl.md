@@ -42,6 +42,8 @@ I also encourage you to do the exercises from my "Built your own event store Sel
 
 To sum up. Bank Account as an example is sufficient for a basic introduction, but it can quickly derail discussion with going to early performance optimisations. You can present those two of the potential solutions, but it can make the Event Sourcing seem more complicated than it is. 
 
+It's also a complex domain. Explaining the boundaries and providing proper aggregates structure might be hard, e.g. how to setup aggregates ("is transaction an aggregate?"). Then next questions may appear: "How to make money transfer between accounts without updating two aggregates at once etc.". You may end up with explaining concepts of distributed processing like Saga, Process Manager, Choreography etc. Of course, it's valuable to explain them, but in the beginning, it may be overwhelming. Someone might get the impression that those concepts are part of Event Sourcing, while with regular approach you'll face the same issues (if you try to model a distributed banking system).
+
 What could be a **better example**? It could be a tedious but well-known **Order** example or **Helpdesk ticket**. Another one could be the meetup of a programming group. These are things that are closer to the everyday problems solved in Event Sourcing. They do not differ at all from the typical programmer's topics. What makes Event Sourcing different from traditional programming is what Greg Young said:
 
 _**"When you start modelling events, it forces you to think about the behaviour of the system. As opposed to thinking about the structure of the system."**_
