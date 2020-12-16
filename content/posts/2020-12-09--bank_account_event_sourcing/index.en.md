@@ -15,10 +15,10 @@ It's like when describing your day to someone: "You know, the bus was late for m
 
 Getting back to the banking example. In such a case, we record all transactions for a given account, so inflows (e.g. salaries, payments, etc.) and expenses (e.g. card withdrawals, fees, etc.). Each of these transactions:
 
-carries specific business information,
-occurs within a particular time,
-follows one another,
-is immutable (we cannot undo a money transfer once it has been made).
+- carries specific business information,
+- occurs within a particular time,
+- follows one another,
+- is immutable (we cannot undo a money transfer once it has been made).
 
 Everything seems okay, why am I picking on it? I am not a saint myself. I also give such an example: https://github.com/oskardudycz/EventSourcing.NetCore/tree/main/Sample/BankAccounts.
 
