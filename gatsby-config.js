@@ -144,7 +144,8 @@ module.exports = {
               width: "25px"
             }
           }
-        }
+        },        
+        "@weknow/gatsby-remark-twitter"
         ]
       }
     },
