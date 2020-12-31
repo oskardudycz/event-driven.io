@@ -91,8 +91,8 @@ This change makes possible parallelisation. We no longer update the event after 
 - Have more than a single consumer (e.g. one for webhooks, one for the queue, etc.)
 
 **Change detection capture-based (or also called transactional) takes that on a different level**. Polling will always have redundancy, as the background workers need to call database for new events continuously. Almost all popular databases provide functionality for getting triggers when data was changed, e.g.
-- Postgres WAL https://www.postgresql.org/docs/9.0/wal-intro.html, 
-- MSSQL transaction log https://docs.microsoft.com/en-us/sql/relational-databases/logs/the-transaction-log-sql-server?view=sql-server-ver15
+- Postgres WAL - https://www.postgresql.org/docs/9.0/wal-intro.html, http://www.npgsql.org/doc/replication.html, 
+- MSSQL transaction log - https://docs.microsoft.com/en-us/sql/relational-databases/logs/the-transaction-log-sql-server?view=sql-server-ver15
 - EventStoreDB - https://developers.eventstore.com/clients/grpc/subscribing-to-streams/
 - DynamoDB change streams - https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html
 
