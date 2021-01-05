@@ -269,7 +269,7 @@ module.exports = {
                 allMarkdownRemark(
                   limit: 1000,
                   sort: { order: DESC, fields: [fields___prefix] },
-                  filter: { fields: { slug: { ne: null } } }
+                  filter: { fileAbsolutePath: { regex: "//posts/[0-9]+.*--/" }, fields: { slug: { ne: null }, langKey: { eq: "en" } } }
                 ) {
                   edges {
                     node {

@@ -8,6 +8,7 @@
     "clean": "gatsby clean",
     "develop": "gatsby develop",
     "devhost": "gatsby develop --host 192.168.0.112",
+    "serve": "gatsby serve",
     "format": "prettier --write 'src/**/*.js'",
     "lint-errors": "eslint src/**/*.{js,jsx} --quiet",
     "lint": "eslint src/**/*.{js,jsx}",
