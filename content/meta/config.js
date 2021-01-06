@@ -1,8 +1,10 @@
+const siteUrl = "https://event-driven.io";
+
 module.exports = {
   siteTitle: "Event-Driven by Oskar Dudycz", // <title>
   shortSiteTitle: "Event-Driven.io", // <title> ending for posts and pages
   siteDescription: "Event-Driven by Oskar Dudycz",
-  siteUrl: "https://event-driven.io",
+  siteUrl,
   pathPrefix: "",
   siteImage: "/preview.jpg",
   siteLanguage: "en",
@@ -26,6 +28,7 @@ module.exports = {
     twitter: { url: "https://twitter.com/oskar_at_net" },
     facebook: { url: "https://www.facebook.com/Oskar.At.NET" },
     youtube: { url: "https://www.youtube.com/channel/UC3M4_OgJS4lvZHVDzkOlxIg" },
-    linkedin: { url: "https://www.linkedin.com/in/oskardudycz/" }
+    linkedin: { url: "https://www.linkedin.com/in/oskardudycz/" },
+    rss: { url: `${siteUrl}/rss.xml` }
   }
 };

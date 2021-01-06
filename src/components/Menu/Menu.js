@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 require("core-js/fn/array/from");
 
-import { FaFacebook, FaGithub, FaHome, FaLinkedin, FaTwitter, FaYoutube } from "react-icons/fa/";
+import { FaFacebook, FaGithub, FaHome, FaLinkedin, FaRss, FaTwitter, FaYoutube } from "react-icons/fa/";
 import { FaSearch } from "react-icons/fa/";
 import { FaEnvelope } from "react-icons/fa/";
 import { FaTag } from "react-icons/fa/";
@@ -36,7 +36,8 @@ class Menu extends React.Component {
       { to: config.socialLinks.github.url, icon: FaGithub },
       { to: config.socialLinks.youtube.url, icon: FaYoutube },
       { to: config.socialLinks.linkedin.url, icon: FaLinkedin },
-      { to: config.socialLinks.facebook.url, icon: FaFacebook }
+      { to: config.socialLinks.facebook.url, icon: FaFacebook },
+      { to: config.socialLinks.rss.url, icon: FaRss }
     ];
 
     this.renderedItems = []; // will contain references to rendered DOM elements of menu
