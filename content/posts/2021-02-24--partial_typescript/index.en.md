@@ -15,7 +15,7 @@ That's why I wasn't a TypeScript fan. Its early versions were adding too many in
 
 **That changed when TypeScript was aligned to EcmaScript 6 standard.** I also read some eye-opening content about Type-Driven Development, e.g. ["Domain Modeling Made Functional"](https://pragprog.com/titles/swdddf/domain-modeling-made-functional/) by Scott Wlaschin. I realised that I could use TypeScript the same way I was using JavaScript but add more predictability and reliability related to types.
 
-This week I was preparing the blog post about the v1 release of [EventStoreDB gRPC NodeJS client](https://developers.eventstore.com/clients/grpc/getting-started/?codeLanguage=NodeJS). While working on the samples, I started to play with our API and building the current aggregate state from events (_"aggregate stream"_). NodeJS client is built with TypeScript, so why not? 
+This week I was preparing the [blog post](https://www.eventstore.com/blog/nodejs-v1-release) about the v1 release of [EventStoreDB gRPC NodeJS client](https://developers.eventstore.com/clients/grpc/getting-started/?codeLanguage=NodeJS). While working on the samples, I started to play with our API and building the current aggregate state from events (_"aggregate stream"_). NodeJS client is built with TypeScript, so why not? 
 
 I started by defining event types and aggregate data. I used the cinema ticket reservation as the sample use case.
 
@@ -53,9 +53,9 @@ As you see - nothing extraordinary. You can reserve the seat and change it. The 
 This is cool, but how can we do it with proper typing and not taking shortcuts with casting? 
 
 **There are 3 things to cover:**
-1. _reduce_ in TypeScript is a generic method, and allows to provide the result type generic parameter. It doesn't have to be the same as type of the array elements.
+1. _reduce_ in TypeScript is a generic method. It allows to provide the result type as a parameter. It doesn't have to be the same as type of the array elements.
 2. You can also use optional param to provide the default value for accumulation.
-3. Use [Partial<Type>](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype) as the generic reduce param. It constructs a type with all properties of Type set to optional. This utility will return a type that represents all subsets of a given type. This is extremely important, as TypeScript forces you to define all required properties. We'll be merging different states of the aggregate state into the final one. Only the first event (_SeatReserved_) will provide all required fields. The other events will just do a partial update (_SeatChanged_ only changes the seatId). 
+3. Use [Partial&lt;Type&gt;](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype) as the generic reduce param. It constructs a type with all properties of Type set to optional. This utility will return a type that represents all subsets of a given type. This is extremely important, as TypeScript forces you to define all required properties. We'll be merging different states of the aggregate state into the final one. Only the first event (_SeatReserved_) will provide all required fields. The other events will just do a partial update (_SeatChanged_ only changes the _seatId_). 
 
 Let's see how it works in practice:
 
@@ -97,27 +97,23 @@ const result = events.reduce<Partial<Reservation>>((currentState, event) => {
 }, {});
 ```
 
-Thanks to strong typing (_ReservationEvents_), we're sure about the events array's content. We know that both events will have the _eventType_ property. Having that, we can define _switch_ and define a custom state mutation logic for each event.
+Thanks to strong typing (_ReservationEvents_), we're sure about the events array's content. We know that both events will have the _eventType_ property. Having that, we can use _switch_ and define a custom state mutation logic for each event.
 
-The only thing left is to make sure that our final result has a proper state and can be used as the _Reservation_ type. Remember, the result of _reduce_ will be _Partial<Reservation>_ with all required fields made optional. We have to do it manually by defining the type assertion method.
+The only thing left is to make sure that our final result has a proper state and can be used as the _Reservation_ type. Remember, the result of _reduce_ will be _Partial<Reservation>_ with all required fields made optional. We can use [type guard](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types) to verify if _Partial<Reservation>_ is also a valid `Reservation`.
 
 ```typescript
-function assertStateIsValid(reservation: Partial<Reservation>): Reservation {
-    if(!reservation.reservationId ||
-        !reservation.movieId || 
-        !reservation.seatId || 
-        !reservation.userId)
-        throw "Reservation state is not valid!";
+const reservationIsValid = 
+    (reservation: Partial<Reservation>): reservation is Reservation => (
+        !!reservation.reservationId &&
+        !!reservation.movieId &&
+        !!reservation.seatId &&
+        !!reservation.userId 
+    );
 
-    return {
-        reservationId: reservation.reservationId,
-        movieId: reservation.movieId,
-        seatId: reservation.seatId,
-        userId: reservation.userId
-    };
-}
+if(!reservationIsValid(reservation))
+    throw "Reservation state is not valid!";
 
-const reservation: Reservation = assertStateIsValid(result);
+const reservation: Reservation = result;
 ```
 
 As a bonus, let me present you the full working sample with the [EventStoreDB NodeJS gRPC client](https://developers.eventstore.com/clients/grpc/getting-started/?codeLanguage=NodeJS):
@@ -144,7 +140,7 @@ type SeatChanged = JSONEventType<
     }
 >;
 
-type ReservationEvents = SeatReservedEvent | SeatChangedEvent;
+type ReservationEvents = SeatReserved | SeatChanged;
 
 interface Reservation {
     reservationId: string;
@@ -153,20 +149,13 @@ interface Reservation {
     seatId: string;
 }
 
-function assertStateIsValid(reservation: Partial<Reservation>): Reservation {
-    if(!reservation.reservationId ||
-        !reservation.movieId || 
-        !reservation.seatId || 
-        !reservation.userId)
-        throw "Reservation state is not valid!";
-
-    return {
-        reservationId: reservation.reservationId,
-        movieId: reservation.movieId,
-        seatId: reservation.seatId,
-        userId: reservation.userId
-    };
-}
+const reservationIsValid = 
+    (reservation: Partial<Reservation>): reservation is Reservation => (
+        !!reservation.reservationId &&
+        !!reservation.movieId &&
+        !!reservation.seatId &&
+        !!reservation.userId 
+    );
 
 // create events
 const reservationId = "res-homeAlone-1";
@@ -181,10 +170,10 @@ const seatReserved = jsonEvent<SeatReserved>({
     },
 });
 
-const seatChanged= jsonEvent<SeatChanged>({
+const seatChanged = jsonEvent<SeatChanged>({
     type: "SeatChanged",
     data: {
-    reservationId,
+        reservationId,
         newSeatId: '21',
     },
 });   
@@ -196,7 +185,7 @@ const client = EventStoreDBClient.connectionString("esdb://localhost:2113?tls=fa
 const appendResult = await client.appendToStream(
     reservationId, seatReserved, seatChanged);
 
-// readAppendedEvents
+// read appended events
 const events = await client.readStream<ReservationEvents>(reservationId);  
 
 // aggregate stream
@@ -221,7 +210,10 @@ const result = events.reduce<Partial<Reservation>>((acc, { event }) => {
     }
 }, {});
 
-const reservation: Reservation = assertStateIsValid(result);
+if(!reservationIsValid(result))
+    throw "Reservation state is not valid!";
+
+const reservation: Reservation = result;
 ```
 
 Thoughts?
