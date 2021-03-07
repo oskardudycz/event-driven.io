@@ -333,7 +333,7 @@ module.exports = {
                 }
               }
             `,
-            output: "newsletter-pl-rss.xml"
+            output: "/newsletter-pl-rss.xml"
           }
         ]
       }
