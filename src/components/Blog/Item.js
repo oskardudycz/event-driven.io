@@ -90,11 +90,10 @@ const Item = props => {
 
           &:first-child {
             &::before {
-              border-top: 1px solid ${theme.line.color};
               content: "";
               height: 0;
               position: absolute;
-              top: ${`calc(${theme.space.default} * -1.5)`};
+              top: ${`calc(${theme.space.default} * -1.2)`};
               left: 50%;
               transform: translateX(-50%);
               transition: all ${theme.time.duration.default};
