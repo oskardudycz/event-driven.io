@@ -70,4 +70,5 @@ yarn-error.log
 report/
 /.env.development
 content/newsletter-pl/
+content/architecture-weekly/
 temp/
