@@ -105,7 +105,7 @@ export const createPages = ({ graphql, actions }) => {
           // Create category list
           const categorySet = new Set();
           items
-            .filter(edge => edge.node.fields.langKey === supportedLangKey)
+            .filter(edge => edge.node.fields.langKey === supportedLangKey && edge.node.fields.source === "posts")
             .forEach(edge => {
               const {
                 node: {
@@ -155,7 +155,7 @@ export const createPages = ({ graphql, actions }) => {
                 source
               }
             });
-          });          
+          });
         });
 
         // and pages.
