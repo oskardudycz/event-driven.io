@@ -69,3 +69,5 @@ yarn-error.log
 # other
 report/
 /.env.development
+content/newsletter-pl/
+temp/

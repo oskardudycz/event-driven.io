@@ -83,6 +83,13 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
+        path: `${__dirname}/content/newsletter-pl/`,
+        name: "newsletter-pl"
+      }
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
         path: `${__dirname}/content/pages/`,
         name: "pages"
       }
@@ -289,6 +296,44 @@ module.exports = {
               }
             `,
             output: "/rss.xml"
+          },
+          
+          {
+            serialize: ({ query: { site, allMarkdownRemark } }) => {
+              return allMarkdownRemark.edges.map(edge => {
+                return Object.assign({}, edge.node.frontmatter, {
+                  description: edge.node.excerpt,
+                  url: `${site.siteMetadata.siteUrl}/${edge.node.fields.langKey}${edge.node.fields.slug}`,
+                  guid: `${site.siteMetadata.siteUrl}/${edge.node.fields.langKey}${edge.node.fields.slug}`,
+                  custom_elements: [{ "content:encoded": edge.node.html }]
+                });
+              });
+            },
+            query: `
+              {
+                allMarkdownRemark(
+                  limit: 1000,
+                  sort: { order: DESC, fields: [fields___prefix] },
+                  filter: { fileAbsolutePath: { regex: "//newsletter-pl/[0-9]+.*--/" }, fields: { slug: { ne: null }, langKey: { eq: "en" } } }
+                ) {
+                  edges {
+                    node {
+                      excerpt
+                      html
+                      fields {
+                        slug
+                        prefix
+                        langKey
+                      }
+                      frontmatter {
+                        title
+                      }
+                    }
+                  }
+                }
+              }
+            `,
+            output: "newsletter-pl-rss.xml"
           }
         ]
       }
