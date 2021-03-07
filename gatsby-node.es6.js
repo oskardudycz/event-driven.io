@@ -156,6 +156,30 @@ export const createPages = ({ graphql, actions }) => {
               }
             });
           });
+
+          // Create posts
+          const newsletterPlPosts = items.filter(item => item.node.fields.source === "newsletter-pl" && item.node.fields.langKey == supportedLangKey);
+          newsletterPlPosts.forEach(({ node }, index) => {
+            const slug = node.fields.slug;
+            const langKey = node.fields.langKey;
+            const next = index === 0 ? undefined : newsletterPlPosts[index - 1].node;
+            const prev = index === newsletterPlPosts.length - 1 ? undefined : newsletterPlPosts[index + 1].node;
+            const source = node.fields.source;
+            const path = `/${langKey}${slug}`;
+
+            createPage({
+              path,
+              component: postTemplate,
+              context: {
+                slug,
+                lang: langKey,
+                langKey,
+                prev,
+                next,
+                source
+              }
+            });
+          });
         });
 
         // and pages.

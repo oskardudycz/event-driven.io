@@ -28,7 +28,10 @@ const Header = ({ pages, path, theme, }) => {
 
   const getHeaderSize = () => {
     const fixedText = fixed ? "fixed" : "";
-    const homepage = path === `/${lang}/` || path === `/${lang}` ? "homepage" : "";
+
+    const homePages = [`/${lang}`]; //, `/${lang}/newsletter-pl`];
+
+    const homepage = homePages.some(page => path === `${page}/` || path === `${page}`) ? "homepage" : "";
 
     return `${fixedText} ${homepage}`;
   };
