@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "import-newsletter": "node ./import/import-newsletter.js",
-    "build": "yarn import-newsletter & gatsby build",
+    "import-architecture-weekly": "node ./import/import-architecture-weekly.js",
+    "build": "yarn import-newsletter && yarn import-architecture-weekly && gatsby build",
     "clean": "gatsby clean",
     "develop": "gatsby develop",
     "devhost": "gatsby develop --host 192.168.0.112",
