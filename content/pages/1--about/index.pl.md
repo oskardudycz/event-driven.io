@@ -22,6 +22,7 @@ Moje główne projekty:
 - 🐉 [Event Store](https://www.eventstore.com/) - Baza danych dla zdarzeń zbudowana dla Event Sourcing.
 - 🐿️ [Marten](https://martendb.io/) - Biblioteka .NET pozwalająca używać Postgres jako bazę dokumentową oraz event store.
 - ⚡ [Event Sourcing in .NET](https://github.com/oskardudycz/EventSourcing.NetCore) - Praktyczne przykłady, ćwiczenia oraz tutoriale o tym jak budować aplikacje z użyciem Event Sourcing w .NET.
+- 🏗 [Architecture Weekly](https://github.com/oskardudycz/ArchitectureWeekly) - Cotygodniowy zestaw materiałów i linków na temat szeroko pojętej Architectury Oprogramowania.
 - 🔧 [WebApi with .NET Core](https://github.com/oskardudycz/WebApiWith.NETCore) - Przykłady i materiały o tym jak tworzyć dobrze zaprojektowane WebApi w .NET.
 - 👁️ [GoldenEye](https://github.com/oskardudycz/GoldenEye) - Przyprawiony CQRS framework, którzy przyepiesza pracę nad tworzeniem WebApi i Mikroserwisów.
 
