@@ -65,6 +65,7 @@ export const postQuery = graphql`
         title
         author
         category
+        disqusId
         cover {
           childImageSharp {
             resize(width: 600) {

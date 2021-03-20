@@ -25,10 +25,9 @@ const Post = props => {
     post: {
       html,
       fields: { prefix, slug, },
-      frontmatter: { title, author, category }
+      frontmatter: { title, author, category, disqusId }
     },
     authornote,
-    facebook,
     next: nextPost,
     prev: prevPost,
     theme
@@ -36,8 +35,8 @@ const Post = props => {
 
   const disqusConfig = {
     shortname: process.env.GATSBY_DISQUS_NAME,
-    config: { identifier: slug, title },
-  }
+    config: { identifier: disqusId || slug, title }
+  };
 
   return (
     <React.Fragment>
