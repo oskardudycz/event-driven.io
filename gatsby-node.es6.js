@@ -260,6 +260,8 @@ export const onCreatePage = async (
     });
   }
 
+  createRedirectsToOldPosts(isEnvDevelopment, createRedirect);
+
   // Regardless of whether the original page was deleted or not, create the localized versions of
   // the current page
   await Promise.all(
@@ -340,6 +342,39 @@ export const onCreateWebpackConfig = ({ stage, loaders, actions }, options) => {
       break;
   }
 };
+
+function createRedirectsToOldPosts(isEnvDevelopment, createRedirect) {
+  [
+    {
+      from: "/2017/11/05/co-gra-na-gitarze-moze-dac-programiscie",
+      to: "/pl/o_tym_co_gra_na_gitarze_moze_dac_programiscie"
+    },
+    {
+      from: "/2018/04/18/mezczyzna-w-it",
+      to: "/pl/mezczyzna_w_IT"
+    },
+    {
+      from: "/2019/11/30/zrodla-otwartosci",
+      to: "/pl/zrodla_otwartosci"
+    },
+    {
+      from: "/2020/02/16/relacja-z-domain-driven-design-europe-2020-cz-1-event-sourcing",
+      to: "/pl/relacja_z_doman_driven_design_europe_2020"
+    },
+    {
+      from: "/2020/10/01/jak-zaczac-z-open-source",
+      to: "/pl/jak_zaczac_z_open_source"
+    }
+  ].forEach(r => {
+    createRedirect({
+      fromPath: r.from,
+      toPath: r.to,
+      isPermanent: true,
+      redirectInBrowser: isEnvDevelopment,
+      statusCode: 301
+    });
+  });
+}
 
 export const onPreBuild = ({ actions: { createRedirect } }, pluginOptions) => {
   const isEnvDevelopment = process.env.NODE_ENV === 'development';
