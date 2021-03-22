@@ -16,7 +16,7 @@ Także tego. Co chciałbym Wam w zasadzie przekazać? No chciałbym zaprosić. Z
 
 – [Event Sourcing i CQRS w .NET Core](https://github.com/oskardudycz/EventSourcing.NetCore) – nieskromnie uważam, że całkiem przyjemne repo. Próbuję w nim pokazać, że Event Sourcing i CQRS są klawe. Pokazuję też, że implementacja w .NET Core nie musi być trudna. Gotowe przykłady, kompilujący się kod. Zachęcam. Można też obejrzeć jak na [94tym spotkaniu Wrocławskiej Grupy .NET](http://wrocnet.github.io/2017/02/21/94-spotkanie-wroclawskiej-grupy-net.html) próbowałem to (nie)udolnie przedstawić. Gdzieś pomiędzy nieśmiesznymi żartami.
 
-`youtube https://www.youtube.com/watch?v=i1XDr9km0RY`
+`youtube: https://www.youtube.com/watch?v=i1XDr9km0RY`
 
 – [.NET Core With Docker](https://github.com/oskardudycz/NetCoreWithDocker) – tutorial o tym jak szybko i przyjemnie zrobić WebApi przy pomocy .NET Core, Entity Framework oraz o tym jak Docker może nam w tym pomóc
 

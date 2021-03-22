@@ -346,6 +346,10 @@ export const onCreateWebpackConfig = ({ stage, loaders, actions }, options) => {
 function createRedirectsToOldPosts(isEnvDevelopment, createRedirect) {
   [
     {
+      from: "2017/01/06/metallica-skonczyla-sie-na-kill-em-all-a-ja-ide-w-open-sourcey/",
+      to: "/pl/metallica_skonczyla_sie_na_kill_em_all_a_ja_ide_w_open_sourcey"
+    },
+    {
       from: "/2017/11/05/co-gra-na-gitarze-moze-dac-programiscie",
       to: "/pl/o_tym_co_gra_na_gitarze_moze_dac_programiscie"
     },

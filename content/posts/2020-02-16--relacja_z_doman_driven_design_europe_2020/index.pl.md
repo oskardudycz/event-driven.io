@@ -1,6 +1,6 @@
 ---
 title: Relacja z Domain Driven Design Europe 2020 – Event Sourcing
-category: "Open Source"
+category: "Event Sourcing"
 cover: 2020-02-16-cover.jpg
 author: oskar dudycz
 disqusId: 361 https://oskar-dudycz.pl/?p=361
