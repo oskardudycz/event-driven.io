@@ -13,12 +13,162 @@ Events projections may get tricky. Let's discuss today one of the non-trivial ca
 
 It does not seem particularly difficult, and it does not have to be. However, when we go deeper into that, it may turn out that it is not always that simple. **What if we have relationships between different projections results?** For example, if we have a School with Students and their parents? How to create a projection in which we have the school and all the children with their parents' names? How to handle nested relations?
 
+```csharp
+class SchoolDashboard
+{
+    string SchoolId;
+    string Name;
+    StudentWithParents[] Students;
+}
+
+class StudentWithParents
+{
+    string Id;
+    string Name;
+    Parent Mother;
+    Parent Father;
+}
+
+class Parent
+{
+    string Id;
+    string Name;
+}
+```
+
 In my opinion, there are three main options for approaching this topic. Plus grey matter:
 
 1. **Publish a bigger event** (_"fat event"_), which has all the data needed to build a read model by projection. For example, _StudentAddedToSchool_ with _StudentId_, _SchoolId_, but also whole student data together with nested parent data.
-2. **Publish the event with only identifiers of dependent objects.** E.g. _StudentAddedDoSchool_ with from  _StudentId_, _SchoolId_, but also the student's data with the parents' identifiers. In this case, if we want to have a denormalised reading model, we can load dependent data (e.g. parents' names) at the moment of applying the projection.
-3. **Publish the event as in point 2, but do not read the dependent data.** Then we keep the normalised data. So classically like in relational databases. Thus we'll join data (or "do lookup" if we are using the document database) while reading.
+    ```csharp
+    class StudentAddedToSchool
+    {
+        string SchoolId;
+        StudentWithParents Student;
+    }
 
+    class SchoolDashboardProjection : Projection<SchoolDashboard>
+    {
+        SchoolDashboardProjection()
+        {
+            // Select dashboard view with Id equal to SchoolId from event
+            Project(event => event.SchoolId, Handle);
+        }
+
+        void Handle(StudentAddedToSchool event, SchoolDashboard view)
+        {
+            view.Students.Add(event.Student);
+        }
+    }
+
+    // query by name
+    var name = "John Smith";
+    var students = database.Students.Where(s => s.Name == name).ToList();
+    ```
+2. **Publish the event with only identifiers of dependent objects.** E.g. _StudentAddedDoSchool_ with from  _StudentId_, _SchoolId_, but also the student's data with the parents' identifiers. In this case, if we want to have a denormalised reading model, we can load dependent data (e.g. parents' names) at the moment of applying the projection.
+    ```csharp
+    class StudentWithParentIds
+    {
+        string Id;
+        string Name;
+        string MotherId;
+        string FatherId;
+    }
+
+    class StudentAddedToSchool
+    {
+        string SchoolId;
+        StudentWithParents Student;
+    }
+
+    class SchoolDashboardProjection : Projection<SchoolDashboard>
+    {
+        Database database;
+
+        SchoolDashboardProjection(Database database)
+        {
+            this.database = database;
+            // Select dashboard view with Id equal to SchoolId from event
+            Project(event => event.SchoolId, Handle);
+        }
+
+        void Handle(StudentAddedToSchool event, SchoolDashboard view)
+        {
+            var mother = database.Load<Parent>(event.Student.MotherId);
+            var father = database.Load<Parent>(event.Student.FatherId);
+
+            var student = new StudentWithParents
+            {
+                Id = event.Student.Id;
+                Name = event.Student.Name;
+                Mother = mother;
+                Father = father;
+            }
+
+            view.Students.Add(student);
+        }
+    }
+
+    // query by name
+    var name = "John Smith";
+    var students = database.Students.Where(s => s.Name == name).ToList();
+    ```
+3. **Publish the event as in point 2, but do not read the dependent data.** Then we keep the normalised data. So classically like in relational databases. Thus we'll join data (or "do lookup" if we are using the document database) while reading.
+    ```csharp
+    class StudentWithParentIds
+    {
+        string Id;
+        string Name;
+        string MotherId;
+        string FatherId;
+    }
+
+    class StudentAddedToSchool
+    {
+        string SchoolId;
+        StudentWithParents Student;
+    }
+
+    class SchoolDashboard
+    {
+        string SchoolId;
+        string Name;
+        StudentWithParentIds[] Students;
+    }
+    
+    class SchoolDashboardProjection : Projection<SchoolDashboard>
+    {
+        SchoolDashboardProjection()
+        {
+            // Select dashboard view with Id equal to SchoolId from event
+            Project(event => event.SchoolId, Handle);
+        }
+
+        void Handle(StudentAddedToSchool event, SchoolDashboard view)
+        {
+            view.Students.Add(event.Student);
+        }
+    }
+
+    // query by name
+    var name = "John Smith";
+    // two joins needed
+    var students = database
+        .Join(database.Parents,
+            student => student.Mother.Id,
+            mother => mother.Id,
+            (student, mother) => { 
+                student.Mother = mother;
+                return student;
+            })
+        .Join(database.Parents,
+            student => student.Father.Id,
+            father => father.Id,
+            (student, father) => { 
+                student.Father = father;
+                return student;
+            })
+        .ToList();
+    ```
 
 Each of these options has pros and cons:
 
