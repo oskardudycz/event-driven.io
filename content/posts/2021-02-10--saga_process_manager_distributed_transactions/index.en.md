@@ -1,6 +1,6 @@
 ---
 title: Saga and Process Manager - distributed processes in practice
-category: "Distributed processes"
+category: "Design Patterns"
 cover: 2021-02-10-cover.png
 author: oskar dudycz
 ---

@@ -1,6 +1,6 @@
 ---
 title: Outbox, Inbox patterns and delivery guarantees explained
-category: "Design Patterns"
+category: "Wzorce Projektowe"
 cover: 2020-12-30-cover.png
 author: oskar dudycz
 ---

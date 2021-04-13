@@ -1,6 +1,6 @@
 ---
 title: What's the difference between a command and an event?
-category: "Event-Driven Architecture"
+category: "Event Sourcing"
 cover: 2021-02-17-cover.png
 author: oskar dudycz
 ---

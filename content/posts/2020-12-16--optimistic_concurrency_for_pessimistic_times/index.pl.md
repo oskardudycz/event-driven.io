@@ -1,6 +1,6 @@
 ---
 title: Optimistic concurrency for pessimistic times
-category: "Design Patterns"
+category: "Wzorce projektowe"
 cover: 2020-12-16-cover.png
 author: oskar dudycz
 ---
