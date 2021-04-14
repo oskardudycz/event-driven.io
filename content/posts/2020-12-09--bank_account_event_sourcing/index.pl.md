@@ -38,7 +38,7 @@ Typically, objects in our systems do not have so many events and do not live tha
 
 Another option is to send a "summary event", which will contain the state of the object for a given moment. What does it mean in practice? Even in the financial domain, data is kept with some cadence. Usually, such systems are interested in a specific period - e.g. billing period. Even financial data do not have to be kept forever - e.g. five years for invoices in Poland. Having that, we can send a "Finished Financial Year" event for the account. It will contain the current state and other needed information. After that, we're free to and archive old events (e.g. move to another database from where we can get the full history on demand). Thanks to this we have complete information and can still keep the advantages of Event Sourcing. 
 Take a look at an excellent description of Mathias Verras Verras with the "Summary Event" pattern - http://verraes.net/2019/05/patterns-for-decoupling-distsys-summary-event/. 
-I also encourage you to do the exercises from my "Built your own event store Self-paced kit" https://github.com/oskardudycz/EventSourcing.NetCore/tree/master/Workshop/01-EventStoreBasics.
+I also encourage you to do the exercises from my "Built your own event store Self-paced kit" https://github.com/oskardudycz/EventSourcing.NetCore/tree/main/Workshops/BuildYourOwnEventStore/01-EventStoreBasics.
 
 To sum up. Bank Account as an example is sufficient for a basic introduction, but it can quickly derail discussion with going to early performance optimisations. You can present those two of the potential solutions, but it can make the Event Sourcing seem more complicated than it is. 
 
