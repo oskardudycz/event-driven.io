@@ -123,7 +123,7 @@ export const createPages = ({ graphql, actions }) => {
 
           categoryList.forEach(category => {
             createPage({
-              path: `/category/${supportedLangKey}/${_.kebabCase(category)}/`,
+              path: `/${supportedLangKey}/category/${_.kebabCase(category)}/`,
               component: categoryTemplate,
               context: {
                 category,
