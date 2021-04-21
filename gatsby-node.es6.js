@@ -24,7 +24,10 @@ export const onCreateNode = ({ node, getNode, actions }) => {
       createNodeField({
         node,
         name: `slug`,
-        value: (`${separtorIndex ? "/" : ""}${slug.substring(shortSlugStart)}`).replace(`/index.${langKey}/`,"/")
+        value: `${separtorIndex ? "/" : ""}${slug.substring(shortSlugStart)}`.replace(
+          `/index.${langKey}/`,
+          "/"
+        )
       });
     }
     createNodeField({
@@ -100,12 +103,14 @@ export const createPages = ({ graphql, actions }) => {
 
         const items = result.data.allMarkdownRemark.edges;
 
-
         supportedLanguages.forEach(supportedLangKey => {
           // Create category list
           const categorySet = new Set();
           items
-            .filter(edge => edge.node.fields.langKey === supportedLangKey && edge.node.fields.source === "posts")
+            .filter(
+              edge =>
+                edge.node.fields.langKey === supportedLangKey && edge.node.fields.source === "posts"
+            )
             .forEach(edge => {
               const {
                 node: {
@@ -134,7 +139,10 @@ export const createPages = ({ graphql, actions }) => {
           });
 
           // Create posts
-          const posts = items.filter(item => item.node.fields.source === "posts" && item.node.fields.langKey == supportedLangKey);
+          const posts = items.filter(
+            item =>
+              item.node.fields.source === "posts" && item.node.fields.langKey == supportedLangKey
+          );
           posts.forEach(({ node }, index) => {
             const slug = node.fields.slug;
             const langKey = node.fields.langKey;
@@ -158,12 +166,19 @@ export const createPages = ({ graphql, actions }) => {
           });
 
           // Create posts
-          const newsletterPlPosts = items.filter(item => item.node.fields.source === "newsletter-pl" && item.node.fields.langKey == supportedLangKey);
+          const newsletterPlPosts = items.filter(
+            item =>
+              item.node.fields.source === "newsletter-pl" &&
+              item.node.fields.langKey == supportedLangKey
+          );
           newsletterPlPosts.forEach(({ node }, index) => {
             const slug = node.fields.slug;
             const langKey = node.fields.langKey;
             const next = index === 0 ? undefined : newsletterPlPosts[index - 1].node;
-            const prev = index === newsletterPlPosts.length - 1 ? undefined : newsletterPlPosts[index + 1].node;
+            const prev =
+              index === newsletterPlPosts.length - 1
+                ? undefined
+                : newsletterPlPosts[index + 1].node;
             const source = node.fields.source;
             const path = `/${langKey}${slug}`;
 
@@ -206,7 +221,6 @@ export const createPages = ({ graphql, actions }) => {
   });
 };
 
-
 /**
  * Makes sure to create localized paths for each file in the /pages folder.
  * For example, pages/404.js will be converted to /en/404.js and /el/404.js and
@@ -227,13 +241,13 @@ export const onCreatePage = async (
     defaultLanguage,
     notFoundPage,
     excludedPages,
-    deleteOriginalPages,
+    deleteOriginalPages
   } = {
     ...DEFAULT_OPTIONS,
-    ...pluginOptions,
+    ...pluginOptions
   };
 
-  const isEnvDevelopment = process.env.NODE_ENV === 'development';
+  const isEnvDevelopment = process.env.NODE_ENV === "development";
   const originalPath = page.path;
   const is404 = originalPath.includes(notFoundPage);
 
@@ -256,7 +270,7 @@ export const onCreatePage = async (
         originalPath,
         lang: defaultLanguage,
         langKey: defaultLanguage
-      },
+      }
     });
   }
 
@@ -275,7 +289,7 @@ export const onCreatePage = async (
         Language: lang,
         isPermanent: false,
         redirectInBrowser: isEnvDevelopment,
-        statusCode: is404 ? 404 : 301,
+        statusCode: is404 ? 404 : 301
       });
 
       await createPage({
@@ -287,7 +301,7 @@ export const onCreatePage = async (
           originalPath,
           lang,
           langKey: lang
-        },
+        }
       });
     })
   );
@@ -301,10 +315,10 @@ export const onCreatePage = async (
       toPath: `/${defaultLanguage}${page.path}`,
       isPermanent: false,
       redirectInBrowser: isEnvDevelopment,
-      statusCode: is404 ? 404 : 301,
+      statusCode: is404 ? 404 : 301
     });
   }
-}
+};
 
 export const onCreateWebpackConfig = ({ stage, loaders, actions }, options) => {
   switch (stage) {
@@ -323,22 +337,22 @@ export const onCreateWebpackConfig = ({ stage, loaders, actions }, options) => {
       break;
     case "build-html":
       /*
-           * During the build step, `auth0-js` will break because it relies on
-           * browser-specific APIs. Fortunately, we don’t need it during the build.
-           * Using Webpack’s null loader, we’re able to effectively ignore `auth0-js`
-           * during the build. (See `src/utils/auth.js` to see how we prevent this
-           * from breaking the app.)
-           */
+       * During the build step, `auth0-js` will break because it relies on
+       * browser-specific APIs. Fortunately, we don’t need it during the build.
+       * Using Webpack’s null loader, we’re able to effectively ignore `auth0-js`
+       * during the build. (See `src/utils/auth.js` to see how we prevent this
+       * from breaking the app.)
+       */
       actions.setWebpackConfig({
         module: {
           rules: [
             {
               test: /auth0-js/,
-              use: loaders.null(),
-            },
-          ],
-        },
-      })
+              use: loaders.null()
+            }
+          ]
+        }
+      });
       break;
   }
 };
@@ -368,6 +382,14 @@ function createRedirectsToOldPosts(isEnvDevelopment, createRedirect) {
     {
       from: "/2020/10/01/jak-zaczac-z-open-source",
       to: "/pl/jak_zaczac_z_open_source"
+    },
+    {
+      from: "/pl/how_to_configure_algolia_for_your_site",
+      to: "/pl/how_to_configure_algolia_for_your_site_search"
+    },
+    {
+      from: "/en/how_to_configure_algolia_for_your_site",
+      to: "/en/how_to_configure_algolia_for_your_site_search"
     }
   ].forEach(r => {
     createRedirect({
@@ -381,7 +403,7 @@ function createRedirectsToOldPosts(isEnvDevelopment, createRedirect) {
 }
 
 export const onPreBuild = ({ actions: { createRedirect } }, pluginOptions) => {
-  const isEnvDevelopment = process.env.NODE_ENV === 'development';
+  const isEnvDevelopment = process.env.NODE_ENV === "development";
   const { notFoundPage } = { ...DEFAULT_OPTIONS, ...pluginOptions };
 
   // we add a generic redirect to the "not found path" for every path that's not present in the app.
@@ -390,11 +412,11 @@ export const onPreBuild = ({ actions: { createRedirect } }, pluginOptions) => {
 
   if (notFoundPage) {
     createRedirect({
-      fromPath: '/*',
+      fromPath: "/*",
       toPath: notFoundPage,
       isPermanent: false,
       redirectInBrowser: isEnvDevelopment,
-      statusCode: 302,
+      statusCode: 302
     });
   }
 };
