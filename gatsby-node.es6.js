@@ -360,7 +360,11 @@ export const onCreateWebpackConfig = ({ stage, loaders, actions }, options) => {
 function createRedirectsToOldPosts(isEnvDevelopment, createRedirect) {
   [
     {
-      from: "/2016/01/06/nauka-uczenia-sie/",
+      from: "/2015/12/07/cierpienia-niemodego-bloggera-czyli",
+      to: "/pl/cierpienia_niemlodego_bloggera"
+    },
+    {
+      from: "/2016/01/06/nauka-uczenia-sie",
       to: "/pl/nauka_uczenia_sie"
     },
     {
