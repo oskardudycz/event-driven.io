@@ -360,6 +360,14 @@ export const onCreateWebpackConfig = ({ stage, loaders, actions }, options) => {
 function createRedirectsToOldPosts(isEnvDevelopment, createRedirect) {
   [
     {
+      from: "2015/03/29/englishman-in-new-york-czyli-jak",
+      to: "/pl/englishman_in_new_york_czyli_net_w_mssql"
+    },
+    {
+      from: "/2015/10/31/what-really-grind-my-gears-1",
+      to: "/pl/what_really_grind_my_gears_if"
+    },
+    {
       from: "/2015/12/07/cierpienia-niemodego-bloggera-czyli",
       to: "/pl/cierpienia_niemlodego_bloggera"
     },
