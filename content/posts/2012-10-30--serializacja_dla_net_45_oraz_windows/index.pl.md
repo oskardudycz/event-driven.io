@@ -23,13 +23,9 @@ Pobrałem je, przekonwertowałem, poprawiłem część rzeczy, przekompilowałem
 Efekt moich prac możecie pobrać: [tutaj (src + dll)](http://joomanji.no-ip.org/blog/sharpSerializer.zip).
 
 Więcej informacji na temat SharpSerializer pod linkami:
-
-– http://www.sharpserializer.com/en/tutorial/index.html
-
-– http://www.codeproject.com/Articles/76530/XML-Serialization-of-Generic-Dictionary-Multidimen
-
-– http://www.codeproject.com/Articles/240621/How-to-serialize-data-effectively-Custom-serializa
-
-– http://www.codeproject.com/Articles/116020/Binary-Serialization-to-Isolated-Storage-in-Silver
+* http://www.sharpserializer.com/en/tutorial/index.html
+* http://www.codeproject.com/Articles/76530/XML-Serialization-of-Generic-Dictionary-Multidimen
+* http://www.codeproject.com/Articles/240621/How-to-serialize-data-effectively-Custom-serializa
+* http://www.codeproject.com/Articles/116020/Binary-Serialization-to-Isolated-Storage-in-Silver
 
 Zachęcam do zabawy z SharpSerializerem, naprawdę dobra biblioteka.

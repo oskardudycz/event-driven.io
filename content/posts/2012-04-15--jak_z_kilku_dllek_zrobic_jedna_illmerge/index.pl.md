@@ -169,17 +169,10 @@ Mam nadzieję, że tym artykułem udało mi się przybliżyć to jak ILMerge mo�
 Kody źródłowe przykładów z tego artykułu możecie znaleźć tutaj.
 
 Linki do artykułów z których korzystałem przy tworzeniu tego wpisu to:
-
-– http://www.hanselman.com/blog/MixingLanguagesInASingleAssemblyInVisualStudioSeamlesslyWithILMergeAndMSBuild.aspx
-
-– http://blogs.msdn.com/b/jomo_fisher/archive/2006/03/05/544144.aspx
-
-– http://blogs.clariusconsulting.net/kzu/leveraging-ilmerge-to-simplify-deployment-and-your-users-experience/
-
-– http://awkwardcoder.blogspot.com/2011/05/using-ilmerge-for-windows-phone-7.html
-
-– http://albao.wordpress.com/tag/ilmerge-error-documentation-exception-net/
-
-– http://nitoprograms.blogspot.com/2010/09/using-ilmerge-with-net-40-andor-rx.html
-
-– http://devnet.jetbrains.net/message/5253869#5253869
+* http://www.hanselman.com/blog/MixingLanguagesInASingleAssemblyInVisualStudioSeamlesslyWithILMergeAndMSBuild.aspx
+* http://blogs.msdn.com/b/jomo_fisher/archive/2006/03/05/544144.aspx
+* http://blogs.clariusconsulting.net/kzu/leveraging-ilmerge-to-simplify-deployment-and-your-users-experience/
+* http://awkwardcoder.blogspot.com/2011/05/using-ilmerge-for-windows-phone-7.html
+* http://albao.wordpress.com/tag/ilmerge-error-documentation-exception-net/
+* http://nitoprograms.blogspot.com/2010/09/using-ilmerge-with-net-40-andor-rx.html
+* http://devnet.jetbrains.net/message/5253869#5253869

@@ -100,22 +100,22 @@ Na początku chciałem być programistą Javy, uwielbiałem Eclipse. C# i Visual
 Flash umarł, Java się zagubiła w rozwoju, kierunek okazał się na szczęście dobry, ale praca w innych technologiach dała mi sporo dobrego. Dzięki Javie szybko nauczyłem się C#, Flashowi asynchroniczności, Ruby wzorca MVC.
 
 Sama praca w technologiach Microsoftu też była jak jazda rollercoasterem:
-– ASP.NET WebForms,
-– ASP.NET MVC (beta!)
-– Win.Forms,
-– MVVM w WPF,
-– ASP.NET MVC z koniecznością zostania specem od JavaScript,
-– Business Inteligence w MSSQL bez frontendu
+* ASP.NET WebForms,
+* ASP.NET MVC (beta!)
+* Win.Forms,
+* MVVM w WPF,
+* ASP.NET MVC z koniecznością zostania specem od JavaScript,
+* Business Inteligence w MSSQL bez frontendu
  
 Niby środowisko te same, a technologie kompletnie inne. Co ja będę Wam mówił, macie pewnie podobnie. Taka dola programisty. Ciężko się do czegoś przyzwyczajać. Można i trzeba wyznaczyć sobie kierunek. Meandrów się jednak nie uniknie. Co więcej nie warto chyba tego robić.
 
 Jak żyć gdy technologie tak szybko się zmieniają? Gdy wzorce szybko robią się nieaktualne, a frameworki JavaScriptowe szybko robią się takie zeszłotygodniowe. 
 
 Co bym radził:
-– trzymać rękę na pulsie, 
-– zachować zdrowy rozsądek,
-– być otwartym na nowe technologie, nie łapiąc jednocześnie podjarki każdym nowym frameworkiem
-– nie zasklepiać się w swoich poglądach i dobrze znanych rozwiązaniach.
+* trzymać rękę na pulsie, 
+* zachować zdrowy rozsądek,
+* być otwartym na nowe technologie, nie łapiąc jednocześnie podjarki każdym nowym frameworkiem
+* nie zasklepiać się w swoich poglądach i dobrze znanych rozwiązaniach.
 
 Czyli być optymistycznym sceptykiem. Zamkniętym w sobie gadułą. Najlepiej schizofrenikiem. To pomaga.
 

@@ -165,11 +165,11 @@ public partial class MainPage : UserControl, ICommandHandler
 
 Dodaliśmy do niego zainicjowanie połączenia z serwerem poprzez podanie adresu oraz numeru portu, na którym będziemy nasłuchiwać. Klasa ta implementuje również interfejs ICommandHandler, dzięki czemu może obsługiwać polecenia wysłane przez serwer.
 
-Dokładnie to samo moglibyśmy zrobić w przypadku MainWindow aplikacji WPF oraz MainPage w aplikacji na Phone’a, z małym wyjątkiem w przypadku tego ostatniego. Nie możemy podać jako adres serwera “localhost”, gdyż emulator telefonu potraktuje to jako odwołanie się do siebie, a nie do naszego komputera. Możemy to łatwo obejść wpisując zamiast “localhost” nazwę sieciową naszego komputera. Należy uważać też na numer portu, ale o tym szerzej w kolejnym punkcie.
+Dokładnie to samo moglibyśmy zrobić w przypadku MainWindow aplikacji WPF oraz MainPage w aplikacji na Phone'a, z małym wyjątkiem w przypadku tego ostatniego. Nie możemy podać jako adres serwera "localhost", gdyż emulator telefonu potraktuje to jako odwołanie się do siebie, a nie do naszego komputera. Możemy to łatwo obejść wpisując zamiast "localhost" nazwę sieciową naszego komputera. Należy uważać też na numer portu, ale o tym szerzej w kolejnym punkcie.
 
 ## Konfiguracja serwera
 
-Serwer w swoim zachowaniu będzie zbliżony do klienta, poza tym, że będzie musiał rozpocząć nasłuchiwanie na połączenie z klientem, a nie łączyć się bezpośrednio z nim. Utwórzmy nowy katalog solucji “Server” oraz nowy projekt “Multiplatform.Server” typu “Class Library”. Dodajmy klasę ServerProgram – będzie ona odpowiadała za rozpoczęcie nasłuchiwania oraz obsługę poleceń od klienta. Powinna ona wyglądać następująco:
+Serwer w swoim zachowaniu będzie zbliżony do klienta, poza tym, że będzie musiał rozpocząć nasłuchiwanie na połączenie z klientem, a nie łączyć się bezpośrednio z nim. Utwórzmy nowy katalog solucji "Server" oraz nowy projekt "Multiplatform.Server" typu "Class Library". Dodajmy klasę ServerProgram – będzie ona odpowiadała za rozpoczęcie nasłuchiwania oraz obsługę poleceń od klienta. Powinna ona wyglądać następująco:
 
 ```csharp
 public class ServerProgram : ICommandHandler
@@ -240,7 +240,7 @@ public class TextCommand : Command
 }
 ```
 
-Jak widzimy jest to bardzo prosta klasa. Dziedziczy po klasie Command, ma konstruktor domyślny oraz przyjmujący parametr z tekstem, który chcemy przesłać. Na pewno was zastanawia dlaczego nie zrobiłem tutaj standardowej serializacji przy pomocy BinaryFormattera. Otóż nie mogłem tego zrobić, bo z nieznanych mi powodów w Silverlight tej klasy nie ma. Można kombinować i robić [hacki stosując serializację WCFową](http://www.eggheadcafe.com/tutorials/xaml/96487d4c-d92f-4ca5-85b7-0fef6f42d6c3/silverlight-binary-serialization-and-compression-with-wcf-services.aspx), ja jednak polecam użycie Open Source’owej biblioteki [SharpSerializer](http://www.sharpserializer.com/en/index.html). Pozwala ona na całkiem sprawną i szybką serializację zarówno w zwykłych projektach .NETowych jak i Silverlight, Windows Phone.
+Jak widzimy jest to bardzo prosta klasa. Dziedziczy po klasie Command, ma konstruktor domyślny oraz przyjmujący parametr z tekstem, który chcemy przesłać. Na pewno was zastanawia dlaczego nie zrobiłem tutaj standardowej serializacji przy pomocy BinaryFormattera. Otóż nie mogłem tego zrobić, bo z nieznanych mi powodów w Silverlight tej klasy nie ma. Można kombinować i robić [hacki stosując serializację WCFową](http://www.eggheadcafe.com/tutorials/xaml/96487d4c-d92f-4ca5-85b7-0fef6f42d6c3/silverlight-binary-serialization-and-compression-with-wcf-services.aspx), ja jednak polecam użycie Open Source'owej biblioteki [SharpSerializer](http://www.sharpserializer.com/en/index.html). Pozwala ona na całkiem sprawną i szybką serializację zarówno w zwykłych projektach .NETowych jak i Silverlight, Windows Phone.
 
 Po pobraniu i dołączeniu plików dll do projektów dodajmy klasę opakowującą do dla tej biblioteki.
 
@@ -280,7 +280,7 @@ public TextCommand(string text) : this()
 }
 ```
 
-Dodajmy więc prostą funkcjonalność przesyłania tej komendy pomiędzy klientem a serwerem i odwrotnie. Klient po nawiązaniu połączenia wyśle wiadomość “Ping”, serwer mu odpowie wiadomością “Pong”. Musimy dokonać zmian w obsłudze Poleceń zarówno po stronie klienckiej ja i stronie serwerowej.
+Dodajmy więc prostą funkcjonalność przesyłania tej komendy pomiędzy klientem a serwerem i odwrotnie. Klient po nawiązaniu połączenia wyśle wiadomość "Ping", serwer mu odpowie wiadomością "Pong". Musimy dokonać zmian w obsłudze Poleceń zarówno po stronie klienckiej ja i stronie serwerowej.
 
 Klasa okna klienta wyglądało będzie po zmianach:
 
@@ -414,7 +414,7 @@ Możecie śmiało odpalić serwer, i jedną z aplikacji klienckich, wszędzie za
 
  Silverlight jako chyba najbardziej irytująca technologia Microsoftu i tutaj musi utrudniać programistom życie. Oczywiście celem jest dobro i bezpieczeństwo użytkowników końcowych. Ja jednak nie do końca ufam i nie do końca wierzę tym tłumaczeniom, skoro w Windows Phone nie ma już takich utrudnień związanych z socketami.
 
-Szczegółowo można przeczytać na ten temat w artykule [Network Security Access Restrictions in Silverlight na MSDN](http://msdn.microsoft.com/en-us/library/cc645032%28VS.95%29.aspx) – ja postaram się to skrócić w kilku zdaniach. Aby zachować bezpieczeństwo i wygodę użytkowników w Silverlight można łączyć się z Socketami tylko z zakresu 4502-4534. Dodatkowo aplikacja Silverlightowa łącząca się z serwerem na zadanym adresie i zadanym porcie najpierw próbuje połączyć się z tym adresem z portem 943. Oczekuje, że na tym porcie będzie wystawiona usługa, która mu dostarczy plik xml z informacjami o zasadach bezpieczeństwa (tzw. “policy file”).
+Szczegółowo można przeczytać na ten temat w artykule [Network Security Access Restrictions in Silverlight na MSDN](http://msdn.microsoft.com/en-us/library/cc645032%28VS.95%29.aspx) – ja postaram się to skrócić w kilku zdaniach. Aby zachować bezpieczeństwo i wygodę użytkowników w Silverlight można łączyć się z Socketami tylko z zakresu 4502-4534. Dodatkowo aplikacja Silverlightowa łącząca się z serwerem na zadanym adresie i zadanym porcie najpierw próbuje połączyć się z tym adresem z portem 943. Oczekuje, że na tym porcie będzie wystawiona usługa, która mu dostarczy plik xml z informacjami o zasadach bezpieczeństwa (tzw. "policy file").
 
 Jeżeli nie odnajdzie tej usługi i nie pobierze tego pliku, to automatycznie ignoruje połączenie uznając, że jest ono niebezpieczne. Wszystko dla naszego dobra, oczywiście.
 

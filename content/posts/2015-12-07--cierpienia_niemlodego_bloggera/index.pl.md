@@ -47,7 +47,7 @@ Już trzy? To mało? Dużo? A może w sam raz? W zasadzie każdy z argumentów t
 A po co ta moja wspaniała klasa skoro Knockout sam w sobie taki fajny? Komponenty w Knockout daje nam domyślny prosty i z grubsza spoko mechanizm wczytywania komponentów. Dodatkowo jego twórcy dali nam możliwość zmiany domyślnego mechanizmu, poprzez zdefiniowanie i podpięcie własnej klasy loadera.
 
 Po co to robić? A np. dlatego, że mnie.:
-– nie podoba się domyślna definicja komponentu przez podanie anonimowej klasy i kodu html bezpośrednio w defnicji komponentu
+* nie podoba się domyślna definicja komponentu przez podanie anonimowej klasy i kodu html bezpośrednio w defnicji komponentu
 
 ```javascript
 ko.components.register('login-component', {
@@ -64,7 +64,7 @@ ko.components.register('login-component', {
 });
 ```
 
-– nie podoba mi się również alternatywna wersja, w której muszę umieszczać w ciele html głównej strony definicji widoku pomiędzy znacznikami &lt;template&gt; i muszę pamiętać, żeby załączyć plik z klasą viewmodelu do strony, lub co gorsza zdefiniować klasę na tej stronie.
+* nie podoba mi się również alternatywna wersja, w której muszę umieszczać w ciele html głównej strony definicji widoku pomiędzy znacznikami &lt;template&gt; i muszę pamiętać, żeby załączyć plik z klasą viewmodelu do strony, lub co gorsza zdefiniować klasę na tej stronie.
 
 ```html
 <template id="login-view">
@@ -94,8 +94,8 @@ Mam drobnomieszczańskie zwyczaje, ciepła woda w kranie, te sprawy. Ja to bym c
 Przykładowo chcę wyświetlić komponent: Login. 
 
 Czy nie byłoby fajne gdyby Knockout sam sobie zaczytał:
-– widok LoginView z lokalizacji: _Scripts/Components/Login/LoginView.html_,
-– viewmodel  LoginViewModel z lokalicacji: _Scripts/Components/Login/LoginViewModel.js_?
+* widok LoginView z lokalizacji: _Scripts/Components/Login/LoginView.html_,
+* viewmodel  LoginViewModel z lokalicacji: _Scripts/Components/Login/LoginViewModel.js_?
 
 Jak to zrobić? Użyć mojej wspaniałej klasy B-)
 
@@ -106,9 +106,9 @@ Potwierdzenie tezy
 Co teraz? Detaliczny opis? Nudny listing? Może kod po prostu wkleić? Niech czytelnik ma szaradę. A może wzorem Makłowicza pokazać, że wystarczy wymyślić nazwę klasy, dopisać jedną metodę, odczekać chwilę i mamy gotową klasę na ponad 100 linii kodu? Wszystkiego po trochu?
 
 Aby przeładować Knockoutowy mechanizm loaderów komponentów należy utworzyć klasę zawierającą następujące metody:
-– _loadTemplate_ – gdy chcemy przeładować mechanizm pobierania widoku
-– _loadViewModel_ – gdy chcemy przeładować mechanizm pobierania viewmodelu
-– _getConfig_ – gdy chcemy przeładować wszystko. W-s-z-y-s-t-k-o.
+* _loadTemplate_ – gdy chcemy przeładować mechanizm pobierania widoku
+* _loadViewModel_ – gdy chcemy przeładować mechanizm pobierania viewmodelu
+* _getConfig_ – gdy chcemy przeładować wszystko. W-s-z-y-s-t-k-o.
 
 Potem wystarczy taką klasę zarejestrować. Przykładzik:
 
@@ -267,16 +267,16 @@ No i to by było na tyle. Reszta to proste metody pomocnicze. Chcesz je zobaczy�
 Podoba Ci się i chciałbyś to użyć w swoim projekcie? Pobierz [nugeta](https://www.nuget.org/packages/Knockout.ComponentByNamingConventionLoader/). Autor nawet nieśmiało zachęca do krytyki i pull requestów.
 
 No i niby rozprawka cała, podsumowania tylko brak. Wpis taki długi, ozdobników tak wiele, pewnie się znudzili, pewnie wymiękli. A chciałoby się wytrwałych zapytać czy wierzą już redaktorowi:
-– że komponenty w Knockout pozwalają robić fajny, modularny frontend, 
-– że są łatwe w użyciu, 
-– że faktycznie ułatwiają pracę, a sam Knockout pozwala się łatwo rozszerzać,
-– że użycie wymyślonej przez niego klasie może się czytelnikowi przydać w ułożeniu kodu i przyspieszeniu developmentu.
+* że komponenty w Knockout pozwalają robić fajny, modularny frontend, 
+* że są łatwe w użyciu, 
+* że faktycznie ułatwiają pracę, a sam Knockout pozwala się łatwo rozszerzać,
+* że użycie wymyślonej przez niego klasie może się czytelnikowi przydać w ułożeniu kodu i przyspieszeniu developmentu.
 
 Nawet jakby przecząco pokręcił głową to można by się nieśmiało obronić garścią linków:
-– http://knockoutjs.com/documentation/component-binding.html
-– http://knockoutjs.com/documentation/component-loaders.html
-– http://www.knockmeout.net/2014/06/knockout-3-2-preview-components.html 
-– https://javascriptkicks.com/articles/2657/i-wont-be-using-angular-for-my-next-project-and-neither-should-you
+* http://knockoutjs.com/documentation/component-binding.html
+* http://knockoutjs.com/documentation/component-loaders.html
+* http://www.knockmeout.net/2014/06/knockout-3-2-preview-components.html 
+* https://javascriptkicks.com/articles/2657/i-wont-be-using-angular-for-my-next-project-and-neither-should-you
 
 Pisać nie pisać? Publikować nie publikować?  
 
