@@ -360,19 +360,23 @@ export const onCreateWebpackConfig = ({ stage, loaders, actions }, options) => {
 function createRedirectsToOldPosts(isEnvDevelopment, createRedirect) {
   [
     {
-      from: "/2011/12/10/scrum-i-team-foundation-server-cz6/",
+      from: "/2011/11/30/scrum-i-team-foundation-server-cz5",
+      to: "/pl/scrum_i_team_foundation_server_05"
+    },
+    {
+      from: "/2011/12/10/scrum-i-team-foundation-server-cz6",
       to: "/pl/scrum_i_team_foundation_server_06"
     },
     {
-      from: "/2012/02/05/wspodzielenie-klas-w-net-silverlight-i/",
+      from: "/2012/02/05/wspodzielenie-klas-w-net-silverlight-i",
       to: "/pl/multiplatforomowe_aplikacje_w_net_01"
     },
     {
-      from: "/2012/02/05/multiplatforomowe-aplikacje-w-ne-2/",
+      from: "/2012/02/05/multiplatforomowe-aplikacje-w-ne-2",
       to: "/pl/multiplatforomowe_aplikacje_w_net_02"
     },
     {
-      from: "/2012/02/05/multiplatforomowe-aplikacje-w-net_05/",
+      from: "/2012/02/05/multiplatforomowe-aplikacje-w-net_05",
       to: "/pl/multiplatforomowe_aplikacje_w_net_03"
     },
     {

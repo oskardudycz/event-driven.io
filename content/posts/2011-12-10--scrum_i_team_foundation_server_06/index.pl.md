@@ -1,12 +1,12 @@
 ---
-title: Scrum i Team Foundation Server cz.6 – Proces TDD
+title: Scrum i Team Foundation Server cz.5 – Continuous Integration
 category: ".NET"
-cover: 2011-12-10-cover.png
+cover: 2011-11-30-cover.png
 author: oskar dudycz
 disqusId: 25 http://oskar-dudycz.pl/2011/12/10/scrum-i-team-foundation-server-cz6/
 ---
 
-![cover](2011-12-10-cover.png)
+![cover](2011-11-30-cover.png)
 
 W kilku ostatnich wpisach przedstawiłem czym jest metodyka Scrum, po co i jak ją stosować przy użyciu Team Foundation Server. W teorii moglibyśmy już rozpocząć projekt i z powodzeniem go prowadzić. Możliwe, że więcej wiedzy nie było by Wam szybko potrzebne, ale podejrzewam, że całkiem szybko zaczęły się pojawiać pytania o zarządzanie i przepływ zadań, np.:
 * Który rodzaj zadania jest  z czym powiązany?
@@ -40,6 +40,7 @@ Co z sytuacjami gdy odnajdziemy inne błędy, które nie zostały ujęte w testy
 
 Paczkę koniecznej wiedzy teoretycznej już uzyskaliśmy, możemy teraz przejść do przykładu. Będzie on pokazany na Team Foundation Server 11 DP oraz Visual Studio 11 DP. Załóżmy, że tworzymy znaną z innych wpisów grę One Card Master. Mamy już zaimplementowaną część kodu odpowiadającego za zarządzanie graczami. Dostępne już są klasy:
 * informacje o graczu:
+
 ```csharp
 public class Player
 {
