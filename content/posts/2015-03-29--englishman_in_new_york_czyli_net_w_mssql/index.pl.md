@@ -18,7 +18,7 @@ Albo dajmy na to delegacja do Wałbrzycha lub Sosnowca…
 
 Praca programisty daleka  jest od błogostanu. Nowy dzień, nowe problemy. Pudełko czekoladek prosto od Foresta. Szczególną sytuacją jest zmiana projektu. Konsternacja sięga zenitu. Nowe osoby, nowe środowisko i te parszywe nowe technologie.
 
-_"…you can hear it in my accent when I talk, I’m an Englishman in New York"_
+_"…you can hear it in my accent when I talk, I'm an Englishman in New York"_
 
 Jakiś czas temu doświadczyłem takiej zmiany. Drastyyycznej zmiany. Z intensywnej pracy przy mocno JavaScriptowym systemie przeszedłem na drugą stronę. Ciemniejszą stronę. Tam gdzie nie ma frontendu – systemu Business Inteligence w MSSQL.
 
@@ -31,7 +31,7 @@ Suma wszystkich strachów.
 Czego się obawiałem?
 
 1. Management Studio jest przyzwoitym środowiskiem do zarządzania bazą danych. Z funkcjonalnościami i rozbudowaniem Visual Studio nie ma jednak żadnego porównania. Ot taki mniej rozgarnięty koleżka. Ten co nosi za duże, używane rzeczy po starszym bracie.
-2. Skryptów inkrementalnych. Każdy z nas wie jak bolesne jest utrzymywanie tego barachła. Oczywiście można sobie radzić, stosować konwencje nazewnicze, używać migracji w Entity Framework, ale czy to czyni sprawę przyjemną? Don’t think so… Znośniejszą. W najlepszym razie. Dodajmy jeszcze do tego konieczność utrzymywania aktualnej struktury bazy, by można było zawsze odtworzyć ją od zera, kontrolę wersji i pracę na wielu branchach. Mniam. Mniam. Paluszki lizać.
+2. Skryptów inkrementalnych. Każdy z nas wie jak bolesne jest utrzymywanie tego barachła. Oczywiście można sobie radzić, stosować konwencje nazewnicze, używać migracji w Entity Framework, ale czy to czyni sprawę przyjemną? Don't think so… Znośniejszą. W najlepszym razie. Dodajmy jeszcze do tego konieczność utrzymywania aktualnej struktury bazy, by można było zawsze odtworzyć ją od zera, kontrolę wersji i pracę na wielu branchach. Mniam. Mniam. Paluszki lizać.
 3. Wdrażania na różne środowiska. Developerskie, Testowe, Preprod, Produkcjne, NaKolejneZyczenieKlienta. I każde z tych środowisk się trochę różni, na każdym trzeba trochę inne skrypty odpalić. Kup sobie chłopcze zapas melisy jeśli chcesz być wdrożeniowcem, wujo Ci to mówi. Jeden Cherry pick, drugi cherry pick, zapomnisz przerzucić jeden skrypt inkrementalny i [KA BOOM!](https://i.imgur.com/XxCqMiG.gif) Nie ma Cię – ehę. Albo produkcji. Twoja premia też gdzieś się zapodziała.
 4. Struktura i modularność projektu. Jak ładnie utrzymywać strukturę projektu w świecie MSSQL. Podział kodu, modularność, biblioteki, współdzielenie kodu przez różne projekty? Czy to w ogóle możliwe? Projekty w Management Studio, w porównaniu do tych znanych z VS to właśnie te spodnie starszego brata, które podcięto, żeby robiły za bojówki. Do tego kod się nie kompiluje, jak być pewnym, że po zmianie nazwy kolumny nie zapomnieliśmy poprawić kodu, w którejś procedurze? Jak być pewnym, że nasz projekt jest dalej stabilny?
 5. No i na koniec duszki Kacperki w porównaniu z poprzednimi punktami. Czyli takie fanaberie jak intellisence, refactoring, sprawdzanie gdzie używana jest procedura, tabela, przystępniejsze debugowanie kodu. Małe rzeczy, które czynią nas szczęśliwszymi. 
@@ -83,13 +83,13 @@ Jestem jednak dużo szczęśliwszy niż mógłbym być pracując w inny sposób.
 
 Deklaratywne programowanie i posiadanie zwykłego rodzaju projektów daje nam możliwość fajnej integracji z systemami kontroli wersji oraz zrobienia porządnego procesu Continuous Integration.
 
-_"I don’t drink coffee, I take tea, my dear. I like my toast done on one side"_
+_"I don't drink coffee, I take tea, my dear. I like my toast done on one side"_
 
 Hej hej! Mamy XXI wiek! Czas i w projektach bazodanowych się do niego zbliżyć!
 
 Dziękuję za przeczytanie.
 
-p.s. Przykłady? Pics or didn’t happen? Stay tuned. Więcej pojawi się w kolejnych wpisach.
+p.s. Przykłady? Pics or didn't happen? Stay tuned. Więcej pojawi się w kolejnych wpisach.
 
 p.s.2 garść linków do mądrzejszych ludzi:
 

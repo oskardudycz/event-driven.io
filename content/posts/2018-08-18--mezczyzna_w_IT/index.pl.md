@@ -58,7 +58,7 @@ To zrób to chociaż po to by udowodnić mi, że parytety faktycznie są niepotr
 
 p.s. garść linków od mądrzejszych ludzi
 
-- [Rachel Thomas - If you think women in tech is just a pipeline problem, you haven’t been paying attention](https://medium.com/tech-diversity-files/if-you-think-women-in-tech-is-just-a-pipeline-problem-you-haven-t-been-paying-attention-cb7a2073b996)
+- [Rachel Thomas - If you think women in tech is just a pipeline problem, you haven't been paying attention](https://medium.com/tech-diversity-files/if-you-think-women-in-tech-is-just-a-pipeline-problem-you-haven-t-been-paying-attention-cb7a2073b996)
 - [StackOverflow Podcast - Jon Skeet Wants You to Be a Feminist](https://soundcloud.com/stack-exchange/podcast-123-jon-skeet-wants-you-to-be-a-feminist)
 - [Emily Bache - Proportion of Women Programmers](https://coding-is-like-cooking.info/2017/04/proportion-of-women-programmers/)
 https://twitter.com/julielerman/status/986317578720210944

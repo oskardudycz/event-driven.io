@@ -36,7 +36,7 @@ Knockout jest tylko i aż frameworkiem MVVM. To zaleta. Jest prosty i dzięki te
 Gdzie ja dałem tę temperówkę… O jest.
 
 ## Argu-ment 2:
-Modularność jest cool. Kiedyś myślałem, że generyczność. Naaah. Przyjdźcie na wystawę LEGO, na wrocławski stadion, to zobaczycie dlaczego (jest i rym a’la Rychu Peja). Podział aplikacji na moduły daje aplikacji skalowalność, łatwość rozwoju, ponownego wykorzystania kodu. Chcesz dorzucić kilka sposobów logowania? Żaden problem, zamienić jeden widok z drugim? Keine problem! Wpiąć zestaw Robin Hooda do zestawu Ninjago? Też się da.
+Modularność jest cool. Kiedyś myślałem, że generyczność. Naaah. Przyjdźcie na wystawę LEGO, na wrocławski stadion, to zobaczycie dlaczego (jest i rym a'la Rychu Peja). Podział aplikacji na moduły daje aplikacji skalowalność, łatwość rozwoju, ponownego wykorzystania kodu. Chcesz dorzucić kilka sposobów logowania? Żaden problem, zamienić jeden widok z drugim? Keine problem! Wpiąć zestaw Robin Hooda do zestawu Ninjago? Też się da.
 
 ## Ar-gu-meeent 3:
 Komponenty w Knockout pozwalają tworzyć frontend w pełni modułowo. Czym one w ogóle są? Powiązanym ze sobą Widokiem i ViewModelem. Czyli pakiecikiem, który dostarcza zarówno logikę biznesową jak i formatę ją obsługującą – 2w1, Head&Shoulders. Powiązanie luźne jak nadgarstek nastolatka. Zgodne z zasadami SOLID. W dalszym ciągu widok nie musi za dużo wiedzieć o ViewModelu. I z wzajemnością.  Nie ma problemu z używaniem tych samych widoków i viewmodeli w różnych komponentach.
@@ -213,7 +213,7 @@ Jak widać sam algorytm jest bardzo prosty i zrobiony przez analogię. Dobra Mak
 
 **LoadViewFromUrl**
 
-Dzięcioł jaki jest każdy widzi. Preparujemy url poprzez dodanie prefiksu do ścieżki i sufiksu z ustawieniami cache’owania strony (w celach optymalizacji). Potem wywołujemy pobranie pliku poprzez jQuery‘owy $.get, a pobrany html wstrzykujemy do Knockouta przy pomocy wbudowanej metody. Jeśli coś poszło nie tak – wywołujemy domyślny mechanizm.
+Dzięcioł jaki jest każdy widzi. Preparujemy url poprzez dodanie prefiksu do ścieżki i sufiksu z ustawieniami cache'owania strony (w celach optymalizacji). Potem wywołujemy pobranie pliku poprzez jQuery‘owy $.get, a pobrany html wstrzykujemy do Knockouta przy pomocy wbudowanej metody. Jeśli coś poszło nie tak – wywołujemy domyślny mechanizm.
 
 ```javascript
 var componentsPrefix = "Scripts/Components/";

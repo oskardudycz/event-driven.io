@@ -25,7 +25,7 @@ Nasze życie nie jest jak kiedyś. Adżajle, dżiry, wartość biznesowa. Kontak
 
 Sprawdź maila. Napisz minutkę. W ogóle to czytałeś co Stefan odpisał? Build się wywalił. Krzysiek na Slacku wrzucił ważną rzecz. A jeszcze Kasia na fejsie i Józek na Łatsapie. Jak żyć?
 
-Ogólnie to chce się narzekać. PKP jednak nie jest takie głupie. Wszystko by było pięknie gdyby nie klient, tak by się dobrze pracowało. Tester męczy, PM stręczy, Klient wkurwia. No i jeszcze Ci pożal się boże współpracownicy. Merdże ciągle. Na którym to branchu? A w ogóle to czemu ja mam to poprawiać?! Czy ja ostatni tam zmieniałem? Kto w ogóle to napisał? Nie daruję, blame’a zrobię. Aaaażżżż to znowu on… Czy on się w ogóle nauczy kiedyś programować? Co tam? Eeee… Serio?! Co ten klient znowu powymyślał… No ja pierdziele…
+Ogólnie to chce się narzekać. PKP jednak nie jest takie głupie. Wszystko by było pięknie gdyby nie klient, tak by się dobrze pracowało. Tester męczy, PM stręczy, Klient wkurwia. No i jeszcze Ci pożal się boże współpracownicy. Merdże ciągle. Na którym to branchu? A w ogóle to czemu ja mam to poprawiać?! Czy ja ostatni tam zmieniałem? Kto w ogóle to napisał? Nie daruję, blame'a zrobię. Aaaażżżż to znowu on… Czy on się w ogóle nauczy kiedyś programować? Co tam? Eeee… Serio?! Co ten klient znowu powymyślał… No ja pierdziele…
 
 To Ty o mnie czy ja o Tobie?
 

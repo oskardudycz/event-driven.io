@@ -10,7 +10,7 @@ disqusId: 283 http://oskar-dudycz.pl/?p=283
 
 No cóż. Ekhm. No tak. W zasadzie to i dziwne i trochę straszne, że zaczynając wpisy na blogu chcę przepraszać. Róż na policzkach. Te sprawy. Lubię pisać, lubię gadać, ale rzadko piszę i coraz rzadziej gadam. Chciałbym ale mi się nie chcę. Chyba to znamy?
 
-No więc… No tak. Chciałem pomachać ręką. Lekko pohukać. Gdzieś tam dać znać, że ciągle żyję i białej flagi Francji nie wywieszam. W poprzednim wpisie mówiłem, że idę w open source’y no i faktycznie idę. Licznik na [Twitterze](https://twitter.com/oskar_at_net) bije. [Github](https://github.com/oskardudycz) się rozbudowuje. Planów też trochę. Czy wyjdzie z nimi jak zawsze?
+No więc… No tak. Chciałem pomachać ręką. Lekko pohukać. Gdzieś tam dać znać, że ciągle żyję i białej flagi Francji nie wywieszam. W poprzednim wpisie mówiłem, że idę w open source'y no i faktycznie idę. Licznik na [Twitterze](https://twitter.com/oskar_at_net) bije. [Github](https://github.com/oskardudycz) się rozbudowuje. Planów też trochę. Czy wyjdzie z nimi jak zawsze?
 
 Także tego. Co chciałbym Wam w zasadzie przekazać? No chciałbym zaprosić. Zachodźcie, zachodźcie! Co mam Wam do pokazania?
 

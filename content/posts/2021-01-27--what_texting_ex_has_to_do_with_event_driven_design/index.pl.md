@@ -12,7 +12,7 @@ We sometimes feel melancholic, blue and a bit messy. When we enhance those feeli
 - "Maybe she didn't read it?"
 - "Maybe I can remove it or at least edit it?", 
 
-Sometimes we are lucky, e.g. we can delete a message on WhatsApp, or edit it on Skype. However, we aren’t sure if the message was read or not. Usually, the best thing to do is apologize or write "I was just kidding!". You cannot retract a bad situation, but you can try to fix it. 
+Sometimes we are lucky, e.g. we can delete a message on WhatsApp, or edit it on Skype. However, we aren't sure if the message was read or not. Usually, the best thing to do is apologize or write "I was just kidding!". You cannot retract a bad situation, but you can try to fix it. 
 
 Why am I writing this to you? People often ask me, what will happen in event-driven systems when we publish a wrong event (e.g., missing data, incorrect data, etc.). The recipe is similar to the scenario when texting your ex: 
 1. **Think upfront:** This can save you a lot of trouble and difficulties. Make sure that you correctly understood the logic with the Business, then write tests. Such an approach can protect you from bad consequences.

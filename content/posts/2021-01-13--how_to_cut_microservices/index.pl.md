@@ -9,7 +9,7 @@ author: oskar dudycz
 
 Today, I'm holding a keyboard in one hand and scissors in the other. What do I need these scissors for? According to the post title, I would like to talk about cutting (micro) services.
 
-We’ve come a long way from the moment when the saying "you do a monolith" sounded like "you're dumb", to the time when many people refrain from saying the word "microservices". How is that? In the IT world, buzzwords are popping out every day. Just like in clothes selection, fashion is an essential thing in programming. It is also interesting how initially smart ideas and patterns, chewed by the jaws of the blogosphere, can eventually become something inedible.
+We've come a long way from the moment when the saying "you do a monolith" sounded like "you're dumb", to the time when many people refrain from saying the word "microservices". How is that? In the IT world, buzzwords are popping out every day. Just like in clothes selection, fashion is an essential thing in programming. It is also interesting how initially smart ideas and patterns, chewed by the jaws of the blogosphere, can eventually become something inedible.
 
 I believe that we can divide misunderstandings about microservices into two categories:
 

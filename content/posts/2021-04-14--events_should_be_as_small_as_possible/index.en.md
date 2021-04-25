@@ -13,7 +13,7 @@ TV size? The bigger, the better. Debt amount? Opposite. It's hard to find the ri
 
 It is an inverted type of communication. In the classic HTTP API, the interested client must request the service. By publishing the event, we inform all listening modules of its occurrence. We might not even know if anyone is interested. We're unsure and don't know what will happen after the message is received. That's okay most of the time, as it allows for decoupling of services and setting correct boundaries.
 
-Contract definition practices and review are pretty standard for Web API. There’s a lot of discussion about whether or not we’re designing a system according to REST practices. For some reason, such an approach is not typical for the events' definition. 
+Contract definition practices and review are pretty standard for Web API. There's a lot of discussion about whether or not we're designing a system according to REST practices. For some reason, such an approach is not typical for the events' definition. 
 
 **In my opinion, Web API and events' design are not so different. Both of them should be treated as the public API.** Of course, they have other formats, protocols, etc.; however, general design principles are the same. If we're using an _API-first_ approach, we should define public API as the first step of our design process. By public, I mean _"public-public"_ available for all and an _"internal public"_ API between our services. The API definition should be our starting point for the system design.
 
@@ -51,7 +51,7 @@ In short, we're demanding other modules know all the internal details of our pro
 
 What if we extend the process by an additional event? What if we change the shape of events? For example, if the financial module does not know that we added the _ProductQuantityUpdated_ event, it might not be able to not generate the correct data for the invoice. 
 
-**It gets demanding not only for others but also for us.** We can ignore other’s needs and provide breaking changes. However, if we care for our product's success, then we need to develop coordination. Inform others about breaking changes, etc.  
+**It gets demanding not only for others but also for us.** We can ignore other's needs and provide breaking changes. However, if we care for our product's success, then we need to develop coordination. Inform others about breaking changes, etc.  
 
 **I suggest splitting events into Internal and External.** Internal are meaningful in the specific module context. External are understandable in the context of the entire system and overall business process. 
 
