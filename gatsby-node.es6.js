@@ -360,6 +360,10 @@ export const onCreateWebpackConfig = ({ stage, loaders, actions }, options) => {
 function createRedirectsToOldPosts(isEnvDevelopment, createRedirect) {
   [
     {
+      from: "/2012/02/05/multiplatforomowe-aplikacje-w-net_05/",
+      to: "/pl/multiplatforomowe_aplikacje_w_net_03"
+    },
+    {
       from: "2012/03/23/wrocnet-team-foundation-server-to-nie",
       to: "/pl/wrocnet_team_foundation_server_to_nie_svn"
     },
@@ -368,27 +372,27 @@ function createRedirectsToOldPosts(isEnvDevelopment, createRedirect) {
       to: "/pl/jak_z_kilku_dllek_zrobic_jedna_illmerge"
     },
     {
-      from: "2012/10/30/serializacja-dla-net-45-oraz-windows",
+      from: "/2012/10/30/serializacja-dla-net-45-oraz-windows",
       to: "/pl/serializacja_dla_net_45_oraz_windows"
     },
     {
-      from: "2012/11/08/prezent-od-microsoft-darmowa-ksiazka-o",
+      from: "/2012/11/08/prezent-od-microsoft-darmowa-ksiazka-o",
       to: "/pl/darmowa_ksiazka_o_windows_8"
     },
     {
-      from: "2014/05/31/refleksyjnie-plus-pierwszy-w-historii-vlog",
+      from: "/2014/05/31/refleksyjnie-plus-pierwszy-w-historii-vlog",
       to: "/pl/refleksyjnie_plus_pierwszy_w_historii_vlog"
     },
     {
-      from: "2014/06/10/na-temat-branzy",
+      from: "/2014/06/10/na-temat-branzy",
       to: "/pl/na_temat_branzy"
     },
     {
-      from: "2015/01/31/borys-najlepiej-dryblowa",
+      from: "/2015/01/31/borys-najlepiej-dryblowa",
       to: "/pl/borys_najlepiej_dryblowal"
     },
     {
-      from: "2015/02/17/sqlowa-ciekawostka-1-uwazaj-na-exists",
+      from: "/2015/02/17/sqlowa-ciekawostka-1-uwazaj-na-exists",
       to: "/pl/sqlowa_ciekawostka_uwazaj_na_exists"
     },
     {
