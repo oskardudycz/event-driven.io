@@ -360,6 +360,10 @@ export const onCreateWebpackConfig = ({ stage, loaders, actions }, options) => {
 function createRedirectsToOldPosts(isEnvDevelopment, createRedirect) {
   [
     {
+      from: "2012/03/23/wrocnet-team-foundation-server-to-nie",
+      to: "/pl/wrocnet_team_foundation_server_to_nie_svn"
+    },
+    {
       from: "2012/04/15/jak-z-kilku-dllek-zrobic-jedna-czyli",
       to: "/pl/jak_z_kilku_dllek_zrobic_jedna_illmerge"
     },
