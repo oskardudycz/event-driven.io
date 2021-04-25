@@ -338,8 +338,8 @@ export const onCreateWebpackConfig = ({ stage, loaders, actions }, options) => {
     case "build-html":
       /*
        * During the build step, `auth0-js` will break because it relies on
-       * browser-specific APIs. Fortunately, we don’t need it during the build.
-       * Using Webpack’s null loader, we’re able to effectively ignore `auth0-js`
+       * browser-specific APIs. Fortunately, we don't need it during the build.
+       * Using Webpack's null loader, we're able to effectively ignore `auth0-js`
        * during the build. (See `src/utils/auth.js` to see how we prevent this
        * from breaking the app.)
        */
@@ -359,6 +359,34 @@ export const onCreateWebpackConfig = ({ stage, loaders, actions }, options) => {
 
 function createRedirectsToOldPosts(isEnvDevelopment, createRedirect) {
   [
+    {
+      from: "2012/04/15/jak-z-kilku-dllek-zrobic-jedna-czyli",
+      to: "/pl/jak_z_kilku_dllek_zrobic_jedna_illmerge"
+    },
+    {
+      from: "2012/10/30/serializacja-dla-net-45-oraz-windows",
+      to: "/pl/serializacja_dla_net_45_oraz_windows"
+    },
+    {
+      from: "2012/11/08/prezent-od-microsoft-darmowa-ksiazka-o",
+      to: "/pl/darmowa_ksiazka_o_windows_8"
+    },
+    {
+      from: "2014/05/31/refleksyjnie-plus-pierwszy-w-historii-vlog",
+      to: "/pl/refleksyjnie_plus_pierwszy_w_historii_vlog"
+    },
+    {
+      from: "2014/06/10/na-temat-branzy",
+      to: "/pl/na_temat_branzy"
+    },
+    {
+      from: "2015/01/31/borys-najlepiej-dryblowa",
+      to: "/pl/borys_najlepiej_dryblowal"
+    },
+    {
+      from: "2015/02/17/sqlowa-ciekawostka-1-uwazaj-na-exists",
+      to: "/pl/sqlowa_ciekawostka_uwazaj_na_exists"
+    },
     {
       from: "2015/03/29/englishman-in-new-york-czyli-jak",
       to: "/pl/englishman_in_new_york_czyli_net_w_mssql"
