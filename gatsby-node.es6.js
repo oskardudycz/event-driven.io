@@ -360,6 +360,10 @@ export const onCreateWebpackConfig = ({ stage, loaders, actions }, options) => {
 function createRedirectsToOldPosts(isEnvDevelopment, createRedirect) {
   [
     {
+      from: "/2011/11/22/scrum-i-team-foundation-server-cz4/",
+      to: "/pl/scrum_i_team_foundation_server_04"
+    },
+    {
       from: "/2011/11/30/scrum-i-team-foundation-server-cz5",
       to: "/pl/scrum_i_team_foundation_server_05"
     },
