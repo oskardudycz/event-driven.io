@@ -72,7 +72,7 @@ Udało Wam się? Mnie nie. Przy próbie dodania referencji w projekcie Silverlig
 
 ![mp](mp-08.png)
 
-Podobny dostaniemy przy próbie dodania referencji do projektu Phone’owego. Zatem w jaki sposób można współdzielić pliki skoro nie możemy podpiąć projektu do wszystkich typów aplikacji klienckich?
+Podobny dostaniemy przy próbie dodania referencji do projektu Phone'owego. Zatem w jaki sposób można współdzielić pliki skoro nie możemy podpiąć projektu do wszystkich typów aplikacji klienckich?
 
 Rozwiązanie tego problemu nie jest ani eleganckie, ani najwygodniejsze, ale póki co jedyne rozsądne. Musimy utworzyć analogiczne projekty z klasami wspólnymi dla każdej z docelowych platform klienckich:
 
@@ -80,7 +80,7 @@ Rozwiązanie tego problemu nie jest ani eleganckie, ani najwygodniejsze, ale pó
 
 ![mp](mp-09.png)
 
-* Phone’a
+* Phone'a
 
 ![mp](mp-10.png)
 
