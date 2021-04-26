@@ -1,6 +1,6 @@
 ---
 title: Scrum i Team Foundation Server cz.1 - wprowadzenie do Scrum
-category: ".NET"
+category: "Agile"
 cover: 2011-11-09-cover.png
 author: oskar dudycz
 disqusId: 30 http://oskar-dudycz.pl/2011/11/09/scrum-i-team-foundation-system-cz1/

@@ -360,6 +360,26 @@ export const onCreateWebpackConfig = ({ stage, loaders, actions }, options) => {
 function createRedirectsToOldPosts(isEnvDevelopment, createRedirect) {
   [
     {
+      from: "/2011/09/21/witam-jest-to-moj-pierwszy-wpis-na",
+      to: "/pl/inauguracja"
+    },
+    {
+      from: "/2011/09/22/wielokrotny-join-we-fluentnhibernate",
+      to: "/pl/wielokrotny_join_we_fluentnhibernate"
+    },
+    {
+      from: "/2011/10/01/jak-odblokowac-workspace-w-tfs",
+      to: "/pl/jak_odblokowac_workspace_w_tfs"
+    },
+    {
+      from: "/2011/10/06/bad-cannot-update-przy-pobieraniu",
+      to: "/pl/blad_cannot_update_przy_pobieraniu"
+    },
+    {
+      from: "/2011/10/17/ciekawostki-cz-1",
+      to: "/pl/ciekawostki_equals"
+    },
+    {
       from: "/2011/11/09/scrum-i-team-foundation-system-cz1",
       to: "/pl/scrum_i_team_foundation_server_01"
     },

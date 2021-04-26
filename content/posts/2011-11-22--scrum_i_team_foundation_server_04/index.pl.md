@@ -97,9 +97,9 @@ W sekcji "Group membership" naciskamy przycisk "manage membership". W znanym nam
 
 ## 4. Przygotowania do pierwszego sprintu
 
-Mając wybrany i utworzony zespół możemy przystąpić do planowania projektu. Zgodnie z metodyką Scrum będziemy go dzielić na Sprinty oraz pomocniczo grupować je w Release’y. Grupowanie takie jest przydatne z tego względu, że pozwala na lepszą motywację, grupowanie faz oddawania projektu klientowi (np. jeden release to utworzenie konkretnego modułu). Tak jak wspomniałem we wcześniejszym artykule długość Sprintu być w przedziale 2-4 tygodnie (z tym, że każdy Sprint powinien trwać tyle samo). Liczba sprintów w Releasie też jest kwestią ustaleń.
+Mając wybrany i utworzony zespół możemy przystąpić do planowania projektu. Zgodnie z metodyką Scrum będziemy go dzielić na Sprinty oraz pomocniczo grupować je w Release'y. Grupowanie takie jest przydatne z tego względu, że pozwala na lepszą motywację, grupowanie faz oddawania projektu klientowi (np. jeden release to utworzenie konkretnego modułu). Tak jak wspomniałem we wcześniejszym artykule długość Sprintu być w przedziale 2-4 tygodnie (z tym, że każdy Sprint powinien trwać tyle samo). Liczba sprintów w Releasie też jest kwestią ustaleń.
 
-Dostęp do Sprintów oraz Release’ów znajduje się w sekcji Iterations.
+Dostęp do Sprintów oraz Release'ów znajduje się w sekcji Iterations.
 
 ![stfs](stfs-4-17.png)
 
