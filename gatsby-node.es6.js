@@ -360,6 +360,14 @@ export const onCreateWebpackConfig = ({ stage, loaders, actions }, options) => {
 function createRedirectsToOldPosts(isEnvDevelopment, createRedirect) {
   [
     {
+      from: "http://oskar-dudycz.pl/*",
+      to: "https://event-driven.io/:splat"
+    },
+    {
+      from: "https://oskar-dudycz.pl/*",
+      to: "https://event-driven.io/:splat"
+    },
+    {
       from: "/2011/09/21/witam-jest-to-moj-pierwszy-wpis-na",
       to: "/pl/inauguracja"
     },
