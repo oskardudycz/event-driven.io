@@ -158,7 +158,7 @@ Jak łatwo zauważyć podmieniliśmy tylko ścieżki do plików z domyślnymi us
 
 ## ILMerge i Resharper
 
-eżeli zrobiliście wszystko zgodnie z powyższym opisem to po dodaniu klas i próbie wywołania ich w projekcie Application okaże się, że Resharper nie widzi klas z podmodułów (Authorization, Registration, Login). Dzieje się tak dlatego, że projekty naszych modułów znajdują się w tej samej solucji co projekt Application. Jeżeli utworzylibyśmy osobną solucję, w której nie znajdowałyby się nasze podmoduły, a tylko projekt Application okaże się, że Resharper widzi je już bez większych problemów.
+Jeżeli zrobiliście wszystko zgodnie z powyższym opisem to po dodaniu klas i próbie wywołania ich w projekcie Application okaże się, że Resharper nie widzi klas z podmodułów (Authorization, Registration, Login). Dzieje się tak dlatego, że projekty naszych modułów znajdują się w tej samej solucji co projekt Application. Jeżeli utworzylibyśmy osobną solucję, w której nie znajdowałyby się nasze podmoduły, a tylko projekt Application okaże się, że Resharper widzi je już bez większych problemów.
 
 Jest to błąd Resharpera – chociaż oni [twierdzą](http://devnet.jetbrains.net/message/5253869#5253869) inaczej. Zapewne nie chce im się tego naprawiać, ale oczywiście mają na to mądre wytłumaczenie. Mówią, że jeżeli doprowadziło się do takiej sytuacji to znaczy, że układ projektów jest zły. Można by się było z nimi po części zgodzić, bo moduły powinny być traktowane jako całość i posiadać osobne solucje a nie być wepchnięte w jedną dużą. Jest to jednak spore uniedogodnienie, szczególnie na początku tworzenia systemu, gdy moduły są często zmieniane – trzeba wtedy pracować na kilku solucjach na raz, albo ignorować błędnie podświetlony przez Resharpera kod.
 
