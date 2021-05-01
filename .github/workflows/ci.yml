@@ -1,0 +1,54 @@
+name: Build and Deploy
+
+on:
+  # run it on push to the default repository branch
+  push:
+    branches: [main]
+  # run it during pull request
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-and-test-code:
+    name: Build and test application code
+    # use system defined below in the tests matrix
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      # define the test matrix
+      matrix:
+        # selected operation systems to run CI
+        os: [ubuntu-latest]
+        # selected node version to run CI
+        node-version: [10.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          # use the node version defined in matrix above
+          node-version: ${{ matrix.node-version }}
+      # install dependencies
+      - run: yarn install
+      # build
+      - run: yarn build
+        env:
+          ALGOLIA_ADMIN_API_KEY: ${{ secrets.ALGOLIA_ADMIN_API_KEY }}
+          ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
+          ALGOLIA_INDEX_NAME: ${{ secrets.ALGOLIA_INDEX_NAME }}
+          ALGOLIA_SEARCH_ONLY_API_KEY: ${{ secrets.ALGOLIA_SEARCH_ONLY_API_KEY }}
+          AUTH0_CALLBACK: ${{ secrets.AUTH0_CALLBACK }}
+          AUTH0_CLIENTID: ${{ secrets.AUTH0_CLIENTID }}
+          AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
+          GATSBY_AUTH0_CALLBACK: ${{ secrets.GATSBY_AUTH0_CALLBACK }}
+          GATSBY_AUTH0_CLIENTID: ${{ secrets.GATSBY_AUTH0_CLIENTID }}
+          GATSBY_AUTH0_DOMAIN: ${{ secrets.GATSBY_AUTH0_DOMAIN }}
+          GATSBY_DISQUS_NAME: ${{ secrets.GATSBY_DISQUS_NAME }}
+          GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
+      # deploy
+      - run: yarn deploy:prod
+        if: ${{ github.ref == 'refs/heads/main' }}
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}

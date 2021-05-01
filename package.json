@@ -101,6 +101,7 @@
     "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-react": "^7.10.0",
     "json-loader": "^0.5.7",
+    "netlify-cli": "^3.24.3",
     "postcss": "^7.0.0",
     "postcss-cli": "^5.0.1",
     "postcss-cssnext": "^3.1.0",
