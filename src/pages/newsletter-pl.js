@@ -3,7 +3,6 @@ import React from "react";
 import { graphql } from "gatsby";
 import { ThemeContext } from "../layouts";
 import Blog from "../components/Blog";
-import Hero from "../components/Hero";
 import Seo from "../components/Seo";
 
 class IndexPage extends React.Component {
@@ -67,7 +66,10 @@ export default IndexPage;
 export const query = graphql`
   query NewsletterPlQuery($langKey: String!) {
     posts: allMarkdownRemark(
-      filter: { fileAbsolutePath: { regex: "//newsletter-pl/[0-9]+.*--/" }, fields: { langKey: { eq: $langKey } } }
+      filter: {
+        fileAbsolutePath: { regex: "//newsletter-pl/[0-9]+.*--/" }
+        fields: { langKey: { eq: $langKey } }
+      }
       sort: { fields: [fields___prefix], order: DESC }
     ) {
       edges {

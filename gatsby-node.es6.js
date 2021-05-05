@@ -1,4 +1,3 @@
-//const webpack = require("webpack");
 const _ = require("lodash");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const path = require("path");
@@ -165,7 +164,8 @@ export const createPages = ({ graphql, actions }) => {
             });
           });
 
-          // Create posts
+          // -------------------------
+          // Create newsletter posts
           const newsletterPlPosts = items.filter(
             item =>
               item.node.fields.source === "newsletter-pl" &&
@@ -195,6 +195,37 @@ export const createPages = ({ graphql, actions }) => {
               }
             });
           });
+          // -------------------------
+          // Create newsletter posts
+          const architectureWeeklyPosts = items.filter(
+            item => item.node.fields.source === "architecture-weekly"
+            // && item.node.fields.langKey == supportedLangKey
+          );
+          architectureWeeklyPosts.forEach(({ node }, index) => {
+            const slug = node.fields.slug;
+            const langKey = supportedLangKey; //node.fields.langKey;
+            const next = index === 0 ? undefined : architectureWeeklyPosts[index - 1].node;
+            const prev =
+              index === architectureWeeklyPosts.length - 1
+                ? undefined
+                : architectureWeeklyPosts[index + 1].node;
+            const source = node.fields.source;
+            const path = `/${langKey}${slug}`;
+
+            createPage({
+              path,
+              component: postTemplate,
+              context: {
+                slug,
+                lang: langKey,
+                langKey,
+                prev,
+                next,
+                source
+              }
+            });
+          });
+          // -------------------------
         });
 
         // and pages.

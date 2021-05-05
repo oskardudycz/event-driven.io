@@ -90,6 +90,13 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
+        path: `${__dirname}/content/architecture-weekly/`,
+        name: "architecture-weekly"
+      }
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
         path: `${__dirname}/content/pages/`,
         name: "pages"
       }
@@ -104,55 +111,56 @@ module.exports = {
     {
       resolve: `gatsby-transformer-remark`,
       options: {
-        plugins: [{
-          resolve: "gatsby-remark-embed-video",
-          options: {
-            maxWidth: 800,
-            ratio: 1.77,
-            height: 400,
-            related: false,
-            noIframerder: true,
+        plugins: [
+          {
+            resolve: "gatsby-remark-embed-video",
+            options: {
+              maxWidth: 800,
+              ratio: 1.77,
+              height: 400,
+              related: false,
+              noIframerder: true
+            }
           },
-        },
           `gatsby-plugin-sharp`,
-        {
-          resolve: `gatsby-remark-images`,
-          options: {
-            maxWidth: 800,
-            backgroundColor: "transparent",
-            wrapperStyle: "height: auto"
-          }
-        },
-        {
-          resolve: `gatsby-remark-responsive-iframe`,
-          options: {
-            wrapperStyle: `margin-bottom: 2em`
-          }
-        },
+          {
+            resolve: `gatsby-remark-images`,
+            options: {
+              maxWidth: 800,
+              backgroundColor: "transparent",
+              wrapperStyle: "height: auto"
+            }
+          },
+          {
+            resolve: `gatsby-remark-responsive-iframe`,
+            options: {
+              wrapperStyle: `margin-bottom: 2em`
+            }
+          },
           `gatsby-remark-prismjs`,
           `gatsby-remark-copy-linked-files`,
           `gatsby-remark-smartypants`,
-        {
-          resolve: "gatsby-remark-emojis",
-          options: {
-            // Deactivate the plugin globally (default: true)
-            active: true,
-            // Add a custom css class
-            class: "emoji-icon",
-            // Select the size (available size: 16, 24, 32, 64)
-            size: 64,
-            // Add custom styles
-            styles: {
-              display: "inline",
-              margin: "0",
-              "margin-top": "1px",
-              position: "relative",
-              top: "5px",
-              width: "25px"
+          {
+            resolve: "gatsby-remark-emojis",
+            options: {
+              // Deactivate the plugin globally (default: true)
+              active: true,
+              // Add a custom css class
+              class: "emoji-icon",
+              // Select the size (available size: 16, 24, 32, 64)
+              size: 64,
+              // Add custom styles
+              styles: {
+                display: "inline",
+                margin: "0",
+                "margin-top": "1px",
+                position: "relative",
+                top: "5px",
+                width: "25px"
+              }
             }
-          }
-        },        
-        "@weknow/gatsby-remark-twitter"
+          },
+          "@weknow/gatsby-remark-twitter"
         ]
       }
     },
@@ -160,10 +168,10 @@ module.exports = {
     `gatsby-transformer-sharp`,
     `gatsby-plugin-react-helmet`,
     {
-      resolve: 'gatsby-plugin-i18n',
+      resolve: "gatsby-plugin-i18n",
       options: {
-        langKeyDefault: 'en'
-      },
+        langKeyDefault: "en"
+      }
     },
     `gatsby-plugin-catch-links`,
     {
@@ -230,7 +238,7 @@ module.exports = {
         // should be an object or a function that is executed in the browser
         //
         // Defaults to null
-        defaultDataLayer: { platform: "gatsby" },
+        defaultDataLayer: { platform: "gatsby" }
 
         // // Specify optional GTM environment details.
         // gtmAuth: "YOUR_GOOGLE_TAGMANAGER_ENVIRONMENT_AUTH_STRING",
@@ -242,7 +250,7 @@ module.exports = {
         // //
         // // Defaults to gatsby-route-change
         // routeChangeEventName: "YOUR_ROUTE_CHANGE_EVENT_NAME",
-      },
+      }
     },
     {
       resolve: `gatsby-plugin-feed`,
@@ -297,7 +305,6 @@ module.exports = {
             `,
             output: "/rss.xml"
           },
-          
           {
             serialize: ({ query: { site, allMarkdownRemark } }) => {
               return allMarkdownRemark.edges.map(edge => {
@@ -347,6 +354,6 @@ module.exports = {
         include: /svg-icons/
       }
     },
-    `gatsby-plugin-netlify`,
+    `gatsby-plugin-netlify`
   ]
 };
