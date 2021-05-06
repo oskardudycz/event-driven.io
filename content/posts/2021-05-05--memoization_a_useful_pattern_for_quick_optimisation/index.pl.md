@@ -94,6 +94,40 @@ public static Func<TInput, TResult> Memoize<TInput, TResult>(this Func<TInput, T
 }
 ```
 
+This version is still not perfect. When we are memoizing many items, our cache may grow exponentially and generate a memory usage issue. Generally, we'd like to keep in memory only the actively accessed entries. Not accessed, we can evict. We'd like to be able to set up a top limit of entries in our cache. To do that, we could use, e.g. [Redis](https://redis.io/) instead. If we need a simpler/lightweight solution, we can choose a [MemoryCache](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/memory?view=aspnetcore-5.0) class. A sample implementation can look like this:
+
+```csharp
+public static Func<TInput, TResult> Memoize<TInput, TResult>(this Func<TInput, TResult> func)
+{
+    // create cache ("memo")
+    var memo = new MemoryCache(new MemoryCacheOptions
+    {
+        // Set cache size limit.
+        // Note: this is not size in bytes,
+        // but sum of all entries' sizes.
+        // Entry size is declared on adding to cache
+        // in the factory method 
+        SizeLimit = 100
+    });
+    
+    // wrap provided function with cache handling
+    // get a value from cache if it exists
+    // if not, call factory method
+    // MemCache will handle that internally
+    return input => memo.GetOrCreate(input, entry =>
+    {
+        // you can set different options like e.g.
+        // sliding expiration - time between now and last time
+        // and the last time the entry was accessed 
+        entry.SlidingExpiration = TimeSpan.FromSeconds(3);
+        
+        // this value is used to calculate total SizeLimit
+        entry.Size = 1;
+        return func(input);
+    });
+}
+```
+
 **When is it worth using memoization?** Especially where we have to call the same code many times in one operation. If this code is deterministic, then you can cut a lot of execution time. You can also use it with, e.g. a cache in Redis. When we invalidate it, it will just get us a new value. The basis for optimization is to start with operations that are performed very often. This is simple math:
 * If we cut 0.1 seconds on an operation performed 1000 times on each call, we will gain 100 seconds. 
 * If the operation is performed 10 times and we cut 1 second, we will gain 10 seconds in total.
@@ -107,3 +141,7 @@ I hope I helped!
 Cheers!
 
 Oskar
+
+p.s. Per [Wikipedia](https://en.wikipedia.org/wiki/Memoization): 
+
+_The term "memoization" was coined by Donald Michie in 1968 and is derived from the Latin word "memorandum" ("to be remembered"), usually truncated as "memo" in American English, and thus carries the meaning of "turning [the results of] a function into something to be remembered". While "memoization" might be confused with "memorization" (because they are etymological cognates), "memoization" has a specialized meaning in computing._
