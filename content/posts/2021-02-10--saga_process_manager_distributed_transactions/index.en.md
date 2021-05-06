@@ -180,8 +180,8 @@ class OrderSaga
 ```
 
 You can also check the real implementation written in C#: 
-- [Order Saga](https://github.com/oskardudycz/EventSourcing.NetCore/blob/main/Workshops/PracticalEventSourcing/Orders/Orders/Orders/OrderSaga.cs)
-- [Whole solution with services split, external buses and integration with CRUD approach](https://github.com/oskardudycz/EventSourcing.NetCore/blob/main/Workshops/PracticalEventSourcing) 
+- [Order Saga](https://github.com/oskardudycz/EventSourcing.NetCore/tree/main/Sample/ECommerce/Orders/Orders/Orders/OrderSaga.cs)
+- [Whole solution with services split, external buses and integration with CRUD approach](https://github.com/oskardudycz/EventSourcing.NetCore/tree/main/Sample/ECommerce) 
 
 Additionally, I have prepared a set of recommended materials about distributed processes, [read more](https://github.com/oskardudycz/EventSourcing.NetCore#105-distributed-processes).
 
