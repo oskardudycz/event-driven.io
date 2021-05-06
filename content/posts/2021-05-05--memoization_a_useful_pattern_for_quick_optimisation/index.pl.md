@@ -44,7 +44,7 @@ public static class Memoizer
 }
 ```
 
-We're using function scopes (_closure_) here. We define a dictionary (variable _memo_) in which we will remember the results of the function.
+We're using function scope (_closure_) here. We define a dictionary (variable _memo_) in which we will remember the results of the function.
 
 Next, we generate a wrapping method that will check if there is already a cached result for the given input parameter. If it is, it returns the result from the cache and does not call the function itself. If not, it calls the function, adds the result to the cache, and returns it.
 

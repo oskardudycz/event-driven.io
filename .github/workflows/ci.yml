@@ -45,7 +45,7 @@ jobs:
           GATSBY_AUTH0_CLIENTID: ${{ secrets.GATSBY_AUTH0_CLIENTID }}
           GATSBY_AUTH0_DOMAIN: ${{ secrets.GATSBY_AUTH0_DOMAIN }}
           GATSBY_DISQUS_NAME: ${{ secrets.GATSBY_DISQUS_NAME }}
-          GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
+          GOOGLE_TAG_ID: ${{ secrets.GOOGLE_TAG_ID }}
       # deploy
       - run: yarn deploy:prod
         if: ${{ github.ref == 'refs/heads/main' }}
