@@ -169,7 +169,7 @@ var result = fibonacci(3);
 
 The trick is that the local _fibonacci_ function is lazily evaluated. That means that effectively it will use the assigned, memoized function while doing the call (doing recursion by that).
 
-I know that analyzing recursion can create a headache. It may be more accessible by debugging the [test in my sample repo](https://github.com/oskardudycz/Memoization/Memoization.Tests/RecurrsionWithFunctionTests.cs).
+I know that analyzing recursion can create a headache. It may be more accessible by debugging the [test in my sample repo](https://github.com/oskardudycz/Memoization/blob/main/Memoization.Tests/RecurrsionWithFunctionTests.cs).
 
 ## When is it worth using memoization?
 Especially where we have to call the same code many times in one operation. If this code is deterministic, then you can cut a lot of execution time. You can also use it with, e.g. a cache in Redis. When we invalidate it, it will just get us a new value. The basis for optimization is to start with operations that are performed very often. This is simple math:
