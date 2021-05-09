@@ -128,7 +128,51 @@ public static Func<TInput, TResult> Memoize<TInput, TResult>(this Func<TInput, T
 }
 ```
 
-**When is it worth using memoization?** Especially where we have to call the same code many times in one operation. If this code is deterministic, then you can cut a lot of execution time. You can also use it with, e.g. a cache in Redis. When we invalidate it, it will just get us a new value. The basis for optimization is to start with operations that are performed very often. This is simple math:
+Michał motivated me, with the comment below, to even go even further. In functional programming, recursion is a widespread practice. It's non-trivial as to understand recursion, you need to understand recursion. It can be computation expensive. How to use the Memoization with recursion? Let's take the Fibonacci sequence as an example. The rule is: the next number is found by adding up the two numbers before it.
+
+```csharp
+int Fibonacci(int n1)
+{
+    if (n1 <= 2)
+        return 1;
+                
+    return Fibonacci(n1 -1) + Fibonacci(n1 - 2);
+}
+```
+
+We'll need to find a way to inject the memoized version of the Fibonacci function. Let's start with breaking out function into the main and the overload:
+
+```csharp
+int Fibonacci(int n1)
+{
+    return Fibonacci(n1, Fibonacci);
+}
+
+int Fibonacci(int n1, Func<int, int> fibonacci)
+{        
+    if (n1 <= 2)
+        return 1;
+        
+    return fibonacci(n1 -1) + fibonacci(n1 - 2);
+}
+```
+
+Now instead of the direct self-call, we can inject the function to use while doing recursion. Now we have the possibility to memoize it by doing:
+
+```csharp
+Func<int, int> fibonacci = null;
+            
+fibonacci = Memoizer.Memoize((int n1)  => Fibonacci(n1, fibonacci));
+            
+var result = fibonacci(3);
+```
+
+The trick is that the local _fibonacci_ function is lazily evaluated. That means that effectively it will use the assigned, memoized function while doing the call (doing recursion by that).
+
+I know that analyzing recursion can create a headache. It may be more accessible by debugging the [test in my sample repo](https://github.com/oskardudycz/Memoization/Memoization.Tests/RecurrsionWithFunctionTests.cs).
+
+## When is it worth using memoization?
+Especially where we have to call the same code many times in one operation. If this code is deterministic, then you can cut a lot of execution time. You can also use it with, e.g. a cache in Redis. When we invalidate it, it will just get us a new value. The basis for optimization is to start with operations that are performed very often. This is simple math:
 * If we cut 0.1 seconds on an operation performed 1000 times on each call, we will gain 100 seconds. 
 * If the operation is performed 10 times and we cut 1 second, we will gain 10 seconds in total.
 
