@@ -157,7 +157,7 @@ int Fibonacci(int n1, Func<int, int> fibonacci)
 }
 ```
 
-Now instead of the direct self-call, we can inject the function to use while doing recursion. Now we have the possibility to memoize it by doing:
+Now instead of the direct self-call, we can inject the function to use while doing recursion. Therfore, we have the possibility to memoize it by doing:
 
 ```csharp
 Func<int, int> fibonacci = null;
