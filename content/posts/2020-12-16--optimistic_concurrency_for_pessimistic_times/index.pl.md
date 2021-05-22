@@ -39,7 +39,7 @@ However, both EventStoreDB and Marten use numeric version numbers for event vers
 
 **How can you handle this in the web API?** The most common approach is to send a version as an Etag header (https://en.wikipedia.org/wiki/HTTP_ETag). In the case of a version conflict, the 409 status is returned (https://http.cat/409).
 
-Optimistic concurrency is also fundamental in ensuring the order of events in **Event Sourcing**. I encourage you to try going through the task from my "Self Paced Kit" as ademonstration of how this works: https://github.com/oskardudycz/EventSourcing.NetCore/tree/main/Workshops/BuildYourOwnEventStore/01-EventStoreBasics/03-OptimisticConcurrency.
+Optimistic concurrency is also fundamental in ensuring the order of events in **Event Sourcing**. I encourage you to try going through the task from my "Self Paced Kit" as ademonstration of how this works: https://github.com/oskardudycz/EventSourcing.NetCore/tree/main/Workshops/BuildYourOwnEventStore/03-OptimisticConcurrency.
 
 The lack of optimistic locking is also one of the reasons why Kafka is not a tool for Event Sourcing. You can learn more here: https://issues.apache.org/jira/browse/KAFKA-2260.
 
