@@ -1,13 +1,13 @@
 ---
 title: When Agile is not enough
 category: "Agile"
-cover: 2020-06-02-cover.png
+cover: 2021-06-02-cover.png
 author: oskar dudycz
 ---
 
-![cover](2020-06-02-cover.png)
+![cover](2021-06-02-cover.png)
 
-Today I want to invert [the classical pro-agile drawing](./proagile.png). Let's talk about the devaluation of functionality that occurs in Agile projects.
+Today I want to invert [the classical pro-agile drawing](https://blog.crisp.se/wp-content/uploads/2016/01/Making-sense-of-MVP-.jpg). Let's talk about the devaluation of functionality that occurs in Agile projects.
 
 **In the old times, the project was planned ahead. The Waterfall was the king.** First, analysts were with the client, collecting requirements and building the system vision. The next phase was functional and technical analysis.  Plans were made, steering committees were created. 
 Having several hundred (thousand?) pages of documentation, you could start programming.  The developers didn't see the client face-to-face.  What's more, they sometimes did not even know what they were producing. They got requirement #284 located on page 1847 in the documentation. Just create a form that will call the service with the defined request params. Then repeat and repeat for similar specifications. After years of analysis and coding, finally, testing can be done. A lot of different tests: system, user acceptance etc. Then the long-awaited deadline. That's an optimistic scenario. Much often the project was so off the budget that it collapsed in the meantime.
