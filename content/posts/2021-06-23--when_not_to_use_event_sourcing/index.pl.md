@@ -19,7 +19,7 @@ As with a hammer, you can drive a nail, but you can also hit yourself on the fin
 
 What do I mean by _"supportive modules"_? I mean, for instance, a CMS (_Content Management System_), e.g., Confluence, WordPress, OneNote or even Excel. Such systems can be treated as bags for data. You put some data in there, sometimes in plain text, sometimes a table, sometimes a photo. We do not intend to perform advanced data analysis: we just want to store and retrieve data. It's not essential to know the type of data we're storing. All will be aligned and handled with the same patterns, e.g. a grid with data, edit form. We create, update, read or delete records. We can use such systems both for everything from wedding planning to warehouse inventory and budgeting.
 
-**In this definition, we could say _"in my system the Event Sourcing system won't work out because it is a simple CRUD"_.**  Even if we add more fancy technical features like permissions management or logging, it's still a CRUD just wrapped in layers like a Matrioshka. We create some tables, add some services and add some forms, as the finishing touch on top of it.
+**In this definition, we could say _"in my system the Event Sourcing won't work out because it is a simple CRUD"_.**  Even if we add more fancy technical features like permissions management or logging, it's still a CRUD just wrapped in layers like a Matrioshka. We create some tables, add some services and add some forms, as the finishing touch on top of it.
 
 I agree that Event Sourcing will not suit such systems. However, it usually happens that at some point, business comes to us and says:
 - _"You know what, I'd like to have a template for monthly budgeting."_
