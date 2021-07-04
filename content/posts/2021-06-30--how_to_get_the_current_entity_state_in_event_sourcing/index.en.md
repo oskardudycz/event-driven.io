@@ -16,7 +16,7 @@ In Event Sourcing, the application state is stored in events. They are the resul
 
 Many people believe that Snapshots are the must-have in the Event-Sourced system. Instead of retrieving all stream events to rebuild the state, we could retrieve one record and use it for our business logic. It sounds promising and can be useful as the technical optimisation technique but should not be used as a ground basis. Isn't loading more than one event a performance issue? Frankly, it's not. Downloading even a dozen, or several dozens of small events is not a significant overhead. Events are concise, containing only the information needed. Event Stores are optimised for such operations, and the reads scale well (read more in my article ["Snapshots in Event Sourcing"](https://www.eventstore.com/blog/snapshots-in-event-sourcing)).
 
-Using Event Sourcing does not have to cause an automatic revolution in our code. We can still use aggregates/entities. In Event Sourcing, events are logically grouped linked into streams. Streams are ordered sequences of events. One stream includes all events for a given business object, e.g. _InvoiceInitiated_, _InvoiceIssued_, _InvoiceSent_.
+Using Event Sourcing does not have to cause an automatic revolution in our code. We can still use aggregates/entities. In Event Sourcing, events are logically grouped into streams. Streams are ordered sequences of events. One stream includes all events for a given business object, e.g. _InvoiceInitiated_, _InvoiceIssued_, _InvoiceSent_.
 
 Thus recommended approach is to build the current state from events. To do so, we need to perform the following steps:
 1. Get all events for a given stream. We choose them based on the stream identifier (derived from the business object/record id). An event store retains the events for a given stream in the order they were appended; retrieval should preserve the order.
@@ -24,7 +24,7 @@ Thus recommended approach is to build the current state from events. To do so, w
 3. Apply each event sequentially to the entity.
 
 The first two points are obvious, but what does it mean to _apply an event_? There are two ways:
-* Use the _When_ function. We're passing a generic event object as an input parameter. Inside the method, we can use _"pattern matching" _ to determine what logic applies to the specific event type. It is a framework-independent solution. You have to write a bit more yourself, but there is less magic. 
+* Use the _When_ function. We're passing a generic event object as an input parameter. Inside the method, we can use _"pattern matching"_ to determine what logic applies to the specific event type. It is a framework-independent solution. You have to write a bit more yourself, but there is less magic. 
 * Some frameworks provide convention-based solutions that simplify handling and make it a bit more magical. For example, in [Marten](https://martendb.io/), the aggregate class should have an _Apply_ method for every event it can handle. This is because the built-in [AggregateStream](https://martendb.io/documentation/events/projections/) method is reading events and applying them internally. 
 
 The process of rebuilding the state from events is also called _Stream Aggregation_.

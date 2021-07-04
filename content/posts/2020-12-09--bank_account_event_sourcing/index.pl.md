@@ -20,7 +20,7 @@ Getting back to the banking example. In such a case, we record all transactions 
 - follows one another,
 - is immutable (we cannot undo a money transfer once it has been made).
 
-Everything seems okay, why am I picking on it? I am not a saint myself. I also give such an example: https://github.com/oskardudycz/EventSourcing.NetCore/tree/main/Sample/BankAccounts.
+Everything seems okay, why am I picking on it? I am not a saint myself. I also gave such examples before.
 
 Why am I saying then that this example is problematic? In my opinion, it's not a typical problem solved in Event Sourcing. Providing Bank Account as an example makes it easy to accuse it of performance problems. It's easy to generalise that the whole Event Sourcing is not efficient. 
 Let's try to do a small calculation. Let's say we do three transactions a day, milk in the store, cigs in the newsagent's, transfer from grandma. 3 times 365 = 1095. This number is the sum of the annual transactions. I have a bank account, which I set up at the age of 18. It is 17 years old now. 17 x 1095 = 18615, plus four days for leap years. What is this math for? 
