@@ -34,15 +34,25 @@ _"They looked at the "Matts" across the entire company—hundreds of developers�
 
 **_It took twenty-four times longer._** _If a bug was addressed on the day it was created, it would take an hour to fix; three weeks later, it would take twenty-four hours. It didn't even matter if the bug was big or small, complicated or simple—it always took twenty-four times longer three weeks later. As you can imagine, every software developer in the company was soon required to test and fix their code on the same day."_
 
-I suggest following rule:
+I suggest the following rule:
 
 **DO NOT MAKE BREAKING CHANGES AND DO NOT BREAK OTHER PEOPLE WORK. NEVER!**
 
-Sounds radical? Maybe, but it is true. There is always a way to perform changes in a non-breaking manner.
+Sounds radical? Maybe, but it is true. There is always a way to perform changes in a non-breaking manner. We can always do a step by step process.  
 
-To makes things harder, backward compatibility is not the only compatibility we should think of. There is also forward compatibility? It means that we have to anticipate that our code may be called by the newer version of the code/service. It is backward compatibility seen from the perspective of this old code/state. For example, if we listen to an event, e.g. _UserAdded_, which has the fields _Id_, _Username_, we can expect that, for example, in the future, we may get its newer version with new fields, e.g. _Email_, _BirthDate_, etc. 
+If we're creating an OSS library, we can mark features we want to remove with obsolete markers. We should add information about why and when we want to remove it and add a migration path. Then we can give our users time to migrate and not surprise them. In one of the follow-up releases, we can remove it.
 
-Of course, we can't predict how our application will evolve. We will not handle fields that we do not know. We don't have to predict everything. Nevertheless, we have to keep in mind that the contract may change, and if it is backwards compatible, we should handle it. How can we do that? Well, we can, for example, not throw an error when we get additional fields in the payload. If we do Event Sourcing and save the events to the database as JSON, we should save them as they are. Thanks to that, when we update the code, we will create the new logic and handle the extended data.
+Literally, it will be a breaking change but done in a non-breaking manner. If you are a library maintainer and provide breaking changes in each release, I can guarantee that you won't reach mainstream or broader usage. Most companies expect predictability. If you keep posting breaking changes now and then, users will either not move to newer versions or quit. Read more in my article ["How to get started with Open Source?"](/en/how_to_start_with_open_source/).
+
+Of course, sometimes breaking changes are needed to remove the ballast. Then migration guidelines are necessary to help your users. Still, it's a tactical thing that you should avoid if you can. 
+
+There are ways to reduce the number of breaking changes. For instance,  keeping everything private, that doesn't have to be public. If you expose something, then you have to assume that someone uses it. Follow the [Semantic Versioning](https://semver.org/lang/pl/) rules. Also, grouping the breaking changes into a single release.
+
+It's also worth providing migration tools (e.g. we did such a thing in EventStoreDB with [Replicator](https://replicator.eventstore.org)). Nevertheless, those are tactics. I stand on my take that the strategy to be reliable and effective is not doing breaking changes.
+
+**To makes things harder, backward compatibility is not the only compatibility we should think of.** There is also forward compatibility? It means that we have to anticipate that our code may be called by the newer version of the code/service. It is backward compatibility seen from the perspective of this old code/state. For example, if we listen to an event, e.g. _UserAdded_, which has the fields _Id_, _Username_, we can expect that, for example, in the future, we may get its newer version with new fields, e.g. _Email_, _BirthDate_, etc. 
+
+Of course, we can't predict how our application will evolve. We will not handle fields that we do not know. We don't have to predict everything. Nevertheless, we have to keep in mind that the contract may change, and if it is backwards compatible, we should handle it. How can we do that? Well, we can, for example, not throw an error when we get additional fields in the payload. If we do Event Sourcing and save the events to the database as JSON, we should keep them as they are. Thanks to that, when we update the code, we will create the new logic and handle the extended data.
 
 We should help ourselves and help others. Let's try not to break others' work because it really pays off, literally. It really isn't a waste of time.
 
