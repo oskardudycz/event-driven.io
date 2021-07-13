@@ -75,7 +75,7 @@ ALGOLIA_INDEX_NAME = Documentation
 
 Algolia has several types of API keys to ensure security. We'll use a separate read-only API Key for search and write for uploading the site data.
 
-Let's define an auxiliary script _ "scrape.sh" _, which we will run for  scraping and indexing our site (if you use Windows, you need [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10)):
+Let's define an auxiliary script _"scrape.sh"_, which we will run for  scraping and indexing our site (if you use Windows, you need [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10)):
 
 ```bash
 if [ -f .env ]; then
