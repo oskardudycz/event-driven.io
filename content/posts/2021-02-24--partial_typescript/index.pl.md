@@ -219,3 +219,5 @@ const reservation: Reservation = result;
 Thoughts?
 
 Oskar
+
+p.s. If you liked this article, check also the follow-up ["How to get the current entity state from events?"](/pl/how_to_get_the_current_entity_state_in_event_sourcing/)!

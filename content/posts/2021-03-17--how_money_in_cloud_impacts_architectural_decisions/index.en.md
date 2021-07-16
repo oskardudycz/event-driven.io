@@ -26,3 +26,5 @@ What are your experiences in this area?
 Cheers! 
 
 Oskar
+
+p.s. I also wrote my thoughts on the Cloud security in article ["Form a wall! And other concerns about security"](/en/form_a_wall/). Have a look!
