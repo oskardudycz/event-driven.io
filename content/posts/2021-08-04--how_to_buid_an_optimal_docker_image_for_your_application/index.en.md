@@ -16,7 +16,7 @@ What do my inclinations for event-based architectures and CI/CD have in common? 
 Today, I would like to share a Docker build configuration for my Event Sourcing sample repositories. I'll explain it based on the .NET and NodeJS applications. I think that the three aspects that I used there may be helpful to you as well:
 1. Layers and why you should remember about them.
 2. Multi-stage build.
-3. Deploying the image to the repository
+3. Deploying the image to the repository (this is explained in the [dedicated post](/en/how_to_buid_and_push_docker_image_with_github_actions)).
 
  In this post, I'll focus on the most important things for the developer, so pardon me, simplifications made for brevity.
 
@@ -203,6 +203,8 @@ The image built in this way can be used to implement and run in the final enviro
 We can also use such an image for manual and automated tests.
 
 **To sum up - thanks to a few simple tricks, we can make the build time significantly shorten**. In addition, it won't contain unnecessary files and dependencies. Thanks to that, downloading it and launching it will be faster. As you see, these rules can be applied to any platform. I showed .NET and NodeJS as an example, but the same could be done in other environments.
+
+I encourage you to also read the follow-up article ["How to build and push Docker image with GitHub actions?"](/en/how_to_buid_and_push_docker_image_with_github_actions).
 
 Cheers!
 

@@ -83,3 +83,7 @@ Your own GitHub actions give you a lot of possibilities. You can create very int
 Cheers!
 
 Oskar
+
+p.s. If GitHub actions look interesting to you, read also other articles on this topic:
+- [How to build and push Docker image with GitHub actions?](/pl/how_to_buid_and_push_docker_image_with_github_actions)
+- [How to enhance and configure your site search with Algolia?](/pl/how_to_configure_algolia_for_your_site_search/)

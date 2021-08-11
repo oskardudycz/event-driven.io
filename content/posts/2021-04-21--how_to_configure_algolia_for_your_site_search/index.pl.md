@@ -139,3 +139,7 @@ I hope you found my post interesting. Besides the Algolia configuration, I wante
 Cheers!
 
 Oskar
+
+p.s. If GitHub actions look interesting to you, read also other articles on this topic:
+- [How to build and push Docker image with GitHub actions?](/pl/how_to_buid_and_push_docker_image_with_github_actions)
+- [How to create a custom GitHub Action?](/pl/how_to_create_a_custom_github_action/)
