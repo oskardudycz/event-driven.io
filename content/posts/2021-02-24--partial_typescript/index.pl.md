@@ -99,7 +99,7 @@ const result = events.reduce<Partial<Reservation>>((currentState, event) => {
 
 Thanks to strong typing (_ReservationEvents_), we're sure about the events array's content. We know that both events will have the _eventType_ property. Having that, we can use _switch_ and define a custom state mutation logic for each event.
 
-The only thing left is to make sure that our final result has a proper state and can be used as the _Reservation_ type. Remember, the result of _reduce_ will be _Partial<Reservation>_ with all required fields made optional. We can use [type guard](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types) to verify if _Partial<Reservation>_ is also a valid `Reservation`.
+The only thing left is to make sure that our final result has a proper state and can be used as the _Reservation_ type. Remember, the result of _reduce_ will be _Partial<Reservation>_ with all required fields made optional. We can use [type guard](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types) to verify if _Partial<Reservation>_ is also a valid _Reservation_.
 
 ```typescript
 const reservationIsValid = 
