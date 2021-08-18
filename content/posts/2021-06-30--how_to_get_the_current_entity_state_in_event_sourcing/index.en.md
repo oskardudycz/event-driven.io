@@ -350,22 +350,23 @@ export function aggregateStream<Aggregate, StreamEvents extends Event>(
 Then we could use it as follows to read events and rebuild the current state:
 
 ```typescript
-const resolvedEvents = await eventStore.readStream(`invoice-${invoiceId}`);
+const events: InvoiceEvent[] = [];
 
-const events = resolvedEvents
-  .map((resolvedEvent) => {
-    return <InvoiceEvent>{
-      type: resolvedEvent.event!.type,
-      data: resolvedEvent.event!.data,
-      metadata: resolvedEvent.event?.metadata,
-    };
-  })
+for await (const resolvedEvent of eventStore.readStream(
+  `invoice-${invoiceId}`
+)) {
+  events.push(<InvoiceEvent>{
+    type: resolvedEvent.event!.type,
+    data: resolvedEvent.event!.data,
+    metadata: resolvedEvent.event?.metadata,
+  });
+}
 
 const invoice = aggregateStream<Invoice, InvoiceEvent>(
-    events,
-    when,
-    isInvoice
-  );
+  events,
+  when,
+  isInvoice
+);
 ```
 
 Both approaches have pros and cons. Object-oriented way brings more ceremony. However, it has an advantage against the functional approach, keeping object state and behaviour grouped together.

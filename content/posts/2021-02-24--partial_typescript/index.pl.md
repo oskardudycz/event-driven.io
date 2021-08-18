@@ -186,7 +186,17 @@ const appendResult = await client.appendToStream(
     reservationId, seatReserved, seatChanged);
 
 // read appended events
-const events = await client.readStream<ReservationEvents>(reservationId);  
+const events: ReservationEvents[] = [];
+
+for await (const resolvedEvent of eventStore.readStream(
+  reservationId
+)) {
+  events.push(<ReservationEvents>{
+    type: resolvedEvent.event!.type,
+    data: resolvedEvent.event!.data,
+    metadata: resolvedEvent.event?.metadata,
+  });
+}
 
 // aggregate stream
 const result = events.reduce<Partial<Reservation>>((acc, { event }) => {
