@@ -6,7 +6,8 @@
   "scripts": {
     "import-newsletter": "node ./import/import-newsletter.js",
     "import-architecture-weekly": "node ./import/import-architecture-weekly.js",
-    "build": "yarn import-newsletter && yarn import-architecture-weekly && gatsby build",
+    "import-and-build": "yarn import-newsletter && yarn import-architecture-weekly && yarn build",
+    "build": "gatsby build",
     "clean": "gatsby clean",
     "develop": "gatsby develop",
     "devhost": "gatsby develop --host 192.168.0.112",
