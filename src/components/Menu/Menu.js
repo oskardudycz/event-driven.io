@@ -2,11 +2,19 @@ import React from "react";
 import PropTypes from "prop-types";
 require("core-js/fn/array/from");
 
-import { FaFacebook, FaGithub, FaHome, FaLinkedin, FaRss, FaTwitter, FaYoutube } from "react-icons/fa/";
+import {
+  FaFacebook,
+  FaGithub,
+  FaHome,
+  FaLinkedin,
+  FaRss,
+  FaTwitter,
+  FaYoutube
+} from "react-icons/fa/";
 import { FaSearch } from "react-icons/fa/";
 import { FaEnvelope } from "react-icons/fa/";
 import { FaTag } from "react-icons/fa/";
-import LanguagePicker from "../LanguagePicker"
+import LanguagePicker from "../LanguagePicker";
 
 import Item from "./Item";
 import Expand from "./Expand";
@@ -17,13 +25,12 @@ class Menu extends React.Component {
     super(props);
     this.itemList = React.createRef();
 
-    const pages = props.pages
-      .map(page => ({
-        to: page.node.fields.slug,
-        label: page.node.frontmatter.menuTitle
-          ? page.node.frontmatter.menuTitle
-          : page.node.frontmatter.title
-      }));
+    const pages = props.pages.map(page => ({
+      to: page.node.fields.slug,
+      label: page.node.frontmatter.menuTitle
+        ? page.node.frontmatter.menuTitle
+        : page.node.frontmatter.title
+    }));
 
     this.items = [
       { to: "/", label: "Start", icon: FaHome },
@@ -161,16 +168,15 @@ class Menu extends React.Component {
             ))}
           </ul>
           {this.state.hiddenItems.length > 0 && <Expand onClick={this.toggleMenu} theme={theme} />}
-          {open &&
-            screenWidth >= 1024 && (
-              <ul className="hiddenItemList">
-                {this.state.hiddenItems.map(item => (
-                  <Item item={item} key={item.label} hiddenItem theme={theme} />
-                ))}
-              </ul>
-            )}
-            
-            <LanguagePicker />
+          {open && screenWidth >= 1024 && (
+            <ul className="hiddenItemList">
+              {this.state.hiddenItems.map(item => (
+                <Item item={item} key={item.label} hiddenItem theme={theme} />
+              ))}
+            </ul>
+          )}
+
+          <LanguagePicker />
         </nav>
 
         {/* --- STYLES --- */}
@@ -196,7 +202,7 @@ class Menu extends React.Component {
             justify-content: center;
             list-style: none;
             margin: 0;
-            padding: 0; /* 0 ${theme.space.s}; */
+            padding: 0;
             position: relative;
             width: 100%;
           }
@@ -253,7 +259,6 @@ class Menu extends React.Component {
               padding: ${theme.space.m};
               border-radius: ${theme.size.radius.small};
               border-top-right-radius: 0;
-
 
               &:after {
                 content: "";
