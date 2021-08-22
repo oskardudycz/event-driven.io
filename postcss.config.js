@@ -1,18 +1,24 @@
-module.exports = ctx => ({
-  plugins: {
-    "postcss-easy-media-query": {
+const postcssPresetEnv = require(`postcss-preset-env`);
+const postcssEasyMediaQuery = require(`postcss-easy-media-query`);
+const postcssTextRemoveGap = require(`postcss-text-remove-gap`);
+
+module.exports = () => ({
+  plugins: [
+    postcssPresetEnv({
+      stage: 0
+    }),
+    postcssEasyMediaQuery({
       breakpoints: {
         tablet: 600,
         desktop: 1024
       }
-    },
-    "postcss-text-remove-gap": {
+    }),
+    postcssTextRemoveGap({
       defaultFontFamily: "Open Sans",
       defaultLineHeight: "0"
-    },
-    "postcss-nested": {},
-    "postcss-cssnext": {}
-  }
+    }),
+    require(`postcss-nested`)
+  ]
 });
 
 // "postcss-nested": {},
@@ -22,4 +28,3 @@ module.exports = ctx => ({
 //   "unspecified-properties-position": "bottom"
 // },
 // "postcss-utilities": {},
-// "postcss-cssnext": {}

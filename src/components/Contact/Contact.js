@@ -1,17 +1,17 @@
 /* eslint no-unused-vars: 0 */
 
 import { navigate } from "gatsby";
-import Button from "antd/lib/button";
-import Form from "antd/lib/form";
-import Input from "antd/lib/input";
+import { Button } from "antd";
+import { Form } from "@ant-design/compatible";
+import { Input } from "antd";
 import PropTypes from "prop-types";
 import React from "react";
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
-import "antd/lib/form/style/index.css";
-import "antd/lib/input/style/index.css";
-import "antd/lib/button/style/index.css";
+import "@ant-design/compatible/assets/index.css";
+import "antd/es/input/style/index.css";
+import "antd/es/button/style/index.css";
 import { ThemeContext } from "../../layouts";
 
 const Contact = props => {
@@ -91,11 +91,7 @@ const Contact = props => {
                     { required: true, message: "Please input your message!", whitespace: true }
                   ]
                 })(
-                  <TextArea
-                    name="message"
-                    placeholder=""
-                    autosize={{ minRows: 4, maxRows: 10 }}
-                  />
+                  <TextArea name="message" placeholder="" autosize={{ minRows: 4, maxRows: 10 }} />
                 )}
               </FormItem>
               <FormItem>
