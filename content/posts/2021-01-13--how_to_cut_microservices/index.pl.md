@@ -3,6 +3,7 @@ title: How (not) to cut microservices
 category: "Microservices"
 cover: 2021-01-13-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2021-01-13-cover.png)

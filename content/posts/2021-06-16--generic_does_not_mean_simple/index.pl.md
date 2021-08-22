@@ -3,6 +3,7 @@ title: Generic does not mean Simple
 category: "Architecture"
 cover: 2021-06-16-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2021-06-16-cover.png)

@@ -3,6 +3,7 @@ title: Structural Typing in TypeScript
 category: "TypeScript"
 cover: 2021-06-09-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2021-06-09-cover.png)

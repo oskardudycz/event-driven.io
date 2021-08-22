@@ -3,6 +3,7 @@ title: Revolution now!
 category: "Event Sourcing"
 cover: 2020-12-02-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2020-12-02-cover.png)

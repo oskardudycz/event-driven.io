@@ -3,6 +3,7 @@ title: How to enhance and configure your site search with Algolia?
 category: "Tools"
 cover: 2020-04-21-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2020-04-21-cover.png)

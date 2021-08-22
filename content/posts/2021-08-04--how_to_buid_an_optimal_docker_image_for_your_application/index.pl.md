@@ -3,6 +3,7 @@ title: How to build an optimal Docker image for your application?
 category: "DevOps"
 cover: 2021-08-04-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2021-08-04-cover.png)

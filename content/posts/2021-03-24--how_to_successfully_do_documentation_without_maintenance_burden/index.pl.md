@@ -3,6 +3,7 @@ title: How to successfully do documentation without a maintenance burden?
 category: "Documentation"
 cover: 2021-03-24-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2021-03-24-cover.png)

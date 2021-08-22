@@ -3,6 +3,7 @@ title: How to create projections of events for nested object structures?
 category: "Event Sourcing"
 cover: 2020-04-07-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2020-04-07-cover.png)

@@ -3,6 +3,7 @@ title: Events should be as small as possible, right?
 category: "Event Sourcing"
 cover: 2020-04-14-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2020-04-14-cover.png)

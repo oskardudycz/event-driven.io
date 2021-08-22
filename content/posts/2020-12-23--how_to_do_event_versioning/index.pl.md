@@ -3,6 +3,7 @@ title: How to (not) do the events versioning?
 category: "Event Sourcing"
 cover: 2020-12-23-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2020-12-23-cover.png)

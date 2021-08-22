@@ -3,6 +3,7 @@ title: In what language are programmers writing?
 category: "Coding Life"
 cover: 2021-07-21-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2021-07-21-cover.png)

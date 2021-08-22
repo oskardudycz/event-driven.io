@@ -3,6 +3,7 @@ title: Bring me problems, not solutions!
 category: "Agile"
 cover: 2021-01-06-cover.jpg
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 **_"Bring me solutions, not problems!"_** I've heard this sentence multiple times from Business and management. You've heard it too, haven't you?

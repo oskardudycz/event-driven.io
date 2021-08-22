@@ -3,6 +3,7 @@ title: Notes about C# records and Nullable Reference Types
 category: "C#"
 cover: 2021-07-28-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2021-07-28-cover.png)

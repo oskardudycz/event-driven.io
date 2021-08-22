@@ -3,6 +3,7 @@ title: Why a bank account is not the best example of Event Sourcing?
 category: "Event Sourcing"
 cover: 2020-12-09-cover.jpg
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2020-12-09-cover.jpg)

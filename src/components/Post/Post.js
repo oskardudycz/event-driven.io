@@ -9,14 +9,14 @@ import Meta from "./Meta";
 import Author from "./Author";
 import Comments from "./Comments";
 import NextPrev from "./NextPrev";
-import { DiscussionEmbed } from "disqus-react"
+import { DiscussionEmbed } from "disqus-react";
 
 const Share = asyncComponent(() =>
   import("./Share")
     .then(module => {
       return module.default;
     })
-    .catch(error => { })
+    .catch(error => {})
 );
 
 const Post = props => {
@@ -24,7 +24,7 @@ const Post = props => {
     post,
     post: {
       html,
-      fields: { prefix, slug, },
+      fields: { prefix, slug },
       frontmatter: { title, author, category, disqusId }
     },
     authornote,

@@ -3,6 +3,7 @@ title: When not to use Event Sourcing?
 category: "Event Sourcing"
 cover: 2021-06-23-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2021-06-23-cover.png)

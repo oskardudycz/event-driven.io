@@ -3,6 +3,7 @@ title: How money in Cloud impacts Architectural decisions?
 category: "Cloud"
 cover: 2021-03-17-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2021-03-17-cover.png)

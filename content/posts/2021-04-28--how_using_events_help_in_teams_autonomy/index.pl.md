@@ -3,6 +3,7 @@ title: How using events helps in a teams' autonomy
 category: "Event Sourcing"
 cover: 2020-04-28-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2020-04-28-cover.png)

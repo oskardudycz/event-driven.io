@@ -3,6 +3,7 @@ title: Form a wall! And other concerns about security
 category: "Coding Life"
 cover: 2021-07-14-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2021-07-14-cover.png)

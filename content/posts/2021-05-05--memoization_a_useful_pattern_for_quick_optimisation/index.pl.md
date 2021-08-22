@@ -3,6 +3,7 @@ title: Memoization, a useful pattern for quick optimization
 category: "Design Patterns"
 cover: 2020-05-05-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2020-05-05-cover.png)

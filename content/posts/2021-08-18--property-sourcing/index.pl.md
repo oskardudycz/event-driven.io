@@ -3,6 +3,7 @@ title: Anti-patterns in event modelling - Property Sourcing
 category: "Event Sourcing"
 cover: 2021-08-18-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2021-08-18-cover.png)

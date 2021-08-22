@@ -3,6 +3,7 @@ title: Optimistic concurrency for pessimistic times
 category: "Wzorce projektowe"
 cover: 2020-12-16-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2020-12-16-cover.png)

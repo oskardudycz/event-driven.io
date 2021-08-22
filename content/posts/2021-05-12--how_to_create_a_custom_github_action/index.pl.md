@@ -3,6 +3,7 @@ title: How to create a custom GitHub Action?
 category: "DevOps"
 cover: 2020-05-12-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2020-05-12-cover.png)

@@ -3,6 +3,7 @@ title: Outbox, Inbox patterns and delivery guarantees explained
 category: "Design Patterns"
 cover: 2020-12-30-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 Yesterday I was asked by Cezary about the transactional outbox pattern sample implementation.

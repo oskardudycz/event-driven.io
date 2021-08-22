@@ -37,7 +37,11 @@ const PostTemplate = props => {
         )}
       </ThemeContext.Consumer>
 
-      <Seo data={post} facebook={facebook} />
+      <Seo
+        data={post}
+        facebook={facebook}
+        useDefaultLangCanonical={post.frontmatter.useDefaultLangCanonical}
+      />
     </React.Fragment>
   );
 };
@@ -66,6 +70,7 @@ export const postQuery = graphql`
         author
         category
         disqusId
+        useDefaultLangCanonical
         cover {
           childImageSharp {
             resize(width: 600) {

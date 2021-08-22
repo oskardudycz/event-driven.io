@@ -3,6 +3,7 @@ title: How to scale projections in the event-driven systems?
 category: "Event Sourcing"
 cover: 2020-05-26-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2020-05-26-cover.png)

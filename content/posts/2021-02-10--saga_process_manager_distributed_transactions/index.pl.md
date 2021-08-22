@@ -3,6 +3,7 @@ title: Saga and Process Manager - distributed processes in practice
 category: "Wzorce Projektowe"
 cover: 2021-02-10-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2021-02-10-cover.png)

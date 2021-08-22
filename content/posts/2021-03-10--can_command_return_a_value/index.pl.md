@@ -3,6 +3,7 @@ title: Can command return a value?
 category: "CQRS"
 cover: 2021-03-10-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2021-03-10-cover.png)
