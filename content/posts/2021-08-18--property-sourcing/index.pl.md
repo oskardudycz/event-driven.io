@@ -132,9 +132,9 @@ With this, we do not have hundreds of minor events but business-significant even
 
 **Publishing events like _LastNameChanged_ is called _Property Sourcing_.** This is an anti-pattern. The events themselves tell us nothing about the operation that performed them. They have no business value. Due to the number of event types we have to generate, it is also challenging to manage them. It's also not convenient for other modules to consume them.
 
-Of course, sometimes it makes sense to create field change events. For example, *EmailUpdated*, *MartialStateChanged*, *AccountBalanceUpdated*, *InvoiceNumberSet*. These are significant business fields and can trigger other workflows.
+Of course, sometimes it makes sense to create field change events. For example, *EmailUpdated*, *MartialStatusChanged*, *AccountBalanceUpdated*, *InvoiceNumberSet*. These are significant business fields and can trigger other workflows.
 
-The basis of good event modelling is in cooperation with business. Discussion and understanding what we want to achieve is the foundation. Of course, sometimes, it is worth cutting the design discussions and starts coding. When we see them in action, it's more accessible to find the weak spots. Still, we should not try to save the four hours of discussion time by two weeks of coding.
+The basis of good event modelling is in cooperation with business. Discussion and understanding what we want to achieve is the foundation. Of course, sometimes, it is worth cutting the design discussions and getting coding. When we see them in action, it's more accessible to find the weak spots. Still, we should not try to save the four hours of discussion time by two weeks of coding.
 
 It's also important to not treat our initial event model as set in stone. We should embrace that our model will change. We'll understand our domain better. The business will also change as time goes. We should continue to drill down and make our event model closer to the real world.
 
