@@ -115,8 +115,8 @@ public class PersonalDataUpdated
 
     public PersonalDataUpdated(string firstName,  string lastName, DateTime changedAt)
     {
-        PreviousLastName = previousLastName;
-        NewLastName = newLastName;
+        FirstName = previousLastName;
+        LastName = newLastName;
         ChangedAt = changedAt;
     }
 }
@@ -124,7 +124,8 @@ public class PersonalDataUpdated
 var onlyLastNameUpdated = 
     new PersonalDataUpdated(
         Option<string>.None, 
-        Option<string>.Some("Smith")
+        Option<string>.Some("Smith"),
+        DateTime.UtcNow
     );
 ```
 
