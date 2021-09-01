@@ -115,7 +115,7 @@ public class PersonalDataUpdated
 
     public PersonalDataUpdated(string firstName,  string lastName, DateTime changedAt)
     {
-        FirstName = previousLastName;
+        FirstName = firstName;
         LastName = newLastName;
         ChangedAt = changedAt;
     }
