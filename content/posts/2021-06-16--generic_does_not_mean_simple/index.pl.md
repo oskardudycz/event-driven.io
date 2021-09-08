@@ -166,8 +166,9 @@ I encourage you to take a look at:
 - PR with "the extreme MapCommand makeover": https://github.com/oskardudycz/EventSourcing.NetCore/pull/43.
 
 For more information about CQRS check my other articles:
-- ["CQRS facts and myths explained"](/en/cqrs_facts_and_myths_explained/)
-- ["Can command return a value?"](/en/cqrs_facts_and_myths_explained/)
+- ["CQRS facts and myths explained"](/pl/cqrs_facts_and_myths_explained/)
+- ["How to slice the codebase effectively?"](/pl/how_to_slice_the_codebase_effectively/)
+- ["Can command return a value?"](/pl/can_command_return_a_value/)
 
 Comments are welome!
 

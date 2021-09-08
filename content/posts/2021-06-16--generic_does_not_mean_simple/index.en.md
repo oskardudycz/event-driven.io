@@ -166,7 +166,8 @@ I encourage you to take a look at:
 
 For more information about CQRS check my other articles:
 - ["CQRS facts and myths explained"](/en/cqrs_facts_and_myths_explained/)
-- ["Can command return a value?"](/en/cqrs_facts_and_myths_explained/)
+- ["How to slice the codebase effectively?"](/en/how_to_slice_the_codebase_effectively/)
+- ["Can command return a value?"](/en/can_command_return_a_value/)
 
 Comments are welome!
 
