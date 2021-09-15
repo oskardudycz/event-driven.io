@@ -3,6 +3,7 @@ title: How to slice the codebase effectively?
 category: "Architecture"
 cover: 2021-09-08-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2021-09-08-cover.png)
