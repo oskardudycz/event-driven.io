@@ -59,3 +59,5 @@ Of course, the best thing to do before a significant change is to contact me. If
 Cheers!
 
 Oskar
+
+p.s. If you're also considering blogging, have a look at my ["10 notes on the 10th blogging anniversary"](/en/thoughts_on_tenth_blogging_anniversary). I'd like to know them before I start!

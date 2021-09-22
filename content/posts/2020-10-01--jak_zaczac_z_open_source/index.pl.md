@@ -76,4 +76,4 @@ Uf! Jeśli jesteś jeszcze ze mną to należy Ci się naklejka "Dzielny czytelni
 Dziękuję za lekturę i pozdrawiam!
 Oskar
 
-**P.S. Ten wpis ukazał się oryginalnie w moim Newsletter (to jest jego odświeżona wersja). Wysyłam w nim co tydzień podobną tematykę, czyli: architektura, systemy oparte o zdarzeniach i ogólnie zagwozdki programistyczne. Zachęcam do zapisu – z prawej strony jest formularz!**
+p.s. Jeśli rozważasz również blogowanie, spójrz na moje ["10 notatek z okazji 10tej rocznicy blogowania"](/pl/thoughts_on_tenth_blogging_anniversary). Chciałbym to wiedzieć, gdy startowałem!
