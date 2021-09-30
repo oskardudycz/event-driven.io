@@ -265,8 +265,8 @@ Sample API could look as follows:
 ```csharp
 public static class Configuration
 {
-    public static IServiceCollection AddShoppingCartsModule(this IServiceCollection services)
-        => services
+    public static IServiceCollection AddShoppingCartsModule(this IServiceCollection services) => 
+        services
             .AddDbContext<ECommerceDbContext>()
             .For<ShoppingCartDetails, ECommerceDbContext>(
                 builder => builder
