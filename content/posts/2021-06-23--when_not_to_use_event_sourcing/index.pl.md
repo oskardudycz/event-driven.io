@@ -8,7 +8,7 @@ useDefaultLangCanonical : true
 
 ![cover](2021-06-23-cover.png)
 
-Event Sourcing is perceived as a complex pattern that's challenging to learn. Typically it's matched with the financial industry or big enterprise systems. If you’re familiar with my posts, you already know that I disagree with this categorisation. **I think that Event Sourcing is also relevant for the smaller systems.**
+Event Sourcing is perceived as a complex pattern that's challenging to learn. Typically it's matched with the financial industry or big enterprise systems. If you're familiar with my posts, you already know that I disagree with this categorisation. **I think that Event Sourcing is also relevant for the smaller systems.**
 
 Indeed, Event Sourcing shines the most when we can work with the business to find the business events. [Event Storming](https://www.eventstorming.com/) and [Event Modeling](https://eventmodeling.org/posts/what-is-event-modeling/) proved that events work great as a way to describe business processes. We can use them as _"checkpoints"_ of our workflow.
 

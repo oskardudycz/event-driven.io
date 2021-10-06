@@ -62,7 +62,7 @@
     "i18next": "^20.4.0",
     "js-yaml": "^4.1.0",
     "normalize.css": "^8.0.0",
-    "prismjs": "^1.24.1",
+    "prismjs": "^1.25.0",
     "react": "^17.0.2",
     "react-addons-perf": "^15.4.2",
     "react-dom": "^17.0.2",

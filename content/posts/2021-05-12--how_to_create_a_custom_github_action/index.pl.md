@@ -30,7 +30,7 @@ We had already preconfigured scripts for copying documentation from other reposi
 
 **That's why we decided to implement automation.** Last week, I added a custom GitHub action, which will automatically do a _cherry-pick_ of changes from a merged pull request. For each *cherry-pick: {target_branch}* label on the pull request, it will create a separate PR with a copy of the changes.
 
-**GitHub allows you to do your own actions** using Docker or JavaScript. I used the latter approach. The action code itself is relatively simple, but for how much swearing and nerves it cost me… that’s a secret! GitHub actions enable a lot of scenarios, but they have terrible documentation. Hence my idea to share this example with you.
+**GitHub allows you to do your own actions** using Docker or JavaScript. I used the latter approach. The action code itself is relatively simple, but for how much swearing and nerves it cost me… that's a secret! GitHub actions enable a lot of scenarios, but they have terrible documentation. Hence my idea to share this example with you.
 
 We can define our own action in the repository where the code is located. We can also create a dedicated repository that will store shared actions. We chose the latter solution because:
 - It's easier to maintain.

@@ -18,7 +18,7 @@ Workspace NazwaGrupyRoboczej;Nazwa użytkownika
 does not reside on this computer.
 ```
 
-Komunikat ni mniej ni więcej mówi, że VS nie mogło odnaleźć wcześniejszego workspace’a. Powodem jest to z tego, że TFS cache’uje workspace’y. Jak zatem wymusić na żeby odświeżył je i zobaczył naszą zmianę?
+Komunikat ni mniej ni więcej mówi, że VS nie mogło odnaleźć wcześniejszego workspace'a. Powodem jest to z tego, że TFS cache'uje workspace'y. Jak zatem wymusić na żeby odświeżył je i zobaczył naszą zmianę?
 
 Należy uruchomić Visual Studio Command Prompt (Start => Programy => Microsoft Visual Studio 2010 => Visual Studio Tools => Visual Studio Command Prompt (2010)) i wpisać w nim:
 

@@ -122,7 +122,7 @@ Session.CreateCriteria<Wydatek>()
 ```
 Po jego wykonaniu w obiekcie rodzina znajdą się wszyscy jej członkowie, a dla każdego członka zostaną pobrane jego wydatki
 
-Jak to się dzieje? Skąd ta magia? Wykorzystywany jest tutaj mechanizm cache’owania wyników NHibernate. W dużym uproszczeniu można powiedzieć, że dzięki niemu zapamiętywane są działania i ich wyniki wykonane w obrębie jednej sesji połączenia z bazą.
+Jak to się dzieje? Skąd ta magia? Wykorzystywany jest tutaj mechanizm cache'owania wyników NHibernate. W dużym uproszczeniu można powiedzieć, że dzięki niemu zapamiętywane są działania i ich wyniki wykonane w obrębie jednej sesji połączenia z bazą.
 
 W pierwszym kroku pobrany zostaje obiekt rodziny. Następnie pobieramy jej członków,a później ich wydatki. Dzięki temu, że dokonujemy tego w obrębie jednej sesji NHibernate wie, że powinien "posklejać" odpowiednie obiekty ze sobą (na podstawie zdefiniowanych wcześniej klas mapowań). Rodzinę z jej członkami, członków z ich wydatkami.
 
