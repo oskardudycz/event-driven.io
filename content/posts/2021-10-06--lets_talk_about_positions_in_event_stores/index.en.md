@@ -23,7 +23,7 @@ In Marten, the append-only log is one table. The primary key is the sequence fie
 
 In EventStoreDB, the design is similar.
 
-The append-only log is called the _$all stream_. It is a specific stream representing all events stored in the database. It is a logical representation of the memory (disk) position where the event is located. The position is monotonic, and may have gaps. To be precise, it is actually composed of two such pointers: a _commit_ and a _prepare_. They are remainings from when it was possible to make transactions were supported in EventStoreDB (it is to be unified into one number in upcoming versions). For now, if you're not using transactions, you can treat the commit position as the single relevant one.
+The append-only log is called the _$all stream_. It is a specific stream representing all events stored in the database. It is a logical representation of the memory (disk) position where the event is located. The position is monotonic, and may have gaps. To be precise, it is actually composed of two such pointers: a _commit_ and a _prepare_. They are remainings from when transactions were supported in EventStoreDB (it is to be unified into one number in upcoming versions). For now, if you're not using transactions, you can treat the commit position as the single relevant one.
 
 The stream version is an automatically incremented number. It is called stream position. Similarly, on its basis, EventStoreDB allows you to use it for optimistic concurrency. Then it is called stream revision.
 
@@ -31,7 +31,7 @@ Interestingly, in EventStoreDB, the physical structures are streams. The _$all s
 
 If you subscribe to _$all_, you will receive events from multiple streams respecting the global order in which they occur. You will need to save the position as the checkpoint of the last processed event. The position can also be used for deduplication and idempotency. You can check if an event was already processed.
 
-It is similar also in Kafka. Although it is not a proper tool for Event Sourcing, it is similar in a way that also lies "append-only log" in its core. There, the logical structure is _topic_, split into a set of physical _partitions_. The position is named _commit offset_. This is the entry where the event has been saved on the partition.
+It is similar also in Kafka. Although it is not a proper tool for Event Sourcing, it is similar in that the notion of an "append-only log" lies at its core. There, the logical structure is _topic_, split into a set of physical _partitions_. The position is named _commit offset_. This is the entry where the event has been saved on the partition.
 
 Here's a picture of what it looks like in the Event Store!
 
