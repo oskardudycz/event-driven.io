@@ -3,6 +3,7 @@ title: Let's talk about positions in event stores
 category: "Event Sourcing"
 cover: 2021-10-06-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2021-10-06-cover.png)
