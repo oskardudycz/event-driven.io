@@ -1,0 +1,229 @@
+[
+    {
+      "Date": "October 27, 2021",
+      "Where": "4Dev Live",
+      "Title": "Nigdy więcej nie trać danych, czyli Event Sourcing na ratunek!",
+      "Description": "W dzisiejszych czasach informacja i dane to najcenniejsze zasoby. Tradycyjny sposób nadpisywania aktualnego stanu może nie być już wystarczający. Na swojej prelekcji pokażę dlaczego Event Sourcing jest wzorcem, który pozwala bezstratnie zachować, a następnie analizować operacje zachodzące w naszym systemie. Poparte to będzie praktycznymi przykładami z użyciem EventStoreDB i .NET.",
+      "Link": "https://4developers.org.pl/lecture_online_2021/#id=69058",
+      "Video": "https://www.youtube.com/watch?v=sJe1sw1Wdco",
+      "HideVideo": true,
+      "Language": "PL"
+    },
+    {
+      "Date": "October 13, 2021",
+      "Where": "StoryMapping.pl",
+      "Title": "Co PO/BA powinien wiedzieć o Event Sourcing i architekturze opartej na zdarzeniach?",
+      "Description": "Event Sourcing i Architektury Oparte na Zdarzeniach to tematy często określane jako trudne. Wcale nie muszą takie być.\nNa spotkaniu zaczeliśmy od podstaw, omówiliśmy dlaczego w Event Sourcing nie tracimy żadnych danych biznesowych, dlaczego zdarzenia są świetnym połączeniem biznesu z technologią.\nPrzegadaliśmy też częste problemy oraz typowe błędy we wdrażaniu Event Sourcingu w projektach.",
+      "Link": "https://www.youtube.com/watch?v=AwyVsYfsKoU",
+      "Video": "https://www.youtube.com/watch?v=AwyVsYfsKoU",
+      "Language": "PL"
+    },
+    {
+      "Date": "October 7, 2021",
+      "Where": "Event Sourcing Live",
+      "Title": "Let's build the worst Event Sourcing system!",
+      "Description": "Most of the articles that can be found on the Internet about Event Sourcing are wrong or incomplete. There are common (anti)patterns as, e.g.: - using materialised views as the state instead of the events as state, - using queues/streaming systems instead of subscriptions, - keeping huge streams and ignoring the temporal modelling aspect of Event Sourcing, - creating homebrew frameworks, - etc. I'll gather those crazy ideas from the Internet and compile them into a recipe for disaster. This presentation aims to be funny, but I'd like to leave the audience with an idea of what and why not to do, explaining what's Event Sourcing is about.",
+      "Link": "https://2021.eventsourcing.live/speakers/oskar-dudycz",
+      "Video": "https://www.youtube.com/watch?v=i86LJimSijU",
+      "HideVideo": true,
+      "Language": "EN"
+    },
+    {
+      "Date": "September 30, 2021",
+      "Where": ".NET Liverpool",
+      "Title": "Practical introduction to Event Sourcing with EventStoreDB",
+      "Description": "Event Sourcing is perceived as a complex pattern. I'll try to present that it doesn't have to be true. I'll explain why no data is lost in Event Sourcing, and it's easier to write code closer to business. All of that will be shown on the practical examples using EventStoreDB and flavoured with a bit of CQRS and DDD.",
+      "Link": "https://www.meetup.com/Dot-NET-Liverpool/events/280553666/",
+      "Video": "https://www.youtube.com/watch?v=rqYPVzjoxqI",
+      "Language": "EN"
+    },
+    {
+      "Date": "September 8, 2021",
+      "Where": "Event Store",
+      "Title": "CQRS is simpler than you think with C#9 and .NET 5!",
+      "Description": "CQRS is quite often perceived as an over complex pattern with a lot of redundancy and ceremony. Too often it's explained pushing towards multiple databases, eventual consistency, DDD, and Event Sourcing. In this webinar, Oskar will show that it's the opposite in reality.\nDuring live coding, Oskar will show how CQRS can help in tackling the layered architecture complexity. He'll build a simple, but real WebAPI. Then he'll spice all of that with all the goodies from C#9 and .NET 5 to help achieve that. Records, Nullable Reference Types, Endpoints etc. The main focus will be on CQRS and pure .NET, not Event Sourcing, or DDD.",
+      "Link": "https://www.eventstore.com/webinars/cqrs-is-simpler-than-you-think",
+      "Video": "",
+      "Language": ""
+    },
+    {
+      "Date": "August 26, 2021",
+      "Where": "Devoxx Poland",
+      "Title": "The Light and The Dark Side of the Event-Driven Design",
+      "Description": "Recently Event-Driven Design became one of the most popular Buzz Words. This approach is shown as the model way of the modern, scalable systems. I'll play the devil's advocate and show in practice what may go wrong. I'll show that this experience may be painful. I'll tell of how you may end up with distributed monolith and the concrete tips on how to prevent that. I'll explain all those enigmatic terms as idempotency, eventual consistency, at least once delivery, etc. I'll bust few myths and show facts without evangelisation. All of that will be flavoured with a dose of the healthy pragmatism.",
+      "Link": "https://devoxx.pl/talk-details/?id=2873",
+      "Video": "https://www.youtube.com/watch?v=0pYmuk0-N_4",
+      "Language": "EN"
+    },
+    {
+      "Date": "May 28, 2021",
+      "Where": "Event Store Conversations",
+      "Title": "Yves Lorphelin talks to Oskar Dudycz about CQRS",
+      "Description": "",
+      "Link": "",
+      "Video": "https://www.youtube.com/watch?v=D-3N2vQ7ADE",
+      "Language": ""
+    },
+    {
+      "Date": "May 26, 2021",
+      "Where": "4Developers",
+      "Title": "Przynieś mi problemy, nie rozwiązania!",
+      "Description": "W wielu projektach występuje walka My kontra Oni - Programiści kontra Biznes. Programiści słyszą, że powinni przynosić rozwiązania, a nie problemy. Jest to uzasadnione, ale ważne, żeby Biznes przynosił programista problemy, a nie rozwiązania.\nW trakcie swojej prezentacji opowiem o tym jak zasypać tę dziurę między dwiema stronami. Opowiem dlaczego podział na Biznes/IT powoli odchodzi do lamusa oraz jak efektywnie i asertywnie ze sobą współpracować z korzyścią dla obydwu stron.",
+      "Link": "",
+      "Video": "https://www.youtube.com/watch?v=iSbpZBeGU7k",
+      "Language": ""
+    },
+    {
+      "Date": "May 25, 2021",
+      "Where": "4Developers",
+      "Title": "CQRS is simpler than you think with C#9 and .NET 5",
+      "Description": "CQRS is quite often perceived as an over complex pattern with a lot of redundancy and ceremony. Too often it's explained pushing towards multiple databases, eventual consistency, DDD, and Event Sourcing. In this webinar, Oskar will show that it's the opposite in reality.\nDuring live coding, Oskar will show how CQRS can help in tackling the layered architecture complexity. He'll build a simple, but real WebAPI. Then he'll spice all of that with all the goodies from C#9 and .NET 5 to help achieve that. Records, Nullable Reference Types, Endpoints etc. The main focus will be on CQRS and pure .NET, not Event Sourcing, or DDD.",
+      "Link": "https://4developers.org.pl/lecture_online_2021/#id=65099",
+      "Video": "https://www.youtube.com/watch?v=WY5dZD_0sgg",
+      "Language": "PL"
+    },
+    {
+      "Date": "May 15, 2021",
+      "Where": "SegFault/PGR",
+      "Title": "Event sourcing - lekarstwo na całe zło czy tylko hype?",
+      "Description": "Architektura oparta o zdarzenia jest jak święty Graal, miasto ze złota ukryte w dżungli, buddyjski klasztor z dala od utartych szlaków, który skrywa tajemnice wiecznego szczęścia.\nWielu o tym rozmawia, marzy, planuje samobójcze wyprawy. Niewielu jednak tam dociera.\nJedną ze ścieżek, która tam prowadzi jest Event Sourcing.\nPodczas naszego spotkania, zaprawieni w bojach podróżnicy: Oskar Dudycz, Andrzej Ludwikowski i Piotr Wyczesany, przeprowadzą Was przez meandry Event Sourcing. Bazując na swoim doświadczeniu zdobytym w boju, podczas wdrażania systemów opartych o zdarzenia, przybliżą Wam dobre i złe strony tego podejścia. Chcecie od ekspertów dowiedzieć się czy Apache Kafka to dobry wybór, czy JSON ma sens, czym jest “zdarzenie” i jak przekonać biznes? Wszystkiego tego dowiecie się podczas spotkania, moderowanego przez Wiktora Sztajerowskiego.\nZero slajdów, tylko szczere pytania i bolesna prawda!",
+      "Link": "",
+      "Video": "https://www.youtube.com/watch?v=m39mZ7NsbUA",
+      "Language": "PL"
+    },
+    {
+      "Date": "May 18, 2021",
+      "Where": "WrocNet/KGD.NET",
+      "Title": "CQRS jest łatwiejszy niż myślisz z C# 9 i .NET 5",
+      "Description": "CQRS jest dość często postrzegane jako skomplikowany wzorzec z dużą ilością nadmiarowości i ceremonii. Zbyt często kładzie się nacisk na wiele baz danych, eventual consistency, DDD i Event Sourcing. W prezentacji pokażę, że w rzeczywistości jest odwrotnie, że to prosty i użyteczny wzrozcec. Podczas kodowania na żywo pokażę, jak CQRS może pomóc w radzeniu sobie ze złożonością architektury warstwowej. Zbuduję proste, ale prawdziwe WebAPI. Doprawię to wszystko wszystkimi dodatkami z C # 9 i .NET 5, aby to osiągnąć. Rekordy, typy odwołań dopuszczających wartość zerową, punkty końcowe itp. Brak źródła zdarzeń, DDD, tylko CQRS i czysty .NET.",
+      "Link": "https://www.meetup.com/wrocnet/events/278081384/",
+      "Video": "https://www.youtube.com/watch?v=HiMVV9SEMto",
+      "Language": "PL"
+    },
+    {
+      "Date": "February 25, 2021",
+      "Where": "Forum Architektury - mBank",
+      "Title": "Dostarczajmy jakość, a nie jakoś",
+      "Description": "Omówię kilka nieoczywistych zasad dotyczących każdego etapu procesu wytwarzania oprogramowania: np. czy posiadanie 100% code coverage jest wystarczające, gdzie się kończy rola programisty w procesie jakości, jak niepewność wymagań wpływa na wytwarzanie oprogramowania itp.",
+      "Link": "",
+      "Video": "",
+      "Language": ""
+    },
+    {
+      "Date": "January 25, 2021",
+      "Where": "Ostra Piła",
+      "Title": "Architektury oparte o zdarzenia",
+      "Description": "",
+      "Link": "https://ostrapila.pl/architektury-oparte-o-zdarzenia",
+      "Video": "",
+      "Language": ""
+    },
+    {
+      "Date": "September 16, 2020",
+      "Where": "4Developers",
+      "Title": "Cienie i blaski Event Driven Design",
+      "Description": "W ostatnim czasie Event Driven Design stało się jednym z najpopularniejszych Buzz Words. Podejście to jest pokazywane jako wzorcowe przy tworzeniu nowoczesnych, skalowalnych systemów. Postaram się zabawić w adwokata diabła i pokazać, co w praktyce może pójść nie tak. Przedstawię, że jej użycie może też boleć. Pokażę jak można wylądować z rozproszonym monolitem i opowiem jak się przed tym bronić. Opowiem o tych wszystkich enigmatycznych terminach jak idempotency, eventual consistency, at least once delivery itd. Obalę kilka mitów i przedstawimę sporo faktów bez ewangelizacji, ale za to ze sporą dawką zdrowego pragmatyzmu.",
+      "Link": "https://4developers.org.pl/lecture_warszawa_2020/#id=62346",
+      "Video": "https://www.youtube.com/watch?v=4H344KPURlE",
+      "Language": "PL"
+    },
+    {
+      "Date": "September 15, 2020",
+      "Where": "4Developers",
+      "Title": "Practical Event Sourcing with Marten",
+      "Description": "Event Sourcing is like the Nessie, all heard about it but not much have seen it. The presentation will show how the moderns systems can benefit from that pattern with the practical examples using Marten ( https://martendb.io/documentation/events/ ).\nMarten is an interesting framework that benefits from the great JSON support in Postgres. It makes it an Event Store (and DocumentDB) keeping benefits of the Event-Driven systems and allowing them to keep strong data consistency.\nAll of that will be flavoured with a dose of CQRS and DDD.",
+      "Link": "https://4developers.org.pl/lecture_warszawa_2020/#id=62333",
+      "Video": "https://www.youtube.com/watch?v=L_ized5xwww",
+      "Language": "EN"
+    },
+    {
+      "Date": "October 31, 2020",
+      "Where": "Wrocławska Grupa .NET",
+      "Title": "Event Sourcing w praktyce przy użyciu Marten",
+      "Description": "Event Sourcing jest jak Nessie, każdy o nim słyszał, niewiele go widziało. Uważany jest (wg mnie niesłusznie) za trudny wzorzec architektoniczny, nadający się do specyficznych rozwiązań. W swoim wystąpieniu planuję pokazać, że wbrew potocznej opinii jest to dosyć prosty wzorzec dający duże możliwości, np.\n- lepsze zrozumienie domeny biznesowej,\n- elastyczność,\n- możliwość poruszania się w czasie, powrotu do specyficznego miejsca w systemie,\n- audotyowalność\nZaprezentowane to zostanie na konkretnej aplikacji używającej Marten z .NET Core. Przyprawione to będzie dozą CQRS i DDD.",
+      "Link": "https://www.meetup.com/WG-NET/events/271103030/",
+      "Video": "https://www.youtube.com/watch?v=LNcPKMZ11zo",
+      "Language": "PL"
+    },
+    {
+      "Date": "May 27, 2020",
+      "Where": "dev@LDZ",
+      "Title": "Zbuduj swój Event Store w godzinę",
+      "Description": "Event Sourcing jest jak Nessie, każdy o nim słyszał, niewiele go widziało.\nPokażę na żywo, jak w około godzinę stworzyć swój Event Store w bazie relacyjnej. W trakcie tego wyjaśnię podstawowe zasady Event Sourcingu i pokażę, że jest to dużo prostsze niż się wszystkim wydaje.\nBędzie SQL, będzie kod - czyli klasyczne programistyczne \"mięcho\".",
+      "Link": "https://www.meetup.com/dev-LDZ/events/270666438/",
+      "Video": "https://www.youtube.com/watch?v=wNrH5dK1m0I",
+      "Language": "PL"
+    },
+    {
+      "Date": "April 21, 2020",
+      "Where": "WrocNet",
+      "Title": "Event Sourcing w praktyce przy użyciu Marten",
+      "Description": "Event Sourcing jest jak Nessie, każdy o nim słyszał, niewiele go widziało. Uważany jest (wg mnie niesłusznie) za trudny wzorzec architektoniczny, nadający się do specyficznych rozwiązań. W swoim wystąpieniu planuję pokazać, że wbrew potocznej opinii jest to dosyć prosty wzorzec dający duże możliwości, np. - lepsze zrozumienie domeny biznesowej, - elastyczność, - możliwość poruszania się w czasie, powrotu do specyficznego miejsca w systemie, - audotyowalność Zaprezentowane to zostanie na konkretnej aplikacji używającej Marten z .NET Core. Przyprawione to będzie dozą CQRS i DDD.",
+      "Link": "https://www.meetup.com/wrocnet/events/268145624/",
+      "Video": "https://www.youtube.com/watch?v=HiMVV9SEMto",
+      "Language": "PL"
+    },
+    {
+      "Date": "April 7, 2020",
+      "Where": "SegFault Online",
+      "Title": "”Blaski i cienie Event Driven Design”, z udziałem Oskara Dudycza i Jarka Pałki.",
+      "Description": "Event Driven Design to podejście do budowania architektury nowoczesnych i skalowalnych systemów, które zdobyło ostatnio grono gorliwych wyznawców, jak i przeciwników, którzy wskazują na złożoność systemów tworzonych w tej architekturze, problemy z konsystencją danych, a także potrzebę poznania i doskonalenia nowych narzędzi.",
+      "Link": "",
+      "Video": "https://www.youtube.com/watch?v=vFhhvZJB-Es",
+      "Language": "PL"
+    },
+    {
+      "Date": "March 3, 2020",
+      "Where": "AzureDay Poland",
+      "Title": "Matrix Tests with Azure DevOps",
+      "Description": "",
+      "Link": "https://www.facebook.com/events/221256022227197",
+      "Video": "",
+      "Language": "PL"
+    },
+    {
+      "Date": "February 27, 2020",
+      "Where": "Let's Speak IT",
+      "Title": "Event Sourcing w praktyce przy użyciu Marten.",
+      "Description": "Event Sourcing jest jak Nessie, każdy o nim słyszał, niewielu go widziało. Uważany jest (wg mnie niesłusznie) za trudny wzorzec architektoniczny, nadający się do specyficznych rozwiązań. W swoim wystąpieniu Oskar Dudycz pokaże, że wbrew potocznej opinii jest to dosyć prosty wzorzec dający duże możliwości, np.: lepsze zrozumienie domeny biznesowej, elastyczność, możliwość poruszania się w czasie, powrotu do specyficznego miejsca w systemie, audotyowalność. Zaprezentowane to zostanie na konkretnej aplikacji używającej Marten z .NET Core, a dodatkowo okraszone będzie dozą CQRS i DDD.",
+      "Link": "https://www.meetup.com/Chillout-Meetup/events/268603135/",
+      "Video": "",
+      "Language": ""
+    },
+    {
+      "Date": "January 29, 2020",
+      "Where": "KGD .NET",
+      "Title": "Event Sourcing w praktyce przy użyciu Marten",
+      "Description": "Event Sourcing jest jak Nessie, każdy o nim słyszał, niewiele go widziało. Uważany jest (wg mnie niesłusznie) za trudny wzorzec architektoniczny, nadający się do specyficznych rozwiązań. W swoim wystąpieniu planuję pokazać, że wbrew potocznej opinii jest to dosyć prosty wzorzec dający duże możliwości, np. - lepsze zrozumienie domeny biznesowej, - elastyczność, - możliwość poruszania się w czasie, powrotu do specyficznego miejsca w systemie, - audotyowalność Zaprezentowane to zostanie na konkretnej aplikacji używającej Marten z .NET Core. Przyprawione to będzie dozą CQRS i DDD.",
+      "Link": "https://www.meetup.com/KGD-NET/events/267639392/",
+      "Video": "",
+      "Language": "PL"
+    },
+    {
+      "Date": "November 25, 2019",
+      "Where": "SegFault Unconference",
+      "Title": "Cienie i blaski Event Driven Design",
+      "Description": "W ostatnim czasie Event Driven Design stało się jednym z najpopularniejszych Buzz Words. Podejście to jest pokazywane jako wzorcowe przy tworzeniu nowoczesnych, skalowalnych systemów. Postaram się zabawić w adwokata diabła i pokazać, co w praktyce może pójść nie tak. Przedstawię, że jej użycie może też boleć. Pokażę jak można wylądować z rozproszonym monolitem i opowiem jak się przed tym bronić. Opowiem o tych wszystkich enigmatycznych terminach jak idempotency, eventual consistency, at least once delivery itd. Obalę kilka mitów i przedstawimę sporo faktów bez ewangelizacji, ale za to ze sporą dawką zdrowego pragmatyzmu.",
+      "Link": "https://segfault.events/sites/krakow2019/abstracts/cienie-i-blaski-event-driven-design/",
+      "Video": "https://www.youtube.com/watch?v=vurPWlrDwuQ",
+      "Language": "PL"
+    },
+    {
+      "Date": "April 27, 2017",
+      "Where": "Chillout Meetup",
+      "Title": "Porzuć CRUD! Czyli Event Sourcing w .NET Core, Marten i PostgreSQL",
+      "Description": "Jeżeli kiedykolwiek obiły Ci się o uszy takie tematy jak Domain Driven Design lub Command Query Responsibility Segregation to warto zainteresować się również Event Sourcingiem. Prezentacja z bardziej praktycznym podejściem przedstawi alternatywę do nadmiernie stosowanego CRUDa.",
+      "Link": "https://www.meetup.com/Chillout-Meetup/events/238670622/",
+      "Video": "",
+      "Language": ""
+    },
+    {
+      "Date": "February 21, 2017",
+      "Where": "WrocNet",
+      "Title": "Przygody z EventSourcing i CQRS, czyli jak to sie w praktyce robi w świecie dotNet Core",
+      "Description": "Event Sourcing, CQRS i Domain Driven Development to modne terminy, traktowane jednak zwykle jak Nessi i Yeti. DotNetCore jak mesjasz, który podobno już jest, ale czy na pewno to już nie wiadomo. Opowiem o moich przygodach zawodowych z nimi i co z nich wyniosłem na przykładzie dotnet core, webapi bibliotek Marten, MediatR oraz Postgresa. Spróbuje pokazać, że to wcale nie musi byc takie trudne i wbrew obiegowym opiniom upraszcza życie.",
+      "Link": "https://www.meetup.com/wrocnet/events/237406855",
+      "Video": "https://www.youtube.com/watch?v=i1XDr9km0RY",
+      "Language": "PL"
+    }
+  ]

@@ -66,6 +66,14 @@ module.exports = {
         chunkSize: 10000 // default: 1000
       }
     },
+    `gatsby-transformer-json`,
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `data`,
+        path: `${__dirname}/data/`
+      }
+    },
     {
       resolve: `gatsby-source-filesystem`,
       options: {

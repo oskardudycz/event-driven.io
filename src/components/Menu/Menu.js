@@ -7,6 +7,7 @@ import {
   FaGithub,
   FaHome,
   FaLinkedin,
+  FaMicrophone,
   FaRss,
   FaTwitter,
   FaYoutube
@@ -36,6 +37,7 @@ class Menu extends React.Component {
       { to: "/", label: "Start", icon: FaHome },
       { to: "/category/", label: "menu.categories", icon: FaTag },
       ...pages,
+      { to: "/talks/", label: "menu.talks", icon: FaMicrophone },
       { to: "/contact/", label: "menu.contact", icon: FaEnvelope },
       { to: "/search/", icon: FaSearch },
 
