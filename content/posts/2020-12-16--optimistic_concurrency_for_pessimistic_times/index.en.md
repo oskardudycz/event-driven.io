@@ -37,7 +37,7 @@ However, both EventStoreDB and Marten use numeric version numbers for event vers
 - DynamoDB - https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBMapper.OptimisticLocking.html
 - CosmosDB - https://docs.microsoft.com/en-us/azure/cosmos-db/database-transactions-optimistic-concurrency
 
-**How can you handle this in the web API?** The most common approach is to send a version as an Etag header (https://en.wikipedia.org/wiki/HTTP_ETag). In the case of a version conflict, the 409 status is returned (https://http.cat/409).
+**How can you handle this in the web API?** The most common approach is to send a version as an Etag header (https://en.wikipedia.org/wiki/HTTP_ETag). In the case of a version conflict, the 409 status is returned (https://http.cat/409). Read more on how to do that in [How to use ETag header for optimistic concurrency](/en/how_to_use_etag_header_for_optimistic_concurrency/).
 
 Optimistic concurrency is also fundamental in ensuring the order of events in **Event Sourcing**. I encourage you to try going through the task from my "Self Paced Kit" as ademonstration of how this works: https://github.com/oskardudycz/EventSourcing.NetCore/tree/main/Workshops/BuildYourOwnEventStore/03-OptimisticConcurrency.
 
