@@ -310,8 +310,8 @@ I also added a random factor. This is critical, especially if we have _cron_ bas
 As the final touch, let's add a helper for retrying when the document was not found:
 
 ```typescript
-export async function assertFound<T>(find: Promise<T | null>): Promise<T> {
-  const result = await find;
+export async function assertFound<T>(() => find: Promise<T | null>): Promise<T> {
+  const result = await find();
 
   if (result === null) {
     throw 'DOCUMENT_NOT_FOUND';
@@ -321,7 +321,7 @@ export async function assertFound<T>(find: Promise<T | null>): Promise<T> {
 }
 
 export function retryIfNotFound<T>(
-  find: Promise<T | null>,
+  find: () => Promise<T | null>,
   options: RetryOptions = DEFAULT_RETRY_OPTIONS
 ): Promise<T> {
   return retryPromise(() => assertFound(find), options);
@@ -332,9 +332,9 @@ We can also add a similar wrapper for updates:
 
 ```typescript
 export async function assertUpdated(
-  update: Promise<UpdateResult>
+  update: () => Promise<UpdateResult>
 ): Promise<UpdateResult> {
-  const result = await update;
+  const result = await update();
 
   if (result.modifiedCount === 0) {
     throw 'FAILED_TO_UPDATE_DOCUMENT';
@@ -344,7 +344,7 @@ export async function assertUpdated(
 }
 
 export function retryIfNotUpdated(
-  update: Promise<UpdateResult>,
+  update: () => Promise<UpdateResult>,
   options: RetryOptions = DEFAULT_RETRY_OPTIONS
 ): Promise<UpdateResult> {
   return retryPromise(() => assertUpdated(update), options);
@@ -361,7 +361,7 @@ export async function projectProductItemAddedToShoppingCart(
   const shoppingCarts = await shoppingCartsCollection();
   const lastRevision = streamRevision - 1;
 
-  const { productItems, revision } = await retryIfNotFound(
+  const { productItems, revision } = await retryIfNotFound(() =>
     shoppingCarts.findOne(
       {
         shoppingCartId: event.data.shoppingCartId,
@@ -403,7 +403,7 @@ export async function projectProductItemRemovedFromShoppingCart(
   const shoppingCarts = await shoppingCartsCollection();
   const lastRevision = streamRevision - 1;
 
-  const { productItems, revision } = await retryIfNotFound(
+  const { productItems, revision } = await retryIfNotFound(() =>
     shoppingCarts.findOne(
       {
         shoppingCartId: event.data.shoppingCartId,
