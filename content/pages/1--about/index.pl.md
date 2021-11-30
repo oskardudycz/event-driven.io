@@ -7,7 +7,7 @@ Od ponad 13 lat, tworzę systemy informatyczne bliskie biznesowi. Zaczynałem ka
 
 ![photo](bg-1.jpg)
 
-Lubię tworzyć dobrze przemyślane systemy, narzędzia i frameworki, które są używane na produkcji i robią życie ludzi łatwiejszym. Wierzę, żę **Event Sourcing**, **CQRS**, i w ogólności, **Architektury oparte na zdarzeniach** są dobrymi podstawami dzięki którymi można to osiągnąć. Praca przy OSS i współdzielenie wiedzy są dla mnie dużą motywacją.
+Lubię tworzyć dobrze przemyślane systemy, narzędzia i frameworki, które są używane na produkcji i robią życie ludzi łatwiejszym. Wierzę, żę **Event Sourcing**, **CQRS**, i w ogólności, **Architektury oparte o zdarzenia** są dobrymi podstawami dzięki którymi można to osiągnąć. Praca przy OSS i współdzielenie wiedzy są dla mnie dużą motywacją.
 
 Dlatego właśnie:
 
