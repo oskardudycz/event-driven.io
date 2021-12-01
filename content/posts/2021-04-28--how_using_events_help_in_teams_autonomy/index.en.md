@@ -50,3 +50,5 @@ Modelling with events helps on keeping the focus on the business flow without ge
 Cheers!
 
 Oskar
+
+p.s. check also my [Architect Manifesto](/en/architect_manifesto).

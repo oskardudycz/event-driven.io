@@ -3,7 +3,6 @@ title: Architect Manifesto
 category: "Architecture"
 cover: 2020-11-29-cover.png
 author: oskar dudycz
-useDefaultLangCanonical : true
 ---
 
 ![cover](2020-11-29-cover.png)
@@ -16,13 +15,13 @@ _"We have autonomous teams that drive their design."_
 
 _"We have DevOps team."_
 
-Have you heard or made such statements? During the years we create an enormous set of the architect subtypes - _Software Architect_, _Enterprise Architect_, _Solution Architect_, _Chief Architect_, _DevOps Architect_, _Junior Architect_. I'm sure that there are already bullshit architect title generators somewhere on the web. This term was so bloated that I had a hard time calling myself an architect.
+Have you heard or made such statements? Over the years we have create an enormous set of architect subtypes - _Software Architect_, _Enterprise Architect_, _Solution Architect_, _Chief Architect_, _DevOps Architect_, _Junior Architect_. I'm sure, somewhere on the web, you will find one of those bullshit title generators for architect titles. The title architect has been so abused recently that I find it difficult to refer to myself as an architect.
 
-For many of us, architects are just a bunch of middle-aged white dudes sitting in the Ivory Tower. Like a Mage Guild - throwing ideas out of context. Dettached from the real development struggles.
+For many of us, architects are just a bunch of middle-aged white dudes sitting in their Ivory Tower. Like a Mage Guild - throwing around ideas that are out of context with the work being done. Detached from the real work at hand and the real development struggles.
 
-Some of us, following the microservice and DevOps movements, resigned from having architects. Now our teams are autonomous, making their own decisions.
+In the perfect world with the perfect teams - the "A" Teams - we may be able to adhere to the principals of the microservice and DevOps movements in that our teams are autonomous, making their own decisions. We can resigned from having architects.
 
-That's a perfect world. Our world is rarely perfect, usually [it's a mad world](https://www.youtube.com/watch?v=4N3N1MlvVc4). Teams are struggling with the Conway Law. Knowledge sharing rarely happens. It's challenging to maintain consistency. DevOps quite often appears to be just rebranded ops team or group of people holding CI tools.
+Our world is rarely perfect, usually [it's a mad world](https://www.youtube.com/watch?v=4N3N1MlvVc4). Teams are struggling with Conway's Law . Knowledge sharing rarely happens. It's challenging to maintain consistency. Designs go off into tangents. Teams become islands onto themselves. DevOps quite often appears to be just rebranded ops team or group of people holding Continuous Integration tools 
 
 Some companies and people already found out that having distinct pieces is not always the best approach. Uber evolved from "rewrite everything" mode to ["Domain-Oriented Microservice Architecture"](https://eng.uber.com/microservice-architecture/). Matthew Skelton and Manuel Pais provided the concept of [Team Topologies](https://teamtopologies.com) to [reduce the cognitive load](https://www.youtube.com/watch?v=haejb5rzKsM) and impact of Conway Law.
 
@@ -55,8 +54,10 @@ Some time ago, I wrote a vision of such a team for the project I was working. I 
 
 11. **Architecture team should make sure (together with DevOps team) that continuous integration and delivery process are fluent** and it's helping to effectively deliver the new features (so if it's reliable, fast enough, secure, etc.). They should also work with the System Teams to understand the production systems configurations to be able to make recommendations and make sure that investigation of the production bugs is effective.
 
-
 ---
 
-
 Thoughts?
+
+Oskar
+
+p.s. if you liked this article, check also ["How using events helps in a teams' autonomy"](/pl/how_using_events_help_in_teams_autonomy/).
