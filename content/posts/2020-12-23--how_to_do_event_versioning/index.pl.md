@@ -38,6 +38,8 @@ There are several ways:
 
 Versioning is not easy. The earlier we start thinking about the versioning strategy, the better. However, the best is to aim to achieve a situation when we don't need that strategy.
 
-**What is your experience with that? How are you dealing with the Event Sourcing on production?**
+If you're looking on the practical examples on how to practically implement Events Schema Versioning, check [Simple patterns for events schema versioning](/pl/simple_events_versioning_patterns).
+
+Cheers!
 
 Oskar

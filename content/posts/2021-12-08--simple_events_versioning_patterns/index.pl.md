@@ -5,7 +5,7 @@ cover: 2021-12-08-cover.png
 author: oskar dudycz
 ---
 
-![cover](2021-12-01-cover.png)
+![cover](2021-12-08-cover.png)
 
 Events (schema) versioning is a boogeyman for people learning Event Sourcing. They're a spooky tale told at the campfire. There's a truth in it, as migrations are always challenging. As time flow, the events' definition may change. Our business is changing, and we need to add more information. Sometimes we have to fix a bug or modify the definition for a better developer experience. 
 
@@ -33,7 +33,7 @@ If you prefer watching than reading you can also check the video below:
 
 ## Simple mapping
 
-There are some simple mappings that we could handle on the code structure or serialisation level. I'll be showing samples using C# and `System.Text.Json`  serialiser, but patterns and samples should be generic enough to apply to other environments and serialisers.
+There are some simple mappings that we could handle on the code structure or serialisation level. I'll be showing samples using C# and _System.Text.Json_  serialiser, but patterns and samples should be generic enough to apply to other environments and serialisers.
 
 Having event defined as such:
 
@@ -46,7 +46,7 @@ public record ShoppingCartInitialized(
 
 ### New not required property
 
-If we'd like to add a new not required property, e.g. `IntializedAt`, we can add it just as a new nullable property. The essential fact to decide if that's the right strategy is if we're good with not having it defined. It can be handled as:
+If we'd like to add a new not required property, e.g. _IntializedAt_, we can add it just as a new nullable property. The essential fact to decide if that's the right strategy is if we're good with not having it defined. It can be handled as:
 
 ```csharp
 public record ShoppingCartInitialized(
@@ -61,7 +61,7 @@ public record ShoppingCartInitialized(
 
 We must define a default value if we'd like to add a new required property and make it non-breaking. It's the same as you'd add a new column to the relational table. 
 
-For instance, we decide that we'd like to add a validation step when the shopping cart is open (e.g. for fraud or spam detection), and our shopping cart can be opened with a pending state. We could solve that by adding the new property with the status information and setting it to `Initialised`, assuming that all old events were appended using the older logic.
+For instance, we decide that we'd like to add a validation step when the shopping cart is open (e.g. for fraud or spam detection), and our shopping cart can be opened with a pending state. We could solve that by adding the new property with the status information and setting it to _Initialised_, assuming that all old events were appended using the older logic.
 
 ```csharp
 public enum ShoppingCartStatus
@@ -84,7 +84,7 @@ public record ShoppingCartInitialized(
 
 Renaming property is also a breaking change. Still, we can do it in a non-breaking manner. We could keep the same name in the JSON but map it during (de) serialisation.
 
-Let's assume that we concluded that keeping `ShoppingCart` prefix in the `ShoppingCartId` is redundant and decided to change it to `CartId`, as we see in the event name, what cart we have in mind.
+Let's assume that we concluded that keeping _ShoppingCart_ prefix in the _ShoppingCartId_ is redundant and decided to change it to _CartId_, as we see in the event name, what cart we have in mind.
 
 We could do it as:
 
@@ -291,7 +291,7 @@ public class EventTransformations
 }
 ```
 
-We have two `Register` methods. Both of them has JSON and handler function as params. One is used to register the `JsonDocument` raw transformation, the other to register an object to object one. Sample registrations:
+We have two _Register_ methods. Both of them has JSON and handler function as params. One is used to register the _JsonDocument_ raw transformation, the other to register an object to object one. Sample registrations:
 
 ```csharp
 var transformations = new EventTransformations()
@@ -300,7 +300,7 @@ var transformations = new EventTransformations()
         eventTypeV2Name, UpcastV2);
 ```
 
-We also have `TryTransform` that either transforms JSON into the new object structure or returns `null`. We'll use it further on.
+We also have _TryTransform_ that either transforms JSON into the new object structure or returns _null_. We'll use it further on.
 
 Let's also define the type mapping class responsible for mapping event type name into the CLR type.
 
@@ -368,7 +368,7 @@ The logic is simple. It'll either transform JSON through registered transformati
 
 You might want not only to transform a single event into another (1:1) but also a set of events into another one (N:M).
 
-Let's take as an example scenario where we can initialise not only empty shopping cart but also filled with products. For some time, we were doing that by publishing multiple events: `ShoppingCartInitialized` and `ProductItemAddedToShoppingCart` for each added product item. We decided that we'd like to replace this with event containing list of product items:
+Let's take as an example scenario where we can initialise not only empty shopping cart but also filled with products. For some time, we were doing that by publishing multiple events: _ShoppingCartInitialized_ and _ProductItemAddedToShoppingCart_ for each added product item. We decided that we'd like to replace this with event containing list of product items:
 
 ```csharp
 public record ProductItem(
@@ -402,7 +402,7 @@ We want to process our logic using a new event schema. However, that'd require z
 
 ![stream transformation](./2021-12-08-streams.png)
 
-Using it, we could decide if `ProductItemAddedToShoppingCart` was a part of the initialisation request or not.
+Using it, we could decide if _ProductItemAddedToShoppingCart_ was a part of the initialisation request or not.
 
 We need to take the stream events and transform them into another sequence of events. It could be modeled by such class:
 
@@ -432,9 +432,9 @@ public class StreamTransformations
 }
 ```
 
-We allow registering multiple transformations. Thanks to that, we can chain them using the `Aggregate` method, taking the previous transformation's result as a base for the next one.
+We allow registering multiple transformations. Thanks to that, we can chain them using the _Aggregate_ method, taking the previous transformation's result as a base for the next one.
 
-To connect it with the deserialisation process, we need to add it to the `EventSerializer` defined in the previous steps.
+To connect it with the deserialisation process, we need to add it to the _EventSerializer_ defined in the previous steps.
 
 ```csharp
 public class EventSerializer
@@ -535,8 +535,6 @@ private EventData ToShoppingCartInitializedWithProducts(
         shoppingCartInitialized.MetaData);
 }
 ```
-
----
 
 I hope that those samples will show you that you can support many versioning scenarios with basic composition techniques.
 

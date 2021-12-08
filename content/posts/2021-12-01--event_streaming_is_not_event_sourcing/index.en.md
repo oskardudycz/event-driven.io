@@ -65,6 +65,8 @@ You can read more in:
 - [EventStoreDB vs Kafka](https://domaincentric.net/blog/eventstoredb-vs-kafka)
 - [A Beginner's Guide to Event Sourcing](https://www.eventstore.com/event-sourcing)
 
+Check also Derek's Comartin video explaining his concerns around this topic: [Don't Let the Internet Dupe You, that's NOT Event Sourcing](https://www.youtube.com/watch?v=Y7ca1--EKsg).
+
 I've made a list of articles like that: https://github.com/oskardudycz/EventSourcing.NetCore#this-is-not-event-sourcing
 
 I'll repeat it again: this is not Event Sourcing.
