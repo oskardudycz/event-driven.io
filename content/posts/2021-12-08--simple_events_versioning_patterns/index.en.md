@@ -23,7 +23,7 @@ Also, as I wrote in [How to (not) do the events versioning?](/en/how_to_do_event
 
 *"If our aggregate lives shortly, a day or two, week, then these are easier to manage. If we'’'re deploying new changes with the new events schema, then events with the old one will be living for at most a few days. Thanks to that, we can break our deployment into two phases. First, we deploy a version that supports both schemas and mark the old one as "obsolete". Then, during the next deployment, we get rid of the code responsible for old events, because there are no living aggregate instances with old schemas."*
 
-Still, it's always worth knowing those practices to use them depending on your use case. Greg Young wrote a book about it: [Versioning in an Event Sourced System](https://leanpub.com/esversioning/read). I recommend you to read it.
+Still, it's always worth knowing those practices to use them depending on your use case. Greg Young wrote a book about it: [Versioning in an Event Sourced System](https://leanpub.com/esversioning/read). I recommend you to read it, especially that's for free, which is always a reasonable price.
 
 I'll try to explain today some of the basic strategies that will help you handle most of the basic scenarios.
 
@@ -35,27 +35,29 @@ If you prefer watching than reading you can also check the video below:
 
 There are some simple mappings that we could handle on the code structure or serialisation level. I'll be showing samples using C# and _System.Text.Json_  serialiser, but patterns and samples should be generic enough to apply to other environments and serialisers.
 
+### New not required property
+
 Having event defined as such:
 
 ```csharp
-public record ShoppingCartInitialized(
+public record ShoppingCartIntialised(
     Guid ShoppingCartId,
     Guid ClientId
 );
 ```
 
-### New not required property
-
 If we'd like to add a new not required property, e.g. _IntializedAt_, we can add it just as a new nullable property. The essential fact to decide if that's the right strategy is if we're good with not having it defined. It can be handled as:
 
 ```csharp
-public record ShoppingCartInitialized(
+public record ShoppingCartIntialised(
     Guid ShoppingCartId,
     Guid ClientId,
     // Adding new not required property as nullable
     DateTime? IntializedAt
 );
 ```
+
+Then, most serialisers will put the null value by default and not fail unless we use strict mode. The new events will contain whole information, for the old ones we'll have to live with that.
 
 ### New required property
 
@@ -67,16 +69,16 @@ For instance, we decide that we'd like to add a validation step when the shoppin
 public enum ShoppingCartStatus
 {
     Pending = 1,
-    Initialized = 2,
+    Intialised = 2,
     Confirmed = 3,
     Cancelled = 4
 }
 
-public record ShoppingCartInitialized(
+public record ShoppingCartIntialised(
     Guid ShoppingCartId,
     Guid ClientId,
     // Adding new not required property as nullable
-    ShoppingCartStatus Status = ShoppingCartStatus.Initialized
+    ShoppingCartStatus Status = ShoppingCartStatus.Intialised
 );
 ```
 
@@ -89,13 +91,13 @@ Let's assume that we concluded that keeping _ShoppingCart_ prefix in the _Shoppi
 We could do it as:
 
 ```csharp
-public class ShoppingCartInitialized
+public class ShoppingCartIntialised
 {
     [JsonPropertyName("ShoppingCartId")]
     public Guid CartId { get; init; }
     public Guid ClientId { get; init; }
 
-    public ShoppingCartInitialized(
+    public ShoppingCartIntialised(
         Guid cartId,
         Guid clientId
     )
@@ -105,6 +107,28 @@ public class ShoppingCartInitialized
     }
 }
 ```
+
+The benefit is that both old and the new structure will be backward and forward compatible. The downside of this solution is that we're still keeping the old JSON structure, so all consumers need to be aware of that and do mapping if they want to use the new structure. Some serialisers like Newtonsoft Json.NET allows to do such magic:
+
+```csharp
+public class ShoppingCartIntialised
+{
+    public Guid CartId { get; init; }
+    public Guid ClientId { get; init; }
+
+    public ShoppingCartIntialised(
+        Guid? cartId,
+        Guid clientId,
+        Guid? shoppingCartId = null
+    )
+    {
+        CartId = cartId ?? shoppingCartId!.Value;
+        ClientId = clientId;
+    }
+}
+```
+
+We'll either use the new property name or, if it's not available, then an old one. The downside is that we had to pollute our code with additional fields and nullable markers. As always, pick your poison.
 
 ## Upcasting
 
@@ -118,14 +142,14 @@ For instance, we decide to send also other information about the client, instead
 
 ```csharp
 public record Client(
-        Guid Id,
-        string Name = "Unknown"
-    );
+    Guid Id,
+    string Name = "Unknown"
+);
 
-    public record ShoppingCartInitialized(
-        Guid ShoppingCartId,
-        Client Client
-    );
+public record ShoppingCartIntialised(
+    Guid ShoppingCartId,
+    Client Client
+);
 ```
 
 We can define upcaster as a function that'll later plug in the deserialisation process. 
@@ -133,11 +157,11 @@ We can define upcaster as a function that'll later plug in the deserialisation p
 We can define the transformation of the object of the old structure as:
 
 ```csharp
-public static ShoppingCartInitialized Upcast(
-    V1.ShoppingCartInitialized oldEvent
+public static ShoppingCartIntialised Upcast(
+    V1.ShoppingCartIntialised oldEvent
 )
 {
-    return new ShoppingCartInitialized(
+    return new ShoppingCartIntialised(
         oldEvent.ShoppingCartId,
         new Client(oldEvent.ClientId)
     );
@@ -147,13 +171,17 @@ public static ShoppingCartInitialized Upcast(
 Or we can map it from JSON
 
 ```csharp
-public static ShoppingCartInitialized Upcast(
-    V1.ShoppingCartInitialized oldEvent
+public static ShoppingCartIntialised Upcast(
+    string oldEventJson
 )
 {
-    return new ShoppingCartInitialized(
-        oldEvent.ShoppingCartId,
-        new Client(oldEvent.ClientId)
+    var oldEvent = JsonDocument.Parse(oldEventJson).RootElement;
+
+    return new ShoppingCartIntialised(
+        oldEvent.GetProperty("ShoppingCartId").GetGuid(),
+        new Client(
+            oldEvent.GetProperty("ClientId").GetGuid()
+        )
     );
 }
 ```
@@ -169,22 +197,22 @@ public record EventMetadata(
     Guid UserId
 );
 
-public record ShoppingCartInitialized(
+public record ShoppingCartIntialised(
     Guid ShoppingCartId,
     Guid ClientId,
-    Guid InitializedBy
+    Guid IntialisedBy
 );
 ```
 
 Upcaster from old object to the new one can look like:
 
 ```csharp
-public static ShoppingCartInitialized Upcast(
-    V1.ShoppingCartInitialized oldEvent,
+public static ShoppingCartIntialised Upcast(
+    V1.ShoppingCartIntialised oldEvent,
     EventMetadata eventMetadata
 )
 {
-    return new ShoppingCartInitialized(
+    return new ShoppingCartIntialised(
         oldEvent.ShoppingCartId,
         oldEvent.ClientId,
         eventMetadata.UserId
@@ -195,7 +223,7 @@ public static ShoppingCartInitialized Upcast(
 From JSON to the object:
 
 ```csharp
-public static ShoppingCartInitialized Upcast(
+public static ShoppingCartIntialised Upcast(
     string oldEventJson,
     string eventMetadataJson
 )
@@ -203,7 +231,7 @@ public static ShoppingCartInitialized Upcast(
     var oldEvent = JsonDocument.Parse(oldEventJson);
     var eventMetadata = JsonDocument.Parse(eventMetadataJson);
 
-    return new ShoppingCartInitialized(
+    return new ShoppingCartIntialised(
         oldEvent.RootElement.GetProperty("ShoppingCartId").GetGuid(),
         oldEvent.RootElement.GetProperty("ClientId").GetGuid(),
         eventMetadata.RootElement.GetProperty("UserId").GetGuid()
@@ -218,11 +246,11 @@ In the same way, as described above, we can downcast the events from the new str
 From the new object to the old one:
 
 ```csharp
-public static V1.ShoppingCartInitialized Downcast(
-    ShoppingCartInitialized newEvent
+public static V1.ShoppingCartIntialised Downcast(
+    ShoppingCartIntialised newEvent
 )
 {
-    return new V1.ShoppingCartInitialized(
+    return new V1.ShoppingCartIntialised(
         newEvent.ShoppingCartId,
         newEvent.Client.Id
     );
@@ -232,13 +260,13 @@ public static V1.ShoppingCartInitialized Downcast(
 From new JSON format to the old object:
 
 ```csharp
-public static V1.ShoppingCartInitialized Downcast(
+public static V1.ShoppingCartIntialised Downcast(
     string newEventJson
 )
 {
     var newEvent = JsonDocument.Parse(newEventJson).RootElement;
 
-    return new V1.ShoppingCartInitialized(
+    return new V1.ShoppingCartIntialised(
         newEvent.GetProperty("ShoppingCartId").GetGuid(),
         newEvent.GetProperty("Client").GetProperty("Id").GetGuid()
     );
@@ -296,7 +324,7 @@ We have two _Register_ methods. Both of them has JSON and handler function as pa
 ```csharp
 var transformations = new EventTransformations()
     .Register(eventTypeV1Name, UpcastV1)
-    .Register<ShoppingCartInitialized, ShoppingCartInitializedWithStatus>(
+    .Register<ShoppingCartIntialised, ShoppingCartIntialisedWithStatus>(
         eventTypeV2Name, UpcastV2);
 ```
 
@@ -328,12 +356,12 @@ public class EventTypeMapping
 and use it as
 
 ```csharp
-const string eventTypeV1Name = "shopping_cart_initialized_v1";
-const string eventTypeV2Name = "shopping_cart_initialized_v2";
-const string eventTypeV3Name = "shopping_cart_initialized_v3";
+const string eventTypeV1Name = "shopping_cart_initialised_v1";
+const string eventTypeV2Name = "shopping_cart_initialised_v2";
+const string eventTypeV3Name = "shopping_cart_initialised_v3";
 
 var mapping = new EventTypeMapping()
-    .Register<ShoppingCartInitializedWithStatus>(
+    .Register<ShoppingCartIntialisedWithStatus>(
         eventTypeV1Name,
         eventTypeV2Name,
         eventTypeV3Name
@@ -368,7 +396,7 @@ The logic is simple. It'll either transform JSON through registered transformati
 
 You might want not only to transform a single event into another (1:1) but also a set of events into another one (N:M).
 
-Let's take as an example scenario where we can initialise not only empty shopping cart but also filled with products. For some time, we were doing that by publishing multiple events: _ShoppingCartInitialized_ and _ProductItemAddedToShoppingCart_ for each added product item. We decided that we'd like to replace this with event containing list of product items:
+Let's take as an example scenario where we can initialise not only empty shopping cart but also filled with products. For some time, we were doing that by publishing multiple events: _ShoppingCartIntialised_ and _ProductItemAddedToShoppingCart_ for each added product item. We decided that we'd like to replace this with event containing list of product items:
 
 ```csharp
 public record ProductItem(
@@ -381,7 +409,7 @@ public record PricedProductItem(
     decimal UnitPrice
 );
 
-public record ShoppingCartInitialized(
+public record ShoppingCartIntialised(
     Guid ShoppingCartId,
     Guid ClientId
 );
@@ -391,7 +419,7 @@ public record ProductItemAddedToShoppingCart(
     PricedProductItem ProductItem
 );
  
-public record ShoppingCartInitializedWithProducts(
+public record ShoppingCartIntialisedWithProducts(
     Guid ShoppingCartId,
     Guid ClientId,
     List<V1.PricedProductItem> ProductItems
@@ -468,13 +496,13 @@ We're injecting stream transformations into the deserialisation process. We're p
 We can implement function doing event grouping as described above as:
 
 ```csharp
-public List<EventData> FlattenInitializedEventsWithProductItemsAdded(
+public List<EventData> FlattenIntialisedEventsWithProductItemsAdded(
     List<EventData> events
 )
 {
-    var cartInitialized = events.First();
-    var cartInitializedCorrelationId =
-        JsonSerializer.Deserialize<EventMetadata>(cartInitialized.MetaData)!
+    var cartIntialised = events.First();
+    var cartIntialisedCorrelationId =
+        JsonSerializer.Deserialize<EventMetadata>(cartIntialised.MetaData)!
             .CorrelationId;
 
     var i = 1;
@@ -491,15 +519,15 @@ public List<EventData> FlattenInitializedEventsWithProductItemsAdded(
             .Deserialize<EventMetadata>(eventData.MetaData)!
             .CorrelationId;
 
-        if (correlationId != cartInitializedCorrelationId)
+        if (correlationId != cartIntialisedCorrelationId)
             break;
 
         productItemsAdded.Add(eventData);
         i++;
     }
 
-    var mergedEvent = ToShoppingCartInitializedWithProducts(
-        cartInitialized,
+    var mergedEvent = ToShoppingCartIntialisedWithProducts(
+        cartIntialised,
         productItemsAdded
     );
 
@@ -508,16 +536,16 @@ public List<EventData> FlattenInitializedEventsWithProductItemsAdded(
     );
 }
 
-private EventData ToShoppingCartInitializedWithProducts(
-    EventData shoppingCartInitialized,
+private EventData ToShoppingCartIntialisedWithProducts(
+    EventData shoppingCartIntialised,
     List<EventData> productItemsAdded
 )
 {
-    var shoppingCartInitializedJson = JsonDocument.Parse(shoppingCartInitialized!.Data).RootElement;
+    var shoppingCartIntialisedJson = JsonDocument.Parse(shoppingCartIntialised!.Data).RootElement;
 
-    var newEvent = new ShoppingCartInitializedWithProducts(
-        shoppingCartInitializedJson.GetProperty("ShoppingCartId").GetGuid(),
-        shoppingCartInitializedJson.GetProperty("ClientId").GetGuid(), new List<V1.PricedProductItem>(
+    var newEvent = new ShoppingCartIntialisedWithProducts(
+        shoppingCartIntialisedJson.GetProperty("ShoppingCartId").GetGuid(),
+        shoppingCartIntialisedJson.GetProperty("ClientId").GetGuid(), new List<V1.PricedProductItem>(
             productItemsAdded.Select(pi =>
             {
                 var pricedProductItem = JsonDocument.Parse(pi.Data).RootElement.GetProperty("ProductItem");
@@ -531,12 +559,20 @@ private EventData ToShoppingCartInitializedWithProducts(
         )
     );
 
-    return new EventData("shopping_cart_initialized_v2", JsonSerializer.Serialize(newEvent),
-        shoppingCartInitialized.MetaData);
+    return new EventData("shopping_cart_initialised_v2", JsonSerializer.Serialize(newEvent),
+        shoppingCartIntialised.MetaData);
 }
 ```
 
+## Migrations
+
+You can say that, well, those patterns are not migrations. Events will stay as they were, and you'll have to keep the old structure forever. That's quite true. Still, this is fine, as typically, you should not change the past. Having precise information, even including bugs, is a valid scenario. It allows you to get insights and see the precise history. However, pragmatically you may sometimes want to have a "clean" event log with only a new schema.
+
+It appears that composing the patterns described above can support such a case. For example, if you're running EventStoreDB or Marten, you can read/subscribe to the event stream, store events in the new stream, or even a new EventStoreDB cluster or Postgres schema. Having that, you could even rewrite the whole log and switch databases once the new one caught up.
+
 I hope that those samples will show you that you can support many versioning scenarios with basic composition techniques.
+
+![migrations](./2021-12-08-migration.png)
 
 Nevertheless, the best approach is to [not need to do versioning at all](/en/how_to_do_event_versioning/). If you're facing such a need, before using the strategies described above, make sure that your business scenario cannot be solved by talking to the business. It may appear that's some flaw in the business process modelling. We should not be trying to fix the issue, but the root cause. 
 
