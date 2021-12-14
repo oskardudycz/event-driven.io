@@ -1,6 +1,6 @@
 ---
 title: Simple patterns for events schema versioning
-category: "CQRS"
+category: "Event Sourcing"
 cover: 2021-12-08-cover.png
 author: oskar dudycz
 ---
