@@ -158,7 +158,8 @@ Problems arise on the first update. If we rapidly add a new product to the shopp
 
 ```typescript
 export async function projectProductItemAddedToShoppingCart(
-  event: ProductItemAddedToShoppingCart
+  event: ProductItemAddedToShoppingCart,
+  streamRevision: number
 ): Promise<Result<boolean>> {
   const shoppingCarts = await shoppingCartsCollection();
 
