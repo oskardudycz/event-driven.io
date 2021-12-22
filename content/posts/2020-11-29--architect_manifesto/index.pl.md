@@ -23,16 +23,15 @@ In the perfect world with the perfect teams - the "A" Teams - we may be able to 
 
 Our world is rarely perfect, usually [it's a mad world](https://www.youtube.com/watch?v=4N3N1MlvVc4). Teams are struggling with Conway's Law . Knowledge sharing rarely happens. It's challenging to maintain consistency. Designs go off into tangents. Teams become islands onto themselves. DevOps quite often appears to be just rebranded ops team or group of people holding Continuous Integration tools 
 
-Some companies and people already found out that having distinct pieces is not always the best approach. Uber evolved from "rewrite everything" mode to ["Domain-Oriented Microservice Architecture"](https://eng.uber.com/microservice-architecture/). Matthew Skelton and Manuel Pais provided the concept of [Team Topologies](https://teamtopologies.com) to [reduce the cognitive load](https://www.youtube.com/watch?v=haejb5rzKsM) and impact of Conway Law.
+Some of us, on up to and including the enterprise have found that breaking our development out into distinct efforts working autonomously is not always the best approach. Uber evolved from a "rewrite everything" mode to one based on ["Domain-Oriented Microservice Architecture"](https://eng.uber.com/microservice-architecture/). The work of Matthew Skelton and Manuel Pais provided us with the concept of [Team Topologies](https://teamtopologies.com) to [reduce the cognitive load](https://www.youtube.com/watch?v=haejb5rzKsM) and impact of Conway's Law. We are discovering that autonomy may not be as much of a benefit as we once thought.
 
-Having all of that, I still believe that having a software architect makes sense, even in the remote, DevOps, microservice development culture. We might not call them architects. We might just name them technical team leaders. In my vision, it should be rather a group of people than single indivudual to not create bottlenecks.
+Having said all of that, I still believe that having an architect makes sense, even within the DevOps and microservice development cultures. We might not call them architects, but they are architects none the less. From my perspective, my vision, depending on the project size and diverse needs within the project it should be a group of people rather than dependence on a single individual. A group has the ability to address many associated issues and domains without creating a bottleneck within the project. Potentially, truly allowing the development teams to work with greater autonomy without impacting the project adversely. Preventing or at a minimum reducing the impact of Conway's law. 
 
-Some time ago, I wrote a vision of such a team for the project I was working. I want to share it with you. It's my Architect Manifesto. It's a bit idealistic, maybe naive at some points, but in my opinion, it's a decent description of the direction we should aim.
+Some time ago, I decided to write down the vision I foresaw for such a team of architects. I was basing this upon a project I was involved in that held many of the characteristics for which I spoke of above. Its size and scope seem to justify the need. I want to share my thoughts with you. Although, they may seem a tad bit idealistic, maybe even naïve, in my opinion they are a worthwhile endeavor to undertake, possibly even something that we should aim for. I called this writing the "Architect Manifesto"
 
 ---
 
-
-1. **Architecture team should be either group of people that are responsible for the shape of the whole system architecture or the advisory board.** In my opinion, the first option is prefered one, as the advisory board would make it confusing and blurred - eg. whether teams must or should apply the recommendation.
+1. **Architecture team should be either a group of people that are responsible for the shape of the system architecture or an advisory board with direct responsibility with the success of the project.** In my opinion, the first option is the preferred one, as an advisory board could lead to greater project confusion and objective blur - e.g., whether the teams must or should apply the recommendation of the advisory board.
 
 2. **Architecture team should provide clear guidance and documentation** (written form, diagrams etc.) of the overall architecture vision and the assumptions that were taken into account while choosing the exact solution. Those decisions and vision should be transparent and openly available for all developers. Architecture team should review with the developers if the way of presenting that information is clear enough (eg. which database to chose, why and when using the event queue, how to write the acceptance tests etc.)
 
@@ -54,7 +53,9 @@ Some time ago, I wrote a vision of such a team for the project I was working. I 
 
 11. **Architecture team should make sure (together with DevOps team) that continuous integration and delivery process are fluent** and it's helping to effectively deliver the new features (so if it's reliable, fast enough, secure, etc.). They should also work with the System Teams to understand the production systems configurations to be able to make recommendations and make sure that investigation of the production bugs is effective.
 
+
 ---
+
 
 Thoughts?
 
