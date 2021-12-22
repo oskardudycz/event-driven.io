@@ -3,6 +3,7 @@ title: How to use ETag header for optimistic concurrency
 category: "API"
 cover: 2021-11-03-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2021-11-03-cover.png)

@@ -3,6 +3,7 @@ title: Dealing with Eventual Consistency and Idempotency in MongoDB projections
 category: "API"
 cover: 2021-11-10-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 Auditability, diagnostics, time travelling are usually the first mentioned features when speaking about Event Sourcing. All of them are great, but to me, projections are the real killer feature of an event-driven approach. Why?

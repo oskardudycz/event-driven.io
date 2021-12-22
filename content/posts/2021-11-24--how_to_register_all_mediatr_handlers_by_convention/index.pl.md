@@ -3,6 +3,7 @@ title: How to register all CQRS handlers by convention
 category: "CQRS"
 cover: 2021-11-24-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2021-11-24-cover.png)
