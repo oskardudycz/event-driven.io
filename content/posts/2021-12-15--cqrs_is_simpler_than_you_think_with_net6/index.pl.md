@@ -3,6 +3,7 @@ title: CQRS is simpler than you think with .NET 6 and C# 10
 category: "CQRS"
 cover: 2021-12-15-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2021-12-15-cover.png)
