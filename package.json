@@ -76,7 +76,7 @@
     "react-obfuscate": "^3.6.8",
     "react-share": "^4.4.0",
     "react-visibility-sensor": "^5.1.1",
-    "shelljs": "^0.8.4",
+    "shelljs": "^0.8.5",
     "styled-jsx": "^4.0.0",
     "styled-jsx-plugin-postcss": "^4.0.1",
     "styled-jsx-plugin-stylelint": "^0.1.0",
