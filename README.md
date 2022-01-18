@@ -2,6 +2,10 @@
 
 Event-Driven.io - Resources about Event-Driven Architectures, Event Sourcing and pragmatic development
 
+## License
+
+This blog is licensed under [License Creative Commons BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+
 
 ## Included configuration
 
