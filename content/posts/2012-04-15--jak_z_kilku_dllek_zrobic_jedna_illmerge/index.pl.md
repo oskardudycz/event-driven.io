@@ -36,7 +36,7 @@ Dużym uproszczeniem byłaby sytuacja gdy każdy moduł jest osobną dllką. Dzi
 
 ILMerge jest narzędziem dostarczonym przez Microsoft, pozwalającym na łączenie kilku asemblatów w jeden (stąd jego nazwa – łączenie [ILa](http://pl.wikipedia.org/wiki/Common_Intermediate_Language)). Radzi on sobie bez większych problemów również z łączeniem plików .pdb umożliwiając tym samym debugowanie. Dostarczany jest w postaci pliku EXE (można go pobrać pod [linkiem](http://www.microsoft.com/download/en/details.aspx?displaylang=en&id=17630)), który uruchomiony z odpowiednimi parametrami pozwala nam na złączenie asemblatów. Przykładowe jego wywołanie to:
 
-```poweshell
+```powershell
 ilmerge /target:winexe /out:myprogram.exe yourexe.exe yourlibrary.dll
 ```
 
