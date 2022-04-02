@@ -38,7 +38,9 @@ _"Zawsze kierowałem się zasadą pięciu rzeczy, które wyjątkowo cenię, ale 
 Brylantynowy Pat Riley oddał idealnie to co sam dłuuuugo szukałem, to co uzmysłowiłem sobie i ciągle odkrywam na nowo. Proste rzeczy, proste spostrzeżenia, ale czemu tak trudno je zrozumieć?
 
 – **to co chcesz powiedzieć, to co innego niż powiesz, a jeszcze coś innego niż ktoś zrozumie** (no chyba, żeś farciarz) – najczęstszy i najprostszy błąd, zwany również "no ale chciałem dobrze, czemu on tego nie rozumie…". Skąd ta pewność, że dobrze w Twoim rozumieniu to to samo dobrze dla drugiej osoby? Nie zakładaj, nie przypuszczaj, nie rozumiesz? Nie jesteś pewien? Zapytaj, upewnij się. Mimo, że w dobie GPSów to dalej wstyd.
+
 – **nie bierz zachowań innych personalnie** –  ludzie nie chcą dla Ciebie źle, ludzie chcą dla siebie dobrze. Nie ma co w swej próżności zakładać, że ktoś specjalnie zada sobie trud tylko po to, żeby zrobić Ci krzywdę. My ludzie, jesteśmy raczej leniwi, szukamy dla siebie łatwej i dobrej drogi, jeśli robimy Ci krzywdę to zwykle mimochodem, przy okazji, bo stoisz na drodze naszych celów, jakbyś nie stał, to by Ci się nie oberwało. Cyniczne? Raczej prawdziwe.
+
 – **bądź krytyczny, sceptyczny** – szczególnie do siebie i swoich pomysłów. Najpierw słuchaj, potem mów. Każde spojrzenie jest cenne. W gruncie rzeczy, czy dużo stracisz słuchając czyjejś koncepcji? Jak ją wysłuchasz i Ci się nie spodoba to i tak zawsze możesz wrócić do swojej.
 
 Czy to takie proste? Wiadomka, że nie. Czy to dobry punkt wyjścia? No jaha. Reszta już od Ciebie zależy, myślenia, empatii wpis na blogu nie zastąpi. Dobrze jakby trochę zmotywował.
