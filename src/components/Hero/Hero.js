@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 
 import { FaArrowDown } from "react-icons/fa/";
 
-import { Trans, useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from "react-i18next";
 
-const Hero = props => {
+const Hero = (props) => {
   const { scrollToContent, backgrounds, theme } = props;
   const { t } = useTranslation();
 
@@ -19,7 +19,7 @@ const Hero = props => {
           <Trans i18nKey="hero.h2">Zapoznaj się z moimi treściami - <span className="yellow">od artykułów po wideo</span></Trans>
         </h2>
         <h3>
-          <Trans i18nKey="hero.h3">Nazywam się <b className="yellow">Oskar Dudycz</b>. Od ponad 13 lat, tworzę systemy informatyczne bliskie biznesowi. <br />
+          <Trans i18nKey="hero.h3">Nazywam się <b className="yellow">Oskar Dudycz</b>. Od ponad 14 lat, tworzę systemy informatyczne bliskie biznesowi. <br />
           Prowadzę warsztaty i szkolenia na temat <b className="yellow">Event Sourcing</b>, CQRS oraz architektur opartych o zdarzeniach. <br />
           Jestem maintainerem biblioteki <a href="https://martendb.io/" target="_parent" className="yellow">Marten</a>, umożliwiającej pracę z Event Sourcing. <br />          
           Na blogu dzielę się wiedzą jak pragmatycznie tworzyć, dobre modularne aplikacje.</Trans>
@@ -79,7 +79,6 @@ const Hero = props => {
           text-decoration-color: yellow;
         }
 
-        
         h2 {
           text-align: left;
           font-size: ${theme.hero.h2.size};
@@ -199,7 +198,7 @@ const Hero = props => {
             margin-bottom: ${theme.space.l};
             font-size: ${`calc(${theme.hero.h2.size} * 1.3)`};
           }
-          
+
           h3 {
             max-width: 95%;
             margin-top: 30px;
@@ -252,7 +251,7 @@ const Hero = props => {
 Hero.propTypes = {
   scrollToContent: PropTypes.func.isRequired,
   backgrounds: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
 };
 
 export default Hero;

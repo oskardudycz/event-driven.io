@@ -3,7 +3,7 @@ title: Hi! My name is Oskar Dudycz
 menuTitle: menu.about
 ---
 
-From over 13 years, I'm creating software close to the business. I started my career when StackOverflow didn't exist. I'm a developer, technical leader and architect.
+From over 14 years, I'm creating software close to the business. I started my career when StackOverflow didn't exist. I'm a developer, technical leader and architect.
 
 ![photo](bg-1.jpg)
 
