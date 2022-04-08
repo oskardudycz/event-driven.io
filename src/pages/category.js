@@ -8,26 +8,30 @@ import Headline from "../components/Article/Headline";
 import List from "../components/List";
 import Seo from "../components/Seo";
 
-const CategoryPage = props => {
+const CategoryPage = (props) => {
   const {
     data: {
       posts: { edges: posts },
       site: {
-        siteMetadata: { facebook }
-      }
-    }
+        siteMetadata: { facebook },
+      },
+    },
+    location,
   } = props;
+
+  const params = new URLSearchParams(location.search);
+  const filter = params.get("category");
 
   // Create category list
   const categories = {};
-  posts.forEach(edge => {
+  posts.forEach((edge) => {
     const {
       node: {
-        frontmatter: { category }
-      }
+        frontmatter: { category },
+      },
     } = edge;
 
-    if (category && category != null) {
+    if (category && category != null && (filter == null || category == filter)) {
       if (!categories[category]) {
         categories[category] = [];
       }
@@ -44,12 +48,12 @@ const CategoryPage = props => {
   return (
     <React.Fragment>
       <ThemeContext.Consumer>
-        {theme => (
+        {(theme) => (
           <Article theme={theme}>
             <header>
               <Headline title="Posts by categories" theme={theme} />
             </header>
-            {categoryList.map(item => (
+            {categoryList.map((item) => (
               <section key={item[0]}>
                 <h2>
                   <FaTag /> {item[0]}
@@ -77,7 +81,7 @@ const CategoryPage = props => {
 };
 
 CategoryPage.propTypes = {
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
 };
 
 export default CategoryPage;
@@ -86,7 +90,10 @@ export default CategoryPage;
 export const query = graphql`
   query PostsQuery($langKey: String!) {
     posts: allMarkdownRemark(
-      filter: { fileAbsolutePath: { regex: "//posts/[0-9]+.*--/" }, fields: { langKey: { eq: $langKey } } }
+      filter: {
+        fileAbsolutePath: { regex: "//posts/[0-9]+.*--/" }
+        fields: { langKey: { eq: $langKey } }
+      }
       sort: { fields: [fields___prefix], order: DESC }
     ) {
       edges {
