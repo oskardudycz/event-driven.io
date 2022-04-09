@@ -62,21 +62,10 @@ const Contact = (props) => {
           <div className="form">
             <Form
               name="contact"
-              onSubmit="submit"
-              method="POST"
-              action={`/${lang}/success`}
+              onSubmit={handleSubmit}
               data-netlify="true"
               data-netlify-honeypot="bot-field"
             >
-              <FormItem label="bot-field" className="bot-field">
-                {getFieldDecorator("bot-field", {
-                  rules: [
-                    {
-                      whitespace: true,
-                    },
-                  ],
-                })(<Input name="bot-field" />)}
-              </FormItem>
               <FormItem label="Name">
                 {getFieldDecorator("name", {
                   rules: [
@@ -150,10 +139,6 @@ const Contact = (props) => {
               }
               .form :global(.ant-form-explain) {
                 margin-top: 0.2em;
-              }
-
-              .form :global(.bot-field) {
-                display: none !important;
               }
 
               @from-width desktop {
