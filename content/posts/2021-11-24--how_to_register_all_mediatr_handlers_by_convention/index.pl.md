@@ -169,3 +169,7 @@ Et voilà!
 Cheers!
 
 Oskar
+
+p.s. if you liked this article, then check also similar:
+- [How to build a simple event pipeline](/pl/how_to_build_simple_event_pipeline)
+- [CQRS is simpler than you think with .NET 6 and C# 10](/pl/cqrs_is_simpler_than_you_think_with_net6/)
