@@ -136,3 +136,5 @@ Async Daemon guarantees at-least delivery. It's pull-based, so Marten internally
 Cheers!
 
 Oskar
+
+p.s. Are you using EventStoreDB or curious how that works there? Check my another article [Persistent vs catch-up, EventStoreDB subscriptions in action](/pl/persistent_vs_catch_up_eventstoredb_subscriptions_in_action/). TLDR on the differences? Marten subscription (_IProjection_) is hard to map precisely. The closest to say is that it's like a catch-up subscription to _$all_. Though it has retries of transient errors, it has built-in checkpointing (like a persistent subscription). Marten projection doesn't allow you to subscribe from a certain position. You need to do it from the beginning.

@@ -43,4 +43,7 @@ Cheers!
 
 Oskar
 
-p.s. if you liked this article, check also ["What if I told you that Relational Databases are in fact Event Stores?"](/en/relational_databases_are_event_stores/).
+p.s. if you liked this article, check also:
+- [What if I told you that Relational Databases are in fact Event Stores?](/en/relational_databases_are_event_stores/),
+- [Integrating Marten with other systems](/en/integrating_Marten/)
+- [Persistent vs catch-up, EventStoreDB subscriptions in action](/en/persistent_vs_catch_up_eventstoredb_subscriptions_in_action/)
