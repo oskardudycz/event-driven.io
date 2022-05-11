@@ -204,7 +204,7 @@ We can also use such an image for manual and automated tests.
 
 **To sum up - thanks to a few simple tricks, we can make the build time significantly shorten**. In addition, it won't contain unnecessary files and dependencies. Thanks to that, downloading it and launching it will be faster. As you see, these rules can be applied to any platform. I showed .NET and NodeJS as an example, but the same could be done in other environments.
 
-I encourage you to also read the follow-up article ["How to build and push Docker image with GitHub actions?"](/en/how_to_buid_and_push_docker_image_with_github_actions).
+I encourage you to also read the follow-up articles ["How to build and push Docker image with GitHub actions?"](/en/how_to_buid_and_push_docker_image_with_github_actions) and [A few tricks on how to set up related Docker images with docker-compose](/en/tricks_on_how_to_set_up_related_docker_images/).
 
 Cheers!
 

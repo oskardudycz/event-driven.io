@@ -124,4 +124,5 @@ Oskar
 
 p.s. if GitHub actions look interesting to you, read also other articles on this topic:
 - [How to create a custom GitHub Action?](/en/how_to_create_a_custom_github_action/)
+- [A few tricks on how to set up related Docker images with docker-compose](/en/tricks_on_how_to_set_up_related_docker_images/)
 - [How to enhance and configure your site search with Algolia?](/en/how_to_configure_algolia_for_your_site_search/)
