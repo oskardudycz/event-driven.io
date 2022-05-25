@@ -3,6 +3,7 @@ title: What onion has to do with Clean Code?
 category: "Coding Life"
 cover: 2022-05-18-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 I quite often make fun of Clean Code and Clean Architecture. I'm calling it an Onion Architecture. Not least because it has layers but also because it's smelly. I have already told about it several times in the blog and talks, but it is never enough to emphasize it!
