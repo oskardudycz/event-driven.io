@@ -62,3 +62,5 @@ Is it the right decision? I believe so!
 **Please keep your fingers crossed and don't afraid to reach me!** I will be grateful for that!
 
 Oskar
+
+p.s. as you know how it started, read also how it finished in [Why I'm leaving Event Store and getting ready for the next episode](/en/leaving_event_store).
