@@ -13,11 +13,11 @@ I was asked to compile various statistics from our Event Store GitHub community 
 - but also data over time, i.e. how did they increase over time,
 - additionally, data such as issues, number of discussions, comments, etc.
 
-The Event Store has a lot of repositories (we're busy bees), so trying to copy and paste data from GitHub UI into Excel would be pointless. Well, we are programmers for something; we automate. GitHub provides its API (https://docs.github.com/en/rest) to get the whole spectrum of information. I decided to go on this path. Still, having API is one thing, and scrapping data efficiently, is another.
+The Event Store has a lot of repositories (we're busy bees), so trying to copy and paste data from GitHub UI into Excel would be pointless. Well, we are programmers for something; we automate. GitHub provides its API (https://docs.github.com/en/rest) to get the whole spectrum of information. I decided to go on this path. Still, having API is one thing, and scraping data efficiently, is another.
 
 How to do it then? The top results will suggest Python if you google "data scraping". Probably you don't even need to google that. Python and data scraping come hand in hand.
 
-And here comes my ignorance, which turned out to be my advantage. I don't know much about Python. Before this task, I only wrote a small, simple thing to integrate data from two APIs overnight. It was a bit similar, and I had pleasant memories, so I said: _"Why not? Let's go deeper"_. It turned out that Python is a straightforward and intuitive language. Even such an ignorant like me was able to write a program that scrapped a significant amount of data from GitHub and analyzed it. Python is a dynamic programming language. Because of that, it allows rapid prototyping and reduces unnecessary code structures. Plus, it is very expressive and straightforward (as I already noted).
+And here comes my ignorance, which turned out to be my advantage. I don't know much about Python. Before this task, I only wrote a small, simple thing to integrate data from two APIs overnight. It was a bit similar, and I had pleasant memories, so I said: _"Why not? Let's go deeper"_. It turned out that Python is a straightforward and intuitive language. Even such an ignorant like me was able to write a program that scraped a significant amount of data from GitHub and analyzed it. Python is a dynamic programming language. Because of that, it allows rapid prototyping and reduces unnecessary code structures. Plus, it is very expressive and straightforward (as I already noted).
 
 Additionally, it has ingeniously simple support for data processing and analysis. [Pandas](https://pandas.pydata.org/) allows you to use code like Excel. Really!
 
