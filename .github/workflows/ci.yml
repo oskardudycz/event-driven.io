@@ -48,7 +48,7 @@ jobs:
           GOOGLE_TAG_ID: ${{ secrets.GOOGLE_TAG_ID }}
       - name: Build & Deploy docs preview
         run: yarn deploy
-        if: ${{ github.ref != 'refs/heads/master' }}
+        if: ${{ github.ref != 'refs/heads/main' }}
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
