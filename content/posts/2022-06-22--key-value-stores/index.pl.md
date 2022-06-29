@@ -8,9 +8,9 @@ useDefaultLangCanonical : true
 
 ![cover](2022-06-22-cover.png)
 
-Today I wanted to talk a bit about Key-Value databases. It is a seemingly obvious subject, but it is easy to overlook the basic assumptions and have a spectacular failure in production.
+**Today I wanted to talk a bit about Key-Value databases.** It is a seemingly obvious subject, but it is easy to overlook the basic assumptions and have a spectacular failure in production.
 
-The general concept of such databases is straightforward. **Data consists of a unique pair - key and value. Key is responsible for the uniqueness of the representation; the value can be anything: **
+The general concept of such databases is straightforward. **Data consists of a unique pair - key and value. Key is responsible for the uniqueness of the representation; the value can be anything:**
 - binary data (e.g. serialised objects or even a video file), 
 - structured binary format (e.g. Protobuf or Avro),
 - structured text file (JSON, XML), 
