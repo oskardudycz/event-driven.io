@@ -26,7 +26,7 @@ Keys and indexes are fun, but they limit performance, cause deadlocks, etc. So i
 
 All event stores I know give the uniqueness guarantee for the stream identifier. A stream is an ordered collection of events recorded for a specific object, for instance: events of a given user. The identifier could be an e-mail or social number for such a case.
 
-Since the stream identifier is unique, by formatting it as _'user_ {e-mail}'_, we can easily enforce the e-mail uniqueness for all users.
+Since the stream identifier is unique, by formatting it as _'user- {e-mail}'_, we can easily enforce the e-mail uniqueness for all users.
 
 Oh well, but is it really easy? What if the user changes their e-mail? Or what if we say that e-mail should be unique only for active users? Or how to handle [GDPR](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation) then?
 
