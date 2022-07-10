@@ -29,7 +29,9 @@ Recently I've been doing another private training, and as a side effect, I creat
 
 All of that shows practical aspects using Marten and EventStoreDB.
 
-**I decided to open-source them to give people the chance to do them as a self-paced kit. Get it here:** https://github.com/oskardudycz/EventSourcing.NetCore/tree/main/Workshops/IntroductionToEventSourcing.
+**I decided to open-source them to give people the chance to do them as a self-paced kit. Get it here:**
+- C#: https://github.com/oskardudycz/EventSourcing.NetCore/tree/main/Workshops/IntroductionToEventSourcing.
+- Java: https://github.com/oskardudycz/EventSourcing.JVM/tree/main/workshops/introduction-to-event-sourcing.
 
 It took me two weeks of full focus, plus all the hours I spent in the past years. Of course, it's not the same experience as attending the workshop. But I hope it should be a good starting point in your Event Sourcing journey. It should give you the tools to build on and play with your ideas and reduce the initial confusion. 
 
