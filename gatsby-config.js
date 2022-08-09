@@ -26,8 +26,8 @@ const queries = [
     query,
     transformer: ({ data }) => {
       return data.allMarkdownRemark.edges.reduce(transformer, []);
-    }
-  }
+    },
+  },
 ];
 
 module.exports = {
@@ -41,11 +41,11 @@ module.exports = {
       searchOnlyApiKey: process.env.ALGOLIA_SEARCH_ONLY_API_KEY
         ? process.env.ALGOLIA_SEARCH_ONLY_API_KEY
         : "",
-      indexName: process.env.ALGOLIA_INDEX_NAME ? process.env.ALGOLIA_INDEX_NAME : ""
+      indexName: process.env.ALGOLIA_INDEX_NAME ? process.env.ALGOLIA_INDEX_NAME : "",
     },
     facebook: {
-      appId: process.env.FB_APP_ID ? process.env.FB_APP_ID : ""
-    }
+      appId: process.env.FB_APP_ID ? process.env.FB_APP_ID : "",
+    },
   },
   plugins: [
     `gatsby-plugin-styled-jsx`, // the plugin's code is inserted directly to gatsby-node.js and gatsby-ssr.js files
@@ -53,8 +53,8 @@ module.exports = {
     {
       resolve: `gatsby-plugin-layout`,
       options: {
-        component: require.resolve(`./src/layouts/`)
-      }
+        component: require.resolve(`./src/layouts/`),
+      },
     },
     {
       resolve: `gatsby-plugin-algolia`,
@@ -63,114 +63,116 @@ module.exports = {
         apiKey: process.env.ALGOLIA_ADMIN_API_KEY ? process.env.ALGOLIA_ADMIN_API_KEY : "",
         indexName: process.env.ALGOLIA_INDEX_NAME ? process.env.ALGOLIA_INDEX_NAME : "",
         queries,
-        chunkSize: 10000 // default: 1000
-      }
+        chunkSize: 10000, // default: 1000
+      },
     },
     `gatsby-transformer-json`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `data`,
-        path: `${__dirname}/data/`
-      }
+        path: `${__dirname}/data/`,
+      },
     },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `images`,
-        path: `${__dirname}/src/images/`
-      }
+        path: `${__dirname}/src/images/`,
+      },
     },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
         path: `${__dirname}/content/posts/`,
-        name: "posts"
-      }
+        name: "posts",
+      },
     },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
         path: `${__dirname}/content/newsletter-pl/`,
-        name: "newsletter-pl"
-      }
+        name: "newsletter-pl",
+      },
     },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
         path: `${__dirname}/content/pages/`,
-        name: "pages"
-      }
+        name: "pages",
+      },
     },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `parts`,
-        path: `${__dirname}/content/parts/`
-      }
+        path: `${__dirname}/content/parts/`,
+      },
     },
     {
       resolve: `gatsby-transformer-remark`,
       options: {
-        plugins: [{
-          resolve: "gatsby-remark-embed-video",
-          options: {
-            maxWidth: 800,
-            ratio: 1.77,
-            height: 400,
-            related: false,
-            noIframerder: true,
+        plugins: [
+          {
+            resolve: "gatsby-remark-embed-video",
+            options: {
+              maxWidth: 800,
+              ratio: 1.77,
+              height: 400,
+              related: false,
+              noIframerder: true,
+            },
           },
-        },
           `gatsby-plugin-sharp`,
-        {
-          resolve: `gatsby-remark-images`,
-          options: {
-            maxWidth: 800,
-            backgroundColor: "transparent",
-            wrapperStyle: "height: auto"
-          }
-        },
-        {
-          resolve: `gatsby-remark-responsive-iframe`,
-          options: {
-            wrapperStyle: `margin-bottom: 2em`
-          }
-        },
+          {
+            resolve: `gatsby-remark-images`,
+            options: {
+              maxWidth: 800,
+              backgroundColor: "transparent",
+              wrapperStyle: "height: auto",
+            },
+          },
+          {
+            resolve: `gatsby-remark-responsive-iframe`,
+            options: {
+              wrapperStyle: `margin-bottom: 2em`,
+            },
+          },
+          `gatsby-remark-autolink-headers`,
           `gatsby-remark-prismjs`,
           `gatsby-remark-copy-linked-files`,
           `gatsby-remark-smartypants`,
-        {
-          resolve: "gatsby-remark-emojis",
-          options: {
-            // Deactivate the plugin globally (default: true)
-            active: true,
-            // Add a custom css class
-            class: "emoji-icon",
-            // Select the size (available size: 16, 24, 32, 64)
-            size: 64,
-            // Add custom styles
-            styles: {
-              display: "inline",
-              margin: "0",
-              "margin-top": "1px",
-              position: "relative",
-              top: "5px",
-              width: "25px"
-            }
-          }
-        },        
-        "@weknow/gatsby-remark-twitter"
-        ]
-      }
+          {
+            resolve: "gatsby-remark-emojis",
+            options: {
+              // Deactivate the plugin globally (default: true)
+              active: true,
+              // Add a custom css class
+              class: "emoji-icon",
+              // Select the size (available size: 16, 24, 32, 64)
+              size: 64,
+              // Add custom styles
+              styles: {
+                display: "inline",
+                margin: "0",
+                "margin-top": "1px",
+                position: "relative",
+                top: "5px",
+                width: "25px",
+              },
+            },
+          },
+          "@weknow/gatsby-remark-twitter",
+        ],
+      },
     },
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-react-helmet`,
     {
-      resolve: 'gatsby-plugin-i18n',
+      resolve: "gatsby-plugin-i18n",
       options: {
-        langKeyDefault: 'en'
+        langKeyDefault: "en",
       },
     },
     `gatsby-plugin-catch-links`,
@@ -187,40 +189,40 @@ module.exports = {
           {
             src: "/icons/icon-48x48.png",
             sizes: "48x48",
-            type: "image/png"
+            type: "image/png",
           },
           {
             src: "/icons/icon-96x96.png",
             sizes: "96x96",
-            type: "image/png"
+            type: "image/png",
           },
           {
             src: "/icons/icon-144x144.png",
             sizes: "144x144",
-            type: "image/png"
+            type: "image/png",
           },
           {
             src: "/icons/icon-192x192.png",
             sizes: "192x192",
-            type: "image/png"
+            type: "image/png",
           },
           {
             src: "/icons/icon-256x256.png",
             sizes: "256x256",
-            type: "image/png"
+            type: "image/png",
           },
           {
             src: "/icons/icon-384x384.png",
             sizes: "384x384",
-            type: "image/png"
+            type: "image/png",
           },
           {
             src: "/icons/icon-512x512.png",
             sizes: "512x512",
-            type: "image/png"
-          }
-        ]
-      }
+            type: "image/png",
+          },
+        ],
+      },
     },
     //`gatsby-plugin-offline`,
     `gatsby-plugin-remove-serviceworker`,
@@ -270,12 +272,12 @@ module.exports = {
         feeds: [
           {
             serialize: ({ query: { site, allMarkdownRemark } }) => {
-              return allMarkdownRemark.edges.map(edge => {
+              return allMarkdownRemark.edges.map((edge) => {
                 return Object.assign({}, edge.node.frontmatter, {
                   description: edge.node.excerpt,
                   url: `${site.siteMetadata.siteUrl}/${edge.node.fields.langKey}${edge.node.fields.slug}`,
                   guid: `${site.siteMetadata.siteUrl}/${edge.node.fields.langKey}${edge.node.fields.slug}`,
-                  custom_elements: [{ "content:encoded": edge.node.html }]
+                  custom_elements: [{ "content:encoded": edge.node.html }],
                 });
               });
             },
@@ -303,17 +305,17 @@ module.exports = {
                 }
               }
             `,
-            output: "/rss.xml"
+            output: "/rss.xml",
           },
-          
+
           {
             serialize: ({ query: { site, allMarkdownRemark } }) => {
-              return allMarkdownRemark.edges.map(edge => {
+              return allMarkdownRemark.edges.map((edge) => {
                 return Object.assign({}, edge.node.frontmatter, {
                   description: edge.node.excerpt,
                   url: `${site.siteMetadata.siteUrl}/${edge.node.fields.langKey}${edge.node.fields.slug}`,
                   guid: `${site.siteMetadata.siteUrl}/${edge.node.fields.langKey}${edge.node.fields.slug}`,
-                  custom_elements: [{ "content:encoded": edge.node.html }]
+                  custom_elements: [{ "content:encoded": edge.node.html }],
                 });
               });
             },
@@ -341,20 +343,20 @@ module.exports = {
                 }
               }
             `,
-            output: "/newsletter-pl-rss.xml"
-          }
-        ]
-      }
+            output: "/newsletter-pl-rss.xml",
+          },
+        ],
+      },
     },
     {
-      resolve: `gatsby-plugin-sitemap`
+      resolve: `gatsby-plugin-sitemap`,
     },
     {
       resolve: "gatsby-plugin-react-svg",
       options: {
-        include: /svg-icons/
-      }
+        include: /svg-icons/,
+      },
     },
     `gatsby-plugin-netlify`,
-  ]
+  ],
 };
