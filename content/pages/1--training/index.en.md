@@ -1,17 +1,11 @@
 ---
-title: Training
+title: Training is the most effective way to learn Event Sourcing and Event-Driven Architectures.
 menuTitle: menu.training
 ---
 
-## Training is the most effective way to learn Event Sourcing and Event-Driven Architectures.
-
-I perfectly remember how I started my journey with Event-Driven Architecture and Event Sourcing. I was banging my head against the wall. I thought it was pointless. However, I was stubborn, and it turned out that it was not as difficult as painting it. 
-
-The main reason is the lack of decent PRACTICAL learning materials. For several years I have been trying to cover it up by documenting and sharing my path and the knowledge I have gained.
-
-Now you also have the opportunity to take advantage of it! Without hitting your head against a wall. **I designed two workshops that should give you good foundations and a set of skills for a PRACTICAL and pragmatic start to your journey.**
-- [Practical Introduction to Event Sourcing]()
-- [Event-Driven Architecture: The Light and the Dark Side]()
+**I designed two workshops that should give you good foundations and a set of skills for a PRACTICAL and pragmatic start to your journey.**
+- [Practical Introduction to Event Sourcing](#practical-introduction-to-event-sourcing)
+- [Event-Driven Architecture: The Light and the Dark Side](#event-driven-architecture-the-light-and-the-dark-side)
 
 You'll understand the best practices and tradeoffs, being ready to apply them to your project.
 
@@ -19,11 +13,19 @@ You'll understand the best practices and tradeoffs, being ready to apply them to
 
 ![photo](1651942455589.jpg)
 
+I perfectly remember how I started my journey with Event-Driven Architecture and Event Sourcing. I was banging my head against the wall. I thought it was pointless. However, I was stubborn, and it turned out that it was not as difficult as painting it. 
+
+The main reason is the lack of decent PRACTICAL learning materials. For several years I have been trying to cover it up by documenting and sharing my path and the knowledge I have gained.
+
+Now you also have the opportunity to take advantage of it! Without hitting your head against a wall. 
+
+I run trainings both online and offline in the office.
+
 ## Practical Introduction to Event Sourcing
 
-**Description:** Event Sourcing allows you to create business-related applications. Recording events (facts) about the business process gives a complete understanding of your workflow and reflects them in the code. It is wrongly considered a complicated pattern that is challenging to apply in practice. The workshop will be hands-on and teach you how to use Event Sourcing, giving you solid foundations. Exercises will be run in C#, Java or NodeJS.
+🛠️ **Description:** Event Sourcing allows you to create business-related applications. Recording events (facts) about the business process gives a complete understanding of your workflow and reflects them in the code. It is wrongly considered a complicated pattern that is challenging to apply in practice. The workshop will be hands-on and teach you how to use Event Sourcing, giving you solid foundations. Exercises will be run in C#, Java or NodeJS.
 
-**Outcomes:**
+🧑‍🎓 **Outcomes:**
 - Good understanding of all the building blocks of Event Sourcing,
 - When and how to use it and what benefits it brings,
 - How to reflect your business logic in the code using events,
@@ -32,9 +34,9 @@ You'll understand the best practices and tradeoffs, being ready to apply them to
 - How to use Event Sourcing on your system,
 - Challenges related to Event Sourcing and recommended solutions.
 
-**Length:** 2-3 days
+⏱️ **Length:** 2-3 days
 
-**Plan:**
+📅 **Plan:**
 1. Introduction to Event Sourcing. Basic terminology (event, stream of events, command), differences from the classical approach.
 2. What is Event Sourcing, and how is it different from Event Streaming. Advantages and disadvantages.
 3. Write model and data consistency guarantees.
@@ -46,20 +48,22 @@ You'll understand the best practices and tradeoffs, being ready to apply them to
 9. Good and bad practices in modelling and handling events.
 10. Event Sourcing on production, evolution, event versioning, etc.
 
+📧 [Contact me for more information.](mailto:oskar@event-driven.io)
+
 ## Event-Driven Architecture: The Light and the Dark Side
 
-**Description:** Event-driven architectures help build predictable, scalable, and fault-tolerant systems. In addition, they improve both the technical autonomy of created systems and the teams working on them. However, like any architecture, it has distinctive features that can cause far-reaching complications if not understood well.
+🛠️ **Description:** Event-driven architectures help build predictable, scalable, and fault-tolerant systems. In addition, they improve both the technical autonomy of created systems and the teams working on them. However, like any architecture, it has distinctive features that can cause far-reaching complications if not understood well.
 
-**Outcomes:** The training aims to build the knowledge of the general concept and its patterns for the participants. The emphasis will be on a pragmatic understanding of architectures and tools rather than specific implementations. The acquired knowledge will allow for the conscious design of architectural solutions and the analysis of related risks. You'll also learn how tools like RabbitMQ, Kafka, and Cloud-Native messaging systems differ and how selecting them can impact your architecture.
+🧑‍🎓 **Outcomes:** The training aims to build the knowledge of the general concept and its patterns for the participants. The emphasis will be on a pragmatic understanding of architectures and tools rather than specific implementations. The acquired knowledge will allow for the conscious design of architectural solutions and the analysis of related risks. You'll also learn how tools like RabbitMQ, Kafka, and Cloud-Native messaging systems differ and how selecting them can impact your architecture.
 
 Additionally, the training will include a workshop part (in the form of a team "Architecture Kata"), where you will practice your theoretical knowledge. The training involves:
 - Interaction and discussion with participants.
 - Exchanging views.
 - Asking questions based on current problems.
 
-**Length:** 2-3 days
+⏱️ **Length:** 2-3 days
 
-**Plan:**
+📅 **Plan:**
 1. Introduction and basic concepts (events, commands, business flows).
 2. Comparison with the classical approach of synchronous communication.
 3. Message delivery guarantees: how to ensure reliable communication between services.
@@ -74,3 +78,5 @@ Additionally, the training will include a workshop part (in the form of a team "
 12. How (not) to model events.
 13. Migration (versioning) of the event schema.
 14. Ways of transforming/migrating from systems based on synchronous communication to architectures based on events.
+
+📧 [Contact me for more information.](mailto:oskar@event-driven.io)
