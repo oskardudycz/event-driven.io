@@ -1,15 +1,19 @@
 ---
-title: Szkolenie jest najbardziej efektywną formą zrozumienia Event Sourcing i Architektur Opartych na Zdarzeniach.
+title: Szkolenie
 menuTitle: menu.training
 ---
 
-Przygotowałem dwa warsztaty które dadzą Ci dobre dobre fundamenty i podstawy oraz zestaw umiejętności do PRAKTYCZNEGO i pragmatycznego rozpoczęcia swojej drogi.
+**jest najbardziej efektywną formą zrozumienia Event Sourcing i Architektur Opartych na Zdarzeniach.** 
+
+Przygotowałem **dwa warsztaty** które dadzą Ci dobre dobre **fundamenty** i podstawy oraz zestaw **umiejętności** do **praktycznego** i pragmatycznego **rozpoczęcia swojej drogi**.
 - [Praktyczne Wprowadzenie do Event Sourcing](#praktyczne-wprowadzenie-do-event-sourcing)
 - [Architektury Oparte na Zdarzeniach: Ciemne i Jasne Strony](#architektury-oparte-na-zdarzeniach-ciemne-i-jasne-strony)
 
-Zrozumiesz najlepsze praktyki, oraz konieczne kompromisy, będąc gotowym do zaaplikowania ich do swojego projektu.
+Zrozumiesz najlepsze praktyki, oraz konieczne kompromisy, wiedząc jak zaaplikować je do swojego projektu.
 
-**Chesz przeprowadzić trening w swojej firmie?** Masz jakieś pytania, albo chcesz bardziej dopasowany pod Ciebie? [Skontaktuj się ze mną!](mailto:oskar@event-driven.io)
+**Chesz przeprowadzić trening w swojej firmie?** Masz jakieś pytania, albo chcesz bardziej dopasowany pod Ciebie? 
+
+**[Skontaktuj się ze mną!](mailto:oskar@event-driven.io)**
 
 ![photo](1651942455589.jpg)
 

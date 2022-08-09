@@ -1,21 +1,23 @@
 ---
-title: Training is the most effective way to learn Event Sourcing and Event-Driven Architectures.
+title: Training
 menuTitle: menu.training
 ---
 
-**I designed two workshops that should give you good foundations and a set of skills for a PRACTICAL and pragmatic start to your journey.**
+**is the most effective way to learn Event Sourcing and Event-Driven Architectures.** I designed **two workshops** that should give you good **foundations** and a set of **skills** for a **practical** and pragmatic start to your **journey**.
 - [Practical Introduction to Event Sourcing](#practical-introduction-to-event-sourcing)
 - [Event-Driven Architecture: The Light and the Dark Side](#event-driven-architecture-the-light-and-the-dark-side)
 
 You'll understand the best practices and tradeoffs, being ready to apply them to your project.
 
-**Want to have the training in your company?** Have any questions or want custom one? [Contact me!](mailto:oskar@event-driven.io)
+**Want to have the training in your company?** Have any questions or want custom one? 
+
+**[Contact me!](mailto:oskar@event-driven.io)**
 
 ![photo](1651942455589.jpg)
 
 I perfectly remember how I started my journey with Event-Driven Architecture and Event Sourcing. I was banging my head against the wall. I thought it was pointless. However, I was stubborn, and it turned out that it was not as difficult as painting it. 
 
-The main reason is the lack of decent PRACTICAL learning materials. For several years I have been trying to cover it up by documenting and sharing my path and the knowledge I have gained.
+The main reason is the lack of decent practical learning materials. For several years I have been trying to cover it up by documenting and sharing my path and the knowledge I have gained.
 
 Now you also have the opportunity to take advantage of it! Without hitting your head against a wall. 
 
@@ -30,7 +32,7 @@ I run trainings both online and offline in the office.
 - When and how to use it and what benefits it brings,
 - How to reflect your business logic in the code using events,
 - Differences to the classical approach,
- -Different tools such as Marten and EventStoreDB and the differences between them,
+- Different tools such as Marten and EventStoreDB and the differences between them,
 - How to use Event Sourcing on your system,
 - Challenges related to Event Sourcing and recommended solutions.
 
