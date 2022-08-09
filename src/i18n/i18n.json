@@ -9,6 +9,7 @@
         "categories": "Categories",
         "contact": "Contact",
         "talks": "Talks",
+        "workshops": "Workshops",
         "about": "About"
       },
       "hero": {
@@ -32,6 +33,7 @@
         "categories": "Kategorie",
         "contact": "Kontakt",
         "talks": "Wystąpienia",
+        "workshops": "Warsztaty",
         "about": "O mnie"
       },
       "hero": {
