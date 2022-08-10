@@ -1,6 +1,8 @@
 ---
 title: Training
 menuTitle: menu.training
+cover: training-cover.jpg
+icon: FaUserGraduate
 ---
 
 **is the most effective way to learn Event Sourcing and Event-Driven Architectures.** I designed **two workshops** that should give you good **foundations** and a set of **skills** for a **practical** and pragmatic start to your **journey**.
@@ -13,7 +15,7 @@ You'll understand the best practices and tradeoffs, being ready to apply them to
 
 **[Contact me!](mailto:oskar@event-driven.io)**
 
-![photo](1651942455589.jpg)
+![photo](training-cover.jpg)
 
 I perfectly remember how I started my journey with Event-Driven Architecture and Event Sourcing. I was banging my head against the wall. I thought it was pointless. However, I was stubborn, and it turned out that it was not as difficult as painting it. 
 

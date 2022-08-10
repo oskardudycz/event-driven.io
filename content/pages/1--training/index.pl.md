@@ -1,6 +1,8 @@
 ---
 title: Szkolenie
 menuTitle: menu.training
+cover: training-cover.jpg
+icon: FaUserGraduate
 ---
 
 **jest najbardziej efektywną formą zrozumienia Event Sourcing i Architektur Opartych na Zdarzeniach.** 

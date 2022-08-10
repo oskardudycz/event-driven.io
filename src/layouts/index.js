@@ -94,6 +94,7 @@ class Layout extends React.Component {
                   frontmatter {
                     title
                     menuTitle
+                    icon
                   }
                 }
               }
@@ -208,6 +209,7 @@ export const postQuery = graphql`
           frontmatter {
             title
             menuTitle
+            icon
           }
         }
       }
