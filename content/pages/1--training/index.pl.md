@@ -17,7 +17,7 @@ Zrozumiesz najlepsze praktyki, oraz konieczne kompromisy, wiedząc jak zaaplikow
 
 **[Skontaktuj się ze mną!](mailto:oskar@event-driven.io)**
 
-![photo](1651942455589.jpg)
+![photo](training-cover.jpg)
 
 Pamiętam doskonale jak zaczynałem swoją drogę z Event Sourcing i Architekturami Opartymi na Zdarzeniach. Uderzałem głową w ścianę, uważałem, że jest on bez sensu. Byłem jednak uparty i okazało się, że nie takie to trudne jak go malują. 
 
