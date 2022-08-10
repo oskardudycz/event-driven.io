@@ -15,7 +15,7 @@ author: oskar dudycz
 
 Do you know those questions? I asked them myself; what's more, I hear it regularly when talking to people. I am also often asked: how do I find the answers, and how do I deal with them? Well, I don't have all the answers. Sometimes I'm wrong; sometimes I'm right. And that's okay.
 
-**These discussions take place on two levels: technical and metaphysical.** The metaphysical one is dangerous because it is not tangible. Warning! Stay with me after what you're about to read. It may sound like couching gibberish, but it'll be made actionable later. I promise! So...
+**These discussions take place on two levels: technical and metaphysical.** The metaphysical one is dangerous because it is not tangible. Warning! Stay with me after what you're about to read. It may sound like coaching gibberish, but it'll be made actionable later. I promise! So...
 
 **To assess what actions we should take, we should first consider where our fear of making a decision comes from.** Sometimes, it is a justified fear, but most often, it's not.
 
@@ -25,7 +25,7 @@ Sometimes, it is a justified fear, but most often, it's not.
 
 Another problem is, what I call, a **broken contract between business and development.** We don't believe that business will give us time to correct our mishaps. Business doesn't trust us that the next refactoring will actually be needed and not just moving the code from one place to another.
 
-**Fear may come from us not being experienced enough.** In our industry, we usually face new problems every day (or following in a couching tone: _challenges_). We rarely have an identical case to solve. And even if we do, it often turns out that we were too fast in our assumptions. The similarity was only superficial, and the problem turned out completely different. A small detail made it so.
+**Fear may come from us not being experienced enough.** In our industry, we usually face new problems every day (or following in a coaching tone: _challenges_). We rarely have an identical case to solve. And even if we do, it often turns out that we were too fast in our assumptions. The similarity was only superficial, and the problem turned out completely different. A small detail made it so.
 
 **All of these fears are real. If we focus on them, they will overwhelm us. How do you break this vicious circle?**
 

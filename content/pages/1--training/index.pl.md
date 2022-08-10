@@ -1,7 +1,7 @@
 ---
 title: Szkolenie
 menuTitle: menu.training
-cover: training-cover.jpg
+cover: training-social-cover.jpeg
 icon: FaUserGraduate
 ---
 
