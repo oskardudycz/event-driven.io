@@ -7,13 +7,13 @@ icon: FaUserGraduate
 
 **jest najbardziej efektywną formą zrozumienia Event Sourcing i Architektur Opartych na Zdarzeniach.** 
 
-Przygotowałem **dwa warsztaty** które dadzą Ci dobre dobre **fundamenty** i podstawy oraz zestaw **umiejętności** do **praktycznego** i pragmatycznego **rozpoczęcia swojej drogi**.
+Przygotowałem **dwa warsztaty** które dadzą Ci dobre **fundamenty** i podstawy oraz zestaw **umiejętności** do **praktycznego** i pragmatycznego **rozpoczęcia swojej drogi**.
 - [Praktyczne Wprowadzenie do Event Sourcing](#praktyczne-wprowadzenie-do-event-sourcing)
 - [Architektury Oparte na Zdarzeniach: Ciemne i Jasne Strony](#architektury-oparte-na-zdarzeniach-ciemne-i-jasne-strony)
 
 Zrozumiesz najlepsze praktyki, oraz konieczne kompromisy, wiedząc jak zaaplikować je do swojego projektu.
 
-**Chesz przeprowadzić trening w swojej firmie?** Masz jakieś pytania, albo chcesz bardziej dopasowany pod Ciebie? 
+**Chcesz przeprowadzić trening w swojej firmie?** Masz jakieś pytania, albo chcesz mieć trening bardziej dopasowany do Twoich potrzeb? 
 
 **[Skontaktuj się ze mną!](mailto:oskar@event-driven.io)**
 
@@ -21,7 +21,7 @@ Zrozumiesz najlepsze praktyki, oraz konieczne kompromisy, wiedząc jak zaaplikow
 
 Pamiętam doskonale jak zaczynałem swoją drogę z Event Sourcing i Architekturami Opartymi na Zdarzeniach. Uderzałem głową w ścianę, uważałem, że jest on bez sensu. Byłem jednak uparty i okazało się, że nie takie to trudne jak go malują. 
 
-Przyczyną główną jest brak dobrych PRAKTYCZNYCH materiałów do nauki. Od kilku lat próbuję to zasypać dokumentując i dzieląc się swoją drogą i wiedzą, którą zdobyłem.
+Przyczyną główną jest brak dobrych PRAKTYCZNYCH materiałów do nauki. Od kilku lat próbuję zasypać tę dziurę dokumentując i dzieląc się swoją drogą i wiedzą, którą zdobyłem.
 
 Teraz Ty też masz okazję z niej skorzystać! Bez bicia głową w ścianę.
 
@@ -36,7 +36,7 @@ Przeprowadzam szkolenia zarówno zdalnie jak i na miejscu w biurze.
 - Kiedy i jak z niego korzystać oraz jakie przynosi korzyści,
 - Jak odzwierciedlić logikę biznesową w kodzie za pomocą zdarzeń,
 - Różnice w stosunku do klasycznego podejścia,
-- Przedstawienie różnych nardzędzi, takich jak Marten i EventStoreDB oraz różnice między nimi,
+- Przedstawienie różnych narzędzi, takich jak Marten i EventStoreDB oraz różnice między nimi,
 - Jak korzystać z Event Sourcing w swoim systemie,
 - Wyzwania związane z Event Sourcingi i rekomendowane rozwiązania.
 
