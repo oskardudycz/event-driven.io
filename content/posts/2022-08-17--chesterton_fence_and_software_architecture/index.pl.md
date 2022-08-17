@@ -1,5 +1,5 @@
 ---
-title: What do the British writer and his fence have to do with architecture?
+title: What do the British writer and his fence have to do with Software Architecture?
 category: "Architecture"
 cover: 2022-08-17-cover.png
 author: oskar dudycz
@@ -8,15 +8,15 @@ useDefaultLangCanonical : true
 
 ![cover](2022-08-17-cover.png)
 
-**Gilbert Keith Chesterton was a British writer from the turn of the 20th and 21st centuries.** As for his times, we would call him an influencer or a maven. He had a lot of opinions and did not hesitate to share them. He wrote about 80 books, several hundred poems, 200 short stories, 4,000 essays and several plays. Plus countless letters, for example, to C. S. Lewis. Yes, _the Narnia guy_. In 1929, in his book _"The Thing "_, he wrote:
+**Gilbert Keith Chesterton was a British writer from the turn of the 19th and 20th centuries.** As for his times, we would call him an influencer or a maven. He had a lot of opinions and did not hesitate to share them. He wrote about 80 books, several hundred poems, 200 short stories, 4,000 essays and several plays. Plus countless letters, for example, to C. S. Lewis. Yes, _the Narnia guy_. In 1929, in his book _"The Thing "_, he wrote:
 
 **_"There exists in such a case a certain institution or law; let us say, for the sake of simplicity, a fence or gate erected across a road. The more modern type of reformer goes gaily up to it and says, "I don't see the use of this; let us clear it away." To which the more intelligent type of reformer will do well to answer: "If you don't see the use of it, I certainly won't let you clear it away. Go away and think. Then, when you can come back and tell me that you do see the use of it, I may allow you to destroy it."_**
 
 Chesterton was a professional writer. Even though he wasn't writing programs, the quote sounds almost like programming.
 
-In our work, we regularly find a place where we wonder _what the author had in mind_. Not once, not twice, after removing the meaningless IF, it turned out that we got an angry call from the client informing us that some critical feature was not working anymore. It appears that the IF, which we considered useless, served something.
+In our work, we regularly find a place where we wonder _what the author had in mind_. Not once, not twice, after removing the meaningless [IF](/pl/what_really_grind_my_gears_if/), it turned out that we got an angry call from the client informing us that some critical feature was not working anymore. It appears that the [IF](/pl/what_really_grind_my_gears_if/), which we considered useless, served something.
 
-Rudy Tomjanovich, after defending the NBA title in 1995, despite many hardships, told: [_"Don't ever underestimate the heart of a champion!"](https://www.youtube.com/watch?v=dTyP7I8X4UY)._ I would paraphrase that as: 
+Rudy Tomjanovich, after defending the NBA title in 1995, despite many hardships, told: _["Don't ever underestimate the heart of a champion!"](https://www.youtube.com/watch?v=dTyP7I8X4UY)._ I would paraphrase that as: 
 
 **_Don't ever underestimate the value of working software_**
 
@@ -34,7 +34,7 @@ Disregarding existing code can come from many sources:
 
 What I want to say, and what I think Chesterton wanted to say, is that **to make sure we don't mess up anything, we need to understand why something is here before removing it.**
 
-It is not that simple, of course. Sometimes we have to be pragmatic because we don't have enough time to analyze. In that case, it may be okay to add yet another IF, but only if we plan to investigate it afterwards.
+It is not that simple, of course. Sometimes we have to be pragmatic because we don't have enough time to analyze. In that case, it may be okay to add yet another [IF](/pl/what_really_grind_my_gears_if/), but only if we plan to investigate it afterwards.
 
 Of course, the analysis is much easier when we have documentation and someone to ask questions. Yet, we usually don't have such a chance in such a situation. 
 
