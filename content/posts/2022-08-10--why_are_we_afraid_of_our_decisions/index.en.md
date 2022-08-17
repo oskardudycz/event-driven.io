@@ -54,6 +54,8 @@ These are elementary questions, but they will put us on the right track.
 
 **TLDR: Let's not be afraid to make difficult decisions.** If we discuss them well, they may not be all that difficult. Let's learn to live with them and accept that we may be wrong. We make decisions at a given point in time. However, this does not release us from analysing and assessing whether we made a mistake and correcting our mishaps.
 
+Check also the follow up post, explaining how to make decisions based on the existing state: [What do the British writer and his fence have to do with architecture?](/en/chesterton_fence_and_software_architecture).
+
 Cheers!
 
 Oskar
