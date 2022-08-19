@@ -112,7 +112,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: check out code 🛎
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: scrape the site 🧽
         env:
           ALGOLIA_APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID }}

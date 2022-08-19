@@ -63,7 +63,7 @@ jobs:
     name: Cherry pick PR commits for label
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Cherry Pick PR for label
         # you setup here the separate repository
         # where action is located:
