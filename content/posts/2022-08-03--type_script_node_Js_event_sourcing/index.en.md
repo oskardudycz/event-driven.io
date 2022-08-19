@@ -713,7 +713,7 @@ router.post(
 );
 
 // Remove Product Item
-router.post(
+router.delete(
   '/clients/:clientId/shopping-carts/:shoppingCartId/product-items',
   on((request, handle) => {
     const shoppingCartId = assertNotEmptyString(request.params.shoppingCartId);
@@ -723,8 +723,8 @@ router.post(
       data: {
         shoppingCartId: assertNotEmptyString(request.params.shoppingCartId),
         productItem: {
-          productId: assertNotEmptyString(request.body.productId),
-          quantity: assertPositiveNumber(request.body.quantity),
+          productId: assertNotEmptyString(request.query.productId),
+          quantity: assertPositiveNumber(request.query.quantity),
         },
       },
     });
