@@ -39,7 +39,7 @@ public abstract record ShoppingCart
         DateTimeOffset CanceledAt
     ): ShoppingCart;
 
-    private protected ShoppingCart() { }
+    private ShoppingCart() { }
 }
 ```
 
@@ -49,7 +49,7 @@ I defined the type for each of the possible shopping cart states.
 - instantiating the base shopping cart definition,
 - extending it freely (or, in fact, accidentally) to limit hacking.
 
-For that, we need to define the _ShoppingCart_ base type as an abstract and _private protected_ constructor. Let's quote [C# docs](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/private-protected): _A private protected member is accessible by types derived from the containing class, but only within its containing assembly._. It's not ideal, as still some malicious action can be done, but at least we're limiting the assembly scope. It may be a good enough restriction for many cases as typically, we can guard our code with tests, code reviews, etc. If we trust ourselves (a.k.a. _famous last words_), we can skip this constructor restriction.
+We cannot make it _sealed_ to, but by making the default constructor _private_, we're effectively blocking others from creating other derived classes, and the code won't compile.
 
 **We'd also like proper pattern matching to make processing easier.** Let's define events that can happen for our shopping cart to show that better:
 
@@ -81,7 +81,7 @@ public abstract record ShoppingCartEvent
         DateTimeOffset CanceledAt
     ): ShoppingCartEvent;
 
-    private protected ShoppingCartEvent() { }
+    private ShoppingCartEvent() { }
 }
 ```
 
@@ -125,7 +125,7 @@ public abstract record ShoppingCart
             _ => state
         };
 
-    private protected ShoppingCart() { }
+    private ShoppingCart() { }
 }
 
 ```
@@ -153,7 +153,7 @@ public class TextFormatter
 {
     public abstract record FormattedValue
     {
-        private protected FormattedValue() { }
+        private FormattedValue() { }
 
         public record DateTime(
             DateTimeOffset Value

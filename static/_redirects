@@ -1,3 +1,5 @@
 # Redirects from what the browser requests to what we serve
-/en/jak_zaczac_z_open_source/                    /en/how_to_start_with_open_source/  301!
-/pl/how_to_start_with_open_source/               /pl/jak_zaczac_z_open_source/       301!
+/en/jak_zaczac_z_open_source/                                  /en/how_to_start_with_open_source/                            301!
+/pl/how_to_start_with_open_source/                             /pl/jak_zaczac_z_open_source/                                 301!
+/en/o_tym_co_gra_na_gitarze_moze_dac_programiscie/             /en/how_playing_on_guitar_helps_in_being_better_developer/    301!
+/pl/how_playing_on_guitar_helps_in_being_better_developer/     /pl/o_tym_co_gra_na_gitarze_moze_dac_programiscie/            301!

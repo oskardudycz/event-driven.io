@@ -40,10 +40,7 @@ Before we push images, we need to do a basic setup for the container registry:
 - _read:packages_
 - _write:packages_
 4. Go to your GitHub secrets settings (Settings => Secrets, url https://github.com/{your_username}/{your_repository_name}/settings/secrets/actions).
-5. Create the secret (they won't be visible for other users and will be used in the non-forked builds). 
-- *GHCR_PAT* - with the pasted value of a token generated in point 2.
-    
-  In theory, default [*GITHUB_TOKEN* secret](https://docs.github.com/en/actions/reference/authentication-in-a-workflow#about-the-github_token-secret) could be used. This would take the token of the user that triggered the workflow. Unfortunately, it doesn't seem to be working.
+5. Navigate to your package landing page https://github.com/{your_username}/{your_repository_name}/pkgs/container/{your_package_name}. Grant GitHub action  write access (more in [GitHub Registry docs](https://docs.github.com/en/packages/managing-github-packages-using-github-actions-workflows/publishing-and-installing-a-package-with-github-actions#upgrading-a-workflow-that-accesses-ghcrio)). By that, as long as user running action has proper permissions (we can also setup them to automatically derive them from repository config) we can use default [*GITHUB_TOKEN* secret](https://docs.github.com/en/actions/reference/authentication-in-a-workflow#about-the-github_token-secret). Thanks, @Brickwall, for pointing that out in the [comment](https://event-driven.io/en/how_to_buid_and_push_docker_image_with_github_actions/#comment-5915972111)!
 
 Once we have Docker registries setup, we can create a workflow file. It should be located in the _.\.github\workflows_ directory in our repository. Let's name it _build-and-publish.yml_.
 
@@ -70,7 +67,7 @@ on:
   # run it during pull request
   pull_request:
 
-defaults:
+jobs:
   # define job to build and publish docker image
   build-and-push-docker-image:
     name: Build Docker image and push to repositories
@@ -80,25 +77,25 @@ defaults:
     # steps to perform in job
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # setup Docker buld action
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Login to Github Packages
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_PAT }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Build image and push to Docker Hub and GitHub Container Registry
         uses: docker/build-push-action@v2

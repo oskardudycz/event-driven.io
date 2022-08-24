@@ -13,7 +13,7 @@ author: oskar dudycz
 
 Chesterton was a professional writer. Even though he wasn't writing programs, the quote sounds almost like programming.
 
-In our work, we regularly find a place where we wonder _what the author had in mind_. Not once, not twice, after removing the meaningless [IF](/pl/what_really_grind_my_gears_if/), it turned out that we got an angry call from the client informing us that some critical feature was not working anymore. It appears that the [IF](/pl/what_really_grind_my_gears_if/), which we considered useless, served something.
+In our work, we regularly find a place where we wonder _what the author had in mind_. Not once, not twice, after removing the meaningless IF, it turned out that we got an angry call from the client informing us that some critical feature was not working anymore. It appears that the IF, which we considered useless, served something.
 
 Rudy Tomjanovich, after defending the NBA title in 1995, despite many hardships, told: _["Don't ever underestimate the heart of a champion!"](https://www.youtube.com/watch?v=dTyP7I8X4UY)._ I would paraphrase that as: 
 
@@ -33,7 +33,7 @@ Disregarding existing code can come from many sources:
 
 What I want to say, and what I think Chesterton wanted to say, is that **to make sure we don't mess up anything, we need to understand why something is here before removing it.**
 
-It is not that simple, of course. Sometimes we have to be pragmatic because we don't have enough time to analyze. In that case, it may be okay to add yet another [IF](/pl/what_really_grind_my_gears_if/), but only if we plan to investigate it afterwards.
+It is not that simple, of course. Sometimes we have to be pragmatic because we don't have enough time to analyze. In that case, it may be okay to add yet another IF, but only if we plan to investigate it afterwards.
 
 Of course, the analysis is much easier when we have documentation and someone to ask questions. Yet, we usually don't have such a chance in such a situation. 
 
