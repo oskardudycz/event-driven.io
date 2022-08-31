@@ -1,7 +1,7 @@
 ---
 title: How playing on guitar can help you to be a better developer?
 category: "Coding Life"
-cover: 2022-08-25-cover.jpg
+cover: 2022-08-24-cover.jpg
 author: oskar dudycz
 ---
 
