@@ -40,7 +40,7 @@ There are some simple mappings that we could handle on the code structure or ser
 Having event defined as such:
 
 ```csharp
-public record ShoppingCartIntialised(
+public record ShoppingCartOpened(
     Guid ShoppingCartId,
     Guid ClientId
 );
@@ -49,7 +49,7 @@ public record ShoppingCartIntialised(
 If we'd like to add a new not required property, e.g. _IntializedAt_, we can add it just as a new nullable property. The essential fact to decide if that's the right strategy is if we're good with not having it defined. It can be handled as:
 
 ```csharp
-public record ShoppingCartIntialised(
+public record ShoppingCartOpened(
     Guid ShoppingCartId,
     Guid ClientId,
     // Adding new not required property as nullable
@@ -69,16 +69,16 @@ For instance, we decide that we'd like to add a validation step when the shoppin
 public enum ShoppingCartStatus
 {
     Pending = 1,
-    Intialised = 2,
+    Opened = 2,
     Confirmed = 3,
     Cancelled = 4
 }
 
-public record ShoppingCartIntialised(
+public record ShoppingCartOpened(
     Guid ShoppingCartId,
     Guid ClientId,
-    // Adding new not required property as nullable
-    ShoppingCartStatus Status = ShoppingCartStatus.Intialised
+    // Adding new required property with default value
+    ShoppingCartStatus Status = ShoppingCartStatus.Opened
 );
 ```
 
@@ -91,13 +91,13 @@ Let's assume that we concluded that keeping _ShoppingCart_ prefix in the _Shoppi
 We could do it as:
 
 ```csharp
-public class ShoppingCartIntialised
+public class ShoppingCartOpened
 {
     [JsonPropertyName("ShoppingCartId")]
     public Guid CartId { get; init; }
     public Guid ClientId { get; init; }
 
-    public ShoppingCartIntialised(
+    public ShoppingCartOpened(
         Guid cartId,
         Guid clientId
     )
@@ -111,12 +111,12 @@ public class ShoppingCartIntialised
 The benefit is that both old and the new structure will be backward and forward compatible. The downside of this solution is that we're still keeping the old JSON structure, so all consumers need to be aware of that and do mapping if they want to use the new structure. Some serialisers like Newtonsoft Json.NET allows to do such magic:
 
 ```csharp
-public class ShoppingCartIntialised
+public class ShoppingCartOpened
 {
     public Guid CartId { get; init; }
     public Guid ClientId { get; init; }
 
-    public ShoppingCartIntialised(
+    public ShoppingCartOpened(
         Guid? cartId,
         Guid clientId,
         Guid? shoppingCartId = null
@@ -146,7 +146,7 @@ public record Client(
     string Name = "Unknown"
 );
 
-public record ShoppingCartIntialised(
+public record ShoppingCartOpened(
     Guid ShoppingCartId,
     Client Client
 );
@@ -157,11 +157,11 @@ We can define upcaster as a function that'll later plug in the deserialisation p
 We can define the transformation of the object of the old structure as:
 
 ```csharp
-public static ShoppingCartIntialised Upcast(
-    V1.ShoppingCartIntialised oldEvent
+public static ShoppingCartOpened Upcast(
+    V1.ShoppingCartOpened oldEvent
 )
 {
-    return new ShoppingCartIntialised(
+    return new ShoppingCartOpened(
         oldEvent.ShoppingCartId,
         new Client(oldEvent.ClientId)
     );
@@ -171,13 +171,13 @@ public static ShoppingCartIntialised Upcast(
 Or we can map it from JSON
 
 ```csharp
-public static ShoppingCartIntialised Upcast(
+public static ShoppingCartOpened Upcast(
     string oldEventJson
 )
 {
     var oldEvent = JsonDocument.Parse(oldEventJson).RootElement;
 
-    return new ShoppingCartIntialised(
+    return new ShoppingCartOpened(
         oldEvent.GetProperty("ShoppingCartId").GetGuid(),
         new Client(
             oldEvent.GetProperty("ClientId").GetGuid()
@@ -197,7 +197,7 @@ public record EventMetadata(
     Guid UserId
 );
 
-public record ShoppingCartIntialised(
+public record ShoppingCartOpened(
     Guid ShoppingCartId,
     Guid ClientId,
     Guid IntialisedBy
@@ -207,12 +207,12 @@ public record ShoppingCartIntialised(
 Upcaster from old object to the new one can look like:
 
 ```csharp
-public static ShoppingCartIntialised Upcast(
-    V1.ShoppingCartIntialised oldEvent,
+public static ShoppingCartOpened Upcast(
+    V1.ShoppingCartOpened oldEvent,
     EventMetadata eventMetadata
 )
 {
-    return new ShoppingCartIntialised(
+    return new ShoppingCartOpened(
         oldEvent.ShoppingCartId,
         oldEvent.ClientId,
         eventMetadata.UserId
@@ -223,7 +223,7 @@ public static ShoppingCartIntialised Upcast(
 From JSON to the object:
 
 ```csharp
-public static ShoppingCartIntialised Upcast(
+public static ShoppingCartOpened Upcast(
     string oldEventJson,
     string eventMetadataJson
 )
@@ -231,7 +231,7 @@ public static ShoppingCartIntialised Upcast(
     var oldEvent = JsonDocument.Parse(oldEventJson);
     var eventMetadata = JsonDocument.Parse(eventMetadataJson);
 
-    return new ShoppingCartIntialised(
+    return new ShoppingCartOpened(
         oldEvent.RootElement.GetProperty("ShoppingCartId").GetGuid(),
         oldEvent.RootElement.GetProperty("ClientId").GetGuid(),
         eventMetadata.RootElement.GetProperty("UserId").GetGuid()
@@ -246,11 +246,11 @@ In the same way, as described above, we can downcast the events from the new str
 From the new object to the old one:
 
 ```csharp
-public static V1.ShoppingCartIntialised Downcast(
-    ShoppingCartIntialised newEvent
+public static V1.ShoppingCartOpened Downcast(
+    ShoppingCartOpened newEvent
 )
 {
-    return new V1.ShoppingCartIntialised(
+    return new V1.ShoppingCartOpened(
         newEvent.ShoppingCartId,
         newEvent.Client.Id
     );
@@ -260,13 +260,13 @@ public static V1.ShoppingCartIntialised Downcast(
 From new JSON format to the old object:
 
 ```csharp
-public static V1.ShoppingCartIntialised Downcast(
+public static V1.ShoppingCartOpened Downcast(
     string newEventJson
 )
 {
     var newEvent = JsonDocument.Parse(newEventJson).RootElement;
 
-    return new V1.ShoppingCartIntialised(
+    return new V1.ShoppingCartOpened(
         newEvent.GetProperty("ShoppingCartId").GetGuid(),
         newEvent.GetProperty("Client").GetProperty("Id").GetGuid()
     );
@@ -324,7 +324,7 @@ We have two _Register_ methods. Both of them has JSON and handler function as pa
 ```csharp
 var transformations = new EventTransformations()
     .Register(eventTypeV1Name, UpcastV1)
-    .Register<ShoppingCartIntialised, ShoppingCartIntialisedWithStatus>(
+    .Register<ShoppingCartOpened, ShoppingCartIntialisedWithStatus>(
         eventTypeV2Name, UpcastV2);
 ```
 
@@ -409,7 +409,7 @@ public record PricedProductItem(
     decimal UnitPrice
 );
 
-public record ShoppingCartIntialised(
+public record ShoppingCartOpened(
     Guid ShoppingCartId,
     Guid ClientId
 );
