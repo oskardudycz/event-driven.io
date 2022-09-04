@@ -5,7 +5,7 @@ cover: 2022-08-24-cover.jpg
 author: oskar dudycz
 ---
 
-![cover](2022-08-25-cover.jpg)
+![cover](2022-08-24-cover.jpg)
 
 **The first time I did not become a musician was when my grandma tried to sign me to music school.** During rehearsal, I stubbornly said I would not sing or repeat things played on the piano.
 
