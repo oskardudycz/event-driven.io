@@ -1,6 +1,6 @@
 ---
 title: Slim your aggregates with Event Sourcing!
-category: "Coding Life"
+category: "Event Sourcing"
 cover: 2022-08-31-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical : true
