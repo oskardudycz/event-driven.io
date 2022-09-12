@@ -12,7 +12,7 @@ Through my window, I see the result of good plans but poor execution. Opposite m
 
 Some time ago, I heard that using Event Sourcing makes creating Event-Driven Architecture easier. The arguments were correct, that if we're already publishing events to trigger business workflows, then at some point, we may want to also store events to not lose information. Agreed. However, I also heard that keeping the state as events will simplify things. We'll have a source of truth with a record of the system behaviour. This will allow, e.g. to confront the results of the operations with the recorded state. I'd agree with that, with one distinction. It's easier as long as you already know Event Sourcing.
 
-Many people in the DDD community claim that the essential is to properly break down the system into autonomous parts called bounded contexts. . Once we have it, the rest is secondary and will sort itself out. For sure.
+Many people in the DDD community claim that the essential is to properly break down the system into autonomous parts called bounded contexts. Once we have it, the rest is secondary and will sort itself out. For sure.
 
 Many seasoned programmers speak similarly about new technologies. They claim that they can translate past experience into new technologies. That's true that by analogy, they can catch the big picture quicker. But isn't it a bold assumption to say that Win.Forms specialist will learn Angular quickly?
 
