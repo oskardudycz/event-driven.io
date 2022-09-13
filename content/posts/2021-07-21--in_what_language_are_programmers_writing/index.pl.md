@@ -10,7 +10,7 @@ useDefaultLangCanonical : true
 
 [Wikipedia states](https://en.wikipedia.org/wiki/List_of_programming_languages) that there are around 700 programming languages. Some are more popular. Some are less. But what language do programmers write in? 
 
-When I started my career (which was over 14 years ago), the most popular language for Polish programmers wrote was Ponglish. Ephemeral programming language. People were writing in Java, C#, etc., but typing names in Ponglish. Let's start with a Polish language lesson:
+When I started my career (which was over 15 years ago), the most popular language for Polish programmers wrote was Ponglish. Ephemeral programming language. People were writing in Java, C#, etc., but typing names in Ponglish. Let's start with a Polish language lesson:
 - _nazwa_ - name,
 - _Użytkownik_ - user,
 - _Czy użytkownik jest adminem?_ - Is the user an admin?
