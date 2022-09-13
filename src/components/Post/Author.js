@@ -13,7 +13,7 @@ const Author = props => {
         <div className="avatar">
           <img src={avatar} alt={config.siteTitle} />
         </div>
-        <div className="note"><span className="authorName">Oskar Dudycz</span> For over 14 years, I have been creating IT systems close to the business. I started my career when StackOverflow didn't exist yet. I am a programmer, technical leader, architect. I like to create well-thought-out systems, tools and frameworks that are used in production and make people's lives easier. I believe Event Sourcing, CQRS, and in general, Event-Driven Architectures are a good foundation by which this can be achieved.</div>
+        <div className="note"><span className="authorName">Oskar Dudycz</span> For over 15 years, I have been creating IT systems close to the business. I started my career when StackOverflow didn't exist yet. I am a programmer, technical leader, architect. I like to create well-thought-out systems, tools and frameworks that are used in production and make people's lives easier. I believe Event Sourcing, CQRS, and in general, Event-Driven Architectures are a good foundation by which this can be achieved.</div>
         {/* <div className="note" dangerouslySetInnerHTML={{ __html: note }} /> */}
       </div>
 

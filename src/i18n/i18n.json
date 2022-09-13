@@ -15,7 +15,7 @@
       "hero": {
         "h1": "Are you looking for practical knowledge <1 /> about <3>software architecture?</3>",
         "h2": "Check out my content - <1>from articles to videos</1>",
-        "h3": "My name is <1>Oskar Dudycz</1>. From over 14 years, I'm creating software close to the business. <3 />I run workshops and training about <5>Event Sourcing</5>,  CQRS and event-driven architectures. <7 />I'm co-maintainer of <9>Marten</9> OSS library that allows implementing Event Sourcing. <11 />On the blog, I share my knowledge of how to create good, modular applications pragmatically."
+        "h3": "My name is <1>Oskar Dudycz</1>. From over 15 years, I'm creating software close to the business. <3 />I run workshops and training about <5>Event Sourcing</5>,  CQRS and event-driven architectures. <7 />I'm co-maintainer of <9>Marten</9> OSS library that allows implementing Event Sourcing. <11 />On the blog, I share my knowledge of how to create good, modular applications pragmatically."
       },
       "404": {
         "title": "Not found",
@@ -39,7 +39,7 @@
       "hero": {
         "h1": "Szukasz praktycznej wiedzy <1 /> o <3>architekturze oprogramowania?</3>",
         "h2": "Zapoznaj się z moimi treściami - <1>od artykułów po wideo</1>",
-        "h3": "Nazywam się <1>Oskar Dudycz</1>. Od ponad 14 lat, tworzę systemy informatyczne bliskie biznesowi. <3 />Prowadzę warsztaty i szkolenia na temat <5>Event Sourcing</5>, CQRS oraz architektur opartych o zdarzeniach. <7 />Jestem maintainerem biblioteki <9>Marten</9>, umożliwiającej pracę z Event Sourcing. <11 />Na blogu dzielę się wiedzą jak pragmatycznie tworzyć, dobre modularne aplikacje."
+        "h3": "Nazywam się <1>Oskar Dudycz</1>. Od ponad 15 lat, tworzę systemy informatyczne bliskie biznesowi. <3 />Prowadzę warsztaty i szkolenia na temat <5>Event Sourcing</5>, CQRS oraz architektur opartych o zdarzeniach. <7 />Jestem maintainerem biblioteki <9>Marten</9>, umożliwiającej pracę z Event Sourcing. <11 />Na blogu dzielę się wiedzą jak pragmatycznie tworzyć, dobre modularne aplikacje."
       },
       "404": {
         "title": "Nie znaleziono",
