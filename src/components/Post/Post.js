@@ -7,7 +7,7 @@ import Headline from "../Article/Headline";
 import Bodytext from "../Article/Bodytext";
 import Meta from "./Meta";
 import Author from "./Author";
-import Comments from "./Comments";
+import Substack from "./Substack";
 import NextPrev from "./NextPrev";
 import { DiscussionEmbed } from "disqus-react";
 
@@ -46,6 +46,7 @@ const Post = props => {
       </header>
       <Bodytext html={html} theme={theme} />
       <footer>
+        <Substack />
         <Share post={post} theme={theme} />
         <Author note={authornote} theme={theme} />
         <NextPrev next={nextPost} prev={prevPost} theme={theme} />

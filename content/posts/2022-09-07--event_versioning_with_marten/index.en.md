@@ -199,7 +199,7 @@ options.Events
 var documentStore = new DocumentStore(options);
 ```
 
-You could also put the upcasting options configuration into the `ProductItemAddedToShoppingCartUpcasters` class to encapsulate all upcasting definitions:
+You could also put the upcasting options configuration into the _ProductItemAddedToShoppingCartUpcasters_ class to encapsulate all upcasting definitions:
 
 ```csharp
 public static class ProductItemAddedToShoppingCartUpcasters
@@ -281,8 +281,8 @@ public static class ProductItemAddedToShoppingCartUpcasters
 
 For such registration, you can don't need to specify event type, as Marten will automatically use the old CLR event type name and perform mapping by convention:
 - _ProductItemAddedToShoppingCart_ => "product_item_added_to_shopping_cart",
-- ProductItemAddedToShoppingCartWithPrice => "product_item_added_to_shopping_cart_with_price",
-- ProductItemAddedToShoppingCartWithPriceAndGroupedProduct => "product_item_added_to_shopping_cart_with_price_and_grouped_product".
+- _ProductItemAddedToShoppingCartWithPrice_ => "product_item_added_to_shopping_cart_with_price",
+- _ProductItemAddedToShoppingCartWithPriceAndGroupedProduct_ => "product_item_added_to_shopping_cart_with_price_and_grouped_product".
 
 Of course, you can override the event type name, e.g.
 

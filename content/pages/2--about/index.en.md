@@ -3,7 +3,7 @@ title: Hi! My name is Oskar Dudycz
 menuTitle: menu.about
 ---
 
-From over 14 years, I'm creating software close to the business. I started my career when StackOverflow didn't exist. I'm a developer, technical leader and architect.
+From over 15 years, I'm creating software close to the business. I started my career when StackOverflow didn't exist. I'm a developer, technical leader and architect.
 
 ![photo](bg-1.jpg)
 
@@ -18,11 +18,10 @@ That's why I am:
 
 My main projects:
 
-- 🐉 [EventStoreDB](https://www.eventstore.com/) - The stream database built for Event Sourcing.
+- 🏗 [Architecture Weekly](https://github.com/oskardudycz/ArchitectureWeekly) - weekly set of links and resources to boost your knowledge and developer experience.
 - 🐿️ [Marten](https://martendb.io/) - .NET Transactional Document DB and Event Store on PostgreSQL.
 - ⚡ [Event Sourcing in .NET](https://github.com/oskardudycz/EventSourcing.NetCore) - Practical samples, self-paced kits and tutorials of how to build Event-Sourced applications in .NET.
 - ⚡ [Event Sourcing in Node.js tutorials](https://github.com/oskardudycz/EventSourcing.NodeJS) - Samples and materials similar as for .NET, but written in more functional approach.
-- 🏗 [Architecture Weekly](https://github.com/oskardudycz/ArchitectureWeekly) - weekly set of links and resources to boost your knowledge and developer experience.
 - 🔧 [WebApi with .NET Core](https://github.com/oskardudycz/WebApiWith.NETCore) - Samples and resources of how to create well-designed WebApi in .NET.
 - 👁️ [GoldenEye](https://github.com/oskardudycz/GoldenEye) - The CQRS flavoured framework that will speed up your WebAPI and Microservices development.
 
