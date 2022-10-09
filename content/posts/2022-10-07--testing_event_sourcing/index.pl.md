@@ -10,62 +10,7 @@ useDefaultLangCanonical : true
 
 **I've heard a few times that Event Sourcing is hard to test. I'm not sure where this myth comes from;** maybe from mixing it with [event streaming](/pl/event_streaming_is_not_event_sourcing/). Event Sourcing logic is pretty straightforward. We're getting the list of events recorded for a specific entity (e.g. bank account), building the current state from them and running business logic based on it. As a result, we're getting either a new event or a list of events.
 
-The simplest example of how to validate such logic might look like this (using C#):
-
-```csharp
-static class IncidentService
-{
-    private static DepositRecorded Handle(
-        RecordDeposit command,
-        BankAccount account
-    )
-    {
-        if (account.Status == BankAccountStatus.Closed)
-            throw new InvalidOperationException("Account is closed!");
-
-        return new DepositRecorded(account.Id, command.Amount, command.CashierId);
-    }
-}
-```
-
-As you see, it's a pure function that takes command (representing user intention), the current state and returns a new fact: an event. It's a pure function that's not causing any side effects. Thus, the most straightforward code to test. We assert that the following event is returned based on the provided parameters.
-
-**Of course, there are multiple ways how to run business logic.** I showed them in [Slim your aggregates with Event Sourcing!](/pl/slim_your_entities_with_event_sourcing/). **Let's start today with the pattern called Decider.** It's a [pattern defined by Jérémie Chassaing](https://thinkbeforecoding.com/post/2021/12/17/functional-event-sourcing-decider), I explained it in detail in [How to effectively compose your business logic](/pl/how_to_effectively_compose_your_business_logic/). Decider pattern clarifies how to run the business logic. It's composed of the following three methods:
-- **decide** - a method that's running the business logic as in the example shown above in the incident categorisation example,
-- **evolve** - a method that takes the current state, an event and returns the new state updated by event data,
-- **get initial state** - a method that returns the default state object, this methods is used as a base for [getting the current state from events](/pl/how_to_get_the_current_entity_state_in_event_sourcing/).
-- there's also the terminal function, but let's skip it for now. If you're interested, read more in [Jérémie's article](https://thinkbeforecoding.com/post/2021/12/17/functional-event-sourcing-decider)
-
-We could describe the decider in C# code as:
-
-```csharp
-public record Decider<TCommand, TEvent, TState>(
-    Func<TCommand, TState, TEvent[]> Decide,
-    Func<TState, TEvent, TState> Evolve,
-    Func<TState> GetInitialState
-);
-```
-
-I like it, as it's a concise and complete way of explaining the event-driven business logic. It helps in composability.
-
-The handling could be described as follows:
-
-```csharp
-private (TEvent[], TState) Handle<TEvent, TState>(
-    TEvent[] events,
-    Command command
-)
-{
-    var currentState = decider.GetInitialState();
-
-    var newEvents = decider.Decide(command, currentState);
-    var newState = newEvents.Aggregate(currentState, decider.Evolve);
-
-    return (newEvents, newState);
-}
-```
-
-Let's define a Bank Account entity together with evolve function:
+Let's take a bank account as an example. We could define it as:
 
 ```csharp
 public record BankAccount(
@@ -77,9 +22,8 @@ public record BankAccount(
     public static BankAccount Evolve(
         BankAccount bankAccount,
         object @event
-    )
-    {
-        return @event switch
+    ) =>
+        @event switch
         {
             BankAccountOpened bankAccountCreated =>
                 Create(bankAccountCreated),
@@ -91,7 +35,6 @@ public record BankAccount(
                 bankAccount.Apply(bankAccountClosed),
             _ => bankAccount
         };
-    }
 
     private static BankAccount Create(BankAccountOpened @event) =>
         new BankAccount(@event.BankAccountId, BankAccountStatus.Opened, @event.Version);
@@ -107,51 +50,14 @@ public record BankAccount(
 }
 ```
 
-Decide method could look like:
+It contains the state definition (_Id_, _Status_, and _Balance_) plus _Evolve_ function that takes the current state, applies the event, and gets the new state. Read more in [How to get the current entity state from events](/pl/how_to_get_the_current_entity_state_in_event_sourcing/).
+
+The simplest example of how to run business logic might look like this (using C#):
 
 ```csharp
-public static class BankAccountDecider
+static class BankAccountService
 {
-    public static object Handle(
-        object command,
-        BankAccount bankAccount
-    ) =>
-        command switch
-        {
-            OpenBankAccount openBankAccount =>
-                Handle(now, openBankAccount),
-            RecordDeposit recordDeposit =>
-                Handle(now, recordDeposit, bankAccount),
-            WithdrawnCashFromATM withdrawnCash =>
-                Handle(now, withdrawnCash, bankAccount),
-            CloseBankAccount closeBankAccount =>
-                Handle(now, closeBankAccount, bankAccount),
-            _ =>
-                throw new InvalidOperationException($"{command.GetType().Name} cannot be handled for Bank Account")
-        };
-
-    private static BankAccountOpened Handle(
-        OpenBankAccount command
-    ) =>
-        new BankAccountOpened(
-            command.BankAccountId,
-            command.AccountNumber,
-            command.ClientId,
-            command.CurrencyISOCode
-        );
-
-    private static DepositRecorded Handle(
-        RecordDeposit command,
-        BankAccount account
-    )
-    {
-        if (account.Status == BankAccountStatus.Closed)
-            throw new InvalidOperationException("Account is closed!");
-
-        return new DepositRecorded(account.Id, command.Amount, command.CashierId);
-    }
-
-    private static CashWithdrawnFromATM Handle(
+    public static CashWithdrawnFromATM Handle(
         WithdrawnCashFromATM command,
         BankAccount account
     )
@@ -164,21 +70,90 @@ public static class BankAccountDecider
 
         return new CashWithdrawnFromATM(account.Id, command.Amount, command.AtmId);
     }
-
-    private static  BankAccountClosed Handle(
-        CloseBankAccount command,
-        BankAccount account
-    )
-    {
-        if (account.Status == BankAccountStatus.Closed)
-            throw new InvalidOperationException("Account is already closed!");
-
-        return new BankAccountClosed(account.Id, command.Reason);
-    }
 }
 ```
 
-**Wouldn't it be great to be able to test such logic as below?**
+As you see, it's a pure function that takes the  _CashWithdrawnFromATM_ command (representing user intention), the current bank account state and returns a new fact: an event that the cash was withdrawn. It's a pure function that's not causing any side effects. Thus, straightforward code to test. 
+
+```csharp
+[Fact]
+public void GivenOpenBankAccountWithEnoughMoney_WhenCashWithdrawnFromATM_ThenSucceeds()
+{
+    // Given
+    // Existing events
+    var bankAccountId = Guid.NewGuid();
+    var accountNumber = Guid.NewGuid().ToString();
+    var clientId = Guid.NewGuid();
+    var currencyISOCode = "USD";
+    var accountOpened = 
+        new BankAccountOpened(
+            bankAccountId,
+            accountNumber,
+            clientId,
+            currencyISOCode
+        );
+
+    var cashierId = Guid.NewGuid();
+    var initialAmount = (decimal)random.NextDouble()* 100 + 10;
+    var depositRecorded = new DepositRecorded(bankAccountId, amount, cashierId);
+
+    // and currentstate build from them
+    var currentState = GetCurrentState(
+        accountOpened,
+        depositRecorded
+    );
+
+    // When
+    var withdrawalAmount = initialAmount - 1;
+    var atmId = Guid.NewGuid();
+
+    // Command is handled
+    var newEvent = BankAccountService.Handle(
+        new WithdrawCashFromATM(bankAccountId, withdrawalAmount, atmId),
+        currentState
+    );
+
+    // Then
+    Assert.Equal(
+        new CashWithdrawnFromATM(bankAccountId, withdrawalAmount, atmId),
+        newEvent
+    );
+}
+
+public BankAccount GetCurrentState(params object[] events)
+{
+    var currentState = new BankAccount();
+
+    foreach(var @event in events)
+    {
+        currentState = BankAccount.Evolve(currentState, @event);
+    }
+
+    return currentState
+}
+```
+
+We assert that the specific event is returned after running the command handler logic for the current state.
+
+**The tests are written in the following pattern:**
+
+**Given** the sequence of past events.
+
+![given](2022-10-07-logic-1.png)
+
+**When** the business logic is run for the command and the current state built from events.
+
+![when](2022-10-07-logic-2.png)
+
+**Then** the following set of events is returned (when succeeded), or an exception is thrown (when failed).
+
+![then](2022-10-07-logic-3.png)
+
+The test is written in the [Behaviour Driven-Development](https://en.wikipedia.org/wiki/Behavior-driven_development) style.
+
+The pattern is repeatable, and we could use it for all possible event-sourcing business logic.
+
+**Wouldn't it be great to be able to generalise business logic tests as below?**
 
 ```csharp
 public class BankAccountTests
@@ -232,6 +207,23 @@ public class BankAccountTests
             .ThenThrows<InvalidOperationException>(exception => exception.Message.Should().Be("Account is closed!"));
     }
 
+    [Fact]
+    public void GivenOpenBankAccountWithEnoughMoney_WhenCashWithdrawnFromATM_ThenSucceeds()
+    {
+        var bankAccountId = Guid.NewGuid();
+        var initialAmount = (decimal)random.NextDouble()* 100 + 10;
+        
+        var withdrawalAmount = initialAmount - 1;
+        var atmId = Guid.NewGuid();
+        
+        Spec.Given(
+                BankAccountOpened(bankAccountId)
+                DepositRecorded(bankAccountId, initialAmount)
+            )
+            .When(new WithdrawCashFromATM(bankAccountId, withdrawalAmount, atmId))
+            .Then(new CashWithdrawnFromATM(bankAccountId, amount, cashierId));
+    }
+
     public static BankAccountOpened BankAccountOpened(Guid bankAccountId)
     {
         var accountNumber = Guid.NewGuid().ToString();
@@ -239,6 +231,12 @@ public class BankAccountTests
         var currencyISOCode = "USD";
 
         return new BankAccountOpened(bankAccountId, accountNumber, clientId, currencyISOCode);
+    }
+
+    public static BankAccountOpened DepositRecorded(Guid bankAccountId, decimal amount)
+    {
+        var cashierId = Guid.NewGuid();
+        return new DepositRecorded(bankAccountId, amount, cashierId);
     }
 
     public static BankAccountClosed BankAccountClosed(Guid bankAccountId)
@@ -250,16 +248,123 @@ public class BankAccountTests
 }
 ```
 
-**The tests are written in the following pattern:**
-- **Given** the sequence of past events,
-- **When** the business logic is run for command and the current state built from events,
-- **Then** the following set of events is returned (when succeeded), or an exception is thrown (when failed).
-
-This is written in the [Behaviour Driven-Development](https://en.wikipedia.org/wiki/Behavior-driven_development) style.
-
 Ok, but how to get to that?
 
+**No worries, I got you covered!**
+
+Some time ago [I created Ogooreck, a sneaky testing library in BDD style](/pl/ogooreck_sneaky_bdd_testing_framework/). 
+
+**Now I extended it also for the business logic tests**. It's testing framework agnostic so that you can use it both for XUnit, NUnit and others! Just [add the NuGet](https://www.nuget.org/packages/Ogooreck), and you'll be able to test your business logic as described in this article. All of that (and more) is already available. See more in the [Ogooreck repository](https://github.com/oskardudycz/Ogooreck#business-logic-testing).
+
+Are you not coding in .NET? Don't you want to use my library? That's also fine. Let me try to explain how to build it on your own.
+
 ## Decider tests specification
+
+**There are multiple ways how to run business logic.** I showed them in [Slim your aggregates with Event Sourcing!](/pl/slim_your_entities_with_event_sourcing/). **Let's start today with the pattern called _Decider_.** It's a [pattern defined by Jérémie Chassaing](https://thinkbeforecoding.com/post/2021/12/17/functional-event-sourcing-decider), I explained it in detail in [How to effectively compose your business logic](/pl/how_to_effectively_compose_your_business_logic/). Decider pattern clarifies how to run the business logic. It's composed of the following three methods:
+- **decide** - a method that's running the business logic as in the example shown above in the incident categorisation example,
+- **evolve** - a method that takes the current state, an event and returns the new state updated by event data,
+- **get initial state** - a method that returns the default state object, this methods is used as a base for [getting the current state from events](/pl/how_to_get_the_current_entity_state_in_event_sourcing/).
+- there's also the terminal function, but let's skip it for now. If you're interested, read more in [Jérémie's article](https://thinkbeforecoding.com/post/2021/12/17/functional-event-sourcing-decider)
+
+We could describe the decider in C# code as:
+
+```csharp
+public record Decider<TCommand, TEvent, TState>(
+    Func<TCommand, TState, TEvent[]> Decide,
+    Func<TState, TEvent, TState> Evolve,
+    Func<TState> GetInitialState
+);
+```
+
+I like it, as it's a concise and complete way of explaining the event-driven business logic. It helps in composability.
+
+The handling could be described as follows:
+
+```csharp
+private (TEvent[], TState) Handle<TEvent, TState>(
+    TEvent[] events,
+    Command command
+)
+{
+    var currentState = decider.GetInitialState();
+
+    var newEvents = decider.Decide(command, currentState);
+    var newState = newEvents.Aggregate(currentState, decider.Evolve);
+
+    return (newEvents, newState);
+}
+```
+
+For defined above _BankAccount_ entity the _Decide_ method could look like this:
+
+```csharp
+public static class BankAccountDecider
+{
+    public static object Handle(
+        object command,
+        BankAccount bankAccount
+    ) =>
+        command switch
+        {
+            OpenBankAccount openBankAccount =>
+                Handle(openBankAccount),
+            RecordDeposit recordDeposit =>
+                Handle(recordDeposit, bankAccount),
+            WithdrawnCashFromATM withdrawnCash =>
+                Handle(withdrawnCash, bankAccount),
+            CloseBankAccount closeBankAccount =>
+                Handle(closeBankAccount, bankAccount),
+            _ =>
+                throw new InvalidOperationException($"{command.GetType().Name} cannot be handled for Bank Account")
+        };
+
+    private static BankAccountOpened Handle(
+        OpenBankAccount command
+    ) =>
+        new BankAccountOpened(
+            command.BankAccountId,
+            command.AccountNumber,
+            command.ClientId,
+            command.CurrencyISOCode
+        );
+
+    private static DepositRecorded Handle(
+        RecordDeposit command,
+        BankAccount account
+    )
+    {
+        if (account.Status == BankAccountStatus.Closed)
+            throw new InvalidOperationException("Account is closed!");
+
+        return new DepositRecorded(account.Id, command.Amount, command.CashierId);
+    }
+
+    private static CashWithdrawnFromATM Handle(
+        WithdrawnCashFromATM command,
+        BankAccount account
+    )
+    {
+        if (account.Status == BankAccountStatus.Closed)
+            throw new InvalidOperationException("Account is closed!");
+
+        if (account.Balance < command.Amount)
+            throw new InvalidOperationException("Not enough money!");
+
+        return new CashWithdrawnFromATM(account.Id, command.Amount, command.AtmId);
+    }
+
+    private static  BankAccountClosed Handle(
+        CloseBankAccount command,
+        BankAccount account
+    )
+    {
+        if (account.Status == BankAccountStatus.Closed)
+            throw new InvalidOperationException("Account is already closed!");
+
+        return new BankAccountClosed(account.Id, command.Reason);
+    }
+}
+```
 
 To define the following test, we'll need to mix a bit of [Specification](https://en.wikipedia.org/wiki/Specification_pattern) and [Builder](https://en.wikipedia.org/wiki/Builder_pattern) patterns.
 
@@ -1103,13 +1208,9 @@ That allows us to take the state based on the _evolve_ method and directly from 
 
 **As you can see, we started with the _Decider_ pattern and tried to use it in our event-sourced tests.** Yet it appeared that the concept is flexible enough and strong that on top of it, we were able to test aggregates (event-driven and state-based).
 
-**You may say that it's still complex enough that you won't be able to apply it to your project. No worries, I got you covered!**
-
-Some time ago [I created Ogooreck, a sneaky testing library in BDD style](/pl/ogooreck_sneaky_bdd_testing_framework/). 
-
-**Now I extended it also for the business logic tests**. It's testing framework agnostic so that you can use it both for XUnit, NUnit and others! Just [add the NuGet](https://www.nuget.org/packages/Ogooreck), and you'll be able to test your business logic as described in this article. All of that (and more) is already available. See more in the [Ogooreck repository](https://github.com/oskardudycz/Ogooreck#business-logic-testing).
-
 The code samples show the C# implementation, but using the following patterns can also be applied to any other programming language.
+
+Still, you don't need to do it on your own, if you're in .NET space, just [add the NuGet](https://www.nuget.org/packages/Ogooreck), and you'll be able to test your business logic as described in this article.
 
 I hope that you like it!
 
