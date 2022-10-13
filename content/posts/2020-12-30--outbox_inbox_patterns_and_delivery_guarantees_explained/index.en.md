@@ -1,6 +1,6 @@
 ---
 title: Outbox, Inbox patterns and delivery guarantees explained
-category: "Design Patterns"
+category: "Architecture"
 cover: 2020-12-30-cover.png
 author: oskar dudycz
 ---
@@ -30,12 +30,14 @@ We should also check if we need more sophisticated idempotency handling. If we'r
 
 To properly handle at-least-once and exactly-once delivery, following patterns should be used:
 
-- **Outbox Pattern** - This pattern ensures that a message was sent (e.g. to a queue) successfully at least once. With this pattern, instead of directly publishing a message to the queue, we store it in the temporary storage (e.g. database table). We're wrapping the entity save and message storing with the Unit of Work (transaction). By that, we're making sure that if the application data was stored, the message wouldn't be lost. It will be published later by a background process. This process will check if there are any not sent events in the table. When the worker finds such messages, it tries to send them. After it gets confirmation of publishing (e.g. ACK from the queue) it marks the event as sent. 
-    
-    Why does it provide at-least-once and not exactly-once? Writing to the database may fail (e.g. it will not respond). When that happens, the process handling outbox pattern will try to resend the event after some time and try to do it until the message is correctly marked as sent in the database. 
-- **Inbox Pattern** - This is a pattern similar to Outbox Pattern. It's used to handle incoming messages (e.g. from a queue). Accordingly, we have a table in which we're storing incoming events. Contrary to outbox pattern, we first save the event in the database, then we're returning ACK to queue. If save succeeded, but we didn't return ACK to queue, then delivery will be retried. That's why we have at-least-once delivery again. After that, an outbox-like process runs. It calls message handlers that perform business logic. 
+- **Outbox Pattern** - it ensures that a message was sent (e.g. to a queue) successfully at least once. With this pattern, instead of directly publishing a message to the queue, we store it in temporary storage (e.g. database table). We're wrapping the entity save and message storing with the Unit of Work (transaction). By that, we're ensuring that the message won't be lost if the application data is stored. It will be published later through a background process. This process will check if there are any unsent messages in the table. When the worker finds any, it tries to send them. After it gets confirmation of publishing (e.g. ACK from the queue), it marks the event as sent.
+
+	Why does it provide at-least-once and not exactly-once? Writing to the database may fail (e.g. it will not respond). When that happens, the process handling outbox pattern will try to resend the event after some time and try to do it until the message is correctly marked as sent in the database.
+- **Inbox Pattern** - it is similar to Outbox Pattern. It's used to handle incoming messages (e.g. from a queue). Accordingly, we have a table in which we're storing incoming events. Contrary to outbox pattern, we first save the event in the database, then we're returning ACK to queue. If save succeeded, but we didn't return ACK to queue, then delivery will be retried. That's why we have at-least-once delivery again. After that, an outbox-like process runs. It calls message handlers that perform business logic. 
     
     You can simplify the implementation by calling handlers immediately and sending ACK to the queue when they succeeded. The benefit of using additional table is ability to quickly accept events from the bus. Then they're processed internally at a convenient pace minimising the impact of transient errors.
+
+![cover](2020-12-30-outbox.png)
 
 Both Outbox and Inbox can be implemented with polling or triggered by the change detection capture.
 
@@ -92,23 +94,17 @@ This change makes possible parallelisation. We no longer update the event after 
 
 **Change detection capture-based (or also called transactional) takes that on a different level**. Polling will always have redundancy, as the background workers need to call database for new events continuously. Almost all popular databases provide functionality for getting triggers when data was changed, e.g.
 - [Postgres WAL](https://www.postgresql.org/docs/9.0/wal-intro.html), [Npgsql WAL support](http://www.npgsql.org/doc/replication.html), 
-- [MSSQL transaction log](https://docs.microsoft.com/en-us/sql/relational-databases/logs/the-transaction-log-sql-server?view=sql-server-ver15)
-- [EventStoreDB subscriptions](https://developers.eventstore.com/clients/grpc/subscribing-to-streams/)
-- [DynamoDB change streams](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html)
+- [MSSQL transaction log](https://docs.microsoft.com/en-us/sql/relational-databases/logs/the-transaction-log-sql-server?view=sql-server-ver15),
+- [DynamoDB change streams](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html),
+- [Change feed in Azure Cosmos DB](https://learn.microsoft.com/en-us/azure/cosmos-db/change-feed),
+- [EventStoreDB subscriptions](https://developers.eventstore.com/clients/grpc/subscribing-to-streams/).
 
 We could use such triggers for outbox processing. Instead of the background process, we get notifications on new events. We can also parallelise processing with routing to different handlers by partition key.
 
-The most popular tool for relational table CDC processing is [Kafka Connect with Debezium](https://debezium.io/blog/2019/02/19/reliable-microservices-data-exchange-with-the-outbox-pattern/).
-
-You can play with my sample showing Proof of Concept for connecting Marten to Debezium and Kafka Connect: 
-https://github.com/oskardudycz/kafka-connect.
-
-You can also check links I gathered in: 
-- https://github.com/oskardudycz/PostgresOutboxPatternWithCDC.NET.
-- https://github.com/oskardudycz/EventSourcing.NetCore#1215-event-processing
+**I described that in more details in [Push-based Outbox Pattern with Postgres logical replication](/en/push_based_outbox_pattern_with_postgres_logical_replication).**
 
 To sum up. Outbox and Inbox patterns are must-haves for getting at-least once or exactly-once delivery. They're used internally in many solutions like 
-- Kafka, 
+- [Kafka Connect with Debezium](https://debezium.io/blog/2019/02/19/reliable-microservices-data-exchange-with-the-outbox-pattern/),
 - [NServiceBus](https://docs.particular.net/nservicebus/outbox/), 
 - [Jasper](https://jasperfx.github.io/documentation/durability/), 
 - [MassTransit](https://masstransit-project.com/articles/outbox.html). 

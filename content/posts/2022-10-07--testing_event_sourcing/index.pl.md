@@ -1,6 +1,6 @@
 ---
 title: Testing business logic in Event Sourcing, and beyond!
-category: "Coding Life"
+category: "Event Sourcing"
 cover: 2022-10-07-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical : true
