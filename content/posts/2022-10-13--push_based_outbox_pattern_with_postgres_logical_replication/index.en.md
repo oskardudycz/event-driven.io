@@ -69,7 +69,8 @@ LIMIT 100
 This is fine for many cases, but:
 - it's not easy to find the right interval. [Marten Async Daemon](https://martendb.io/events/projections/async-daemon.html#async-projections-daemon) does fancy stuff to tune it depending on how fast new messages are appended. But still, it's an approximation.
 - polling may require more resources and have more extensive memory pressure.
-- it's not as easy as it seems to scale it in a reliable and resilient way (e.g. have multiple nodes, [leaders election](https://jeremydmiller.com/2020/05/05/using-postgresql-advisory-locks-for-leader-election/) etc.)
+- it's not as easy as it seems to scale it in a reliable and resilient way (e.g. have multiple nodes, [leaders election](https://jeremydmiller.com/2020/05/05/using-postgresql-advisory-locks-for-leader-election/) etc.),
+- may be harder to implement than it seems, check more in [How Postgres sequences issues can impact your messaging guarantees](/en/ordering_in_postgres_outbox/).
 
 It would be great if we could be notified by the database when new messages arrive, right?
 
