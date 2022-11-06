@@ -139,7 +139,7 @@ let decide command bankAccount =
 **Each method is just a pure function that takes command, current state and returns event(s).** See more:
 
 ```fsharp
-let openBankAccount (command: OpenBankAccount) bankAccount: Event =
+let openBankAccount (command: OpenBankAccount) bankAccount : Event =
     match bankAccount with
     | Open _ -> invalidOp "Account is already opened!"
     | Closed _ -> invalidOp "Account is already closed!"
@@ -152,7 +152,7 @@ let openBankAccount (command: OpenBankAccount) bankAccount: Event =
               CreatedAt = command.Now
               Version = 1 }
 
-let recordDeposit (command: RecordDeposit) bankAccount: Event =
+let recordDeposit (command: RecordDeposit) bankAccount : Event =
     match bankAccount with
     | Initial _ -> invalidOp "Account is not opened!"
     | Closed _ -> invalidOp "Account is closed!"
@@ -161,10 +161,10 @@ let recordDeposit (command: RecordDeposit) bankAccount: Event =
             { BankAccountId = state.Id
               Amount = command.Amount
               CashierId = command.CashierId
-              RecordedAt  = command.Now
+              RecordedAt = command.Now
               Version = state.Version + 1L }
 
-let withdrawCashFromAtm (command: WithdrawCashFromAtm) bankAccount: Event =
+let withdrawCashFromAtm (command: WithdrawCashFromAtm) bankAccount : Event =
     match bankAccount with
     | Initial _ -> invalidOp "Account is not opened!"
     | Closed _ -> invalidOp "Account is closed!"
@@ -179,7 +179,7 @@ let withdrawCashFromAtm (command: WithdrawCashFromAtm) bankAccount: Event =
               RecordedAt = command.Now
               Version = state.Version + 1L }
 
-let closeBankAccount (command: CloseBankAccount) bankAccount: Event =
+let closeBankAccount (command: CloseBankAccount) bankAccount : Event =
     match bankAccount with
     | Initial _ -> invalidOp "Account is not opened!"
     | Closed _ -> invalidOp "Account is already closed!"
@@ -188,7 +188,7 @@ let closeBankAccount (command: CloseBankAccount) bankAccount: Event =
             { BankAccountId = state.Id
               Reason = command.Reason
               ClosedAt = command.Now
-              Version = state.Version + 1L }
+              Version = state.Version + 1
 ```
 
 Here we also see why having union types is helpful. We can explicitly restrict the handling based on the current bank account state. "Can" is, in fact, wrong. We "have to". F# compiler will ask us to handle each possible state, helping us not to forget about anything. We also don't need to check conditions based on fields (e.g. status, etc.) as our state will only contain available data.

@@ -141,7 +141,7 @@ let decide command bankAccount =
 **Each method is just a pure function that takes command, current state and returns event(s).** See more:
 
 ```fsharp
-let openBankAccount (command: OpenBankAccount) bankAccount: Event =
+let openBankAccount (command: OpenBankAccount) bankAccount : Event =
     match bankAccount with
     | Open _ -> invalidOp "Account is already opened!"
     | Closed _ -> invalidOp "Account is already closed!"
@@ -154,7 +154,7 @@ let openBankAccount (command: OpenBankAccount) bankAccount: Event =
               CreatedAt = command.Now
               Version = 1 }
 
-let recordDeposit (command: RecordDeposit) bankAccount: Event =
+let recordDeposit (command: RecordDeposit) bankAccount : Event =
     match bankAccount with
     | Initial _ -> invalidOp "Account is not opened!"
     | Closed _ -> invalidOp "Account is closed!"
@@ -163,10 +163,10 @@ let recordDeposit (command: RecordDeposit) bankAccount: Event =
             { BankAccountId = state.Id
               Amount = command.Amount
               CashierId = command.CashierId
-              RecordedAt  = command.Now
+              RecordedAt = command.Now
               Version = state.Version + 1L }
 
-let withdrawCashFromAtm (command: WithdrawCashFromAtm) bankAccount: Event =
+let withdrawCashFromAtm (command: WithdrawCashFromAtm) bankAccount : Event =
     match bankAccount with
     | Initial _ -> invalidOp "Account is not opened!"
     | Closed _ -> invalidOp "Account is closed!"
@@ -181,7 +181,7 @@ let withdrawCashFromAtm (command: WithdrawCashFromAtm) bankAccount: Event =
               RecordedAt = command.Now
               Version = state.Version + 1L }
 
-let closeBankAccount (command: CloseBankAccount) bankAccount: Event =
+let closeBankAccount (command: CloseBankAccount) bankAccount : Event =
     match bankAccount with
     | Initial _ -> invalidOp "Account is not opened!"
     | Closed _ -> invalidOp "Account is already closed!"
