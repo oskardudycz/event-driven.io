@@ -945,7 +945,7 @@ It may be harder to slimmer it more!
 - control,
 - encapsulation,
 - simplicity,
-you may decide to use it one way or another.
+you may decide to use it one way or another. This approach can be also helpful to classical state-based approach. Read more in [How events can help in making the state-based approach efficient](/pl/ow_events_can_help_on_making_state_based_approach_efficient).
 
 I encourage you to try those different styles and play with them. An excellent way for that is the [Event Sourcing self-paced kit](/pl/introduction_to_event_sourcing/) that I prepared for you.
 

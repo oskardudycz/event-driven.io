@@ -769,6 +769,8 @@ See, besides going a bit wild with command handling definition, we just used sim
 
 I encourage you to play with that and get your own opinion. Source codes are available here: https://github.com/oskardudycz/EventSourcing.NodeJS/pull/21.
 
+This approach can be also helpful to classical state-based approach. Read more in [How events can help in making the state-based approach efficient](/pl/ow_events_can_help_on_making_state_based_approach_efficient).
+
 Cheers!
 
 Oskar
