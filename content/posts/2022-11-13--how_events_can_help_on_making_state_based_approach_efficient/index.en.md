@@ -120,7 +120,7 @@ class MongoDbRepository<T extends Document & { _id: ObjectId }>
 
 Some may say that's too many abstractions, and I could _yessir_ to that. Still, the worst part is that **we're doing the lowest common denominator by not benefiting from the storage capabilities**. 
 
-MongoDB has a sweet set of atomic operations you can apply to the document. You can update a subset of properties, increment values, and nested arrays. **You can do upserts and modify the whole document.** This is not so common for [key-value databases](/en/key-value-stores/). It's fine to keep documents a bit bigger, denormalised and use the same document for writing and read models by just querying for a subset of information. We're not getting a big penalty hit if we're doing atomic operations. Having that, loading and updating the whole document each time is overkill.
+MongoDB has a sweet set of atomic operations you can apply to the document. You can update a subset of properties, increment values, and nested arrays without modifying the whole document. This is not so common for [key-value databases](/en/key-value-stores/). It's fine to keep documents a bit bigger, denormalised and use the same document for write and read models by just querying for a subset of information. We're not getting a big penalty hit if we're doing atomic operations. Having that, loading and updating the whole document each time is overkill.
 
 Let's say that we [applied transformations explained in the aforementioned article](/en/slim_your_entities_with_event_sourcing/) and ended up with a similar model to the one presented in [Straightforward Event Sourcing with TypeScript and NodeJS](/en/type_script_node_Js_event_sourcing/).
 
