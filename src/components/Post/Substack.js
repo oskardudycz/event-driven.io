@@ -9,7 +9,7 @@ const Substack = () => {
         <div className="substack-legend">
           <b>👋 If you found this article helpful</b> and want to get notification about the next one, <b>subscribe to Architecture Weekly.</b>
           <br /><br />
-          <b>✉️ Join over 1500 subscribers</b>, get the best resources to boost your skills, and stay updated with Software Architecture trends!
+          <b>✉️ Join over 1800 subscribers</b>, get the best resources to boost your skills, and stay updated with Software Architecture trends!
           <br /><br />
         </div>
         <iframe
