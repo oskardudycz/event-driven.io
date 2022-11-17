@@ -26,6 +26,7 @@ module.exports = {
   socialLinks: {
     github: { url: "https://github.com/oskardudycz" },
     twitter: { url: "https://twitter.com/oskar_at_net" },
+    mastodon: { url: "https://fosstodon.org/@oskardudycz" },
     facebook: { url: "https://www.facebook.com/Oskar.At.NET" },
     youtube: { url: "https://www.youtube.com/channel/UC3M4_OgJS4lvZHVDzkOlxIg" },
     linkedin: { url: "https://www.linkedin.com/in/oskardudycz/" },

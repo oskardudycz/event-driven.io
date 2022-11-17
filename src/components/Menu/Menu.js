@@ -10,6 +10,7 @@ import {
   FaMicrophone,
   FaRss,
   FaTwitter,
+  FaMastodon,
   FaYoutube,
   FaUserGraduate
 } from "react-icons/fa/";
@@ -46,6 +47,7 @@ class Menu extends React.Component {
 
       { to: config.socialLinks.twitter.url, icon: FaTwitter },
       { to: config.socialLinks.github.url, icon: FaGithub },
+      { to: config.socialLinks.mastodon.url, icon: FaMastodon },
       { to: config.socialLinks.youtube.url, icon: FaYoutube },
       { to: config.socialLinks.linkedin.url, icon: FaLinkedin },
       { to: config.socialLinks.facebook.url, icon: FaFacebook },
