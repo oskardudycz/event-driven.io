@@ -271,8 +271,9 @@ Some time ago, I did a [proof of concept using Debezium to forward events from M
 
 I started to play with logical replication, and this article summarises my current findings. You can find more in my [GitHub repository](https://github.com/oskardudycz/PostgresOutboxPatternWithCDC.NET). I'd like to provide a simple, focused on, append-only outbox solution for .NET. Then do extensive tests to see if I could make it production-ready. Maybe incorporate that in Marten or generalise it into some tool if that works out.
 
+If you're wondering on how existing records will be processed, read more in [How to get all messages through Postgres logical replication](/en/how_to_get_all_messages_through_postgres_logical_replication).
+
 What are the next steps? I need to check:
-- various scenarios like adding replication to the existing table,
 - subscriptions and replies,
 - scenarios around backups and, in general, fault tolerance.
 
