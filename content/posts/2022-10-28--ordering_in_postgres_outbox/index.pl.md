@@ -17,7 +17,7 @@ Two articles should be enough to exhaust the topic, aye? Let's go deeper and dis
 **Let's say that we'll use the table structure from [the previous article](/pl/push_based_outbox_pattern_with_postgres_logical_replication/):**
 
 ```sql
-CREATE TABLE publications(
+CREATE TABLE outbox(
    -- the autoincremented position of the message to respect the order
    position        BIGSERIAL                 PRIMARY KEY,
    -- this may allow you to partition publications, e.g. per tenant
@@ -155,7 +155,40 @@ Thanks to that, we won't get the "Usain Bolts", so the messages from the transac
 
 If we have a scenario like in the image above, as we have transaction 129 ongoing, then through our query, we'll get record 11, as it was added in transaction no 128. We won't get the record with position 13, as it was added by the transaction that started later than the ongoing one.
 
-It is a much better option than the previous nuke option, as we don't have a performance hit while adding new messages (besides using more data). Our queries may be a bit delayed if our transactions last long, so we should ensure they're processed quickly. Nevertheless, this is something that we should always strive for.
+It looks good enough, but let's discuss one more scenario. Let's say that we have the same set of transactions again. Yet, this time 128, so the earliest one finished first. Still, it got the global position later than the still active 129.
+
+![11](2022-10-28-11.png)
+
+If we query now using the sequence number to filter out already processed records, we'll lose the message from transaction 129. It has a smaller number (11) than the one processed in transaction 128 (12).
+
+![11](2022-10-28-11.png)
+
+To solve that, the only option we have is to filter by the transaction id instead of the global position. We're benefiting from the fact that a transaction id is a monotonic number. 
+
+![12](2022-10-28-13.png)
+
+This filter will give us a guarantee of not losing any messages. It is a much better option than the previous nuke option, as we don't have a performance hit while adding new messages (besides using more data). Our queries may be a bit delayed if our transactions last long, so we should ensure they're processed quickly. Worth noting is that our ordering guarantee respects when the transaction was started, not when the message was appended. That should be fine for most cases, but in some edge cases, it may create problems if forgotten.
+
+The last thing to mention is that one transaction can append more than one message. In that case, we would only like to be polling the same message once (e.g. in case of retry). The final SQL query to respect this would be:
+
+```sql
+SELECT 
+     position, message_id, message_type, data
+FROM
+     outbox
+WHERE
+     (
+          (transaction_id = last_processed_transaction_id
+               AND position > last_processed_position)
+          OR
+          (transaction_id > last_processed_transaction_id)
+     )
+     AND transaction_id < pg_snapshot_xmin(pg_current_snapshot())
+ORDER BY
+    transaction_id ASC,
+    position ASC
+LIMIT 100;
+```
 
 To sum up, as always, the devil lies in details. Good and useful patterns are not always easy to implement. We should always ensure that we defined our expected guarantees upfront and that they're matched. But hey, isn't that what we're getting paid for?
 
