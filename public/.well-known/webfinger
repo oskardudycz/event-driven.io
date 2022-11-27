@@ -1,1 +1,23 @@
-{"subject":"acct:oskardudycz@fosstodon.org","aliases":["https://fosstodon.org/@oskardudycz","https://fosstodon.org/users/oskardudycz"],"links":[{"rel":"http://webfinger.net/rel/profile-page","type":"text/html","href":"https://fosstodon.org/@oskardudycz"},{"rel":"self","type":"application/activity+json","href":"https://fosstodon.org/users/oskardudycz"},{"rel":"http://ostatus.org/schema/1.0/subscribe","template":"https://fosstodon.org/authorize_interaction?uri={uri}"}]}
+{
+  "subject": "acct:oskardudycz@hachyderm.io",
+  "aliases": [
+    "https://hachyderm.io/@oskardudycz",
+    "https://hachyderm.io/users/oskardudycz"
+  ],
+  "links": [
+    {
+      "rel": "http://webfinger.net/rel/profile-page",
+      "type": "text/html",
+      "href": "https://hachyderm.io/@oskardudycz"
+    },
+    {
+      "rel": "self",
+      "type": "application/activity+json",
+      "href": "https://hachyderm.io/users/oskardudycz"
+    },
+    {
+      "rel": "http://ostatus.org/schema/1.0/subscribe",
+      "template": "https://hachyderm.io/authorize_interaction?uri={uri}"
+    }
+  ]
+}
