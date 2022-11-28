@@ -9,7 +9,7 @@ author: oskar dudycz
 
 **Events are an essential block of Event-Driven Architecture. They represent business facts that happened in our system.** We can use them to integrate business workflow steps, store them to use them later in our business logic, or get insights about our process. They’re both business concepts representing the checkpoints of our workflow, and technical messages changed back and forth into a series of ones and zeros. This process is called (de)serialisation. We have plenty of options to choose from in serialisation formats. The major split is for text-based and binary formats. Text-based are, e.g. JSON and XML. Their advantage is that you can read them in any text editor, are (more or less) human-readable, popular and have much tooling around them; they’re also standardised. Yet, they have flaws, like the inability to easily express precise numeric, date and time formats; they take more space. That’s where binary formats can help. The most popular are [Protobuf](https://developers.google.com/protocol-buffers) and [Avro]( https://avro.apache.org/).
 
-**No matter your choice, you’ll still need to define the mapping between the code type representing your event and serialised message.** This part is also essential in maintaining the evolution/versioning of events. I wrote about that in my other articles: [Simple patterns for events schema versioning](/en/simple_events_versioning_patterns/), [Event Versioning with Marten](/en/event_versioning_with_marten/).
+**No matter your choice, you’ll still need to define the mapping between the code type representing your event and serialised message.** This part is also essential in maintaining the evolution/versioning of events. I wrote about that in my other articles: [Simple patterns for events schema versioning](/en/simple_events_versioning_patterns/) and [Event Versioning with Marten](/en/event_versioning_with_marten/). Check also Greg Young book [Versioning in an Event Sourced System](https://leanpub.com/esversioning/read).
 
 **When serialising type to bytes, you need to store the type name. You can do that explicitly by manually defining mapping or using a convention-based approach.** Both have pros and cons. Manual can be a bit repetitive and yet another thing to remember. Convention-based is more magical, and if we forget how it works, then surprisingly, we can break our mapping. How? The most straightforward approach in languages like C# or Java is to use the full class name.  We can get the text name from our event class. It contains both namespace/package paths so that we won’t mistake it with other events named the same but in different locations. Yet, if we’re refactoring and moving code from one place to another or fixing an accidental typo, we can change the event type name. Once we did that, our mapping was broken, as the stored event type name won’t match the new location.
 
@@ -22,8 +22,8 @@ public class EventTypeMapper
 {
     private static readonly EventTypeMapper Instance = new();
 
-    private readonly Dictionary<string, Type?> typeMap = new();
-    private readonly Dictionary<Type, string> typeNameMap = new();
+    private readonly ConcurrentDictionary<string, Type?> typeMap = new();
+    private readonly ConcurrentDictionary<Type, string> typeNameMap = new();
 }
 ```
 We also defined a singleton instance, as we’d like to have it as a global store to increase the performance (read more in [Memoization, a useful pattern for quick optimization](/en/memoization_a_useful_pattern_for_quick_optimisation/)).
@@ -34,12 +34,15 @@ As I mentioned, we’d like to have option to define the custom, explicit mappin
 public class EventTypeMapper
 {
     // (…)
-    public static void AddCustomMap<T>(string mappedEventTypeName) => AddCustomMap(typeof(T), mappedEventTypeName);
+    public static void AddCustomMap<T>(string mappedEventTypeName) =>
+        AddCustomMap(typeof(T), mappedEventTypeName);
 
     public static void AddCustomMap(Type eventType, string mappedEventTypeName)
     {
-        Instance.typeNameMap[eventType] = mappedEventTypeName;
-        Instance.typeMap[mappedEventTypeName] = eventType;
+        Instance.typeNameMap
+            .AddOrUpdate(eventType, mappedEventTypeName, (_, _) => mappedEventTypeName);
+        Instance.typeMap
+            .AddOrUpdate(mappedEventTypeName, eventType, (_, _) => eventType);
     }
 }
 ``` 
@@ -53,32 +56,31 @@ public class EventTypeMapper
     // (…)
     public static string ToName<TEventType>() => ToName(typeof(TEventType));
 
-    public static string ToName(Type eventType)
-    {
-        if (Instance.typeNameMap.ContainsKey(eventType))
-            return Instance.typeNameMap[eventType];
+    public static string ToName(Type eventType) =>
+        Instance.typeNameMap.GetOrAdd(eventType, _ =>
+        {
+            var eventTypeName = eventType.FullName!;
 
-        var eventTypeName = eventType.FullName!;
+            Instance.typeMap
+                .AddOrUpdate(eventTypeName, eventType, (_, _) => eventType);
 
-        Instance.typeMap[eventTypeName] = eventType;
+            return eventTypeName;
+        });
 
-        return eventTypeName;
-    }
+    public static Type? ToType(string eventTypeName) => 
+        Instance.typeMap.GetOrAdd(eventTypeName, _ =>
+        {
+            var type = 
+                GetFirstMatchingTypeFromCurrentDomainAssembly(eventTypeName);
 
-    public static Type? ToType(string eventTypeName)
-    {
-        if (Instance.typeMap.ContainsKey(eventTypeName))
-            return Instance.typeMap[eventTypeName];
+            if (type == null)
+                return null;
 
-        var type = GetFirstMatchingTypeFromCurrentDomainAssembly(eventTypeName);
+            Instance.typeNameMap
+                .AddOrUpdate(type, eventTypeName, (_, _) => eventTypeName);
 
-        if (type == null)
-            return null;
-
-        Instance.typeNameMap[type] = eventTypeName;
-
-        return type;
-    }
+            return type;
+        });
 
     private static Type? GetFirstMatchingTypeFromCurrentDomainAssembly(string typeName) =>
         AppDomain.CurrentDomain.GetAssemblies()
@@ -89,7 +91,67 @@ public class EventTypeMapper
 }
 ```
 
-**The logic for mapping is simple, we’re either using already existing one or trying to resolve type by convention.** _GetFirstMatchingTypeFromCurrentDomainAssembly_ method is responsible for that. We can define any other convention if we’d like to.
+**The logic for mapping is simple, we’re either using already existing one or trying to resolve type by convention.** _GetFirstMatchingTypeFromCurrentDomainAssembly_ method is responsible for that. We can define any other convention if we’d like to. I'm using _ConcurrentDictionary_ instead of regular _Dictionary_ to make operations [Thread safe](https://learn.microsoft.com/en-us/dotnet/api/system.collections.concurrent.concurrentdictionary-2?view=net-7.0#thread-safety).
+
+Note that the _GetFirstMatchingTypeFromCurrentDomainAssembly_ is an expensive operation that will be called for each event type. Yet, it will be only called once, then resolved type will be cached, and you won't get further performance hits.  If you're afraid of that and know the event types upfront, then you can preload types at the startup. If you're in the .NET space, you can also consider using [ImHashMap](https://github.com/dadhi/ImTools) which is also thread safe and much faster than regular _ConcurrentDictionary_.
+
+The final mapper class will look as follow:
+
+```csharp
+public class EventTypeMapper
+{
+    private static readonly EventTypeMapper Instance = new();
+
+    private readonly ConcurrentDictionary<string, Type?> typeMap = new();
+    private readonly ConcurrentDictionary<Type, string> typeNameMap = new();
+    
+    public static void AddCustomMap<T>(string mappedEventTypeName) =>
+        AddCustomMap(typeof(T), mappedEventTypeName);
+
+    public static void AddCustomMap(Type eventType, string mappedEventTypeName)
+    {
+        Instance.typeNameMap
+            .AddOrUpdate(eventType, mappedEventTypeName, (_, _) => mappedEventTypeName);
+        Instance.typeMap
+            .AddOrUpdate(mappedEventTypeName, eventType, (_, _) => eventType);
+    }
+
+    public static string ToName<TEventType>() => ToName(typeof(TEventType));
+
+    public static string ToName(Type eventType) =>
+        Instance.typeNameMap.GetOrAdd(eventType, _ =>
+        {
+            var eventTypeName = eventType.FullName!;
+
+            Instance.typeMap
+                .AddOrUpdate(eventTypeName, eventType, (_, _) => eventType);
+
+            return eventTypeName;
+        });
+
+    public static Type? ToType(string eventTypeName) => 
+        Instance.typeMap.GetOrAdd(eventTypeName, _ =>
+        {
+            var type = 
+                GetFirstMatchingTypeFromCurrentDomainAssembly(eventTypeName);
+
+            if (type == null)
+                return null;
+
+            Instance.typeNameMap
+                .AddOrUpdate(type, eventTypeName, (_, _) => eventTypeName);
+
+            return type;
+        });
+
+    private static Type? GetFirstMatchingTypeFromCurrentDomainAssembly(string typeName) =>
+        AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(a => a.GetTypes()
+                .Where(x => x.AssemblyQualifiedName == typeName || x.FullName == typeName || x.Name == typeName)
+            )
+            .FirstOrDefault();
+}
+```
 
 In Java, we could define that accordingly:
 
