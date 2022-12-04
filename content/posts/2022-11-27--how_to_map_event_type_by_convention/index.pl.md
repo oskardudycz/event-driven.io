@@ -21,7 +21,7 @@ Of course, we can fix it by introducing manual mapping and telling our mapping l
 ```csharp
 public class EventTypeMapper
 {
-    private static readonly EventTypeMapper Instance = new();
+    public static readonly EventTypeMapper Instance = new();
 
     private readonly ConcurrentDictionary<string, Type?> typeMap = new();
     private readonly ConcurrentDictionary<Type, string> typeNameMap = new();
@@ -35,15 +35,13 @@ As I mentioned, we’d like to have option to define the custom, explicit mappin
 public class EventTypeMapper
 {
     // (…)
-    public static void AddCustomMap<T>(string mappedEventTypeName) =>
-        AddCustomMap(typeof(T), mappedEventTypeName);
+    public void AddCustomMap<T>(string eventTypeName) => 
+        AddCustomMap(typeof(T), eventTypeName);
 
-    public static void AddCustomMap(Type eventType, string mappedEventTypeName)
+    public void AddCustomMap(Type eventType, string eventTypeName)
     {
-        Instance.typeNameMap
-            .AddOrUpdate(eventType, mappedEventTypeName, (_, _) => mappedEventTypeName);
-        Instance.typeMap
-            .AddOrUpdate(mappedEventTypeName, eventType, (_, _) => eventType);
+        typeNameMap.AddOrUpdate(eventType, eventTypeName, (_, typeName) => typeName);
+        typeMap.AddOrUpdate(eventTypeName, eventType, (_, type) => type);
     }
 }
 ``` 
@@ -55,33 +53,28 @@ How to define the resolution methods? We can do it like that:
 public class EventTypeMapper
 {
     // (…)
-    public static string ToName<TEventType>() => ToName(typeof(TEventType));
+    public string ToName<TEventType>() => ToName(typeof(TEventType));
 
-    public static string ToName(Type eventType) =>
-        Instance.typeNameMap.GetOrAdd(eventType, _ =>
-        {
-            var eventTypeName = eventType.FullName!;
+    public string ToName(Type eventType) => typeNameMap.GetOrAdd(eventType, _ =>
+    {
+        var eventTypeName = eventType.FullName!;
 
-            Instance.typeMap
-                .AddOrUpdate(eventTypeName, eventType, (_, _) => eventType);
+        typeMap.TryAdd(eventTypeName, eventType);
 
-            return eventTypeName;
-        });
+        return eventTypeName;
+    });
 
-    public static Type? ToType(string eventTypeName) => 
-        Instance.typeMap.GetOrAdd(eventTypeName, _ =>
-        {
-            var type = 
-                GetFirstMatchingTypeFromCurrentDomainAssembly(eventTypeName);
+    public Type? ToType(string eventTypeName) => typeMap.GetOrAdd(eventTypeName, _ =>
+    {
+        var type = GetFirstMatchingTypeFromCurrentDomainAssembly(eventTypeName);
 
-            if (type == null)
-                return null;
+        if (type == null)
+            return null;
 
-            Instance.typeNameMap
-                .AddOrUpdate(type, eventTypeName, (_, _) => eventTypeName);
+        typeNameMap.TryAdd(type, eventTypeName);
 
-            return type;
-        });
+        return type;
+    });
 
     private static Type? GetFirstMatchingTypeFromCurrentDomainAssembly(string typeName) =>
         AppDomain.CurrentDomain.GetAssemblies()
@@ -101,56 +94,42 @@ The final mapper class will look as follow:
 ```csharp
 public class EventTypeMapper
 {
-    private static readonly EventTypeMapper Instance = new();
+    public static readonly EventTypeMapper Instance = new();
 
     private readonly ConcurrentDictionary<string, Type?> typeMap = new();
     private readonly ConcurrentDictionary<Type, string> typeNameMap = new();
-    
-    public static void AddCustomMap<T>(string mappedEventTypeName) =>
-        AddCustomMap(typeof(T), mappedEventTypeName);
 
-    public static void AddCustomMap(Type eventType, string mappedEventTypeName)
+    public void AddCustomMap<T>(string eventTypeName) => 
+        AddCustomMap(typeof(T), eventTypeName);
+
+    public void AddCustomMap(Type eventType, string eventTypeName)
     {
-        Instance.typeNameMap
-            .AddOrUpdate(eventType, mappedEventTypeName, (_, _) => mappedEventTypeName);
-        Instance.typeMap
-            .AddOrUpdate(mappedEventTypeName, eventType, (_, _) => eventType);
+        typeNameMap.AddOrUpdate(eventType, eventTypeName, (_, typeName) => typeName);
+        typeMap.AddOrUpdate(eventTypeName, eventType, (_, type) => type);
     }
 
-    public static string ToName<TEventType>() => ToName(typeof(TEventType));
+    public string ToName<TEventType>() => ToName(typeof(TEventType));
 
-    public static string ToName(Type eventType) =>
-        Instance.typeNameMap.GetOrAdd(eventType, _ =>
-        {
-            var eventTypeName = eventType.FullName!;
+    public string ToName(Type eventType) => typeNameMap.GetOrAdd(eventType, _ =>
+    {
+        var eventTypeName = eventType.FullName!;
 
-            Instance.typeMap
-                .AddOrUpdate(eventTypeName, eventType, (_, _) => eventType);
+        typeMap.TryAdd(eventTypeName, eventType);
 
-            return eventTypeName;
-        });
+        return eventTypeName;
+    });
 
-    public static Type? ToType(string eventTypeName) => 
-        Instance.typeMap.GetOrAdd(eventTypeName, _ =>
-        {
-            var type = 
-                GetFirstMatchingTypeFromCurrentDomainAssembly(eventTypeName);
+    public Type? ToType(string eventTypeName) => typeMap.GetOrAdd(eventTypeName, _ =>
+    {
+        var type = TypeProvider.GetFirstMatchingTypeFromCurrentDomainAssembly(eventTypeName);
 
-            if (type == null)
-                return null;
+        if (type == null)
+            return null;
 
-            Instance.typeNameMap
-                .AddOrUpdate(type, eventTypeName, (_, _) => eventTypeName);
+        typeNameMap.TryAdd(type, eventTypeName);
 
-            return type;
-        });
-
-    private static Type? GetFirstMatchingTypeFromCurrentDomainAssembly(string typeName) =>
-        AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(a => a.GetTypes()
-                .Where(x => x.AssemblyQualifiedName == typeName || x.FullName == typeName || x.Name == typeName)
-            )
-            .FirstOrDefault();
+        return type;
+    });
 }
 ```
 
@@ -196,37 +175,21 @@ We can use such a mapper directly in the serialiser:
 ```csharp
 public class EventSerializer
 {
-    private readonly EventTypeMapping mapping;
-    private readonly EventTransformations transformations;
+    private readonly EventTypeMapper eventTypeMapper;
 
-    public EventSerializer(EventTypeMapping mapping, EventTransformations transformations)
-    {
-        this.mapping = mapping;
-        this.transformations = transformations;
-    }
+    public EventSerialiser(EventTypeMapper eventTypeMapper) =>
+        this.eventTypeMapper = eventTypeMapper;
 
-    public object? Deserialize(string eventTypeName, string json) =>
-        transformations.TryTransform(eventTypeName, json, out var transformed)
-            ? transformed
-            : JsonSerializer.Deserialize(json, mapping.Map(eventTypeName));
-}
-```
-
-You can use those classes in a serialiser as follows.
-
-```csharp
-public class EventSerializer
-{
     public (string, string) Serialize<T>(T @event)
     {
-        var typeName = EventTypeMapper.ToName<T>();
+        var typeName = eventTypeMapper.ToName<T>();
 
         return (typeName, JsonSerializer.Serialize(@event));
     }
     
     public object? Deserialize(string eventTypeName, string json)
     {
-        var type = EventTypeMapper.ToType(eventTypeName);
+        var type = eventTypeMapper.ToType(eventTypeName);
 
         if (type == null)
             throw new InvalidOperationException();
@@ -236,7 +199,7 @@ public class EventSerializer
 }
 ```
 
-Is it the best approach? It depends on personal preferences. My experience is that tedious, repetitive code leads to stupid mistakes. A bit of magic can create bugs that are harder to find, so you need to pick your poison. What’s most important is that such mapping is not blocking you in any way from changing your approach in the future.
+**Is it the best approach?** It depends on personal preferences. My experience is that tedious, repetitive code leads to stupid mistakes. A bit of magic can create bugs that are harder to find, so you need to pick your poison. What’s most important is that such mapping is not blocking you in any way from changing your approach in the future.
 
 If you don’t like magic, I’ll cover full-explicit mode in the next article.
 
