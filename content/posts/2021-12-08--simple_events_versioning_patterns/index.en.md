@@ -368,7 +368,7 @@ var mapping = new EventTypeMapping()
     );
 ```
 
-It's the most straightforward wrapper that requires manual mapping for all the event types, but it benefits from being explicit and less error-prone. For the convention-based mapper, there is a risk that refactoring accidentally changes the event type name stored in the event store. Still, a viable option is a mixed solution. See example of such approch in [my repository](https://github.com/oskardudycz/EventSourcing.NetCore/tree/main/Core/Events/EventTypeMapper.cs)
+It's the most straightforward wrapper that requires manual mapping for all the event types, but it benefits from being explicit and less error-prone. For the convention-based mapper, there is a risk that refactoring accidentally changes the event type name stored in the event store. Still, a viable option is a mixed solution. Read also more in [Mapping event type by convention](/en/how_to_map_event_type_by_convention/) or see example of such approch in [my repository](https://github.com/oskardudycz/EventSourcing.NetCore/tree/main/Core/Events/EventTypeMapper.cs). 
 
 Having those classes, we can define the final deserialisation logic.
 
