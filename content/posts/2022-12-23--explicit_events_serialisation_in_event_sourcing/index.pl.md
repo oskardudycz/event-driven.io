@@ -14,7 +14,7 @@ useDefaultLangCanonical : true
 
 I wrote already about [simple patterns for events schema versioning](/en/simple_events_versioning_patterns/). I explained [why the best way of doing event versioning is not having the need for that](/en/how_to_do_event_versioning/). I also presented [how to do versioning in Marten](/en/event_versioning_with_marten/). In the last article, I showed [mapping event type by convention](/en/how_to_map_event_type_by_convention/). I'll show you how and when it may be worth serialising explicit events this time.
 
-**Conventional mapping can take you far if you have a set of basic conventions and serialiser that can do a lot.** In many languages like C#, Java serialisers can go pretty wild and do advanced mappings. That's quite powerful as long as you obey the rules. Creator rules. That's fine until you'll try to do something a bit unusual. 
+**Conventional mapping can take you far if you have a set of basic conventions and serialiser that can do a lot.** In many languages, like C# or Java, serialisers can go pretty wild and do advanced mappings. That's quite powerful as long as you obey the rules. Creator rules. That's fine until you'll try to do something a bit unusual. 
 
 **What can unusual mean in this context?** For instance: building a complex type system instead of just using primitives. Or: connecting evolved type structure to the old event payload.
 

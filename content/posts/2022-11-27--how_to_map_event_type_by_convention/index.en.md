@@ -200,7 +200,7 @@ public class EventSerializer
 
 **Is it the best approach?** It depends on personal preferences. My experience is that tedious, repetitive code leads to stupid mistakes. A bit of magic can create bugs that are harder to find, so you need to pick your poison. What’s most important is that such mapping is not blocking you in any way from changing your approach in the future.
 
-If you don’t like magic, I’ll cover full-explicit mode in the next article.
+If you don’t like such magic, check [Explicit events serialisation in Event Sourcing](/en/explicit_events_serialisation_in_event_sourcing/).
 
 
 Cheers!
