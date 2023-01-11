@@ -10,7 +10,7 @@ useDefaultLangCanonical : true
 
 In the traditional approach, what we get is what we store. Our write model is too often used directly as our read model, because the typical set of functionality in a system has a details view that exposes it all. Based on that, the user makes decisions and indicates the desired updates. Depending on how CRUDish is our preference, we either have a single update or a set of business operations.
 
-Let's say that we're modelling the shopping cart aggregate known from [the previous post](/pl/introduction_to_event_sourcing/). We have the following requirements:
+Let's say that we're modelling the shopping cart aggregate known from [the previous post](/pl/how_to_effectively_compose_your_business_logic/). We have the following requirements:
 
 1. The customer may only add a product to the shopping cart after opening it.
 2. When selecting and adding a product to the basket customer needs to provide the quantity chosen. The system calculates the product price based on the current price list.
