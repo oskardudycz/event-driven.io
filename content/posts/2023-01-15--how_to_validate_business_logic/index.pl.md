@@ -8,7 +8,7 @@ useDefaultLangCanonical : true
 
 ![cover](2023-01-15-cover.jpg)
 
-**Fox Mulder used to say: "trust no one".** 
+**Fox Mulder got advice: "trust no one".** 
 
 I'm claiming that each software developer should define their level of paranoia.
 
@@ -36,7 +36,8 @@ If we should trust no one, then how do we live? We have to trust someone. We can
 
 My general flow is as follows:
 
-1. **I make API request classes as plain objects using primitives.** I assume that I can get anything, null, invalid format, everything can be wrong. I try to [parse, don't validate](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/). The task of such a class is to translate the data from the request to the instance of the class. I usually keep such a class directly in an API project. It may look as follows in C#
+## 1. I make API request classes as plain objects using primitives.
+I assume that I can get anything, null, invalid format, everything can be wrong. I try to [parse, don't validate](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/). The task of such a class is to translate the data from the request to the instance of the class. I usually keep such a class directly in an API project. It may look as follows in C#
 
 ```csharp
 public record AddProductRequest(
@@ -45,7 +46,8 @@ public record AddProductRequest(
 );
 ```
 
-2. **Having parsed the request, I'm mapping it to the real contract (e.g. command or query).** This contract already comes from the domain module. This is where the element of trust comes in. I can trust this code, as I'm instantiating in my code, plus I'm also responsible for defining how to do it. I'm usually creating a static factory method and am not shy to use [value objects](/pl/immutable_value_objects/) here to enforce semantic validation. The mapping code could look like:
+## 2. Having parsed the request, I'm mapping it to the real contract (e.g. command or query).
+This contract already comes from the domain module. This is where the element of trust comes in. I can trust this code, as I'm instantiating in my code, plus I'm also responsible for defining how to do it. I'm usually creating a static factory method and am not shy to use [value objects](/pl/immutable_value_objects/) here to enforce semantic validation. The mapping code could look like:
 
 ```csharp
  var command = AddProduct.From(
@@ -114,7 +116,8 @@ You may also notice that I've used [records types](/pl/notes_about_csharp_record
 
 You can also consider doing [explicit deserialisation](/pl/explicit_events_serialisation_in_event_sourcing/).
 
-3. **Proper domain validation should be done in business logic.** That's why I like CQRS. Thanks to CQRS, we know that a specific handler will execute the command. Business logic will be routed to a particular function or aggregate method. If we are to change the rule, we don't have to look at the whole code with unsteady eyes. For example, it is worth validating in the command whether the end date is later than the start date, but I suggest checking if the dates are greater than today's date in business logic. Example:
+## 3. Proper domain validation should be done in business logic.
+That's why I like CQRS. Thanks to CQRS, we know that a specific handler will execute the command. Business logic will be routed to a particular function or aggregate method. If we are to change the rule, we don't have to look at the whole code with unsteady eyes. For example, it is worth validating in the command whether the end date is later than the start date, but I suggest checking if the dates are greater than today's date in business logic. Example:
 
 ```csharp
 public class ShoppingCart: Aggregate
