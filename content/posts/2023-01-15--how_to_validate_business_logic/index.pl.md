@@ -6,7 +6,7 @@ author: oskar dudycz
 useDefaultLangCanonical : true
 ---
 
-![cover](2022-12-29-cover.jpg)
+![cover](2023-01-15-cover.jpg)
 
 **Fox Mulder used to say: "trust no one".** 
 
