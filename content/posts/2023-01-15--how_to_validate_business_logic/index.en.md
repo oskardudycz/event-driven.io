@@ -66,7 +66,7 @@ public record AddProduct(
     ProductItem ProductItem
 )
 {
-    public static AddProduct Create(Guid cartId, ProductItem productItem)
+    public static AddProduct From(Guid cartId, ProductItem productItem)
     {
         if (cartId == Guid.Empty)
             throw new ArgumentOutOfRangeException(nameof(cartId));
@@ -105,7 +105,7 @@ public record ProductItem
 
 As with everything, this pattern also has its name [Smart Constructor](https://wiki.haskell.org/Smart_constructors). It comes from functional programming, but as you see, even in the imperative world, it makes a lot of sense.
 
-**After creating a command or query instance, we know it's correct.** By _correct_, I mean that it fulfils the basic assumptions like: all required fields have assigned values, fields have correct types, validations like start date is earlier than end date, etc. It is crucial not to do sophisticated domain logic validation here but semantic one.
+**After creating a command or query instance, we know it's correct.** By _correct_, I mean that it fulfils the basic assumptions like: all required fields have assigned values, fields have correct types, validations like product item quantity is positive, etc. It is crucial not to do sophisticated domain logic validation here but semantic one.
 
 You may also notice that I've used [records types](/en/notes_about_csharp_records_and_nullable_reference_types/). That means that instances of these classes will be immutable. Most languages nowadays allow defining such structures, e.g. [Java also has records](https://openjdk.org/jeps/395), TypesScript [readonly types](https://www.typescriptlang.org/docs/handbook/utility-types.html#readonlytype) and functional languages have that by default. Why is it so important? 
 
@@ -116,7 +116,7 @@ You may also notice that I've used [records types](/en/notes_about_csharp_record
 You can also consider doing [explicit deserialisation](/en/explicit_events_serialisation_in_event_sourcing/).
 
 ## 3. Proper domain validation should be done in business logic.
-That's why I like CQRS. Thanks to CQRS, we know that a specific handler will execute the command. Business logic will be routed to a particular function or aggregate method. If we are to change the rule, we don't have to look at the whole code with unsteady eyes. For example, it is worth validating in the command whether the end date is later than the start date, but I suggest checking if the dates are greater than today's date in business logic. Example:
+That's why I like CQRS. Thanks to CQRS, we know that a specific handler will execute the command. Business logic will be routed to a particular function or aggregate method. If we are to change the rule, we don't have to look at the whole code with unsteady eyes. For example, it is worth validating in the command whether the quantity is positive, but all the others, like checking if there are enough product items in the cart or should be made in the business logic. Example:
 
 ```csharp
 public class ShoppingCart: Aggregate
@@ -151,9 +151,46 @@ public class ShoppingCart: Aggregate
             existingProductItem.MergeWith(newProductItem)
         );
     }
+
+    public void RemoveProduct(
+        PricedProductItem productItemToBeRemoved)
+    {
+        if(Status != ShoppingCartStatus.Pending)
+            throw new InvalidOperationException($"Removing product from the cart in '{Status}' status is not allowed.");
+
+        var existingProductItem = FindProductItemMatchingWith(productItemToBeRemoved);
+
+        if (existingProductItem is null)
+            throw new InvalidOperationException($"Product with id `{productItemToBeRemoved.ProductId}` and price '{productItemToBeRemoved.UnitPrice}' was not found in cart.");
+
+        if(!existingProductItem.HasEnough(productItemToBeRemoved.Quantity))
+            throw new InvalidOperationException($"Cannot remove {productItemToBeRemoved.Quantity} items of Product with id `{productItemToBeRemoved.ProductId}` as there are only ${existingProductItem.Quantity} items in card");
+
+        if (existingProductItem.HasTheSameQuantity(productItemToBeRemoved))
+        {
+            ProductItems.Remove(existingProductItem);
+            return;
+        }
+
+        ProductItems.Replace(
+            existingProductItem,
+            existingProductItem.Subtract(productItemToBeRemoved)
+        );
+    }
+
+    // (...)
+}
 ```
 
-**Summing up. Being more explicit may seem a bit redundant at first, but thanks to that:**
+The other story is whether to throw exceptions in business logic. That's highly dependent on the technology you use, team experience and preferences. I'll expand on that in the dedicated post, but for now, I recommend following the conventions and capabilities of your coding environment.
+
+If you're coding in functional programming, Go, or Rust, you won't throw exceptions too much. You'll likely use exceptions if you're into C# or Java. Why? I wrote about it longer in [Union types in C#](/en/union_types_in_csharp/). If you're into swiss-scissor language like TypeScript, you might do one or another. 
+
+The most important thing is to refrain from fighting the language and local conventions because code created that way will be hard to maintain and constantly fight with the tooling. It can be beneficial in some scenarios, but I'd try to avoid it as a general approach.
+
+## Summing up
+
+**Being more explicit may seem a bit redundant at first, but thanks to that:**
 - we increase trust and the security of our code,
 - we make changes in the domain code independent of changes in the API,
 - we can cut off edge scenarios one by one: deserialisation, semantic validation of types, and business validation. 
