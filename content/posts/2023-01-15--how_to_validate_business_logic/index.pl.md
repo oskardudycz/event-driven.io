@@ -117,7 +117,7 @@ You may also notice that I've used [records types](/pl/notes_about_csharp_record
 You can also consider doing [explicit deserialisation](/pl/explicit_events_serialisation_in_event_sourcing/).
 
 ## 3. Proper domain validation should be done in business logic.
-That's why I like CQRS. Thanks to CQRS, we know that a specific handler will execute the command. Business logic will be routed to a particular function or aggregate method. If we are to change the rule, we don't have to look at the whole code with unsteady eyes. For example, it is worth validating in the command whether the quantity is positive, but all the others, like checking if there are enough product items in the cart or should be made in the business logic. Example:
+That's why I like CQRS. Thanks to CQRS, we know that a specific handler will execute the command. Business logic will be routed to a particular function or aggregate method. If we are to change the rule, we don't have to look at the whole code with unsteady eyes. For example, it is worth validating in the command whether the quantity is positive, but all the others, like checking if there are enough product items in the cart should be made in the business logic. Example:
 
 ```csharp
 public class ShoppingCart: Aggregate
@@ -188,6 +188,8 @@ The other story is whether to throw exceptions in business logic. That's highly 
 If you're coding in functional programming, Go, or Rust, you won't throw exceptions too much. You'll likely use exceptions if you're into C# or Java. Why? I wrote about it longer in [Union types in C#](/en/union_types_in_csharp/). If you're into swiss-scissor language like TypeScript, you might do one or another. 
 
 The most important thing is to refrain from fighting the language and local conventions because code created that way will be hard to maintain and constantly fight with the tooling. It can be beneficial in some scenarios, but I'd try to avoid it as a general approach.
+
+Also, aggregates are one of many ways to handle business logic. Read more in [How to effectively compose your business logic](/pl/how_to_effectively_compose_your_business_logic/) and [Slim your aggregates with Event Sourcing!](/pl/slim_your_entities_with_event_sourcing/).
 
 ## Summing up
 
