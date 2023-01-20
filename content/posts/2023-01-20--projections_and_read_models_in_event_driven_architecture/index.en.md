@@ -1,205 +1,401 @@
 ---
-title: How to validate business logic
+title: Guide to Projections and Read Models in Event Driven Architecture
 category: "Event Sourcing"
-cover: 2023-01-15-cover.jpg
+cover: 2023-01-20-cover.jpg
 author: oskar dudycz
 ---
 
-![cover](2023-01-15-cover.jpg)
+![cover](2023-01-20-cover.jpg)
 
-**Fox Mulder got advice: "trust no one".** 
+**If I had to choose the killer feature of Event Sourcing, I'd select projections.** Why? I'll explain that in detail in this article.
 
-I'm claiming that each software developer should define their level of paranoia.
+Events are facts; they represent something that has happened in the past. Projections are a different interpretation of the set of facts. Sounds enigmatic? Let's have a look at this picture.
 
-**The thing that we should never trust is the outside world.** At least if we're creating the public API. That includes web requests, messages from the queue, and maybe even data we have in the database.
+![projection](2023-01-20-projection-01.png)
 
-Can we at least trust ourselves? We'll get to that.
+It shows the result of a boxing fight. Even if you're not a boxing fan, you can see that the triumphing guy is Muhammad Ali. Below him lies Sonny Liston. 
 
-**Let's discuss the classical 3-tiered architecture where we have frontend communication with Web API that's interacting with the database.** Let's look at where the data processing pipeline can go wrong:
+Why am I telling you about it? 
 
-1. There was no validation on the frontend, or it didn't check all conditions. We cannot assume that we will be flawless and can standardise everything. The more elements we have in the development pipeline, the greater the chance that our colleagues or we will overlook them.
-2. The API has changed its business logic, and the frontend doesn't know about it yet.
-3. Frontend validation cannot verify some conditions. For instance, whether the product is still in stock or if the user email is unique. Querying the backend to check these conditions is not enough. Why? I explained that in [Tell, don't ask! Or, how to keep an eye on boiling milk](/en/tell_dont_ask_how_to_keep_an_eye_on_boiling_milk/).
-4. Our API is public. Most of the APIs use text-based representations for messages they get. That means anyone can handcraft JSON, XML or plain text and send any data. That means, e.g. empty request, wrong message format (XML instead of JSON), not providing required data, invalid data format (string instead of a number, array instead of single value, etc.).
-5. Someone may deliberately perform a malicious action, e.g. sending invalid requests to break our system or steal data by doing [data scraping](https://en.wikipedia.org/wiki/Data_scraping). Anyone can poke our API with a stick, trying to find holes and extract data by analysing the response.
+**Because it shows pretty well what's an event.** The fight result is a fact. It cannot be retracted. It happened on 25th May 1965, so at a certain point in time. It has specific information about what has happened, like information of:
+- who fought, 
+- that it only lasted 1 minute 44 seconds, 
+- the venue was Central Maine Youth Center in Lewiston, Maine,
+- etc.
 
-Basically, anything can happen. If we don't [form a wall](/en/form_a_wall/), we might get into real trouble.
+**It also shows well what's projection.** The same result of the fight may be interpreted differently: Muhammad is triumphing, Sonny not so much. What's more, to this day, boxing fans are arguing if this was a real fight or a rigged one. The punch knocked down Sonny Liston is known as [phantom punch](https://en.wikipedia.org/wiki/Muhammad_Ali_vs._Sonny_Liston#The_phantom/anchor_punch) as no one saw it reaching Sonny Liston's face.
 
-**The same can be true of a database.** And that's even dangerous, as we believe that it's our data and we have full control. That can catch us off-guard. Both data structure and its meaning evolve with the software's lifetime. Some fields become required, some become obsolete, and some are dropped. We won't be able from the beginning to provide the end solution. Not speaking about the scenario where we have a big ball of mud, and we're integrating multiple modules/services through the database.
+**In projections, we're taking a set of events representing various facts (about the same object, multiple), correlating them and building interpretation.** Most of the time, we store the result as a materialised read model. Yet, the projection result can be anything: email, PDF, etc.
 
-Embracing that the outside world can be evil or just different than we expect is a basis of Ports & Adapters, so [Hexagonal Architecture](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/).
+![projection](2023-01-20-projection-02.png)
 
-Even if you didn't watch X-Files, you should start agreeing with Fox Mulder's conclusion.
+Projections can be built on existing facts. Thus together with data analytics, drilling and handling insights, we got from them. Events are an excellent source for data exploration. For instance, by checking products bought in the e-commerce system, we can find the gaps like abandoned carts, build a recommendation engine, etc. Read more in [Never Lose Data Again - Event Sourcing to the Rescue!](/en/never_lose_data_with_event_sourcing/).
 
-If we should trust no one, then how do we live? We have to trust someone. We can try to trust our own code. Aka, famous last words. Be careful with that. Control is the foundation of trust.
+As mentioned, a single fact can have multiple interpretations; events can be a source of numerous projections. For instance, information about the product added to the shopping cart should update the shopping cart view, product availability, etc.
 
-My general flow is as follows:
+![projection](2023-01-20-projection-04.png)
 
-## 1. I make API request classes as plain objects using primitives.
-I assume that I can get anything, null, invalid format, everything can be wrong. I try to [parse, don't validate](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/). The task of such a class is to translate the data from the request to the instance of the class. I usually keep such a class directly in an API project. It may look as follows in C#
+**The most popular approach to handling them is to perform the so-called _left-fold_ approach.** We're taking the current state of the read model, applying the upcoming event and getting the new state as a result.
+
+![projection](2023-01-20-projection-03.png)
+
+**Of course, nothing stops you from batch processing by taking all the events, merging them and storing the result.** For instance, if you're doing set-based aggregations like the total of sold products, money accrual, and average grades in school, it could be more efficient if done _en masse_.
+
+## Projections can be synchronous and asynchronous
+
+Although most tooling shows that they need eventual consistency, that's incorrect. Their state doesn't have to be updated with a delay. It's a technical _"detail"_ of the exact implementation. If you're storing events and read models in the same relational database (like, e.g. [Marten]() in Postgres), then you can wrap all in a transaction. Then either events are appended and projections updated, or no change is made.
+
+![projection](2023-01-20-projection-05.png)
+
+**Of course, we should not be afraid of eventual consistency.** How soon is now? There's no now! Everything in the real world happens with some delay. Also, if we want to make a reliable and fault-tolerant processing pipeline doing stuff as a background process may be a go-to way. Read more in [Outbox, Inbox patterns and delivery guarantees explained](/en/outbox_inbox_patterns_and_delivery_guarantees_explained/).
+
+**Projections are a concept that's part of Event-Driven Architecture and essential building block of [CQRS](/en/cqrs_facts_and_myths_explained/). They're not tight to Event Sourcing.** Yet, event stores can help you in making them efficient. Most of the time, they allow you to subscribe to the appended events notifications, for instance, [Marten's Async Daemon](/en/integrating_Marten/) or [EventStoreDB subscriptions](/en/persistent_vs_catch_up_eventstoredb_subscriptions_in_action/). They are an [outbox pattern](/en/push_based_outbox_pattern_with_postgres_logical_replication/) provided as a commodity by the database. That gives both durabilities for the events and strong guarantees around processing them.
+
+![projection](2023-01-20-projection-06.png)
+
+## Projections rebuild
+
+**The significant benefit of the projections is that they're predictable.**  That means that the same logic will generate the same result for the same events.
+
+**As events are our source of truth, then we can think of read models as secondary data.** If we treat events as the source of truth and base projection processing only on data we get from them, we can also rebuild our read models. 
+
+We could break it into two phases:
+- **catching up**, where we're far from the current state. 
+- **live**, where we're processing new, upcoming events.
+
+**How to decide if the gap is _"far enough"_?** We might never be fully caught up if events are appended continuously. Because of that, we need to define some threshold, e.g. in our context, live means that we have a maximum of ten events to process from the latest registered event. Of course, this can be done case by case and differ for various projections. Read also more in [Let's talk about positions in event stores](/en/lets_talk_about_positions_in_event_stores/).
+
+We can use different projection handling techniques depending on the phase we're in, e.g., batch processing when we're catching up and left-fold when we're live. 
+
+Projections are usually made asynchronously, while the left-fold approach can work well in sync and async ways.
+
+**The simplest rebuild we can do is truncate the current state of the read model and then reapply all events through projection logic.** We can do that if we can afford the downtime. There will be a time when there's no data, or we're far from being up to date. 
+
+**If we cannot afford downtime, we can do a _blue-green_ rebuild.** In that, we're setting up a read model in the other storage (e.g. different database, schema, table, etc.). Then we're reapplying events to this secondary read model. Once we're caught up, we can switch queries to target the new read model and archive the old one.
+
+![projection](2023-01-20-projection-07.png)
+
+## Idempotency
+
+Some event-driven tooling promises to bring you the Holy Grail: exactly-once delivery. I explained in detail in [another article](/en/outbox_inbox_patterns_and_delivery_guarantees_explained/) that this is impossible. 
+
+**The safe assumption is that we might get the same event more than once and run projection logic multiple times for the same event.** Because of that, our projection handling needs to be idempotent. It's a fancy word to say that no matter how many times we apply the same event, we'll get the same result as we'd applied it only once.
+
+How to handle idempotency correctly?
+
+**The simplest case is [Event-Carried State Transfer](https://martinfowler.com/articles/201701-event-driven.html).** It's a fancy term for just pushing the latest state through events. Generally, it's not the best practice, as it creates a coupling between event producer and consumer. Also, if we just send the state, we're losing the context of the operation that caused the state change. However, it can be more than enough for cases like read model updates. Especially if our read model is just another representation of write model data.
+
+**Yet, it's better to avoid having [state obsession](/en/state-obsession/) and work on the event model design.** For instance, if we have read model with the bank account balance _Payment Registered_ event. If we put the transaction amount to the event payload, applying it more than once will result in the wrong balance calculation. If we additionally include the account balance after payment was registered, then updating the balance would become upsert, idempotent by default.
+
+**Of course, it's a tradeoff, as we should keep events granular. [They should be as small as possible, but not smaller](/en/events_should_be_as_small_as_possible/).** We should treat events as API. We should apply the same design practices as the others, so think if it should be API first or more tuned to consumer needs.
+
+If you're still unsure of my reasoning, let's look at that from a different angle. Which component should be responsible for doing balance calculation? In reality, it's much more complex than just incrementing the value. We need to account for taxes, policies, previous balance etc. Do you really want to repeat this logic in read models or all the other consumers? The business logic should rather do such a calculation and propagate it further to subscribers. As always, pick your poison.
+
+**The next option is a more generic solution based on the event's position in the log.** We could pass the entity version in event metadata and store it in the read model during the update. If we assume that we're getting events in the proper order, then we could compare the value during the update and ignore the change if it's smaller than the value in the read model. I wrote about it longer in:
+- [Dealing with Eventual Consistency and Idempotency in MongoDB projections](/en/simple_trick_for_idempotency_handling_in_elastic_search_readm_model/)
+- [A simple trick for idempotency handling in the Elastic Search read model](/en/dealing_with_eventual_consistency_and_idempotency_in_mongodb_projections/)
+
+**You could also store events' ids and ensure their uniqueness.** This could be done as part of middleware around your event handler that tries to store the event id and stops processing if it was already handled. It may be part of your [inbox pattern deduplication](/en/outbox_inbox_patterns_and_delivery_guarantees_explained/) or stored in a dedicated table together with business results wrapped in the database transaction. 
+
+If we decide to do that, we should consider keeping the handled events' ids information for each projection. Why? To enable projection rebuilds and add new projections based on existing events.
+
+**My general recommendation is to work on the design and use the last handled position (checkpoints) to verify if the event was already handled.** Other mechanisms may appear to be more sophisticated but also more fragile.
+
+## Eventual Consistency
+
+**I often hear the phrase: _"business won't let me to have stale data"_.** That's not surprising, as [we're not great at speaking with each other](/en/bring_me_problems_not_solutions/). 
+
+The first step to solving that is not to use technical jargon while talking with a business. We're scaring them by using it and not helping to understand what we're trying to say. Cross out eventual consistency from your dictionary before speaking with business. Ask them questions like:
+- _"What worse can happen if user won't see this information immediately?"_ or
+- _"Can we solve it differently, so we don't need to show it at once?"
+
+**Show them the money and tell them how much development time and money it will cost for each solution.** Don't go too far into the implementation details. Try to build professional relationships in which we trust each other. So business knows about business, and we know the technical aspects.
+
+**Start also talking more with UX designers.** Simple usability tricks may cut a lot of complexity from you. For instance, when adding a new product to the shopping cart, you might not redirect it to the shopping cart view. You may keep the user on the product page. It reduces the chance of not seeing the product in the shopping cart details and makes the user experience smoother. Typically users want to continue shopping and go to selected product details when they want to confirm and proceed to payment. Between those actions, our read model should become consistent.
+
+You can also use different techniques like push notifications from the server or simulate the synchronous flows in the asynchronous world by using long-polling. Read more in [Long-polling, how to make our async API synchronous](/en/long_polling_and_eventual_consistency/).
+
+**Still, the best advice is to work closely with the business and designers; this will save you a lot of accidental complexity.** The real world has delays, and we should embrace that also in our technical design.
+
+## Scaling and data isolation
+
+_**Will it scale? How to scale?**_ Those are mantras we tell in all cases. Most of the time, we don't know what we need and don't know the exact metrics, but we're already trying to solve imaginary scenarios. Don't get me wrong; it's essential to consider this before going to production. Yet, those considerations before knowing where we need to go are just pointless. 
+
+Performance optimisation should be made based on the precise requirements and verified with the benchmarks. Before trying to parallelise processing, we should ascertain if we need to optimise and if our current solution needs to scale more.
+
+I wrote about those considerations in [How to scale projections in the event-driven systems?](/en/how_to_scale_projections_in_the_event_driven_systems/). 
+
+**In short, the foundational aspect of scaling projections is not the tech stack we use but the data partitioning we apply.** To be able to parallelise, we need to isolate data. We could do it per module, customer, and region, but we can also go deeper. We can have a processor for each projection type (e.g. different for the user dashboard and shopping cart view). We can also go extreme and distribute the load on the row level. We should be good if projections are not competing for resources. 
+
+**That also means we should not have multiple projections updating the same data.** If we're using a normalised relational database for our read models and have a shopping cart with product items as separate tables, then we should still have a single projection updating them. They're conceptually grouped together, as you won't have product items without a shopping cart, so keep a single writer updating it as a whole.
+
+Speaking about nested data. Check also [How to create projections of events for nested object structures?](/en/how_to_create_projections_of_events_for_nested_object_structures/)
+
+## Talk is cheap; show me the code!
+
+Let's say that we have to implement the following projections:
+
+1. Detailed view of the shopping cart with:
+- the total amount of products in the basket,
+- total number of products
+- list of products (e.g. if someone added the same product twice, then we should have one element with the sum).
+2. View with short information about pending shopping carts. It's intended to be used as a list view for administration:
+- the total amount of products in the basket,
+- total number of products
+- confirmed and cancelled shopping carts should be hidden.
+
+Let's say we're using some database that can store/upsert and delete the entities with provided id.
+
+We could add to it a helper that'd get the current state and store the updated result using C#:
 
 ```csharp
-public record AddProductRequest(
-    Guid? ProductId,
-    int? Quantity
-);
-```
-
-## 2. Having parsed the request, I'm mapping it to the real contract (e.g. command or query).
-This contract already comes from the domain module. This is where the element of trust comes in. I can trust this code, as I'm instantiating in my code, plus I'm also responsible for defining how to do it. I'm usually creating a static factory method and am not shy to use [value objects](/en/immutable_value_objects/) here to enforce semantic validation. The mapping code could look like:
-
-```csharp
- var command = AddProduct.From(
-    id,
-    ProductItem.From(
-        request?.ProductItem?.ProductId,
-        request?.ProductItem?.Quantity
-    )
-);
-```
-
-And types definition:
-
-```csharp
-public record AddProduct(
-    Guid CartId,
-    ProductItem ProductItem
-)
+public static class DatabaseExtensions
 {
-    public static AddProduct From(Guid cartId, ProductItem productItem)
+    public static void GetAndStore<T>(this Database database, Guid id, Func<T, T> update) where T : class, new ()
     {
-        if (cartId == Guid.Empty)
-            throw new ArgumentOutOfRangeException(nameof(cartId));
+        var item = database.Get<T>(id) ?? new T();
 
-        return new AddProduct(cartId, productItem);
+        database.Store(id, update(item));
     }
 }
+```
 
-public record ProductItem
+Having that, we could implement the first projection as:
+
+```csharp
+public class ShoppingCartDetails
 {
-    public Guid ProductId { get; }
+    public Guid Id { get; set; }
+    public Guid ClientId { get; set; }
+    public ShoppingCartStatus Status { get; set; }
+    public IList<PricedProductItem> ProductItems { get; set; } = new List<PricedProductItem>();
+    public DateTime? ConfirmedAt { get; set; }
+    public DateTime? CanceledAt { get; set; }
+    public decimal TotalPrice { get; set; }
+    public decimal TotalItemsCount { get; set; }
+}
 
-    public int Quantity { get; }
+public class ShoppingCartDetailsProjection
+{
+    private readonly Database database;
+    public ShoppingCartDetailsProjection(Database database) => this.database = database;
 
-    private ProductItem(Guid productId, int quantity)
-    {
-        ProductId = productId;
-        Quantity = quantity;
-    }
+    public void Handle(EventEnvelope<ShoppingCartOpened> @event) =>
+        database.Store(@event.Data.ShoppingCartId,
+            new ShoppingCartDetails
+            {
+                Id = @event.Data.ShoppingCartId,
+                Status = ShoppingCartStatus.Pending,
+                ClientId = @event.Data.ClientId,
+                ProductItems = new List<PricedProductItem>(),
+                TotalPrice = 0,
+                TotalItemsCount = 0
+            });
 
-    public static ProductItem From(Guid? productId, int? quantity)
-    {
-        if (!productId.HasValue)
-            throw new ArgumentNullException(nameof(productId));
-
-        return quantity switch
+    public void Handle(EventEnvelope<ProductItemAddedToShoppingCart> @event) =>
+        database.GetAndStore<ShoppingCartDetails>(@event.Data.ShoppingCartId, item =>
         {
-            null => throw new ArgumentNullException(nameof(quantity)),
-            <= 0 => throw new ArgumentOutOfRangeException(nameof(quantity), "Quantity has to be a positive number"),
-            _ => new ProductItem(productId.Value, quantity.Value)
-        };
-    }
-    // (...)
+            var productItem = @event.Data.ProductItem;
+            var existingProductItem = item.ProductItems.SingleOrDefault(p => p.ProductId == productItem.ProductId);
+
+            if (existingProductItem == null)
+            {
+                item.ProductItems.Add(productItem);
+            }
+            else
+            {
+                item.ProductItems.Remove(existingProductItem);
+                item.ProductItems.Add(
+                    new PricedProductItem(
+                        existingProductItem.ProductId,
+                        existingProductItem.Quantity + productItem.Quantity,
+                        existingProductItem.UnitPrice
+                    )
+                );
+            }
+
+            item.TotalPrice += productItem.TotalAmount;
+            item.TotalItemsCount += productItem.Quantity;
+
+            return item;
+        });
+
+    public void Handle(EventEnvelope<ProductItemRemovedFromShoppingCart> @event) =>
+        database.GetAndStore<ShoppingCartDetails>(@event.Data.ShoppingCartId, item =>
+        {
+            var productItem = @event.Data.ProductItem;
+            var existingProductItem = item.ProductItems.SingleOrDefault(p => p.ProductId == productItem.ProductId);
+
+            if (existingProductItem == null || existingProductItem.Quantity - productItem.Quantity < 0)
+                // You may consider throwing exception here, depending on your strategy
+                return item;
+
+            if (existingProductItem.Quantity - productItem.Quantity == 0)
+            {
+                item.ProductItems.Remove(productItem);
+            }
+            else
+            {
+                item.ProductItems.Remove(existingProductItem);
+                item.ProductItems.Add(
+                    new PricedProductItem(
+                        existingProductItem.ProductId,
+                        existingProductItem.Quantity - productItem.Quantity,
+                        existingProductItem.UnitPrice
+                    )
+                );
+            }
+
+            item.TotalPrice -= productItem.TotalAmount;
+            item.TotalItemsCount -= productItem.Quantity;
+
+            return item;
+        });
+
+    public void Handle(EventEnvelope<ShoppingCartConfirmed> @event) =>
+        database.GetAndStore<ShoppingCartDetails>(@event.Data.ShoppingCartId, item =>
+        {
+            item.Status = ShoppingCartStatus.Confirmed;
+            item.ConfirmedAt = DateTime.UtcNow;
+
+            return item;
+        });
+
+
+    public void Handle(EventEnvelope<ShoppingCartCanceled> @event) =>
+        database.GetAndStore<ShoppingCartDetails>(@event.Data.ShoppingCartId, item =>
+        {
+            item.Status = ShoppingCartStatus.Canceled;
+            item.CanceledAt = DateTime.UtcNow;
+
+            return item;
+        });
 }
 ```
 
-As with everything, this pattern also has its name [Smart Constructor](https://wiki.haskell.org/Smart_constructors). It comes from functional programming, but as you see, even in the imperative world, it makes a lot of sense.
-
-**After creating a command or query instance, we know it's correct.** By _correct_, I mean that it fulfils the basic assumptions like: all required fields have assigned values, fields have correct types, validations like product item quantity is positive, etc. It is crucial not to do sophisticated domain logic validation here but semantic one.
-
-You may also notice that I've used [records types](/en/notes_about_csharp_records_and_nullable_reference_types/). That means that instances of these classes will be immutable. Most languages nowadays allow defining such structures, e.g. [Java also has records](https://openjdk.org/jeps/395), TypesScript [readonly types](https://www.typescriptlang.org/docs/handbook/utility-types.html#readonlytype) and functional languages have that by default. Why is it so important? 
-
-**Thanks to immutability, we're getting even better trust with our objects.** We know no one will change them by doing accidental cowboy updates. We can pass them as parameters; they will always be as we created them. 
-
-**That also reduces the amount of duplicated validation. We just do it once.** Of course, we should unit test our smart constructor, but we don't need to repeat it. We're getting fewer tests as the compiler will do a lot of work for us.
-
-You can also consider doing [explicit deserialisation](/en/explicit_events_serialisation_in_event_sourcing/).
-
-## 3. Proper domain validation should be done in business logic.
-That's why I like CQRS. Thanks to CQRS, we know that a specific handler will execute the command. Business logic will be routed to a particular function or aggregate method. If we are to change the rule, we don't have to look at the whole code with unsteady eyes. For example, it is worth validating in the command whether the quantity is positive, but all the others, like checking if there are enough product items in the cart should be made in the business logic. Example:
+And the second projection as:
 
 ```csharp
-public class ShoppingCart: Aggregate
+public class ShoppingCartShortInfo
 {
-    private Guid ClientId { get; private set; }
+    public Guid Id { get; set; }
+    public Guid ClientId { get; set; }
+    public decimal TotalPrice { get; set; }
+    public decimal TotalItemsCount { get; set; }
+}
 
-    private ShoppingCartStatus Status { get; private set; }
+public class ShoppingCartShortInfoProjection
+{
+    private readonly Database database;
 
-    private List<PricedProductItem> ProductItems { get; private set; } = new ();
+    public ShoppingCartShortInfoProjection(Database database) => this.database = database;
 
-    public void AddProduct(
-        IProductPriceCalculator productPriceCalculator,
-        ProductItem productItem)
-    {
-        if(Status != ShoppingCartStatus.Pending)
-            throw new InvalidOperationException($"Adding product for the cart in '{Status}' status is not allowed.");
+    public void Handle(EventEnvelope<ShoppingCartOpened> @event) =>
+        database.Store(@event.Data.ShoppingCartId,
+            new ShoppingCartShortInfo
+            {
+                Id = @event.Data.ShoppingCartId,
+                ClientId = @event.Data.ClientId,
+                TotalPrice = 0,
+                TotalItemsCount = 0
+            });
 
-        var pricedProductItem = productPriceCalculator.Calculate(productItem).Single();
-
-        var newProductItem = @event.ProductItem;
-
-        var existingProductItem = FindProductItemMatchingWith(newProductItem);
-
-        if (existingProductItem is null)
+    public void Handle(EventEnvelope<ProductItemAddedToShoppingCart> @event) =>
+        database.GetAndStore<ShoppingCartShortInfo>(@event.Data.ShoppingCartId, item =>
         {
-            ProductItems.Add(newProductItem);
-            return;
-        }
+            var productItem = @event.Data.ProductItem;
 
-        ProductItems.Replace(
-            existingProductItem,
-            existingProductItem.MergeWith(newProductItem)
+            item.TotalPrice += productItem.TotalAmount;
+            item.TotalItemsCount += productItem.Quantity;
+
+            return item;
+        });
+
+    public void Handle(EventEnvelope<ProductItemRemovedFromShoppingCart> @event) =>
+        database.GetAndStore<ShoppingCartShortInfo>(@event.Data.ShoppingCartId, item =>
+        {
+            var productItem = @event.Data.ProductItem;
+
+            item.TotalPrice -= productItem.TotalAmount;
+            item.TotalItemsCount -= productItem.Quantity;
+
+            return item;
+        });
+
+    public void Handle(EventEnvelope<ShoppingCartConfirmed> @event) =>
+        database.Delete<ShoppingCartShortInfo>(@event.Data.ShoppingCartId);
+
+
+    public void Handle(EventEnvelope<ShoppingCartCanceled> @event) =>
+        database.Delete<ShoppingCartShortInfo>(@event.Data.ShoppingCartId);
+}
+```
+
+**As you see, projections use using simple handler that takes the upcoming events, loads the current state, runs the projection logic and stores the result.** So, doing left-fold. 
+
+That's also how [Marten projections](https://martendb.io/events/projections/) are working. Yet, they're doing much more internally. So batching, parallelising etc. 
+
+Of course, as explained earlier, you don't need to do left fold; you could even just run an SQL statement, e.g.:
+
+```csharp
+public class UserDashboardProjection : Projection
+{
+    private readonly NpgsqlConnection databaseConnection;
+
+    public UserDashboardProjection(NpgsqlConnection databaseConnection)
+    {
+        this.databaseConnection = databaseConnection;
+
+        Projects<UserCreated>(Apply);
+        Projects<UserNameUpdated>(Apply);
+        Projects<OrderCreated>(Apply);
+    }
+
+    void Apply(UserCreated @event)
+    {
+        databaseConnection.Execute(
+            @"INSERT INTO UserDashboards (Id, UserName, OrdersCount, TotalAmount)
+                VALUES (@UserId, @UserName, 0, 0)",
+            @event
         );
     }
 
-    public void RemoveProduct(
-        PricedProductItem productItemToBeRemoved)
+    void Apply(UserNameUpdated @event)
     {
-        if(Status != ShoppingCartStatus.Pending)
-            throw new InvalidOperationException($"Removing product from the cart in '{Status}' status is not allowed.");
-
-        var existingProductItem = FindProductItemMatchingWith(productItemToBeRemoved);
-
-        if (existingProductItem is null)
-            throw new InvalidOperationException($"Product with id `{productItemToBeRemoved.ProductId}` and price '{productItemToBeRemoved.UnitPrice}' was not found in cart.");
-
-        if(!existingProductItem.HasEnough(productItemToBeRemoved.Quantity))
-            throw new InvalidOperationException($"Cannot remove {productItemToBeRemoved.Quantity} items of Product with id `{productItemToBeRemoved.ProductId}` as there are only ${existingProductItem.Quantity} items in card");
-
-        if (existingProductItem.HasTheSameQuantity(productItemToBeRemoved))
-        {
-            ProductItems.Remove(existingProductItem);
-            return;
-        }
-
-        ProductItems.Replace(
-            existingProductItem,
-            existingProductItem.Subtract(productItemToBeRemoved)
+        databaseConnection.Execute(
+            @"UPDATE UserDashboards
+                SET UserName = @UserName
+                WHERE Id = @UserId",
+            @event
         );
     }
 
-    // (...)
+    void Apply(OrderCreated @event)
+    {
+        databaseConnection.Execute(
+            @"UPDATE UserDashboards
+                SET OrdersCount = OrdersCount + 1,
+                    TotalAmount = TotalAmount + @Amount
+                WHERE Id = @UserId",
+            @event
+        );
+    }
 }
 ```
 
-**The other story is whether to throw exceptions in business logic.** That's highly dependent on the technology you use, team experience and preferences. I'll expand on that in the dedicated post, but for now, I recommend following the conventions and capabilities of your coding environment.
+Or do batch processing. 
 
-If you're coding in functional programming, Go, or Rust, you won't throw exceptions too much. You'll likely use exceptions if you're into C# or Java. Why? I wrote about it longer in [Union types in C#](/en/union_types_in_csharp/). If you're into swiss-scissor language like TypeScript, you might do one or another. 
-
-The most important thing is to refrain from fighting the language and local conventions because code created that way will be hard to maintain and constantly fight with the tooling. It can be beneficial in some scenarios, but I'd try to avoid it as a general approach.
-
-Also, aggregates are one of many ways to handle business logic. Read more in [How to effectively compose your business logic](/en/how_to_effectively_compose_your_business_logic/) and [Slim your aggregates with Event Sourcing!](/en/slim_your_entities_with_event_sourcing/).
+Projections should be as close as possible to end storage to be efficient. Create abstractions when needed, but beware to avoid ending up with the lowest common denominator.
 
 ## Summing up
 
-**Being more explicit may seem a bit redundant at first, but thanks to that:**
-- we increase trust and the security of our code,
-- we make changes in the domain code independent of changes in the API,
-- we can cut off edge scenarios one by one: deserialisation, semantic validation of types, and business validation. 
-- it is easier to know what, where and how to change, thanks to increasing maintainability and cognitive load.
-- we reduce the number of tests needed.
+**Projections are powerful mechanism.** In a nutshell, they're _just_ transformations of information we got from events into other data. We can look at the past and analyse the data, finding even new business models. Thanks to that, we can get business insights and view data from different perspectives.
 
-Of course, all of that requires consistency, but once we build it and work carefully on our types, it'll get easier with each new one.
+To implement projections efficiently and benefit fully from their superpowers, we need to take a lot into consideration. I hope this post is a decent starting point for you to know how to deal with them and what to watch for. 
+
+I showed a foundational building block from a big-picture view. Even though it ended up as a lengthy article, there are still things to expand. Feel free to post such in the comments!
+
+If you also want to learn more, consider [doing training with me](/en/training/). A real workshop is the best way to learn, discuss and get hands-on experience.
 
 Cheers!
 
