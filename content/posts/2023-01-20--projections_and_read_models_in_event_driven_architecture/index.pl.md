@@ -392,11 +392,11 @@ Projections should be as close as possible to end storage to be efficient. Creat
 
 **Projections are powerful mechanism.** In a nutshell, they're _just_ transformations of information we got from events into other data. We can look at the past and analyse the data, finding even new business models. Thanks to that, we can get business insights and view data from different perspectives.
 
-To implement projections efficiently and benefit fully from their superpowers, we need to take a lot into consideration. I hope this post is a decent starting point for you to know how to deal with them and what to watch for. 
+To implement projections efficiently and benefit fully from their superpowers, we need to take a lot into consideration. I hope this article is a decent starting point for you to know how to deal with them and what to watch for. 
 
 I showed a foundational building block from a big-picture view. Even though it ended up as a lengthy article, there are still things to expand. Feel free to post such in the comments!
 
-If you also want to learn more, consider [doing training with me](/pl/training/). A real workshop is the best way to learn, discuss and get hands-on experience.
+**If you also want to learn more, consider [doing training with me](/pl/training/).** A real workshop is the best way to learn, discuss and get hands-on experience.
 
 Cheers!
 
