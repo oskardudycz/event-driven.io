@@ -26,10 +26,10 @@ My main projects:
 - 👁️ [GoldenEye](https://github.com/oskardudycz/GoldenEye) - The CQRS flavoured framework that will speed up your WebAPI and Microservices development.
 
 Trivia:
-- 📻 I've run once the most popular Polish fan-site about [Radiohead](https://www.youtube.com/watch?v=jNY_wLukVW0&list=PLxzSZG7g8c8x6GYz_FcNr-3zPQ7npP6WF).
+- 📻 I once ran the most popular Polish fan-site about [Radiohead](https://www.youtube.com/watch?v=jNY_wLukVW0&list=PLxzSZG7g8c8x6GYz_FcNr-3zPQ7npP6WF).
 - 🎸 I can play [City of Stars theme](https://www.youtube.com/watch?v=VFUos9sYbHs) on guitar in fingerstyle.
 - 🏀 I was a [Mascot at Eurobasket 2009](https://kolor-plusz.pl/gallery/1/zubr-kostium.png).
-- 📚 My favourite books are "[1984](https://www.goodreads.com/book/show/40961427-1984)" and "[Too Kill a Mockingbird](https://www.goodreads.com/book/show/2657.To_Kill_a_Mockingbird)".
+- 📚 My favourite books are "[1984](https://www.goodreads.com/book/show/40961427-1984)" and "[To Kill a Mockingbird](https://www.goodreads.com/book/show/2657.To_Kill_a_Mockingbird)".
 - 🎥 My beloved movie is "[Eternal Sunshine of the Spotless Mind](https://www.imdb.com/title/tt0338013/)".
 - 👦 As a child, I wanted to be a palaeontologist.
 - 🕹 I still have working Amiga 500.

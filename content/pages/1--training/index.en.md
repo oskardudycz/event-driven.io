@@ -17,24 +17,24 @@ You'll understand the best practices and tradeoffs, being ready to apply them to
 
 ![photo](training-cover.jpg)
 
-I perfectly remember how I started my journey with Event-Driven Architecture and Event Sourcing. I was banging my head against the wall. I thought it was pointless. However, I was stubborn, and it turned out that it was not as difficult as painting it. 
+I perfectly remember how I started my journey with Event-Driven Architecture and Event Sourcing. I was banging my head against the wall. I thought it was pointless. However, I was stubborn, and it turned out that it was not as difficult as the available materials had painted it.
 
 The main reason is the lack of decent practical learning materials. For several years I have been trying to cover it up by documenting and sharing my path and the knowledge I have gained.
 
 Now you also have the opportunity to take advantage of it! Without hitting your head against a wall. 
 
-I run trainings both online and offline in the office.
+I run trainings both online and in person (in your office or a dedicated venue).
 
 ## Practical Introduction to Event Sourcing
 
-🛠️ **Description:** Event Sourcing allows you to create business-related applications. Recording events (facts) about the business process gives a complete understanding of your workflow and reflects them in the code. It is wrongly considered a complicated pattern that is challenging to apply in practice. The workshop will be hands-on and teach you how to use Event Sourcing, giving you solid foundations. Exercises will be run in C#, Java or NodeJS.
+🛠️ **Description:** Event Sourcing allows you to create business-related applications. Recording events (facts) about the business process gives a complete understanding of your workflow and reflects them in the code. It's developed a reputation for being a complicated pattern that's challenging to apply in real systems. We examine the reasons for those misconceptions, and spend the time to help you understand common traps. The workshop will be hands-on and teach you how to use Event Sourcing, giving you solid foundations. Exercises will be run in C#, Java or NodeJS.
 
 🧑‍🎓 **Outcomes:**
 - Good understanding of all the building blocks of Event Sourcing,
 - When and how to use it and what benefits it brings,
 - How to reflect your business logic in the code using events,
 - Differences to the classical approach,
-- Different tools such as Marten and EventStoreDB and the differences between them,
+- Using tools such as Marten and EventStoreDB, and understanding the differences between them,
 - How to use Event Sourcing on your system,
 - Challenges related to Event Sourcing and recommended solutions.
 
@@ -50,7 +50,7 @@ I run trainings both online and offline in the office.
 7. Saga, Choreography, Process Manager, handling distributed processes.
 8. Event Sourcing in the context of application architecture, integration with other approaches.
 9. Good and bad practices in modelling and handling events.
-10. Event Sourcing on production, evolution, event versioning, etc.
+10. Event Sourcing in production, evolution, event versioning, etc.
 
 📧 [Contact me for more information.](mailto:oskar@event-driven.io)
 

@@ -25,13 +25,13 @@ Why am I telling you about it?
 
 **It also shows well what's projection.** The same result of the fight may be interpreted differently: Muhammad is triumphing, Sonny not so much. What's more, to this day, boxing fans are arguing if this was a real fight or a rigged one. The punch knocked down Sonny Liston is known as [phantom punch](https://en.wikipedia.org/wiki/Muhammad_Ali_vs._Sonny_Liston#The_phantom/anchor_punch) as no one saw it reaching Sonny Liston's face.
 
-**In projections, we're taking a set of events representing various facts (about the same object, multiple), correlating them and building interpretation.** Most of the time, we store the result as a materialised read model. Yet, the projection result can be anything: email, PDF, etc.
+**In projections, we're taking a set of events representing various facts (about the same object, multiple), correlating them and building interpretation.** Most of the time, we store the result as a materialised read model. Yet, the projection result can be anything: text file, Excel spreadsheet, PDF, in-memory data etc.
 
 ![projection](2023-01-20-projection-02.png)
 
-Projections can be built on existing facts. Thus together with data analytics, drilling and handling insights, we got from them. Events are an excellent source for data exploration. For instance, by checking products bought in the e-commerce system, we can find the gaps like abandoned carts, build a recommendation engine, etc. Read more in [Never Lose Data Again - Event Sourcing to the Rescue!](/en/never_lose_data_with_event_sourcing/).
+Events are facts and, thus, an excellent source for data exploration. Projections, together with analytics, and data drilling, can bring valuable insights. For instance, by checking products bought in the e-commerce system, we can find the gaps like abandoned carts, build a recommendation engine, etc. Read more in [Never Lose Data Again - Event Sourcing to the Rescue!](/en/never_lose_data_with_event_sourcing/).
 
-As mentioned, a single fact can have multiple interpretations; events can be a source of numerous projections. For instance, information about the product added to the shopping cart should update the shopping cart view, product availability, etc.
+As mentioned, a single fact can have multiple interpretations; events can be a source of numerous projections. For instance, information about the product added to the shopping cart can trigger the contents view update, change the product availability, and feed the information out for analytics.
 
 ![projection](2023-01-20-projection-04.png)
 
@@ -43,13 +43,13 @@ As mentioned, a single fact can have multiple interpretations; events can be a s
 
 ## Projections can be synchronous and asynchronous
 
-Although most tooling shows that they need eventual consistency, that's incorrect. Their state doesn't have to be updated with a delay. It's a technical _"detail"_ of the exact implementation. If you're storing events and read models in the same relational database (like, e.g. [Marten]() in Postgres), then you can wrap all in a transaction. Then either events are appended and projections updated, or no change is made.
+Although most tooling shows that they need eventual consistency, that's incorrect. Their state doesn't have to be updated with a delay. It's a technical _"detail"_ of the exact implementation. If you're storing events and read models in the same relational database (like e.g. [Marten](https://martendb.io/) in Postgres), then you can wrap all in a transaction. Then either events are appended and projections updated, or no change is made.
 
 ![projection](2023-01-20-projection-05.png)
 
 **Of course, we should not be afraid of eventual consistency.** How soon is now? There's no now! Everything in the real world happens with some delay. Also, if we want to make a reliable and fault-tolerant processing pipeline doing stuff as a background process may be a go-to way. Read more in [Outbox, Inbox patterns and delivery guarantees explained](/en/outbox_inbox_patterns_and_delivery_guarantees_explained/).
 
-**Projections are a concept that's part of Event-Driven Architecture and essential building block of [CQRS](/en/cqrs_facts_and_myths_explained/). They're not tight to Event Sourcing.** Yet, event stores can help you in making them efficient. Most of the time, they allow you to subscribe to the appended events notifications, for instance, [Marten's Async Daemon](/en/integrating_Marten/) or [EventStoreDB subscriptions](/en/persistent_vs_catch_up_eventstoredb_subscriptions_in_action/). They are an [outbox pattern](/en/push_based_outbox_pattern_with_postgres_logical_replication/) provided as a commodity by the database. That gives both durabilities for the events and strong guarantees around processing them.
+**Projections are a concept that's part of Event-Driven Architecture and essential building block of [CQRS](/en/cqrs_facts_and_myths_explained/). They're not tied to Event Sourcing.** Yet, event stores can help you in making them efficient. Most of the time, they allow you to subscribe to the appended events notifications, for instance, [Marten's Async Daemon](/en/integrating_Marten/) or [EventStoreDB subscriptions](/en/persistent_vs_catch_up_eventstoredb_subscriptions_in_action/). They are an [outbox pattern](/en/push_based_outbox_pattern_with_postgres_logical_replication/) provided as a commodity by the database. That gives both the durability for the events and strong guarantees around processing them.
 
 ![projection](2023-01-20-projection-06.png)
 
@@ -63,11 +63,11 @@ We could break it into two phases:
 - **catching up**, where we're far from the current state. 
 - **live**, where we're processing new, upcoming events.
 
-**How to decide if the gap is _"far enough"_?** We might never be fully caught up if events are appended continuously. Because of that, we need to define some threshold, e.g. in our context, live means that we have a maximum of ten events to process from the latest registered event. Of course, this can be done case by case and differ for various projections. Read also more in [Let's talk about positions in event stores](/en/lets_talk_about_positions_in_event_stores/).
+**How to decide if the gap is _"small enough"_?** We might never be fully caught up if events are appended continuously. Because of that, we need to define some threshold, e.g. in our context, live means that we have a maximum of ten events to process from the latest registered event. Of course, this can be done case by case and differ for various projections. Read also more in [Let's talk about positions in event stores](/en/lets_talk_about_positions_in_event_stores/).
 
 We can use different projection handling techniques depending on the phase we're in, e.g., batch processing when we're catching up and left-fold when we're live. 
 
-Projections are usually made asynchronously, while the left-fold approach can work well in sync and async ways.
+Projections rebuilds are usually made asynchronously, while the left-fold approach can work well in sync and async ways.
 
 **The simplest rebuild we can do is truncate the current state of the read model and then reapply all events through projection logic.** We can do that if we can afford the downtime. There will be a time when there's no data, or we're far from being up to date. 
 
@@ -107,7 +107,7 @@ If we decide to do that, we should consider keeping the handled events' ids info
 
 The first step to solving that is not to use technical jargon while talking with a business. We're scaring them by using it and not helping to understand what we're trying to say. Cross out eventual consistency from your dictionary before speaking with business. Ask them questions like:
 - _"What worse can happen if user won't see this information immediately?"_ or
-- _"Can we solve it differently, so we don't need to show it at once?"
+- _"Can we solve it differently, so we don't need to show it at once?"_
 
 **Show them the money and tell them how much development time and money it will cost for each solution.** Don't go too far into the implementation details. Try to build professional relationships in which we trust each other. So business knows about business, and we know the technical aspects.
 
@@ -121,7 +121,7 @@ You can also use different techniques like push notifications from the server or
 
 _**Will it scale? How to scale?**_ Those are mantras we tell in all cases. Most of the time, we don't know what we need and don't know the exact metrics, but we're already trying to solve imaginary scenarios. Don't get me wrong; it's essential to consider this before going to production. Yet, those considerations before knowing where we need to go are just pointless. 
 
-Performance optimisation should be made based on the precise requirements and verified with the benchmarks. Before trying to parallelise processing, we should ascertain if we need to optimise and if our current solution needs to scale more.
+Performance optimisation should be made based on the precise requirements (expressed as SLOs etc.) and verified with the benchmarks. Before trying to parallelise processing, we should ascertain if we need to optimise and if our current solution needs to scale more.
 
 I wrote about those considerations in [How to scale projections in the event-driven systems?](/en/how_to_scale_projections_in_the_event_driven_systems/). 
 
@@ -391,11 +391,13 @@ Projections should be as close as possible to end storage to be efficient. Creat
 
 **Projections are powerful mechanism.** In a nutshell, they're _just_ transformations of information we got from events into other data. We can look at the past and analyse the data, finding even new business models. Thanks to that, we can get business insights and view data from different perspectives.
 
-To implement projections efficiently and benefit fully from their superpowers, we need to take a lot into consideration. I hope this article is a decent starting point for you to know how to deal with them and what to watch for. 
+To implement projections efficiently and benefit fully from their superpowers, we need to take a lot into consideration. 
 
-I showed a foundational building block from a big-picture view. Even though it ended up as a lengthy article, there are still things to expand. Feel free to post such in the comments!
+I hope this article is a decent starting point for you to know how to deal with projections and what to watch for. I showed foundational building blocks from a big-picture view, challenges and potential solutions. 
 
-**If you also want to learn more, consider [doing training with me](/en/training/).** A real workshop is the best way to learn, discuss and get hands-on experience.
+There's plenty more to discuss at each stop on this city bus tour. Feel free to post your questions and concerns in the comments!
+
+**[Consider my training](/en/training/) as a way to delve more into the specific bits relevant to your project needs.** A real workshop is the best way to learn, discuss and get hands-on experience.
 
 Cheers!
 
