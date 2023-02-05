@@ -176,7 +176,7 @@ public static class Validation
             : throw new ArgumentOutOfRangeException(argumentName);
 }
 
-Guid? productId= "ZS1023";
+Guid? productId = "ZS1023";
 
 // this will work
 string verifiedProductId = productId.AssertNotEmpty();

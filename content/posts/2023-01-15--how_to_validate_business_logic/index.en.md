@@ -113,6 +113,8 @@ You may also notice that I've used [records types](/en/notes_about_csharp_record
 
 **That also reduces the amount of duplicated validation. We just do it once.** Of course, we should unit test our smart constructor, but we don't need to repeat it. We're getting fewer tests as the compiler will do a lot of work for us.
 
+Check also more in my other article on [how to make explicit validation simpler with recent C# and .NET improvements](/en/explicit_validation_in_csharp_just_got_simpler/).
+
 You can also consider doing [explicit deserialisation](/en/explicit_events_serialisation_in_event_sourcing/).
 
 ## 3. Proper domain validation should be done in business logic.

@@ -59,7 +59,7 @@ public record MoneyTransfer(
     string? Comment = null
 )
 {
-    public static MoneyTransfer Create(
+    public static MoneyTransfer From(
         decimal Amount,
         Guid FromAccountId,
         Guid ToAccountId,
@@ -82,7 +82,7 @@ public record MoneyTransfer(
 Then usage will look as:
 
 ```csharp
-var moneyTransfer = MoneyTransfer.Create(
+var moneyTransfer = MoneyTransfer.From(
     amount,
     Anna,
     john
@@ -141,7 +141,7 @@ internal static class Route
             var (sku, name, description) = await context.FromBody<RegisterProductRequest>();
             var productId = Guid.NewGuid();
 
-            var command = RegisterProduct.Create(productId, sku, name, description);
+            var command = RegisterProduct.From(productId, sku, name, description);
 
             await context.SendCommand(command);
 
@@ -205,17 +205,21 @@ public record RegisterProduct
         Description = description;
     }
 
-    public static RegisterProduct Create(Guid? id, string? sku, string? name, string? description)
+    public static RegisterProduct From(Guid? id, string? sku, string? name, string? description)
     {
         if (!id.HasValue || id == Guid.Empty) throw new ArgumentOutOfRangeException(nameof(id));
         if (string.IsNullOrEmpty(sku)) throw new ArgumentOutOfRangeException(nameof(sku));
         if (string.IsNullOrEmpty(name)) throw new ArgumentOutOfRangeException(nameof(name));
         if (description is "") throw new ArgumentOutOfRangeException(nameof(name));
 
-        return new RegisterProduct(id.Value, SKU.Create(sku), name, description);
+        return new RegisterProduct(id.Value, SKU.From(sku), name, description);
     }
 }
 ```
+
+Check also more details in my other articles:
+- [How to validate business logic](/en/how_to_validate_business_logic/).
+- [Explicit validation in C# just got simpler!](/en/explicit_validation_in_csharp_just_got_simpler/).
 
 It may still make sense to use records, as we're getting the automatic _ToString_, equality overloads and good looking object deconstruction.
 
