@@ -17,7 +17,7 @@ useDefaultLangCanonical : true
 
 On each step, we should perform validation.
 
-**Let's focus on the last step for now. In ASP.NET, the validation is quite often conflated with parsing and [model binding](https://learn.microsoft.com/en-us/aspnet/core/mvc/models/model-binding?view=aspnetcore-7.0).** Historically, .NET devs got accustomed to doing all at once. It may sound like a brilliant idea, but it's also a pit of performance issues and nasty production bugs to debug. It all goes well until we remember the conventions and follow them precisely. Yet, the number of permutations we may find makes it hard to tame.
+**Let's focus on the last step for now. In ASP.NET, the validation is quite often conflated with parsing and [model binding](https://learn.microsoft.com/en-us/aspnet/core/mvc/models/model-binding?view=aspnetcore-7.0).** Historically, .NET devs got accustomed to doing all at once. It may sound like a brilliant idea, but it's also a pit of performance issues and nasty production bugs to debug. It all goes well while we remember the conventions and follow them precisely. Yet, the number of permutations we may find makes it hard to tame.
 
 The potential solution could be explicit validation, so break the exact flow into [parse first, then validate](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/). If you have tried that already, you may think I'm suggesting you become a caveman and do a lot of copy-pasting. Also, you may ask how to achieve human-friendly error messages. 
 
@@ -148,7 +148,7 @@ string? sku = null;
 sku.AssertNotEmpty();
 ```
 
-Then it'll automatically use the _productId_ as the parameter name for the _ArgumentException_. That's not all!
+Then it'll automatically use the _sku_ as the parameter name for the _ArgumentException_. That's not all!
 
 If we do:
 
@@ -179,10 +179,10 @@ public static class Validation
 Guid? productId = "ZS1023";
 
 // this will work
-string verifiedProductId = productId.AssertNotEmpty();
+Guid verifiedProductId = productId.AssertNotEmpty();
 
 // this won't compile
-string verifiedProductId = productId;
+Guid verifiedProductId = productId;
 ```
 
 **We can compose those methods and build simple but powerful fleet of validation methods:**
@@ -309,11 +309,11 @@ public record RegisterProductRequest(
 );
 ```
 
-**The only downside of this approach may be that's _fail fast_.** It'll throw an exception on the first wrong property. We won't get a listing of all the incorrect values. Still, that will be fine for the UI-based requests, as we should have validations made there. If the request bypassed them, it either means we forgot to align them or someone made something malicious. For the API-first design, that may be a more significant issue if our convention is to return all errors instead of failing fast.
+**The main downside of this approach may be that it's _fail fast_.** It'll throw an exception on the first wrong property. We won't get a listing of all the incorrect values. Still, that will be fine for the UI-based requests, as we should have validations made there. If the request bypassed them, it either means we forgot to align them or someone made something malicious. For the API-first design, that may be a more significant issue if our convention is to return all errors instead of failing fast.
 
 **I believe that such an explicit approach is much safer and clearer.** We're depending on the compiler, getting failures during development, not in runtime. We're making [explicit things that should be explicit](/pl/explicit_events_serialisation_in_event_sourcing/) and have control over what's happening.
 
-There are allocations, and no reflection magic, which is an obvious win. 
+There are no redundant allocations, and no reflection magic, which is an obvious win. 
 
 **Keeping validation in the code also creates a better form of documentation, as looking at the class, we see what to expect.** Once we create an instance of an object, we can trust it and don't repeat validation in multiple places.
 
