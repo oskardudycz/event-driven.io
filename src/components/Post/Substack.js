@@ -9,7 +9,7 @@ const Substack = () => {
           one, <b>subscribe to Architecture Weekly.</b>
           <br />
           <br />
-          <b>✉️ Join over 2200 subscribers</b>, get the best resources to boost your skills, and
+          <b>✉️ Join over 2400 subscribers</b>, get the best resources to boost your skills, and
           stay updated with Software Architecture trends!
           <br />
           <br />
