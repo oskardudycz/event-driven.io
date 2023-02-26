@@ -25,7 +25,7 @@ Events are a great source and input for future workflows: analytics, reporting o
 
 **[InfoQ in their report](https://www.infoq.com/articles/architecture-trends-2022/) shows Event Sourcing is in the "Late Majority" adoption phase.** That means that it's an established, common technique. Indeed it's getting much more traction. Yet, in my opinion, it's still a niche. That's a chance for you as it means that you can get a competitive advantage by using it. You can do better than other companies, move fast and innovate.  Using an event-driven approach [can also help you build autonomous services and teams](/en/how_using_events_help_in_teams_autonomy/). That can help in making your development process even more efficient. Don't wait to jump on the bandwagon; some empty seats are still left!
 
-**If you don't know how to start, don't be shy to contact me.** I'm here to help. Check my [training](/en/training/) page. A workshop is the most effective way to jump-start. Try also my [Introduction to Event Sourcing - Self-Paced Kit](https://event-driven.io/en/introduction_to_event_sourcing/). When not to use Event Sourcing? I got you covered; I explained that in [my other article here](/en/when_not_to_use_event_sourcing/).
+**If you don't know how to start, don't be shy to contact me.** I'm here to help. Check my [training](/en/training/) page. A workshop is the most effective way to jump-start. Try also my [Introduction to Event Sourcing - Self-Paced Kit](/en/introduction_to_event_sourcing/). When not to use Event Sourcing? I got you covered; I explained that in [my other article here](/en/when_not_to_use_event_sourcing/).
 
 Cheers!
 
