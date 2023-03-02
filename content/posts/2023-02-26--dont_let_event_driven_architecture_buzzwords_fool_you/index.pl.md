@@ -76,6 +76,10 @@ I know that it sounds like 4D Chess, but that's our role. We need to train our a
 
 **Don't let the buzzwords and marketing fool you. Think for yourself, and question authorities.**
 
+If you liked this article, also check others where I'm trying to bust similar myths:
+- [Event Streaming is not Event Sourcing!](/pl/event_streaming_is_not_event_sourcing/)
+- [CQRS facts and myths explained](/plen/cqrs_facts_and_myths_explained/)
+
 Cheers!
 
 Oskar

@@ -7,7 +7,7 @@ author: oskar dudycz
 
 ![cover](2021-12-01-cover.png)
 
-I'm not a HackerNews or Reddit type of guy. I don't have enough time to waste on them. That said, I cannot deny that they're powerful platforms. The heated rants can create a significant impact on the community. Rants around Event Sourcing are appear from time to time. The leitmotiv is ["Don't Let the Internet Dupe You, Event Sourcing is Hard"](https://chriskiehl.com/article/event-sourcing-is-hard) article. 
+I usually don't try to fight the HackerNews or Reddit opinions. That said, I cannot deny that they're powerful platforms. The heated rants can create a significant impact on the community. Rants around Event Sourcing are appear from time to time. The leitmotiv is ["Don't Let the Internet Dupe You, Event Sourcing is Hard"](https://chriskiehl.com/article/event-sourcing-is-hard) article. 
  
 As this article popped out again [here](https://news.ycombinator.com/item?id=29390483) and [there](https://www.reddit.com/r/programming/comments/r5p8qj/dont_let_the_internet_dupe_you_event_sourcing_is/), I decided to step up this time.
  
@@ -61,16 +61,26 @@ The essential point is that for read models, you don't expect to have the same g
 
 **I'm sorry to say, but the author used the wrong tool for the wrong job.** If this article was titled _" Event Sourcing is hard if you're confusing it with Event Streaming"_, then it'd be an excellent article. But, in its current shape, it's just misleading and making the wrong point, repeating just common misunderstandings. It's highly misleading for people who are not aware of what Event Sourcing is and may suggest that it's much more complicated than it's in reality.
 
-You can read more in:
-- [EventStoreDB vs Kafka](https://domaincentric.net/blog/eventstoredb-vs-kafka)
-- [A Beginner's Guide to Event Sourcing](https://www.eventstore.com/event-sourcing)
+I also covered that in my talk: 
 
-Check also Derek's Comartin video explaining his concerns around this topic: [Don't Let the Internet Dupe You, that's NOT Event Sourcing](https://www.youtube.com/watch?v=Y7ca1--EKsg).
+`youtube: https://www.youtube.com/watch?v=Lu-skMQ-vAw`
 
-I've made a list of articles like that: https://github.com/oskardudycz/EventSourcing.NetCore#this-is-not-event-sourcing
-
-I'll repeat it again: this is not Event Sourcing.
+**I'll repeat it again: this is not Event Sourcing.**
 
 Cheers!
 
 Oskar
+
+p.s.
+
+If you liked this article, also check others where I'm trying to bust similar myths:
+- [Don't let Event-Driven Architecture buzzwords fool you](/en/dont_let_event_driven_architecture_buzzwords_fool_you/)
+- [CQRS facts and myths explained](/en/cqrs_facts_and_myths_explained/)
+
+You can read more in:
+- [EventStoreDB vs Kafka written by Kacper Gunia](https://domaincentric.net/blog/eventstoredb-vs-kafka)
+- [A Beginner's Guide to Event Sourcing from Event Store team](https://www.eventstore.com/event-sourcing)
+
+Check Derek's Comartin video explaining his concerns around this topic: [Don't Let the Internet Dupe You, that's NOT Event Sourcing](https://www.youtube.com/watch?v=Y7ca1--EKsg).
+
+I've also made a list of articles with wrong perspective on Event Sourcing: https://github.com/oskardudycz/EventSourcing.NetCore#this-is-not-event-sourcing

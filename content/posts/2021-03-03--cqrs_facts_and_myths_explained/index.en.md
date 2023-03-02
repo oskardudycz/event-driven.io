@@ -147,7 +147,11 @@ See also my repository, where I've gathered practical samples and other resource
 
 It's always best to read the sources and verify if things told on the Internet are truth or Urban Legends. Too often, we make our decisions based on anecdotal evidence rather than research.
 
-I hope that this helps you to sift the wheat from the chaff. Comments are welcome!
+I hope that this helps you to sift the wheat from the chaff.
+
+If you liked this article, also check others where I'm trying to bust similar myths:
+- [Event Streaming is not Event Sourcing!](/en/event_streaming_is_not_event_sourcing/)
+- [Don't let Event-Driven Architecture buzzwords fool you](/en/dont_let_event_driven_architecture_buzzwords_fool_you/)
 
 Cheers!
 
