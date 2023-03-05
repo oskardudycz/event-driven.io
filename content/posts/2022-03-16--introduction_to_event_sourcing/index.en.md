@@ -29,17 +29,17 @@ That's what I wrote 1.5 years ago in my post [Revolution now!](/en/revolution_no
 That shows the practical aspects of using Event Sourcing with different toolings like Marten and EventStoreDB.
 
 **I decided to open-source them to allow people to do them as a self-paced kit. Get it here:**
-- C#: https://github.com/oskardudycz/EventSourcing.NetCore/tree/main/Workshops/IntroductionToEventSourcing.
-- Java: https://github.com/oskardudycz/EventSourcing.JVM/tree/main/workshops/introduction-to-event-sourcing.
-- Node.js and TypeScript: https://github.com/oskardudycz/EventSourcing.NodeJS/tree/main/workshops/introduction_to_event_sourcing.
+- [C#](https://github.com/oskardudycz/EventSourcing.NetCore/tree/main/Workshops/IntroductionToEventSourcing),
+- [Java](https://github.com/oskardudycz/EventSourcing.JVM/tree/main/workshops/introduction-to-event-sourcing),
+- [Node.js and TypeScript](https://github.com/oskardudycz/EventSourcing.NodeJS/tree/main/workshops/introduction_to_event_sourcing).
 
 It took me two weeks of full focus, plus all the hours I spent in the past years. Of course, it's not the same experience as attending the workshop. But it should be a decent starting point in your Event Sourcing journey. It should give you the tools to build on and play with your ideas and reduce the initial confusion. 
 
 **If you need more than that and want full coverage with all nuances of the private workshop, check [the training page](/en/training/).** Feel invited to contact me via [email](mailto:oskar@event-driven.io).
 
-I plan to extend it and provide similar exercises in other languages when I find enough time. Contact me if you want to [sponsor such an effort]((https://github.com/sponsors/oskardudycz) and make that happen for your favourite tech stack.
+I plan to extend it and provide similar exercises in other languages when I find enough time. Contact me if you want to [sponsor such an effort](https://github.com/sponsors/oskardudycz) and make that happen for your favourite tech stack.
 
-**If you like it, share it with your friends to benefit. **
+**If you like it, share it with your friends to benefit.**
 
 Drop me also a line with your thoughts!
 

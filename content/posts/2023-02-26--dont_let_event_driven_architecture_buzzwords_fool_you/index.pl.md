@@ -16,23 +16,23 @@ The real split is Event-Driven Architecture vs Messaging.
 
 Contrary to the traditional approach, we focus on verbs instead of nouns. So behaviours in our systems, interactions between them, reactions about new information and data in motion.
 
-**Events are excellent workflow facilitators.** They represent facts on what has happened. We're inverting the classical flow; instead of requesting everything, we're notifying all interested parts. Then others can react and publish new information through events. [That helps to build decoupled and autonomous components](/pl/how_events_can_help_on_making_state_based_approach_efficient/).
+**Events are excellent workflow facilitators.** They represent facts on what has happened. We're inverting the classical flow; instead of requesting everything, we're notifying all interested parties. Then others can react and publish new information through events. [That helps to build decoupled and autonomous components](/pl/how_events_can_help_on_making_state_based_approach_efficient/).
 
 **Events are messages, but they're not the only message type. The second most important is _command_. They differ by intention.** I wrote about it longer in [What's the difference between a command and an event?](/pl/whats_the_difference_between_event_and_command/). TLDR:
 
-The command is an intent to do something. It's directed, and the handler may reject it.
+A command is an intent to do something. It's directed, and the handler may reject it.
 
 Events are facts; they can (and should) have multiple receivers. Yet, the event producers shouldn't assume getting a response. 
 
 **Understanding this split is essential for proper workflow composition.** As much as we'd like our flow to be fire and forget, sometimes we need to have an explicit request to do something. Suppose we model workflow so that we always expect a particular event back as a follow-up. Is our event really broadcasted information or just an implicit command?
 
-**Events and commands do not differ by definition in terms of how they're delivered, whether synchronous or asynchronous.** The difference is in intention. The event doesn't have to be asynchronous or use tooling like Kafka, Rabbit, SQS, etc. It's about the composition of our flows, modelling conversation and structuring our architecture. It's close to the [original Alan Key's definition of Object Oriented Programming](https://wiki.c2.com/?AlanKaysDefinitionOfObjectOriented).
+**Events and commands do not differ by definition in terms of how they're delivered, whether synchronous or asynchronous.** The difference is in intention. The event doesn't have to be asynchronous or use tooling like Kafka, Rabbit, SQS, etc. It's about the composition of our flows, modelling conversation and structuring our architecture. It's close to the [original Alan Kay's definition of Object Oriented Programming](https://wiki.c2.com/?AlanKaysDefinitionOfObjectOriented).
 
 **Now, here we got to Messaging.** It's a set of patterns like Outbox, Inbox, Competing Consumers etc., focused on integration between our boundaries (modules, services etc.). 
 
 **EDA and Messaging are different design perspectives.** With EDA, you're shaping your application's conceptual/logical split, interactions, and how the flow looks. 
 
-Knowing what we'd like to achieve, we can one layer down and define how to do it. For instance, how to achieve guarantees like at-least-once delivery, strict ordering, and idempotent handlers. That's Messaging; it tells how to handle communication efficiently and is part of the solution space. Yet it's still agnostic to a specific technical solution. We should select the messaging tooling based on the design and whether it supports the Messaging patterns we have chosen to fulfil it.
+Knowing what we'd like to achieve, we can go one layer down and define how to do it. For instance, how to achieve guarantees like at-least-once delivery, strict ordering, and idempotent handlers. That's Messaging; it tells how to handle communication efficiently and is part of the solution space. Yet it's still agnostic to a specific technical solution. We should select the messaging tooling based on the design and whether it supports the Messaging patterns we have chosen to fulfil it.
 
 **The design flow should look like this:**
 1. **WHAT?** Describe the business workflow and model it using Event-Driven Architecture. That includes communication flow between components, boundaries, etc. Great tools for that are [EventStorming](https://www.eventstorming.com/) and [Event Modeling](https://eventmodeling.org).
@@ -75,6 +75,10 @@ That also plays well with tools like [EventStorming](https://www.eventstorming.c
 I know that it sounds like 4D Chess, but that's our role. We need to train our abstract and critical thinking, as [the magic is that there's no magic](/pl/the_magic_is_that_there_is_no_magic/).
 
 **Don't let the buzzwords and marketing fool you. Think for yourself, and question authorities.**
+
+If you liked this article, also check others where I'm trying to bust similar myths:
+- [Event Streaming is not Event Sourcing!](/pl/event_streaming_is_not_event_sourcing/)
+- [CQRS facts and myths explained](/plen/cqrs_facts_and_myths_explained/)
 
 Cheers!
 
