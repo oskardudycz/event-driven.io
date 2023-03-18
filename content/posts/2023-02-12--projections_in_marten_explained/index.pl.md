@@ -566,6 +566,8 @@ builder.Services
 
 Do you want more? Source codes are available [here in my repository](https://github.com/oskardudycz/EventSourcing.NetCore/tree/main/Sample/Helpdesk).
 
+How to project events to other database than Postgres? I got you covered, read the [guide using Elasticsearch as an example](/pl/projecting_from_marten_to_elasticsearch).
+
 Watch also the webinar:
 
 `youtube: https://www.youtube.com/watch?v=Lc2zV8KA16A`
