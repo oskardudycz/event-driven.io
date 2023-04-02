@@ -40,6 +40,7 @@ Jokes aside, the tool is impressive, and I firmly believe it's a must-have nowad
 Who's quote is that? [Sam Altman, CEO of OpenAI, ChatGPT creators](https://www.theverge.com/23560328/openai-gpt-4-rumor-release-date-sam-altman-interview). 
 
 **What's AGI? Per Wikipedia:**
+
 > “Artificial general intelligence (AGI) is the ability of an intelligent agent to understand or learn any intellectual task that human beings or other animals can."
 
 So if those tools are not AGI, then what are they? GPT are [large language models](https://en.wikipedia.org/wiki/Large_language_model). You can consider them a huge graph, where nodes are words, and connections are probabilities. 
