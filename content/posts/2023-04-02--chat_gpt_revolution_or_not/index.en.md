@@ -39,7 +39,8 @@ Jokes aside, the tool is impressive, and I firmly believe it's a must-have nowad
 
 Who's quote is that? [Sam Altman, CEO of OpenAI, ChatGPT creators](https://www.theverge.com/23560328/openai-gpt-4-rumor-release-date-sam-altman-interview). 
 
-**What's AGI? Per Wikipedia, _"Artificial general intelligence (AGI) is the ability of an intelligent agent to understand or learn any intellectual task that human beings or other animals can."_.**
+**What's AGI? Per Wikipedia:
+> “Artificial general intelligence (AGI) is the ability of an intelligent agent to understand or learn any intellectual task that human beings or other animals can."
 
 So if those tools are not AGI, then what are they? GPT are [large language models](https://en.wikipedia.org/wiki/Large_language_model). You can consider them a huge graph, where nodes are words, and connections are probabilities. 
 
@@ -51,7 +52,7 @@ That's why massive input data is critical for such models. The more we put into 
 
 If you add _"Who's the president Polish President?"_ it'll probably tell you the name of the President of Poland. Will it tell you the current one? Probably, as our current one is eight years in the position, so it should be in the trained data.
 
-If you ask, _"Who's the president Polish President of the Polish programmer association?"_ then it'll either tell you it doesn't know or _make up_ the answer. Actually, it's not making up. It checks the connections, and let's say it has the minimum threshold of giving the answer defined as, e.g. 20%; if it finds something above the threshold, it'll take the most probable explanation. If not, then it'll say that it doesn't know.
+If you ask, _"Who's the president of the Polish Programmers Association?"_ then it'll either tell you it doesn't know or _make up_ the answer. Actually, it's not making up. It checks the connections, and let's say it has the minimum threshold of giving the answer defined as, e.g. 20%; if it finds something above the threshold, it'll take the most probable explanation. If not, then it'll say that it doesn't know.
 
 **Of course, it's a plain English explanation from a non-native speaker. No one knows precisely how those tools work, even the authors.** And [OpenAI is not so open on their work](https://fortune.com/2023/03/17/sam-altman-rivals-rip-openai-name-not-open-artificial-intelligence-gpt-4/). For more educated explanation, read a great post by [Stephen Wolfram - What Is ChatGPT Doing … and Why Does It Work?](https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/).
 
