@@ -65,6 +65,12 @@ const Bodytext = props => {
             padding: 0.2em 0.2em 0.2em;
             border-radius: 0.1em;
           }
+          blockquote {
+          font-style: italic;
+          border-left: 7px solid orange;
+          margin: 1.5em 10px;
+          padding: 1em 10px .1em 10px;
+        }
         }
 
         @keyframes bodytextEntry {
