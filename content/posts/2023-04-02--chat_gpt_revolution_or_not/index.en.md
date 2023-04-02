@@ -19,7 +19,7 @@ Some may say that _no pain, no gain_. And that's the hard truth; you learn best 
 
 When StackOverflow had its hay days, I heard _"Now we won't need to code anything, just copy/paste and call it a day!" _. 
 
-Or some more dramatic: _"We won't be needed anymore!" _.
+Or some more dramatic: _"We won't be needed anymore!"_.
 
 **Somehow, that didn't happen.** Did our work change? Sure? Is it better or worse? It's different.
 

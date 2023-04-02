@@ -14,13 +14,13 @@ That's, of course, nothing spectacular, as many people more experienced than me 
 
 Those were dark days. Getting quick help with the coding problem you're trying to solve was almost impossible. Now, does your notebook have a CD player? Nope, if you were a .NET developer, you installed the whole Microsoft Documentation from CD. Or best, you have to read books, but there was no Kindle. Webinars? Free content from [Developers Advocates](/pl/revolution_now/)? Forget about it.
 
-Still, when we look at our stories from the trenches and the battles we somehow survived, they look pretty romantic from our current standpoint. _Hey boy, see we were wounded, but we're still standing!_. We tend to believe that others must go through those trenches to become as experienced and remarkable as we did.
+Still, when we look at our stories from the trenches and the battles we somehow survived, they look pretty romantic from our current standpoint.WHey boy, see we were wounded, but we're still standing!_. We tend to believe that others must go through those trenches to become as experienced and remarkable as we did.
 
 Some may say that _no pain, no gain_. And that's the hard truth; you learn best if you feel the pain. You want to avoid it. Still, does it really have to hurt?
 
-When StackOverflow had its hay days, I heard _"Now we won't need to code anything, just copy/paste and call it a day!" _. 
+When StackOverflow had its hay days, I heard _"Now we won't need to code anything, just copy/paste and call it a day!"_. 
 
-Or some more dramatic: _"We won't be needed anymore!" _.
+Or some more dramatic: _"We won't be needed anymore!"_.
 
 **Somehow, that didn't happen.** Did our work change? Sure? Is it better or worse? It's different.
 
@@ -41,6 +41,7 @@ Jokes aside, the tool is impressive, and I firmly believe it's a must-have nowad
 Who's quote is that? [Sam Altman, CEO of OpenAI, ChatGPT creators](https://www.theverge.com/23560328/openai-gpt-4-rumor-release-date-sam-altman-interview). 
 
 **What's AGI? Per Wikipedia:**
+
 > "Artificial general intelligence (AGI) is the ability of an intelligent agent to understand or learn any intellectual task that human beings or other animals can."
 
 So if those tools are not AGI, then what are they? GPT are [large language models](https://en.wikipedia.org/wiki/Large_language_model). You can consider them a huge graph, where nodes are words, and connections are probabilities. 
