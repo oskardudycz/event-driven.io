@@ -14,7 +14,7 @@ That's, of course, nothing spectacular, as many people more experienced than me 
 
 Those were dark days. Getting quick help with the coding problem you're trying to solve was almost impossible. Now, does your notebook have a CD player? Nope, if you were a .NET developer, you installed the whole Microsoft Documentation from CD. Or best, you have to read books, but there was no Kindle. Webinars? Free content from [Developers Advocates](/pl/revolution_now/)? Forget about it.
 
-Still, when we look at our stories from the trenches and the battles we somehow survived, they look pretty romantic from our current standpoint.WHey boy, see we were wounded, but we're still standing!_. We tend to believe that others must go through those trenches to become as experienced and remarkable as we did.
+Still, when we look at our stories from the trenches and the battles we somehow survived, they look pretty romantic from our current standpoint. _"Hey boy, see we were wounded, but we're still standing!_. We tend to believe that others must go through those trenches to become as experienced and remarkable as we did.
 
 Some may say that _no pain, no gain_. And that's the hard truth; you learn best if you feel the pain. You want to avoid it. Still, does it really have to hurt?
 
@@ -80,7 +80,9 @@ It's great for providing the initial draft or solution for a focused case or bra
 
 Knowing what we want to achieve is the most important, ChatGPT et al. can help us to get answers on how to do that. But it's our role to decide which answer is correct, as they're _only_ the most probable. A mediocre solution can be good enough for everyday tasks, but for advanced or the most important? Probably not. We'll still need to put more work into that.
 
-**Okay, then how it helped me to build the initial state for the [training](/pl/training/)?** See the current result in the repo: https://github.com/oskardudycz/event-sourcing-on-prod-workshop/. Even with its help, it took me a few days to prepare and fix its issues. But without its help, it'd taken me even more. Yet, watch out! Discussions with it and authoring may take longer than if you just did it on your own.
+**Okay, then how it helped me to build the initial state for the [training](/pl/training/)?** See the current result in the repo: https://github.com/oskardudycz/event-sourcing-on-prod-workshop/.
+
+Even with its help, it took me a few days to prepare and fix its issues. But without its help, it'd taken me even more. Yet, watch out! Discussions with it and authoring may take longer than if you just did it on your own.
 
 **Another example? I recently did a [webinar for Architecture Weekly subscribers](https://www.architecture-weekly.com/p/webinar-8-slim-down-your-aggregates) and asked ChatGPT for inspiration about the example of a complex DDD aggregate.** I used it as the base to show how you could refactor it and slim them down.
 
@@ -103,6 +105,10 @@ It generated something that was _okayish_; I've seen such code in other codebase
 > Write the whole code, including business logic and invariant checks. Provide aggregate and entities as separate code snippets. 
 > 
 > Remember that entities should also be broken into dedicated snippets."
+
+Watch what happened next:
+
+[![webinar](2023-04-02-webinar.png)](https://www.architecture-weekly.com/p/webinar-8-slim-down-your-aggregates)
 
 **So, TLDR. Don't be afraid of AI-related tooling.** Learn how to use them, as they can speed up your work and give you a competitive advantage over the people that don't. Yet, it would be best to understand how they work and what they can provide you. 
 

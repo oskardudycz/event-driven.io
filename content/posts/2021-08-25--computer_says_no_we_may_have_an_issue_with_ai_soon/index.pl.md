@@ -55,3 +55,5 @@ Therefore, when the computer says no, verify if it's doing it right.
 Cheers!
 
 Oskar
+
+p.s. read also my thoughts on whether [ChatGPT is a revolution or not](/pl/chat_gpt_revolution_or_not/).
