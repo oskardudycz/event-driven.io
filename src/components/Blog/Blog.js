@@ -46,7 +46,6 @@ const Blog = props => {
           border-left: 7px solid orange;
           margin: 1.5em 10px;
           padding: 1em 10px .1em 10px;
-          quotes: "\201C""\201D""\2018""\2019";
         }
 
         @above tablet {
