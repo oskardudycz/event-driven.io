@@ -61,7 +61,7 @@ If you ask, _"Who's the president of the Polish Programmers Association?"_ then 
 
 I explained some dangers in [Computer says no! Why we might have an issue with Artificial Intelligence soon](/en/computer_says_no_we_may_have_an_issue_with_ai_soon/). Those models are as objective as the people who trained them and tuned their parameters. 
 
-**We'll need to learn to use it cautiously and ethically, as IT people teach others about that.**
+**We'll need to learn to use it cautiously and ethically, as IT people teach others about that.** It's a big concern, especially since it doesn't seem to be the highest priority for the companies. Prove? [Microsoft just layed off an ethical AI team](https://techcrunch.com/2023/03/13/microsoft-lays-off-an-ethical-ai-team-as-it-doubles-down-on-openai).
 
 We should also get the tools to help us fight those fakes or detect AI-generated stuff. That won't be easy, but the need will be so strong that I expect this arms race to start soon.
 
