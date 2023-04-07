@@ -55,6 +55,8 @@ Once you're done, please don't use it on production; rather, use some mature sol
 
 Still, it's a lot of fun, nothing too time-consuming to build a simple one and an excellent exercise in understanding how Event Sourcing works.
 
+Not convinced? Read then why [you can think about event stores as key-value stores, and why that matters](/en/event_stores_are_key_value_stores).
+
 Cheers!
 
 Oskar

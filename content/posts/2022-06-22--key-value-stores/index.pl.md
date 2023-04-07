@@ -20,7 +20,7 @@ or any other form of writing that comes to our mind depending on the specific im
 
 Such databases start with elementary forms such as Azure Blob Storage or AWS S3 - where the value has no clear structure - these are bags/buckets for data. Interestingly, in S3, the key to your resource is unique worldwide. It cannot be repeated by any S3 users.
 
-**This uniqueness is essential.** Keys are like trying to come up with your email while setting up a new mailbox account. We must think twice and come up with a pattern that will make it unique. Of course, we could generate a totally random email, but if someone wants to drop us a line, later on, they will have a problem finding it. In the end, the result looks like  _john.doe@gmail.com_, _aggy14@kisskiss.com_ or another format that will ensure that our email will not be repeated.
+**This uniqueness is essential.** Keys are like trying to come up with your email while setting up a new mailbox account. We must think twice and come up with a pattern that will make it unique. Of course, we could generate a totally random email, but if someone wants to drop us a line, later on, they will have a problem finding it. In the end, the result looks like _john.doe@gmail.com_, _aggy14@kisskiss.com_ or another format that will ensure that our email will not be repeated.
 
 The same we do with keys in key-value databases. To ensure the uniqueness of the key, we can use a random UUID (_[Universally unique identifier](https://en.wikipedia.org/wiki/Universally_unique_identifier)_). We can also develop a specific format, such as _"CustomerId-ProjectNumber-TaskNumber"_, that can represent a particular task in a customer's project.
 
@@ -43,7 +43,7 @@ We should remember that key-value databases are most efficient when traversing t
 
 Redis and Elasticsearch are key-value databases. We can use such databases and not even know about that. Interestingly, for example, Kafka underneath is a key-value database wrapped with algorithms and techniques for data replication and consensus determination.
 
-**The last group of key-value databases are event stores.** They have the same rules about keys as I explained above, but the value is a sequence of events (think the sequence of facts about the entity). Examples? [Marten](https://martendb.io/events/), [EventStoreDB](https://www.eventstore.com/), [Axon Server](https://developer.axoniq.io/axon-server/overview) etc. Interestingly event stores can be modelled on top of other databases, so relational ones, key-value etc. So they're kind of meta-databases.
+**[The last group of key-value databases are event stores.](/en/event_stores_are_key_value_stores)** They have the same rules about keys as I explained above, but the value is a sequence of events (think the sequence of facts about the entity). Examples? [Marten](https://martendb.io/events/), [EventStoreDB](https://www.eventstore.com/), [Axon Server](https://developer.axoniq.io/axon-server/overview) etc. Interestingly event stores can be modelled on top of other databases, so relational ones, key-value etc. So they're kind of meta-databases.
 
 If we look closer, we'll find that most of the systems we work on do not have relational data. Most of them reflect the physical process of documents' workflows. Our clients often transfer physical processes to digital forms: invoices, orders, tickets, personal data, and already mentioned applications. These are all documents.
 
