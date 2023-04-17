@@ -3,6 +3,7 @@ title: Event stores are key-value databases, and why that matters
 category: "Coding Life"
 cover: 2023-04-07-es1.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2023-04-07-es1.png)

@@ -15,7 +15,7 @@ Let's start with a simple case: trip management. We could come up with the follo
 
 ```sql
 CREATE TABLE trips (
-    trip_time TIMESTAMP NOT NULL,
+    trip_time TIMESTAMPTZ NOT NULL,
     vehicle_id INT NOT NULL,
     driver_name VARCHAR(255) NOT NULL,
     start_location TEXT NOT NULL,
@@ -34,7 +34,7 @@ In our case, we could use the partitioning-by-date strategy because we'll be pri
 
 ```sql
 CREATE TABLE trips (
-    trip_time TIMESTAMP NOT NULL,
+    trip_time TIMESTAMPTZ NOT NULL,
     vehicle_id INT NOT NULL,
     driver_name VARCHAR(255) NOT NULL,
     start_location TEXT NOT NULL,
@@ -69,9 +69,7 @@ BEGIN
 END$$;
 ```
 
-Sometimes they're used in triggers before inserting new rows.
-
-Not that terrible, but with a bigger scale, managing that can get complicated.
+Not that terrible, but with a bigger scale, managing that can get complicated. When you cannot predict partitions upfront and set up dynamic ones upon insert, you'd need to use triggers or [pg_partman](https://github.com/pgpartman/pg_partman) extension. But as we're in the time series use case, then...
 
 ## Introducing TimescaleDB
 
@@ -138,8 +136,8 @@ Let's use our materialised view to generate alerts based on detected fuel usage 
 ```sql
 CREATE TABLE fuel_efficiency_alerts (
     vehicle_id INT NOT NULL,
-    start_time TIMESTAMP NOT NULL,
-    end_time TIMESTAMP NOT NULL,
+    start_time TIMESTAMPTZ NOT NULL,
+    end_time TIMESTAMPTZ NOT NULL,
     fuel_efficiency NUMERIC(10,2) NOT NULL,
     PRIMARY KEY (vehicle_id, start_time)
 );

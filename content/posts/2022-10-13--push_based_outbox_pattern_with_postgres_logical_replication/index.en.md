@@ -272,6 +272,8 @@ I started to play with logical replication, and this article summarises my curre
 
 If you're wondering on how existing records will be processed, read more in [How to get all messages through Postgres logical replication](/en/how_to_get_all_messages_through_postgres_logical_replication).
 
+Read also [Postgres Superpowers in Practice](/en/postgres_superpowers/) where I explained the use case of Fleet Management and how it can help together with plugins like Timescale and PostGIS to build the real platform that detects the anomalies and pushes the notifications through #dotnet application to React app!
+
 What are the next steps? I need to check:
 - subscriptions and replies,
 - scenarios around backups and, in general, fault tolerance.
