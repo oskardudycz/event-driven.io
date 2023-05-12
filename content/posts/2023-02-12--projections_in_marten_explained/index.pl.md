@@ -108,7 +108,7 @@ public record IncidentShortInfo(
     IncidentPriority? Priority = null
 );
 
-public class IncidentShortInfoProjection: SingleStreamAggregation<IncidentShortInfo>
+public class IncidentShortInfoProjection: SingleStreamProjection<IncidentShortInfo>
 {
     public static IncidentShortInfo Create(IncidentLogged logged) =>
         new(logged.IncidentId, logged.CustomerId, IncidentStatus.Pending, 0);
@@ -163,7 +163,7 @@ public enum IncidentNoteType
     FromCustomer
 }
 
-public class IncidentDetailsProjection: SingleStreamAggregation<IncidentDetails>
+public class IncidentDetailsProjection: SingleStreamProjection<IncidentDetails>
 {
     public static IncidentDetails Create(IncidentLogged logged) =>
         new(logged.IncidentId, logged.CustomerId, IncidentStatus.Pending, Array.Empty<IncidentNote>());
@@ -353,7 +353,7 @@ For that, we need to correlate the incident and customer information. The simple
 
 If we had a customer id in each incident event, we could use it to find the information in each model. 
 
-Marten also provides a base class for handling multiple streams (of the same or different type): [Multi Stream Aggregation](https://martendb.io/events/projections/view-projections.html).
+Marten also provides a base class for handling multiple streams (of the same or different type): [Multi Stream Projection](https://martendb.io/events/projections/view-projections.html).
 
 ```csharp
 public record CustomerCreated(
@@ -373,7 +373,7 @@ public class CustomerIncidentsSummary
     public int Closed { get; set; }
 }
 
-public class CustomerIncidentsSummaryProjection: MultiStreamAggregation<CustomerIncidentsSummary, Guid>
+public class CustomerIncidentsSummaryProjection: MultiStreamProjection<CustomerIncidentsSummary, Guid>
 {
     public CustomerIncidentsSummaryProjection()
     {
@@ -557,9 +557,9 @@ builder.Services
     .AddMarten(options =>
     {
 	// (...)
-        options.Projections.Add<IncidentHistoryTransformation>();
-        options.Projections.Add<IncidentDetailsProjection>();
-        options.Projections.Add<IncidentShortInfoProjection>();
+        options.Projections.Add<IncidentHistoryTransformation>(ProjectionLifecycle.Inline);
+        options.Projections.Add<IncidentDetailsProjection>(ProjectionLifecycle.Inline);
+        options.Projections.Add<IncidentShortInfoProjection>(ProjectionLifecycle.Inline);
         options.Projections.Add<CustomerIncidentsSummaryProjection>(ProjectionLifecycle.Async);
     }).AddAsyncDaemon(DaemonMode.Solo);
 ```

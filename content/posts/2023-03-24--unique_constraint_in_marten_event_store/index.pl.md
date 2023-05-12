@@ -51,7 +51,7 @@ public record UserNameGuard(
 );
 
 public class UserNameGuardProjection: 
-    SingleStreamAggregation<UserNameGuard>
+    SingleStreamProjection<UserNameGuard>
 {
     public UserNameGuardProjection() =>
         DeleteEvent<UserDeleted>();

@@ -94,10 +94,10 @@ var store = DocumentStore.For(opts =>
     opts.Connection("some connection string");
 
     // Run the Trip as an inline projection
-    opts.Projections.SelfAggregate<FinancialAccount>(ProjectionLifecycle.Inline);
+    opts.Projections.Snapshot<FinancialAccount>(SnapshotLifecycle.Inline);
 
     // Or run it as an asynchronous projection
-    opts.Projections.SelfAggregate<FinancialAccount>(ProjectionLifecycle.Async);
+    opts.Projections.Snapshot<FinancialAccount>(SnapshotLifecycle.Async);
 });
 ```
 
