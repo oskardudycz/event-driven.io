@@ -3,6 +3,7 @@ title: How to test event-driven projections
 category: "Event Sourcing"
 cover: 2023-04-29-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2023-04-29-cover.png)

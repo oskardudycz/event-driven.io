@@ -3,6 +3,7 @@ title: General strategy for migrating relational data to document-based
 category: "Event Sourcing"
 cover: 2023-05-07-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2023-05-07-cover.png)
