@@ -4,9 +4,9 @@ title: How to deal with privacy and GDPR in Event-Sourced systems
 
 **Thanks for joining my talk _"How to deal with privacy and GDPR in Event-Sourced systems"_!**
 
-If you want to rewatch it, or want to share it with your friends, see the recording of the webinar:
+If you want to rewatch it, or want to share it with your friends, see the recording:
 
-`youtube: https://www.youtube.com/watch?v=CI7JPFLlpBw`
+`youtube: https://www.youtube.com/watch?v=7NGlYgobTyY`
 
 **Feel free to [drop me an e-mail](mailto:oskar@event-driven.io) or [connect with me at LinkedIn](https://www.linkedin.com/in/oskardudycz/)**.
 
