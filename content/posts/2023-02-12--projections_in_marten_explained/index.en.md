@@ -547,7 +547,7 @@ public CustomerIncidentsSummaryProjection()
 
 Then Marten will run the transformation behind the scenes and call the proper apply method.
 
-You can define even fancier transformations. Yet, with great power comes great responsibility. You need to be careful not to compromise performance after going wild. At least register such projection as asynchronous, e.g.:
+You can define even fancier transformations. Yet, with great power comes great responsibility. You need to be careful not to compromise performance after going wild. Read more considerations in [Anti-patterns in event modelling - I'll just add one more field](/en/i_will_just_add_one_more_field/). And at least register such projection as asynchronous, e.g.:
 
 ```csharp
 var builder = WebApplication.CreateBuilder(args);

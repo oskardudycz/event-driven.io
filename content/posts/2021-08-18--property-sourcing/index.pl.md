@@ -139,6 +139,10 @@ The basis of good event modelling is in cooperation with business. Discussion an
 
 It's also important to not treat our initial event model as set in stone. We should embrace that our model will change. We'll understand our domain better. The business will also change as time goes. We should continue to drill down and make our event model closer to the real world.
 
+**Read also other article in Anti-patterns in event modelling series:**
+- [State Obsession](/pl/state-obsession/),
+- [I'll just add one more field](/pl/i_will_just_add_one_more_field/).
+
 Cheers!
 
 Oskar
