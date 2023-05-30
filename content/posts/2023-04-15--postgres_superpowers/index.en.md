@@ -552,6 +552,10 @@ export default FleetManagementApp;
 
 I hope this article shows you how extensible and powerful Postgres is and that it can give you a lot of fun and real help to deliver your business features in production-grade quality!
 
+Watch also more and see full considerations in the [webinar recording](https://www.architecture-weekly.com/p/webinar-10-postgresql-superpowers).
+
+[![cover](2023-04-15-webinar.png)](https://www.architecture-weekly.com/p/webinar-10-postgresql-superpowers)
+
 Want to see full code? Check my repositories:
 - [Postgres for .NET developer](https://github.com/oskardudycz/postgres-for-dotnet-dev)
 - [Postgres Outbox Pattern with CDC and .NET](https://github.com/oskardudycz/PostgresOutboxPatternWithCDC.NET)
