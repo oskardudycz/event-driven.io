@@ -26,6 +26,7 @@ Other resources you may find useful:
 - [Daniel Lebrero - Kafka, GDPR and Event Sourcing](https://danlebrero.com/2018/04/11/kafka-gdpr-event-sourcing/)
 - [Stuart Herbert - Event Sourcing and GDPR: When Immutability Meets Reality](https://www.youtube.com/watch?v=FTcBa-2-I2c)
 - [Masih Derkani - GDPR Compliance: Transparent Handing of Personally Identifiable Information in Event-Driven Systems](https://www.confluent.io/resources/kafka-summit-2020/gdpr-compliance-transparent-handing-of-personally-identifiable-information-in-event-driven-systems/)
+- [Harish Kumar - Easy Implementation of GDPR with Aspect Oriented Programming](https://www.infoq.com/articles/gdpr-with-spring-and-aop)
 
 Cheers!
 
