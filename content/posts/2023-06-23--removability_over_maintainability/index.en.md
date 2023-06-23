@@ -17,7 +17,9 @@ The architecture looks obsolete, and the code has more _[code smells](https://en
 
 **Yet, somehow system still stands, and users are using it. Why?**
 
-Gerald Weinberg said _"Things are the way they are because they got that way"._
+Gerald Weinberg said:
+
+> "Things are the way they are because they got that way".
 
 The bad design may be both the weakness and power of the system. Weakness reveals in the inertia of changes and the power in the ability to keep it still going.
 
@@ -31,7 +33,7 @@ That sounds bad, of course, but it's undeniable that multiple people touching th
 
 [I'm a huge proponent of recording architecture decisions.](/en/how_to_successfully_do_documentation_without_maintenance_burden/) In one of my last projects, we had a sophisticated decision-making process. We wanted to make stuff right, have a log of our decisions and be fully transparent. While working on a new design or updating the existing one, each team should provide an [RFC-like](https://en.wikipedia.org/wiki/Request_for_Comments) document and go through the _design review_ process. 
 
-**The Design Review process requires internal approval from the team and then at least two more from people from the other teams.** The intention was to have an immutable log for design changes, increase transparency and get cross-team collaboration and knowledge sharing. Also, to increase the diversity of views. Sounds right?
+**The Design Review process required internal approval from the team and then at least two more from people from the other teams.** The intention was to have an immutable log for design changes, increase transparency and get cross-team collaboration and knowledge sharing. Also, to increase the diversity of views. Sounds right?
 
 That description sounds simple, but of course, we faced issues in applying that. They're a story on their own, but we eventually got an overall sound quality of the design decisions. Such designs would end up in maintainable software.
 
@@ -51,17 +53,19 @@ Maybe it'd be better just to let teams do what they wanted. Make them work close
 
 The critical thing here is to make teams accountable for their decisions. Let them fail and recover but face the consequences of bad choices. As long as we have a log of decision-making and constantly evaluating them, we can learn from them and survive.
 
-**Getting back to the diversity mentioned by Donella Meadows.** We intended to increase the diversity of the decision-making, but by forcing all teams to fit the same process, we achieved the opposite. By that, we decreased the chance of our system to survive.
+**Getting back to the diversity mentioned by Donella Meadows.** We intended to increase the diversity of the decision-making, but by forcing all teams to fit the same process, we achieved the opposite. By that, we decreased the chance of our system to survive. Diversity is critical, giving us more options to evolve and pivot. [Aaron Stannard called it optionality](https://www.youtube.com/watch?v=yV97QwC5gnE), and that's a good name; we're increasing the number of options we have.
 
 **What if we let teams do what they wanted, creating an unmaintainable mess but reaching adoption?** Then that'd be a decent problem to have. Jokes aside, how would I deal with that?
 
-**I think that we should optimise not for maintainability but _removability_.** If our system is built in a way that we can relatively easy to remove pieces from it, then we can drop bad ideas and new with new ones. Also, by accident, we're getting a system that's easier to maintain.
+**I think that we should optimise not for maintainability but _removability_.** If our system is built in a way that we can relatively easy to remove pieces from it, then we can drop bad ideas and move with new ones. Also, by accident, we're getting a system that's easier to maintain. [Greg Young said](https://www.youtube.com/watch?v=Ed94CfxgsCA):
 
-[That's why I like CQRS.](/en/cqrs_facts_and_myths_explained/) By introducing business-focused vertical slices, we're allowing them to be diverse and easier to remove. Each slice can represent a different feature and be implemented differently (if needed). That increases the likelihood of surviving unpredictable scenarios and pivoting our product and design decisions. Of course, CQRS won't solve it all. I'm showing it as an example solution for a technical approach. 
+> One of beautiful things about deleting code its allows you to change your mind
+
+[That's why I like CQRS.](/en/cqrs_facts_and_myths_explained/) By introducing business-focused vertical slices, we're allowing them to be diverse and easier to remove. Each slice can represent a different feature and be implemented differently (if needed). That increases the likelihood of surviving unpredictable scenarios and pivoting our product and design decisions. Of course, CQRS won't solve it all. I'm using it as an example solution for a technical approach. 
 
 **The most important is to ensure that our delivery process matches our product phase and organisation structure.** [Conway's law](https://en.wikipedia.org/wiki/Conway%27s_law), of course. We also should embrace that our business will evolve, the industry will change, and we need to continuously adapt our organisation and approach to changing reality.
 
-Uber started with the attitude never to refactor but add new versions. Then they [pivoted to domain-oriented architecture](https://www.uber.com/en-PL/blog/microservice-architecture/). Amazon Prime started with a serverless approach, then they [centrailised part of their system into micro-services](https://www.primevideotech.com/video-streaming/scaling-up-the-prime-video-audio-video-monitoring-service-and-reducing-costs-by-90). And those are good examples of the evolutionary process.
+Uber started with the attitude to never refactor but add new versions. Then they [pivoted to domain-oriented architecture](https://www.uber.com/en-PL/blog/microservice-architecture/). Amazon Prime started with a serverless approach, then they [centrailised part of their system into micro-services](https://www.primevideotech.com/video-streaming/scaling-up-the-prime-video-audio-video-monitoring-service-and-reducing-costs-by-90). And those are good examples of the evolutionary processes.
 
 **We're making the most significant decisions when we're dumbest.** We don't know our domain, and we don't know the tech stack, yet we're trying to guess the best option and present it as wise architecture decisions. We should embrace that we're not that smart and help ourselves to make mistakes and learn from them. The model way is not always the best approach for our current situation. 
 
