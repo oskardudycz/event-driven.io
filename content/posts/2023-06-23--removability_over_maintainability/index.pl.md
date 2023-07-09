@@ -3,6 +3,7 @@ title: Removability over Maintainability
 category: "Architecture"
 cover: 2023-06-23-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2023-06-23-cover.png)
