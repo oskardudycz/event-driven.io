@@ -75,19 +75,19 @@ Robert explained the second-day issue: rebuilding our projections without system
 
 [Anita showed](https://2023.dddeurope.com/program/event-sourcing-in-action-insights-from-two-real-life-projects/) that whether something is good or bad practice depends on context. She talked a lot about the challenges of implementing an event store on top of CosmosDB and design tradeoffs they took. I liked the pragmatic way of showing the thought process and the existence of the grey matter, e.g., splitting for [private and public events](/pl/events_should_be_as_small_as_possible/) may also depend on the team structure. If we’re a single team, maybe we can take shortcuts. That may work if we’re making conscious, transparent decisions.
 
-Let’s not forget about the friendly folks from Event Store. [Yves Lorphelin and Alexey Zimarev did a discussion panel](https://2023.dddeurope.com/program/sponsored-talk-beyond-the-hype-an-interactive-exploration-of-event-sourcing-and-eventstoredb/) during the main conference giving a chance to the community to ask questions and get answers. I enjoyed that primarily because it focused on the patterns and didn’t have vendor locking.
+Let’s not forget about the friendly folks from Event Store. [Yves Lorphelin and Alexey Zimarev did a discussion panel](https://2023.dddeurope.com/program/sponsored-talk-beyond-the-hype-an-interactive-exploration-of-event-sourcing-and-eventstoredb/) during the main conference giving a chance to the community to ask questions and get answers. I enjoyed that primarily because it focused on the patterns and were not vendor specific.
 
 **I'd like to thank all the speakers for bearing with my lame MC jokes and all the community that was there showing the power of Event Sourcing!**
  
 All speakers did their best and delivered important content. If something was wrong, blame me, humble line-up curator.
  
-Being the curator and MC was a big thing but also stressful for me. [I’m an introvert](/pl/agile_vs_introverts/) that somehow managed to keep the stress on a leash when giving a talk, but that was a new experience. I was really stressed. This is an interesting thing, as I knew that no one would be focused on what I was doing, as speakers and their talks were the most important. Still, I guess we humans are selfish, and our brain tries to focus on ourselves. Still, I tried to make the show as fluent as possible so both audience and speakers liked it.
+Being the curator and MC was a big thing but also stressful for me. [I’m an introvert](/pl/agile_vs_introverts/) that somehow managed to keep the stress on a leash when giving a talk, but that was a new experience. I was really stressed. This is an interesting thing, as I knew that no one would be focused on what I was doing, as speakers and their talks were the most important. Still, I guess we humans are selfish, and our brain tries to focus on ourselves. Still, I tried to make the show as fluid as possible so both audience and speakers liked it.
  
 **The general feedback I got was positive.** Of course, some people said it was too much tech stuff, but we intended to show that Event Sourcing is a living thing and people are doing real things. Some said they would like more content about specifics of event modelling, and I take that, although the content is also dependent on the submissions. I hope we'll have more on that if we have the next edition.
  
 Still, I saw that people enjoyed the versatility, hands-on and pragmatic talks. I also liked them a lot. Especially since the content showed many faces of Event Sourcing, and most importantly, had this personal touch and was closed to the real projects, without esoteric considerations.
  
-When will the videos be available? I’m not sure, but I will update this article as soon as their available. You can subscribe to [Architecture Weekly](https://www.architecture-weekly.com/), and I’ll definitely send an update there.
+When will the videos be available? I’m not sure, but I will update this article as soon as they are available. You can subscribe to [Architecture Weekly](https://www.architecture-weekly.com/), and I’ll definitely send an update there.
  
 **Let me finish this article with my favourite quote from this edition of Event Sourcing Live. Anita Kvamme said:**
  

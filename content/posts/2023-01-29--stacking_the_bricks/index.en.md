@@ -7,7 +7,7 @@ author: oskar dudycz
 
 ![cover](2023-01-29-cover.jpg)
 
-**We, developers, are searching for Holy Grail, one pattern to rule them all. There's no such.**
+**We, developers, are [searching for Holy Grail](/en/holy_graal_syndrome/), one pattern to rule them all. There's no such.**
 
 In his excellent book ["Atomic Habits"](https://jamesclear.com/atomic-habits), James Clear described how we should stack our habits.
 
@@ -25,7 +25,8 @@ Of course, there's a risk when we forget that those small things are just bricks
 - understanding that [generic doesn't mean simple](/en/generic_does_not_mean_simple/),
 - cutting the number of layers in our architecture to [not block the thought process](/en/what_does_mr_bean_opening_the_car_have_to_do_with_programming/),
 - [keep the things that are changing together in one place](/en/how_to_slice_the_codebase_effectively/), e.g. by slicing the code by business behaviour and feature folders. It'll reduce the context switching,
-- [Reduce meaningless discussion and creativity where it's not needed](/en/should_programmers_productivity_be_shown_in_code_formatting/). E.g. define conventions for formatting, automate them and stick to them by making them a commodity,
+- [focus on the removability instead of maintainability](/en/removability_over_maintainability/),
+- [reduce meaningless discussion and creativity where it's not needed](/en/should_programmers_productivity_be_shown_in_code_formatting/). E.g. define conventions for formatting, automate them and stick to them by making them a commodity,
 - don't take [blindly advice from authorities](/en/what_does_a_construction_failure_have_to_do_with_our_authorities/). Be pragmatic, understand the context you're in and in which [patterns were designed](https://event-driven.io/en/the_magic_is_that_there_is_no_magic/). That will help you to be [agile in the right way](/en/when_agile_is_not_enough/).
 
 It's essential to have tools to zoom in and zoom out. We need to have a vision of the solution, but then you need to execute it. A grand vision with poor execution won't succeed. The same thing goes otherwise. I'm a fan of proof of concepts, so I do a quick dive into the code/tools to evaluate assumptions and ensure that they're not show-stoppers before moving forward.
