@@ -35,13 +35,13 @@ public record RoomReserved
 
 public record RoomReservationConfirmed
 (
-    string Id,
+    string ReservationId,
     DateTimeOffset ConfirmedAt
 );
 
 public record RoomReservationCancelled
 (
-    string Id,
+    string ReservationId,
     DateTimeOffset CancelledAt
 );
 
@@ -133,7 +133,7 @@ It could look like that:
 ```csharp
 public record ReserveRoom
 (
-    string Id,
+    string ReservationId,
     RoomType RoomType,
     DateOnly From,
     DateOnly To,
@@ -155,7 +155,7 @@ public record ReserveRoom
             throw new InvalidOperationException("Not enough available rooms!");
 
         return new RoomReserved(
-            command.Id,
+            command.ReservationId,
             command.ExternalId,
             command.RoomType,
             command.From,
@@ -372,7 +372,7 @@ public class DailyRoomTypeAvailabilityProjection: MultiStreamProjection<DailyRoo
 }
 ```
 
-The only complex part is taking the room type and date range from the _RoomReserved_ event and matching that with the read model rows. We can do that by defining the id format as _$"{RoomType}_{Date}"_.
+The only complex part is taking the room type and date range from the _RoomReserved_ event and matching that with the read model rows. We can do that by defining the id format as _$"{RoomType}\_{Date}"_.
 
 **Now, let's define the query for room type availability within the particular period:**
 
@@ -412,7 +412,8 @@ Nothing special here besides the fact that we don't use any query bus, marker in
 
 [Marten gives the option to listen for changes in the read model](/en/publishing_read_model_changes_from_marten/). We can use it to detect if we have overbooking. That's, again, a shortcut to avoid reinventing the wheel if we're inside the same module.
 
-**Let's create _OverbookingDetection_ subfolder inside _RoomReservations.ReservingRoom_ and put there a _DailyOverbookingDetector.cs_ file and put there logic for detecting overbooking:
+Such usage also gives the possibility for on-point performance improvements. [Jeremy did a follow-up explaining how Marten's compiled queries could help in that](https://jeremydmiller.com/2023/07/12/compiled-queries-with-marten/).
+**Let's create _OverbookingDetection_ subfolder inside _RoomReservations.ReservingRoom_ and put there a _DailyOverbookingDetector.cs_ file and put there logic for detecting overbooking:**
 
 ```csharp
 public record DailyOverbookingDetected
@@ -459,8 +460,6 @@ We're filtering the pending changes containing updated read models and getting o
 **Last but not least, let's discuss the external module integration.** We could create a _Guests_ subfolder inside the root of our module and put there _Guest.cs_ with a basic interpretation of the data from an external system. For us, it'll be enough to keep it simple as:
 
 ```csharp
-namespace Reservations.Guests;
-
 public record GuestExternalId(string Value)
 {
     public static GuestExternalId FromPrefix(string prefix, string externalId) =>
@@ -488,7 +487,67 @@ public record GetGuestIdByExternalId
 }
 ```
 
-Of course, it's a dummy implementation, but again, it lets you keep things explicit and self-explanatory. The final code structure looks as follows:
+Of course, it's a dummy implementation, but again, it lets you keep things explicit and self-explanatory. We could either call it explicitly as we did in the Event Handler. 
+
+```csharp
+using static Reservations.Guests.GettingGuestByExternalId.GetGuestIdByExternalId;
+
+public class BookingComRoomReservationMadeHandler: IEventHandler<BookingComRoomReservationMade>
+{
+    // (...)
+
+    public async Task Handle(BookingComRoomReservationMade @event, CancellationToken ct)
+    {
+        var (bookingComReservationId, roomTypeText, from, to, bookingComGuestId, numberOfPeople, madeAt) = @event;
+
+        var guestId = await Query(new GetGuestIdByExternalId(FromPrefix("BCOM", bookingComGuestId)), ct);
+       
+       // (...)
+    }
+}
+```
+
+That makes usage straightforward but also coupled. As we're running a potential code from another module, it may be worth adding abstraction. If we'd like to keep the boundaries explicit, to have e.g. better test isolation, we could inject query as a function:
+
+```csharp
+public delegate ValueTask<GuestId> GetGuestId(GetGuestIdByExternalId query, CancellationToken ct);
+
+public class BookingComRoomReservationMadeHandler: IEventHandler<BookingComRoomReservationMade>
+{
+    private readonly IDocumentSession session;
+    private readonly GetGuestId getGuestId;
+
+    public BookingComRoomReservationMadeHandler(
+        IDocumentSession session,
+        GetGuestId getGuestId)
+    {
+        this.session = session;
+        this.getGuestId = getGuestId;
+    }
+
+    public async Task Handle(BookingComRoomReservationMade @event, CancellationToken ct)
+    {
+        var (bookingComReservationId, roomTypeText, from, to, bookingComGuestId, numberOfPeople, madeAt) = @event;
+        var reservationId = CombGuidIdGeneration.NewGuid().ToString();
+
+        var guestId = await getGuestId(new GetGuestIdByExternalId(FromPrefix("BCOM", bookingComGuestId)), ct);
+        // (...)
+    }
+}
+```
+
+We could also use the interface like:
+
+```csharp
+public interface IQuery<TQuery, out TResponse> where T: notnull
+{
+    ValueTask<TResponse> Query(TQuery query, CancellationToken ct);
+}
+```
+
+And inject it, but I think it just adds more ceremony. Still, it's your call. The most important is to define our boundaries and draw them explicitly where needed to not end up with a big ball of mud.
+
+The final code structure looks as follows:
 
 ```
 📁 ReservationModule

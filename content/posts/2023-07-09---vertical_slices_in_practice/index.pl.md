@@ -8,9 +8,9 @@ useDefaultLangCanonical : true
 
 ![cover](2023-07-09-cover.png)
 
-**I'm a preacher for the [CQRS](/en/cqrs_facts_and_myths_explained/), Vertical Slices, and Feature Folders.** I won't hide that, and I won't even try. I believe that structuring code based on the business feature helps deliver business value, thanks to an increased focus on the domain and reduced cognitive load.
+**I'm a preacher for the [CQRS](/pl/cqrs_facts_and_myths_explained/), Vertical Slices, and Feature Folders.** I won't hide that, and I won't even try. I believe that structuring code based on the business feature helps deliver business value, thanks to an increased focus on the domain and reduced cognitive load.
 
-I explained already in my articles why [Generic does not mean Simple](/en/generic_does_not_mean_simple/) and [how to slice the codebase effectively](/en/how_to_slice_the_codebase_effectively/). I showed that in my talk:
+I explained already in my articles why [Generic does not mean Simple](/pl/generic_does_not_mean_simple/) and [how to slice the codebase effectively](/pl/how_to_slice_the_codebase_effectively/). I showed that in my talk:
 
 `youtube: https://www.youtube.com/watch?v=iY7LO289qnQ`
 
@@ -36,13 +36,13 @@ public record RoomReserved
 
 public record RoomReservationConfirmed
 (
-    string Id,
+    string ReservationId,
     DateTimeOffset ConfirmedAt
 );
 
 public record RoomReservationCancelled
 (
-    string Id,
+    string ReservationId,
     DateTimeOffset CancelledAt
 );
 
@@ -121,20 +121,20 @@ public record RoomReservation
 
 In the _RoomReserved_ event apply method, we already see that external reservation has a different flow than the API one. We assume that it's already confirmed and paid once we get it. That's different from our regular reservation. It'll need to go through an additional flow and be explicitly confirmed after making payment etc.
 
-We could define [union types](/en/union_types_in_csharp/) and different events for internal and external reservations, but let's focus today on the structure rather than the [modelling](/en/how_to_effectively_compose_your_business_logic/). 
+We could define [union types](/pl/union_types_in_csharp/) and different events for internal and external reservations, but let's focus today on the structure rather than the [modelling](/pl/how_to_effectively_compose_your_business_logic/). 
 
 **As we have more stuff around the room reservation process, let's create a dedicated folder _RoomReservations_.** Inside it, we can define the _RoomReservation.cs_ file and put the code we described above. It shapes our domain model. We'll be working around it when defining our process. When we add a new event, we must update the entity, etc. It also forms documentation of our flow.
 
 **Let's now implement the business logic for our room reservation**. Let's create a nested folder called _ReservingRoom_. It'll encapsulate the reservation initiation process. We'll also need a command and its handler. Let's define the _ReserveRoom.cs_ file inside the newly created folder.
 
-We'll keep there both command definition and business logic for the operation. In most cases, when we're changing command, we need to change logic. And when we change logic, we'd like to see the command definition. It's about [ergonomy and developer experience](/en/stacking_the_bricks/).
+We'll keep there both command definition and business logic for the operation. In most cases, when we're changing command, we need to change logic. And when we change logic, we'd like to see the command definition. It's about [ergonomy and developer experience](/pl/stacking_the_bricks/).
 
 It could look like that:
 
 ```csharp
 public record ReserveRoom
 (
-    string Id,
+    string ReservationId,
     RoomType RoomType,
     DateOnly From,
     DateOnly To,
@@ -156,7 +156,7 @@ public record ReserveRoom
             throw new InvalidOperationException("Not enough available rooms!");
 
         return new RoomReserved(
-            command.Id,
+            command.ReservationId,
             command.ExternalId,
             command.RoomType,
             command.From,
@@ -216,11 +216,11 @@ public record ReserveRoom
 }
 ```
 
-It's a pretty straightforward code. A command is an [immutable record](/en/notes_about_csharp_records_and_nullable_reference_types/) we're handling in a function. The command is created and [explicitly validated](/en/explicit_validation_in_csharp_just_got_simpler/) as I'd like to trust my objects.
+It's a pretty straightforward code. A command is an [immutable record](/pl/notes_about_csharp_records_and_nullable_reference_types/) we're handling in a function. The command is created and [explicitly validated](/pl/explicit_validation_in_csharp_just_got_simpler/) as I'd like to trust my objects.
 
-Handler has a basic logic checking for reserving a room based on the room type daily availability data. I could pass it as a handler param, but I prefer to put it into the command, which makes logic predictable. That makes it seamless to test, as I can validate if I'm getting an expected result for the specific input data: event or exception. I could use the [Result](/en/union_types_in_csharp/) type instead of throwing an exception, but that's a matter of personal preference.
+Handler has a basic logic checking for reserving a room based on the room type daily availability data. I could pass it as a handler param, but I prefer to put it into the command, which makes logic predictable. That makes it seamless to test, as I can validate if I'm getting an expected result for the specific input data: event or exception. I could use the [Result](/pl/union_types_in_csharp/) type instead of throwing an exception, but that's a matter of personal preference.
 
-I'm not doing availability validation, as it's already a fact that someone reserved a room in an external system. Throwing an exception won't change that fact. We need to embrace that and compensate for the overbooking (read more in [What texting your Ex has to do with Event-Driven Design?](/en/what_texting_ex_has_to_do_with_event_driven_design/)).
+I'm not doing availability validation, as it's already a fact that someone reserved a room in an external system. Throwing an exception won't change that fact. We need to embrace that and compensate for the overbooking (read more in [What texting your Ex has to do with Event-Driven Design?](/pl/what_texting_ex_has_to_do_with_event_driven_design/)).
 
 **Ok, but how to model different inputs of our process?** Where to put the application code for them? Best in the same folder as the business logic but in separate files. Let's add two of them to _RoomReservations.ReservingRoom_ folder: 
 - _ReserveRoomEndpoint.cs_ - containing the API endpoint definition,
@@ -337,7 +337,7 @@ Guest id mapping will obviously need to be a different module, as it will have o
 
 **As I mentioned, we'd like to keep things simple and don't overengineer. Yet, we'd like to have the option to evolve and, e.g. in future, elevate our subprocesses into autonomous modules.**
 
-**Let's start by defining _GettingRoomTypeAvailability_ as a subfolder of _RoomReservations.ReservingRoom_ and adding there _DailyRoomTypeAvailability.cs_.** It'll contain information about room type availability. It'll be a read model built from the reservation events. Using [Marten projections](/en/projections_in_marten_explained/) it could look as follows:
+**Let's start by defining _GettingRoomTypeAvailability_ as a subfolder of _RoomReservations.ReservingRoom_ and adding there _DailyRoomTypeAvailability.cs_.** It'll contain information about room type availability. It'll be a read model built from the reservation events. Using [Marten projections](/pl/projections_in_marten_explained/) it could look as follows:
 
 ```csharp
 public record DailyRoomTypeAvailability
@@ -373,7 +373,7 @@ public class DailyRoomTypeAvailabilityProjection: MultiStreamProjection<DailyRoo
 }
 ```
 
-The only complex part is taking the room type and date range from the _RoomReserved_ event and matching that with the read model rows. We can do that by defining the id format as _$"{RoomType}_{Date}"_.
+The only complex part is taking the room type and date range from the _RoomReserved_ event and matching that with the read model rows. We can do that by defining the id format as _$"{RoomType}\_{Date}"_.
 
 **Now, let's define the query for room type availability within the particular period:**
 
@@ -411,9 +411,10 @@ public static class GetRoomTypeAvailabilityForPeriodHandler
 
 Nothing special here besides the fact that we don't use any query bus, marker interfaces etc. It's inside the module, so it is unnecessary to overcomplicate it.
 
-[Marten gives the option to listen for changes in the read model](/en/publishing_read_model_changes_from_marten/). We can use it to detect if we have overbooking. That's, again, a shortcut to avoid reinventing the wheel if we're inside the same module.
+[Marten gives the option to listen for changes in the read model](/pl/publishing_read_model_changes_from_marten/). We can use it to detect if we have overbooking. That's, again, a shortcut to avoid reinventing the wheel if we're inside the same module.
 
-**Let's create _OverbookingDetection_ subfolder inside _RoomReservations.ReservingRoom_ and put there a _DailyOverbookingDetector.cs_ file and put there logic for detecting overbooking:
+Such usage also gives the possibility for on-point performance improvements. [Jeremy did a follow-up explaining how Marten's compiled queries could help in that](https://jeremydmiller.com/2023/07/12/compiled-queries-with-marten/).
+**Let's create _OverbookingDetection_ subfolder inside _RoomReservations.ReservingRoom_ and put there a _DailyOverbookingDetector.cs_ file and put there logic for detecting overbooking:**
 
 ```csharp
 public record DailyOverbookingDetected
@@ -460,8 +461,6 @@ We're filtering the pending changes containing updated read models and getting o
 **Last but not least, let's discuss the external module integration.** We could create a _Guests_ subfolder inside the root of our module and put there _Guest.cs_ with a basic interpretation of the data from an external system. For us, it'll be enough to keep it simple as:
 
 ```csharp
-namespace Reservations.Guests;
-
 public record GuestExternalId(string Value)
 {
     public static GuestExternalId FromPrefix(string prefix, string externalId) =>
@@ -489,7 +488,67 @@ public record GetGuestIdByExternalId
 }
 ```
 
-Of course, it's a dummy implementation, but again, it lets you keep things explicit and self-explanatory. The final code structure looks as follows:
+Of course, it's a dummy implementation, but again, it lets you keep things explicit and self-explanatory. We could either call it explicitly as we did in the Event Handler. 
+
+```csharp
+using static Reservations.Guests.GettingGuestByExternalId.GetGuestIdByExternalId;
+
+public class BookingComRoomReservationMadeHandler: IEventHandler<BookingComRoomReservationMade>
+{
+    // (...)
+
+    public async Task Handle(BookingComRoomReservationMade @event, CancellationToken ct)
+    {
+        var (bookingComReservationId, roomTypeText, from, to, bookingComGuestId, numberOfPeople, madeAt) = @event;
+
+        var guestId = await Query(new GetGuestIdByExternalId(FromPrefix("BCOM", bookingComGuestId)), ct);
+       
+       // (...)
+    }
+}
+```
+
+That makes usage straightforward but also coupled. As we're running a potential code from another module, it may be worth adding abstraction. If we'd like to keep the boundaries explicit, to have e.g. better test isolation, we could inject query as a function:
+
+```csharp
+public delegate ValueTask<GuestId> GetGuestId(GetGuestIdByExternalId query, CancellationToken ct);
+
+public class BookingComRoomReservationMadeHandler: IEventHandler<BookingComRoomReservationMade>
+{
+    private readonly IDocumentSession session;
+    private readonly GetGuestId getGuestId;
+
+    public BookingComRoomReservationMadeHandler(
+        IDocumentSession session,
+        GetGuestId getGuestId)
+    {
+        this.session = session;
+        this.getGuestId = getGuestId;
+    }
+
+    public async Task Handle(BookingComRoomReservationMade @event, CancellationToken ct)
+    {
+        var (bookingComReservationId, roomTypeText, from, to, bookingComGuestId, numberOfPeople, madeAt) = @event;
+        var reservationId = CombGuidIdGeneration.NewGuid().ToString();
+
+        var guestId = await getGuestId(new GetGuestIdByExternalId(FromPrefix("BCOM", bookingComGuestId)), ct);
+        // (...)
+    }
+}
+```
+
+We could also use the interface like:
+
+```csharp
+public interface IQuery<TQuery, out TResponse> where T: notnull
+{
+    ValueTask<TResponse> Query(TQuery query, CancellationToken ct);
+}
+```
+
+And inject it, but I think it just adds more ceremony. Still, it's your call. The most important is to define our boundaries and draw them explicitly where needed to not end up with a big ball of mud.
+
+The final code structure looks as follows:
 
 ```
 📁 ReservationModule
@@ -512,7 +571,7 @@ Of course, it's a dummy implementation, but again, it lets you keep things expli
 
 See the full code in [my sample repo](https://github.com/oskardudycz/EventSourcing.NetCore/pull/217).
 
-**Is it the best naming and folder structure you could achieve?** Maybe, but probably not. And that's fine. We should embrace that our initial design will be wrong. Knowing that we can focus on making our code easier to reshuffle, target [Removability over maintainability](/en/removability_over_maintainability/).
+**Is it the best naming and folder structure you could achieve?** Maybe, but probably not. And that's fine. We should embrace that our initial design will be wrong. Knowing that we can focus on making our code easier to reshuffle, target [Removability over maintainability](/pl/removability_over_maintainability/).
 
 Having code sliced by business domain, straightforward and composed instead of generalised, allows us to reshuffle and correct our past decision. We can evolve and introduce more abstractions if we need them and when we need them.
 
@@ -524,6 +583,6 @@ Cheers!
 
 Oskar
 
-p.s. Read also more on how [A few words on communication](/en/a_few_words_on_communication/) and the [Bring me problems, not solutions!](/en/bring_me_problems_not_solutions/).
+p.s. Read also more on how [A few words on communication](/pl/a_few_words_on_communication/) and the [Bring me problems, not solutions!](/pl/bring_me_problems_not_solutions/).
 
 p.s.2. **Ukraine is still under brutal Russian invasion. A lot of Ukrainian people are hurt, without shelter and need help.** You can help in various ways, for instance, directly helping refugees, spreading awareness, putting pressure on your local government or companies. You can also support Ukraine by donating e.g. to [Red Cross](https://www.icrc.org/pl/donate/ukraine), [Ukraine humanitarian organisation](https://savelife.in.ua/pl/donate/) or [donate Ambulances for Ukraine](https://www.gofundme.com/f/help-to-save-the-lives-of-civilians-in-a-war-zone).
