@@ -414,6 +414,7 @@ Nothing special here besides the fact that we don't use any query bus, marker in
 [Marten gives the option to listen for changes in the read model](/pl/publishing_read_model_changes_from_marten/). We can use it to detect if we have overbooking. That's, again, a shortcut to avoid reinventing the wheel if we're inside the same module.
 
 Such usage also gives the possibility for on-point performance improvements. [Jeremy did a follow-up explaining how Marten's compiled queries could help in that](https://jeremydmiller.com/2023/07/12/compiled-queries-with-marten/).
+
 **Let's create _OverbookingDetection_ subfolder inside _RoomReservations.ReservingRoom_ and put there a _DailyOverbookingDetector.cs_ file and put there logic for detecting overbooking:**
 
 ```csharp
@@ -495,7 +496,10 @@ using static Reservations.Guests.GettingGuestByExternalId.GetGuestIdByExternalId
 
 public class BookingComRoomReservationMadeHandler: IEventHandler<BookingComRoomReservationMade>
 {
-    // (...)
+    private readonly IDocumentSession session;
+
+    public BookingComRoomReservationMadeHandler(IDocumentSession session) =>
+        this.session = session;
 
     public async Task Handle(BookingComRoomReservationMade @event, CancellationToken ct)
     {
@@ -520,7 +524,8 @@ public class BookingComRoomReservationMadeHandler: IEventHandler<BookingComRoomR
 
     public BookingComRoomReservationMadeHandler(
         IDocumentSession session,
-        GetGuestId getGuestId)
+        GetGuestId getGuestId
+    )
     {
         this.session = session;
         this.getGuestId = getGuestId;
@@ -577,12 +582,10 @@ Having code sliced by business domain, straightforward and composed instead of g
 
 I hope this article will bring you vertical slices closer to home. Still, I encourage you to play with it and see what you come up with. You can take this example as the starting point and try to improve it.
 
-**In the end, it's all about having more options in our Designed Toolbox!**
+**In the end, it's all about having more options in our Designer Toolbox!**
 
 Cheers!
 
 Oskar
 
-p.s. Read also more on how [A few words on communication](/pl/a_few_words_on_communication/) and the [Bring me problems, not solutions!](/pl/bring_me_problems_not_solutions/).
-
-p.s.2. **Ukraine is still under brutal Russian invasion. A lot of Ukrainian people are hurt, without shelter and need help.** You can help in various ways, for instance, directly helping refugees, spreading awareness, putting pressure on your local government or companies. You can also support Ukraine by donating e.g. to [Red Cross](https://www.icrc.org/pl/donate/ukraine), [Ukraine humanitarian organisation](https://savelife.in.ua/pl/donate/) or [donate Ambulances for Ukraine](https://www.gofundme.com/f/help-to-save-the-lives-of-civilians-in-a-war-zone).
+p.s. **Ukraine is still under brutal Russian invasion. A lot of Ukrainian people are hurt, without shelter and need help.** You can help in various ways, for instance, directly helping refugees, spreading awareness, putting pressure on your local government or companies. You can also support Ukraine by donating e.g. to [Red Cross](https://www.icrc.org/pl/donate/ukraine), [Ukraine humanitarian organisation](https://savelife.in.ua/pl/donate/) or [donate Ambulances for Ukraine](https://www.gofundme.com/f/help-to-save-the-lives-of-civilians-in-a-war-zone).

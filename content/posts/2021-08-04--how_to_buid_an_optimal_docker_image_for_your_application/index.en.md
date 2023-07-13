@@ -45,7 +45,7 @@ Why? Installing packages does not require the entire project. To do it, we only 
 In .NET it will look like that:
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS builder
+FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine AS builder
 
 # Setup working directory for the project	 
 WORKDIR /app
@@ -141,12 +141,12 @@ This is what the final definition looks like for .NET
 
 ```dockerfile
 # the first, heavier image to build your code
-FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS builder
+FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine AS builder
 
 # (...)
 
 # second, final, lighter image
-FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine
+FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine
 
 # Setup working directory for the project  
 WORKDIR /app
@@ -161,7 +161,7 @@ ENV ASPNETCORE_URLS="http://*:5000"
 
 # sets entry point command to automatically	 
 # run application on `docker run`	 
-ENTRYPOINT ["dotnet", "Tickets.Api.dll"]
+ENTRYPOINT dotnet Tickets.Api.dll
 ```
 
 For NodeJS, we can use the same image, as we didn't use additional build tools. However, we still benefit from having only the result files in the final image.
