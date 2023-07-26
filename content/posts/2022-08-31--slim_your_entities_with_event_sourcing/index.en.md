@@ -7,9 +7,9 @@ author: oskar dudycz
 
 ![cover](2022-08-31-cover.jpg)
 
-In the traditional approach, what we get is what we store. Our write model is too often used directly as our read model, because the typical set of functionality in a system has a details view that exposes it all. Based on that, the user makes decisions and indicates the desired updates. Depending on how CRUDish is our preference, we either have a single update or a set of business operations.
+**In the traditional approach, what we get is what we store. Our write model is too often used directly as our read model**, because the typical set of functionality in a system has a details view that exposes it all. Based on that, the user makes decisions and indicates the desired updates. Depending on how CRUDish is our preference, we either have a single update or a set of business operations.
 
-Let's say that we're modelling the shopping cart aggregate known from [the previous post](/en/how_to_effectively_compose_your_business_logic/). We have the following requirements:
+**Let's say that we're modelling the shopping cart aggregate known from [the previous post](/en/how_to_effectively_compose_your_business_logic/).** We have the following requirements:
 
 1. The customer may only add a product to the shopping cart after opening it.
 2. When selecting and adding a product to the basket customer needs to provide the quantity chosen. The system calculates the product price based on the current price list.
@@ -940,11 +940,15 @@ app.MapPost("api/shopping-carts/{agentId:guid}/products/{productId}",
 
 It may be harder to slimmer it more!
 
+Not persuaded? Check more in the [webinar recording](https://www.architecture-weekly.com/p/webinar-8-slim-down-your-aggregates)!
+
+[![webinar](2022-08-31-webinar.png)](https://www.architecture-weekly.com/p/webinar-8-slim-down-your-aggregates)
+
 **To sum up. Thanks to its nature, Event Sourcing aggregates can be made slimmer.** You don't need to put all the data there, as you may not need it for business logic. Check your IFs to see what you actually need to check your invariants. Then, depending on your preferences around:
 - control,
 - encapsulation,
 - simplicity,
-you may decide to use it one way or another. This approach can be also helpful to classical state-based approach. Read more in [How events can help in making the state-based approach efficient](/en/ow_events_can_help_on_making_state_based_approach_efficient).
+you may decide to use it one way or another. This approach can be also helpful to classical state-based approach. Read more in [How events can help in making the state-based approach efficient](/en/how_events_can_help_on_making_state_based_approach_efficient).
 
 I encourage you to try those different styles and play with them. An excellent way for that is the [Event Sourcing self-paced kit](/en/introduction_to_event_sourcing/) that I prepared for you.
 
