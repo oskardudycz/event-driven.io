@@ -116,11 +116,13 @@ jobs:
 
 As you see the pipeline is technology agnostic. You can reuse it in whatever technology you choose. This gives a lot of possibilities to simplify pipelines and processing.
 
+Read also other articles around DevOps process:
+- [A simple way to configure integration tests pipeline](/pl/configure_ci_for_integration_tests/)
+- [How to build an optimal Docker image for your application?](/pl/how_to_buid_an_optimal_docker_image_for_your_application/)
+- [How to create a Docker image for the Marten application](/pl/marten_and_docker/)
+- [A few tricks on how to set up related Docker images with docker-compose](/pl/tricks_on_how_to_set_up_related_docker_images/)
+- [How to create a custom GitHub Action?](/pl/how_to_create_a_custom_github_action/)
+
 Cheers!
 
 Oskar
-
-p.s. if GitHub actions look interesting to you, read also other articles on this topic:
-- [How to create a custom GitHub Action?](/pl/how_to_create_a_custom_github_action/)
-- [A few tricks on how to set up related Docker images with docker-compose](/pl/tricks_on_how_to_set_up_related_docker_images/)
-- [How to enhance and configure your site search with Algolia?](/pl/how_to_configure_algolia_for_your_site_search/)

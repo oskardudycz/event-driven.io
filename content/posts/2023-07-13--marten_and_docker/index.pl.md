@@ -157,7 +157,16 @@ RUN if [ "run_codegen" = true ] ; then dotnet run -- codegen write & dotnet run 
 
 You can see all the changes in the [Pull Request](https://github.com/oskardudycz/EventSourcing.NetCore/pull/218) and play with the [full sample](https://github.com/oskardudycz/EventSourcing.NetCore/tree/main/Sample/Helpdesk) in my repository.
 
+Once you build the image, you can also [push it to Container Registry](/pl/how_to_buid_and_push_docker_image_with_github_actions/)
+
 I'm considering adding an option in our command line to generate such Dockerfile; feel free to share your thoughts and ideas for improvements!
+
+Read also other articles around DevOps process:
+- [A simple way to configure integration tests pipeline](/pl/configure_ci_for_integration_tests/)
+- [How to build an optimal Docker image for your application?](/pl/how_to_buid_an_optimal_docker_image_for_your_application/)
+- [A few tricks on how to set up related Docker images with docker-compose](/pl/tricks_on_how_to_set_up_related_docker_images/)
+- [How to build and push Docker image with GitHub actions?](/pl/how_to_buid_and_push_docker_image_with_github_actions/)
+- [How to create a custom GitHub Action?](/pl/how_to_create_a_custom_github_action/)
 
 Cheers!
 

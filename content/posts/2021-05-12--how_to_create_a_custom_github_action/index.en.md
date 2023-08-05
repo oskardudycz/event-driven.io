@@ -80,10 +80,13 @@ What's even more interesting: you can use this action in your repository. For ex
 
 Your own GitHub actions give you a lot of possibilities. You can create very interesting automations. You have to work through these first problems. I hope this article and these examples will make it easier for you, and I encourage you to play with this code. Let me know what potential uses you see yourself.
 
+Read also other articles around DevOps process:
+- [A simple way to configure integration tests pipeline](/en/configure_ci_for_integration_tests/)
+- [How to build an optimal Docker image for your application?](/en/how_to_buid_an_optimal_docker_image_for_your_application/)
+- [How to create a Docker image for the Marten application](/en/marten_and_docker/)
+- [A few tricks on how to set up related Docker images with docker-compose](/en/tricks_on_how_to_set_up_related_docker_images/)
+- [How to build and push Docker image with GitHub actions?](/en/how_to_buid_and_push_docker_image_with_github_actions/)
+
 Cheers!
 
 Oskar
-
-p.s. If GitHub actions look interesting to you, read also other articles on this topic:
-- [How to build and push Docker image with GitHub actions?](/en/how_to_buid_and_push_docker_image_with_github_actions)
-- [How to enhance and configure your site search with Algolia?](/en/how_to_configure_algolia_for_your_site_search/)
