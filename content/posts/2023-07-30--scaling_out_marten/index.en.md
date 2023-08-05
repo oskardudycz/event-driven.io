@@ -7,7 +7,7 @@ author: oskar dudycz
 
 ![cover](2023-07-30-cover.png)
 
-**If you're not a new reader of this blog, you probably know already that I'm not so fond of the _Will it scale?_ question.** I believe that, too often, it's just a vague response if we don't like something.
+**If you are already a reader of this blog, you probably know already that I'm not so fond of the _Will it scale?_ question.** I believe that, too often, it's just a vague response if we don't like something.
 
 **Still, I cannot deny that scaling is essential.** When choosing a tool, we need to understand its limits. That's a basis for [risk analysis](/en/the_risk_of_ignoring_risks/) and understanding how far we can go with it, also in terms of reaching a bigger scale.
 
