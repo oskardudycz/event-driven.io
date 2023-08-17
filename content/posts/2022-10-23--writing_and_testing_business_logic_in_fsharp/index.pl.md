@@ -348,6 +348,13 @@ I liked the F# ecosystem so far, how the pieces match together and how much it a
 
 The next step for me is to ensure that the F# experience is decent in [Marten](https://martendb.io/). But that's for another story!
 
+Read also:
+- [Testing business logic in Event Sourcing, and beyond!](/pl/testing_event_sourcing/)
+- [Ogooreck, a sneaky testing library in BDD style](/pl/ogooreck_sneaky_bdd_testing_framework/)
+- [Behaviour-Driven Design is more than tests](/pl/behaviour_driven_design_is_not_about_tests/)
+- [How to test event-driven projections](/pl/testing_event_driven_projections/)
+- [I tested it on production and I'm not ashamed of it](/pl/i_tested_on_production/)
+
 Cheers!
 
 Oskar

@@ -9,7 +9,7 @@ author: oskar dudycz
 
 Some time ago, I saw an excellent presentation of Dylan's Beattie presentation - [The Art of Code](https://www.youtube.com/watch?v=6avJHaC3C2U). It reminds us of what we are here for. By _here_ I mean in front of the computer. **It shows the forgotten fun of discovering that computers can do what we tell them to**.
 
-I sometimes forget about it in my daily routine. Our work can be very repetitive, HTML form here, HTML form there. Some time ago, I [wrote about examples I did in Java](/pl/12_things_I_learned_on_last_pull_request_review/). I wrote them using (in my opinion) an interesting approach to testing. Based on **Behavior-Driven Development**. It is an approach to testing similar to TDD, but the accent lies elsewhere. Instead of technical tests (_Arrange / Act / Assert_), we're focusing on the process, so business logic (_Given / When / Then_). This small change also allows us to better think about the API of the code we are writing.
+I sometimes forget about it in my daily routine. Our work can be very repetitive, HTML form here, HTML form there. Some time ago, I [wrote about examples I did in Java](/en/12_things_I_learned_on_last_pull_request_review/). I wrote them using (in my opinion) an interesting approach to testing. Based on **Behavior-Driven Development**. It is an approach to testing similar to TDD, but the accent lies elsewhere. Instead of technical tests (_Arrange / Act / Assert_), we're focusing on the process, so business logic (_Given / When / Then_). This small change also allows us to better think about the API of the code we are writing.
 
 Many people think about them as writing UI tests (using tools such as [Cucumber](https://cucumber.io/) using [Gherkin](https://cucumber.io/docs/gherkin/) syntax). Some people believe that business people will write such tests. I consider it a pipe dream. I have never seen it working out in the long term. It usually ends with art for art's sake. However, this does not change the fact that BDD principles are vital to me. I like when the tests focus on business (even when we test a purely technical class), so I'm concentrating on why we're changing this code. I also like when my tests are a form of code documentation. I have not found a better form.
 
@@ -485,7 +485,12 @@ public class GetProductsTests: IClassFixture<GetProductsFixture>
 }
 ```
 
-Read also more on [how to test business logic with Ogooreck](/en/testing_event_sourcing/).
+Read also:
+- [Behaviour-Driven Design is more than tests](/en/behaviour_driven_design_is_not_about_tests/)
+- [How to test event-driven projections](/en/testing_event_driven_projections/)
+- [Writing and testing business logic in F#](/en/writing_and_testing_business_logic_in_fsharp/)
+- [Testing business logic in Event Sourcing, and beyond!](/en/testing_event_sourcing/)
+- [I tested it on production and I'm not ashamed of it](/en/i_tested_on_production/)
 
 ## Credits
 

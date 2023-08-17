@@ -607,6 +607,13 @@ As you see, there is not a lot of code and not much fancy stuff. As long as we k
 
 Check the complete code in [my sample repository](https://github.com/oskardudycz/EventSourcing.NodeJS/tree/main/samples/decider/src/shoppingCarts/shoppingCartDetails). 
 
+Read also:
+- [Testing business logic in Event Sourcing, and beyond!](/en/testing_event_sourcing/)
+- [Behaviour-Driven Design is more than tests](/en/behaviour_driven_design_is_not_about_tests/)
+- [Ogooreck, a sneaky testing library in BDD style](/en/ogooreck_sneaky_bdd_testing_framework/)
+- [Writing and testing business logic in F#](/en/writing_and_testing_business_logic_in_fsharp/)
+- [I tested it on production and I'm not ashamed of it](/en/i_tested_on_production/)
+
 Cheers! 
 
 Oskar

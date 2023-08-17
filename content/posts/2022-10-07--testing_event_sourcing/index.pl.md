@@ -1214,6 +1214,13 @@ Still, you don't need to do it on your own, if you're in .NET space, just [add t
 
 I hope that you like it!
 
+Read also:
+- [How to test event-driven projections](/pl/testing_event_driven_projections/)
+- [Writing and testing business logic in F#](/pl/writing_and_testing_business_logic_in_fsharp/)
+- [Behaviour-Driven Design is more than tests](/pl/behaviour_driven_design_is_not_about_tests/)
+- [Ogooreck, a sneaky testing library in BDD style](/pl/ogooreck_sneaky_bdd_testing_framework/)
+- [I tested it on production and I'm not ashamed of it](/pl/i_tested_on_production/)
+
 Cheers!
 
 Oskar

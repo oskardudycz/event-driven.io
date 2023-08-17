@@ -486,7 +486,12 @@ public class GetProductsTests: IClassFixture<GetProductsFixture>
 }
 ```
 
-Read also more on [how to test business logic with Ogooreck](/pl/testing_event_sourcing/).
+Read also:
+- [Behaviour-Driven Design is more than tests](/pl/behaviour_driven_design_is_not_about_tests/)
+- [How to test event-driven projections](/pl/testing_event_driven_projections/)
+- [Writing and testing business logic in F#](/pl/writing_and_testing_business_logic_in_fsharp/)
+- [Testing business logic in Event Sourcing, and beyond!](/pl/testing_event_sourcing/)
+- [I tested it on production and I'm not ashamed of it](/pl/i_tested_on_production/)
 
 ## Credits
 
