@@ -56,9 +56,9 @@ See the real-world examples in:
 
 **An important note is to trim down the Docker Compose configuration for CI.** For local development, we might need containers with UIs like [PgAdmin](https://www.pgadmin.org/), [Kibana](https://www.elastic.co/kibana) or tools like Open Telemetry collectors etc. For CI, we don't need them, and they will make setup slower and can even break it by eating too many resources. We can trim it by preparing a dedicated Docker Compose config for CI, but then we need to synchronise those configs. Better is to use [Docker Compose profiles](https://docs.docker.com/compose/profiles/), which will allow us to exclude what we need by default and keep the configuration in a single file.
 
-**Why am I not using [Test Containers](https://testcontainers.com/)?** I'd like to and trying to do that (see [.NET](https://github.com/oskardudycz/EventSourcing.NetCore/pull/221) and [Node.js](https://github.com/oskardudycz/EventSourcing.NodeJS/blob/main/samples/hotelManagement/src/core/testing/eventStoreDB/eventStoreDBContainer.ts) samples). Still, I'm not getting an enough stable solutions. Why?
+**Why am I not using [Test Containers](https://testcontainers.com/)?** I'd like to and trying to do that (see [.NET](https://github.com/oskardudycz/EventSourcing.NetCore/pull/221) and [Node.js](https://github.com/oskardudycz/EventSourcing.NodeJS/blob/main/samples/hotelManagement/src/core/testing/eventStoreDB/eventStoreDBContainer.ts) samples). Still, I'm not getting a stable enough experience overall. Why?
 
-TestContainers are intriguing tool. They try to simplify container-based integration testing. The promise is that you can get or configure your docker configuration in code, and the tool will handle all initialisation, clean up etc. It should also do needed optimisations and default recommended setup. 
+TestContainers are an intriguing tool. They try to simplify container-based integration testing. The promise is that you can get or configure your docker configuration in code, and the tool will handle all initialisation, clean up etc. It should also do needed optimisations and default recommended setup. 
 
 **That's the promise, but my reality was a bit different.**
 
@@ -66,15 +66,15 @@ Docker resources initialisation costs a lot. You need to start the image, set up
 
 If you run too many containers in the GitHub Actions machine, it may become infinitely idle or die. So you must be careful with your setup, as you may accidentally get false/positives after adding a new set of tests. So funnily, the more test isolation we have, the less isolated will be test run (because of eating shared resources on test runner).
 
-Also, if you're spinning up the new container, that's ephemeral, then if the test fails and you'd like to troubleshoot it, then you want easy access to its data. If a container is cleaned up automatically by TestContainers, you won't have access to it. 
+Also, if you're spinning up a fresh ephemeral container, and the test fails, you'll want to get your hands on it to inspect the data as you troubleshoot. If a container is cleaned up automatically by TestContainers, that's not going to be quite so easy. 
 
 Sometimes you also might want to use tests as the data setup for your local environment, not need to click through the UI.
 
 Of course, TestContainers allow you to do most of the magic, but then you need to learn the tool deeply to do that, which is kinda opposite to the premise of a seamless setup. Also, each dev environment supports a different feature set and has different documentation with not always detailed breakdowns.
 
-**So, TLDR: TestContainers are nice, but they do not match my needs so far.** I'll try to go down that path and learn more to see if I can utilise it to my needs. I'll keep you posted.
+**So, TLDR: TestContainers are nice, but they do not match my needs so far.** I'll try to go down that path and learn more to see if I can find a workable flow with it. I'll keep you posted.
 
-**So far, vanilla Docker Compose works best for me; it's simple, flexible, and causes the least friction. I hope that this post will also make it as such for you.**
+**So far, vanilla Docker Compose works best for me; it's simple, flexible, and causes the least friction.**
 
 Read also other articles around DevOps process:
 - [How to build an optimal Docker image for your application?](/en/how_to_buid_an_optimal_docker_image_for_your_application/)

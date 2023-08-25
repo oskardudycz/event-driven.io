@@ -15,7 +15,7 @@ Ogooreck is a phonetical written Ogórek. Seeing the vowel, you may be already g
 
 In my world, the behaviour of the system should be reflected in all the places. So design, backend, frontend and tests. 
 
-Let's check the main points behind the BDD that Dan North wrote when [introducing it in his article](https://dannorth.net/introducing-bdd/): 
+Let's check the main points behind BDD that Dan North wrote when [introducing it in his article](https://dannorth.net/introducing-bdd/): 
 
 > Test method names should be sentences
 >
@@ -51,7 +51,7 @@ There were (and still are) frameworks trying to build [Domain Specific Languages
 
 I think that one of the reasons why dev people didn't use BDD tooling was that they had a lot of ceremonies. They weren't easy to debug and cluttered. They were also not focused on the stuff devs typically need to test.
 
-Is Ogooreck better? For me? Yes. I created it because I wanted to be able to write tests in my Open Source projects quickly. As I was making contributions after hours, time was a critical factor. I also wanted to make them more expressive in behaviour and give them the same shape that clearly explains behaviour in the Given/When/Then.
+Is Ogooreck better? For me, yes! I created it because I wanted to be able to write tests in my Open Source projects quickly. As I was making contributions after hours, time was a critical factor. I also wanted to make them more expressive in their structure, with a consistent shape/style that makes it easy to infer the behaviour.
 
 Tests for business logic thanks to that can look like:
 
@@ -147,7 +147,7 @@ public Task Put_Should_Return_OK_And_Confirm_Shopping_Cart() =>
         );                
 ```
 
-As you see, it already has naming and terms related to the web requests. Some may say that they should not be visible here, and I disagree, as we should be explicit in what we're doing and how we're doing. That cuts the number of translations needed back and forth to understand what technical context is actually this test checking underneath.
+As you see, it already has naming and terms related to the web requests. Some may say that they should not be visible here, and I disagree, as we should be explicit in what we're doing and how we're doing it. That cuts the number of translations needed back and forth to understand what is this actually verifying.
 
 Check more in [Ogooreck documentation](https://github.com/oskardudycz/Ogooreck).
 
