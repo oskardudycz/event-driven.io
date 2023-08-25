@@ -6,6 +6,8 @@ author: oskar dudycz
 useDefaultLangCanonical : true
 ---
 
+![cover](2023-08-17-cover.png)
+
 **Why did I name the testing library _[Ogooreck](https://github.com/oskardudycz/Ogooreck)_?** Between my friends, I'm well known for my lame jokes. [Ogooreck](https://github.com/oskardudycz/Ogooreck) is one of them. 
 
 Ogooreck is a phonetical written Ogórek. Seeing the vowel, you may be already guessing it's a Polish word, and you're correct. Ogórek in Polish means Cucumber. The intriguing part is that it's one of the rare Polish words that succeeded and got into other languages. [German also took the phonetic and named this delicious vegetable Gurke](https://en.wiktionary.org/wiki/Gurke). And the small one is called [gherkin](https://en.wiktionary.org/wiki/gherkin). 
