@@ -88,9 +88,8 @@ public record ShoppingCart
                 .Where(pi => pi.ProductId == productItem.ProductId)
                 .Sum(pi => pi.Quantity) >= productItem.Quantity.Value;
 
-        public bool HasItems =>
-            ProductItems
-                .Sum(pi => pi.Quantity) <= 0;
+        public bool HasItems { get; } =
+            ProductItems.Sum(pi => pi.Quantity) <= 0;
     }
 
     public record Closed: ShoppingCart;
@@ -169,40 +168,40 @@ public record ShoppingCart
 {
     // (...)
 
-    public static ShoppingCart Create(Opened opened) =>
-        new Pending(Array.Empty<(ProductId ProductId, int Quantity)>());
+    public ShoppingCart Apply(ShoppingCartEvent @event) =>
+        @event switch
+        {
+            Opened =>
+                new Pending(Array.Empty<(ProductId ProductId, int Quantity)>()),
 
-    public ShoppingCart Apply(ProductItemAdded productItemAdded) =>
-        this is Pending pending
-            ? pending with
-            {
-                ProductItems = pending.ProductItems
-                    .Concat(new[]
+            ProductItemAdded (var (productId, quantity, _)) =>
+                this is Pending pending
+                    ? pending with
                     {
-                        (productItemAdded.ProductItem.ProductId, productItemAdded.ProductItem.Quantity.Value)
-                    })
-                    .ToArray()
-            }
-            : this;
+                        ProductItems = pending.ProductItems
+                            .Concat(new[] { (productId, quantity.Value) })
+                            .ToArray()
+                    }
+                    : this,
 
-    public ShoppingCart Apply(ProductItemRemoved productItemRemoved) =>
-        this is Pending pending
-            ? pending with
-            {
-                ProductItems = pending.ProductItems
-                    .Concat(new[]
+            ProductItemRemoved (var (productId, quantity, _)) =>
+                this is Pending pending
+                    ? pending with
                     {
-                        (productItemRemoved.ProductItem.ProductId, -productItemRemoved.ProductItem.Quantity.Value)
-                    })
-                    .ToArray()
-            }
-            : this;
+                        ProductItems = pending.ProductItems
+                            .Concat(new[] { (productId, -quantity.Value) })
+                            .ToArray()
+                    }
+                    : this,
 
-    public ShoppingCart Apply(Confirmed confirmed) =>
-        this is Pending pending ? new Closed() : this;
+            Confirmed =>
+                this is Pending ? new Closed() : this,
 
-    public ShoppingCart Apply(Canceled canceled) =>
-        this is Pending pending ? new Closed() : this;
+            Canceled =>
+                this is Pending ? new Closed() : this,
+
+            _ => this
+        };
 }
 
 public abstract record ShoppingCartEvent
@@ -268,7 +267,7 @@ public static class DocumentSessionExtensions
 }
 ```
 
-We're using the [WriteToAggregate](https://martendb.io/scenarios/command_handler_workflow.html#writetoaggregate) method that loads the current state from events and allows encapsulating command handling.
+We're using the [WriteToAggregate](https://martendb.io/scenarios/command_handler_workflow.html#writetoaggregate) method that loads the current state from events using defined earlier _Apply_ method. It allows encapsulating command handling logic.
 
 We can use it to define processing for Shopping Cart:
 
