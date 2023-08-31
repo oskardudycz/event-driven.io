@@ -51,6 +51,7 @@ var app = builder.Build
 return await app.RunOaktonCommands(args);
 ```
 Marten internally is using [Oakton](https://jasperfx.github.io/oakton) for command line processing.
+
 3. Then call from the command line:
 ```shell
 dotnet run -- codegen write

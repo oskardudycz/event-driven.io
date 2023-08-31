@@ -939,7 +939,7 @@ app.MapPost("api/shopping-carts/{agentId:guid}/products/{productId}",
 );
 ```
 
-It may be harder to slimmer it more!
+It may be harder to slimmer it more! But if you want to see that read more the [follow-up article](/pl/prototype_underestimated_design_skill/).
 
 Not persuaded? Check more in the [webinar recording](https://www.architecture-weekly.com/p/webinar-8-slim-down-your-aggregates)!
 

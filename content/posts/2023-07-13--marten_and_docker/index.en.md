@@ -50,11 +50,12 @@ var app = builder.Build
 return await app.RunOaktonCommands(args);
 ```
 Marten internally is using [Oakton](https://jasperfx.github.io/oakton) for command line processing.
+
 3. Then call from the command line:
 ```shell
 dotnet run -- codegen write
 ```
-4. You can also use the [Optimised Artifact Workflow](https://martendb.io/configuration/optimized_artifact_workflow.html). Which will set dynamic code generation for the Development environment and setup code generation for the Production:
+1. You can also use the [Optimised Artifact Workflow](https://martendb.io/configuration/optimized_artifact_workflow.html). Which will set dynamic code generation for the Development environment and setup code generation for the Production:
 ```csharp
 builder.Services.AddMarten()
     // Add this line to Marten config
