@@ -381,6 +381,8 @@ I hope this article will give you a good understanding of your scaling options w
 6. Scale Async Daemon vertically.
 7. Shard projections processing of Async Daemon (ensuring each shard has a distinct set of projections and daemon lock id).
 
+**If you want to get help in scaling your event-driven solutions [contact me!](mailto:oskar@event-driven.io).** Check also my [training](/en/training/) page.
+
 Cheers!
 
 Oskar
