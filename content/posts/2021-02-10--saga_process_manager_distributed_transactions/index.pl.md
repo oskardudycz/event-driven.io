@@ -180,16 +180,24 @@ class OrderSaga
 }
 ```
 
+I recommend to also read my [post about the delivery guarantees](https://event-driven.io/en/outbox_inbox_patterns_and_delivery_guarantees_explained/) to know how to make sure that all events and commands will be delivered.
+
 You can also check the real implementation written in C#: 
 - [Order Saga](https://github.com/oskardudycz/EventSourcing.NetCore/tree/main/Sample/ECommerce/Orders/Orders/Orders/OrderSaga.cs)
 - [Whole solution with services split, external buses and integration with CRUD approach](https://github.com/oskardudycz/EventSourcing.NetCore/tree/main/Sample/ECommerce) 
 
+I explained also how to model distributed processes in detail in the [webinar about implementing distributed processes](https://www.architecture-weekly.com/p/webinar-3-implementing-distributed):
+
+[![webinar](./2023-09-22-webinar.png)](https://www.architecture-weekly.com/p/webinar-3-implementing-distributed)
+
 Additionally, I have prepared a set of recommended materials about distributed processes, [read more](https://github.com/oskardudycz/EventSourcing.NetCore#105-distributed-processes).
 
-I recommend to also read my post about the delivery guarantees to know how to make sure that all events and commands will be delivered: https://event-driven.io/pl/outbox_inbox_patterns_and_delivery_guarantees_explained/. 
+Read also more in:
+- [Event-driven distributed processes by example](/pl/event_driven_distributed_processes_by_example/).
+- [Oops I did it again, or how to update past data in Event Sourcing](/pl/how_to_update_past_data_in_event_sourcing/),
+- [Set up OpenTelemetry with Event Sourcing and Marten](/pl/set_up_opentelemetry_wtih_event_sourcing_and_marten/),
+- [Set of recommended materials about distributed processes](https://github.com/oskardudycz/EventSourcing.NetCore#105-distributed-processes).
 
-**I hope that this will help you build the systems with the eyes of the tiger.**
-
-Let me know if you liked it and if you have any questions or concerns. 
+Cheers!
 
 Oskar

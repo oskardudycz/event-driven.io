@@ -295,6 +295,15 @@ Each module:
 
 can use dedicated event store streams to publish their external events, e.g. _'shopping_carts__external-events'_. Other modules can subscribe to those streams and take it from there. It is a similar concept to Kafka's topics.
 
+I explained also how to model distributed processes in detail in the [webinar about implementing distributed processes](https://www.architecture-weekly.com/p/webinar-3-implementing-distributed):
+
+[![webinar](./2023-09-22-webinar.png)](https://www.architecture-weekly.com/p/webinar-3-implementing-distributed)
+
+Read also more in:
+- [Saga and Process Manager - distributed processes in practice](/en/saga_process_manager_distributed_transactions/),
+- [Oops I did it again, or how to update past data in Event Sourcing](/en/how_to_update_past_data_in_event_sourcing/),
+- [Set up OpenTelemetry with Event Sourcing and Marten](/en/set_up_opentelemetry_wtih_event_sourcing_and_marten/).
+
 Cheers!
 
 Oskar
