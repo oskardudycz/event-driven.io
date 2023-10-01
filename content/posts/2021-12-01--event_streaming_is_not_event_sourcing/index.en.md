@@ -39,14 +39,16 @@ It's easy to fall into the trap, as using a streaming solution is tempting. They
 
 Event Sourcing has some tricky parts. It's essential to highlight them, but it's dangerous to present problems from other patterns and tools as problems that have occurred due to Event Sourcing. I wrote it e.g.:
 - [When not to use Event Sourcing?](/en/when_not_to_use_event_sourcing/)
+- [Is the audit log a proper architecture driver for Event Sourcing?](/en/audit_log_event_sourcing/)
 - [Anti-patterns in event modelling - Property Sourcing](/en/property-sourcing/)
 - [Anti-patterns in event modelling - State Obsession](/en/state-obsession/)
+- [Anti-patterns in event modelling - I'll just add one more field](/en/i_will_just_add_one_more_field/).
 
 You can also watch my talk about The Light and The Dark Side of the Event-Driven Design:
 
 `youtube: https://www.youtube.com/watch?v=0pYmuk0-N_4`
 
-Event Sourcing by itself doesn't directly relate to eventual consistency, type of storage, messaging, etc. Those are implementation details and tradeoffs we're choosing. Each storage solution has its patterns and anti-patterns: relational databases have normalization, document databases are denormalized, key-value stores have strategies for key definition. Event stores also have their problems. The most important aspect is (as I mentioned) to take into account the temporal aspect of streams, which means keeping them short. I agree that there is a huge gap in knowledge sharing. I've been working on an article recently about this aspect. Here's a draft: https://gist.github.com/oskardudycz/f7864532af0db675f037b2962fe793e8.
+Event Sourcing by itself doesn't directly relate to eventual consistency, type of storage, messaging, etc. Those are implementation details and tradeoffs we're choosing. Each storage solution has its patterns and anti-patterns: relational databases have normalization, document databases are denormalized, key-value stores have strategies for key definition. Event stores also have their problems. The most important aspect is (as I mentioned) to take into account the temporal aspect of streams, which means keeping them short. I agree that there is a huge gap in knowledge sharing. That's why I wrote the extensive article on modelling aspect: [Keep your streams short! Temporal modeling for fast reads and optimal data retention](https://www.eventstore.com/blog/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention)
 
 The author of the original article confused Event Sourcing and talks about Event Streaming. **Event Streaming means:**
 1. Producer pushes/produces/publishes an event to the queue. In this sense, an event stream is a pipe where you put an event at the end and receive it on the other side.
@@ -59,7 +61,7 @@ Event stores can integrate with streaming platforms, to publish events and move 
 
 The essential point is that for read models, you don't expect to have the same guarantees as for write models. It's fine to be facing idempotency, even out of order, as read models shouldn't be used (in general) for business logic validation. In Event Streaming, the write  models is stale. In Event Sourcing, the write model is not stale. You can be sure that you're making a decision on the current state. Thus, most of the points mentioned in the article, are just from struggles to use event streaming solutions as tools for storing events. This is not the issue of Event Sourcing or event stores per se, but using the wrong tool for the job.
 
-**I'm sorry to say, but the author used the wrong tool for the wrong job.** If this article was titled _" Event Sourcing is hard if you're confusing it with Event Streaming"_, then it'd be an excellent article. But, in its current shape, it's just misleading and making the wrong point, repeating just common misunderstandings. It's highly misleading for people who are not aware of what Event Sourcing is and may suggest that it's much more complicated than it's in reality.
+**I'm sorry to say, but the author used the wrong tool for the wrong job.** If this article was titled _"Event Sourcing is hard if you're confusing it with Event Streaming"_, then it'd be an excellent article. But, in its current shape, it's just misleading and making the wrong point, repeating just common misunderstandings. It's highly misleading for people who are not aware of what Event Sourcing is and may suggest that it's much more complicated than it's in reality.
 
 I also covered that in my talk: 
 
