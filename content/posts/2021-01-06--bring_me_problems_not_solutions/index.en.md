@@ -81,6 +81,6 @@ Henry Ford once said:
 
 Let me know what came out of it, and what are your thoughts!
 
-Greetings!
+Cheers!
 
 Oskar
