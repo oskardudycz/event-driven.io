@@ -93,7 +93,7 @@ class TeamRoster
 
 The implementation is quite naive; to make it production-ready, we'd need to either model the full [distributed process](/pl/saga_process_manager_distributed_transactions/) or at least [orchestrate changes to multiple teams as batch](/pl/simple_transactional_command_orchestration/). Yet, let's focus today on dealing with the complex, changing requirements.
 
-So far, trade logic looks simple; you select teams, then players, and ensure such a trade can happen. Still, it's not that simple; even to have a look at the [recap of this year's changes](https://www.cbssports.com/nba/news/nba-cba-101-everything-to-know-about-new-agreement-from-salary-cap-to-free-agency-and-beyond/) takes a lot of time to process that. What's more, those rules tend to change. Contracts need to match; the team's overall salary cannot go above a certain level, some players can have trade veto in their contract, etc.
+So far, trade logic looks simple; you select teams, then players, and ensure such a trade can happen. Still, it's not that simple. Contracts need to match; the team's overall salary cannot go above a certain level, some players can have trade veto in their contract, etc. What's more, those rules tend to change. Even to have a look at the [recap of this year's changes](https://www.cbssports.com/nba/news/nba-cba-101-everything-to-know-about-new-agreement-from-salary-cap-to-free-agency-and-beyond/) takes a lot of time to process that.
 
 Let's say that we'd also like to model player veto. We could add player's preferences and include them in our validation logic:
 
@@ -304,7 +304,7 @@ We removed impedance mismatch by that. Now, we can just change or even provide a
 
 Can we call it a day, then? We could, but hold your horses and discuss that a bit more.
 
-## Is strategy always a good strategy?
+## Is using strategy always a good strategy?
 
 **Let's have a look again at our trade checker. What it does is the pre-condition check.** We're injecting it just to validate criteria, passing the internal aggregate state, but not using the result for anything other than validation. Of course, we could say that all is fine; our aggregate drives the business logic, so it should also ensure that all validation was made. 
 

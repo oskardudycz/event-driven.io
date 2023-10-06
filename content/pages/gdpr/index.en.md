@@ -15,7 +15,7 @@ Check also my:
 - [trainings](/en/training/),
 - [other talks](https://www.youtube.com/watch?v=Lc2zV8KA16A&list=PLw-VZz_H4iiqUeEBDfGNendS0B3qIk-ps&pp=gAQB).
 
-To stay up to date with my content, **join also 3600 subscribers of my [Architecture Weekly newsletter](https://www.architecture-weekly.com/)**.
+To stay up to date with my content, **join also 3800 subscribers of my [Architecture Weekly newsletter](https://www.architecture-weekly.com/)**.
 
 Other resources you may find useful:
 - [Bram Leenders - Scalable User Privacy: Crypto Shredding at Spotify](https://www.youtube.com/watch?v=l6ueOeoW7XM)
