@@ -45,6 +45,8 @@ Nope, it's not the end. The result of brainstorming is just an entry point for t
 2. **HOW?** Think about the requirements and guarantees you need to have. Find architecture patterns and class of solutions that will fulfil your requirements. So, the type of databases, deployment type,  [integration patterns](https://www.enterpriseintegrationpatterns.com/), not the specific technologies.
 3. **WITH.** Select the tooling based on the outcome of the previous point. It has to fulfil requirements, but also non-functional like costs, match team experience, ease of use, etc.
 
+Brainstorming is at the WHAT level. We still need to understand HOW and WITH.
+
 What design tools can help us to move further? 
 
 **An interesting one is [the C4 model](https://c4model.com/).** which allows us to zoom in and out perspective on our system. We have four contexts:
