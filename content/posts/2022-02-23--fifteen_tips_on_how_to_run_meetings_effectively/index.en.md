@@ -43,8 +43,7 @@ Don't get me wrong, meetings are beneficial. If they are well-organized, they ca
 
 In this article, I also appeal for respect for others, preparation and I am offering tools that can help in this. Here are some more links:
 - [How to successfully do documentation without a maintenance burden?](/en/how_to_successfully_do_documentation_without_maintenance_burden/) - my article on how to conduct a discussion using documents (ADR, RFC and other essential terms),
-- [The Document Culture of Amazon](https://www.justingarrison.com/blog/2021-03-15-the-document-culture-of-amazon/) - how Amazon introduced it at home,
-- [It doesn't have to be crazy at work](https://basecamp.com/books/calm) - great book, quick reading on how to build an asynchronous culture in an organization.
+- [The Document Culture of Amazon](https://www.justingarrison.com/blog/2021-03-15-the-document-culture-of-amazon/) - how Amazon introduced it at home.
 Cheers!
 
 Oskar

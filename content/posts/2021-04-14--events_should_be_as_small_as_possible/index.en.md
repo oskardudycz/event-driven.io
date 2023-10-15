@@ -59,7 +59,9 @@ Can an event be internal and external at the same time? Of course they can, even
 
 So there is no best answer. As usual: it depends.
 
-Therefore, our events should be as small as possible, but not smaller. When designing them, let's keep a healthy pragmatism and not forget that they're also an essential part of our public contract.
+**Therefore, our events should be as small as possible, but not smaller.** When designing them, let's keep a healthy pragmatism and not forget that they're also an essential part of our public contract.
+
+**Read also the extended follow up to this article [Internal and private events, or how to design event-driven API](/en/internal_external_events).**
 
 Cheers!
 

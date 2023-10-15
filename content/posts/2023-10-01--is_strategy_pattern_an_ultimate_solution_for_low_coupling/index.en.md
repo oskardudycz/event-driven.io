@@ -510,9 +510,9 @@ static class TradeCheckProxy
 
             if (checkResult != ICheckTrade.Result.Ok)
                 throw new InvalidOperationException(checkResult.ToString());
-
-            teamRoster.TradePlayers(tradeOffer);
         }
+
+        teamRoster.TradePlayers(tradeOffer);
     }
 }
 ```
