@@ -32,7 +32,7 @@ Thanks to that, no additional work is needed. Other modules will get all the dat
 
 That can work for some time, especially if we're good colleagues. But sooner or later, we'll get the feedback:
 
-> "That's great that you exposed me to the event, but it only contains information on when the shopping cart was confirmed. I need to know the client and the total amount of all products. Could you add that information to the event?
+> _"That's great that you exposed me to the event, but it only contains information on when the shopping cart was confirmed. I need to know the client and the total amount of all products. Could you add that information to the event?"_
 
 After hearing that, we may agree and extend event data or say that we already publish information about the client and products in the earlier events. We may say:
 
@@ -44,11 +44,11 @@ If our colleagues are not assertive or have a tight schedule, they may agree, wh
 
 We put on our detective hats, investigate what happened and end with the conclusion:
 
-> What a moron!
+> _"What a moron!"_
 
 Then we contact our colleague and say:
 
-> Hey, you should also have handled ProductItemRemoved. Users can not only add but also remove items from the shopping cart. 
+> _"Hey, you should also have handled ProductItemRemoved. Users can not only add but also remove items from the shopping cart."_ 
 
 **If we reach that point, we should stop and do a sanity check.** We may conclude that we were right in shouting _"What a moron!"_, but the target was wrong. Our colleague doesn't need to know about the details of our implementation. What's more, they should not know the details of our process. If they have to, then we have leaking abstractions.
 
@@ -70,7 +70,7 @@ Let's get back to our colleague's request:
 
 We already know that's not as _easy peasy_ as we thought. Instead of downplaying the case, we should start by asking:
 
-> _"I'm open to that, but before we agree on how to technically solve it. Could you explain me your need and business scenario?"
+> _"I'm open to that, but before we agree on how to technically solve it. Could you explain me your need and business scenario?"_
 
 So we should ask our colleague to [bring us the problem instead of the solution](/pl/bring_me_problems_not_solutions/) and understand their use case. 
 
@@ -211,10 +211,14 @@ Tools like [EventCatalog](https://www.eventcatalog.dev/) allow us to design and 
 
 **I hope this article will show you that simple techniques for discussing the API and enriching events can take you far and help create maintainable systems.**
 
+Check also more in:
+- [Events should be as small as possible, right?](/pl/events_should_be_as_small_as_possible/),
+- [Mathias Verraes - Explicit Public Events](https://verraes.net/2019/05/patterns-for-decoupling-distsys-explicit-public-events/),
+- [Derek Comartin - Event-Driven Architecture Gotcha! Inside or Outside Events](https://www.youtube.com/watch?v=qf-BSAhbrWw),
+- [Pat Helland - Data on the Outside vs. Data on the Inside](https://queue.acm.org/detail.cfm?id=3415014).
+
 Cheers!
 
 Oskar
 
-p.s. Read also [Events should be as small as possible, right?](/en/events_should_be_as_small_as_possible/).
-
-p.s.2. **Ukraine is still under brutal Russian invasion. A lot of Ukrainian people are hurt, without shelter and need help.** You can help in various ways, for instance, directly helping refugees, spreading awareness, putting pressure on your local government or companies. You can also support Ukraine by donating e.g. to [Red Cross](https://www.icrc.org/pl/donate/ukraine), [Ukraine humanitarian organisation](https://savelife.in.ua/pl/donate/) or [donate Ambulances for Ukraine](https://www.gofundme.com/f/help-to-save-the-lives-of-civilians-in-a-war-zone).
+p.s. **Ukraine is still under brutal Russian invasion. A lot of Ukrainian people are hurt, without shelter and need help.** You can help in various ways, for instance, directly helping refugees, spreading awareness, putting pressure on your local government or companies. You can also support Ukraine by donating e.g. to [Red Cross](https://www.icrc.org/pl/donate/ukraine), [Ukraine humanitarian organisation](https://savelife.in.ua/pl/donate/) or [donate Ambulances for Ukraine](https://www.gofundme.com/f/help-to-save-the-lives-of-civilians-in-a-war-zone).
