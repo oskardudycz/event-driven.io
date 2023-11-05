@@ -47,7 +47,7 @@ It's a way to push responsibility to the subscriber and potentially reduce the w
 
 > _"You got the notification; just do what you want with it."_
 
-That's not the greatest move, as if the subscriber wants to get that package was sent, and we're just publishing the `ShipmentStatusChanged` event with the shipment id. Each time they get the notification, they need to react and query our API and decide if the information is valuable to them. That also leads to race conditions, which I will cover in more detail later in this article.
+That's not the greatest move, as if the subscriber wants to get that package was sent, and we're just publishing the _ShipmentStatusChanged_ event with the shipment id. Each time they get the notification, they need to react and query our API and decide if the information is valuable to them. That also leads to race conditions, which I will cover in more detail later in this article.
 
 There's little benefit between regular polling from the API with the [cron job](https://en.wikipedia.org/wiki/Cron). Maybe a bit better resource utilisation, but that's also disputable.
 
@@ -189,7 +189,7 @@ Of course, we need to remember that's not the ultimate solution, as once someone
 
 Watch more in:
 
-`youtube: https://www.youtube.com/watch?v=CI7JPFLlpBw`
+`youtube: https://www.youtube.com/watch?v=7NGlYgobTyY`
 
 **We can also use the same for blob data.** For instance, if we know that subscribers are interested in the PDF containing the current shipment letter, we can either send a URL to versioned blob storage (e.g. [AWS S3](https://aws.amazon.com/s3/)) or our service for downloading files.
 
