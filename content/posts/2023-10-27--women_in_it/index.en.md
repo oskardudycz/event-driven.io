@@ -59,8 +59,8 @@ I once had to go to the CEO after learning about several cases of harassment mad
 
 **So now, my fellow men, am I urging you to make a revolution or turn your worldview upside down?** I wouldn't dare. I'm not one of those who tell others how to live. I encourage you to reflect and consider what you can do with this topic. What would I, such a smartass, suggest?
 
-1. Pay attention to how many women are in your company.
-2. Look around and see if your environment is open and friendly. Consider whether you would like your wife, girlfriend or sister to work in such an environment.
+1. Pay attention to how many women are in your company and if they're paid, respected equally to their competence.
+2. Look around and see if your environment is open and friendly. Consider whether you would like your wife, girlfriend, sister or daughter to work in such an environment.
 3. Listen more carefully to what you say and what others say, whether the jokes are appropriate and really funny.
 4. No, conferences and meetups are not places where women are coming to be picked up.
 5. Ask HR about the candidates and their CVs. Ensure that they're inclusive.
@@ -76,6 +76,7 @@ Read also more in:
 - [The Secret History of Women in Coding](https://www.nytimes.com/2019/02/13/magazine/women-coding-computer-programming.html)
 - [Emily Bache - Proportion of Women Programmers](https://coding-is-like-cooking.info/2017/04/proportion-of-women-programmers/)
 - [Rachel Thomas - If you think women in tech is just a pipeline problem, you haven't been paying attention](https://medium.com/tech-diversity-files/if-you-think-women-in-tech-is-just-a-pipeline-problem-you-haven-t-been-paying-attention-cb7a2073b996)
+- [Guardian - We can teach women to code, but that just creates another problem](https://www.theguardian.com/technology/2017/mar/14/tech-women-code-workshops-developer-jobs)
 - [Harvard Business Review - Rethink What You “Know” About High-Achieving Women](https://hbr.org/2014/12/rethink-what-you-know-about-high-achieving-women)
 - [Lian Buan - Insidious, expensive: The massive, hidden cost of keeping women offline](https://www.rappler.com/newsbreak/in-depth/massive-hidden-cost-keeping-women-offline-digital-gender-divide/)
 - [Lisa Harvey-Smith - More women are studying STEM, but there are still stubborn workplace barriers](https://theconversation.com/more-women-are-studying-stem-but-there-are-still-stubborn-workplace-barriers-190839)
