@@ -244,8 +244,9 @@ That may be a valid tradeoff; we should at least [note it ](/pl/how_to_successfu
 As always, pick your poison!
 
 **Read also other article in Anti-patterns in event modelling series:**
-- [Property Sourcing](/pl/property-sourcing/),
+- [Property Sourcing](/pl/property-sourcing/).
 - [State Obsession](/pl/state-obsession/).
+- [Clickbait event](/pl/clickbait_event/).
 
 Cheers!
 

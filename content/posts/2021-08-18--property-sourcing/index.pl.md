@@ -142,6 +142,7 @@ It's also important to not treat our initial event model as set in stone. We sho
 **Read also other article in Anti-patterns in event modelling series:**
 - [State Obsession](/pl/state-obsession/),
 - [I'll just add one more field](/pl/i_will_just_add_one_more_field/).
+- [Clickbait event](/pl/clickbait_event/).
 
 Cheers!
 

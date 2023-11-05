@@ -82,6 +82,7 @@ One of the most significant benefits of using Event Sourcing is not losing data.
 **Read also other article in Anti-patterns in event modelling series:**
 - [Property Sourcing](/en/property-sourcing/),
 - [I'll just add one more field](/en/i_will_just_add_one_more_field/).
+- [Clickbait event](/en/clickbait_event/).
 
 Cheers!
 
