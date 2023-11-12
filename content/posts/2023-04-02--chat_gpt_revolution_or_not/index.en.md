@@ -65,7 +65,7 @@ I explained some dangers in [Computer says no! Why we might have an issue with A
 
 We should also get the tools to help us fight those fakes or detect AI-generated stuff. That won't be easy, but the need will be so strong that I expect this arms race to start soon.
 
-The other is privacy. OpenAI and similar companies are not telling us what training set they used. We don't know if what we get respects the copyrights or laws like GDPR. [Italy already blocked ChatGPT](https://www.zerohedge.com/technology/italy-bans-openais-chatgpt-over-privacy-concerns) for that.
+The other is privacy. OpenAI and similar companies are not telling us what training set they used. We don't know if what we get respects the copyrights or laws like [GDPR](/en/gdpr_for_busy_developers). [Italy already blocked ChatGPT](https://www.zerohedge.com/technology/italy-bans-openais-chatgpt-over-privacy-concerns) for that.
 
 **Yet, those are _just_ tools. You can use a knife to put butter on the bread or stab someone (but please, don't).**
 

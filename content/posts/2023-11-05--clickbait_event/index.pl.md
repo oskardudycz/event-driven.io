@@ -188,7 +188,9 @@ This gives us more control, as we can centralise the privacy-related data and us
 
 Of course, we need to remember that's not the ultimate solution, as once someone queried the data, they can do whatever they want, for instance, cache it or store it locally. 
 
-Watch more in:
+Read more in [GDPR for busy developers](/pl/gdpr_for_busy_developers).
+
+Or watch:
 
 `youtube: https://www.youtube.com/watch?v=7NGlYgobTyY`
 

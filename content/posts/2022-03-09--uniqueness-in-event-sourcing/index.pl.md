@@ -29,7 +29,7 @@ All event stores I know give the uniqueness guarantee for the stream identifier.
 
 Since the stream identifier is unique, by formatting it as _'user- {e-mail}'_, we can easily enforce the e-mail uniqueness for all users.
 
-Oh well, but is it really easy? What if the user changes their e-mail? Or what if we say that e-mail should be unique only for active users? Or how to handle [GDPR](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation) then?
+Oh well, but is it really easy? What if the user changes their e-mail? Or what if we say that e-mail should be unique only for active users? [Or how to handle GDPR then?](/pl/gdpr_for_busy_developers)
 
 The first improvement is adding a hash function. It will allow adding new fields into unique constraints and anonymisation but won't help us with e-mail changes.
 

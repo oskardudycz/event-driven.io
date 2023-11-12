@@ -29,7 +29,7 @@ Both approaches have advantages and disadvantages. _"API first"_ is usually more
 
 Accordingly, we can define an _OrderConfirmed_ event with all the information collected during the process, e.g. the buyer's data, address, total amount, and order details. However, it may turn out that the shipment module does not need detailed financial data. It only needs to know where and to whom to send the product. The financial module does not need address data for shipment, but only the company data (which may differ from personal). The notification module, in turn, should not know anything about the buyer except his name and e-mail. The only thing that we'll be sending in an e-mail is a link to the order page. 
 
-Therefore, it may turn out that the OrderConfirmed event in such an amassed form will have redundant data. Adding GDPR into the equation makes things more challenging. We might not want to send all data everywhere. Therefore, instead of one event, you can publish three: 
+Therefore, it may turn out that the OrderConfirmed event in such an amassed form will have redundant data. [Adding GDPR into the equation makes things more challenging](/pl/gdpr_for_busy_developers). We might not want to send all data everywhere. Therefore, instead of one event, you can publish three: 
 - _OrderConfirmed_ with necessary order data.
 - _OrderReadyForShipment_ with data for the shipment module (like address, etc.). 
 - _OrderPaid_ with financial information. 

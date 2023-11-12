@@ -6,6 +6,8 @@ title: How to deal with privacy and GDPR in Event-Sourced systems
 
 If you want to rewatch it, or want to share it with your friends, see the recording:
 
+Read also [GDPR for busy developers](/pl/gdpr_for_busy_developers).
+
 `youtube: https://www.youtube.com/watch?v=7NGlYgobTyY`
 
 **Feel free to [drop me an e-mail](mailto:oskar@event-driven.io) or [connect with me at LinkedIn](https://www.linkedin.com/in/oskardudycz/)**.
