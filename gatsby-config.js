@@ -130,8 +130,8 @@ module.exports = {
               maxWidth: 800,
               backgroundColor: "transparent",
               wrapperStyle: "height: auto",
+              quality: 70
             },
-            quality: 80
           },
           {
             resolve: `gatsby-remark-responsive-iframe`,
