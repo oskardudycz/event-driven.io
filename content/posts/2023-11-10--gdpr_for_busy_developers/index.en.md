@@ -163,7 +163,9 @@ If you're sharing the data with others, at least ensure that they allow you to r
 
 **As you see, Handling privacy can be tricky, and for Event Sourcing, even more. The most significant Event Sourcing selling point is that [we're not losing data by using it](/en/never_lose_data_with_event_sourcing/).** Our data is an immutable sequence of events, and that sounds already unmatchable with removing data, aye?
 
-How to do it? I'll explain in the next article, but if you cannot wait, watch:
+How to do it? I explained that in the follow up article: [How to deal with privacy and GDPR in Event-Sourced systems](/en/gdpr_in_event_driven_architecture).
+
+You can also watch:
 
 `youtube: https://www.youtube.com/watch?v=7NGlYgobTyY`
 
