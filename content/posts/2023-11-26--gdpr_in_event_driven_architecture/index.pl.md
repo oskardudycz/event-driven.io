@@ -20,7 +20,7 @@ useDefaultLangCanonical : true
 Still, let's dive into the privacy specifics of the event-driven systems!
 
 ## Data segregation
-
+ 
 **Data governance practices are, unfortunately, not discussed enough in event-driven systems.** People treat events more like freehand drawing, sometimes as mesh, but ending too often with a mess instead. We should carefully draw boundaries between our events.
 
 Such practices can be more technical, like:

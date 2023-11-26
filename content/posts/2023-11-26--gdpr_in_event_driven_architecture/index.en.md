@@ -32,7 +32,7 @@ Still, technical aspects are just part of it. We should also think about the log
 
 **Besides the traditional split, we should also avoid keeping personal data with regular ones.** As you'll see later in the article, that makes handling privacy rules much more manageable. But even with common sense, it's clear that keeping personal data segregated gives more options to apply security and privacy regulations described in [the previous article](/en/gdpr_for_busy_developers/).
 
-![categories](2023-11-23-categories.png)
+![categories](2023-11-23-categories.png) 
 
 We can break it down by categories/topics:
 
