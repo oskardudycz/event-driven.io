@@ -6,7 +6,9 @@ author: oskar dudycz
 useDefaultLangCanonical : true
 ---
 
-**I'm always saying that the Marten community is one of the things that keeps me doing Open Source and staying in the .NET community.** It's really welcoming and supportive. Of course, there are [distinctions to the rule](https://www.linkedin.com/posts/oskardudycz_my-favourite-type-of-oss-users-u-how-activity-7135568854675537920-XN9Z?utm_source=share&utm_medium=member_desktop), but they're rare enough.
+![cover](2023-11-30-cover.png)
+
+**I'm always saying that the Marten community is one of the things that keeps me doing Open Source and staying in the .NET community.** It's really welcoming and supportive. Of course, there are distinctions to the rule, but they're rare enough.
 
 At the time of writing, we have almost 1000 users on our Discord. It's a nice place to be, not only for bug reports but also for discussions around architecture and software design. If you're not yet there, [come and join us!](https://discord.gg/w5wGvDpy7E).
 
