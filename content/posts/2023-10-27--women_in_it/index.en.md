@@ -23,7 +23,7 @@ Or, on the contrary, have you seen such a well-coordinated group that you wanted
 
 Some time ago, I was running the recruitment process. I realised that I didn't get a single woman in the twenty or so job interviews I conducted. What's more, I didn't get any female CV either.
 
-I was invited once to a big conference where the organisers gathered one woman out of about ninety speakers.
+I was invited once to a big conference where the organisers gathered one woman out of about ninety speakers. [There were conferences that created fake women profiles to cheat that they care about diversity](https://blog.pragmaticengineer.com/devternity-fake-speakers/).
 
 Do you already know what I'm getting at? What am I wandering around?
 
@@ -87,7 +87,8 @@ Read also more in:
 - [Matt Wynne - Feminism](https://mattwynne.net/feminism)
 - [Jasper Spanjaart - 20 ways to hire more women into engineering and combat the gender gap](https://totalent.eu/20-ways-to-hire-more-women-into-engineering-and-combat-the-gender-gap/)
 - [Heather Wilde - How to Close the Diversity Gap](https://www.youtube.com/watch?v=JQL4doMy73w)
-https://twitter.com/julielerman/status/986317578720210944
+- [Gergely Orosz - A Tech Conference Listed Fake Speakers for Years: I Accidentally Noticed](https://blog.pragmaticengineer.com/devternity-fake-speakers/)
+- [Fempire - A list of women tech speakers & organizers](https://github.com/fempire/women-tech-speakers-organizers)
 
 Cheers!
 
