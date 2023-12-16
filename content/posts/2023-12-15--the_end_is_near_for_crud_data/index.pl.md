@@ -94,7 +94,7 @@ Once we start discussing those boundaries, we may find more events and enrich ou
 
 ## 5. Don't lie, introduce explicit events for import
 
-Once you distinguish all events you're fine with and want to migrate your relational data, don't try to cheat; don't put your events as small and granular. Relational data is flattened; if you try to retrofit what happened from the final state, you will likely fail or not be precise at best. 
+Once you distinguish all events you're fine with and want to migrate your relational data, don't try to cheat; don't reuse your newly found events during import. Relational data is flattened; if you try to retrofit what happened from the final state, you will likely fail or not be precise at best. 
 
 **It's better to be explicit and provide the _Order Imported_ event with all the current states and the code to interpret it.** It gives us clear information on how we got the data about its lifetime, which can be crucial for troubleshooting and diagnostics.
 
