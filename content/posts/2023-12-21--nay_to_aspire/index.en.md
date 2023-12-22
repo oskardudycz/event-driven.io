@@ -41,6 +41,8 @@ Currently, for hobby or small projects, it's a no-go as the setup is overly comp
 
 **TLDR. I didn't have huge expectations, but I still got disappointed.**
 
+**EDIT:** After posting this article, I had a good discussion with David Fowler and Reuben Bond under my [LinkedIn post](https://www.linkedin.com/feed/update/urn:li:activity:7143511551008845824?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7143511551008845824%2C7143518529697349633%29&replyUrn=urn%3Ali%3Acomment%3A%28activity%3A7143511551008845824%2C7143604009860218880%29&dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287143518529697349633%2Curn%3Ali%3Aactivity%3A7143511551008845824%29&dashReplyUrn=urn%3Ali%3Afsd_comment%3A%287143604009860218880%2Curn%3Ali%3Aactivity%3A7143511551008845824%29). I appreciate that they took their time to discuss my concerns and provide their thoughts on it. Read more [here](https://www.linkedin.com/feed/update/urn:li:activity:7143511551008845824?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7143511551008845824%2C7143518529697349633%29&replyUrn=urn%3Ali%3Acomment%3A%28activity%3A7143511551008845824%2C7143604009860218880%29&dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287143518529697349633%2Curn%3Ali%3Aactivity%3A7143511551008845824%29&dashReplyUrn=urn%3Ali%3Afsd_comment%3A%287143604009860218880%2Curn%3Ali%3Aactivity%3A7143511551008845824%29) to see their perspective.
+
 Cheers!
 
 Oskar
