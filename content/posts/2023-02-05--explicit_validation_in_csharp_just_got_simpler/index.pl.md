@@ -17,7 +17,7 @@ useDefaultLangCanonical : true
 
 On each step, we should perform validation.
 
-**Let's focus on the last step for now. In ASP.NET, the validation is quite often conflated with parsing and [model binding](https://learn.microsoft.com/en-us/aspnet/core/mvc/models/model-binding?view=aspnetcore-7.0).** Historically, .NET devs got accustomed to doing all at once. It may sound like a brilliant idea, but it's also a pit of performance issues and nasty production bugs to debug. It all goes well while we remember the conventions and follow them precisely. Yet, the number of permutations we may find makes it hard to tame.
+**Let's focus on the last step for now. In ASP.NET, the validation is quite often conflated with parsing and [model binding](https://learn.microsoft.com/en-us/aspnet/core/mvc/models/model-binding?view=aspnetcore-8.0).** Historically, .NET devs got accustomed to doing all at once. It may sound like a brilliant idea, but it's also a pit of performance issues and nasty production bugs to debug. It all goes well while we remember the conventions and follow them precisely. Yet, the number of permutations we may find makes it hard to tame.
 
 The potential solution could be explicit validation, so break the exact flow into [parse first, then validate](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/). If you have tried that already, you may think I'm suggesting you become a caveman and do a lot of copy-pasting. Also, you may ask how to achieve human-friendly error messages. 
 

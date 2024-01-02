@@ -305,7 +305,7 @@ I explained the superpowers of Postgres logical replication in detail in [Push-b
 >
 > Logical replication takes the traditional approach to the next level. Instead of sending the raw binary stream of backed-up database files, we're sending a stream of changes that were recorded in the Write-Ahead Log. It's named logical, as it understands the operations’ semantics, plus the information about the tables it's replicating. It's highly flexible; it can be defined for one or multiple tables, filter records and copy a subset of data. It can inform you about changes to specific records. Thus it requires the replicated table to have primary keys.
 
-We'll use it to publish our notifications from the alerts table into the web UI! I'll use C#, .NET and [SignalR](https://learn.microsoft.com/en-us/aspnet/core/signalr/introduction?view=aspnetcore-7.0), but you can apply this pattern to other technologies.
+We'll use it to publish our notifications from the alerts table into the web UI! I'll use C#, .NET and [SignalR](https://learn.microsoft.com/en-us/aspnet/core/signalr/introduction?view=aspnetcore-8.0), but you can apply this pattern to other technologies.
 
 We'll subscribe to the changes from the alerts table (_vehicle_fuel_efficiency_avg_). That's also why we didn't make it a _hypertable_. Reminder: it uses partitioning underneath. Postgres, behind the scenes, is creating the table for each partition. Technically, it's possible to tell Postgres to replicate data from those tables, but if we add to that dynamic creation etc., things are getting harder. That's also why TimescaleDB discourages using logical replication for _hypertables_. That may change, as Postgres is investing a lot of effort to make logical replication and partitioning more aligned and easier to use together. However, for now, let's focus on our scenario. For our alerting case, it makes perfect sense, as we're interested in new records, and they're mostly ephemeral notifications.
 
@@ -352,7 +352,7 @@ public class FuelEfficiencyAlertsPostgresSubscription
 
 Behind the scenes, it'll set up the publication for our table, replication slot, and subscribe for the changes.
 
-Each time a new record appears, we'll get a notification from [AsyncEnumerable](https://learn.microsoft.com/en-us/archive/msdn-magazine/2019/november/csharp-iterating-with-async-enumerables-in-csharp-8) and forward it to [SignalR](https://learn.microsoft.com/en-us/aspnet/core/signalr/introduction?view=aspnetcore-7.0). SignalR is a .NETopen-source library that enables sending server-side notifications to client applications (e.g. web clients).
+Each time a new record appears, we'll get a notification from [AsyncEnumerable](https://learn.microsoft.com/en-us/archive/msdn-magazine/2019/november/csharp-iterating-with-async-enumerables-in-csharp-8) and forward it to [SignalR](https://learn.microsoft.com/en-us/aspnet/core/signalr/introduction?view=aspnetcore-8.0). SignalR is a .NETopen-source library that enables sending server-side notifications to client applications (e.g. web clients).
 
 The hub is implemented and configured simply as:
 

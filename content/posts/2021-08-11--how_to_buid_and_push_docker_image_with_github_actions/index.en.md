@@ -77,7 +77,7 @@ jobs:
     # steps to perform in job
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # setup Docker buld action
       - name: Set up Docker Buildx
