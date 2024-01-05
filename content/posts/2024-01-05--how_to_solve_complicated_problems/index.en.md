@@ -15,6 +15,8 @@ Clear issues we solve on autopilot, chaotic ones we tend to ignore, and complex 
 
 **Complicated issues, on the other hand, are _known unknowns_.** They represent something that has to be done. If we have the expertise, we can sense it with our educated gut feeling, analyse it and respond with a solution. In other words, we usually know _what_ we need to do, but we need to find an exact _how_ to solve it. Unknowns are more tactical than strategic.
 
+![Cynefin. Source: https://en.wikipedia.org/wiki/Cynefin_framework#/media/File:Cynefin_framework_2022.jpg](2024-01-05-cynefin.jpg)
+
 **And here's the funny thing: we too often feel more comfortable solving complex tasks than complicated ones.** We counterintuitively think, _"Well, we just need to do research, then select a solution and solve it"_. Too often, that's our self-defence. We're tricking ourselves by postponing the issue. It's easier to justify our efforts in research than lag on _known unknowns_. 
 
 If we categorise something as complex, then probably no one from our close circle knows the answer. There's less chance that we'll be criticised. For complicated, there's a feeling that someone can always come and say _"It is an easy task; why are you spending so much time on it?"_. Yes, _complicated_ is a subjective term. It's like an inverted _[Instant Gratification Theory](https://positivepsychology.com/instant-gratification/)_; we're delaying potential bad scenarios.
@@ -123,7 +125,7 @@ Where:
 - **Storage** - the tenancy of the read model (_Single_ - only default tenant is allowed, _Conjoined_ - non-default tenants are allowed).
 - **Result** - either the same session can be used, or a new nested one should be created (with default or non-default tenant).
 
-You can also see a pattern in which I described permutations. I started by adding possible values for the first column (_DEFAULT_ and _NON-DEFAULT'), then for each value, I added the permutations for the second column and then did the same for the third column. Thanks to that, I'm sure that I covered all permutations. It's also easier to read and reason if we see bigger groups first and then smaller subgroups in the following columns.
+You can also see a pattern in which I described permutations. I started by adding possible values for the first column (_DEFAULT_ and _NON-DEFAULT_), then for each value, I added the permutations for the second column and then did the same for the third column. Thanks to that, I'm sure that I covered all permutations. It's also easier to read and reason if we see bigger groups first and then smaller subgroups in the following columns.
 
 **Having all permutations, I filled in the result.** That's the part that cannot be done automatically. You need to sit and think of the expected result based on the constraints you have. If it's about complicated business logic, then it's time to consult your domain expert to ensure that you understand that well. Once you confirm it, such a breakdown will be an excellent input for unit tests.
 
@@ -185,7 +187,7 @@ I also used _inverted ifs_. Instead of nesting _else_ conditions, I'm returning 
 
 Yes, I didn't write tests first. I have to confess that I never got fully into the habit of doing that. Usually, I start with a raw draft of the API, and then I do the red/green sandwich. I feel more efficient by doing that, especially when I need surgery on already existing, complicated code. Still, if you prefer to follow fully TDD, that's also a viable option.
 
-**I also wanted tests to be explicit about the intention.** If we have such repeatable code varying on the permutation of inputs, it's good to do [Property-based testing](https://fsharpforfunandprofit.com/pbt/). So, preparing (or generating) a set of inputs ensures that they give an expected result. In Marten, we're using the XUnit framework, which allows us to do it through [`Theory` attribute](https://andrewlock.net/creating-parameterised-tests-in-xunit-with-inlinedata-classdata-and-memberdata/).
+**I also wanted tests to be explicit about the intention.** If we have such repeatable code varying on the permutation of inputs, it's good to do [Property-based testing](https://fsharpforfunandprofit.com/pbt/). So, preparing (or generating) a set of inputs ensures that they give an expected result. In Marten, we're using the XUnit framework, which allows us to do it through [_Theory_ attribute](https://andrewlock.net/creating-parameterised-tests-in-xunit-with-inlinedata-classdata-and-memberdata/).
 
 ```csharp
 public class TenantedSessionFactoryTests
