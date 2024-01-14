@@ -101,7 +101,7 @@ As long as they're meaningful for business that's perfectly fine. Again, the clo
 
 **I'd add two events if there were separate parts of the processes.** Let's take the guest's group checkout we modelled in [webinar about implementing distributed processes](https://www.architecture-weekly.com/p/webinar-3-implementing-distributed)
 
-[![webinar](./2023-09-22-webinar.png)](https://www.architecture-weekly.com/p/webinar-3-implementing-distributed)
+[![webinar](./2024-01-14-webinar.png)](https://www.architecture-weekly.com/p/webinar-3-implementing-distributed)
 
 Group checkout can be run as a series of single guest checkouts. We can complete it when all single ones are completed. Thus, we must record and accrue the information in the main process. We do that by subscribing to _GuestCheckoutCompleted_ events and storing _GuestCheckoutCompletionRecorded_ in the group checkout stream. When the last checkout for the group was made from this action, you will also get the _GroupCheckoutCompleted_ event. It doesn't make much sense to group those two events into _GuestCheckoutRecordedAndGroupCheckoutCompleted_ event. We're recording information about two different business facts.
 
