@@ -62,7 +62,7 @@ const Bodytext = props => {
           :global(code.language-text) {
             text-shadow: none;
             color: inherit;
-            padding: 0.2em 0.2em 0.2em;
+            padding: 0.2em 0.2em 0.2em 0;
             border-radius: 0.1em;
           }
           :global(blockquote) {
