@@ -77,7 +77,7 @@ Same for other projections and handlers. Yet, is it such a big optimisation? Esp
 3. GuestCheckedIn (CorrelationId: '9f873')
 ```
 
-But that only gives us a clue that they were stored in the same process. And what if we also did other optimisation and ran [multiple commands in the same transaction](/en/simple_transactional_command_orchestration/)? Then, this correlation ID may mean that they just happen to be stored in the same request, and we need to do more detective work.
+But that only gives us a clue that they were stored in the same process. And what if we also did other optimisation and ran [multiple commands in the same transaction](/en/simple_transactional_command_orchestration/)? Then, this correlation ID may mean that they just happen to be stored in the same request, and we need to do more detective work. Having multiple events as a result of a single request can also be a smell of wrong process boundaries. Maybe we should break it into multiple steps. See more in [Saga and Process Manager - distributed processes in practice](/en/saga_process_manager_distributed_transactions/).
 
 [One of the biggest advantages of using Event Sourcing is keeping the business context](/en/never_lose_data_with_event_sourcing/). We're trading it here for potentially less code. I already said that's disputable, as that can only be true if we have read models representing 1:1 our write model. This may happen, but it's again different from the premises of Event Sourcing.
 
@@ -110,6 +110,8 @@ Group checkout can be run as a series of single guest checkouts. We can complete
 Of course, it’s a grey matter. My safe default is to record a single event. From my experience, most cases are like that. We should double check if there's no benefit of having multiple events. Yet, I understand that someone may have a different perspective, so think for yourself.
 
 I started with base classes, super granular events, and sharing data between events, but I evolved from that. And I regret that I did that because it took me a lot of time to refactor that. The hidden coupling is a big enabler for accidental complexity and [overly complicated solutions](/en/how_to_solve_complicated_problems/).
+
+**Of course, it's not my intention to push you to [state obsession](/en/state-obsession/).** Having two events like _RoomReserved_ and _GuestsInformationUpdated_ is better than having CRUD-like _RoomReservationCreated_ and _RoomReservationUpdated_ events. I intend to suggest you watch your business process and reflect on it as it is. Don't optimise for reusability.
 
 [Events should be as small as possible but not smaller](/en/events_should_be_as_small_as_possible/). And remember to have a split between [internal and external events](/en/internal_external_events/). Thanks to that, you can keep the internal events precise and enrich them for external subscribers who need more context. [Event transformations can help you](/en/event_transformations_and_loosely_coupling/) to keep your processes loosely coupled.
 

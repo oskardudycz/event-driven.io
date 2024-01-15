@@ -78,7 +78,7 @@ Same for other projections and handlers. Yet, is it such a big optimisation? Esp
 3. GuestCheckedIn (CorrelationId: '9f873')
 ```
 
-But that only gives us a clue that they were stored in the same process. And what if we also did other optimisation and ran [multiple commands in the same transaction](/pl/simple_transactional_command_orchestration/)? Then, this correlation ID may mean that they just happen to be stored in the same request, and we need to do more detective work.
+But that only gives us a clue that they were stored in the same process. And what if we also did other optimisation and ran [multiple commands in the same transaction](/pl/simple_transactional_command_orchestration/)? Then, this correlation ID may mean that they just happen to be stored in the same request, and we need to do more detective work. Having multiple events as a result of a single request can also be a smell of wrong process boundaries. Maybe we should break it into multiple steps. See more in [Saga and Process Manager - distributed processes in practice](/en/saga_process_manager_distributed_transactions/).
 
 [One of the biggest advantages of using Event Sourcing is keeping the business context](/pl/never_lose_data_with_event_sourcing/). We're trading it here for potentially less code. I already said that's disputable, as that can only be true if we have read models representing 1:1 our write model. This may happen, but it's again different from the premises of Event Sourcing.
 
@@ -102,7 +102,7 @@ As long as they're meaningful for business that's perfectly fine. Again, the clo
 
 **I'd add two events if there were separate parts of the processes.** Let's take the guest's group checkout we modelled in [webinar about implementing distributed processes](https://www.architecture-weekly.com/p/webinar-3-implementing-distributed)
 
-[![webinar](./2023-09-22-webinar.png)](https://www.architecture-weekly.com/p/webinar-3-implementing-distributed)
+[![webinar](./2024-01-14-webinar.png)](https://www.architecture-weekly.com/p/webinar-3-implementing-distributed)
 
 Group checkout can be run as a series of single guest checkouts. We can complete it when all single ones are completed. Thus, we must record and accrue the information in the main process. We do that by subscribing to _GuestCheckoutCompleted_ events and storing _GuestCheckoutCompletionRecorded_ in the group checkout stream. When the last checkout for the group was made from this action, you will also get the _GroupCheckoutCompleted_ event. It doesn't make much sense to group those two events into _GuestCheckoutRecordedAndGroupCheckoutCompleted_ event. We're recording information about two different business facts.
 
@@ -111,6 +111,8 @@ Group checkout can be run as a series of single guest checkouts. We can complete
 Of course, it’s a grey matter. My safe default is to record a single event. From my experience, most cases are like that. We should double check if there's no benefit of having multiple events. Yet, I understand that someone may have a different perspective, so think for yourself.
 
 I started with base classes, super granular events, and sharing data between events, but I evolved from that. And I regret that I did that because it took me a lot of time to refactor that. The hidden coupling is a big enabler for accidental complexity and [overly complicated solutions](/pl/how_to_solve_complicated_problems/).
+
+**Of course, it's not my intention to push you to [state obsession](/en/state-obsession/).** Having two events like _RoomReserved_ and _GuestsInformationUpdated_ is better than having CRUD-like _RoomReservationCreated_ and _RoomReservationUpdated_ events. I intend to suggest you watch your business process and reflect on it as it is. Don't optimise for reusability.
 
 [Events should be as small as possible but not smaller](/pl/events_should_be_as_small_as_possible/). And remember to have a split between [internal and external events](/pl/internal_external_events/). Thanks to that, you can keep the internal events precise and enrich them for external subscribers who need more context. [Event transformations can help you](/pl/event_transformations_and_loosely_coupling/) to keep your processes loosely coupled.
 
