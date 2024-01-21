@@ -38,10 +38,10 @@ class ReservationProjection
         new Reservation(roomReserved.Id, roomServerd.Number);
 
     Reservation Apply(Reservation reservation, GuestsInformationUpdated guestInfoUpdated) =>
-	reservation with 
-	{
-	    GuestsCount = guestInfoUpdated.GuestsCount,
-	    MainGuest = guestInfoUpdated.MainGuest,
+        reservation with 
+        {
+            GuestsCount = guestInfoUpdated.GuestsCount,
+            MainGuest = guestInfoUpdated.MainGuest,
         }
 }
 ```
@@ -52,7 +52,8 @@ Instead of:
 class ReservationProjection
 {
     Reservation Apply(RoomReserved roomReserved) =>
-        new Reservation(
+        new Reservation
+        (
             roomReserved.Id, 
             roomServerd.Number,
             roomReserved.GuestsInfo.Count,
@@ -60,13 +61,14 @@ class ReservationProjection
         );
 
     Reservation Apply(Reservation reservation, GuestsInformationUpdated guestInfoUpdated) =>
-	reservation with 
-	{
-	    GuestsCount = guestInfoUpdated.GuestsCount,
-	    MainGuest = guestInfoUpdated.MainGuest,
+        reservation with 
+        {
+            GuestsCount = guestInfoUpdated.GuestsCount,
+            MainGuest = guestInfoUpdated.MainGuest,
         }
 }
 ```
+
 Same for other projections and handlers. Yet, is it such a big optimisation? Especially since now, for each handler, we need to handle those two events instead of a single one when we're just interested in starting the reservation process. So, what are we getting out of it? 
 
 **We're definitely losing clarity on what has happened from the business process.** Of course, we could use [telemetry data like correlation id](/en/set_up_opentelemetry_wtih_event_sourcing_and_marten/) and see that by checking metadata:
@@ -114,6 +116,8 @@ I started with base classes, super granular events, and sharing data between eve
 **Of course, it's not my intention to push you to [state obsession](/en/state-obsession/).** Having two events like _RoomReserved_ and _GuestsInformationUpdated_ is better than having CRUD-like _RoomReservationCreated_ and _RoomReservationUpdated_ events. I intend to suggest you watch your business process and reflect on it as it is. Don't optimise for reusability.
 
 [Events should be as small as possible but not smaller](/en/events_should_be_as_small_as_possible/). And remember to have a split between [internal and external events](/en/internal_external_events/). Thanks to that, you can keep the internal events precise and enrich them for external subscribers who need more context. [Event transformations can help you](/en/event_transformations_and_loosely_coupling/) to keep your processes loosely coupled.
+
+Read also more in [On removing prefixes and stream ids from event data](/en/on_putting_stream_id_in_event_data). I continued there, the considerations around optimising for the code size and process understanding.
 
 Cheers!
 
