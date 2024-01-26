@@ -349,6 +349,18 @@ When we need to introduce the new schema, we can do it with backward compatibili
 
 Is Upcasting a killer feature? Probably not. When used wisely, it can be a decent, pragmatic choice helping us in the migration strategies and being our safety belt, allowing us to evolve our model. It should be used with care; thus, this article.
 
+**Watch also more in the webinar:**
+
+![webinar](2021-12-08-webinaresver.png)
+
+**And read in the versioning series:**
+- [Simple patterns for events schema versioning](/en/simple_events_versioning_patterns/)
+- [How to (not) do the events versioning?](/en/how_to_do_event_versioning/)
+- [Fun with serial JSON](/en/fun_with_json_serialisation/)
+- [Mapping event type by convention](/en/how_to_map_event_type_by_convention/)
+- [Let's take care of ourselves! Thoughts on compatibility](/en/lets_take_care_of_ourselves_thoughts_about_comptibility/)
+- [Internal and external events, or how to design event-driven API](/en/internal_external_events/)
+
 Cheers!
 
 Oskar

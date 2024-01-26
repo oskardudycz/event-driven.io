@@ -303,6 +303,19 @@ The choice is yours; I encourage you to try both ways, get familiar with it and 
 
 See the full code for this article in: https://github.com/oskardudycz/EventSourcing.NetCore/pull/190.
 
+**Watch also more in the webinar:**
+
+![webinar](2021-12-08-webinaresver.png)
+
+**And read in the versioning series:**
+- [Simple patterns for events schema versioning](/en/simple_events_versioning_patterns/)
+- [How to (not) do the events versioning?](/en/how_to_do_event_versioning/)
+- [Fun with serial JSON](/en/fun_with_json_serialisation/)
+- [Mapping event type by convention](/en/how_to_map_event_type_by_convention/)
+- [Event Versioning with Marten](/en/event_versioning_with_marten/)
+- [Let's take care of ourselves! Thoughts on compatibility](/en/lets_take_care_of_ourselves_thoughts_about_comptibility/)
+- [Internal and external events, or how to design event-driven API](/en/internal_external_events/)
+
 Cheers!
 
 Oskar

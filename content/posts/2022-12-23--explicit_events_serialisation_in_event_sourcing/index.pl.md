@@ -12,13 +12,13 @@ useDefaultLangCanonical : true
 
 **The truth (as always) lies somewhere in the middle.** Indeed, it's not as hard as envisioned, but there's also a reason I am writing a 5th blog article about that, right? 
 
-I wrote already about [simple patterns for events schema versioning](/en/simple_events_versioning_patterns/). I explained [why the best way of doing event versioning is not having the need for that](/en/how_to_do_event_versioning/). I also presented [how to do versioning in Marten](/en/event_versioning_with_marten/). In the last article, I showed [mapping event type by convention](/en/how_to_map_event_type_by_convention/). I'll show you how and when it may be worth serialising explicit events this time.
+I wrote already about [simple patterns for events schema versioning](/pl/simple_events_versioning_patterns/). I explained [why the best way of doing event versioning is not having the need for that](/pl/how_to_do_event_versioning/). I also presented [how to do versioning in Marten](/pl/event_versioning_with_marten/). In the last article, I showed [mapping event type by convention](/pl/how_to_map_event_type_by_convention/). I'll show you how and when it may be worth serialising explicit events this time.
 
 **Conventional mapping can take you far if you have a set of basic conventions and serialiser that can do a lot.** In many languages, like C# or Java, serialisers can go pretty wild and do advanced mappings. That's quite powerful as long as you obey the rules. Creator rules. That's fine until you'll try to do something a bit unusual. 
 
 **What can unusual mean in this context?** For instance: building a complex type system instead of just using primitives. Or: connecting evolved type structure to the old event payload.
 
-**Let's discuss that in the specific scenario.** I showed you already that [strongly-typed ids might play poorly with a lot of tooling](/en/using_strongly_typed_ids_with_marten/). Still, if you put enough effort or use the proper patterns, they're the simplest example of [value objects](/en/immutable_value_objects/) and can make your life easier. Once you build your type system, you get predictability as the compiler will know better, fewer unit tests and a much more expressive and explicit codebase. All of that makes your code much closer to the business language, a [base for shared understanding](/en/bring_me_problems_not_solutions/) and better matching the expected results.
+**Let's discuss that in the specific scenario.** I showed you already that [strongly-typed ids might play poorly with a lot of tooling](/pl/using_strongly_typed_ids_with_marten/). Still, if you put enough effort or use the proper patterns, they're the simplest example of [value objects](/pl/immutable_value_objects/) and can make your life easier. Once you build your type system, you get predictability as the compiler will know better, fewer unit tests and a much more expressive and explicit codebase. All of that makes your code much closer to the business language, a [base for shared understanding](/pl/bring_me_problems_not_solutions/) and better matching the expected results.
 
 Let's have a look at our events definition. They're facts that can be observed during the Shopping Cart lifetime:
 
@@ -97,7 +97,7 @@ public record Money(
 );
 ```
 
-The others are defined accordingly, creating a primary type with validations and not allowing incorrect values. _StronglyTypedValue_ is the class known from the [previous article](/en/using_strongly_typed_ids_with_marten/) responsible for implementing the equality boilerplate etc. So as you see, nothing spectacular. In C#, some boilerplate is needed; in many languages ([e.g. F#](/en/writing_and_testing_business_logic_in_fsharp/)), this could look even simpler.
+The others are defined accordingly, creating a primary type with validations and not allowing incorrect values. _StronglyTypedValue_ is the class known from the [previous article](/pl/using_strongly_typed_ids_with_marten/) responsible for implementing the equality boilerplate etc. So as you see, nothing spectacular. In C#, some boilerplate is needed; in many languages ([e.g. F#](/pl/writing_and_testing_business_logic_in_fsharp/)), this could look even simpler.
 
 **This approach is flexible, as we can model our types case by case following the business specification. Yet, that's also the weakness if we'd like to use the convention. Customisation and flexibility by convention don't follow conventions.**
 
@@ -156,7 +156,7 @@ public class ShoppingCartEventsSerde
 }
 ```
 
-**We're taking the _ShoppingCartEvent_ and doing a switch based on the exact event type. Knowing this, we can do a specific serialisation of the event data.** We have full flexibility in defining the event structure. We can flatten the structure next to it and set custom property names. This freedom is especially valuable for handling [event schema evolution](/en/simple_events_versioning_patterns/). Thanks to that, we can handle compatibility issues explicitly. As a serialisation result, we're returning both serialised data and a mapped event type name. That's needed to deserialise it, as we'll see later.
+**We're taking the _ShoppingCartEvent_ and doing a switch based on the exact event type. Knowing this, we can do a specific serialisation of the event data.** We have full flexibility in defining the event structure. We can flatten the structure next to it and set custom property names. This freedom is especially valuable for handling [event schema evolution](/pl/simple_events_versioning_patterns/). Thanks to that, we can handle compatibility issues explicitly. As a serialisation result, we're returning both serialised data and a mapped event type name. That's needed to deserialise it, as we'll see later.
 
 **The code also doesn't look that scary besides the _stringly-typed_ property names.** It is dangerous, as we can make a copy-paste mistake. As always, with great power comes great responsibility. Of course, we could make those strings const values or map them from the type names, but that's also not ideal. 
 
@@ -304,8 +304,21 @@ The choice is yours; I encourage you to try both ways, get familiar with it and 
 
 See the full code for this article in: https://github.com/oskardudycz/EventSourcing.NetCore/pull/190.
 
+**Watch also more in the webinar:**
+
+![webinar](2021-12-08-webinaresver.png)
+
+**And read in the versioning series:**
+- [Simple patterns for events schema versioning](/pl/simple_events_versioning_patterns/)
+- [How to (not) do the events versioning?](/pl/how_to_do_event_versioning/)
+- [Fun with serial JSON](/pl/fun_with_json_serialisation/)
+- [Mapping event type by convention](/pl/how_to_map_event_type_by_convention/)
+- [Event Versioning with Marten](/pl/event_versioning_with_marten/)
+- [Let's take care of ourselves! Thoughts on compatibility](/pl/lets_take_care_of_ourselves_thoughts_about_comptibility/)
+- [Internal and external events, or how to design event-driven API](/pl/internal_external_events/)
+
 Cheers!
 
 Oskar
 
-p.s. **Ukraine is still under brutal Russian invasion. A lot of Ukrainian people are hurt, without shelter and need help.** You can help in various ways, for instance, directly helping refugees, spreading awareness, putting pressure on your local government or companies. You can also support Ukraine by donating e.g. to [Red Cross](https://www.icrc.org/en/donate/ukraine), [Ukraine humanitarian organisation](https://savelife.in.ua/en/donate/) or [donate Ambulances for Ukraine](https://www.gofundme.com/f/help-to-save-the-lives-of-civilians-in-a-war-zone).
+p.s. **Ukraine is still under brutal Russian invasion. A lot of Ukrainian people are hurt, without shelter and need help.** You can help in various ways, for instance, directly helping refugees, spreading awareness, putting pressure on your local government or companies. You can also support Ukraine by donating e.g. to [Red Cross](https://www.icrc.org/pl/donate/ukraine), [Ukraine humanitarian organisation](https://savelife.in.ua/pl/donate/) or [donate Ambulances for Ukraine](https://www.gofundme.com/f/help-to-save-the-lives-of-civilians-in-a-war-zone).
