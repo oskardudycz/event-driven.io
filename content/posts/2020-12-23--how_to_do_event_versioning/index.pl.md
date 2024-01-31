@@ -40,6 +40,19 @@ Versioning is not easy. The earlier we start thinking about the versioning strat
 
 If you're looking on the practical examples on how to practically implement Events Schema Versioning, check [Simple patterns for events schema versioning](/pl/simple_events_versioning_patterns).
 
+**Watch also more in the webinar:**
+
+![webinar](2021-12-08-webinaresver.png)
+
+**And read in the versioning series:**
+- [Simple patterns for events schema versioning](/pl/simple_events_versioning_patterns/)
+- [Explicit events serialisation in Event Sourcing](/pl/explicit_events_serialisation_in_event_sourcing/)
+- [Fun with serial JSON](/pl/fun_with_json_serialisation/)
+- [Mapping event type by convention](/pl/how_to_map_event_type_by_convention/)
+- [Event Versioning with Marten](/pl/event_versioning_with_marten/)
+- [Let's take care of ourselves! Thoughts on compatibility](/pl/lets_take_care_of_ourselves_thoughts_about_comptibility/)
+- [Internal and external events, or how to design event-driven API](/pl/internal_external_events/)
+
 Cheers!
 
 Oskar

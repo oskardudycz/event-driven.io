@@ -240,6 +240,18 @@ export type MapperArgs<From, To = From> = Partial<From> &
 
 It allows specifying additional mappers to map JSON back and forth, plus also [reviver](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse#the_reviver_parameter) and [replacer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#the_replacer_parameter) methods to convert types automatically [to Date](https://stackoverflow.com/a/14509447) and [to BigInt](https://stackoverflow.com/a/69573383). In our case, that'd not need an addtional serde type. We could also inline mappings to support payload versioning strategies.
 
+**Watch also more in the webinar:**
+
+![webinar](2021-12-08-webinaresver.png)
+
+**And read in the versioning series:**
+- [Simple patterns for events schema versioning](/en/simple_events_versioning_patterns/)
+- [How to (not) do the events versioning?](/en/how_to_do_event_versioning/)
+- [Mapping event type by convention](/en/how_to_map_event_type_by_convention/)
+- [Event Versioning with Marten](/en/event_versioning_with_marten/)
+- [Let's take care of ourselves! Thoughts on compatibility](/en/lets_take_care_of_ourselves_thoughts_about_comptibility/)
+- [Internal and external events, or how to design event-driven API](/en/internal_external_events/)
+
 Cheers!
 
 Oskar

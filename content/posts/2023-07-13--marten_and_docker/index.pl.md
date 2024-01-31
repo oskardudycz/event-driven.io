@@ -75,7 +75,7 @@ If you configured everything correctly, your app is set up for Production usage.
 Image definition could look as follows:
 
 ```dockerfile
-ARG dotnet_version=7.0
+ARG dotnet_version=8.0
 ########################################
 #  First stage of multistage build
 ########################################
@@ -118,7 +118,7 @@ RUN dotnet publish -c Release --no-build -o out
 ########################################
 FROM mcr.microsoft.com/dotnet/aspnet:${dotnet_version}-alpine
 ARG project_name
-ARG dotnet_version=7.0
+ARG dotnet_version=8.0
 
 # Setup working directory for project
 WORKDIR /app
@@ -145,7 +145,7 @@ docker build --build-arg project_name=Helpdesk.Api . -t helpdesk
 Or with all parameters
 
 ```shell
-docker build --build-arg project_name=Helpdesk.Api --build-arg codegen=true --build-arg dotnet_version=7.0 . -t helpdesk
+docker build --build-arg project_name=Helpdesk.Api --build-arg codegen=true --build-arg dotnet_version=8.0 . -t helpdesk
 ```
 
 **Beside the configurable input arguments, the Docker definition does one specific thing: pre-building generated code.** It has to go after project files are copied and dependencies, but **before the build.** Why? Because if we use static type load, the application will fail if no files are generated.

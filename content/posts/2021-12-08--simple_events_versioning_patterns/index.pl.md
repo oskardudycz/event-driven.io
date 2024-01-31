@@ -578,9 +578,23 @@ I hope that those samples will show you that you can support many versioning sce
 
 Nevertheless, the best approach is to [not need to do versioning at all](/pl/how_to_do_event_versioning/). If you're facing such a need, before using the strategies described above, make sure that your business scenario cannot be solved by talking to the business. It may appear that's some flaw in the business process modelling. We should not be trying to fix the issue, but the root cause. 
 
-You can check full sample in my:
-- [Event Sourcing in .NET repository](https://github.com/oskardudycz/EventSourcing.NetCore/tree/main/Sample/EventsVersioning),
-- Java version in [Event Sourcing in JVM repository](https://github.com/oskardudycz/EventSourcing.JVM/tree/main/samples/events-versioning).
+**You can check full sample in:**
+- [C#](https://github.com/oskardudycz/EventSourcing.NetCore/tree/main/Sample/EventsVersioning),
+- [Java](https://github.com/oskardudycz/EventSourcing.JVM/tree/main/samples/events-versioning),
+- [Typescript](https://github.com/oskardudycz/EventSourcing.NodeJS/tree/main/samples/eventsVersioning).
+
+**Watch also more in the webinar:**
+
+![webinar](2021-12-08-webinaresver.png)
+
+**And read in the versioning series:**
+- [How to (not) do the events versioning?](/pl/how_to_do_event_versioning/)
+- [Explicit events serialisation in Event Sourcing](/pl/explicit_events_serialisation_in_event_sourcing/)
+- [Fun with serial JSON](/pl/fun_with_json_serialisation/)
+- [Mapping event type by convention](/pl/how_to_map_event_type_by_convention/)
+- [Event Versioning with Marten](/pl/event_versioning_with_marten/)
+- [Let's take care of ourselves! Thoughts on compatibility](/pl/lets_take_care_of_ourselves_thoughts_about_comptibility/)
+- [Internal and external events, or how to design event-driven API](/pl/internal_external_events/)
 
 Cheers!
 

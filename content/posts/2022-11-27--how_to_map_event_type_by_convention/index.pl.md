@@ -85,7 +85,7 @@ public class EventTypeMapper
 }
 ```
 
-**The logic for mapping is simple, we’re either using already existing one or trying to resolve type by convention.** _GetFirstMatchingTypeFromCurrentDomainAssembly_ method is responsible for that. We can define any other convention if we’d like to. I'm using _ConcurrentDictionary_ instead of regular _Dictionary_ to make operations [Thread safe](https://learn.microsoft.com/en-us/dotnet/api/system.collections.concurrent.concurrentdictionary-2?view=net-7.0#thread-safety).
+**The logic for mapping is simple, we’re either using already existing one or trying to resolve type by convention.** _GetFirstMatchingTypeFromCurrentDomainAssembly_ method is responsible for that. We can define any other convention if we’d like to. I'm using _ConcurrentDictionary_ instead of regular _Dictionary_ to make operations [Thread safe](https://learn.microsoft.com/en-us/dotnet/api/system.collections.concurrent.concurrentdictionary-2?view=net-8.0#thread-safety).
 
 Note that the _GetFirstMatchingTypeFromCurrentDomainAssembly_ is an expensive operation that will be called for each event type. Yet, it will be only called once, then resolved type will be cached, and you won't get further performance hits.  If you're afraid of that and know the event types upfront, then you can preload types at the startup. If you're in the .NET space, you can also consider using [ImHashMap](https://github.com/dadhi/ImTools) which is also thread safe and much faster than regular _ConcurrentDictionary_.
 

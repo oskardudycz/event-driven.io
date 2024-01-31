@@ -16,7 +16,7 @@ Additionally, we have two types of operations:
 - append an event to the end of the selected stream,
 - read all events for the stream.
 
-That's all, and that's enough to implement the simplest event store. It is no wonder that I will try to [build an event store in an hour at the next NDC Oslo](https://ndcoslo.com/agenda/lets-build-event-store-in-one-hour-0mrk/0cavgqf0evd) (Yeah, as you noticed, I am very excited about that). 
+That's all, and that's enough to implement the simplest event store. [I even showed how to do it in one hour!](/pl/lets_build_event_store_in_one_hour/). 
 
 **In Event Sourcing, each business operation ends with the registration of its results, i.e. a new event.** To execute business logic, we need to know its current state. **In Event Sourcing, the state is events.** We don't have to make a revolution, and we can still use entities and a "flattened" current entity state. We need to turn the sequence of events into an object to get it. How to do it? I wrote in detail in [How to get the current entity state from events?](/en/how_to_get_the_current_entity_state_in_event_sourcing/). A short TLDR:
 - we read all events from the stream in the order of occurrence,

@@ -350,8 +350,20 @@ When we need to introduce the new schema, we can do it with backward compatibili
 
 Is Upcasting a killer feature? Probably not. When used wisely, it can be a decent, pragmatic choice helping us in the migration strategies and being our safety belt, allowing us to evolve our model. It should be used with care; thus, this article.
 
+**Watch also more in the webinar:**
+
+![webinar](2021-12-08-webinaresver.png)
+
+**And read in the versioning series:**
+- [Simple patterns for events schema versioning](/pl/simple_events_versioning_patterns/)
+- [How to (not) do the events versioning?](/pl/how_to_do_event_versioning/)
+- [Fun with serial JSON](/pl/fun_with_json_serialisation/)
+- [Mapping event type by convention](/pl/how_to_map_event_type_by_convention/)
+- [Let's take care of ourselves! Thoughts on compatibility](/pl/lets_take_care_of_ourselves_thoughts_about_comptibility/)
+- [Internal and external events, or how to design event-driven API](/pl/internal_external_events/)
+
 Cheers!
 
 Oskar
 
-p.s. **Ukraine is still under brutal Russian invasion. A lot of Ukrainian people are hurt, without shelter and need help.** You can help in various ways, for instance, directly helping refugees, spreading awareness, putting pressure on your local government or companies. You can also support Ukraine by donating e.g. to [Red Cross](https://www.icrc.org/en/donate/ukraine), [Ukraine humanitarian organisation](https://savelife.in.ua/en/donate/) or [donate Ambulances for Ukraine](https://www.gofundme.com/f/help-to-save-the-lives-of-civilians-in-a-war-zone).
+p.s. **Ukraine is still under brutal Russian invasion. A lot of Ukrainian people are hurt, without shelter and need help.** You can help in various ways, for instance, directly helping refugees, spreading awareness, putting pressure on your local government or companies. You can also support Ukraine by donating e.g. to [Red Cross](https://www.icrc.org/pl/donate/ukraine), [Ukraine humanitarian organisation](https://savelife.in.ua/pl/donate/) or [donate Ambulances for Ukraine](https://www.gofundme.com/f/help-to-save-the-lives-of-civilians-in-a-war-zone).

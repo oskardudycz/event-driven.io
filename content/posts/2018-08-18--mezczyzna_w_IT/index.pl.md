@@ -24,7 +24,7 @@ Albo wręcz przeciwnie, widziałeś tak dobrze zgraną paczkę, w której chcia�
 
 Jakiś czas temu zdałem sobie sprawę, że na około dwudziestu rozmów kwalifikacyjnych, które ostatnio prowadziłem, nie trafiła mi się, żadna kobieta. Co więcej, nie dostałem również żadnego kobiecego CV.
 
-Przed tygodniem jedna z naszych "największych" (jak wszystkie) konferencji na około dziewięćdziesięciu prelegentów "uzbierała" aż jedną kobietę.
+Tydzień przed tym gdy pisałem ten artykuł, jedna z naszych "największych"konferencji na około dziewięćdziesięciu prelegentów "uzbierała" aż jedną kobietę. Zdarzają się też konferencje, [gdzie organizatorzy nawet wymyślą fikcyjną prelegentkę](https://blog.pragmaticengineer.com/devternity-fake-speakers/), aby tylko nie musieć wykazać się minimum wysiłku i znaleźć realnej.
 
 Czy już wiecie do czego zmierzam? W okół czego tak kluczę?
 
@@ -72,7 +72,8 @@ Garść linków od mądrzejszych ludzi
 - [Matt Wynne - Feminism](https://mattwynne.net/feminism)
 - [Jasper Spanjaart - 20 ways to hire more women into engineering and combat the gender gap](https://totalent.eu/20-ways-to-hire-more-women-into-engineering-and-combat-the-gender-gap/)
 - [Heather Wilde - How to Close the Diversity Gap](https://www.youtube.com/watch?v=JQL4doMy73w)
-https://twitter.com/julielerman/status/986317578720210944
+- [Gergely Orosz - A Tech Conference Listed Fake Speakers for Years: I Accidentally Noticed](https://blog.pragmaticengineer.com/devternity-fake-speakers/)
+- [Fempire - A list of women tech speakers & organizers](https://github.com/fempire/women-tech-speakers-organizers)
 
 Pozdrawiam.
 

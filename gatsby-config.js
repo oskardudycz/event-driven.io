@@ -130,6 +130,7 @@ module.exports = {
               maxWidth: 800,
               backgroundColor: "transparent",
               wrapperStyle: "height: auto",
+              quality: 60
             },
             quality: 80
           },

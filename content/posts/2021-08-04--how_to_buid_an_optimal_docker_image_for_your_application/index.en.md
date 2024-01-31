@@ -45,7 +45,7 @@ Why? Installing packages does not require the entire project. To do it, we only 
 In .NET it will look like that:
 
 ```dockerfile
-FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine AS builder
+FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS builder
 
 # Setup working directory for the project	 
 WORKDIR /app
@@ -141,12 +141,12 @@ This is what the final definition looks like for .NET
 
 ```dockerfile
 # the first, heavier image to build your code
-FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine AS builder
+FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS builder
 
 # (...)
 
 # second, final, lighter image
-FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine
 
 # Setup working directory for the project  
 WORKDIR /app

@@ -436,7 +436,7 @@ However, if you're a careful reader (which I'm sure you are!), you noticed that 
 
 Of course, a bit of redundancy may not do significant harm, as [events should be as small as possible, but not smaller](/en/events_should_be_as_small_as_possible/). Still, it's a tradeoff that we should carefully choose to do or not.
 
-**What if we'd like not to repeat this data but load it when applying projection?** Can Marten help with that? Of course! We can do additional preprocessing of events using the [custom event grouper](https://martendb.io/events/projections/view-projections.html#view-projection-with-custom-grouper) feature.
+**What if we'd like not to repeat this data but load it when applying projection?** Can Marten help with that? Of course! We can do additional preprocessing of events using the [custom event grouper](https://martendb.io/events/projections/multi-stream-projections.html#view-projection-with-custom-grouper) feature.
 
 Let's see the full implementation, then explain it step by step.
 
