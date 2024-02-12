@@ -3,6 +3,7 @@ title: Announcing Emmett! Take your event-driven applications back to the future
 category: "Event Sourcing"
 cover: 2024-02-11-cover.png
 author: oskar dudycz
+useDefaultLangCanonical : true
 ---
 
 ![cover](2024-02-11-cover.png)
@@ -13,7 +14,7 @@ author: oskar dudycz
 
 **Why do I do it?** I don't want to be a content creator or influencer. That's not my goal. I just saw in my projects that Event Sourcing and CQRS are working and helping to build better applications. If applied in a simple way, they not only do not bring additional complexity but are cutting it.
 
-But again, simple is not easy. But why?
+Again, simple is not easy. But why?
 
 Because it requires a lot of iterations and experience, it's hard to learn from other people's mistakes. Reading blogs is kinda like trying to do it. Thanks to that, you can avoid some, but not all. Wouldn't it be nice to be walked through by hand sometimes?
 
