@@ -22,15 +22,15 @@ And the talk:
 
 **Closing the Books is the essence of Event Sourcing modelling.** Thanks to that, we can keep things short and thus run our system efficiently. We're slicing the lifetime of our process, marking the start and end of the lifecycle using events.
 
-In this article, I assume you have read/watched, or skimmed the above resources. I'll focus on the practical example using Marten. I know that's not entirely to say _"Go read that, before we talk", but really: _"Go read that"_. It took me three months to write the article, and a bit less to prepare the talk. Of course, this article may be enough to grab the concept, but there you find more nuanced considerations.
+In this article, I assume you have read/watched, or skimmed the above resources. I'll focus on the practical example using Marten. I know that's not entirely to say _"Go read that, before we talk"_, but really: _"Go read that"_. It took me three months to write the article, and a bit less to prepare the talk. Of course, this article may be enough to grab the concept, but there you find more nuanced considerations.
 
-**Still, we'll diverge from the accounting domain.** I started explaining Event Sourcing like many of us: using a Bank Account example. [But I stopped](/en/bank_account_event_sourcing/). It's a business domain that most of us believe in knowing how it works, but it's much different from what we may expect.
+**Still, we'll diverge from the accounting domain.** I started explaining Event Sourcing like many of us: using a Bank Account example. [But I stopped](/pl/bank_account_event_sourcing/). It's a business domain that most of us believe in knowing how it works, but it's much different from what we may expect.
 
 How much different? There's no database transaction between multiple bank accounts while transferring money. A Bank Account is also not an entity or transactional boundary. In accounting, we add lifecycle and work on, e.g. Accounting Month.
 
 Yes, there's no spoon.
 
-**Let's use a scenario close to a financial domain but not the same, plus not tied to a specific period: cashiers in stores** (also used in the original article above). We could try to model that by keeping all transactions for the particular cash register on the same stream, but if we're building a system for bigger department stores, then that could quickly escalate. We might end up with a stream containing thousands of events. That quickly could make our processing inefficient and unmanageable.
+**Let's use a scenario close to a financial domain but not the same, plus not tied to a specific time period: cashiers in stores** (also used in the original article above). We could try to model that by keeping all transactions for the particular cash register on the same stream, but if we're building a system for bigger department stores, then that could quickly escalate. We might end up with a stream containing thousands of events. That quickly could make our processing inefficient and unmanageable.
 
 **Yet, if we talked with our domain experts, we could realise this is not how our business works.** All payments are registered by specific cashiers, and the cashiers care only about what has happened in their shift. They don't need to know the entire history of transactions, just the starting amount of cash in the drawer  (called _float_) that was left from the previous shift.
 
@@ -108,9 +108,9 @@ services.AddMarten(options =>
 ```
 
 Read also:
-- we can use it to define the stream id representing cashier shift (read more in [Event stores are key-value databases, and why that matters](/en/event_stores_are_key_value_stores/)),
-- by that ensures uniqueness that there are no two shifts with the same number (read more in [How to ensure uniqueness in Event Sourcing](/en/uniqueness-in-event-sourcing/)),
-- use it also as a strongly-typed entity identifier if we really want (read more in [Using strongly-typed identifiers with Marten](/en/using_strongly_typed_ids_with_marten/))
+- we can use it to define the stream id representing cashier shift (read more in [Event stores are key-value databases, and why that matters](/pl/event_stores_are_key_value_stores/)),
+- by that ensures uniqueness that there are no two shifts with the same number (read more in [How to ensure uniqueness in Event Sourcing](/pl/uniqueness-in-event-sourcing/)),
+- use it also as a strongly-typed entity identifier if we really want (read more in [Using strongly-typed identifiers with Marten](/pl/using_strongly_typed_ids_with_marten/))
 
 Moving on, our cashier shift can be modelled as follows:
 
@@ -135,7 +135,7 @@ public record CashierShift
 }
 ```
 
-It's either non-existent when there are no shifts, open or closed. It's trimmed to contain only information needed for decision-making (read more in [Slim your aggregates with Event Sourcing!](/en/slim_your_entities_with_event_sourcing/)). We could build it from 
+It's either non-existent when there are no shifts, open or closed. It's trimmed to contain only information needed for decision-making (read more in [Slim your aggregates with Event Sourcing!](/pl/slim_your_entities_with_event_sourcing/)). We could build it from 
 events as:
 
 ```csharp
@@ -273,7 +273,7 @@ public static class CashierShiftDecider
 }
 ```
 
-Yes, I like [functional programming](/en/my_journey_from_aggregates/), and I used new pattern-matching capabilities in C# here. If you're not into it much yet, I'm passing the state and the command, and depending on its type, I'm running a specific business logic.
+Yes, I like [functional programming](/pl/my_journey_from_aggregates/), and I used new pattern-matching capabilities in C# here. If you're not into it much yet, I'm passing the state and the command, and depending on its type, I'm running a specific business logic.
 
 1. Upon _OpenShift_ command, I'm returning _ShiftOpened_ event with the shift number equal to _0_ when there was no state or incrementing the last shift number,
 2. If the shift is already opened, I'm not returning any events, making it irrelevant, so I am not making any changes and not throwing any exceptions.
@@ -355,7 +355,7 @@ public static class CloseAndOpenShift
 }
 ```
 
-We're running two commands sequentially, returning the results from both operations together with ids. Read also more in [How to handle multiple commands in the same transaction](/en/simple_transactional_command_orchestration/). 
+We're running two commands sequentially, returning the results from both operations together with ids. Read also more in [How to handle multiple commands in the same transaction](/pl/simple_transactional_command_orchestration/). 
 
 If we're using Marten, we can benefit from PostgreSQL transactional capabilities and [Marten built-in Unit of Work](https://martendb.io/documents/sessions.html#unit-of-work-mechanics).
 
@@ -422,9 +422,9 @@ app.MapPost("/api/cash-registers/{cashRegisterId}/cashier-shifts/{shiftNumber:in
 );
 ```
 
-As you can see, we greatly benefit from the repeatability and [composability of the Event Sourcing and Decider pattern](/en/how_to_effectively_compose_your_business_logic/) and Marten's transactional capabilities.
+As you can see, we greatly benefit from the repeatability and [composability of the Event Sourcing and Decider pattern](/pl/how_to_effectively_compose_your_business_logic/) and Marten's transactional capabilities.
 
-We're also using [optimistic concurrency with ETag](/en/how_to_use_etag_header_for_optimistic_concurrency/) to ensure we won't face concurrency issues. Thanks to that, we will know we're making decisions based on the expected state.
+We're also using [optimistic concurrency with ETag](/pl/how_to_use_etag_header_for_optimistic_concurrency/) to ensure we won't face concurrency issues. Thanks to that, we will know we're making decisions based on the expected state.
 
 ## Closing and opening shifts as separate operations
 
@@ -492,11 +492,11 @@ That looks fine, as we could start by querying it and getting the needed informa
 - Store summary of the closed streams needed for audit and for the next lifecycle period,
 - When opening, get data from the last event in the closed lifecycle and use it to start a new period and stream.
 
-I wrote in [Let's talk about positions in event stores](/en/lets_talk_about_positions_in_event_stores/) that Marten keeps the global sequence number. It's a monotonic number. There may be gaps when an event is not added for some reason (e.g. a conflict or transient error). It's unique for each event. We could use it as a reference to the closing event.
+I wrote in [Let's talk about positions in event stores](/pl/lets_talk_about_positions_in_event_stores/) that Marten keeps the global sequence number. It's a monotonic number. There may be gaps when an event is not added for some reason (e.g. a conflict or transient error). It's unique for each event. We could use it as a reference to the closing event.
 
 ```csharp
 public record CashierShiftTracker(
-    string Id,
+    string Id, // Cash Register Id
     long? LastShiftClosedSequence
 );
 ```
@@ -512,8 +512,8 @@ public class CashierShiftTrackerProjection: MultiStreamProjection<CashierShiftTr
         Identity<CashierShiftEvent.ShiftClosed>(e => e.CashierShiftId.CashRegisterId);
     }
 
-    public CashierShiftTracker Create(CashRegisterInitialized logged) =>
-        new(logged.CashRegisterId, null);
+    public CashierShiftTracker Create(CashRegisterInitialized initialized) =>
+        new(initialized.CashRegisterId, null);
 
     public CashierShiftTracker Apply(IEvent<CashierShiftEvent.ShiftClosed> closed, CashierShiftTracker current) =>
         current with { LastShiftClosedSequence = closed.Sequence };
@@ -587,7 +587,7 @@ app.MapPost("/api/cash-registers/{cashRegisterId}/cashier-shifts",
         if (opened == null)
             throw new InvalidOperationException("Cannot Open Shift");
 
-        await documentSession.Ev<CashierShift, CashierShiftEvent>(opened.CashierShiftId, result, ct);
+        await documentSession.Add<CashierShift, CashierShiftEvent>(opened.CashierShiftId, result, ct);
 
         return Created(
             $"/api/cash-registers/{cashRegisterId}/cashier-shifts/{opened.CashierShiftId.ShiftNumber}",

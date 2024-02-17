@@ -21,7 +21,7 @@ And the talk:
 
 **Closing the Books is the essence of Event Sourcing modelling.** Thanks to that, we can keep things short and thus run our system efficiently. We're slicing the lifetime of our process, marking the start and end of the lifecycle using events.
 
-In this article, I assume you have read/watched, or skimmed the above resources. I'll focus on the practical example using Marten. I know that's not entirely to say _"Go read that, before we talk", but really: _"Go read that"_. It took me three months to write the article, and a bit less to prepare the talk. Of course, this article may be enough to grab the concept, but there you find more nuanced considerations.
+In this article, I assume you have read/watched, or skimmed the above resources. I'll focus on the practical example using Marten. I know that's not entirely to say _"Go read that, before we talk"_, but really: _"Go read that"_. It took me three months to write the article, and a bit less to prepare the talk. Of course, this article may be enough to grab the concept, but there you find more nuanced considerations.
 
 **Still, we'll diverge from the accounting domain.** I started explaining Event Sourcing like many of us: using a Bank Account example. [But I stopped](/en/bank_account_event_sourcing/). It's a business domain that most of us believe in knowing how it works, but it's much different from what we may expect.
 
@@ -29,7 +29,7 @@ How much different? There's no database transaction between multiple bank accoun
 
 Yes, there's no spoon.
 
-**Let's use a scenario close to a financial domain but not the same, plus not tied to a specific period: cashiers in stores** (also used in the original article above). We could try to model that by keeping all transactions for the particular cash register on the same stream, but if we're building a system for bigger department stores, then that could quickly escalate. We might end up with a stream containing thousands of events. That quickly could make our processing inefficient and unmanageable.
+**Let's use a scenario close to a financial domain but not the same, plus not tied to a specific time period: cashiers in stores** (also used in the original article above). We could try to model that by keeping all transactions for the particular cash register on the same stream, but if we're building a system for bigger department stores, then that could quickly escalate. We might end up with a stream containing thousands of events. That quickly could make our processing inefficient and unmanageable.
 
 **Yet, if we talked with our domain experts, we could realise this is not how our business works.** All payments are registered by specific cashiers, and the cashiers care only about what has happened in their shift. They don't need to know the entire history of transactions, just the starting amount of cash in the drawer  (called _float_) that was left from the previous shift.
 
@@ -586,7 +586,7 @@ app.MapPost("/api/cash-registers/{cashRegisterId}/cashier-shifts",
         if (opened == null)
             throw new InvalidOperationException("Cannot Open Shift");
 
-        await documentSession.Ev<CashierShift, CashierShiftEvent>(opened.CashierShiftId, result, ct);
+        await documentSession.Add<CashierShift, CashierShiftEvent>(opened.CashierShiftId, result, ct);
 
         return Created(
             $"/api/cash-registers/{cashRegisterId}/cashier-shifts/{opened.CashierShiftId.ShiftNumber}",
