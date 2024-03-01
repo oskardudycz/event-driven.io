@@ -24,6 +24,10 @@ useDefaultLangCanonical : true
 
 That's a transparent deal and, I think, a healthier one.
 
+Read also:
+- [Don't be like Ebenezer Scrooge. A few words about workaholism](/pl/a_few_words_about_workaholism/)
+- [Keeping our overachieving freak on a leash](/pl/keeping_overachieving_freak_on_a_leash)
+
 Cheers!
 
 Oskar

@@ -25,7 +25,7 @@ That's something to be proud of.
 
 I felt uplifted for a long time when I heard, _"damn, Oskar is a stunner, he works so hard"_. Or by the feeling of saving the project once again. It was also a boast of being so multitasking. Seven projects at once? No problem. Two calls at a time. Sure, why not.
 
-The reality is that all a myth. Multitasking is inefficient. You can't do many things at once for free. None of these things is done as satisfactorily as possible if you focus only on them. Saving the project and taking on the most challenging stuff is blocking others from learning and proving themselves. It's a dead end. Especially being a leader, it is worth restraining your workaholic tendencies. Even if we never ask anyone to work overtime (e.g. I never did), and we don't undervalue those who work _only_ from 9 till 5, we still put pressure on them. That's dangerous, especially for juniors. Keep this in mind. [It doesn't have to be toxic at work](/en/it_doesnt_have_to_be_toxic_at_work/).
+The reality is that all a myth. Multitasking is inefficient. You can't do many things at once for free. None of these things is done as satisfactorily as possible if you focus only on them. Saving the project and taking on the most challenging stuff is blocking others from learning and proving themselves. It's a dead end. Especially being a leader, it is worth restraining your workaholic tendencies. Even if we never ask anyone to work overtime (e.g. I never did), and we don't undervalue those who work _only_ from 9 till 5, we still put pressure on them. That's dangerous, especially for juniors. Keep this in mind. [It doesn't have to be toxic at work](/pl/it_doesnt_have_to_be_toxic_at_work/).
 
 **We're lucky that we have a job that is also our passion.** Plus a well-paying hobby. Yet, it cuts both ways and can be a curse.
 
@@ -51,6 +51,10 @@ We'll miss grandma's food that we hated some time ago. We'd like to hear that bo
 
 **We'll likely miss them more than ephemeral deadlines at work or overtimes we did.**
 
+Read also:
+- [It doesn't have to be toxic at work](/pl/it_doesnt_have_to_be_toxic_at_work/)
+- [Keeping our overachieving freak on a leash](/pl/keeping_overachieving_freak_on_a_leash)
+  
 Cheers!
 
 Oskar
