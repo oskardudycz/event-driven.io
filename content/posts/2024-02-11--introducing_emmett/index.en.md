@@ -29,7 +29,7 @@ But well, you can always forget about it, or your colleague.
 
 You can already use it by calling:
 
-```shell
+```bash
 npm add @event-driven-io/emmett
 ```
 
@@ -78,13 +78,16 @@ Probably not. For now, I'd like to have a safe playground to have fun, experimen
 
 Because I'm unsure how this will end, and I don't want to expose it as an MIT license from the beginning.
 
-**So try it on your own, have fun and send me feedback!** 
+**[So try it on your own, have fun and send me feedback!](https://event-driven-io.github.io/emmett/getting-started.html)** 
+
+[Join our Discord](https://discord.gg/fTpqUTMmVa) to be a part of building it!
 
 Read also more about Node.js and Event Sourcing to get what I want to provide out of the box:
 - [Straightforward Event Sourcing with TypeScript and NodeJS](/en/type_script_node_Js_event_sourcing/)
 - [How TypeScript can help in modelling business workflows](/en/how_to_have_fun_with_typescript_and_workflow/)
 - [How to get the current entity state from events?](/en/how_to_get_the_current_entity_state_in_event_sourcing/)
 - [How to test event-driven projections](/en/testing_event_driven_projections/)
+- [How to tackle compatibility issues in ECMA Script modules (and in general)](/en/how_to_tackle_esmodules_compatibility_issues)
 - [Introduction to Event Sourcing - Self Paced Kit](/en/introduction_to_event_sourcing/)
 - [Dealing with Eventual Consistency and Idempotency in MongoDB projections](/en/dealing_with_eventual_consistency_and_idempotency_in_mongodb_projections/)
 - [How to use ETag header for optimistic concurrency](/en/how_to_use_etag_header_for_optimistic_concurrency/)

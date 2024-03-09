@@ -33,7 +33,7 @@ Marten can generate code on the fly when you call it, which is helpful for the d
 
 **You can [read about that in our docs](https://martendb.io/configuration/prebuilding.html), but in short, you need to do a few steps:**
 1. Add [Marten.CommandLine NuGet package](https://martendb.io/configuration/cli.html) to your project:
-```shell
+```bash
 dotnet add package Marten.CommandLine
 ```
 2. Register Marten commands by adding the following lines to your code:
@@ -53,7 +53,7 @@ return await app.RunOaktonCommands(args);
 Marten internally is using [Oakton](https://jasperfx.github.io/oakton) for command line processing.
 
 3. Then call from the command line:
-```shell
+```bash
 dotnet run -- codegen write
 ```
 4. You can also use the [Optimised Artifact Workflow](https://martendb.io/configuration/optimized_artifact_workflow.html). Which will set dynamic code generation for the Development environment and setup code generation for the Production:
@@ -138,13 +138,13 @@ ENTRYPOINT dotnet $PROJECT_DLL
 
 You'd need to put it in the runtime project location and call it container build as:
 
-```shell
+```bash
 docker build --build-arg project_name=Helpdesk.Api . -t helpdesk
 ```
 
 Or with all parameters
 
-```shell
+```bash
 docker build --build-arg project_name=Helpdesk.Api --build-arg codegen=true --build-arg dotnet_version=8.0 . -t helpdesk
 ```
 
