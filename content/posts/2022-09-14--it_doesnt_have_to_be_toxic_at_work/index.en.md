@@ -23,6 +23,10 @@ author: oskar dudycz
 
 That's a transparent deal and, I think, a healthier one.
 
+Read also:
+- [Don't be like Ebenezer Scrooge. A few words about workaholism](/en/a_few_words_about_workaholism/)
+- [Keeping our overachieving freak on a leash](/en/keeping_overachieving_freak_on_a_leash)
+  
 Cheers!
 
 Oskar

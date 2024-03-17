@@ -50,6 +50,10 @@ We'll miss grandma's food that we hated some time ago. We'd like to hear that bo
 
 **We'll likely miss them more than ephemeral deadlines at work or overtimes we did.**
 
+Read also:
+- [It doesn't have to be toxic at work](/en/it_doesnt_have_to_be_toxic_at_work/)
+- [Keeping our overachieving freak on a leash](/en/keeping_overachieving_freak_on_a_leash)
+
 Cheers!
 
 Oskar
