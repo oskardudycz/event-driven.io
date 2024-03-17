@@ -30,7 +30,7 @@ jobs:
           # use the node version defined in matrix above
           node-version: ${{ matrix.node-version }}
       # install dependencies
-      - run: yarn install
+      - run: yarn --frozen-lockfile
       # build
       - run: yarn build
         env:
