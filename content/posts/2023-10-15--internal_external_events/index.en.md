@@ -200,7 +200,7 @@ record ShoppingCartConfirmed(
 
 Then, we get more information to fulfil conflicting module requirements and provide more precise events.
 
-Of course, we should be careful and not try to send _passive-aggressive events_, so events that should be commands. If we know that we'll always have a single consumer for an event that always needs to run the specific logic and expect to get the particular event back, then it should probably be a command. Read more in [What's the difference between a command and an event?](https://event-driven.io/pl/whats_the_difference_between_event_and_command/).
+Of course, we should be careful and not try to send _passive-aggressive events_, so events that should be commands. If we know that we'll always have a single consumer for an event that always needs to run the specific logic and expect to get the particular event back, then it should probably be a command. Read more in [What's the difference between a command and an event?](/en/whats_the_difference_between_event_and_command/).
 
 How do we document our Events API? That's currently a bit of a challenge; there are initiatives like [Cloud Events](https://cloudevents.io/) and [AsyncAPI](https://www.asyncapi.com/), they provide a description format, but they're not yet a global standard as e.g. Open Telemetry. 
 
