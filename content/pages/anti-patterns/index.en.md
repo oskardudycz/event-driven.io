@@ -3,7 +3,7 @@ title: Event modelling anti-patterns
 cover: 2023-02-26-cover.png
 ---
 
-Thank you for joining my talk about Event Modelling anti-patterns at Kafka Summit!
+Thank you for joining my talk about Event modelling anti-patterns at Kafka Summit!
 
 **Read also articles in Anti-patterns in event modelling series:**
 - [State Obsession](/en/state-obsession/),
