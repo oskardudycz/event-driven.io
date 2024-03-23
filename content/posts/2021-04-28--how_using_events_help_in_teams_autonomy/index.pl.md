@@ -30,7 +30,7 @@ Events then come to the rescue. How?
 
 **Events are concise and carry a specific business message.** We get a clear domain context from the event (via type and data). That helps us to understand what has happened.
 
-**It is easy to describe business flows with events.** We can do it with the help of [Event Storming](https://www.eventstorming.com/) or [Event Modeling](https://eventmodeling.org/). They enable both microscale and macroscale modelling on how our system should work. What's more, we can make a precise inquiry. If we send:
+**It is easy to describe business flows with events.** We can do it with the help of [Event Storming](https://www.eventstorming.com/). They enable both microscale and macroscale modelling on how our system should work. What's more, we can make a precise inquiry. If we send:
 - correlation id - the identifier of the operation that triggered them, e.g. WebAPI call,
 - causation id - the identifier indicating the order of occurrence.
 

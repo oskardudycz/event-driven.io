@@ -82,7 +82,7 @@ We'll start with the project of the system that looks fine as the first producti
 - knowledge of how to model business logic and projections/read models,
 - Understand that event sourcing is not event streaming and why streaming solutions like Kafka and Pulsar should not be used as event stores.
 
-**I assume you know modelling techniques like EventStorming or Event Modeling, C4 and modularity concepts (microservices, monolith, CQRS, etc.).** And that you were already building and designing web applications.
+**I assume you know modelling techniques like EventStorming, C4 and modularity concepts (microservices, monolith, CQRS, etc.).** And that you were already building and designing web applications.
 
 Most of the exercises will be focused on general understanding and will not be technology-specific, but practical will require knowledge of one of the languages: C#, Java, or TypeScript. We'll use Marten and EventStoreDB as event stores examples.
 

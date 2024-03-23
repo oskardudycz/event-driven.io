@@ -10,7 +10,7 @@ useDefaultLangCanonical : true
 
 Event Sourcing is perceived as a complex pattern that's challenging to learn. Typically it's matched with the financial industry or big enterprise systems. If you're familiar with my posts, you already know that I disagree with this categorisation. **I think that Event Sourcing is also relevant for the smaller systems.**
 
-Indeed, Event Sourcing shines the most when we can work with the business to find the business events. [Event Storming](https://www.eventstorming.com/) and [Event Modeling](https://eventmodeling.org/posts/what-is-event-modeling/) proved that events work great as a way to describe business processes. We can use them as _"checkpoints"_ of our workflow.
+Indeed, Event Sourcing shines the most when we can work with the business to find the business events. [Event Storming](https://www.eventstorming.com/) proved that events work great as a way to describe business processes. We can use them as _"checkpoints"_ of our workflow.
 
 Events are also essential as a data model. If we're storing them in a durable event store (e.g. [EventStoreDB](https://www.eventstore.com) or [Marten](https://martendb.io/)) then we won't lose any business data. The nature of Event Sourcing is storing the results of each business operation. We can use this information later for integration between services, advanced reporting etc.
 

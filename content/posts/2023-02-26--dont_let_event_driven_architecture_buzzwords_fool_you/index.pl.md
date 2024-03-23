@@ -35,7 +35,7 @@ Events are facts; they can (and should) have multiple receivers. Yet, the event 
 Knowing what we'd like to achieve, we can go one layer down and define how to do it. For instance, how to achieve guarantees like at-least-once delivery, strict ordering, and idempotent handlers. That's Messaging; it tells how to handle communication efficiently and is part of the solution space. Yet it's still agnostic to a specific technical solution. We should select the messaging tooling based on the design and whether it supports the Messaging patterns we have chosen to fulfil it.
 
 **The design flow should look like this:**
-1. **WHAT?** Describe the business workflow and model it using Event-Driven Architecture. That includes communication flow between components, boundaries, etc. Great tools for that are [EventStorming](https://www.eventstorming.com/) and [Event Modeling](https://eventmodeling.org).
+1. **WHAT?** Describe the business workflow and model it using Event-Driven Architecture. That includes communication flow between components, boundaries, etc. Great tools for that are [EventStorming](https://www.eventstorming.com/).
 2. **HOW?** Design how to get guarantees and define the expected technical flow using Messaging patterns. They're already established; no need to reinvent the wheel. Gregor Hohpe curated most of them in [Enterprise Integration Patterns: Designing, Building, and Deploying Messaging Solutions](https://www.goodreads.com/book/show/85012.Enterprise_Integration_Patterns) 20 years ago.
 3. **WITH.** Select messaging toolings like RabbitMQ, Kafka, SQS or others that match your requirements. As you see, this is the last phase and outcome of the previous steps. 
 
@@ -70,7 +70,7 @@ That's why I want to highlight how it's important to break our design into multi
 - technical,
 - implementation.
 
-That also plays well with tools like [EventStorming](https://www.eventstorming.com/), [Event Modeling](https://eventmodeling.org) and the [C4 Model](https://c4model.com/). All of them embrace that we have and should be able to zoom in and out.
+That also plays well with tools like [EventStorming](https://www.eventstorming.com/) and the [C4 Model](https://c4model.com/). All of them embrace that we have and should be able to zoom in and out.
 
 I know that it sounds like 4D Chess, but that's our role. We need to train our abstract and critical thinking, as [the magic is that there's no magic](/pl/the_magic_is_that_there_is_no_magic/).
 
