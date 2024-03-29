@@ -82,6 +82,9 @@ Because I'm unsure how this will end, and I don't want to expose it as an MIT li
 
 [Join our Discord](https://discord.gg/fTpqUTMmVa) to be a part of building it!
 
+See also a follow up articles on Emmett:
+- [Testing Event Sourcing, Emmett edition]().
+
 Read also more about Node.js and Event Sourcing to get what I want to provide out of the box:
 - [Straightforward Event Sourcing with TypeScript and NodeJS](/en/type_script_node_Js_event_sourcing/)
 - [How TypeScript can help in modelling business workflows](/en/how_to_have_fun_with_typescript_and_workflow/)
