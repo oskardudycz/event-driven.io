@@ -1,7 +1,7 @@
 ---
 title: How to build an in-memory Message Bus in TypeScript
 category: "Event Sourcing"
-cover: 2024-04-07-kafka.png
+cover: 2024-04-12-cover.png
 author: oskar dudycz
 ---
 
