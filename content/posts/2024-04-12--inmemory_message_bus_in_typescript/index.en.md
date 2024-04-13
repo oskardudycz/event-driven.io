@@ -86,9 +86,9 @@ interface MessageScheduler<CommandOrEvent extends Command | Event> {
 }
 ```
 
-Here, we assume that it'll be forwarded in a separate process, and we're not expecting to get any response either for command or from the event. If we want to reply to the status of the command, then we should do it by publishing the event with a new fact and handing it back. We also allow passing additional options informing when the message should be scheduled.
+Here, we assume that it'll be forwarded in a separate process, and we're not expecting to get any response either for command or from the event. If we want to reply to the status of the command, then we should do it by publishing the a follow up event with a new fact and handing it back. We also allow passing additional options informing when the message should be scheduled.
 
-**You may wonder why we aren't putting all that into a single interface, and the reason is that we want to be precise about the intention.** Typically, you're either handling events or commands, and it's better to have the option to use an interface that allows you to do only certain things. If we have the granular events, then we can also compose them into other interfaces, getting an all-in-one box. Here's how you do it:
+**You may wonder why we aren't putting all that into a single interface, and the reason is that we want to be precise about the intention.** Typically, you're either handling events or commands, and it's better to have the option to use a narrowed interface that allows you to do only certain things. If we have the granular definitions, then we can also compose them into other interfaces, getting an all-in-one box. Here's how you do it:
 
 ```typescript
 interface EventBus extends EventsPublisher, MessageScheduler<Event> {}
@@ -141,7 +141,7 @@ export type GuestStayAccountEvent =
   | GuestCheckedOut
   | GuestCheckoutFailed;
 
-const handleGuestStay = (command: GuestStayAccountEvent) => {
+const handleGuestStay = (event: GuestStayAccountEvent) => {
   switch (event.type) {
     case 'GuestCheckedIn':
       return onCheckedIn(event.data);
@@ -290,7 +290,7 @@ return {
 };
 ```
 
-We're just calling each registered handler sequentially. We could also use `Promise.all` and allow handling them in parallel, or allow both type of handling depending on how the event handler was registered.
+We're just calling each registered handler sequentially. We could also use _Promise.all_ and allow handling them in parallel, or allow both type of handling depending on how the event handler was registered.
 
 Sending command will look accordingly, but again we're adding a validation.
 
