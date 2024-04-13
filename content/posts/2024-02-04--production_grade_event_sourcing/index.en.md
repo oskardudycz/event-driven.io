@@ -51,7 +51,7 @@ The workshop is designed for people who already have experience with Event Sourc
 - knowledge of how to model business logic and projections/read models,
 - Understand that event sourcing is not event streaming and why streaming solutions like Kafka and Pulsar should not be used as event stores.
 
-I assume you know modelling techniques like EventStorming or Event Modeling, C4 and modularity concepts (microservices, monolith, CQRS, etc.). And that you were already building and designing web applications. You don't need to be an expert in that, but the more you know the easier it will be.
+I assume you know modelling techniques like EventStorming, C4 and modularity concepts (microservices, monolith, CQRS, etc.). And that you were already building and designing web applications. You don't need to be an expert in that, but the more you know the easier it will be.
 
 Most of the exercises will be focused on general understanding and will not be technology-specific, but practical will require knowledge of one of the languages: C#, Java, or TypeScript. We'll use Marten and EventStoreDB as event stores examples.
 

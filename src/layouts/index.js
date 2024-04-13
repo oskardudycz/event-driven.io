@@ -172,6 +172,10 @@ class Layout extends React.Component {
                         width: auto;
                         display: block;
                       }
+                      hr {
+                        border: 1px solid lightgray;
+                        margin-bottom: 20px;
+                      }
                     `}</style>
                   </React.Fragment>
                 </ScreenWidthContext.Provider>

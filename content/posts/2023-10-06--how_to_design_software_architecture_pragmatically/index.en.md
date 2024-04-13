@@ -22,7 +22,7 @@ Here are a few rules for making it effective:
 - when we run out of ideas, we should still try to grind a bit longer and tell ourselves to generate 2-3 more. It's like running; often, the best results occur when we pass the first fatigue threshold,
 - however, it is important to set a maximum duration for brainstorming. It should be an intensive and productive meeting. There's no point in making it an endless one. You can always organize several sessions. 
 
-**That is why tools such as [EventStorming](https://www.eventstorming.com/), [Event Modeling](https://eventmodeling.org/) and other _sticky-notes-based_ tools are so popular.** They allow us to throw our ideas onto the wall, crunch them and stimulate discussions. 
+**That is why tools such as [EventStorming](https://www.eventstorming.com/) and other _sticky-notes-based_ tools are so popular.** They allow us to throw our ideas onto the wall, crunch them and stimulate discussions. 
 
 Having a good mixture of people at such a meeting is essential. We should have people of all sorts: programmers, business people and testers. We're discussing the general vision at the early stages here, so every perspective counts.
 

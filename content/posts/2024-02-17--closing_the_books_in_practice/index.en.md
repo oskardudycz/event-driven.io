@@ -627,7 +627,7 @@ Those scenarios will require different ways to handle that, but I'm sure the tec
 
 See the full code in my [sample repository](https://github.com/oskardudycz/EventSourcing.NetCore/tree/main/Sample/ClosingTheBooks).
 
-Most importantly: talk with the business experts and ask enough whys to understand the lifecycle of your business use case. Listen for the keywords like open/close/end, summary, daily, monthly, etc. For business experts, lifecycle may be so apparent that they won't mention it straight away, but if you dig and ask enough questions, they're typically more than happy to reveal it. Workshops like Event Storming or Event Modeling can help you with that.
+Most importantly: talk with the business experts and ask enough whys to understand the lifecycle of your business use case. Listen for the keywords like open/close/end, summary, daily, monthly, etc. For business experts, lifecycle may be so apparent that they won't mention it straight away, but if you dig and ask enough questions, they're typically more than happy to reveal it. Workshops like Event Storming can help you with that.
 
 **Check also the follow up article for more nuanced considerations on [Should you always keep streams short in Event Sourcing?](/en/should_you_always_keep_streams_short/).**
 
