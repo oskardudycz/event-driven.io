@@ -8,7 +8,7 @@ useDefaultLangCanonical : true
 
 ![cover](2024-02-11-cover.png)
 
-**Simple is not easy. Each person has its definition of it.** For me, it means that when I look at the solution, I think: _"So simple. Why didn't I come up with it?". That also means that it's straightforward to understand.
+**Simple is not easy. Each person has its definition of it.** For me, it means that when I look at the solution, I think: _"So simple. Why didn't I come up with it?"_. That also means that it's straightforward to understand.
 
 **In recent years, I went down the rabbit hole trying to explain to you and other readers that Event Sourcing and CQRS can be effective and simple.** I wrote hundreds of articles, delivered samples in multiple languages and worked on tooling like Marten and EventStoreDB. I'm also doing [workshops and consultancy](/pl/training). 
 
