@@ -8,17 +8,17 @@ useDefaultLangCanonical: true
 
 ![](2024-05-04-cover.png)
 
-**I like learning new things. It stimulates my creativity, helps me gain diverse perspectives, and helps me be humble.** When you're a notorious debutant, you learn to appreciate small stuff and simplicity, the [power of ignorance](/en/power_of_ignorance/). It shows that if you're down the rabbit hole, then this works both ways. Not many people could go the same way, but it also takes time to get out of that and embrace the outside world.
+**I like learning new things. It stimulates my creativity, helps me gain diverse perspectives, and helps me be humble.** When you're a notorious debutant, you learn to appreciate small stuff and simplicity, the [power of ignorance](/pl/power_of_ignorance/). It shows that if you're down the rabbit hole, then this works both ways. Not many people could go the same way, but it also takes time to get out of that and embrace the outside world.
 
-Still, I not only like to scratch the surface but also learn idiomatic ways and check how far I can go. Some time ago, [I got back to doing more Java](/en/12_things_I_learned_on_last_pull_request_review/), and it was a good move. This is not only because it appears that many of my clients after I went solo, are from JVM land but also because the language is changing rapidly. And those changes are made quickly and with a proper dose of consideration. I like reading JDK Enhancements Proposals. Even if you don't like Java, they're written in a really accessible way, so it's worth reading them to learn more about decision-making and see how languages and environments are evolving.
+Still, I not only like to scratch the surface but also learn idiomatic ways and check how far I can go. Some time ago, [I got back to doing more Java](/pl/12_things_I_learned_on_last_pull_request_review/), and it was a good move. This is not only because it appears that many of my clients after I went solo, are from JVM land but also because the language is changing rapidly. And those changes are made quickly and with a proper dose of consideration. I like reading JDK Enhancements Proposals. Even if you don't like Java, they're written in a really accessible way, so it's worth reading them to learn more about decision-making and see how languages and environments are evolving.
 
 **This is not your uncle's Java anymore!**
 
 If you're a frequent reader of my blog, you may have noticed that I use the Shopping Cart example frequently. And that's intentional; I think it's worth not doing it all at once. If I'm learning new technical aspects, I wouldn't like to crunch the business domain simultaneously. That also works the other way; it's safer to use a boring tech stack if I'm diving into a new domain. That reduces cognitive load.
 
-**In my opinion, one of the best ways to learn a new technology or language is to have some sort of [Kata](https://en.wikipedia.org/wiki/Kata).** So, the topic we discussed many times is that we don't need to think about mechanics. For me, Kata is a shopping cart. It's straightforward enough, so I don't need to think too much about the domain, but it shows the common cases that can happen during implementation (consistency, concurrency, nested data, integration with other flows). It allows me to [dive a bit deeper](/en/dive_a_bit_deeper_look_a_bit_wider/) if I'd like to, e.g. to analyse integrations with other components, high traffic during Black Friday etc.
+**In my opinion, one of the best ways to learn a new technology or language is to have some sort of [Kata](https://en.wikipedia.org/wiki/Kata).** So, the topic we discussed many times is that we don't need to think about mechanics. For me, Kata is a shopping cart. It's straightforward enough, so I don't need to think too much about the domain, but it shows the common cases that can happen during implementation (consistency, concurrency, nested data, integration with other flows). It allows me to [dive a bit deeper](/pl/dive_a_bit_deeper_look_a_bit_wider/) if I'd like to, e.g. to analyse integrations with other components, high traffic during Black Friday etc.
 
-Still, getting back to not-your-uncle Java. Let's discuss the latest records and pattern-matching enhancements added in Java 22. As mentioned, we'll use my event-sourced shopping cart Kata. Please check [How to effectively compose your business logic](/en/how_to_effectively_compose_your_business_logic/) if you want to learn more about the domain.
+Still, getting back to not-your-uncle Java. Let's discuss the latest records and pattern-matching enhancements added in Java 22. As mentioned, we'll use my event-sourced shopping cart Kata. Please check [How to effectively compose your business logic](/pl/how_to_effectively_compose_your_business_logic/) if you want to learn more about the domain.
 
 Let's start this time with the end result and then explain what actually happened.
 
@@ -255,7 +255,7 @@ What would the evolve function look like? Similarly to the _decide_ presented fi
 public sealed interface ShoppingCart {
   // (...)
 
-static ShoppingCart evolve(ShoppingCart state, Event event) {
+  static ShoppingCart evolve(ShoppingCart state, Event event) {
     return switch (when(state, event)) {
       case When(Initial _, Opened _) ->
         new Pending(ProductItems.empty());
@@ -278,7 +278,7 @@ static ShoppingCart evolve(ShoppingCart state, Event event) {
   }
 ```
 
-We're defining the expected state transitions/evolutions; we just return the state for other cases. Why am I not throwing an exception here? Read more in [Should you throw an exception when rebuilding the state from events?](/en/should_you_throw_exception_when_rebuilding_state_from_events/).
+We're defining the expected state transitions/evolutions; we just return the state for other cases. Why am I not throwing an exception here? Read more in [Should you throw an exception when rebuilding the state from events?](/pl/should_you_throw_exception_when_rebuilding_state_from_events/). Check also the [follow-up article showing how to do make it generic using a custom streams collector](/pl/how_to_write_left_fold_collector_in_java)
 
 And let's stop here and explain a few stuff.
 

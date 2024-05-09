@@ -254,7 +254,7 @@ What would the evolve function look like? Similarly to the _decide_ presented fi
 public sealed interface ShoppingCart {
   // (...)
 
-static ShoppingCart evolve(ShoppingCart state, Event event) {
+  static ShoppingCart evolve(ShoppingCart state, Event event) {
     return switch (when(state, event)) {
       case When(Initial _, Opened _) ->
         new Pending(ProductItems.empty());
@@ -277,7 +277,7 @@ static ShoppingCart evolve(ShoppingCart state, Event event) {
   }
 ```
 
-We're defining the expected state transitions/evolutions; we just return the state for other cases. Why am I not throwing an exception here? Read more in [Should you throw an exception when rebuilding the state from events?](/en/should_you_throw_exception_when_rebuilding_state_from_events/).
+We're defining the expected state transitions/evolutions; we just return the state for other cases. Why am I not throwing an exception here? Read more in [Should you throw an exception when rebuilding the state from events?](/en/should_you_throw_exception_when_rebuilding_state_from_events/). Check also the [follow-up article showing how to do make it generic using a custom streams collector](/en/how_to_write_left_fold_collector_in_java).
 
 And let's stop here and explain a few stuff.
 

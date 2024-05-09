@@ -378,6 +378,8 @@ Check detailed samples in my repositories:
 - https://github.com/oskardudycz/EventSourcing.NetCore
 - https://github.com/oskardudycz/EventSourcing.NodeJS
 
+For Java version check the [follow-up article showing how to do make it generic using a custom streams collector](/pl/how_to_write_left_fold_collector_in_java)
+
 Cheers!
 
 Oskar
