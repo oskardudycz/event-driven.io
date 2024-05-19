@@ -79,9 +79,10 @@ Of course, TestContainers allow you to do most of the magic, but then you need t
 
 Read also other articles around DevOps process:
 - [How to build an optimal Docker image for your application?](/pl/how_to_buid_an_optimal_docker_image_for_your_application/)
-- [How to create a Docker image for the Marten application](/pl/marten_and_docker/)
+- [Docker Compose Profiles, one the most useful and underrated features](/pl/docker_compose_profiles/)
 - [A few tricks on how to set up related Docker images with docker-compose](/pl/tricks_on_how_to_set_up_related_docker_images/)
 - [How to build and push Docker image with GitHub actions?](/pl/how_to_buid_and_push_docker_image_with_github_actions/)
+- [How to create a Docker image for the Marten application](/pl/marten_and_docker)
 - [How to create a custom GitHub Action?](/pl/how_to_create_a_custom_github_action/)
 
 Cheers!

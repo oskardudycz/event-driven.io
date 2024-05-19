@@ -384,6 +384,7 @@ I hope that this article will give you enough background for playing with the co
 Read also other articles around DevOps process:
 - [A simple way to configure integration tests pipeline](/pl/configure_ci_for_integration_tests/)
 - [How to build an optimal Docker image for your application?](/pl/how_to_buid_an_optimal_docker_image_for_your_application/)
+- [Docker Compose Profile, one the most useful and underrated features](/pl/docker_compose_profiles/)
 - [How to create a Docker image for the Marten application](/pl/marten_and_docker/)
 - [How to build and push Docker image with GitHub actions?](/pl/how_to_buid_and_push_docker_image_with_github_actions/)
 - [How to create a custom GitHub Action?](/pl/how_to_create_a_custom_github_action/)
