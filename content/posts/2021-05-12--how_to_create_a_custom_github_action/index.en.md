@@ -86,6 +86,7 @@ Read also other articles around DevOps process:
 - [How to create a Docker image for the Marten application](/en/marten_and_docker/)
 - [Docker Compose Profile, one the most useful and underrated features](/en/docker_compose_profiles/)
 - [A few tricks on how to set up related Docker images with docker-compose](/en/tricks_on_how_to_set_up_related_docker_images/)
+- [How to configure a custom Test Container on the EventStoreDB example](/en/custom_test_container_on_esdb_example/)
 - [How to build and push Docker image with GitHub actions?](/en/how_to_buid_and_push_docker_image_with_github_actions/)
 
 Cheers!

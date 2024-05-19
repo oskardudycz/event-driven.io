@@ -166,6 +166,7 @@ Read also other articles around DevOps process:
 - [How to build an optimal Docker image for your application?](/en/how_to_buid_an_optimal_docker_image_for_your_application/)
 - [A few tricks on how to set up related Docker images with docker-compose](/en/tricks_on_how_to_set_up_related_docker_images/)
 - [How to build and push Docker image with GitHub actions?](/en/how_to_buid_and_push_docker_image_with_github_actions/)
+- [How to configure a custom Test Container on the EventStoreDB example](/en/custom_test_container_on_esdb_example/)
 - [How to create a custom GitHub Action?](/en/how_to_create_a_custom_github_action/)
 
 Cheers!

@@ -258,6 +258,15 @@ void describe('ShoppingCart E2E', () => {
 
 Read also more in [Testing Event Sourcing, Emmett edition](/en/testing_event_sourcing_emmett_edition/).
 
+Check also my other articles on DevOps and Continuous Integration:
+- [A simple way to configure integration tests pipeline](/en/configure_ci_for_integration_tests/)
+- [How to build an optimal Docker image for your application?](/en/how_to_buid_an_optimal_docker_image_for_your_application/)
+- [Docker Compose Profiles, one the most useful and underrated features](/en/docker_compose_profiles/)
+- [A few tricks on how to set up related Docker images with docker-compose](/en/tricks_on_how_to_set_up_related_docker_images/)
+- [How to build and push Docker image with GitHub actions?](/en/how_to_buid_and_push_docker_image_with_github_actions/)
+- [How to create a Docker image for the Marten application](/en/marten_and_docker)
+- [How to create a custom GitHub Action?](/en/how_to_create_a_custom_github_action/)
+
 Cheers!
 
 Oskar

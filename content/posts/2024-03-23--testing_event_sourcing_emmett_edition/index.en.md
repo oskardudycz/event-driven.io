@@ -18,6 +18,7 @@ I wrote already here a few times about testing:
 - [Writing and testing business logic in F#](/en/writing_and_testing_business_logic_in_fsharp/)
 - [Testing asynchronous processes with a little help from .NET Channels](/en/testing_asynchronous_processes_with_a_little_help_from_dotnet_channels/)
 - [I tested it on production and I'm not ashamed of it](/en/i_tested_on_production/)
+- [How to configure a custom Test Container on the EventStoreDB example](/en/custom_test_container_on_esdb_example/)
 - [A simple way to configure integration tests pipeline](/en/configure_ci_for_integration_tests/)
 
 Today, I'd like to show you the next iteration and my current state of the art, which resulted from that journey.

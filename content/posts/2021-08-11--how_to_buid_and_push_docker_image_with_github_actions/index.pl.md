@@ -122,6 +122,7 @@ Read also other articles around DevOps process:
 - [How to create a Docker image for the Marten application](/pl/marten_and_docker/)
 - [Docker Compose Profile, one the most useful and underrated features](/pl/docker_compose_profiles/)
 - [A few tricks on how to set up related Docker images with docker-compose](/pl/tricks_on_how_to_set_up_related_docker_images/)
+- [How to configure a custom Test Container on the EventStoreDB example](/pl/custom_test_container_on_esdb_example/)
 - [How to create a custom GitHub Action?](/pl/how_to_create_a_custom_github_action/)
 
 Cheers!

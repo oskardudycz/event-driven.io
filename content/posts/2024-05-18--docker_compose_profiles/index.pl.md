@@ -3,6 +3,7 @@ title: Docker Compose Profiles, one the most useful and underrated features
 category: "DevOps"
 cover: 2024-05-18-cover.png
 author: oskar dudycz
+useDefaultLangCanonical: true
 ---
 
 ![](2024-05-18-cover.png)
@@ -67,7 +68,7 @@ npm run start
 
 And play with Emmett.
 
-I wanted to keep the sample experience straightforward and use local development/debugging as the default. Docker image build and run would be optional (we could call it "Erik mode"!).
+I wanted to keep the sample experience straightforward and use local development/debugging as the default. Docker image build and run would be optional (we could call it _"Erik's mode"_!).
 
 Now, profiles come in handy here, as they enable that, I just had to add:
 
@@ -93,13 +94,23 @@ services:
 
 The setup is pretty straightforward.
 
-We're stating which Docker file to use and where it is located (_._ means that it is in the same folder as the Docker Compose file definition):
+We're stating which Docker file to use and where it is located.
 
 ```yaml
     build:
       dockerfile: Dockerfile
       context: .
 ```
+
+Used **_._** means that the build context will be the folder as the location of the docker-compose file. _dockerfile_ tells where the Docker file is located. In our case, it's the same folder as the docker-compose file, and it's named _Dockerfile_. That also opens more options. We could also define it as:
+
+```yaml
+    build:
+      dockerfile: src/app/Dockerfile
+      context: .
+```
+
+That'd allow us to use some common dependencies outside the project folder, e.g. _src/build_. Essentially, we could expand the image-building process's access to additional locations and allow project files to access parent folders to use, for instance, shared configurations or dependencies. Thanks go to [Jakub Gutkowski](https://www.linkedin.com/in/jakubg/) for [pointing that out](https://www.linkedin.com/feed/update/urn:li:activity:7197619396448546816?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7197619396448546816%2C7197654708721737728%29&dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287197654708721737728%2Curn%3Ali%3Aactivity%3A7197619396448546816%29)!.
 
 We ensure that we have a connection to EventStoreDB by placing it in the same network and passing the connection string as an environment variable.
 
@@ -141,7 +152,7 @@ You can also group multiple services into a single profile. Why would you do it?
 **In my [Event Sourcing .NET samples repository](https://github.com/oskardudycz/EventSourcing.NetCore), I'm trying to cover multiple aspects, tools, ways to build Event Sourcing, CQRS and Event-Driven systems.** I'm using:
 - Marten (so Postgres) and EventStoreDB as example event stores,
 - Postgres and Elasticsearch as read model stores,
-- Kafka as a messaging system to show the integration between services,
+- Kafka used for integration between services,
 - UI tools like PgAdmin and Kafka UI to easier investigate sample data.
 
 **Multiple samples are using those services in various configurations.**
@@ -167,17 +178,12 @@ services:
     postgres:
         profiles: [ postgres, postgres-all, all, all-no-ui, ci ]
         image: postgres:15.1-alpine
-	# (...) rest of the config
+	      # (...) rest of the config
 
     pgadmin:
         profiles: [ postgres-ui, postgres-all, all ]
         image: dpage/pgadmin4
-	# (...) rest of the config
-
-    jaeger:
-        image: jaegertracing/all-in-one:latest
-        profiles: [ otel, otel-all, all ]
-	# (...) rest of the config
+	      # (...) rest of the config
 
     #######################################################
     #  EventStoreDB
@@ -185,7 +191,7 @@ services:
     eventstore.db:
         image: eventstore/eventstore:23.10.0-bookworm-slim
         profiles: [ eventstoredb, eventstoredb-all, all, all-no-ui, ci ]
-	# (...) rest of the config
+	      # (...) rest of the config
 
     #######################################################
     #  Elastic Search
@@ -193,12 +199,12 @@ services:
     elasticsearch:
         image: docker.elastic.co/elasticsearch/elasticsearch:8.13.2
         profiles: [ elastic, elastic-all, all, all-no-ui, ci ]
-	# (...) rest of the config
+	      # (...) rest of the config
 
     kibana:
         image: docker.elastic.co/kibana/kibana:8.13.2
         profiles: [ elastic-ui, elastic-all, all ]
-	# (...) rest of the config
+	      # (...) rest of the config
 
     #######################################################
     #  Kafka
@@ -206,27 +212,33 @@ services:
     kafka:
         image: confluentinc/confluent-local:7.6.1
         profiles: [kafka, kafka-all, all, all-no-ui]
-	# (...) rest of the config
+	      # (...) rest of the config
 
     init-kafka:
         image: confluentinc/confluent-local:7.6.1
         profiles: [ kafka, kafka-all, all, all-no-ui ]
         command: "#shell script to setup Kafka topics"
-	# (...) rest of the config
-    #######################################################
-    #  Schema Registry
-    #######################################################
+	      # (...) rest of the config
+        
     schema_registry:
         image: confluentinc/cp-schema-registry:7.6.1
         profiles: [ kafka-ui, kafka-all, all ]        
-	# (...) rest of the config
+	      # (...) rest of the config
 
     kafka_topics_ui:
         image: provectuslabs/kafka-ui:latest
         profiles: [ kafka-ui, kafka-all, all ]
         depends_on:
             - kafka
-	# (...) rest of the config
+	      # (...) rest of the config
+
+    #######################################################
+    #  Open Telemetry
+    #######################################################
+    jaeger:
+        image: jaegertracing/all-in-one:latest
+        profiles: [ otel, otel-all, all ]
+	      # (...) rest of the config
 
     #######################################################
     #  Test Backend Service
@@ -236,7 +248,7 @@ services:
             dockerfile: Dockerfile
             context: .
         profiles: [build]
-	# (...) rest of the config
+	    # (...) rest of the config
 
 ## (...) Network and Volumes config
 ```
@@ -290,6 +302,7 @@ If you get to this place, then you may also like my other articles around Docker
 - [How to build an optimal Docker image for your application?](/pl/how_to_buid_an_optimal_docker_image_for_your_application/)
 - [A few tricks on how to set up related Docker images with docker-compose](/pl/tricks_on_how_to_set_up_related_docker_images/)
 - [How to build and push Docker image with GitHub actions?](/pl/how_to_buid_and_push_docker_image_with_github_actions/)
+- [How to configure a custom Test Container on the EventStoreDB example](/pl/custom_test_container_on_esdb_example/)
 - [How to create a Docker image for the Marten application](/pl/marten_and_docker)
 - [How to create a custom GitHub Action?](/pl/how_to_create_a_custom_github_action/)
 
