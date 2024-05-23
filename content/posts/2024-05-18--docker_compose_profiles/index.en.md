@@ -156,6 +156,8 @@ You can also group multiple services into a single profile. Why would you do it?
 
 **Multiple samples are using those services in various configurations.**
 
+I'm also using them in [my Event Sourcing workshops](/en/training/), so I'd like to ensure the setup is smooth and we can focus on learning and not fighting with Docker.
+
 Initially, I kept multiple Docker Compose files for:
 - default configuration with all services,
 - continuous integration pipeline configuration without UI components, as they're not needed for tests. They'd just eat resources and make pipeline runs longer. They also don't have Kafka, as I'm just testing inner modules functionalities,
