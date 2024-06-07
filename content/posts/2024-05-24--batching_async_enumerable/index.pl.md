@@ -29,11 +29,11 @@ await foreach (var message in conn.StartReplication(slot, new PgOutputReplicatio
 {
     if (message is InsertMessage insertMessage)
     {
-      yield return await InsertMessageHandler.Handle(insertMessage, ct);
-   }
+        yield return await InsertMessageHandler.Handle(insertMessage, ct);
+    }
 
-   conn.SetReplicationStatus(message.WalEnd);
-   await conn.SendStatusUpdate(ct);
+    conn.SetReplicationStatus(message.WalEnd);
+    await conn.SendStatusUpdate(ct);
 }
 ```
 
