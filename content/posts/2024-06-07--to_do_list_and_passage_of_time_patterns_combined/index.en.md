@@ -156,9 +156,9 @@ public class Order
 
 As a result, we'll store the _OrderCancelled_ event that will trigger removing the pending order from our To-Do List item.
 
-**What if the `MinuteHasPassed` event handling will be delayed?** Typically, that's not a big deal, as timing out doesn't need to happen at the precise second. It's typically good enough to happen as soon as possible after a certain time.
+**What if the _MinuteHasPassed_ event handling will be delayed?** Typically, that's not a big deal, as timing out doesn't need to happen at the precise second. It's typically good enough to happen as soon as possible after a certain time.
 
-**What if one of `MinuteHasPassed` will be lost?** Then, the next one will be published in another minute. As mentioned above, it's not a big deal.
+**What if one of _MinuteHasPassed_ will be lost?** Then, the next one will be published in another minute. As mentioned above, it's not a big deal.
 
 **What if cancelling one of the pending orders fails?** Not a big deal, as it will be caught again by the next passage of time cadence.
 

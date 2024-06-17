@@ -8,7 +8,7 @@ useDefaultLangCanonical: true
 
 ![](2024-06-16-cover.png)
 
-**_"Just put the load balancer in front of it, and call it a day"._** But is it really that simple? Was it ever "just do XYZ?". I was preparing a new [workshop](/en/training/) recently. I wanted to show how to load balance Marten Async Daemon - essentially, I wanted to expand the general explanation from my [previous article on scaling out Marten](/en/scaling_out_marten/). And of course, the 5-minute task of work appeared to be a bit longer. 
+**_"Just put the load balancer in front of it, and call it a day"._** But is it really that simple? Was it ever "just do XYZ?". I was preparing a new [workshop](/pl/training/) recently. I wanted to show how to load balance Marten Async Daemon - essentially, I wanted to expand the general explanation from my [previous article on scaling out Marten](/pl/scaling_out_marten/). And of course, the 5-minute task of work appeared to be a bit longer. 
 
 As I'm writing this blog, not to forget what I learned, so here it is: guidance on how to configure load balancing of ASP.NET Web Api using Nginx and Docker Compose.
 
@@ -97,7 +97,7 @@ services:
         restart: always
         image: nginx:alpine
         ports:
-            - 8089:80
+            - 8080:80
         volumes:
             - ./nginx.conf:/etc/nginx/nginx.conf
         depends_on:
@@ -170,11 +170,11 @@ Configuration is short, but there are some things to unpack here.
 
 1. **We're configuring the HTTP requests redirection.** Nginx can also do more, such as TCP (e.g., PostgreSQL load balancing, but that's not what we're here for). That's why we setup HTTP server configuration explicitly.
 2. **We're load-balancing all requests by setting _/_ as location.** Nginx is a highly customisable and advanced tool. We could define more advanced rules and patterns, but that'll be enough for our case.
-3. **We're forwarding all those requests to our backend by defining:
-   ```
- _proxy_pass         http://backend:5248/;
-   ```
-1. **Nginx is listening on port 80.** We could also put another port address here; the most important thing is to have it aligned with the port redirection in Docker Compose.
+3. **We're forwarding all those requests to our backend by defining:**
+```
+proxy_pass         http://backend:5248/;
+```
+4. **Nginx is listening on port 80.** We could also put another port address here; the most important thing is to have it aligned with the port redirection in Docker Compose.
 
 Plus, we have a few additional configurations needed:
 
@@ -238,14 +238,14 @@ I also need to replicate the application URL explicitly in the ASP.NET configura
 **In the end, once you know it, then this looks not so hard and kinda makes sense, but yeah, once you know it. Before that, it's never "just do XYZ".**
 
 If you get to this place, then you may also like my other articles around Docker and Continuous Integration:
-- [A simple way to configure integration tests pipeline](/en/configure_ci_for_integration_tests/)
-- [How to build an optimal Docker image for your application?](/en/how_to_buid_an_optimal_docker_image_for_your_application/)
-- [Docker Compose Profiles, one the most useful and underrated features](/en/docker_compose_profiles)
-- [A few tricks on how to set up related Docker images with docker-compose](/en/tricks_on_how_to_set_up_related_docker_images/)
-- [How to build and push Docker image with GitHub actions?](/en/how_to_buid_and_push_docker_image_with_github_actions/)
-- [How to configure a custom Test Container on the EventStoreDB example](/en/custom_test_container_on_esdb_example/)
-- [How to create a Docker image for the Marten application](/en/marten_and_docker)
-- [How to create a custom GitHub Action?](/en/how_to_create_a_custom_github_action/)
+- [A simple way to configure integration tests pipeline](/pl/configure_ci_for_integration_tests/)
+- [How to build an optimal Docker image for your application?](/pl/how_to_buid_an_optimal_docker_image_for_your_application/)
+- [Docker Compose Profiles, one the most useful and underrated features](/pl/docker_compose_profiles)
+- [A few tricks on how to set up related Docker images with docker-compose](/pl/tricks_on_how_to_set_up_related_docker_images/)
+- [How to build and push Docker image with GitHub actions?](/pl/how_to_buid_and_push_docker_image_with_github_actions/)
+- [How to configure a custom Test Container on the EventStoreDB example](/pl/custom_test_container_on_esdb_example/)
+- [How to create a Docker image for the Marten application](/pl/marten_and_docker)
+- [How to create a custom GitHub Action?](/pl/how_to_create_a_custom_github_action/)
 
 **Also feel free to [contact me!](mailto:oskar@event-driven.io) if you think that I could help your project. I'm open on doing consultancy and mentoring to help you speed up and streghten your systems.**
 
