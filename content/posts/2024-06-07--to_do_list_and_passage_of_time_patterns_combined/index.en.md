@@ -173,10 +173,7 @@ The example using the [Quartz.NET](https://www.quartz-scheduler.net) library can
 ```csharp
 public static class QuartzExtensions
 {
-    public static IServiceCollection AddQuartzDefaults(
-        this IServiceCollection services,
-        TimeSpan? passageOfTimeInterval = null
-    ) =>
+    public static IServiceCollection AddQuartzDefaults(this IServiceCollection services) =>
         services
             .AddQuartz(q => q
                 .AddPassageOfTime(TimeUnit.Minute)
