@@ -83,6 +83,7 @@ Read also more in:
 - [J. Terrell, A. Kofink, J. Middleton, C. Rainear, E. Murphy-Hill​, C. Parnin, J. Stallings - Gender differences and bias in open source: pull request acceptance of women versus men](https://peerj.com/articles/cs-111/)
 - [B. Trinkenreich, I. Wiese, A. Sarma, M. Gerosa, I. Steinmacher - Women’s Participation in Open Source Software: A Survey of the Literature](https://biancatrink.github.io/files/papers/TOSEM2021.pdf)
 - [Barbaño González - Why Women Are Underrepresented in Open Source](https://thenewstack.io/why-women-are-underrepresented-in-open-source/)
+- [Emna Ayadi - Diversity in Tech Conferences](https://emnaayadi.wordpress.com/2024/04/09/diversity-in-tech-conferences/)
 - [StackOverflow Podcast - Jon Skeet Wants You to Be a Feminist](https://soundcloud.com/stack-exchange/podcast-123-jon-skeet-wants-you-to-be-a-feminist)
 - [Matt Wynne - Feminism](https://mattwynne.net/feminism)
 - [Jasper Spanjaart - 20 ways to hire more women into engineering and combat the gender gap](https://totalent.eu/20-ways-to-hire-more-women-into-engineering-and-combat-the-gender-gap/)
