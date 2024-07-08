@@ -87,7 +87,45 @@ Moreover, JSONB retains the flexibility of storing semi-structured data while al
 
 This flexibility, performance, and consistency combination makes PostgreSQL with JSONB a powerful tool. There are [benchmarks showing that it can be even faster than MongoDB](https://info.enterprisedb.com/rs/069-ALB-339/images/PostgreSQL_MongoDB_Benchmark-WhitepaperFinal.pdf).
 
-Still, the syntax is not the most pleasant (to say mildly). Just [check the docs](https://www.postgresql.org/docs/current/functions-json.html). That's probably one of the reasons why it's not so popular.
+Still, the syntax is not the most pleasant (to say mildly). Just [check the docs](https://www.postgresql.org/docs/current/functions-json.html) or see what Pongo does behind the scenes.
+
+**For instance, the MongoDB update syntax:**
+
+```typescript
+const pongoCollection = pongoDb.collection<User>("users");
+
+await pongoCollection.updateOne(
+  { _id: someId },
+  { $push: { tags: "character" } }
+);
+```
+
+will be translated to:
+
+```sql
+UPDATE "users"
+SET data = jsonb_set(data, '{tags}', (COALESCE(data->'tags', '[]'::jsonb) || to_jsonb('character')))
+WHERE _id = '137ef052-e41c-428b-b606-1c8070a47eda';
+```
+
+**Or for query:**
+
+```typescript
+const result = await pongoCollection
+  .find({ "address.history": { $elemMatch: { street: "Elm St" } } })
+  .toArray();
+```
+
+will result in:
+
+```sql
+SELECT data
+FROM "users"
+WHERE jsonb_path_exists(
+  data,
+  '$.address.history[*] ? (@.street == "Elm St")'
+);
+```
 
 I thought that it'd be much easier if you could reuse your muscle memory from working with Mongo and use familiar syntax to access the data. I even prepared the compliant shim:
 
@@ -133,7 +171,7 @@ Why did I create Pongo? There are two reasons.
 
 **First, I'll need it for [Emmett](https://event-driven-io.github.io/emmett/) read models.** I was a bit silent about updates to Emmett as I'm working on adding subscriptions and streaming capabilities. The ongoing [Pull Request](https://github.com/event-driven-io/emmett/pull/76) went a bit out of hand, and I was a bit worn out. 
 
-**Thus, the second reason. Sometimes, you just need to have fun. **We too often forget about it. That's also why I came up with the name, a mixture of Mongo and Postgres and a reference to [one of my favourite children's movie characters](https://disney.fandom.com/wiki/Pongo).
+**Thus, the second reason. Sometimes, you just need to have fun.** We too often forget about it. That's also why I came up with the name, a mixture of Mongo and Postgres and a reference to [one of my favourite children's movie characters](https://disney.fandom.com/wiki/Pongo).
 
 **Is it production-ready?** You know the answer. What's there works fine, but it's far from having a fully compliant MongoDB API. And it might not have it fully, but [Pareto principle](https://en.wikipedia.org/wiki/Pareto_principle) works here. I also hope that I'll get from you or others who decide to use its contribution or sponsoring to bring it to the expected level.
 
