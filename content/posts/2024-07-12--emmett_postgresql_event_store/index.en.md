@@ -26,7 +26,7 @@ $ npm add @event-driven-io/@event-driven-io/emmett-postgresql
 Then setup event store using connection string to PostgreSQL:
 
 ```typescript
-import { getPool, getPostgreSQLEventStore } from '@event-driven-io/emmett-postgresql';
+import { getPostgreSQLEventStore } from '@event-driven-io/emmett-postgresql';
 
 const connectionString =
   "postgresql://dbuser:secretpassword@database.server.com:3211/mydb";
