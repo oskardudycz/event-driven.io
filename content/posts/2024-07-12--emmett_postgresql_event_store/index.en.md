@@ -20,7 +20,7 @@ Read more:
 How to use it? Pretty simple. Start with installing npm package:
 
 ```shell
-$ npm add @event-driven-io/@event-driven-io/emmett-postgresql
+$ npm add @@event-driven-io/emmett-postgresql
 ```
 
 Then setup event store using connection string to PostgreSQL:
