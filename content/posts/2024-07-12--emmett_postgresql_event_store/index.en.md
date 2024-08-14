@@ -162,6 +162,8 @@ You can also do a free-hand projection using _pongoProjection_ that takes the fo
 
 Cool, isn't it?
 
+**Read more details in the follow up article [Writing and testing event-driven projections with Emmett, Pongo and PostgreSQL](/en/emmett_projections_testing)
+
 Of course, those are still experimental features; they need to be optimised, tested extensively, etc. But they work, which makes me happy.
 
 **As you see, I'm quite thrilled that I could deliver it, as this is a big milestone.** This will enable many people to finally do Event Sourcing in Node.js using PostgreSQL and have basic building blocks.

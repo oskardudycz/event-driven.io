@@ -15,8 +15,8 @@ Last week, I announced [Pongo](https://github.com/event-driven-io/Pongo) - Mongo
 What's Emmett? It's an Event Sourcing library. I announced it some time ago and have worked on it continuously for the last few months. It already supports EventStoreDB, and now it has our favourite PostgreSQL storage!
 
 Read more:
-- [Announcing Emmett! Take your event-driven applications back to the future!](/en/introducing_emmett/)
-- [Testing Event Sourcing, Emmett edition](/en/introducing_emmett/)
+- [Announcing Emmett! Take your event-driven applications back to the future!](/pl/introducing_emmett/)
+- [Testing Event Sourcing, Emmett edition](/pl/introducing_emmett/)
 
 How to use it? Pretty simple. Start with installing npm package:
 
@@ -162,6 +162,8 @@ You can also do a free-hand projection using _pongoProjection_ that takes the fo
 ```
 
 Cool, isn't it?
+
+**Read more details in the follow up article [Writing and testing event-driven projections with Emmett, Pongo and PostgreSQL](/pl/emmett_projections_testing)
 
 Of course, those are still experimental features; they need to be optimised, tested extensively, etc. But they work, which makes me happy.
 
