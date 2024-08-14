@@ -89,12 +89,28 @@ Let's say that you'd like to use Pongo and store it as a document in PostgreSQL,
 ```typescript
 const shoppingCartShortInfoCollectionName = 'shoppingCartShortInfo';
 
-const shoppingCartShortInfoProjection = pongoSingleProjection(
-  shoppingCartShortInfoCollectionName,
+const shoppingCartShortInfoProjection = pongoSingleStreamProjection({
+  collectionName: shoppingCartShortInfoCollectionName,
   evolve,
-  'ProductItemAdded',
-  'DiscountApplied',
-);
+  canHandle: ['ProductItemAdded', 'DiscountApplied'],
+});
+```
+
+and register it through event store options:
+
+```typescript
+import { projection } from '@event-driven-io/emmett';
+import { getPostgreSQLEventStore } from '@event-driven-io/emmett-postgresql';
+
+const connectionString =
+  "postgresql://dbuser:secretpassword@database.server.com:3211/mydb";
+
+const eventStore = getPostgreSQLEventStore(connectionString, {
+  projections: projections.inline([
+    shoppingCartShortInfoProjection,
+    customProjection,
+  ]),
+});
 ```
 
 We're saying that we'd like to update the _shoppingCartShortInfo_ collection using the _evolve_ function for the following set of event types. 
@@ -113,7 +129,7 @@ for (const event of events) {
 }
 ```
 
-If you're wondering what _getDocumentId_ is, then for _pongoSingleProjection_, it'll automatically use the stream name as the document id. 
+If you're wondering what _getDocumentId_ is, then for _pongoSingleStreamProjection_, it'll automatically use the stream name as the document id. 
 
 Suppose you'd like to customise it, e.g. to match events from different streams. In that case, you can use the _pongoMultiStreamProjection_ definition, which allows you to specify the document ID matcher for each event. For instance:
 
@@ -130,13 +146,12 @@ const getDocumentId = ({type}:  ProductItemAdded | DiscountApplied): string => {
   }
 };
 
-const shoppingCartShortInfoProjection = pongoSingleProjection(
-  shoppingCartShortInfoCollectionName,
-  getDocumentId,
+const shoppingCartShortInfoProjection = pongoSingleStreamProjection({
+  collectionName: shoppingCartShortInfoCollectionName,
   evolve,
-  'ProductItemAdded',
-  'DiscountApplied',
-);
+  canHandle: ['ProductItemAdded', 'DiscountApplied'],
+  getDocumentId
+});
 ```
 
 You can also do a free-hand projection using _pongoProjection_ that takes the following handler:
