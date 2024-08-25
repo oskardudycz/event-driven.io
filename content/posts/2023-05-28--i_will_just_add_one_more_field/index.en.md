@@ -11,7 +11,7 @@ Programming origins are in mathematics. Scientists like [John Von Neumann](https
 
 That may be a reason why we tend to believe that 1 plus 1 will always equal 2.
 
-**This fact is visible in our data modelling; we try to put as much data as possible. Just in case we need it.** There may be a valid reason for that. I'm also to blame, as I often repeat that [storage is cheap, but the information is priceless](/pl/never_lose_data_with_event_sourcing/). Still, the more is not always the merrier.
+**This fact is visible in our data modelling; we try to put as much data as possible. Just in case we need it.** There may be a valid reason for that. I'm also to blame, as I often repeat that [storage is cheap, but the information is priceless](/en/never_lose_data_with_event_sourcing/). Still, the more is not always the merrier.
 
 Let's look at the following events:
 
@@ -51,7 +51,7 @@ public record IncidentClosed(
 );
 ```
 
-They're part of the IT Helpdesk domain I described in [Event-driven projections in Marten explained](/pl/projections_in_marten_explained/) article.
+They're part of the IT Helpdesk domain I described in [Event-driven projections in Marten explained](/en/projections_in_marten_explained/) article.
 
 Now, we'd like to build a read model that contains the summary of the incidents broken down by status:
 
@@ -131,13 +131,13 @@ Then cognitive load skyrockets.
 
 **If we add too much information to our events, they will lose precision.** It may look counterintuitive that by adding more information, we're losing it, as it's getting harder and harder to interpret the meaning. So 1 plus 1 may equal 0.
 
-Of course, a tradeoff is a tradeoff. We're trading complexity for [the risk](/pl/the_risk_of_ignoring_risks/). That's all fine if we're keeping it on a leash. How is the spaghetti code made? Day by day.
+Of course, a tradeoff is a tradeoff. We're trading complexity for [the risk](/en/the_risk_of_ignoring_risks/). That's all fine if we're keeping it on a leash. How is the spaghetti code made? Day by day.
 
-Read more about it in [Events should be as small as possible, right?](/pl/events_should_be_as_small_as_possible/).
+Read more about it in [Events should be as small as possible, right?](/en/events_should_be_as_small_as_possible/).
 
 **So what other alternatives do we have?**
 
-**One of the options is to find the customer id for the specific incident and use it to correlate data.** Yet, how to do it? I explained in [How to create projections of events for nested object structures?](/pl/how_to_create_projections_of_events_for_nested_object_structures/) that it's more challenging than it seems.
+**One of the options is to find the customer id for the specific incident and use it to correlate data.** Yet, how to do it? I explained in [How to create projections of events for nested object structures?](/en/how_to_create_projections_of_events_for_nested_object_structures/) that it's more challenging than it seems.
 
 **If we had an Incident read model, we could do the lookup or join if we keep the data in a relational database.** It could be a solution and a tradeoff, as then we'd couple the read models together. That would make [projections rebuild](https://event-driven.io/pl/projections_and_read_models_in_event_driven_architecture/#projections-rebuild) much harder. We'd always need to rebuild those projections and create a _rebuild train_ to rebuild them in a specific order. That's, of course, a potential trap that we'll fall into later. 
 
@@ -197,7 +197,7 @@ What else could we do?
 
 Most event stores provide the possibility to provide custom event metadata (see docs for [Marten](https://martendb.io/events/metadata.html), [EventStoreDB](https://developers.eventstore.com/server/v22.10/streams.html#event-metadata), [Axon](https://docs.axoniq.io/reference-guide/axon-framework/messaging-concepts/anatomy-message)). We can put some common properties that are not part of the business process but help us make technical processing easier. 
 
-Of course, we need to be careful not to use it too much to cheat and make it our open dump for everything. 
+Of course, we need to be careful not to use it too much to cheat and make it our open dump for everything. **Read more in [Using event metadata in event-driven projections](/en/projections_and_event_metadata/).**
 
 **Still, providing a customer id as metadata sounds like a decent move for our case.** That looks like something that could potentially be a reusable concept, also for diagnostics and tracing. We could use it to correlate our event with the read model.
 
@@ -238,7 +238,7 @@ We should keep this list as an internal thing and technical implementation detai
 
 **Summing up.** Decisions about adding a redundant property to the event should always be carefully made. The new property may not add more information but degrade it. We may lose a precious business context.
 
-That may be a valid tradeoff; we should at least [note it ](/pl/how_to_successfully_do_documentation_without_maintenance_burden/). Still, there are other options; I hope this article will be a good tutorial on techniques you may apply.
+That may be a valid tradeoff; we should at least [note it](/en/how_to_successfully_do_documentation_without_maintenance_burden/). Still, there are other options; I hope this article will be a good tutorial on techniques you may apply.
 
 As always, pick your poison!
 

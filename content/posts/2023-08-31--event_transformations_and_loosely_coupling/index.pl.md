@@ -18,6 +18,8 @@ That's never a pleasant experience.
 
 That sounds too good to be true, and indeed, we need to do a tradeoff analysis. I explained that in:
 - [Events should be as small as possible, right?](/pl/events_should_be_as_small_as_possible/)
+- [Stream ids, event types prefixes and other event data you might not want to slice off](/pl/on_putting_stream_id_in_event_data/)
+- [Using event metadata in event-driven projections](/pl/projections_and_event_metadata/)
 - [How to create projections of events for nested object structures?](/pl/how_to_create_projections_of_events_for_nested_object_structures/)
 - [Anti-patterns in event modelling - I'll just add one more field](/pl/i_will_just_add_one_more_field/).
 - [Guide to Projections and Read Models in Event-Driven Architecture](/pl/projections_and_read_models_in_event_driven_architecture/)

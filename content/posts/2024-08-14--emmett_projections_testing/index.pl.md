@@ -46,7 +46,7 @@ type ProductItemRemoved = Event<
 type PricedProductItem = {
   productId: string;
   quantity: number;
-  price: number;
+  unitPrice: number;
 };
 
 type DiscountApplied = Event<
@@ -112,7 +112,7 @@ const withAdjustedTotals = (
   options: { 
     document: ShoppingCartSummary; 
     productItem: PricedProductItem; 
-    by: 'adding' : 'removing'
+    by: 'adding' | 'removing'
   }) => {
     const { document, productItem, by } = options;
     const plusOrMinus = by === 'adding' ? 1: -1;
@@ -121,7 +121,7 @@ const withAdjustedTotals = (
       ...document,
       totalAmount:
         document.totalAmount +
-        productItem.price * productItem.quantity * plusOrMinus,
+        productItem.unitPrice * productItem.quantity * plusOrMinus,
       productItemsCount:
         document.productItemsCount + productItem.quantity * plusOrMinus,
     }; 
@@ -283,7 +283,7 @@ void describe('Shopping carts summary', () => {
         {
           type: 'ProductItemAdded',
           data: {
-            productItem: { price: 100, productId: 'shoes', quantity: 100 },
+            productItem: { unitPrice: 100, productId: 'shoes', quantity: 100 },
           },
           metadata: {
             streamName: shoppingCartId,
@@ -331,7 +331,7 @@ void describe('Shopping carts summary', () => {
         {
           type: 'ProductItemAdded',
           data: {
-            productItem: { price: 100, productId: 'shoes', quantity: 100 },
+            productItem: { unitPrice: 100, productId: 'shoes', quantity: 100 },
           },
         },
       ]),
@@ -370,7 +370,7 @@ void describe('Shopping carts summary', () => {
   void it('applies discount for existing shopping cart with product', () => 
     given(
         shoppingCartWithProductItem(shoppingCartId, {
-          price: 100, 
+          unitPrice: 100, 
           quantity: 100,
         })
       )
@@ -401,7 +401,7 @@ void describe('Shopping carts summary', () => {
         type: 'ProductItemAdded',
         data: {
           productItem: { 
-            price: 100, 
+            unitPrice: 100, 
             productId: 'shoes', 
             quantity: 100,
             ...productItem
@@ -496,7 +496,7 @@ void describe('Shopping carts summary', () => {
         {
           type: 'ProductItemAdded',
           data: {
-            productItem: { price: 100, productId: 'shoes', quantity: 100 },
+            productItem: { unitPrice: 100, productId: 'shoes', quantity: 100 },
           },
         },
         {

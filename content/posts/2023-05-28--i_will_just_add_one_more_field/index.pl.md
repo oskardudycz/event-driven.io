@@ -198,7 +198,7 @@ What else could we do?
 
 Most event stores provide the possibility to provide custom event metadata (see docs for [Marten](https://martendb.io/events/metadata.html), [EventStoreDB](https://developers.eventstore.com/server/v22.10/streams.html#event-metadata), [Axon](https://docs.axoniq.io/reference-guide/axon-framework/messaging-concepts/anatomy-message)). We can put some common properties that are not part of the business process but help us make technical processing easier. 
 
-Of course, we need to be careful not to use it too much to cheat and make it our open dump for everything. 
+Of course, we need to be careful not to use it too much to cheat and make it our open dump for everything. **Read more in [Using event metadata in event-driven projections](/pl/projections_and_event_metadata/).**
 
 **Still, providing a customer id as metadata sounds like a decent move for our case.** That looks like something that could potentially be a reusable concept, also for diagnostics and tracing. We could use it to correlate our event with the read model.
 
@@ -239,7 +239,7 @@ We should keep this list as an internal thing and technical implementation detai
 
 **Summing up.** Decisions about adding a redundant property to the event should always be carefully made. The new property may not add more information but degrade it. We may lose a precious business context.
 
-That may be a valid tradeoff; we should at least [note it ](/pl/how_to_successfully_do_documentation_without_maintenance_burden/). Still, there are other options; I hope this article will be a good tutorial on techniques you may apply.
+That may be a valid tradeoff; we should at least [note it](/pl/how_to_successfully_do_documentation_without_maintenance_burden/). Still, there are other options; I hope this article will be a good tutorial on techniques you may apply.
 
 As always, pick your poison!
 
