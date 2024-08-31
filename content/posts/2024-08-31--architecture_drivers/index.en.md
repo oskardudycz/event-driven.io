@@ -13,11 +13,11 @@ author: oskar dudycz
 
 **Still, I never feel comfortable being asked about Software Architecture Drivers.** How do you give someone a checklist for good software? Yet I had to answer this time, as [Maciej Jędrzejewski](https://www.linkedin.com/in/jedrzejewski-maciej/) asked me if I could write my thoughts [to his new book](https://leanpub.com/master-software-architecture). How could I reject the offer? Actually, I could, as it surprised me, but hey, maybe my few words will help others fight their impostor syndrome. Or it was just too flattering. Nevertheless, here they are!
 
-It's funny that we called our industry SOFTware, but it's all about making HARD decisions. Usually, we make them when we're the dumbest: we don't know the business domain, we don't know the user needs, and we are unsure of technology choices. Plus, even if we do, our changing environment is open to proving us wrong.
+It's funny that we called our industry **SOFTware**, but it's all about making **HARD decisions**. Usually, we make them when we're the dumbest: we don't know the business domain, we don't know the user needs, and we are unsure of technology choices. Plus, even if we do, our changing environment is open to proving us wrong.
 
 **For me, architecture decisions are more a process than a set of specific rules. It's a process of answering the following questions:**
 
-**WHY?** So, understanding the product vision and business model. Consider where the money flows: who the client and the user are. That's an important fact, as we should care about all users but optimise for clients, especially those who bring money. In the end, our product should bring money.
+**WHY?** So, understanding the product vision and business model. Consider [where the money flows](/en/follow_the_money/): who the client and the user are. That's an important fact, as we should care about all users but optimise for clients, especially those who bring money. In the end, our product should bring money.
 
 **WHAT?** Understand what we actually need to build. Set a mental model of the business workflow. This is an excellent moment for collaborative tooling, brainstorming and modelling practices like Event Storming, Domain Storytelling, etc.
 
@@ -28,13 +28,13 @@ Then rinse and repeat.
 
 **Architecture is not created in a vacuum.** Talk and collaborate with business, users and your technical fellows. 
 
-Consider the team you (can) have. Most of the time, the best technology is the one that your team knows. We're building new tools, but to be true, rarely sophisticated ones. Most of them are regular lines of business applications. 
+Consider the [team you (can) have](/en/on_the_importance_of_shaping_the_boundaries_in_team_management/). Most of the time, the best technology is the one that your team knows. We're building new tools, but to be true, rarely sophisticated ones. Most of them are regular lines of business applications. 
 
 **And hey, let me share the secret with you: your decisions will be wrong. Mine also.** And that's fine. We don't need to be flawless; our system also doesn't need to be. Expect the change; it'll come. 
 
-So don't be afraid to make decisions, but don't rush yourself. Always consider alternative solutions. Record your decisions together with thrown away ideas. Provide the context and explain WHY, WHAT, HOW, WITH. Provide the assumed limits. Suggest how to evolve if, e.g. your system will be a huge success and becomes overwhelmed by traffic. Some problems are good to have. But don't need to be solved immediately.
+So [don't be afraid to make decisions](/en/why_are_we_afraid_of_our_decisions/), but don't rush yourself. Always consider alternative solutions. Record your decisions together with thrown away ideas. Provide the context and explain WHY, WHAT, HOW, WITH. Provide the assumed limits. Suggest how to evolve if, e.g. your system will be a huge success and becomes overwhelmed by traffic. Some problems are good to have. But don't need to be solved immediately.
 
-We should optimise not for maintainability but for removability. If our system is built so that we can relatively easily remove pieces from it, then we can drop bad ideas and move on to new ones. Also, by accident, we're getting a system that's easier to maintain.
+We should [optimise not for maintainability but for removability](/en/removability_over_maintainability/). If our system is built so that we can relatively easily remove pieces from it, then we can drop bad ideas and move on to new ones. Also, by accident, we're getting a system that's easier to maintain.
 
 **What are your architecture drivers? Or better, what's your process?**
 
@@ -49,8 +49,12 @@ If you need even more architecture benchmarks, I have gathered some of my past a
 - [The risk of ignoring risks](en/the_risk_of_ignoring_risks/)
 - [Why are we afraid of our decisions?](/en/why_are_we_afraid_of_our_decisions/)
 - [What do the British writer and his fence have to do with Software Architecture?](/en/chesterton_fence_and_software_architecture/)
+- [Follow the money to get a better design](/en/follow_the_money/)
+- [A few words on communication](/en/a_few_words_on_communication/)
+- [How to successfully do documentation without a maintenance burden?](/en/how_to_successfully_do_documentation_without_maintenance_burden/)
 - [The magic is that there is no magic. Or how to understand design patterns](/en/the_magic_is_that_there_is_no_magic/)
 - [Not all issues are complex, some are complicated. Here's how to deal with them](/en/how_to_solve_complicated_problems/)
+- [On the importance of setting boundaries in team management](/en/on_the_importance_of_shaping_the_boundaries_in_team_management/)
 - [What Dune can tell us about setting our goals](/en/dune_and_long_term_goals/)
 - [Stacking the bricks in the software development process](/en/stacking_the_bricks/)
 - [The Holy Grail syndrome](/en/holy_graal_syndrome/)
