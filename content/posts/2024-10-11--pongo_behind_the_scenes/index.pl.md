@@ -8,7 +8,7 @@ useDefaultLangCanonical: true
 
 ![](2024-10-11-cover.png)
 
-**If you want to make God laugh, tell him about your plans. **
+**If you want to make God laugh, tell him about your plans.**
 
 My plans were simple: recharge during summer, take a break in July, and then return to the regular writing cadence. As you may have noticed, the last part didn't go entirely as expected.
 
@@ -18,7 +18,7 @@ Okay, I also had another plan to bootstrap two projects:
 
 It's going okay in terms of the ongoing work, okayish in terms of adoption, and not so well yet in making it sustainable, so earning money from it to pay for the effort.
 
-I also wanted to do less speaking, as it takes time, energy, and travelling, but then I got a few invitations to conferences and webinars that I wanted to give.
+I also wanted to do less speaking, as it takes time, energy, and travelling, but then I got a few invitations to conferences and webinars that I couldn't reject.
 
 **And that is how we got to Pongo Internals.** That's what I showed last week during [YugabytDB Community Hours](https://www.youtube.com/watch?v=p-6fpV_GDEs)
 
@@ -30,7 +30,7 @@ And earlier on [FerretDB Document Database Community](https://www.youtube.com/wa
 
 It was tiring, as I was doing between [flood](https://notesfrompoland.com/2024/09/19/floods-prompt-polands-first-ever-state-of-natural-disaster-what-does-this-mean/), [AxonIQ Conference](https://www.axoniq.io/axoniq-conference-2024) and having Tonsillitis. But I've made it.
 
-**Plus, it's heartwarming that tools like FerretDB and YugabyteDB are open to collaboration.** I'm all for that, so I hope you'll see more of it.
+**It's heartwarming that tools like FerretDB and YugabyteDB are open to collaboration.** I'm all for that, so I hope you'll see more of it.
 
 **I showcased their recent additions to Pongo like:**
 - fresh new Pongo shell for accessing and manipulating data without setting up the project,
@@ -48,10 +48,6 @@ Check out if you want to see how sausages are made. And drop your thoughts after
 **Pongo is a community project, and I believe it is a decent place to start your journey in Open Source.** If you'd like to do it, join our [Discord server](https://discord.gg/fTpqUTMmVa), and I'll help you jumpstart your contribution.
 
 I'll be blogging about the features mentioned (and more) in the upcoming blogs. And yes, I hope God is not having a good laugh at those plans!
-
-Cheers!
-
-Oskar
 
 Cheers!
 
