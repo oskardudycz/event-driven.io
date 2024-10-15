@@ -49,6 +49,11 @@ Check out if you want to see how sausages are made. And drop your thoughts after
 
 I'll be blogging about the features mentioned (and more) in the upcoming blogs. And yes, I hope God is not having a good laugh at those plans!
 
+**Read more in:**
+- [Pongo - Mongo but on Postgres and with strong consistency benefits](/pl/introducting_pongo/)
+- [Pongo gets strongly-typed client, migrations, and command line tooling](/pl/pongo_strongly_typed_client/)
+- [Running a regular SQL on Pongo documents](/pl/sql_support_in_pongo)
+
 Cheers!
 
 Oskar

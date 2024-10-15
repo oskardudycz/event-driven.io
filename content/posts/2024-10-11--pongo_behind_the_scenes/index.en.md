@@ -46,7 +46,10 @@ Check out if you want to see how sausages are made. And drop your thoughts after
 
 **Pongo is a community project, and I believe it is a decent place to start your journey in Open Source.** If you'd like to do it, join our [Discord server](https://discord.gg/fTpqUTMmVa), and I'll help you jumpstart your contribution.
 
-I'll be blogging about the features mentioned (and more) in the upcoming blogs. And yes, I hope God is not having a good laugh at those plans!
+**Read more in:**
+- [Pongo - Mongo but on Postgres and with strong consistency benefits](/en/introducting_pongo/)
+- [Pongo gets strongly-typed client, migrations, and command line tooling](/en/pongo_strongly_typed_client/)
+- [Running a regular SQL on Pongo documents](/en/sql_support_in_pongo)
 
 Cheers!
 
