@@ -7,7 +7,7 @@ author: oskar dudycz
 
 ![](2024-11-15-cover.png)
 
-> _"Are you command handling idempotent?"_ 
+> _"Is your command handling idempotent?"_ 
 
 Sounds like a douchebag question to ask. Actually, that's not a question but a statement that we want to sound smart.
 
