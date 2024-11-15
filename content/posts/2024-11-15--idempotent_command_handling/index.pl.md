@@ -123,7 +123,8 @@ function checkIn (
   { data: { guestId, roomId }, metadata }: CheckIn,
   state: GuestStayAccount,
 ): GuestCheckedIn | [] {
-  if (state.status === 'CheckedIn') [];
+  if (state.status === 'CheckedIn')
+    return [];
 
   if (state.status === 'CheckedOut')
     throw new IllegalStateError(`Guest account is already checked out`);
@@ -584,7 +585,7 @@ function recordCharge (
 };
 ```
 
-## Look Ma' no exceptions
+## Look Ma' No Exceptions!
 
 Ok, but what about those errors? Many people don't like exceptions, and that's for good reasons. Some languages even don't allow us to return them. How would I model errors in general?
 
