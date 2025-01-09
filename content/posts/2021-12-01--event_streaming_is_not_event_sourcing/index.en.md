@@ -65,7 +65,7 @@ The essential point is that for read models, you don't expect to have the same g
 
 I also covered that in my talk: 
 
-`youtube: https://www.youtube.com/watch?v=Lu-skMQ-vAw`
+`youtube: https://www.youtube.com/watch?v=20zvAJAhqS0`
 
 **I'll repeat it again: this is not Event Sourcing.**
 
@@ -76,13 +76,14 @@ Oskar
 p.s.
 
 If you liked this article, also check others where I'm trying to bust similar myths:
-- [Don't let Event-Driven Architecture buzzwords fool you](/en/dont_let_event_driven_architecture_buzzwords_fool_you/)
-- [CQRS facts and myths explained](/en/cqrs_facts_and_myths_explained/)
+- [Don't let Event-Driven Architecture buzzwords fool you](/en/dont_let_event_driven_architecture_buzzwords_fool_you/),
+- [CQRS facts and myths explained](/en/cqrs_facts_and_myths_explained/).
 
 You can read more in:
-- [EventStoreDB vs Kafka written by Kacper Gunia](https://domaincentric.net/blog/eventstoredb-vs-kafka)
-- [A Beginner's Guide to Event Sourcing from Event Store team](https://www.eventstore.com/event-sourcing)
+- [EventStoreDB vs Kafka written by Kacper Gunia](https://domaincentric.net/blog/eventstoredb-vs-kafka),
+- [Event Sourcing: Why Kafka is not suitable as an Event Store by Anton Stöckl](https://medium.com/itnext/event-sourcing-why-kafka-is-not-suitable-as-an-event-store-796e5d9ab63c),
+- [A Beginner's Guide to Event Sourcing from Event Store team](https://www.eventstore.com/event-sourcing).
 
 Check Derek's Comartin video explaining his concerns around this topic: [Don't Let the Internet Dupe You, that's NOT Event Sourcing](https://www.youtube.com/watch?v=Y7ca1--EKsg).
 
-I've also made a list of articles with wrong perspective on Event Sourcing: https://github.com/oskardudycz/EventSourcing.NetCore#this-is-not-event-sourcing
+I've also made a list of articles with wrong perspective on Event Sourcing. Read it [here](https://github.com/oskardudycz/EventSourcing.NetCore#this-is-not-event-sourcing)
