@@ -15,7 +15,17 @@ A few things are needed for that. The first and most important thing is to have 
 
 **I was lucky to have such with [Alexander Lay-Calvert](https://www.linkedin.com/in/alexander-lay-calvert-2179501b4/).** He did most of the hard work; I was helping conceptually and with final touches. So, what you read today is a summary of our conjoined effort with a majority made by Alex.
 
+Whar else is needed? Let's discuss that today!
+
 ## Event stores as key-value stores
+
+**Here, I'll add a disclaimer: We'll be using the canonical definition of event sourcing.** So we'll expect to use our event store as a regular database, not as a way to just keep the messages logged or publish it further. 
+
+There's a skewed perspective [conflating Event Sourcing with Event Streaming. **Event Sourcing is about making decisions**, capturing their outcomes (so events) and using them to make further decisions (so events are the state). **Event Streaming is about moving information from one place to another** and integrating multiple components. Read more about in [Event Streaming is not Event Sourcing!](/en/event_streaming_is_not_event_sourcing/).
+
+Event stores may have similar capabilities as Event Streaming solutions, but the focus is different: 
+- event stores on consistency, durability and quality of data, 
+- event streaming solutions (like Kafka) are focused on delivery, throughput and integration.
 
 **[Event stores are key-value databases!](/en/event_stores_are_key_value_stores)** At least logically. In relational databases, records are called rows; in document databases, documents; in Event Sourcing, they're called streams.
 
@@ -43,12 +53,6 @@ And that's great, as it's much easier to reason about the guarantees we should e
 
 Plus, it allows us to implement event stores on top of _a bit more exotic_ storage like MongoDB, DynamoDB, CosmosDB or Blob Storage.
 
-**Here, I'll add a reminder: We'll be using the canonical definition of event sourcing.** So we'll expect to use our event store as a regular database, not as a way to just keep the messages logged or publish it further. There's a skewed perspective conflating Event Sourcing with Event Streaming. Event Sourcing is about making decisions, capturing their outcomes (so events) and using them to make further decisions (so events are the state). Event Streaming is about moving information from one place to another and integrating multiple components. Event stores may have similar capabilities as Event Streaming solutions, but the focus is different: 
-- event stores on consistency, durability and quality of data, 
-- event streaming solutions (like Kafka) are focused on delivery, throughput and integration.
-
-Read more about that in [Event Streaming is not Event Sourcing!](/en/event_streaming_is_not_event_sourcing/).
-
 Ok, enough intro! Let's discuss how to do it using the MongoDB example!
 
 ## Basic Event Stream Definition
@@ -67,7 +71,7 @@ type StreamName = unknown;
 type EventStore = Map<StreamName, Stream>;
 ```
 
-It reflects our knowledge; the shape of _Stream_ and type of `Stream Name` are unknown to us, but we already know that _Event Store_ is a database, a map where _Stream Name_ is a key and _Stream_ is a value.
+It reflects our knowledge; the shape of _Stream_ and type of _Stream Name_ are unknown to us, but we already know that _Event Store_ is a database, a map where _Stream Name_ is a key and _Stream_ is a value.
 
 Let's now describe the Stream: it represents a sequence of business events that happened for a specific record.
 
@@ -666,11 +670,11 @@ We want to detect conflicting updates and race conditions. In other words, it ha
 For detection of whether the conflicting change was made, we'll use a stream version as it is incremented with each append.
 
 What does an optimistic concurrency implementation look like?
-Return the current stream position while reading events.
-Append the event, sending the current position as the expected one.
-Check if the position in the stream equals the expected position sent in the append operation.
-If they match, allow appending and set a new entity stream position.
-If not, throw or return an error.
+1. Return the current stream position while reading events.
+2. Append the event, sending the current position as the expected one.
+3. Check if the position in the stream equals the expected position sent in the append operation.
+4. If they match, allow appending and set a new entity stream position.
+5. If not, throw or return an error.
 
 To be able to do it, we need to modify our event store definition:
 
@@ -827,14 +831,33 @@ Once we have it, we pass it on to the update statement.
 
 **If the document with a specified stream name and position wasn't found, that means the stream doesn't exist or the stream position is different.** Even though MongoDB will try to insert the document, it'll fail as we have the unique index constraint on the stream name. If no document was upserted, then that means that there was an optimistic concurrency conflict, and we can throw an error. 
 
-**Together with atomic updates, that gives strong guarantees to our MongoDB event store.** Of course, we should consider adding retries in case of concurrency error, but you can read about it [in my other article](/en/idempotent_command_handling/#idempotency-and-optimistic-concurrency).
-s/manual/changeStreams/), but it’s still more complex (and less straightforward) than dedicated event stores that offer a built-in global offset.
 
-**In [Emmett](https://github.com/event-driven-io/emmett), we provided the option to have [_inline_ projections](https://github.com/event-driven-io/emmett/blob/e8e0b3c8f9620dc42c4888f9dccbf4fd3e69d384/src/packages/emmett-mongodb/src/eventStore/projections/mongoDBInlineProjection.ts#L147) stored in the stream document, together with events.** That allows atomic updates in the same operation as events append. I'll expand on it in the follow-up post.
+A bit more is happening here. After we resolve the collection by the stream type, we either take the provided expected position from options (if it was provided) as the current one or read it from the stream document. 
+
+Once we have it, we pass it on to the update statement. 
+
+**If the document with a specified stream name and position wasn't found, that means the stream doesn't exist or the stream position is different.** Even though MongoDB will try to insert the document, it'll fail as we have the unique index constraint on the stream name. If no document was upserted, then that means that there was an optimistic concurrency conflict, and we can throw an error. 
+
+**Together with atomic updates, that gives strong guarantees to our MongoDB event store.** Of course, we should consider adding retries in case of concurrency error, but you can read about it [in my other article](/en/idempotent_command_handling/#idempotency-and-optimistic-concurrency).
+
+
+## Tradeoffs
+
+While we showed that it’s perfectly doable to build an event store on top of MongoDB, there are some caveats worth highlighting. 
+
+First, MongoDB’s atomic updates and transactions work best on single documents, so if you rely on cross-document or multi-stream consistency, you’ll need to coordinate or accept weaker guarantees carefully. That's not a huge issue for appends, as we should keep our event streams denormalised and focused on business process. See more in my talk:
+
+`youtube: https://www.youtube.com/watch?v=gG6DGmYKk4I`
+
+**Still, that becomes an issue for updating read models: no global ordering out of the box.** Our single-document-per-stream approach ensures ordering within one stream, but nothing enforces a globally monotonic event sequence across all streams. You could try to simulate a global ordering by tapping into MongoDB’s [oplog](https://www.mongodb.com/docs/manual/core/replica-set-oplog/) or [Change Streams](https://www.mongodb.com/docs/manual/changeStreams/), but it’s still more complex (and less straightforward) than dedicated event stores that offer a built-in global offset.
+
+**In Emmett, we provided the option to have [_inline_ projections](https://github.com/event-driven-io/emmett/blob/e8e0b3c8f9620dc42c4888f9dccbf4fd3e69d384/src/packages/emmett-mongodb/src/eventStore/projections/mongoDBInlineProjection.ts#L147) stored in the stream document, together with events.** That allows atomic updates in the same operation as events append. I'll expand on it in the follow-up post.
+
+**There's also a valid concern [raised by Robert Kawecki](https://www.reddit.com/r/node/comments/1hy5n9t/comment/m6etazv) about the maximum size of the MongoDB document.** The maximum size is 16MB, which is actually more than the raw JSON size, as BSON used in MongoDB is a binary format. If we keep our streams short, that should be sufficient for most cases. The stream per document will need to be chunked into multiple documents. The proposed structure could be expanded to include chunk numbers and setting a unique index on streamName and chunk number. That will allow moving events to the new document once the size is reached. We may also need to use [snapshots](https://www.eventstore.com/blog/snapshots-in-event-sourcing). I'll cover this _2nd-day issue_ in the dedicated blog article.
 
 Lastly, from a durability perspective, past [Jepsen tests](https://jepsen.io/analyses/mongodb-4.2.6) have flagged edge cases under certain configurations and failover scenarios, indicating you’ll want to pay close attention to cluster setup and operational practices. None of that rules MongoDB out—it just means that if you absolutely need a strict global ordering or bulletproof multi-document consistency, a specialized event store (or a fully ACID relational system) might be a better fit.
 
- Otherwise, if per-stream concurrency and ordering suffice, this MongoDB-based strategy can still be a solid choice.
+Otherwise, if per-stream concurrency and ordering suffice, this MongoDB-based strategy can still be a solid choice.
 
 ## TLDR
 
@@ -862,10 +885,15 @@ If you're not in Node.js land and want me to help you build it [contact me](mail
 
 **Please also share with me your thoughts, and share the article with your friends if you enjoyed it!** That'd be much appreciated, as writing it took me a hellova time.
 
+If you liked this article, you may also find those interesting:
+- [Event stores are key-value databases!](/en/event_stores_are_key_value_stores)
+- [Event Streaming is not Event Sourcing!](/en/event_streaming_is_not_event_sourcing/)
+- [Let's build event store in one hour!](/en/lets_build_event_store_in_one_hour/)
+- [Using S3 but not the way you expected. S3 as strongly consistent event store](https://www.architecture-weekly.com/p/using-s3-but-not-the-way-you-expected)
+- [Let's talk about positions in event stores](/en/lets_talk_about_positions_in_event_stores/)
+
 Cheers!
 
 Oskar
-
-p.s. I also wrote a long article on how to build event store on top of AWS S3. You'll find it [here](https://www.architecture-weekly.com/p/using-s3-but-not-the-way-you-expected).
 
 p.s. **Ukraine is still under brutal Russian invasion. A lot of Ukrainian people are hurt, without shelter and need help.** You can help in various ways, for instance, directly helping refugees, spreading awareness, putting pressure on your local government or companies. You can also support Ukraine by donating e.g. to [Red Cross](https://www.icrc.org/pl/donate/ukraine), [Ukraine humanitarian organisation](https://savelife.in.ua/pl/donate/) or [donate Ambulances for Ukraine](https://www.gofundme.com/f/help-to-save-the-lives-of-civilians-in-a-war-zone).
