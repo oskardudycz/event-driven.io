@@ -21,7 +21,9 @@ What else is needed? Let's discuss that today!
 
 **In this article, we'll use the canonical definition of event sourcing.**
 
-**Event Sourcing is about making decisions**, capturing their outcomes (so events) and using them to make further decisions (so events are the state). **Event Streaming is about moving information from one place to another** and integrating multiple components. Read more about in [Event Streaming is not Event Sourcing!](/en/event_streaming_is_not_event_sourcing/).
+**Event Sourcing is about making decisions**, capturing their outcomes (so events) and using them to make further decisions (so events are the state). We do that by reading all the events we recorded already for the specifis process/entity, applying them and forming in-memory decision model that we use to check our business rules, and deciding whether we record the next events.
+
+**Event Streaming is about moving information from one place to another** and integrating multiple components. Read more about in [Event Streaming is not Event Sourcing!](/en/event_streaming_is_not_event_sourcing/).
 
 Event stores are not messaging tools. They may have similar capabilities as Event Streaming solutions, but the focus is different: 
 - event stores on consistency, durability and quality of data, 
