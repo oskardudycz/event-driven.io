@@ -8,27 +8,27 @@ useDefaultLangCanonical: true
 
 ![](2025-01-10-cover.png)
 
-**I have always said that is not the best choice for event storage, and guess what?** I just released the stable version of the MongoDB event store in [Emmett](https://github.com/event-driven-io/emmett). 
+**I have always said that MongoDB is not the best choice for event storage, and guess what?** I [just released](https://github.com/event-driven-io/emmett/releases/tag/0.23.0) the stable version of the MongoDB event store in [Emmett](https://github.com/event-driven-io/emmett). 
 
-**And let me explain today how to build an event store on top of MongoDB** It'll be a detailed article, but I think it's an interesting piece, so fasten your seat belts!
+**And let me explain today how to do it.** It'll be a detailed article, but I think it's an interesting piece, so fasten your seat belts!
 
 A few things are needed for that. The first and most important thing is to have a motivated contributor! 
 
 **I was lucky to have such with [Alexander Lay-Calvert](https://www.linkedin.com/in/alexander-lay-calvert-2179501b4/).** He did most of the hard work; I was helping conceptually and with final touches. So, what you read today is a summary of our conjoined effort with a majority made by Alex.
 
-Whar else is needed? Let's discuss that today!
+What else is needed? Let's discuss that today!
 
 ## Event stores as key-value stores
 
-**Here, I'll add a disclaimer: We'll be using the canonical definition of event sourcing.** So we'll expect to use our event store as a regular database, not as a way to just keep the messages logged or publish it further. 
+**In this article, we'll use the canonical definition of event sourcing.**
 
-There's a skewed perspective [conflating Event Sourcing with Event Streaming. **Event Sourcing is about making decisions**, capturing their outcomes (so events) and using them to make further decisions (so events are the state). **Event Streaming is about moving information from one place to another** and integrating multiple components. Read more about in [Event Streaming is not Event Sourcing!](/en/event_streaming_is_not_event_sourcing/).
+**Event Sourcing is about making decisions**, capturing their outcomes (so events) and using them to make further decisions (so events are the state). **Event Streaming is about moving information from one place to another** and integrating multiple components. Read more about in [Event Streaming is not Event Sourcing!](/pl/event_streaming_is_not_event_sourcing/).
 
-Event stores may have similar capabilities as Event Streaming solutions, but the focus is different: 
+Event stores are not messaging tools. They may have similar capabilities as Event Streaming solutions, but the focus is different: 
 - event stores on consistency, durability and quality of data, 
 - event streaming solutions (like Kafka) are focused on delivery, throughput and integration.
 
-**[Event stores are key-value databases!](/en/event_stores_are_key_value_stores)** At least logically. In relational databases, records are called rows; in document databases, documents; in Event Sourcing, they're called streams.
+**[Event stores are key-value databases](/pl/event_stores_are_key_value_stores)** At least logically. In relational databases, records are called rows; in document databases, documents; in Event Sourcing, they're called streams.
 
 In event stores, the stream is built from:
 - **the key** represents a record identifier (e.g. order id, invoice number, car license plate number, etc.), 
@@ -38,7 +38,7 @@ Simple as that, still, most of the time, we were taught that event stores are ap
 
 ![append only log](./append_only_log.png)
 
-**Indeed, physically, most of them are append-only logs.** See: [Emmett PostgreSQL storage](/en/emmett_postgresql_event_store/), [EventStoreDB](https://developers.eventstore.com/), [Marten](https://martendb.io/), [Axon Server](https://www.axoniq.io/products/axon-server). But well, [the same can be said for the relational databases](/en/relational_databases_are_event_stores/). Internally, each operation (INSERT/UPDATE/DELETE) is appended to the [Write-Ahead/Transaction Log](https://www.architecture-weekly.com/p/the-write-ahead-log-a-foundation). Then, upon transaction commit, they're applied to specific tables.
+**Indeed, physically, most of them are append-only logs.** See: [Emmett PostgreSQL storage](/pl/emmett_postgresql_event_store/), [EventStoreDB](https://developers.eventstore.com/), [Marten](https://martendb.io/), [Axon Server](https://www.axoniq.io/products/axon-server). But well, [the same can be said for the relational databases](/pl/relational_databases_are_event_stores/). Internally, each operation (INSERT/UPDATE/DELETE) is appended to the [Write-Ahead/Transaction Log](https://www.architecture-weekly.com/p/the-write-ahead-log-a-foundation). Then, upon transaction commit, they're applied to specific tables.
 
 I haven't seen many (if at all) introductions to relational databases explaining them as append-only logs, and that's fine, as it wouldn't be accessible. We should also stop doing that for event stores.
 
@@ -58,7 +58,7 @@ Ok, enough intro! Let's discuss how to do it using the MongoDB example!
 
 ## Basic Event Stream Definition
 
-Let's try to make the definition of our event stream more formal. Formal? Yes, let's create the code with type definitions to express our requirements more precisely. [Prototyping is an underestimated design skill](/en/prototype_underestimated_design_skill/))
+Let's try to make the definition of our event stream more formal. Formal? Yes, let's create the code with type definitions to express our requirements more precisely. [Prototyping is an underestimated design skill](/pl/prototype_underestimated_design_skill/).
 
 I'll use TypeScript because it's a decent language for that. I won't use much fancy structure, so it should be understandable. If not, paste it into the ChatGPT and translate it into your favourite language. That's how we code today, aye?
 
@@ -94,17 +94,17 @@ Ok, not quite. Let's do a reality check with...
 
 What are the requirements, then? In my opinion, at least:
 - **Appending event at the end of the stream.** We need to be able to record new business facts for a specific entity,
-- **Reading all events from the stream.** That's a must to [get the current entity state from events](/en/how_to_get_the_current_entity_state_in_event_sourcing/). We read all recorded events and apply them to get the current state.
+- **Reading all events from the stream.** That's a must to [get the current entity state from events](/pl/how_to_get_the_current_entity_state_in_event_sourcing/). We read all recorded events and apply them to get the current state.
 - **The guarantee of the ordering within the stream.** It's important to know the order of events in our process. Both in getting the state and integrating it with other workflows.
 - **Being able to read your writes.** As event stores are databases, you should get the new events right after you append them.
-- **Strong-consistent, atomic writes and [optimistic concurrency](/en/optimistic_concurrency_for_pessimistic_times/).** It's a must to know whether we're making a decision based on the latest state and whether conflicting changes have been detected. In other words, ensuring we won't end up in the wrong state.
-- **Store both event data and metadata.** Event data is obvious; it gathers all information related to the business fact that happened. Metadata is needed for the generic handling, such as [telemetry data](/en/set_up_opentelemetry_wtih_event_sourcing_and_marten/).
+- **Strong-consistent, atomic writes and [optimistic concurrency](/pl/optimistic_concurrency_for_pessimistic_times/).** It's a must to know whether we're making a decision based on the latest state and whether conflicting changes have been detected. In other words, ensuring we won't end up in the wrong state.
+- **Store both event data and metadata.** Event data is obvious; it gathers all information related to the business fact that happened. Metadata is needed for the generic handling, such as [telemetry data](/pl/set_up_opentelemetry_wtih_event_sourcing_and_marten/).
 
 The 2nd tier of event stores features (so great to have but not must-haves):
-- **Being able to subscribe to notifications about newly appended events (best if it's push-based). Also, having [at-least once delivery guarantee](/en/outbox_inbox_patterns_and_delivery_guarantees_explained/).** That's important for integrating different business workflows from different streams.
+- **Being able to subscribe to notifications about newly appended events (best if it's push-based). Also, having [at-least once delivery guarantee](/pl/outbox_inbox_patterns_and_delivery_guarantees_explained/).** That's important for integrating different business workflows from different streams.
 - **Built-in projections for building read models**. We need to have performant queries. Reading all events from the stream is fine for business logic but not good enough for querying.
 - **Global ordering of events.** It's both useful for building read models from multiple streams and integrating workflows.
-- **[Streams archiving.](/en/gdpr_in_event_driven_architecture/#archive-data)** So, being able to move the obsolete events (e.g. from completed workflows) to some _cold storage_. The fact that we record all business information doesn't mean that we need to keep them forever.
+- **[Streams archiving.](/pl/gdpr_in_event_driven_architecture/#archive-data)** So, being able to move the obsolete events (e.g. from completed workflows) to some _cold storage_. The fact that we record all business information doesn't mean that we need to keep them forever.
 
 We could expand our Event Store definition into:
 
@@ -143,11 +143,11 @@ Now, let's validate how that fits into the MongoDB capabilities.
 
 ## MongoDB specifics
 
-[Document databases are key-value databases whose values ​​have a defined structure](/en/key-value-stores/). That is why they are called documents. We can compare them to paper applications we send to some government departments. Documents, just like paper ones, can hold various fields and types of data. Usually, they are stored as JSON-like objects.
+[Document databases are key-value databases whose values ​​have a defined structure](/pl/key-value-stores/). That is why they are called documents. We can compare them to paper applications we send to some government departments. Documents, just like paper ones, can hold various fields and types of data. Usually, they are stored as JSON-like objects.
 
 **MongoDB is a document database. Documents are organised into collections, which are similar to tables in relational databases but without a fixed structure.** That means that each document in a collection can have a different set of fields, allowing for a more adaptable and dynamic data model. By storing related data in a single document, MongoDB reduces the need for complex joins, making data retrieval faster and simpler for many applications.
 
-**As I wrote in [my other article](/en/strategy_on_migrating_relational_data_to_document_based/)), contrary to common belief, document data is structured but just less rigidly.** We should define the schema. It should be denormalised, and it is best not to contain cross-document references. It can have relations but not be enforced strictly in a relational way.
+**As I wrote in [my other article](/pl/strategy_on_migrating_relational_data_to_document_based/), contrary to common belief, document data is structured but just less rigidly.** We should define the schema. It should be denormalised, and it is best not to contain cross-document references. It can have relations but not be enforced strictly in a relational way.
 
 Of course, this lack of a fixed schema can also be seen as a downside when maintaining advanced data consistency and integrity, as there are fewer built-in constraints than in relational databases. Relational databases might be more suitable for applications that demand strict data relationships and complex transactions.
 
@@ -662,7 +662,7 @@ We're using [updateOne](https://www.mongodb.com/docs/manual/reference/method/db.
 
 ### Optimistic Concurrency
 
-The final bit to provide the proper consistency guarantees is optimistic concurrency. You can read my [general introduction](/en/optimistic_concurrency_for_pessimistic_times/) and [technical implementation guidance](/en/how_to_use_etag_header_for_optimistic_concurrency/). 
+The final bit to provide the proper consistency guarantees is optimistic concurrency. You can read my [general introduction](/pl/optimistic_concurrency_for_pessimistic_times/) and [technical implementation guidance](/pl/how_to_use_etag_header_for_optimistic_concurrency/). 
 
 We want to detect conflicting updates and race conditions. In other words, it handles concurrency correctly. 
 
@@ -839,7 +839,7 @@ Once we have it, we pass it on to the update statement.
 
 **If the document with a specified stream name and position wasn't found, that means the stream doesn't exist or the stream position is different.** Even though MongoDB will try to insert the document, it'll fail as we have the unique index constraint on the stream name. If no document was upserted, then that means that there was an optimistic concurrency conflict, and we can throw an error. 
 
-**Together with atomic updates, that gives strong guarantees to our MongoDB event store.** Of course, we should consider adding retries in case of concurrency error, but you can read about it [in my other article](/en/idempotent_command_handling/#idempotency-and-optimistic-concurrency).
+**Together with atomic updates, that gives strong guarantees to our MongoDB event store.** Of course, we should consider adding retries in case of concurrency error, but you can read about it [in my other article](/pl/idempotent_command_handling/#idempotency-and-optimistic-concurrency).
 
 
 ## Tradeoffs
@@ -854,7 +854,7 @@ First, MongoDB’s atomic updates and transactions work best on single documents
 
 **In Emmett, we provided the option to have [_inline_ projections](https://github.com/event-driven-io/emmett/blob/e8e0b3c8f9620dc42c4888f9dccbf4fd3e69d384/src/packages/emmett-mongodb/src/eventStore/projections/mongoDBInlineProjection.ts#L147) stored in the stream document, together with events.** That allows atomic updates in the same operation as events append. I'll expand on it in the follow-up post.
 
-**There's also a valid concern [raised by Robert Kawecki](https://www.reddit.com/r/node/comments/1hy5n9t/comment/m6etazv) about the maximum size of the MongoDB document.** The maximum size is 16MB, which is actually more than the raw JSON size, as BSON used in MongoDB is a binary format. If we keep our streams short, that should be sufficient for most cases. The stream per document will need to be chunked into multiple documents. The proposed structure could be expanded to include chunk numbers and setting a unique index on streamName and chunk number. That will allow moving events to the new document once the size is reached. We may also need to use [snapshots](https://www.eventstore.com/blog/snapshots-in-event-sourcing). I'll cover this _2nd-day issue_ in the dedicated blog article.
+**There's also a valid concern [raised by Robert Kawecki](https://www.reddit.com/r/node/comments/1hy5n9t/comment/m6etazv). The maximum size of the MongoDB document is 16MB.** This is, actually, more than the raw JSON size, as BSON used in MongoDB is a binary format. If we keep our streams short, that should be sufficient for most cases. The stream per document will need to be chunked into multiple documents. The proposed structure could be expanded to include chunk numbers and setting a unique index on streamName and chunk number. That will allow moving events to the new document once the size is reached. We may also need to use [snapshots](https://www.eventstore.com/blog/snapshots-in-event-sourcing). I'll cover this _2nd-day issue_ in the dedicated blog article.
 
 Lastly, from a durability perspective, past [Jepsen tests](https://jepsen.io/analyses/mongodb-4.2.6) have flagged edge cases under certain configurations and failover scenarios, indicating you’ll want to pay close attention to cluster setup and operational practices. None of that rules MongoDB out—it just means that if you absolutely need a strict global ordering or bulletproof multi-document consistency, a specialized event store (or a fully ACID relational system) might be a better fit.
 
@@ -862,9 +862,9 @@ Otherwise, if per-stream concurrency and ordering suffice, this MongoDB-based st
 
 ## TLDR
 
-I'd still use [PostgreSQL event store](/en/emmett_postgresql_event_store/) as the default choice, but MongoDB implementation appeared surprisingly good.
+I'd still use [PostgreSQL event store](/pl/emmett_postgresql_event_store/) as the default choice, but MongoDB implementation appeared surprisingly good.
 
-Despite these limitations, many real-world applications do not require global event ordering or the highest levels of transactional consistency. If your workloads are primarily focused on per-stream ordering and optimistic concurrency within a single document, the described MongoDB strategy can be surprisingly effective. 
+Despite MongoDB limitations, many real-world applications do not require global event ordering or the highest levels of transactional consistency. If your workloads are primarily focused on per-stream ordering and optimistic concurrency within a single document, the described MongoDB strategy can be surprisingly effective. 
 
 You can achieve a decent event store solution without deploying an entirely new infrastructure by treating each stream as a document, using upserts for atomic event append operations, and relying on MongoDB’s flexible schema. 
 
@@ -887,11 +887,11 @@ If you're not in Node.js land and want me to help you build it [contact me](mail
 **Please also share with me your thoughts, and share the article with your friends if you enjoyed it!** That'd be much appreciated, as writing it took me a hellova time.
 
 If you liked this article, you may also find those interesting:
-- [Event stores are key-value databases!](/en/event_stores_are_key_value_stores)
-- [Event Streaming is not Event Sourcing!](/en/event_streaming_is_not_event_sourcing/)
-- [Let's build event store in one hour!](/en/lets_build_event_store_in_one_hour/)
+- [Event stores are key-value databases!](/pl/event_stores_are_key_value_stores)
+- [Event Streaming is not Event Sourcing!](/pl/event_streaming_is_not_event_sourcing/)
+- [Let's build event store in one hour!](/pl/lets_build_event_store_in_one_hour/)
 - [Using S3 but not the way you expected. S3 as strongly consistent event store](https://www.architecture-weekly.com/p/using-s3-but-not-the-way-you-expected)
-- [Let's talk about positions in event stores](/en/lets_talk_about_positions_in_event_stores/)
+- [Let's talk about positions in event stores](/pl/lets_talk_about_positions_in_event_stores/)
 
 Cheers!
 

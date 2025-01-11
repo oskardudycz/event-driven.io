@@ -15,21 +15,19 @@ A few things are needed for that. The first and most important thing is to have 
 
 **I was lucky to have such with [Alexander Lay-Calvert](https://www.linkedin.com/in/alexander-lay-calvert-2179501b4/).** He did most of the hard work; I was helping conceptually and with final touches. So, what you read today is a summary of our conjoined effort with a majority made by Alex.
 
-Whar else is needed? Let's discuss that today!
+What else is needed? Let's discuss that today!
 
 ## Event stores as key-value stores
 
-**In this article, we'll use the canonical definition of event sourcing.** So we'll expect to use our event store as a regular database, not as a way to just keep the messages logged or to publish it further. 
-
-There's a skewed perspective conflating Event Sourcing with Event Streaming.
+**In this article, we'll use the canonical definition of event sourcing.**
 
 **Event Sourcing is about making decisions**, capturing their outcomes (so events) and using them to make further decisions (so events are the state). **Event Streaming is about moving information from one place to another** and integrating multiple components. Read more about in [Event Streaming is not Event Sourcing!](/en/event_streaming_is_not_event_sourcing/).
 
-Event stores may have similar capabilities as Event Streaming solutions, but the focus is different: 
+Event stores are not messaging tools. They may have similar capabilities as Event Streaming solutions, but the focus is different: 
 - event stores on consistency, durability and quality of data, 
 - event streaming solutions (like Kafka) are focused on delivery, throughput and integration.
 
-**[Event stores are key-value databases!](/en/event_stores_are_key_value_stores)** At least logically. In relational databases, records are called rows; in document databases, documents; in Event Sourcing, they're called streams.
+**[Event stores are key-value databases](/en/event_stores_are_key_value_stores)** At least logically. In relational databases, records are called rows; in document databases, documents; in Event Sourcing, they're called streams.
 
 In event stores, the stream is built from:
 - **the key** represents a record identifier (e.g. order id, invoice number, car license plate number, etc.), 
@@ -59,7 +57,7 @@ Ok, enough intro! Let's discuss how to do it using the MongoDB example!
 
 ## Basic Event Stream Definition
 
-Let's try to make the definition of our event stream more formal. Formal? Yes, let's create the code with type definitions to express our requirements more precisely. [Prototyping is an underestimated design skill](/en/prototype_underestimated_design_skill/))
+Let's try to make the definition of our event stream more formal. Formal? Yes, let's create the code with type definitions to express our requirements more precisely. [Prototyping is an underestimated design skill](/en/prototype_underestimated_design_skill/).
 
 I'll use TypeScript because it's a decent language for that. I won't use much fancy structure, so it should be understandable. If not, paste it into the ChatGPT and translate it into your favourite language. That's how we code today, aye?
 
@@ -148,7 +146,7 @@ Now, let's validate how that fits into the MongoDB capabilities.
 
 **MongoDB is a document database. Documents are organised into collections, which are similar to tables in relational databases but without a fixed structure.** That means that each document in a collection can have a different set of fields, allowing for a more adaptable and dynamic data model. By storing related data in a single document, MongoDB reduces the need for complex joins, making data retrieval faster and simpler for many applications.
 
-**As I wrote in [my other article](/en/strategy_on_migrating_relational_data_to_document_based/)), contrary to common belief, document data is structured but just less rigidly.** We should define the schema. It should be denormalised, and it is best not to contain cross-document references. It can have relations but not be enforced strictly in a relational way.
+**As I wrote in [my other article](/en/strategy_on_migrating_relational_data_to_document_based/), contrary to common belief, document data is structured but just less rigidly.** We should define the schema. It should be denormalised, and it is best not to contain cross-document references. It can have relations but not be enforced strictly in a relational way.
 
 Of course, this lack of a fixed schema can also be seen as a downside when maintaining advanced data consistency and integrity, as there are fewer built-in constraints than in relational databases. Relational databases might be more suitable for applications that demand strict data relationships and complex transactions.
 
@@ -855,7 +853,7 @@ First, MongoDB’s atomic updates and transactions work best on single documents
 
 **In Emmett, we provided the option to have [_inline_ projections](https://github.com/event-driven-io/emmett/blob/e8e0b3c8f9620dc42c4888f9dccbf4fd3e69d384/src/packages/emmett-mongodb/src/eventStore/projections/mongoDBInlineProjection.ts#L147) stored in the stream document, together with events.** That allows atomic updates in the same operation as events append. I'll expand on it in the follow-up post.
 
-**There's also a valid concern [raised by Robert Kawecki](https://www.reddit.com/r/node/comments/1hy5n9t/comment/m6etazv) about the maximum size of the MongoDB document.** The maximum size is 16MB, which is actually more than the raw JSON size, as BSON used in MongoDB is a binary format. If we keep our streams short, that should be sufficient for most cases. The stream per document will need to be chunked into multiple documents. The proposed structure could be expanded to include chunk numbers and setting a unique index on streamName and chunk number. That will allow moving events to the new document once the size is reached. We may also need to use [snapshots](https://www.eventstore.com/blog/snapshots-in-event-sourcing). I'll cover this _2nd-day issue_ in the dedicated blog article.
+**There's also a valid concern [raised by Robert Kawecki](https://www.reddit.com/r/node/comments/1hy5n9t/comment/m6etazv). The maximum size of the MongoDB document is 16MB.** This is, actually, more than the raw JSON size, as BSON used in MongoDB is a binary format. If we keep our streams short, that should be sufficient for most cases. The stream per document will need to be chunked into multiple documents. The proposed structure could be expanded to include chunk numbers and setting a unique index on streamName and chunk number. That will allow moving events to the new document once the size is reached. We may also need to use [snapshots](https://www.eventstore.com/blog/snapshots-in-event-sourcing). I'll cover this _2nd-day issue_ in the dedicated blog article.
 
 Lastly, from a durability perspective, past [Jepsen tests](https://jepsen.io/analyses/mongodb-4.2.6) have flagged edge cases under certain configurations and failover scenarios, indicating you’ll want to pay close attention to cluster setup and operational practices. None of that rules MongoDB out—it just means that if you absolutely need a strict global ordering or bulletproof multi-document consistency, a specialized event store (or a fully ACID relational system) might be a better fit.
 
@@ -865,7 +863,7 @@ Otherwise, if per-stream concurrency and ordering suffice, this MongoDB-based st
 
 I'd still use [PostgreSQL event store](/en/emmett_postgresql_event_store/) as the default choice, but MongoDB implementation appeared surprisingly good.
 
-Despite these limitations, many real-world applications do not require global event ordering or the highest levels of transactional consistency. If your workloads are primarily focused on per-stream ordering and optimistic concurrency within a single document, the described MongoDB strategy can be surprisingly effective. 
+Despite MongoDB limitations, many real-world applications do not require global event ordering or the highest levels of transactional consistency. If your workloads are primarily focused on per-stream ordering and optimistic concurrency within a single document, the described MongoDB strategy can be surprisingly effective. 
 
 You can achieve a decent event store solution without deploying an entirely new infrastructure by treating each stream as a document, using upserts for atomic event append operations, and relying on MongoDB’s flexible schema. 
 
