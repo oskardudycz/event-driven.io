@@ -21,13 +21,13 @@ What else is needed? Let's discuss that today!
 
 **In this article, we'll use the canonical definition of event sourcing.**
 
-**Event Sourcing is about making decisions**, capturing their outcomes (so events) and using them to make further decisions (so events are the state). We do that by reading all the events we recorded already for the specifis process/entity, applying them and forming in-memory decision model that we use to check our business rules, and deciding whether we record the next events.
+**Event Sourcing is about making decisions**, capturing their outcomes (so events) and using them to make further decisions (so events are the state). We do that by reading all the events we recorded already for the specific process/entity. We apply them and form in-memory decision model that we use to check our business rules, and deciding whether we record the next events.
 
 **Event Streaming is about moving information from one place to another** and integrating multiple components. Read more about in [Event Streaming is not Event Sourcing!](/en/event_streaming_is_not_event_sourcing/).
 
 Event stores are not messaging tools. They may have similar capabilities as Event Streaming solutions, but the focus is different: 
-- event stores on consistency, durability and quality of data, 
-- event streaming solutions (like Kafka) are focused on delivery, throughput and integration.
+- event stores are focus on consistency, durability and quality of data, 
+- event streaming solutions (like Kafka) are focus on delivery, throughput and integration.
 
 **[Event stores are key-value databases](/en/event_stores_are_key_value_stores)** At least logically. In relational databases, records are called rows; in document databases, documents; in Event Sourcing, they're called streams.
 
@@ -117,7 +117,7 @@ interface EventStore {
 }
 ```
 
-And show pseud-code implementation as:
+And show pseudo-code implementation as:
 
 ```ts
 function getEventStore(): EventStore {
@@ -414,7 +414,6 @@ Or separate storage for each customer?
 ![Database per tenant](database-per-tenant.png)
 
 Or maybe use a single database but combine the stream type with the customer name, or use another sharding strategy. Why not? 
-
 
 Moreover, we can also allow users to select different Mongo databases for storage and logical separation.
 
@@ -855,7 +854,7 @@ First, MongoDB’s atomic updates and transactions work best on single documents
 
 **In Emmett, we provided the option to have [_inline_ projections](https://github.com/event-driven-io/emmett/blob/e8e0b3c8f9620dc42c4888f9dccbf4fd3e69d384/src/packages/emmett-mongodb/src/eventStore/projections/mongoDBInlineProjection.ts#L147) stored in the stream document, together with events.** That allows atomic updates in the same operation as events append. I'll expand on it in the follow-up post.
 
-**There's also a valid concern [raised by Robert Kawecki](https://www.reddit.com/r/node/comments/1hy5n9t/comment/m6etazv). The maximum size of the MongoDB document is 16MB.** This is, actually, more than the raw JSON size, as BSON used in MongoDB is a binary format. If we keep our streams short, that should be sufficient for most cases. The stream per document will need to be chunked into multiple documents. The proposed structure could be expanded to include chunk numbers and setting a unique index on streamName and chunk number. That will allow moving events to the new document once the size is reached. We may also need to use [snapshots](https://www.eventstore.com/blog/snapshots-in-event-sourcing). I'll cover this _2nd-day issue_ in the dedicated blog article.
+**There's also a valid concern [raised by Robert Kawecki](https://www.reddit.com/r/node/comments/1hy5n9t/comment/m6etazv). The maximum size of the MongoDB document is 16MB.** This is, actually, more than the raw JSON size, as BSON used in MongoDB is a binary format. If we [keep our streams short](https://www.kurrent.io/blog/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention), that should be sufficient for most cases. The stream per document will need to be chunked into multiple documents. The proposed structure could be expanded to include chunk numbers and setting a unique index on streamName and chunk number. That will allow moving events to the new document once the size is reached. We may also need to use [snapshots](https://www.eventstore.com/blog/snapshots-in-event-sourcing). I'll cover this _2nd-day issue_ in the dedicated blog article.
 
 Lastly, from a durability perspective, past [Jepsen tests](https://jepsen.io/analyses/mongodb-4.2.6) have flagged edge cases under certain configurations and failover scenarios, indicating you’ll want to pay close attention to cluster setup and operational practices. None of that rules MongoDB out—it just means that if you absolutely need a strict global ordering or bulletproof multi-document consistency, a specialized event store (or a fully ACID relational system) might be a better fit.
 
