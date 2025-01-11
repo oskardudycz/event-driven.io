@@ -19,9 +19,11 @@ Whar else is needed? Let's discuss that today!
 
 ## Event stores as key-value stores
 
-**Here, I'll add a disclaimer: We'll be using the canonical definition of event sourcing.** So we'll expect to use our event store as a regular database, not as a way to just keep the messages logged or publish it further. 
+**In this article, we'll use the canonical definition of event sourcing.** So we'll expect to use our event store as a regular database, not as a way to just keep the messages logged or to publish it further. 
 
-There's a skewed perspective [conflating Event Sourcing with Event Streaming. **Event Sourcing is about making decisions**, capturing their outcomes (so events) and using them to make further decisions (so events are the state). **Event Streaming is about moving information from one place to another** and integrating multiple components. Read more about in [Event Streaming is not Event Sourcing!](/en/event_streaming_is_not_event_sourcing/).
+There's a skewed perspective conflating Event Sourcing with Event Streaming.
+
+**Event Sourcing is about making decisions**, capturing their outcomes (so events) and using them to make further decisions (so events are the state). **Event Streaming is about moving information from one place to another** and integrating multiple components. Read more about in [Event Streaming is not Event Sourcing!](/en/event_streaming_is_not_event_sourcing/).
 
 Event stores may have similar capabilities as Event Streaming solutions, but the focus is different: 
 - event stores on consistency, durability and quality of data, 
