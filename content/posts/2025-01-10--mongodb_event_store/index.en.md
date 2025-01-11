@@ -7,7 +7,7 @@ author: oskar dudycz
 
 ![](2025-01-10-cover.png)
 
-**I have always said that is not the best choice for event storage, and guess what?** I just released the stable version of the MongoDB event store in [Emmett](https://github.com/event-driven-io/emmett). 
+**I have always said that MongoDB is not the best choice for event storage, and guess what?** I [just released](https://github.com/event-driven-io/emmett/releases/tag/0.23.0) the stable version of the MongoDB event store in [Emmett](https://github.com/event-driven-io/emmett). 
 
 **And let me explain today how to build an event store on top of MongoDB** It'll be a detailed article, but I think it's an interesting piece, so fasten your seat belts!
 
