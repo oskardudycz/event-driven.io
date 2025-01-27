@@ -33,6 +33,8 @@ Event Sourcing wymaga nowego zestawu praktyk i uzyskania pewności siebie w proj
 - wyzwania związane z Event Sourcing i zalecane rozwiązania,
 - Event Sourcing w połączeniu z CQRS, Vertical Slices i innymi wzorcami.
 
+**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/kqZg1tyPWhitNsmV6)**
+
 ## O mnie
 
 **Jestem niezależnym architektem i konsultantem specjalizującym się w tworzeniu systemów ściśle dostosowanych do potrzeb biznesowych.** Tworzę je od ponad 17 lat. Jestem pasjonatem projektowania solidnych systemów, narzędzi i struktur. Skupiam się na ułatwianiu ludziom życia za pomocą technologii.
@@ -113,6 +115,8 @@ Terminy szkoleń to:
 - 10.03.2025
 - 11.03.2025
 
+**Koszt szkolenia 3000 PLN (+ VAT).**
+
 ## Dlaczego warto wziąć udział w tym szkoleniu?
 
 **Zbudujesz kompletną aplikację używając Event Sourcing.** Będzie to względnie prosta aplikacja, ale gotowa do użycia. Może być szablonem do stosowania Event Sourcing w Twoich systemach. 
@@ -120,6 +124,8 @@ Terminy szkoleń to:
 Zdobędziesz przewagę konkurencyjną nad innymi, wiedząc, jak sprawić, by Twoje systemy były obserwowalne i śledzone. **Na obecnym rynku pracy taka wiedza może być cennym wyróżnikiem.**
 
 Zrozumiesz gdzie używać i gdzie nie używać Event Sourcing. Zyskasz dobre fundamenty do podejmowania decyzji architektonicznych oraz dodatkowe materiały do dalszego poszerzenia wiedzy.
+
+**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/kqZg1tyPWhitNsmV6)**
 
 ## Referencje
 
@@ -130,6 +136,10 @@ Jeśli powyższe Cię nie przekonało, zerknij na [opinie innych ludzi o moich w
 ![rekomendacja](../../../src/images/recommendations/r02.png)
 
 ![rekomendacja](../../../src/images/recommendations/r20.png)
+
+![rekomendacja](../../../src/images/recommendations/r10.png)
+
+![rekomendacja](../../../src/images/recommendations/r24.png)
 
 ![rekomendacja](../../../src/images/recommendations/r22.png)
 
@@ -153,8 +163,6 @@ Jeśli powyższe Cię nie przekonało, zerknij na [opinie innych ludzi o moich w
 
 ![rekomendacja](../../../src/images/recommendations/r11.png)
 
-![rekomendacja](../../../src/images/recommendations/r10.png)
-
 ![rekomendacja](../../../src/images/recommendations/r09.png)
 
 ![rekomendacja](../../../src/images/recommendations/r08.png)
@@ -170,3 +178,7 @@ Jeśli powyższe Cię nie przekonało, zerknij na [opinie innych ludzi o moich w
 ![rekomendacja](../../../src/images/recommendations/r03.png)
 
 ![rekomendacja](../../../src/images/recommendations/r01.png)
+
+**To co, przekonałem Cię?**
+
+**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/kqZg1tyPWhitNsmV6)**
