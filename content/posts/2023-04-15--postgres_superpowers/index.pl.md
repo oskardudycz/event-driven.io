@@ -555,7 +555,7 @@ I hope this article shows you how extensible and powerful Postgres is and that i
 
 Watch also more and see full considerations in the [webinar recording](https://www.architecture-weekly.com/p/webinar-10-postgresql-superpowers).
 
-[![cover](2023-04-15-webinar.png)](https://www.architecture-weekly.com/p/webinar-10-postgresql-superpowers)
+`youtube: https://www.youtube.com/watch?v=2oUow8SWVaI`
 
 Want to see full code? Check my repositories:
 - [Postgres for .NET developer](https://github.com/oskardudycz/postgres-for-dotnet-dev)
