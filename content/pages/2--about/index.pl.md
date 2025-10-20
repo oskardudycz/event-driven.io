@@ -3,7 +3,7 @@ title: Cześć! Nazywam się Oskar Dudycz
 menuTitle: menu.about
 ---
 
-Od ponad 15 lat, tworzę systemy informatyczne bliskie biznesowi. Zaczynałem karierę gdy StackOverflow jeszcze nie istniał. Jestem programistą, liderem technicznym, architektem.
+Od ponad 18 lat, tworzę systemy informatyczne bliskie biznesowi. Zaczynałem karierę gdy StackOverflow jeszcze nie istniał. Jestem programistą, liderem technicznym, architektem.
 
 ![photo](bg-1.jpg)
 

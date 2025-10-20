@@ -12,7 +12,7 @@ I like building well-designed systems, tools and frameworks that are used on pro
 That's why I am:
 
 - running workshops and training about **Event Sourcing**, CQRS and event-driven architectures.
-- co-maintainer of [Marten](https://martendb.io/) OSS library that allows implementing **Event Sourcing**.
+- creator of [Emmett](https://event-driven-io.github.io/emmett/getting-started.html) OSS library that allows implementing **Event Sourcing**.
 - providing Event Sourcing in real-world samples and tutorials in [my Github Repository](https://github.com/oskardudycz/EventSourcing.NetCore)
 - share my knowledge on the blog of how to create good, modular applications pragmatically.
 
