@@ -59,9 +59,9 @@ Of course, we can do more. We'll discuss today a simple technique with Read Mode
 
 Let's say that you're using Event Sourcing in your system. You take all the messages coming from other systems, and you store them in your event store. 
 
-Event Sourcing assumes you can rebuild state by replaying events in sequence. When `FraudScoreCalculated` arrives before `PaymentInitiated`, the payment doesn't exist. You can't apply a fraud score to nothing. You realise that when your carefully designed domain model throws exceptions. This should never happen, aye?
+Event Sourcing assumes you can rebuild state by replaying events in sequence. When _FraudScoreCalculated_ arrives before _PaymentInitiated_, the payment doesn't exist. You can't apply a fraud score to nothing. You realise that when your carefully designed domain model throws exceptions. This should never happen, aye?
 
-This isn't specific to Event Sourcing. Even if you don't use it but just update read models directly from events, you have the same problem. Your read model update handler for `FraudScoreCalculated` looks for a payment document to update. No document exists. The update fails.
+This isn't specific to Event Sourcing. Even if you don't use it but just update read models directly from events, you have the same problem. Your read model update handler for _FraudScoreCalculated_ looks for a payment document to update. No document exists. The update fails.
 
 Such issues are a recurring theme in my consulting, as they are a common concern for my customers. My advice is usually: Don't try to fight them. 
 
@@ -86,6 +86,7 @@ type PaymentVerificationEvent =
   | PaymentCompleted
   | PaymentDeclined;
 ```
+
 Having
 
 ```typescript
@@ -199,7 +200,7 @@ type MerchantLimits = {
 };
 
 type Decision = {
-  approval: "approve" | "decline";
+  approval: "approved" | " declined";
   reason: string;
   decidedAt: Date;
 };
@@ -211,18 +212,67 @@ Of course, sometimes things can get harder. We do not always have acertain id, s
 
 How do we update our read model? We need a function that takes the current state (or null if it doesn't exist) and the event we apply on top of it, returning the new state.
 
+It can look as follows:
+
+```typescript
+function evolve(
+  current: PaymentVerification,
+  event: PaymentVerificationEvent
+): PaymentVerification | null {
+  current = current ?? initialState;
+
+  switch (event.type) {
+    case "PaymentInitiated": 
+      return onPaymentInitiated(current, event);
+    case "FraudScoreCalculated": 
+      return onFraudScoreCalculated(current, event);
+    case "RiskAssessmentCompleted": 
+      return onRiskAssessmentCompleted(current, event);
+    case "MerchantLimitsChecked": 
+      return onMerchantLimitsChecked(current, event);
+    case "PaymentCompleted": 
+      return onPaymentCompleted(current, event);
+    case "PaymentDeclined": 
+      return onPaymentDeclined(current, event);
+};
+
+const initialState: PaymentVerification = { 
+  paymentId: event.paymentId, 
+  status: 'unknown', 
+  completionPercentage: 0, 
+  lastUpdated: new Date(), 
+  dataQuality: 'partial' 
+};
+
+// Using Emmett it could be defined as
+export const paymentVerificationProjection = pongoSingleStreamProjection({
+  // collection to where we store projection
+  collectionName: 'paymentVerification',
+  getDocumentId: (event) => event.data.paymentId,
+  evolve,
+  canHandle: [
+    'PaymentInitiated',
+    'FraudScoreCalculated',
+    'RiskAssessmentCompleted',
+    'MerchantLimitsChecked',
+    'PaymentApproved',
+    'PaymentDeclined',
+  ],
+  // use this state when there's no document in collection of certain id
+  initialState: () => initialState,
+});
+```
+
 And yes, even if the data is not in the state we expect, we can always create the _**Phantom Record**_ that represents the best state we can in the conditions we have.
 
 What if fraud scoring arrives first?
 
 ```typescript
-case 'FraudScoreCalculated': {
-  // assign data we have even if record doesn't exist.
-  const existing = current ?? { paymentId: event.paymentId, status: 'unknown', completionPercentage: 0, lastUpdated: new Date(), dataQuality: 'partial' };
-
-  if (existing.fraudAssessment && event.calculatedAt <= existing.fraudAssessment.assessedAt) {
-    return existing;
-  }
+function onFraudScoreCalculated(
+  current: PaymentVerification,
+  { type, data: event }: FraudScoreCalculated): PaymentVerification {
+  if (current.fraudAssessment && event.calculatedAt <= current.fraudAssessment.assessedAt)
+    return current;
 
   const fraudAssessment: FraudAssessment = {
     score: event.score,
@@ -230,25 +280,24 @@ case 'FraudScoreCalculated': {
     assessedAt: event.calculatedAt,
   };
 
-  if (event.riskLevel === 'high') {
+  const updated = {
+    ...current,
+    fraudAssessment,
+    lastUpdated: event.calculatedAt,
+  }
+
+  if (event.riskLevel !== 'high')
     return {
-      ...existing,
-      fraudAssessment,
+      ...updated,
       status: 'declined',
       decision: {
         approval: 'decline',
         reason: `High fraud risk detected: score ${event.score}`,
         decidedAt: event.calculatedAt,
       },
-      lastUpdated: event.calculatedAt,
     };
-  }
 
-  return {
-    ...existing,
-    fraudAssessment,
-    lastUpdated: event.calculatedAt,
-  };
+  return updated;
 }
 ```
 
@@ -257,51 +306,36 @@ I told you that you should not use a timestamp, but I did it on my own. We canno
 Now, lets have a look on the payment initiation when fraud scoring might have already completed:
 
 ```typescript
-const evolve = (
-  current: PaymentVerification | null,
-  { type, data: event }: PaymentVerificationEvent
-): PaymentVerification | null => {
-  switch (type) {
-    case "PaymentInitiated": {
-      // take what we have or create a new one
-      const existing = current ?? {
-        paymentId: event.paymentId,
-        status: "unknown",
-        completionPercentage: 0,
-        lastUpdated: new Date(),
-        dataQuality: "partial",
-      };
-
-      return {
-        ...existing,
-        payment: {
-          amount: event.amount,
-          currency: event.currency,
-          gatewayId: event.gatewayId,
-          initiatedAt: event.initiatedAt,
-        },
-        lastUpdated: event.initiatedAt,
-      };
-    }
-  }
-  // (...) other cases for event types
+function onPaymentInitiated(
+  current: PaymentVerification,
+  { type, data: event }: PaymentInitiated): PaymentVerification {
+  return {
+    ...current,
+    payment: {
+      amount: event.amount,
+      currency: event.currency,
+      gatewayId: event.gatewayId,
+      initiatedAt: event.initiatedAt,
+    },
+    lastUpdated: event.initiatedAt,
+  };
 };
 ```
 
-If fraud scoring was completed first, _current_ already has fraud data. The handler merges payment details into the existing state.
+If fraud scoring was completed first, _current_ already has fraud data. The handler merges payment details into the current state.
 
 We can also mark that in the field that I called _dataQuality_. It may not be the perfect name, but I used it to indicate that we can have a field that lets us decide whether data is as expected, or if we hit reality. Based on that, we can decide how to display it, or whether to display it at all. Thus, the name "phantom record". It may look like phantom as it's missing some data but it's the best data we have.
 
 ```typescript
-case 'PaymentCompleted': {
-  const existing = current ?? { paymentId: event.paymentId, status: 'unknown' as const, completionPercentage: 0, lastUpdated: new Date(), dataQuality: 'partial' as const };
-
-  if (existing.fraudAssessment?.riskLevel === 'high') {
+function onPaymentCompleted(
+  current: PaymentVerification,
+  { type, data: event }: PaymentCompleted): PaymentVerification {
+  if (current.fraudAssessment?.riskLevel === 'high') {
     return {
-      ...existing,
+      ...current,
       decision: {
         approval: 'decline',
-        reason: `Approval attempted but overridden by fraud (score: ${existing.fraudAssessment.score})`,
+        reason: `Approval attempted but overridden by fraud (score: ${current.fraudAssessment.score})`,
         decidedAt: event.approvedAt,
       },
       lastUpdated: event.approvedAt,
@@ -309,7 +343,7 @@ case 'PaymentCompleted': {
   }
 
   return {
-    ...existing,
+    ...current,
     status: 'approved',
     decision: {
       approval: 'approve',
@@ -323,12 +357,12 @@ case 'PaymentCompleted': {
 
 ## Waiting for Dependencies
 
-Some decisions need multiple pieces. The `MerchantLimitsChecked` handler waits for both fraud assessment and merchant limits. If we receive merchant limits first and don't have a fraud assessment yet, we simply store the information; the same applies if it goes the other way. When we eventually get both, we can make the final update, e.g. about the final payment approval or decline.
+Some decisions need multiple pieces. The _MerchantLimitsChecked_ handler waits for both fraud assessment and merchant limits. If we receive merchant limits first and don't have a fraud assessment yet, we simply store the information; the same applies if it goes the other way. When we eventually get both, we can make the final update, e.g. about the final payment approval or decline.
 
 ```typescript
-case 'MerchantLimitsChecked': {
-  const existing = current ?? { paymentId: event.paymentId, status: 'unknown' as const, completionPercentage: 0, lastUpdated: new Date(), dataQuality: 'partial' as const };
-
+function onMerchantLimitsChecked(
+  current: PaymentVerification,
+  { type, data: event }: MerchantLimitsChecked): PaymentVerification {
   const merchantLimits: MerchantLimits = {
     withinLimits: event.withinLimits,
     dailyRemaining: event.dailyRemaining,
@@ -336,55 +370,44 @@ case 'MerchantLimitsChecked': {
   };
 
   const updated = {
-    ...existing,
+    ...current,
     merchantLimits,
     lastUpdated: event.checkedAt,
   };
 
   // Check if we now have BOTH critical pieces
-  if (updated.fraudAssessment && updated.merchantLimits) {
-    // Both present - can make final decision
-    if (updated.fraudAssessment.riskLevel === 'high') {
-      return {
-        ...updated,
-        status: 'declined',
-        decision: {
-          approval: 'decline',
-          reason: 'High fraud risk',
-          decidedAt: event.checkedAt,
-        },
-      };
-    }
-
-    if (!updated.merchantLimits.withinLimits) {
-      return {
-        ...updated,
-        status: 'declined',
-        decision: {
-          approval: 'decline',
-          reason: 'Exceeds merchant limits',
-          decidedAt: event.checkedAt,
-        },
-      };
-    }
-
-    // Both checks pass - approve
+  if (!updated.fraudAssessment || !updated.merchantLimits)
+    // Don't have both yet - stay in processing
     return {
       ...updated,
-      status: 'approved',
-      decision: {
-        approval: 'approve',
-        reason: 'Verified',
-        decidedAt: event.checkedAt,
-      },
+      status: "processing",
+      dataQuality: "processing",
     };
-  }
 
-  // Don't have both yet - stay in processing
+  // Both present - can make final decision
+  const decision =
+    updated.fraudAssessment.riskLevel === "high"
+      ? {
+          approval: "declined",
+          reason: "High fraud risk",
+          decidedAt: event.checkedAt,
+        }
+      : !updated.merchantLimits.withinLimits
+      ? {
+          approval: "declined",
+          reason: "High fraud risk",
+          decidedAt: event.checkedAt,
+        }
+      : {
+          approval: "approved",
+          reason: "Verified",
+          decidedAt: event.checkedAt,
+        };
+        
   return {
     ...updated,
-    status: 'processing',
-    dataQuality: 'processing'
+    status: decision.approval,
+    decision,
   };
 }
 ```
@@ -395,7 +418,7 @@ And now we're reaching the grey matter, where this can become an anti-pattern. I
 
 I'm sure you've used or seen Anti-Corruption Layers. They're usually places where all the weird logic lands. We want to protect our core logic, pushing all hacks to one, hidden place. This strategy makes some sense; that's why it's called Anti-Corruption Layer. Yet...
 
-Yet, we should not push it to the limits, as we'll end up with an unmaintainable beast. With the last example, we've reached or even passed the limits of what projection should be responsible for. The projection should just interpret upcoming information and store the result. It should not make decisions. Business logic is responsible for making business logic.
+Yet, we should not push it to the limits, as we'll end up with an unmaintainable beast. With the last example, we've reached or even passed the limits of what projection should be responsible for. The projection should just interpret upcoming information and store the result. It should not make decisions. Business logic is responsible for making decisions.
 
 What we actually ended up with in the last step is a form of [process manager, or workflow](https://www.architecture-weekly.com/p/workflow-engine-design-proposal-tell), so a state machine that listens to events, gets its current state and makes further decisions. And what's the best way to inform the outside world about making new decisions? Well, producing a new event.
 
@@ -405,7 +428,7 @@ We could define an event as:
 type PaymentVerificationCompleted = {
   type: "PaymentVerificationCompleted";
   data: { 
-    approval: "approve" | "decline";
+    approval: "approved" | " declined";
     reason: string;
     decidedAt: Date; 
   };
@@ -416,27 +439,20 @@ As we're making decisions, let's be frank and rename _evolve_ function to _decid
 
 It could look like that:
 
-
 ```typescript
-const decide = async (
+function decide(
   current: PaymentVerification | null,
   event: PaymentVerificationEvent
 ):
   | PaymentVerification
-  | { document: PaymentVerification; events: VerificationEvent[] } => {
-  const existing = current ?? {
-    paymentId: event.paymentId,
-    status: "unknown",
-    completionPercentage: 0,
-    lastUpdated: new Date(),
-    dataQuality: "partial",
-  };
+  | { document: PaymentVerification; events: VerificationEvent[] } {
+  current = current ?? initialState;
 
   switch (event.type) {
     // (...) other event handlers
     case "MerchantLimitsChecked": {
       const updated = {
-        ...existing,
+        ...current,
         merchantLimits: {
           withinLimits: event.withinLimits,
           dailyRemaining: event.dailyRemaining,
@@ -449,13 +465,13 @@ const decide = async (
     }
     case "FraudScoreCalculated": {
       if (
-        existing.fraudAssessment &&
-        event.calculatedAt <= existing.fraudAssessment.assessedAt
+        current.fraudAssessment &&
+        event.calculatedAt <= current.fraudAssessment.assessedAt
       )
-        return existing;
+        return current;
 
       const updated = {
-        ...existing,
+        ...current,
         fraudAssessment: {
           score: event.score,
           riskLevel: event.riskLevel,
@@ -473,12 +489,12 @@ const decide = async (
 We update the state and try to complete verification if we gathered both merchant limits and risk assessment. This could be encapsulated in a dedicated method, as the logic is the same now matter which event came first:
 
 ```typescript
-const tryCompleteVerification = (
+function tryCompleteVerification(
   current: PaymentVerification,
   event: PaymentVerificationEvent
 ):
   | PaymentVerification
-  | { document: PaymentVerification; events: VerificationEvent[] } => {
+  | { document: PaymentVerification; events: VerificationEvent[] } {
   // Check if we now have BOTH critical pieces
   if (!updated.fraudAssessment || !updated.merchantLimits)
     // Don't have both yet - stay in processing
@@ -568,6 +584,20 @@ Sometimes the proper solution is fixing your message topology. Route related eve
 Build your local models and live with partial state. Process events in any order. Make decisions with available data. That's how you build reliable systems on unreliable foundations.
 
 **If you're dealing with such issues, I'm happy to help you through consulting or mentoring. [Contact me](mailto:oskar@event-driven.io) and we'll find a way to unblock you!**
+
+Read also more in:
+- [The Order of Things: Why You Can't Have Both Speed and Ordering in Distributed Systems](https://www.architecture-weekly.com/p/the-order-of-things-why-you-cant),
+- [Internal and external events, or how to design event-driven API](/en/internal_external_events/),
+- [Dealing with Eventual Consistency and Idempotency in MongoDB projections](/en/simple_trick_for_idempotency_handling_in_elastic_search_readm_model/)
+- [Saga and Process Manager - distributed processes in practice](/en/saga_process_manager_distributed_transactions/),
+- [Predictable Identifiers: Enabling True Module Autonomy in Distributed Systems](https://www.architecture-weekly.com/p/predictable-identifiers-enabling)
+- [Dealing with Eventual Consistency, and Causal Consistency using Predictable Identifiers](https://www.architecture-weekly.com/p/dealing-with-eventual-consistency),
+- [Event-driven distributed processes by example](/en/event_driven_distributed_processes_by_example/),
+- [Workflow Engine design proposal, tell me your thoughts](https://www.architecture-weekly.com/p/workflow-engine-design-proposal-tell),
+- [How TypeScript can help in modelling business workflows](/en/how_to_have_fun_with_typescript_and_workflow/),
+- [Oops I did it again, or how to update past data in Event Sourcing](/en/how_to_update_past_data_in_event_sourcing/),
+- [Event transformations, a tool to keep our processes loosely coupled](/en/event_transformations_and_loosely_coupling/), 
+- [Testing asynchronous processes with a little help from .NET Channels](/en/testing_asynchronous_processes_with_a_little_help_from_dotnet_channels/).
 
 Cheers!
 
