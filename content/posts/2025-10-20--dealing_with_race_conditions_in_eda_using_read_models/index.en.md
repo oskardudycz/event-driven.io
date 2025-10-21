@@ -273,19 +273,18 @@ What if fraud scoring arrives first?
 ```typescript
 function onFraudScoreCalculated(
   current: PaymentVerification,
-  { type, data: event }: FraudScoreCalculated): PaymentVerification {
+  { data: event }: FraudScoreCalculated): PaymentVerification {
+  // Ignore event if we're already ahead of it
   if (current.fraudAssessment && event.calculatedAt <= current.fraudAssessment.assessedAt)
     return current;
 
-  const fraudAssessment: FraudAssessment = {
-    score: event.score,
-    riskLevel: event.riskLevel,
-    assessedAt: event.calculatedAt,
-  };
-
   const updated = {
     ...current,
-    fraudAssessment,
+    fraudAssessment: {
+      score: event.score,
+      riskLevel: event.riskLevel,
+      assessedAt: event.calculatedAt,
+    },
     lastUpdated: event.calculatedAt,
   }
 
@@ -294,7 +293,7 @@ function onFraudScoreCalculated(
       ...updated,
       status: 'declined',
       decision: {
-        approval: 'decline',
+        approval: 'declined',
         reason: `High fraud risk detected: score ${event.score}`,
         decidedAt: event.calculatedAt,
       },
@@ -311,7 +310,11 @@ Now, lets have a look on the payment initiation when fraud scoring might have al
 ```typescript
 function onPaymentInitiated(
   current: PaymentVerification,
-  { type, data: event }: PaymentInitiated): PaymentVerification {
+  { data: event }: PaymentInitiated): PaymentVerification {
+  // Ignore if we already handled this event
+  if (current.payment)
+    return current;
+
   return {
     ...current,
     payment: {
@@ -332,27 +335,27 @@ We can also mark that in the field that I called _dataQuality_. It may not be th
 ```typescript
 function onPaymentCompleted(
   current: PaymentVerification,
-  { type, data: event }: PaymentCompleted): PaymentVerification {
-  if (current.fraudAssessment?.riskLevel === 'high') {
-    return {
-      ...current,
-      decision: {
-        approval: 'decline',
+  { data: event }: PaymentCompleted): PaymentVerification {
+  // Ignore if we already made decision
+  if (current.decision)
+    return current;
+
+  const decision = 
+    current.fraudAssessment?.riskLevel === 'high' 
+      ? {
+        approval: 'declined',
         reason: `Approval attempted but overridden by fraud (score: ${current.fraudAssessment.score})`,
         decidedAt: event.approvedAt,
-      },
-      lastUpdated: event.approvedAt,
-    };
-  }
+      } : {
+        approval: 'approved',
+        reason: `Approved by ${event.approvedBy}`,
+        decidedAt: event.approvedAt,
+      };
 
   return {
     ...current,
-    status: 'approved',
-    decision: {
-      approval: 'approve',
-      reason: `Approved by ${event.approvedBy}`,
-      decidedAt: event.approvedAt,
-    },
+    status: decision.approval,
+    decision,
     lastUpdated: event.approvedAt,
   };
 }
@@ -365,16 +368,18 @@ Some decisions need multiple pieces. The _MerchantLimitsChecked_ handler waits f
 ```typescript
 function onMerchantLimitsChecked(
   current: PaymentVerification,
-  { type, data: event }: MerchantLimitsChecked): PaymentVerification {
-  const merchantLimits: MerchantLimits = {
-    withinLimits: event.withinLimits,
-    dailyRemaining: event.dailyRemaining,
-    checkedAt: event.checkedAt,
-  };
+  { data: event }: MerchantLimitsChecked): PaymentVerification {
+  // Ignore if we already handled this event
+  if (current.merchantLimits)
+    return current;
 
   const updated = {
     ...current,
-    merchantLimits,
+    merchantLimits: {
+      withinLimits: event.withinLimits,
+      dailyRemaining: event.dailyRemaining,
+      checkedAt: event.checkedAt,
+    },
     lastUpdated: event.checkedAt,
   };
 
@@ -501,23 +506,27 @@ function tryCompleteVerifications(
 ):
   | PaymentVerification
   | { document: PaymentVerification; events: VerificationEvent[] } {
+  // Ignore if we already made decision
+  if (current.decision)
+    return current;
+
   // Check if we now have BOTH critical pieces
-  if (!updated.fraudAssessment || !updated.merchantLimits)
+  if (!current.fraudAssessment || !current.merchantLimits)
     // Don't have both yet - stay in processing
     return {
-      ...updated,
+      ...current,
       status: "processing",
       dataQuality: "processing",
     };
 
   const decision =
-    updated.fraudAssessment.riskLevel === "high"
+    current.fraudAssessment.riskLevel === "high"
       ? {
           approval: "declined",
           reason: "High fraud risk",
           decidedAt: event.checkedAt,
         }
-      : !updated.merchantLimits.withinLimits
+      : !current.merchantLimits.withinLimits
       ? {
           approval: "declined",
           reason: "High fraud risk",
@@ -531,7 +540,7 @@ function tryCompleteVerifications(
 
   return {
     document: {
-      ...updated,
+      ...current,
       status: decision.approval,
       decision,
     },
