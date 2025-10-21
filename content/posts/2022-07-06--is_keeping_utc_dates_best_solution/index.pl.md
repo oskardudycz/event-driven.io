@@ -24,7 +24,7 @@ Of course, not every business domain will have serious consequences. For example
 
 **Is this really a problem?** It depends; it may or may not be. If your domain is based on scheduling and time is essential (e.g. reservations, transport, hotel industry, financial services), it is worth checking if we are prepared for this situation. We don't want to end up with [Y2K problem](https://en.wikipedia.org/wiki/Year_2000_problem). It is, of course, still an edge case, but contrary to common belief, it happens much more often than we think.
 
-**How can you deal with it?** Keeping UTC for past timestamps is fine. We can deduct time from historical knowledge. Yet, for future dates, it's important to keep the local time zone or local date-time. Using tools like [NodaTime](https://nodatime.org/), [Joda time](https://www.joda.org/joda-time/) (or alternatives) can be definitely helpful.
+**How can you deal with it?** Keeping UTC for past timestamps is fine. We can deduce time from historical knowledge. Yet, for future dates, it's important to keep the local time zone or local date-time. Using tools like [NodaTime](https://nodatime.org/), [Joda time](https://www.joda.org/joda-time/) (or alternatives) can be definitely helpful.
 
 It is worth considering and ensuring that our dates are as safe and straightforward as we think. We should aim to build simple solutions, but not simplistic ones.
 

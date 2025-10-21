@@ -37,7 +37,7 @@ My general strategy would be:
 
 11. Consider also using the _[strangler fig pattern](https://shopify.engineering/refactoring-legacy-code-strangler-fig-pattern)_ while migrating to your existing system to do it step by step. 
 
-**Of course, you'll need to figure out a lot of grey matter, but it'd be worth first [making the change easy, then making the easy change](https://www.youtube.com/watch?v=3gib0hKYjB0).** So, minimising the data model refactoring during migration. 
+**Of course, you'll need to figure out a lot of grey area, but it'd be worth first [making the change easy, then making the easy change](https://www.youtube.com/watch?v=3gib0hKYjB0).** So, minimising the data model refactoring during migration. 
 
 It's also better to start with simple mapping without changing schema too much(unless your data is simple). After it works, consider adjusting it to fit the document approach. Read also my other article where I lined up the heuristics on changing legacy design: [What do the British writer and his fence have to do with Software Architecture?](/pl/chesterton_fence_and_software_architecture).
 

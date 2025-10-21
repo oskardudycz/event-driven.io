@@ -45,7 +45,7 @@ Or when we have a requirement, we have to check in a guest if we have an availab
 
 Apart from Decalogue, only a few rules were carved in stone. Even Decalogue's ten rules are not always applied properly in real life. 
 
-Most computer systems rely on the automation of the already established "analogue" procedures. Such procedures usually allow many different options. There is a lot of grey matter. We should design our systems accordingly. We should be asking the business:
+Most computer systems rely on the automation of the already established "analogue" procedures. Such procedures usually allow many different options. There is a lot of grey area. We should design our systems accordingly. We should be asking the business:
 - How is it being done now?
 - What are you doing if this didn't happen?
 - How do you fix this issue?

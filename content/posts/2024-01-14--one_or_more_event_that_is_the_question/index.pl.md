@@ -110,7 +110,7 @@ Group checkout can be run as a series of single guest checkouts. We can complete
 
 **I'd use multiple events if they represent different parts of the business process, especially if they're optional.**
 
-Of course, it’s a grey matter. My safe default is to record a single event. From my experience, most cases are like that. We should double check if there's no benefit of having multiple events. Yet, I understand that someone may have a different perspective, so think for yourself.
+Of course, it’s a grey area. My safe default is to record a single event. From my experience, most cases are like that. We should double check if there's no benefit of having multiple events. Yet, I understand that someone may have a different perspective, so think for yourself.
 
 I started with base classes, super granular events, and sharing data between events, but I evolved from that. And I regret that I did that because it took me a lot of time to refactor that. The hidden coupling is a big enabler for accidental complexity and [overly complicated solutions](/pl/how_to_solve_complicated_problems/).
 

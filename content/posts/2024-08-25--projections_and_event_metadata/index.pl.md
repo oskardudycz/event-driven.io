@@ -70,7 +70,7 @@ export type PricedProductItem = ProductItem & {
 
 **They show what can happen in our shopping cart's lifetime.** They're [as small as possible, but not smaller](/pl/events_should_be_as_small_as_possible/). They're granular and focused on business but have some potential redundancy by all having shopping cart id. I want to keep events expressive and telling what has happened. I wrote in another article on [the danger of slicing too much from events](/pl/on_putting_stream_id_in_event_data/).
 
-**Of course, this is the grey matter and a careful act of balancing where to put where.** For instance, I put the client ID only in product items added to the shopping cart. I expect it to be always the first event in the stream, and I don't want to repeat it. Why? Because the stream represents a shopping cart, keeping the shopping cart id can be seen as explicit information about the context; the client id is an additional reference to another stream. That's why I'm not repeating the client id in other events. But maybe I should?
+**Of course, this is the grey area and a careful act of balancing where to put where.** For instance, I put the client ID only in product items added to the shopping cart. I expect it to be always the first event in the stream, and I don't want to repeat it. Why? Because the stream represents a shopping cart, keeping the shopping cart id can be seen as explicit information about the context; the client id is an additional reference to another stream. That's why I'm not repeating the client id in other events. But maybe I should?
 
 What if we'd like to have the read model that aggregates the general summary of client's pending, confirmed and cancelled shopping carts? It could be defined as:
 

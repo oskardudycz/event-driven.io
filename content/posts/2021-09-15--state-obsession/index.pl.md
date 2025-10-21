@@ -70,7 +70,7 @@ It gives us several advantages:
 
 This not only apply to read models, but equally about any downstream consumers. Events can trigger other workflows as well (e.g. fraud detection, etc.). They don't have to be only to update the reading models. Events are facts. How they are interpreted depends on the subscribers.
 
-It is a bit grey matter when to allow redundancy and where not. You have to analyse the pros and cons each time. We should avoid putting a derivative state in our events (e.g. balance) when possible. We should try to [keep them as concise and small as possible, but not smaller](/pl/events_should_be_as_small_as_possible/).
+It is a bit grey area when to allow redundancy and where not. You have to analyse the pros and cons each time. We should avoid putting a derivative state in our events (e.g. balance) when possible. We should try to [keep them as concise and small as possible, but not smaller](/pl/events_should_be_as_small_as_possible/).
 
 We can pragmatically add additional information or make transformations to help subscribers, but that should not be the basis of our considerations. It should be an optimisation that we have carefully crafted.
 

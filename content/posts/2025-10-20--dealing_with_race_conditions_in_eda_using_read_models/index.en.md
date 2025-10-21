@@ -45,7 +45,7 @@ It's safe to say that you won't get any ordering guarantee between different que
 
 Continuing with the payment verification process example: Fraud module publishes to one queue. Risk assessment for another. The payment gateway to a third. Messages arrive at your module in the order your system received them, not the order they were created. Fraud detection service flags a high-risk payment at 10:00:01. The payment initiation event from the gateway, created at 10:00:00, arrives at 10:00:02. The fraud score arrives before the payment exists in your system. You might think sorting by timestamp solves this. It doesn't. Clock skew between services means timestamps lie. Each service node has its own time. It may be similar, but if you have a system with high throughput, the skew may be significant enough, causing more issues than actual help.
 
-But, well, that's the same case when you're getting information from the outside world. You can get multiple friends sending you some news, you can get them at different paces, and read them in a different order. You may get obsolete news and then newer, but it can go the other way round. You're only sure of which you received those messages; to get the truth, you need to correlate that information and do fact-checking based on some rules (e.g. which source is more reliable, newer, etc). Then you can deduct the actual information.
+But, well, that's the same case when you're getting information from the outside world. You can get multiple friends sending you some news, you can get them at different paces, and read them in a different order. You may get obsolete news and then newer, but it can go the other way round. You're only sure of which you received those messages; to get the truth, you need to correlate that information and do fact-checking based on some rules (e.g. which source is more reliable, newer, etc). Then you can deduce the actual information.
 
 We're saying that in the event-driven world, events are facts. But that's just half the truth.
 
@@ -142,7 +142,7 @@ type PaymentDeclined = {
 };
 ```
 
-Let's say the fraud system flagged the payment as high-risk before it even existed in your system. Approval happened before the risk assessment was completed. The example race condition can look as follows w
+Let's say the fraud system flagged the payment as high-risk before it even existed in your system. Approval happened before the risk assessment was completed. The example race condition can look as follows:
 
 ```
 10:15:32.123 - FraudScoreCalculated (score: 85, high risk)
@@ -208,18 +208,21 @@ type Decision = {
 
 Besides the optional data that we'll gradually fill as events arrive, we have some mandatory fields. The obvious one is paymentId, we need to be able to correlate upcoming data from events. If you have a look at them, all of them have such information. Thanks to that, we know which payments we are verifying. If we're missing it, then we won't be able to correlate upcoming data. Then we're indeed doomed.
 
-Of course, sometimes things can get harder. We do not always have acertain id, sometimes some other data, like external id, idempotence key, correlation id, whatever id. Still, we need to have some field, or multiple fields that allow us to point to that for this event we need to update that document.
+Of course, sometimes things can get harder. We do not always have a certain id, sometimes some other data, like external id, idempotence key, correlation id, whatever id. Still, we need to have some field, or multiple fields that allow us to point to that for this event we need to update that document.
 
 How do we update our read model? We need a function that takes the current state (or null if it doesn't exist) and the event we apply on top of it, returning the new state.
 
 It can look as follows:
 
 ```typescript
-function evolve(
+function evolve (
   current: PaymentVerification,
   event: PaymentVerificationEvent
 ): PaymentVerification | null {
-  current = current ?? initialState;
+  current = current ?? {
+    paymentId: event.paymentId,
+    initialState,
+  }
 
   switch (event.type) {
     case "PaymentInitiated": 
@@ -237,7 +240,7 @@ function evolve(
 };
 
 const initialState: PaymentVerification = { 
-  paymentId: event.paymentId, 
+  paymentId: undefined!, 
   status: 'unknown', 
   completionPercentage: 0, 
   lastUpdated: new Date(), 
@@ -412,7 +415,7 @@ function onMerchantLimitsChecked(
 }
 ```
 
-And now we're reaching the grey matter, where this can become an anti-pattern. I even made this mistake when writing this article. I wrote initially, _"we can make the final decision"_, but then changed it to _"we can make the final update"_. Why?
+And now we're reaching the grey area, where this can become an anti-pattern. I even made this mistake when writing this article. I wrote initially, _"we can make the final decision"_, but then changed it to _"we can make the final update"_. Why?
 
 ## Projections, ACL responsibility and Workflows
 
@@ -446,7 +449,10 @@ function decide(
 ):
   | PaymentVerification
   | { document: PaymentVerification; events: VerificationEvent[] } {
-  current = current ?? initialState;
+  current = current ?? {
+    paymentId: event.paymentId,
+    initialState,
+  }
 
   switch (event.type) {
     // (...) other event handlers
@@ -489,7 +495,7 @@ function decide(
 We update the state and try to complete verification if we gathered both merchant limits and risk assessment. This could be encapsulated in a dedicated method, as the logic is the same now matter which event came first:
 
 ```typescript
-function tryCompleteVerification(
+function tryCompleteVerifications(
   current: PaymentVerification,
   event: PaymentVerificationEvent
 ):
@@ -575,7 +581,7 @@ This approach struggles when:
 
 ## Conclusion: Embracing the Chaos
 
-**The world is chaotic, and we can stop the chaos, but we can stop fighting the chaos.** External events are rumours about what happened in other systems. Your read model can store the information you derive from those rumours. The evolve function processes whatever arrives, in whatever order, building state incrementally, making your local interpretation.
+**The world is chaotic, and we can't stop the chaos, but we can stop fighting the chaos.** External events are rumours about what happened in other systems. Your read model can store the information you derive from those rumours. The evolve function processes whatever arrives, in whatever order, building state incrementally, making your local interpretation.
 
 Undeniably, it's a workaround of some sort. But it's also an acknowledgement that distributed systems don't guarantee order across boundaries. When you can't control the topology, you adapt on your side. Store data as it arrives. Denoise in your projections. Create clean internal events for downstream systems.
 
@@ -603,4 +609,4 @@ Cheers!
 
 Oskar
 
-p.s. **Ukraine is still under brutal Russian invasion. A lot of Ukrainian people are hurt, without shelter and need help.** You can help in various ways, for instance, directly helping refugees, spreading awareness, putting pressure on your local government or companies. You can also support Ukraine by donating e.g. to [Red Cross](https://www.icrc.org/pl/donate/ukraine), [Ukraine humanitarian organisation](https://savelife.in.ua/pl/donate/) or [donate Ambulances for Ukraine](https://www.gofundme.com/f/help-to-save-the-lives-of-civilians-in-a-war-zone).
+p.s. **Ukraine is still under brutal Russian invasion. A lot of Ukrainian people are hurt, without shelter and need help.** You can help in various ways, for instance, directly helping refugees, spreading awareness, putting pressure on your local government or companies. You can also support Ukraine by donating e.g. to [Red Cross](https://www.icrc.org/en/donate/ukraine), [Ukraine humanitarian organisation](https://savelife.in.ua/en/donate/) or [donate Ambulances for Ukraine](https://www.gofundme.com/f/help-to-save-the-lives-of-civilians-in-a-war-zone).

@@ -29,7 +29,7 @@ Having a good mixture of people at such a meeting is essential. We should have p
 
 **Yet, it's also essential to not have too many people and care for mental health.** Doing continuous brainstorming sessions can be draining and ineffective. We need to let our thoughts sink in. I'm personally an introvert, and I'm emotionally exhausted after a set of longer sessions and need time to recover (read more in [Agile vs Introverts](/pl/agile_vs_introverts/)).
 
-Thus, after brainstorming, it is worth sifting out what we have found. We should group ideas by category. Even if some look like duplicates, discussing them before we throw them out is crucial. Often, such details contain grey matter, so details that can have a significant impact but are easy to miss.
+Thus, after brainstorming, it is worth sifting out what we have found. We should group ideas by category. Even if some look like duplicates, discussing them before we throw them out is crucial. Often, such details contain grey area, so details that can have a significant impact but are easy to miss.
 
 **The brainstorming itself may concern specific functionalities as well as the global vision of the system.** EventStorming divides this into _"big picture"_ and _"process/design level"_. First, we look at the events that are essential from the overall system perspective, then we go lower (read more about the distinction between internal and external events on my blog: ["Events should be as small as possible, right?"](/pl/events_should_be_as_small_as_possible/)).
 

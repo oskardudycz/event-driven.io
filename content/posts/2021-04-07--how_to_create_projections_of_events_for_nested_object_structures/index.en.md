@@ -36,7 +36,7 @@ class Parent
 }
 ```
 
-In my opinion, there are three main options for approaching this topic. Plus grey matter:
+In my opinion, there are three main options for approaching this topic. Plus grey area:
 
 1. **Publish a bigger event** (_"fat event"_), which has all the data needed to build a read model by projection. For example, _StudentAddedToSchool_ with _StudentId_, _SchoolId_, but also whole student data together with nested parent data.
     ```csharp
@@ -177,7 +177,7 @@ Each of these options has pros and cons:
 3. The third solution is the fastest in terms of processing and data transfer but the slowest in reading. Both the events and the projections themselves won't have redundant data. For this reason, we will have to correlate data when reading. It is not always a big problem, but database joins always have a negative performance impact. However, if we have good data distribution and index it well, this should also be a good enough solution for many scenarios.
 
 
-Between these cases, there is also grey matter. Unfortunately, we won't escape the classic *"it depends"* answer. Each case is different, and if we want a good, efficient yet sustainable solution, we need to consider the final usage scenarios. The above points are heuristics and advice that I hope can help you to design your solution.
+Between these cases, there is also grey area. Unfortunately, we won't escape the classic *"it depends"* answer. Each case is different, and if we want a good, efficient yet sustainable solution, we need to consider the final usage scenarios. The above points are heuristics and advice that I hope can help you to design your solution.
 
 Cheers!
 

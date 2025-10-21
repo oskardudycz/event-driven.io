@@ -45,7 +45,7 @@ No matter which way we choose, we need to clean all privacy-related data like na
 
 ![](2023-11-10-03.png)
 
-**It's worth noting that we don't need to remove all data.** We need to remove only those allowing us to deduct their identity. And that's highly contextual and tricky. For instance, typically, we can leave information like gender as it's not precise, but not always. If we have a class in tech school, and there's only a single woman there, then gender in this context is _[Personally Identifiable Information (PII)](https://en.wikipedia.org/wiki/Personal_data)_, as we can identify a specific woman in this context.
+**It's worth noting that we don't need to remove all data.** We need to remove only those allowing us to deduce their identity. And that's highly contextual and tricky. For instance, typically, we can leave information like gender as it's not precise, but not always. If we have a class in tech school, and there's only a single woman there, then gender in this context is _[Personally Identifiable Information (PII)](https://en.wikipedia.org/wiki/Personal_data)_, as we can identify a specific woman in this context.
 
 **Also, we cannot always remove users' data.** There may be higher-priority laws that would force us to keep them (e.g., medical history in hospitals, tax history, etc.). To make it even trickier, we need to do our best to detect that person requested data removal from our system when we're merging companies or buying user data (a common practice in, e.g., recruitment companies). That can be done by keeping some irreversible hashes and comparing them with incoming data.
 
