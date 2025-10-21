@@ -1,7 +1,7 @@
 ---
 title: Dealing with Race Conditions in Event-Driven Architecture with Read Models
 category: "Event Sourcing"
-cover: 2026-10-20-cover.png
+cover: 2025-10-20-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true
 ---
