@@ -6,7 +6,9 @@ author: oskar dudycz
 useDefaultLangCanonical: true
 ---
 
-After the last article on [Dealing with Race Conditions in Event-Driven Architecture with Read Models](/pl/dealing_with_race_conditions_in_eda_using_read_models/), I got [question from Ben](https://www.architecture-weekly.com/p/dealing-with-race-conditions-in-event/comment/171420356):
+![](2025-11-03-cover.png)
+
+After the last article on [Dealing with Race Conditions in Event-Driven Architecture with Read Models](/pl/dealing_with_race_conditions_in_eda_using_read_models/), I got such a [question from Ben](https://www.architecture-weekly.com/p/dealing-with-race-conditions-in-event/comment/171420356):
 
 > You described the scenario where you know what events you should receive, just not the order. But what if you don't know that? For example, you get an ItemRemovedFromCart event, but the item doesn't exist in your view of the current state of the cart. Is it an invalid event? Or is there an ItemAddedToCart event that hasn't come through yet?
 
@@ -26,7 +28,7 @@ Is it an issue? Not a huge one, as you just want them to come asap so you have f
 
 In many systems, ordering is not a key concern, especially when we partition the workload. The issue may arise when we need to correlate separate actions.
 
-In the last article, we showed the payment verification workflow. To make the final decision, we needed to correlate data from the external payment gateway with our own modules, which calculate fraud scores, check limits, and assess risk. Only after receiving data on available merchant limits and the fraud assessment score could we make the final decision. Those pieces of information could return to us at different times and in a different order.
+**In the last article, we discussed the payment verification workflow.** To make the final decision, we needed to correlate data from the external payment gateway with our own modules, which calculate fraud scores, check limits, and assess risk. Only after receiving data on available merchant limits and the fraud assessment score could we make the final decision. Those pieces of information could return to us at different times and in a different order.
 
 To resolve it, we were just gathering and aggregating data as they went. Then, after each step, we checked whether we now have all the data. If we had, we were making the final decision; if not, we were storing it as is, assuming that at some point, data would arrive.
 
@@ -46,7 +48,7 @@ function decide(
 
   switch (event.type) {
     // (...) other event handlers
-    case “MerchantLimitsChecked”: {
+    case 'MerchantLimitsChecked': {
       const updated = {
         ...current,
         merchantLimits: {
@@ -59,7 +61,7 @@ function decide(
 
       return tryCompleteVerification(updated, event);
     }
-    case “FraudScoreCalculated”: {
+    case 'FraudScoreCalculated': {
       if (
         current.fraudAssessment &&
         event.calculatedAt <= current.fraudAssessment.assessedAt
@@ -100,26 +102,26 @@ function tryCompleteVerifications(
     // Don’t have both yet - stay in processing
     return {
       ...current,
-      status: “processing”,
-      dataQuality: “processing”,
+      status: 'processing',
+      dataQuality: 'processing',
     };
 
   const decision =
-    current.fraudAssessment.riskLevel === “high”
+    current.fraudAssessment.riskLevel === 'high'
       ? {
-          approval: “declined”,
-          reason: “High fraud risk”,
+          approval: 'declined',
+          reason: 'High fraud risk',
           decidedAt: event.checkedAt,
         }
       : !current.merchantLimits.withinLimits
       ? {
-          approval: “declined”,
-          reason: “High fraud risk”,
+          approval: 'declined',
+          reason: 'High fraud risk',
           decidedAt: event.checkedAt,
         }
       : {
-          approval: “approved”,
-          reason: “Verified”,
+          approval: 'approved',
+          reason: 'Verified',
           decidedAt: event.checkedAt,
         };
 
@@ -131,7 +133,7 @@ function tryCompleteVerifications(
     },
     events: [
       {
-        type: “PaymentVerificationCompleted”,
+        type: 'PaymentVerificationCompleted',
         data: decision,
       },
     ],
@@ -146,10 +148,10 @@ This works fine, as we know precisely which steps need to happen, so we know wha
 Let's have a look at the case brought by Ben: the e-commerce flow. First, we complete the shopping cart by adding and removing items, then we confirm it. The example event flow could look as follows for the online food ordering:
 
 ```
-ItemAddedToCart          (cartId: 1, name: Pizza Napoletana) 
-ItemAddedToCart          (cartId: 1, name: Pizza Napoletana)
+ItemAddedToCart     (cartId: 1, name: Pizza Napoletana) 
+ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
-CartConfirmed                (cartId:1, confirmedAt: 2025-11-03 11:44:27)
+CartConfirmed       (cartId:1, confirmedAt: 2025-11-03 11:44:27)
 ```
 
 We see here that someone added the first Pizza, then maybe accidentally added it again, corrected their mistake, and confirmed the order.
@@ -158,9 +160,9 @@ Then, if that was an online ordering system and we had it integrated with the ki
 
 ```
 ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
-CartConfirmed                (cartId:1, confirmedAt: 2025-11-03 11:44:27)
-ItemAddedToCart          (cartId: 1, name: Pizza Napoletana) 
-ItemAddedToCart          (cartId: 1, name: Pizza Napoletana)
+CartConfirmed       (cartId: 1, confirmedAt: 2025-11-03 11:44:27)
+ItemAddedToCart     (cartId: 1, name: Pizza Napoletana) 
+ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 ```
 
 We see that someone removed one Pizza from their shopping cart, which suggests that some information is missing. When we get a confirmation event, we still know that there's more to come, as an order with a removed item doesn't make sense. The same goes for the information that one pizza was added; when we correlate it with the removal event having the same cart identifier, we still see zero items in the shopping cart. Once we get the next event, we will finally know that we have more than one item in our shopping cart. 
@@ -168,12 +170,12 @@ We see that someone removed one Pizza from their shopping cart, which suggests t
 Can we then proceed? Maybe yes and maybe no. For this particular order, it'd be correct, but what if our real order:
 
 ```
-ItemAddedToCart          (cartId: 1, name: Pizza Napoletana) 
-ItemAddedToCart          (cartId: 1, name: Pizza Napoletana)
+ItemAddedToCart     (cartId: 1, name: Pizza Napoletana) 
+ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
-ItemAddedToCart          (cartId: 1, name: Spaghetti Carbonara)
+ItemAddedToCart     (cartId: 1, name: Spaghetti Carbonara)
 ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
-CartConfirmed                (cartId:1, confirmedAt: 2025-11-03 11:44:27)
+CartConfirmed       (cartId: 1, confirmedAt: 2025-11-03 11:44:27)
 ```
 
 Also, since messaging systems retry to ensure delivery, how would we know that those "doubled" events for adding or removing are actually distinct events and not just retries?
@@ -181,11 +183,11 @@ Also, since messaging systems retry to ensure delivery, how would we know that t
 For instance, in such a delivery case:
 
 ```
-ItemAddedToCart          (cartId: 1, name: Pizza Napoletana) 
-ItemAddedToCart          (cartId: 1, name: Pizza Napoletana)
+ItemAddedToCart     (cartId: 1, name: Pizza Napoletana) 
+ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
-CartConfirmed                (cartId:1, confirmedAt: 2025-11-03 11:44:27)
-ItemAddedToCart          (cartId: 1, name: Spaghetti Carbonara)
+CartConfirmed       (cartId: 1, confirmedAt: 2025-11-03 11:44:27)
+ItemAddedToCart     (cartId: 1, name: Spaghetti Carbonara)
 ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
 ```
 
@@ -196,6 +198,8 @@ Let's discuss a few strategies to deal with that!
 > - Doctor, it hurts when I bend my arm this way.
 > - Then don't bend it this way
 
+![doctor](./2025-11-03-pun-small.jpg)
+
 One of the most common mistakes we learn too late is separating our events into internal and external (or private and public). [Internal information can and should be more granular](/pl/events_should_be_as_small_as_possible/). We need it to be precise in capturing the business context and making our decision. 
 
 Yet, other parts of our system don't need to know all of that. Is the kitchen interested in the details of all the changes procrastinating customer made to their shopping cart? No, they just want the final information on which meal they need to prepare.
@@ -205,10 +209,8 @@ So in our example, if we published to the outside world just:
 ```
 CartConfirmed  {
     cartId: 1, 
-    items: [
-        { name: Pizza Napoletana }
-    ]
-    confirmedAt: 2025-11-03 11:44:27
+    items: [ { name: "Spaghetti Carbonara" } ],
+    confirmedAt: "2025-11-03 11:44:27"
 }
 ```
 
@@ -217,7 +219,7 @@ Such a type of event is also called a **Summary Event**. We should not mistake i
 We can define such an internal event API as:
 
 ```typescript
-export type ItemAddedToCart = {
+type ItemAddedToCart = {
   type: 'sc:int:ItemAddedToCart';
   data: {
     cartId: string;
@@ -225,7 +227,7 @@ export type ItemAddedToCart = {
   };
 };
 
-export type ItemRemovedFromCart = {
+type ItemRemovedFromCart = {
   type: 'sc:int:ItemRemovedFromCart';
   data: {
     cartId: string;
@@ -233,7 +235,7 @@ export type ItemRemovedFromCart = {
   };
 };
 
-export type CartConfirmed = {
+type CartConfirmed = {
   type: 'sc:int:CartConfirmed';
   data: {
     cartId: string;
@@ -241,12 +243,12 @@ export type CartConfirmed = {
   };
 };
 
-export type ShoppingCartEvent =
+type ShoppingCartEvent =
   | ItemAddedToCart
   | ItemRemovedFromCart
   | CartConfirmed;
 
-interface ProductItem {
+type ProductItem = {
   productId: string;
   quantity: number;
 }
@@ -255,7 +257,7 @@ interface ProductItem {
 and public as:
 
 ```typescript
-export type CartOpened = {
+type CartOpened = {
   type: 'sc:ext:CartOpened';
   data: {
     cartId: string;
@@ -263,7 +265,7 @@ export type CartOpened = {
   };
 };
 
-export type CartConfirmed = {
+type CartConfirmed = {
   type: 'sc:ext:CartConfirmed';
   data: {
     cartId: string;
@@ -272,7 +274,7 @@ export type CartConfirmed = {
   };
 };
 
-export type ShoppingCartExternalEvent = CartOpened | CartConfirmed;
+type ShoppingCartExternalEvent = CartOpened | CartConfirmed;
 ```
 
 As you see, we can even have more than one summary event, and not even be one-to-one with an internal event. Maybe we also have an analytics module that analyses how long it takes the user to make a final decision after adding the first product. Then we may decide to expose such an event, hiding the details of the internal flow. We're also defending ourselves and [minimising the need for versioning when flow changes](/pl/how_to_do_event_versioning/).
@@ -285,7 +287,7 @@ We can enrich them using such a function:
 import type { ShoppingCartExternalEvent } from './shoppingCart.external';
 import type { ShoppingCart, ShoppingCartEvent } from './shoppingCart.internal';
 
-export const enrich = (
+const enrich = (
   event: ShoppingCartEvent,
   state: ShoppingCart | null,
 ): ShoppingCartExternalEvent | [] => {
@@ -318,8 +320,8 @@ export const enrich = (
 We can then subscribe to internal events in our module, load the state (best to build it from events if we're using Event Sourcing), and publish enriched events externally.
 
 **If we're using messaging, this means also separating queues/topics.** If you're using Kafka both for internal and external communication, then you should separate topics and have two different topics for outgoing communication, e.g.:
-- 'carts:events:int'
-- 'carts:events:out'.
+- *carts:events:int*
+- *carts:events:out*.
 
 Similarly, for RabbitMQ or similar tools, you should have separate queues for internal and external communications.
 
@@ -335,7 +337,7 @@ Sweet, right?
 
 Maybe it's sweet enough for you, but you may also say:
 
-> But Oskar, it's not me, it's them. If I was responsible for that, I'd go this way, but I can't change it how messages are published.
+> But Oskar, I'm not producing those events, it's the other team and the external service. If I was responsible for that, I'd go this way, but I can't change it how messages are published.
 
 I could handwave it and say I pity you, but well, this actually can happen. Let's see what else we could do about it. 
 
@@ -344,22 +346,22 @@ The first idea could be: Let's add timestamps!
 Let's see how it looks for our example:
 
 ```
-11:40:10 - ItemAddedToCart          (cartId: 1, name: Pizza Napoletana) 
-11:40:10 - ItemAddedToCart          (cartId: 1, name: Pizza Napoletana)
+11:40:10 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana) 
+11:40:10 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 11:42:13 - ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
-11:43:18 - ItemAddedToCart          (cartId: 1, name: Spaghetti Carbonara)
+11:43:18 - ItemAddedToCart     (cartId: 1, name: Spaghetti Carbonara)
 11:44:23 - ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
-11:44:27 - CartConfirmed                (cartId:1)
+11:44:27 - CartConfirmed       (cartId: 1)
 ```
 
 And the out of order delivery:
 
 ```
-11:40:10 - ItemAddedToCart          (cartId: 1, name: Pizza Napoletana) 
-11:40:10 - ItemAddedToCart          (cartId: 1, name: Pizza Napoletana)
+11:40:10 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana) 
+11:40:10 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 11:44:23 - ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
-11:44:27 - CartConfirmed                (cartId:1, confirmedAt: 2025-11-03 11:44:27)
-11:43:18 - ItemAddedToCart          (cartId: 1, name: Spaghetti Carbonara)
+11:44:27 - CartConfirmed       (cartId: 1, confirmedAt: 2025-11-03 11:44:27)
+11:43:18 - ItemAddedToCart     (cartId: 1, name: Spaghetti Carbonara)
 11:42:13 - ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
 ```
 
@@ -368,22 +370,22 @@ Would that help? No, because how would we know, based on timestamps, that there 
 What we actually need is the logical clock. One that increments after each operation. So something like:
 
 ```
-1 - ItemAddedToCart          (cartId: 1, name: Pizza Napoletana) 
-2 - ItemAddedToCart          (cartId: 1, name: Pizza Napoletana)
+1 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana) 
+2 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 3 - ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
-4 - ItemAddedToCart          (cartId: 1, name: Spaghetti Carbonara)
+4 - ItemAddedToCart     (cartId: 1, name: Spaghetti Carbonara)
 5 - ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
-6 - CartConfirmed                (cartId:1)
+6 - CartConfirmed       (cartId: 1)
 ```
 
 If we had such, then our delivery would look as follows:
 
 ```
-2 - ItemAddedToCart          (cartId: 1, name: Pizza Napoletana) 
-1 - ItemAddedToCart          (cartId: 1, name: Pizza Napoletana)
+2 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana) 
+1 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 5 - ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
-6 - CartConfirmed                (cartId:1, confirmedAt: 2025-11-03 11:44:27)
-4 - ItemAddedToCart          (cartId: 1, name: Spaghetti Carbonara)
+6 - CartConfirmed       (cartId: 1, confirmedAt: 2025-11-03 11:44:27)
+4 - ItemAddedToCart     (cartId: 1, name: Spaghetti Carbonara)
 3 - ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
 ```
 
@@ -441,7 +443,7 @@ You can think about pending commands as your git repository on your local disk. 
 The code for that workflow could look as follows:
 
 ```typescript
-export function handle(
+function handle(
   event: ShoppingCartEvent,
   document: DocumentWithPendingCommands<
     KitchenOrder,
@@ -566,7 +568,7 @@ function getCommandsReadyToHandle<Command>(
   lastProcessedRevision: number,
 ): PendingCommand<Command>[] {
   return (
-    [...pending]
+    pending
       // filter out commands that have already been processed
       .filter((cmd) => cmd.metadata.revision > lastProcessedRevision)
       // sort by revision to ensure correct order
@@ -586,7 +588,6 @@ function getCommandsReadyToHandle<Command>(
 When we filter them out and have actions to process, we need to run the actual logic for each of them. For our case this could look like that:
 
 ```ts
-
 function decide(
   command: KitchenOrderCommand,
   order: KitchenOrder,
@@ -630,7 +631,7 @@ function decide(
   }
 }
 
-export type KitchenOrderCommand =
+type KitchenOrderCommand =
   | {
       type: 'AddItem' | 'RemoveItem';
       productId: string;
@@ -692,6 +693,7 @@ Then, using revision can be a decent option to solve things in an organised way.
 **If you're dealing with such issues, I'm happy to help you through consulting or mentoring. [Contact me](mailto:oskar@event-driven.io) and we'll find a way to unblock you!**
 
 Read also more in:
+- [Dealing with Race Conditions in Event-Driven Architecture with Read Models](/pl/dealing_with_race_conditions_in_eda_using_read_models/)
 - [The Order of Things: Why You Can't Have Both Speed and Ordering in Distributed Systems](https://www.architecture-weekly.com/p/the-order-of-things-why-you-cant),
 - [Internal and external events, or how to design event-driven API](/pl/internal_external_events/),
 - [Dealing with Eventual Consistency and Idempotency in MongoDB projections](/pl/simple_trick_for_idempotency_handling_in_elastic_search_readm_model/)
