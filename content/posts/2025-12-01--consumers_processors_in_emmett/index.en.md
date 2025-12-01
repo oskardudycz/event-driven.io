@@ -7,7 +7,7 @@ author: oskar dudycz
 
 **Did you know that you can build an event store in one hour?** I even did it a few times on the conference stage. Actually, it took me usually around 25 minutes; the rest was mistyping, lame jokes and a bit of explanation. See:
 
-`youtube: https://www.youtube.com/watch?v=gaoZdtQSOTo`
+[![](talk.png)](https://www.youtube.com/watch?v=gaoZdtQSOTo)
 
 **Yet, my final thought was: Kids don't do it at home.**
 
@@ -192,10 +192,10 @@ Why? Consider this scenario: you have two processors, one updating MongoDB and a
 Still, failure behaviour is configurable; your message handler can return:
 
 - **void/ACK**: message processed successfully, continue to the next one.
-- **Skip**: Skip this message, useful for poison messages that consistently fail
-- **Stop**: Stop this processor entirely.
+- **SKIP**: Skip this message, useful for poison messages that consistently fail
+- **STOP**: Stop this processor entirely.
 
-Why have `skip` separate from ACK?  Consider a poison message - a message that causes your processor to fail every time. Without `skip`, you have two bad options: fail forever (blocking all processing) or ACK it (pretending you processed it). With _Skip_, you can move it to a dead-letter queue for investigation while continuing to process other messages.
+Why have _skip_ separate from _ACK_?  Consider a poison message - a message that causes your processor to fail every time. Without _skip_, you have two bad options: fail forever (blocking all processing) or _ACK_ it (pretending you processed it). With _Skip_, you can move it to a dead-letter queue for investigation while continuing to process other messages.
 
 For now, [Emmett](https://github.com/event-driven-io/emmett) doesn't support Dead Letter/Poison Message Queues out of the box, but they will be supported in the future. You could already append those events to some specific stream.
 
