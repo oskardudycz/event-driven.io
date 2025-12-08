@@ -37,17 +37,17 @@ Let's say that we're using PostgreSQL and our Outbox structure looks as explaine
 ```sql
 CREATE TABLE outbox(
    -- the autoincremented position of the message to respect the order
-   position         BIGSERIAL                 PRIMARY KEY,
+   position        BIGSERIAL                 PRIMARY KEY,
    -- used to detect gaps in numbering
-   transaction_id   XID8                      NOT NULL,
+   transaction_id    xid8 NOT NULL,
    -- unique message id, which can be used for deduplication or idempotency
-   message_id       VARCHAR(250)              NOT NULL,
+   message_id       VARCHAR(250)             NOT NULL,
    -- the message type, e.g. `TransactionRecorded`
-   message_type     VARCHAR(250)              NOT NULL,
+   message_type     VARCHAR(250)             NOT NULL,
    -- serialised message data, e.g. to JSON
-   data             JSONB                     NOT NULL,
+   data             JSONB                    NOT NULL,
    -- diagnostic information on when the message was scheduled
-   scheduled        TIMESTAMP WITH TIME ZONE  NOT NULL    default (now())
+   scheduled       TIMESTAMP WITH TIME ZONE  NOT NULL    default (now())
 );
 ```
 
@@ -57,14 +57,15 @@ Now we can be polling it with the query like:
 
 ```sql
 SELECT 
-     position, message_id, message_type, datas
+     position, message_id, message_type, data
 FROM
      outbox
 WHERE
      (
-        (transaction_id > :last_processed_transaction_id)
-        OR
-        (transaction_id = :last_processed_transaction_id AND position > :last_processed_position))
+          (transaction_id = last_processed_transaction_id
+               AND position > last_processed_position)
+          OR
+          (transaction_id > last_processed_transaction_id)
      )
      AND transaction_id < pg_snapshot_xmin(pg_current_snapshot())
 ORDER BY
@@ -90,12 +91,12 @@ We need one more table for storing our checkpoints. It can look as follows:
 ```sql
 CREATE TABLE processor_checkpoints
 (
-   -- Processor unique identifier
-   processor_id                 VARCHAR(100) PRIMARY KEY,
+   -- subscription name
+   processor_id          VARCHAR(100) PRIMARY KEY,
    -- information about the position of the last processed message
-   last_processed_position      BIGINT       NULL,
+   last_processed_position  INTEGER      NULL,
    -- used to detect gaps in numbering
-   last_processed_transaction_id XID8        NOT NULL
+   last_processed_transaction_id    xid8 NOT NULL
 );
 ```
 
