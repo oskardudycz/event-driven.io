@@ -36,7 +36,7 @@ I've been working on the message processing architecture in [Emmett](https://git
 
 When processing messages, we already know that someone produced them. We're on the receiving end. Facts are already known; now we need to do something about them.
 
-When we process them, do we care about the source? Typically, we take the information it gathers and reason about it. For instance, when we received an event indicating that a room reservation was made, we may need to send an email with details to the consumer, update the reservations dashboard, and generate a pro forma invoice. We may have specific logic, whether it came from our internal reservation platform or Booking.com, but we know the source from the message payload. 
+When we process them, do we care about the source? Typically, we take the information it gathers and reason about it. For instance, when we received an event indicating that a room reservation was made, we may need to send an email with details to the consumer, update the reservations dashboard, and generate a pro forma invoice. We may have specific logic, depending whether it came from our internal reservation platform or Booking.com, but we know the source from the message payload. 
 
 That seems obvious, but it was an important realisation for me. When we're building a read model in MongoDB, we don't care if events come from PostgreSQL event store, EventStoreDB, RabbitMQ queue or Kafka topic. 
 
@@ -57,7 +57,7 @@ I realised that much of the complexity comes from coupling those two together. W
 **Processors** are responsible for doing something meaningful with those messages. They handle the "what do we do with messages" concern. A processor might:
 - Update a read model in PostgreSQL or MongoDB,
 - Call an external API when certain events occur,
-- Publish events to Kafka or send webhooks,
+- Publish events to Kafka or fire webhooks,
 - Trigger workflow steps or saga operations.
 
 This separation follows Unix philosophy: small, focused components connected by simple interfaces. Each piece does one thing well. You can plug any processor into any consumer. This gives you flexibility that matters in practice:
@@ -99,7 +99,7 @@ const consumer = postgreSQLEventStoreConsumer({
 await consumer.start();
 ```
 
-Set up looks accordingly for the other sources providing options specific for the source, e.g. fthe or EventStoreDB store, you may want to provide the category stream name:
+Set up looks accordingly for the other sources providing options specific for the source, e.g. for EventStoreDB store, you may want to provide the category stream name:
 
 ```ts
 const consumer = eventStoreDBEventStoreConsumer({
