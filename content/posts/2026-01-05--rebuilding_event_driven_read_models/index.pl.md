@@ -183,7 +183,7 @@ In the mentioned article, I described multiple options and popular tools for han
 
 PostgreSQL gives us two options for coordination.
 
-**Row-level locks** lock individual table rows. You do `SELECT ... FOR UPDATE`, and anyone else trying to modify that row waits. The lock is tied to the specific row in a table.
+**Row-level locks** lock individual table rows. You do _SELECT ... FOR UPDATE_, and anyone else trying to modify that row waits. The lock is tied to the specific row in a table.
 
 ```sql
 BEGIN;
@@ -421,7 +421,18 @@ The cost on the hot path is microseconds: one in-memory lock check, one indexed 
 
 I hope this article also shows you how to use distributed locking in practice. 
 
-Please tell me your thoughts and concerns, especially if you see any blind spots in this design! You can do that in our [Emmett Discord](https://discord.gg/fTpqUTMmVa), come on in, we have a nice community!
+**Please tell me your thoughts and concerns, especially if you see any blind spots in this design!** You can do that in our [Emmett Discord](https://discord.gg/fTpqUTMmVa), come on in, we have a nice community! 
+
+**If you're dealing with such issues, I'm happy to help you through consulting or mentoring. [Contact me](mailto:oskar@event-driven.io) and we'll find a way to unblock you!**
+
+Or check also other related articles:
+- [Emmett's Pull Request implementing described approach](https://github.com/event-driven-io/emmett/pull/286)
+- [Guide to Projections and Read Models in Event-Driven Architecture](/pl/projections_and_read_models_in_event_driven_architecture/),
+- [Distributed Locking: A Practical Guide](https://www.architecture-weekly.com/p/distributed-locking-a-practical-guide),
+- [Consumers, projectors, reactors and all that messaging jazz in Emmett](/pl/consumers_processors_in_emmett/),
+- [How to scale projections in the event-driven systems?](/pl/how_to_scale_projections_in_the_event_driven_systems/),
+- [Checkpointing the message processing](/pl/checkpointing_message_processing/),
+- [Let's talk about positions in event stores](/pl/lets_talk_about_positions_in_event_stores/).
 
 Cheers!
 
