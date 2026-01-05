@@ -331,18 +331,22 @@ WITH lock_check AS (
     ) AS acquired
 ),
 ownership_check AS (
-    UPDATE emt_processors
+    INSERT INTO emt_processors (
+        processor_id,
+        partition,
+        version,
+        processor_instance_id,
+        status,
+        last_processed_checkpoint,
+        last_processed_transaction_id
+    )
+    VALUES ($2, $3, $4, $5, 'running', '0', '0'::xid8)
+    ON CONFLICT (processor_id, partition, version) DO UPDATE
     SET processor_instance_id = $5,
-        status = 'running',
-        last_processed_checkpoint = COALESCE(last_processed_checkpoint, '0')
-    WHERE processor_id = $2 
-      AND partition = $3 
-      AND version = $4
-      AND (
-          processor_instance_id = $5  -- We already own it
-          OR processor_instance_id = 'emt:unknown'  -- Unclaimed
-          OR status = 'stopped'  -- Previous instance finished or crashed
-      )
+        status = 'running'
+    WHERE emt_processors.processor_instance_id = $5 -- We already own it
+       OR emt_processors.processor_instance_id = 'emt:unknown' -- Unclaimed
+       OR emt_processors.status = 'stopped'  -- Previous instance finished or crashed
     RETURNING last_processed_checkpoint
 )
 SELECT
