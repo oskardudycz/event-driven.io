@@ -3,6 +3,7 @@ title: Rebuilding Event-Driven Read Models in a safe and resilient way
 category: "Event-Driven Architecture"
 cover: 2026-01-05-cover.png
 author: oskar dudycz
+useDefaultLangCanonical: true
 ---
 
 ![cover](2026-01-05-cover.png)
@@ -26,7 +27,7 @@ Typically, we're using events in two ways:
 - reacting to them, triggering and integrating the steps of our business workflow,
 - projecting them, and getting the flattened interpretation of our system state inside read models.
 
-Such processing can happen asynchronously, but doesn't have to. If we're using a transactional database (like PostgreSQL, SQLite, or even MongoDB), we can update our read models in the same atomic transaction that stores new events. Such a process is typically called _inline projection_. Event stores like [Emmett](/en/emmett_projections_testing/) and [Marten](/en/projections_in_marten_explained/) allows that. Still, you can do the same if you're using [outbox pattern](/en/outbox_inbox_patterns_and_delivery_guarantees_explained/), then you can achieve the same without Event Sourcing.
+Such processing can happen asynchronously, but doesn't have to. If we're using a transactional database (like PostgreSQL, SQLite, or even MongoDB), we can update our read models in the same atomic transaction that stores new events. Such a process is typically called _inline projection_. Event stores like [Emmett](/pl/emmett_projections_testing/) and [Marten](/pl/projections_in_marten_explained/) allows that. Still, you can do the same if you're using [outbox pattern](/pl/outbox_inbox_patterns_and_delivery_guarantees_explained/), then you can achieve the same without Event Sourcing.
 
 Inline processing is tempting because we're getting immediate consistency. Yet, there's no free lunch here. We're slowing down our event append as we need to process more, and our transactions will be open longer, which can cause deadlocks, etc. We also can't take advantage of batching event processing.
 
@@ -128,7 +129,7 @@ You could say that:
 
 > Why add a new read model with similar data? Can't we just do a subquery?
 
-Of course, you can. I wrote about that more in [How to create projections of events for nested object structures?](/en/how_to_create_projections_of_events_for_nested_object_structures/). This can make sense if those read models will always evolve together.
+Of course, you can. I wrote about that more in [How to create projections of events for nested object structures?](/pl/how_to_create_projections_of_events_for_nested_object_structures/). This can make sense if those read models will always evolve together.
 
 If you need to run multiple _views_ on the same read models, you're increasing coupling. As such, when you're rebuilding the read model, then potential downtime will impact both. Also, each time you adjust one view, ensure you haven't broken the others.
 
@@ -142,7 +143,7 @@ Still, if those models are indeed the same, or we bet they'll constantly evolve 
 
 Ok, I was already using _rebuilding_ word multiple times. But how do we actually do it?
 
-If you've read articles on [checkpointing](/en/checkpointing_message_processing/) or [positions in event stores](/en/lets_talk_about_positions_in_event_stores/),  you already know that each event in the event store/outbox can have its unique, monotonic position. We can subscribe to notifications about new events and process them one by one. That's how [consumers and processors](/en/consumers_processors_in_emmett/) work in [Emmett](https://github.com/event-driven-io/emmett). Once we process a specific event, we can store the checkpoint in the end storage. This enables resilient failover when our processor dies for some reason. When we restart, we'll read the last processed checkpoint first and start listening for events from that point.
+If you've read articles on [checkpointing](/pl/checkpointing_message_processing/) or [positions in event stores](/pl/lets_talk_about_positions_in_event_stores/),  you already know that each event in the event store/outbox can have its unique, monotonic position. We can subscribe to notifications about new events and process them one by one. That's how [consumers and processors](/pl/consumers_processors_in_emmett/) work in [Emmett](https://github.com/event-driven-io/emmett). Once we process a specific event, we can store the checkpoint in the end storage. This enables resilient failover when our processor dies for some reason. When we restart, we'll read the last processed checkpoint first and start listening for events from that point.
 
 We could reuse this not only for failover but also for rebuilds. Instead of starting processing from the last known checkpoint, we could reset the checkpoint in our database to a specific point (e.g., the beginning of the log). Then we'll get recorded events again.
 
@@ -152,7 +153,7 @@ In-place means that we're the same storage target. We need to truncate it and th
 
 The same happens when we create a new read model based on the existing events. When we create a new read model, it won't magically contain data from existing events.
 
-Typically, we need to spin up a background worker (e.g., [Emmett consumer with a projector plugged in](/en/consumers_processors_in_emmett/)) that pulls all events since the beginning and runs projection logic. Obviously, that means we need to run it asynchronously, and depending on the data size, we'll need to wait until it catches up. During that time, querying for the data will return outdated information - eventual consistency in practice.
+Typically, we need to spin up a background worker (e.g., [Emmett consumer with a projector plugged in](/pl/consumers_processors_in_emmett/)) that pulls all events since the beginning and runs projection logic. Obviously, that means we need to run it asynchronously, and depending on the data size, we'll need to wait until it catches up. During that time, querying for the data will return outdated information - eventual consistency in practice.
 
 That's why there's another option. Instead of truncating existing data, we can keep it as it is, or even keep updating it in the old form. Having that, we can build a new read model in parallel. This read model could have a different name, or just a suffix, e.g. V2, V2.0.1, whatever we find helpful.
 
@@ -364,23 +365,13 @@ If the rebuild crashes, the lock is released, but the status remains 'rebuilding
 
 As a single good image speaks more than thousands of words, let me give you some diagrams to summarise how it works.
 
+
 **1. During inline projection while event appends:**
 - Each inline projection grabs a shared lock before applying,
 - Multiple inlines can run concurrently (shared locks are compatible),
 - Projection updates happen normally.
 
-```mermaid
-sequenceDiagram
-    participant App
-    participant DB
-
-    App->>DB: BEGIN transaction
-    App->>DB: Append event
-    App->>DB: Try shared lock + check status
-    DB-->>App: acquired=true, is_active=true
-    App->>DB: Apply projection
-    App->>DB: COMMIT
-```
+![mermaid1](./2026-01-05-mermaid1.png)
 
 **2. When a rebuild starts:**
 - Rebuild grabs an exclusive lock (waits for any in-flight inlines to finish),
@@ -390,76 +381,21 @@ sequenceDiagram
 - Marks the projection as "active" and releases the lock,
 - Inlines resume.
 
-```mermaid
-sequenceDiagram
-    participant Inline
-    participant DB
-    participant Rebuild
-
-    Rebuild->>DB: Acquire exclusive lock
-    DB-->>Rebuild: OK
-    Rebuild->>DB: Set status='rebuilding'
-    
-    Inline->>DB: Try shared lock
-    DB-->>Inline: acquired=false (blocked by exclusive)
-    Inline->>DB: Skip projection
-    
-    Rebuild->>DB: Process events...
-    Rebuild->>DB: Set status='active'
-    Rebuild->>DB: Release lock
-```
+![mermaid2](./2026-01-05-mermaid2.png)
 
 **3. If rebuild crashes:**
 - Lock releases automatically
 - Status stays "rebuilding"
 - Inlines keep skipping until another rebuild completes
 
-```mermaid
-sequenceDiagram
-    participant Inline
-    participant DB
-    participant Rebuild
-
-    Note over Rebuild: Rebuild crashes mid-way
-    Note over DB: Lock auto-releases, status='rebuilding'
-    
-    Inline->>DB: Try shared lock
-    DB-->>Inline: acquired=true
-    Inline->>DB: Check status
-    DB-->>Inline: is_active=false
-    Inline->>DB: Skip projection
-    
-    Note over Rebuild: New rebuild starts
-    Rebuild->>DB: Acquire exclusive lock
-    Rebuild->>DB: Truncate and rebuild
-    Rebuild->>DB: Set status='active'
-```
+![mermaid3](./2026-01-05-mermaid3.png)
 
 **4. Multiple async processors:**
 - Each processor tries to acquire the exclusive lock,
 - First one wins, others wait or skip,
 - Guarantees that only one processor handles a projection at a time.
 
-```mermaid
-sequenceDiagram
-    participant Processor1
-    participant Processor2
-    participant DB
-
-    Processor1->>DB: Try exclusive lock
-    DB-->>Processor1: acquired=true
-    Processor1->>DB: Process events...
-    
-    Processor2->>DB: Try exclusive lock
-    DB-->>Processor2: acquired=false
-    Note over Processor2: Skip or wait
-    
-    Processor1->>DB: Release lock
-    
-    Processor2->>DB: Try exclusive lock
-    DB-->>Processor2: acquired=true
-    Processor2->>DB: Process events...
-```
+![mermaid4](./2026-01-05-mermaid4.png)
 
 **5. When you add a new projection:**
 - No status row exists yet,
