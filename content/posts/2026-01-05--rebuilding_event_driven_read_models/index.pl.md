@@ -31,6 +31,8 @@ Such processing can happen asynchronously, but doesn't have to. If we're using a
 
 Inline processing is tempting because we're getting immediate consistency. Yet, there's no free lunch here. We're slowing down our event append as we need to process more, and our transactions will be open longer, which can cause deadlocks, etc. We also can't take advantage of batching event processing.
 
+Also, as [Bastian Waidelich](https://www.linkedin.com/in/bastian-waidelich-84865221) rightfully pointed out to me, using inline projections also increases the coupling and fragility of our business logic. If the inline projection fails (due to a bug in its projection logic, a database constraint or other random issue), then we won’t be able to append our event, which is counterintuitive, as why would read model block our business logic (e.g. confirming shopping cart).
+
 My thumb rule is that for single stream, simple projections, I prefer inline projections, but for more complex or workflow processing, I'd go with async.
 
 The big benefit of a durable event log is that we can correct past mistakes and gain more insights from existing data. 
