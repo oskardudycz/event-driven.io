@@ -1,14 +1,14 @@
 ---
-title: The Blind Spot in Rebuilding Read Models (and Why Letting Go is Sometimes the Answer)
+title: On rebuilding read models, Dead-Letter Queues and Why Letting Go is Sometimes the Answer
 category: "Event-Driven Architecture"
-cover: 2026-01-05-cover.png
+cover: 2026-01-19-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true
 ---
 
-![cover](2026-01-05-cover.png)
+![cover](2026-01-19-cover.png)
 
-Last week, I explained [how to rebuild Event-Driven Read Models in a safe and resilient way](/en/rebuilding_event_driven_read_models/). I asked readers to let me know if they find any blind spots in my design.
+In the last article, I explained [how to rebuild Event-Driven Read Models in a safe and resilient way](/pl/rebuilding_event_driven_read_models/). I asked readers to let me know if they find any blind spots in my design.
 
 Well, I found one myself.
 
@@ -16,7 +16,7 @@ This article is about that edge case, but more importantly, it's about the rabbi
 
 ## Everyone has a plan until they get punched in the mouth
 
-Let me recap the situation described in [the previous article](/en/rebuilding_event_driven_read_models/). We're using PostgreSQL to store events and read models. We want to rebuild an inline projection, one that's applied in the same transaction as the appended event.
+Let me recap the situation described in [the previous article](/pl/rebuilding_event_driven_read_models/). We're using PostgreSQL to store events and read models. We want to rebuild an inline projection, one that's applied in the same transaction as the appended event.
 
 In the design from my previous article, during a rebuild, we:
 1. Mark the projection as "rebuilding".
@@ -28,32 +28,11 @@ The hybrid locking strategy with advisory locks and status checks ensures that i
 
 Sounds solid. Here's where it breaks:
 
-```mermaid
-sequenceDiagram
-    participant Append as Event Append
-    participant DB
-    participant Rebuild
-    
-    Note over Rebuild: Almost done, checking for new events...
-    
-    Append->>DB: BEGIN transaction
-    Append->>DB: INSERT event (position 1000)
-    Append->>DB: Try shared advisory lock - BLOCKED
-    Note over Append: Will skip inline projection
-    
-    Rebuild->>DB: Query for new events
-    Note over Rebuild: Event 1000 not visible (uncommitted)
-    Rebuild->>DB: "No new events, I'm done!"
-    Rebuild->>DB: Set status = 'active', release lock
-    
-    Append->>DB: COMMIT (projection skipped)
-    
-    Note over DB: Event 1000 exists, projection not applied 💀
-```
+![mermaid1](./2026-01-19-mermaid1.png)
 
 The rebuild process checks for new events, sees none (because event 1000 is still in an uncommitted transaction), declares victory, and sets the projection to active. Meanwhile, the append transaction has already decided to skip the inline projection. When it finally commits, the event exists but was never projected. The rebuild process is done, and only new events will update the projection during the next update to the new event append.
 
-We could handwave it with [it won't ever happen!](/en/no_it_can_never_happen/). But, well, under load, this will happen eventually. You might not even notice it, but it will. The timing window is small, but with enough throughput, it becomes a certainty.
+We could handwave it with [it won't ever happen!](/pl/no_it_can_never_happen/). But, well, under load, this will happen eventually. You might not even notice it, but it will. The timing window is small, but with enough throughput, it becomes a certainty.
 
 ## The Rabbit Hole of "Fixes"
 
@@ -65,24 +44,7 @@ Let me walk you through the rabbit hole.
 
 PostgreSQL provides *pg_snapshot_xmin(pg_current_snapshot())* which tells us the oldest transaction that's still running. The idea: after processing events, wait until all potentially-skipping transactions have completed before marking the projection as active.
 
-```mermaid
-sequenceDiagram
-    participant Rebuild
-    participant DB
-    participant Appends
-    
-    Rebuild->>DB: "I'll wait for all transactions to finish"
-    Rebuild->>DB: Check pg_snapshot_xmin
-    
-    loop The endless chase
-        Appends->>DB: Tx 101 starts, sees 'rebuilding', decides to skip
-        Appends->>DB: Tx 102 starts, sees 'rebuilding', decides to skip
-        Note over Rebuild: Still waiting for visibility horizon...
-        Appends->>DB: Tx 103 starts, sees 'rebuilding', decides to skip
-    end
-    
-    Note over Rebuild: The target keeps moving!
-```
+![mermaid2](./2026-01-19-mermaid2.png)
 
 **Why it fails:** We don't know what we're waiting for. While we wait for existing transactions to complete, new transactions start and make their own skip decisions. The target keeps moving. We can never "catch up" because new skips happen while we're waiting for old ones to become visible.
 
@@ -106,37 +68,7 @@ Here's why it doesn't work.
 When a transaction starts, PostgreSQL assigns it the next available transaction ID. But transactions don't commit in the order they started. A transaction that started earlier (lower ID) might take longer to complete and commit after a transaction that started later (higher ID).
 
 Let's trace through a concrete scenario:
-```mermaid
-sequenceDiagram
-    participant Tx99 as Tx 99 (Append)
-    participant Tx100 as Tx 100 (Rebuild)
-    participant Tx101 as Tx 101 (Append)
-    participant DB
-    
-    Note over Tx99: Starts first, gets lowest ID
-    Tx99->>DB: BEGIN (assigned txid 99)
-    Tx99->>DB: INSERT event
-    Tx99->>DB: Check status = 'rebuilding', decide to SKIP
-    Note over Tx99: Slow network, waiting to commit...
-    
-    Tx100->>DB: BEGIN (assigned txid 100)
-    Tx100->>DB: Set sealing_txid = 100, status = 'completing'
-    
-    Tx101->>DB: BEGIN (assigned txid 101)
-    Tx101->>DB: INSERT event
-    Tx101->>DB: Check: my txid (101) >= sealing_txid (100)?
-    Note over Tx101: Yes! Safe to process inline
-    Tx101->>DB: Apply inline projection
-    Tx101->>DB: COMMIT
-    
-    Tx100->>DB: Set status = 'active'
-    Tx100->>DB: COMMIT
-    
-    Note over Tx99: Finally ready to commit
-    Tx99->>DB: COMMIT (but projection was skipped!)
-    
-    Note over DB: Event from Tx 99 exists, projection not applied 💀
-```
+![mermaid3](./2026-01-19-mermaid3.png)
 
 Here's what happened:
 
@@ -150,7 +82,7 @@ The fundamental issue: **we can't see uncommitted transactions.** When Tx 100 se
 
 You might think: "Just wait until all transactions before the sealing point have committed!" PostgreSQL even provides *pg_snapshot_xmin(pg_current_snapshot())* which tells you the oldest active transaction. But this leads us back to Attempt 1—while we wait, new transactions start and make their own skip decisions. The target keeps moving.
 
-I wrote about this exact problem in [How Postgres sequences issues can impact your messaging guarantees](/en/ordering_in_postgres_outbox/). The same visibility challenges that affect outbox ordering apply here. Transaction IDs are useful for ordering within committed data, but they can't help us coordinate with transactions that haven't committed yet.
+I wrote about this exact problem in [How Postgres sequences issues can impact your messaging guarantees](/pl/ordering_in_postgres_outbox/). The same visibility challenges that affect outbox ordering apply here. Transaction IDs are useful for ordering within committed data, but they can't help us coordinate with transactions that haven't committed yet.
 
 ### Attempt 3: Lock Appends During Transition
 
@@ -178,34 +110,7 @@ The decision in step 5 happens *inside* the transaction. If the transaction saw 
 
 Our exclusive lock in the completion flow blocks step 3 - new transactions can't acquire the shared lock. But what about transactions that already passed step 5 and are just waiting to commit?
 
-```mermaid
-sequenceDiagram
-    participant Append as In-flight Append (Tx 101)
-    participant DB
-    participant Rebuild as Rebuild (Tx 100)
-    
-    Note over Append: Transaction already in progress...
-    Append->>DB: BEGIN
-    Append->>DB: INSERT event (position 1000)
-    Append->>DB: Acquire shared advisory lock ✓
-    Append->>DB: Check status = 'rebuilding'
-    Note over Append: Decision made: SKIP projection
-    Append->>DB: (skip projection logic)
-    Note over Append: Doing other work, slow commit...
-    
-    Rebuild->>DB: Acquire EXCLUSIVE advisory lock
-    Note over Rebuild: Waits for Append's shared lock to release?
-    Note over Append: No! Append already holds shared lock
-    Note over Rebuild: Actually, append might have released it already
-    
-    Rebuild->>DB: Set status = 'active'
-    Rebuild->>DB: Release exclusive lock
-    
-    Append->>DB: COMMIT (with skipped projection!)
-    
-    Note over DB: Event 1000 committed, projection skipped
-    Note over DB: Status is 'active' but event was never projected 💀
-```
+![mermaid4](./2026-01-19-mermaid4.png)
 
 The timing here is tricky. Advisory locks in PostgreSQL can be either:
 - **Transaction-scoped** (*pg_advisory_xact_lock*): released automatically when transaction commits
@@ -221,25 +126,7 @@ If the connection dies while holding the exclusive lock:
 - The system is now in an unknown state
 - Other transactions resume with potentially inconsistent data
 
-```mermaid
-sequenceDiagram
-    participant Append
-    participant DB
-    participant Rebuild
-    
-    Rebuild->>DB: Acquire exclusive advisory lock
-    Rebuild->>DB: Begin status update...
-    
-    Note over Rebuild: 💥 Connection dies (network blip, OOM, crash)
-    
-    Note over DB: Lock released automatically
-    Note over DB: Status might be partially updated
-    Note over DB: What state are we in?
-    
-    Append->>DB: Acquire shared lock - succeeds!
-    Append->>DB: Check status - what does it say?
-    Note over Append: Undefined behavior
-```
+![mermaid5](./2026-01-19-mermaid5.png)
 
 We can't build reliable coordination on something that vanishes when connections fail. This is exactly why the original article combined advisory locks with persistent status checks—but that combination doesn't solve this particular race condition.
 
@@ -268,20 +155,7 @@ Both of these are solvable.
 
 If we can't prevent skips from happening, let's make them visible. When an inline projection skips, it could record that it skipped in the same transaction as the event append.
 
-```mermaid
-sequenceDiagram
-    participant App
-    participant DB
-    
-    App->>DB: BEGIN
-    App->>DB: INSERT event (position 1000)
-    App->>DB: Check projection status = 'rebuilding'
-    App->>DB: Must skip inline projection
-    App->>DB: INSERT skip record into system messages
-    App->>DB: COMMIT
-    
-    Note over DB: Event and skip record committed atomically
-```
+![mermaid6](./2026-01-19-mermaid6.png)
 
 If the append transaction rolls back, the skip record also rolls back (there's no event to worry about). If it commits, we have a durable record of exactly what was skipped.
 
@@ -293,7 +167,7 @@ The regular *emt_messages* table is for business events—the actual domain even
 A simple "skipped_events" table with just (projection_id, event_position) could be enough, but in the long term, it may be hard to maintain. As systems evolve, we'll have more cases where we might want to skip events. Plus, having system events recorded with all metadata gives us full observability of the internals of our system. We could even make tables for projections and processors' status, built as read models from system events! Still, let's hold our horses and get back to our use case.
 
 The system messages table could mirror the structure of regular messages with:
-- Global position sequencing (with all the transaction visibility handling from the [outbox ordering article](/en/ordering_in_postgres_outbox/))
+- Global position sequencing (with all the transaction visibility handling from the [outbox ordering article](/pl/ordering_in_postgres_outbox/))
 - Transaction ID tracking for proper visibility checks
 - Archiving support via *is_archived* flag
 - Partitioning for performance
@@ -345,25 +219,7 @@ For each skip record:
 2. Apply the projection for that event
 3. Archive the skip record (set is_archived = true)
 
-```mermaid
-sequenceDiagram
-    participant Processor
-    participant DB
-    
-    Note over DB: Status = 'active'
-    
-    Processor->>DB: Query emt_system_messages for this projection
-    DB-->>Processor: Skip record for event 1000 (tx visible)
-    
-    Processor->>DB: Load event 1000 from event log
-    Processor->>DB: Apply projection for event 1000
-    Processor->>DB: Archive skip record
-    
-    Processor->>DB: Query for more skip records
-    DB-->>Processor: None visible
-    
-    Note over Processor: Done draining
-```
+![mermaid7](./2026-01-19-mermaid7.png)
 
 The skip record and the event are committed in the same transaction. This gives us a simple invariant: if an event exists, either its projection was applied inline (status was 'active') or a skip record exists (status was 'rebuilding'). There's no third option where an event exists without a trace.
 
@@ -432,14 +288,14 @@ That's the kind of system I can reason about and trust.
 **If you're dealing with similar challenges, I'm happy to help through [consulting or mentoring](mailto:oskar@event-driven.io).** You can also join the discussion in our [Emmett Discord](https://discord.gg/fTpqUTMmVa)—we have a nice community working through these exact problems.
 
 Or check also other related resources:
-- [Rebuilding Event-Driven Read Models in a safe and resilient way](/en/rebuilding_event_driven_read_models/)
-- [How Postgres sequences issues can impact your messaging guarantees](/en/ordering_in_postgres_outbox/)
-- [Guide to Projections and Read Models in Event-Driven Architecture](/en/projections_and_read_models_in_event_driven_architecture/),
+- [Rebuilding Event-Driven Read Models in a safe and resilient way](/pl/rebuilding_event_driven_read_models/)
+- [How Postgres sequences issues can impact your messaging guarantees](/pl/ordering_in_postgres_outbox/)
+- [Guide to Projections and Read Models in Event-Driven Architecture](/pl/projections_and_read_models_in_event_driven_architecture/),
 - [Distributed Locking: A Practical Guide](https://www.architecture-weekly.com/p/distributed-locking-a-practical-guide),
-- [Consumers, projectors, reactors and all that messaging jazz in Emmett](/en/consumers_processors_in_emmett/),
-- [How to scale projections in the event-driven systems?](/en/how_to_scale_projections_in_the_event_driven_systems/),
-- [Checkpointing the message processing](/en/checkpointing_message_processing/),
-- [Let's talk about positions in event stores](/en/lets_talk_about_positions_in_event_stores/).
+- [Consumers, projectors, reactors and all that messaging jazz in Emmett](/pl/consumers_processors_in_emmett/),
+- [How to scale projections in the event-driven systems?](/pl/how_to_scale_projections_in_the_event_driven_systems/),
+- [Checkpointing the message processing](/pl/checkpointing_message_processing/),
+- [Let's talk about positions in event stores](/pl/lets_talk_about_positions_in_event_stores/).
 
 Cheers!
 
