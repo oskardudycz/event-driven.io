@@ -35,7 +35,7 @@ import { pgDumboDriver } from '@event-driven-io/dumbo/pg';
 const pool = dumbo({ connectionString, driver: pgDatabaseDriver });
 ```
 
-You need to set up a specific database driver (e.g. `pg` for PostgreSQL or `sqlite3` for SQLite), as Dumbo now supports multiple relational databases.
+You need to set up a specific database driver (e.g. _pg_ for PostgreSQL or _sqlite3_ for SQLite), as Dumbo now supports multiple relational databases.
 
 Having that, you can do stuff like:
 
@@ -43,9 +43,9 @@ Having that, you can do stuff like:
 import { SQL } from '@event-driven-io/dumbo';
 
 await pool.execute.batchCommand([
-      SQL`CREATE TABLE test_users (id SERIAL PRIMARY KEY, name TEXT)`,
-      SQL`INSERT INTO test_users (name) VALUES ('Alice'), ('Bob')`,
- ]);
+  SQL`CREATE TABLE test_users (id SERIAL PRIMARY KEY, name TEXT)`,
+  SQL`INSERT INTO test_users (name) VALUES ('Alice'), ('Bob')`,
+]);
 ```
 
 And also do queries:
@@ -53,8 +53,8 @@ And also do queries:
 ```ts
 const count = pool.execute.query<{count: number}>(
   SQL`SELECT COUNT(*) as count 
-           FROM test_users 
-           WHERE ${SQL.in('id', userIds)}`,
+      FROM test_users 
+      WHERE ${SQL.in('id', userIds)}`,
 );
 ```
 
@@ -66,13 +66,13 @@ It can also handle transactions:
 const users = await pool.withTransaction(async (tx) => {
   await tx.execute.command(
     SQL`INSERT INTO test_users (name) 
-    VALUES (${firstUserName}), (${secondUserName})`,
+        VALUES (${firstUserName}), (${secondUserName})`,
   );
 
   return execute.query<User>(
     SQL`SELECT *
-             FROM test_users 
-             WHERE ${SQL.in('id', userIds)}`,
+        FROM test_users 
+        WHERE ${SQL.in('id', userIds)}`,
    );
 });
 ```
@@ -110,7 +110,7 @@ Databases like Cloudflare D1 and Supabase expose databases as pay-as-you-go serv
 
 They do it by exposing the database API through HTTP API, for instance [PostgREST](https://docs.postgrest.org/en/v14/). This gives them easier management around throughput, security, etc., as each call is made as an HTTP request through the exposed API.
 
-Yet, that kills some options like: ekhm, transactions. The challenge with transactions is that they don't scale (that's why [MongoDB is WebScale](https://www.youtube.com/watch?v=b2F-DItXtZs)). They don't scale, as you'd need to open a transaction, do some freehand operations, and then commit or rollback. That means you need to keep a connection open during that time. If you're building SaaS, it's a no-go, because sneaky users would open it for a few hours, do crazy stuff, and kill your SaaS resources' utilisation.
+Yet, that kills some options like: ekhm, transactions. The challenge with transactions is that they don't scale (that's why [MongoDB is WebScale](https://www.youtube.com/watch?v=b2F-DItXtZs)). They don't scale, as you'd need to open a transaction, do some freehand operations, and then commit or rollback. That means (typically) you need to keep a connection open during that time. If you're building SaaS, it's a no-go, because sneaky users would open it for a few hours, do crazy stuff, and kill your SaaS resources' utilisation.
 
 But, boy, aren't transactions one of the selling points of relational databases? They do, so how to proceed?
 
@@ -128,7 +128,7 @@ What are sessions? [Per Cloudflare Docs](https://developers.cloudflare.com/d1/be
 
 Essentially, that means that we're getting [repeatable reads](https://jepsen.io/consistency/models/repeatable-read). So when we're starting specific sessions, they will be handled sequentially.
 
-**And now, the second ingredient: Batches. Per [Cloudflare docs](https://developers.cloudflare.com/d1/best-practices/read-replication)**
+**And now, the second ingredient: Batches. Per [Cloudflare docs](https://developers.cloudflare.com/d1/worker-api/d1-database/#batch)**
 
 > Sends multiple SQL statements inside a single call to the database. This can have a huge performance impact as it reduces latency from network round trips to D1. D1 operates in auto-commit. Our implementation guarantees that each statement in the list will execute and commit, sequentially, non-concurrently.
 > 
@@ -149,18 +149,21 @@ Then they get clear information on the first try.
 2. Allow users to explicitly open a session-based transaction by providing mode:
 
 ```ts
-const users = await pool.withTransaction(async (tx) => {
-  await tx.execute.command(
-    SQL`INSERT INTO test_users (name) 
-    VALUES (${firstUserName}), (${secondUserName})`,
-  );
+const users = await pool.withTransaction(
+  async (tx) => {
+    await tx.execute.command(
+      SQL`INSERT INTO test_users (name) 
+      VALUES (${firstUserName}), (${secondUserName})`,
+    );
 
-  return execute.query<User>(
-    SQL`SELECT *
-             FROM test_users 
-             WHERE ${SQL.in('id', userIds)}`,
-   );
-},  { mode: 'session_based' });
+    return tx.execute.query<User>(
+      SQL`SELECT *
+              FROM test_users 
+              WHERE ${SQL.in('id', userIds)}`,
+    );
+  },  
+  { mode: 'session_based' }
+);
 ```
 
 When they do it, they will need to be aware of the limitations of the tool they have. So that this will internally create a D1 session, and only handle a single batch of operations properly. We're mimicking the sequential processing by the session-based repeatable reads capability. Still, we need to remember that we won't be able to roll back changes across multiple statements. Only a single command or batch command is an atomic operation. 
@@ -169,13 +172,13 @@ We can't, for instance, run a batch of updates, and fail the whole batch if one 
 
 By making this choice to require explicit mode and naming it explicitly, I didn't manage to cover all cases, but at least made it safe, so people need to learn about this non-default behaviour and be more careful about it. When designing an API, it's usually better to start with a more strict option and do a bit of _"scarification"_ sometimes.
 
-Still, when I implemented that in Emmett and Pongo, I intentionally used it to enable event appends, but document operations, etc.
+Still, when I implemented that in [Emmett](https://event-driven-io.github.io/emmett/getting-started.html) and [Pongo](https://github.com/event-driven-io/pongo), I intentionally used it to enable event appends, but document operations, etc.
 
 If you'd like to try it, you can check Emmett's or Pongo's beta versions.
 
 For Pongo, you can install it with:
 
-```
+```shell
 npm install @event-driven-io/pongo@0.17.0-beta.21
 ```
 
@@ -185,20 +188,17 @@ And use it as:
 import { d1PongoDriver } from '@event-driven-io/pongo/cloudflare';
 
 const client = pongoClient({
-      driver: d1PongoDriver,
-      database,
-      transactionOptions: { mode: 'session_based' },
- });
+  driver: d1PongoDriver,
+  database,
+  transactionOptions: { mode: 'session_based' },
+});
 ```
-
-
 
 Or in Emmett by installing:
 
-```
+```shell
 npm install @event-driven-io/emmett-sqlite@0.43.0-beta.1
 ```
-
 
 And use it as:
 
@@ -207,9 +207,9 @@ import { getSQLiteEventStore } from '@event-driven-io/emmett-sqlite';
 import { d1EventStoreDriver } from '@event-driven-io/emmett-sqlite/cloudflare';
 
 const eventStore = getSQLiteEventStore({
-      driver: d1EventStoreDriver,
-      database,
- });
+  driver: d1EventStoreDriver,
+  database,
+});
 ```
 
 Still, even if you don't care about Emmett, Pongo, and my Open Source project, I hope that this will give you decent inspiration for your own tradeoffs analysis. 
