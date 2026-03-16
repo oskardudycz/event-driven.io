@@ -15,7 +15,7 @@ There's a lot of stuff about GenAI that makes me smile, but I still understand t
 
 **One of the ways that helped me is something I call _"Interactive Rubber-Ducking"_.** 
 
-Initially, I called it just [brainstorming](https://www.architecture-weekly.com/p/start-alone-then-together-why-software), but that wouldn't be precise, as I'm using it to brainstorm ideas, more to challenge and clarify them.
+Initially, I called it just [brainstorming](https://www.architecture-weekly.com/p/start-alone-then-together-why-software), but that wouldn't be precise, as I'm not using it to brainstorm ideas, more to challenge and clarify them.
 
 Most of the code I write nowadays is done in [my OSS projects](https://github.com/oskardudycz/). I'm grateful to have a [great community](https://discord.gg/fTpqUTMmVa) with people actively contributing in different ways; still, the canonical design and code work is on my side. As I work in an event-driven niche, I'm often alone with my own thoughts. I try to use the [RFC process](https://www.architecture-weekly.com/p/workflow-engine-design-proposal-tell) and discuss it with other fellow humans, but they are not always available. Even if they do, to avoid wasting their time, I need to know what to tell or ask them. I need to give some proposals (with alternatives) to have an [effective discussion](/en/fifteen_tips_on_how_to_run_meetings_effectively/). I may seem organised, but that's not always the thing. Sitting in your own head is not a great place to be in general. If you're a technical leader or an architect, I'm sure that you know that solitude too well.
 
