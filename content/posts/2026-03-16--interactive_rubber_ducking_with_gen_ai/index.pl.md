@@ -16,7 +16,7 @@ There's a lot of stuff about GenAI that makes me smile, but I still understand t
 
 **One of the ways that helped me is something I call _"Interactive Rubber-Ducking"_.** 
 
-Initially, I called it just [brainstorming](https://www.architecture-weekly.com/p/start-alone-then-together-why-software), but that wouldn't be precise, as I'm using it to brainstorm ideas, more to challenge and clarify them.
+Initially, I called it just [brainstorming](https://www.architecture-weekly.com/p/start-alone-then-together-why-software), but that wouldn't be precise, as I'm using it not to brainstorm ideas, more to challenge and clarify them.
 
 Most of the code I write nowadays is done in [my OSS projects](https://github.com/oskardudycz/). I'm grateful to have a [great community](https://discord.gg/fTpqUTMmVa) with people actively contributing in different ways; still, the canonical design and code work is on my side. As I work in an event-driven niche, I'm often alone with my own thoughts. I try to use the [RFC process](https://www.architecture-weekly.com/p/workflow-engine-design-proposal-tell) and discuss it with other fellow humans, but they are not always available. Even if they do, to avoid wasting their time, I need to know what to tell or ask them. I need to give some proposals (with alternatives) to have an [effective discussion](/pl/fifteen_tips_on_how_to_run_meetings_effectively/). I may seem organised, but that's not always the thing. Sitting in your own head is not a great place to be in general. If you're a technical leader or an architect, I'm sure that you know that solitude too well.
 
@@ -87,6 +87,28 @@ Tell me your thoughts, if that matches your way, if you haven't done it yet, try
 ---
 
 ## Interactive Rubber Ducking example
+
+### My idea
+
+I'd like to provide 2nd-level cache to Pongo. I want to either use keyv (https://www.npmjs.com/package/keyv) or lru-cache (https://www.npmjs.com/package/lru-cache) packages.
+
+For now, I'd like to do it by id.
+
+I probably need to either extend pongoCollection src/packages/pongo/src/core/collection/pongoCollection.ts with findeOneById and findManyByIds methods, or check if _id is passed in and then try to access the cache.
+
+Cache should be set up either on the pongo collection, pongo db or pongoClient.
+
+Optimistic Concurrency errors should invalidate cache (as that means someone else updated the record in db, e.g. through a different node). 
+
+InsertMany and insertOne should put it into the cache.
+
+I'd also like to expand the handle method to allow passing either an id or an array of IDs to support batch loading of entities and improve performance, and to support batch update/insert/delete.
+
+Thoughts?
+
+Which defaults should I set? (Of course, allowing users to override it).
+
+Check the related code I pasted. I want to keep it aligned and as non-invasive as possible.
 
 ### Q1: Cache library choice — lru-cache, keyv, or custom interface?
 

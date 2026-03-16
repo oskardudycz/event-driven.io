@@ -87,6 +87,28 @@ Tell me your thoughts, if that matches your way, if you haven't done it yet, try
 
 ## Interactive Rubber Ducking example
 
+### My idea
+
+I'd like to provide 2nd-level cache to Pongo. I want to either use keyv (https://www.npmjs.com/package/keyv) or lru-cache (https://www.npmjs.com/package/lru-cache) packages.
+
+For now, I'd like to do it by id.
+
+I probably need to either extend pongoCollection src/packages/pongo/src/core/collection/pongoCollection.ts with findeOneById and findManyByIds methods, or check if _id is passed in and then try to access the cache.
+
+Cache should be set up either on the pongo collection, pongo db or pongoClient.
+
+Optimistic Concurrency errors should invalidate cache (as that means someone else updated the record in db, e.g. through a different node). 
+
+InsertMany and insertOne should put it into the cache.
+
+I'd also like to expand the handle method to allow passing either an id or an array of IDs to support batch loading of entities and improve performance, and to support batch update/insert/delete.
+
+Thoughts?
+
+Which defaults should I set? (Of course, allowing users to override it).
+
+Check the related code I pasted. I want to keep it aligned and as non-invasive as possible.
+
 ### Q1: Cache library choice — lru-cache, keyv, or custom interface?
 
 **Question:** You mentioned both `keyv` and `lru-cache`. They pull in different directions. Which trade-off do you prefer?
