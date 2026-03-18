@@ -11,18 +11,6 @@ If you don't, you better check the talk I gave at Kafka Summit 2024. Knowing onl
 
 [![](2024-04-07-kafka.png)](https://www.confluent.io/events/kafka-summit-london-2024/event-modeling-anti-patterns/)
 
-During the session, I explained the specifics of event modelling, starting with bad practices and knowing why and how to avoid them. I told the story about the project that aimed to modernise legacy software into the event-driven world. In theory, artificial, but in practice, none of the examples were made up. Either I made those mistakes on my own, or I saw them in my projects or helped to fix them for my clients.
-
-I tried to make it both entertaining and educational, bitter and sweet. It is not easy when you're not a native speaker. There's a thin line between being funny and being silly.
-
-**The thin line is also between bad and good practices. And this thin line is: _context_.**
-
-By the way, I'm not a lucky guy, so I always try to be overprepared. I put a big effort into preparing the talk, and it paid off, as the comments were really positive. 
-
-That was a big relief for me, as it was my first time speaking for this community, and I wasn't sure how my talk about event modelling anti-patterns would be seen.
-
-Why unlucky? This time, the Wi-Fi on my laptop broke right before the talk. I also had in past cases like Windows Updates shutting my computer in the middle of the talk. After that, I have been taking two laptops with me for some time.
-
 **The talk also summarised my current article series about anti-patterns in event modelling. Here's the full list:**
 - [State Obsession](/en/state-obsession/),
 - [Property Sourcing](/en/property-sourcing/),
@@ -40,17 +28,19 @@ Why unlucky? This time, the Wi-Fi on my laptop broke right before the talk. I al
 - [How to design software architecture pragmatically](/en/how_to_design_software_architecture_pragmatically/),
 - [How to deal with privacy and GDPR in Event-Driven systems](/en/gdpr_in_event_driven_architecture/).
 
+During the session, I explained the specifics of event modelling, starting with bad practices and knowing why and how to avoid them. I told the story about the project that aimed to modernise legacy software into the event-driven world. In theory, artificial, but in practice, none of the examples were made up. Either I made those mistakes on my own, or I saw them in my projects or helped to fix them for my clients.
+
+I tried to make it both entertaining and educational, bitter and sweet. It is not easy when you're not a native speaker. There's a thin line between being funny and being silly.
+
+The thin line is also between bad and good practices. And this thin line is: _context_.
+
 **If you'd like to avoid those mistakes, don't hesitate to [contact me!](mailto:oskar@event-driven.io).** I'm here to help. Check my [training](/en/training/) page. A workshop is the most effective way to jump-start. 
 
 You can check [recommendations on my Linked.in profile](https://www.linkedin.com/in/oskardudycz/) to see how other people liked working with me.
 
-**Watch also my talk about The Light and The Dark Side of the Event-Driven Design:**
-
-`youtube: https://www.youtube.com/watch?v=0pYmuk0-N_4`
-
-Also, fun fact: Kafka in Polish is pronounced as "kawka," which means small coffee. Thus, the photo below.
-
-![](2024-04-07-kafka-komp.png)
+Watch also my other talks:
+- [The Light and The Dark Side of the Event-Driven Design](https://www.youtube.com/watch?v=0pYmuk0-N_4)
+- [Let's build the worst Event Sourcing system!](https://www.youtube.com/watch?v=20zvAJAhqS0)
 
 Cheers!
 
