@@ -35,6 +35,8 @@ Ok, so why would we take those two blind "people" and try to make them help each
 > 
 > Here's the idea:
 
+Don’t treat it as *“one magical prompt that will change your life”*. Most important is why we’re doing it, what happens next, and who’s actually doing the work. Spoiler alert: it’s not LLM.
+
 I'm using it as a command in Claude Code, and, most importantly, with beefier models like Opus, which can better reason and ask better questions. Doing it with lower-level models always gave me much worse results.
 
 I'm using it with Claude Code, not Claude Chat, because I want the model to scan my codebase. I can ask it to look in certain areas or to reference my answers. I can even ask to search the web or MCPs like [Context 7](https://context7.com/) to check documentation and APIs for popular libraries. Then it's getting more into brainstorming sometimes, than rubber-ducking, but that's fine.
@@ -47,7 +49,7 @@ It may look like Specification-Driven Design, but it's not.
 
 My goal for this exercise is not to get an actionable specification.
 
-The goal is to get our LLM-based Rubber Duck to ask us hard questions and make us think, not to make the LLM think for us. Find blind spots, and challenge our thinking.
+**The goal is to get our LLM-based Rubber Duck to ask us hard questions and make us think, not to make the LLM think for us. Find blind spots, and challenge our thinking.**
 
 But we're drivers, we need to know what we want to do, we need to know all the WHYs, and we also need to know HOW. LLM is here to help, but not to do creative work for us. It just pulls it out from our heads.
 
