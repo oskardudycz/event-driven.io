@@ -65,7 +65,7 @@ It's the one Oskar pays for his stay, because he wants to check out but didn't p
 
 And hey, we just found out new business rules, let's put them on the board and update our flow to be more precise and reflect our scenario by adding a note that this scenario represents a guest paying with a credit card.
 
-![](./em04.jpg)
+![](./em05.jpg)
 
 Now, what if the payment fails? Can it fail? Let's ask the business!
 
@@ -81,7 +81,7 @@ What if the guest doesn't have cash? 🤔
 
 Here's the updated flow. The one where Oskar pays for his entire stay with a credit card, but the Internet is down, and he doesn't have cash.
 
-![](./em05.jpg)
+![](./em04.jpg)
 
 Now, we found out:
 - **A new outcome**, failed payment, 
