@@ -100,9 +100,11 @@ And that's precisely how the Example Mapping session looks like. It’s a struct
 
 You don’t need a big setup, a huge ceremon, you don't need sticky notes, you can just use plain text like:
 
-Given: Example
-When: We use specific features
-Then: Based on business rules, we get a specific outcome.
+**Given:** Example
+
+**When:** We use specific features
+
+**Then:** Based on business rules, we get a specific outcome.
 
 Business people don't need to give them to you in such form. You can use the interview as I showed above and note it on your own, while you're discussing stuff. It's also a nice way to collaborate and visualise your discussions. 
 
