@@ -106,6 +106,8 @@ You don’t need a big setup, a huge ceremon, you don't need sticky notes, you c
 
 **Then:** Based on business rules, we get a specific outcome.
 
+![](./em07.jpg)
+
 Business people don't need to give them to you in such form. You can use the interview as I showed above and note it on your own, while you're discussing stuff. It's also a nice way to collaborate and visualise your discussions. 
 
 You don't even need to start with an interview; you can use the Example Mapping as a brainstorming tool to generate as many examples of your (part of the) system. Then, try to model it as you see fit and ask the business for clarifications in the preferred form. It can help facilitate discussion with your team, not only with business stakeholders.
