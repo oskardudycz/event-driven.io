@@ -15,17 +15,19 @@ Recently, I realised during [my workshops](/en/training/) that referencing Frien
 >
 > Just like in Friends. 
 
-I started to notice a bit slower head nodding and a bit more awkward smiles from the attendees. I repeated 
+I started to notice a bit slower head nodding and a bit more awkward smiles from the attendees. I repeated
 
-> "You know, like in Friends, the series titles episodes". 
+> You know, like in titles of Friends episodes.
 
-And head-nodding stopped; only totally awkwardly polite smiles remained. Definitely, it wasn't The One Where Everybody Finds Out. So I finally asked, you weren't watching Frients, didn't you?
+And head-nodding stopped; only totally awkwardly polite smiles remained. Definitely, it wasn’t The One Where Everybody Finds Out. So I finally asked:
+
+> You weren’t watching Friends, didn’t you?
 
 Obviously, the answer was:
 
-> Emmm. NO.
+> Emmm. No...
 
-Okay, then, if you don't know Friends or the Example Mapping technique, this will be The One Where You Find Out.
+**Okay, then, if you don't know Friends or the Example Mapping technique, this will be The One Where You Find Out.**
 
 Let's say that we're working on the guest checkout feature for a hotel management system.
 

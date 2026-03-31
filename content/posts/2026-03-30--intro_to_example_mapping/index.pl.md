@@ -16,17 +16,19 @@ Recently, I realised during [my workshops](/pl/training/) that referencing Frien
 >
 > Just like in Friends. 
 
-I started to notice a bit slower head nodding and a bit more awkward smiles from the attendees. I repeated 
+I started to notice a bit slower head nodding and a bit more awkward smiles from the attendees. I repeated
 
-> "You know, like in Friends, the series titles episodes". 
+> You know, like in titles of Friends episodes.
 
-And head-nodding stopped; only totally awkwardly polite smiles remained. Definitely, it wasn't The One Where Everybody Finds Out. So I finally asked, you weren't watching Frients, didn't you?
+And head-nodding stopped; only totally awkwardly polite smiles remained. Definitely, it wasn’t The One Where Everybody Finds Out. So I finally asked:
+
+> You weren’t watching Friends, didn’t you?
 
 Obviously, the answer was:
 
-> Emmm. NO.
+> Emmm. No...
 
-Okay, then, if you don't know Friends or the Example Mapping technique, this will be The One Where You Find Out.
+**Okay, then, if you don't know Friends or the Example Mapping technique, this will be The One Where You Find Out.**
 
 Let's say that we're working on the guest checkout feature for a hotel management system.
 
@@ -101,9 +103,13 @@ And that's precisely how the Example Mapping session looks like. It’s a struct
 
 You don’t need a big setup, a huge ceremon, you don't need sticky notes, you can just use plain text like:
 
-Given: Example
-When: We use specific features
-Then: Based on business rules, we get a specific outcome.
+**Given:** Example
+
+**When:** We use specific features
+
+**Then:** Based on business rules, we get a specific outcome.
+
+![](./em07.jpg)
 
 Business people don't need to give them to you in such form. You can use the interview as I showed above and note it on your own, while you're discussing stuff. It's also a nice way to collaborate and visualise your discussions. 
 
