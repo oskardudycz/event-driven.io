@@ -19,29 +19,25 @@ Or
 
 > Heads up: the coffee machine is empty again.
 
-Or 
-
-> It's fine, I already walked the dog. 
-
 I'm sure you either heard or used such phrases.
 
-We all know that there's some intention behind it. 
+We all know that there's some hidden intention behind it. 
 
-The intention is not to inform, but to trigger some action.
+The intention is not to inform, but to trigger a certain action.
 
-Formally, we're reporting on events to announce the facts, but in practice, they're passive-aggressive words. The real intention is to command someone.
+Formally, we're reporting on events to announce the facts, but in practice, we're using passive-aggressive words. The real intention is to command someone.
 
-We don't want to inform you that the trash bin is full, but we want someone to take it out. We don't want to inform you that the coffee machine requires a coffee bean refill, but we want someone to do it.
+We don't want to inform that the trash bin is full, but we want someone to take it out. We don't want to inform that the coffee machine requires coffee beans refill, but we want someone to do it.
 
 Passive-aggressive tone is the worst. It's toxic for both sides of the communication. Usually, it's just better to ask someone to do it. 
 
-The same rule also works in Event-Driven Modelling. We should avoid passive-aggressive communication at all costs. 
+The same rule applies in event-driven modelling. We should avoid passive-aggressive communication at all costs. 
 
 **We should watch out for Passive-Agressive Events. So events that should be commands.**
 
-I already warned you in past: [don't let Event-Driven Architecture buzzwords fool you](/en/dont_let_event_driven_architecture_buzzwords_fool_you/).
+I already warned you in past [not to let Event-Driven Architecture buzzwords fool us](/en/dont_let_event_driven_architecture_buzzwords_fool_you/).
 
-Event-Driven Architecture is an integration architecture style. We're trying to model our business processes so they run smoothly. For that, we prefer a non-blocking communication flow, with things happening in parallel at their own pace. The goal is to achieve autonomous components that reduce the time needed to understand them. That helps [maintain, or even replace them](/en/removability_over_maintainability/) as your business evolves.
+Event-Driven Architecture is an integration architecture style. We're trying to model our business processes to run smoothly. To achieve that, we prefer a non-blocking communication flow, with things happening in parallel at their own pace. The goal is to achieve autonomous components, reducing the time needed to understand them. That helps [maintain, or even replace them](/en/removability_over_maintainability/) as your business evolves.
 
 And events are enablers for that. They notify of what has happened, allowing other components to interpret facts and take the next steps.
 
@@ -53,27 +49,27 @@ It's parliament, per the official definition: a room full of angry, shouting peo
 
 **If we model our communication only in terms of events, our system will look just like that.** We'd just announce new facts in a passive-aggressive style and not be interested in what happens next. Oh, wait, are we really not interested? Actually, we are. If someone won't do what we expect with our information, we'll be even angrier.
 
-[What's the difference between a command and an event?](/en/whats_the_difference_between_event_and_command/) Both are messages. They convey specific information: a command indicating intent to do something, or an event describing what happened. From the computer’s point of view, they are no different. Only the business logic and the interpretation of the message can distinguish between an event and a command.
+[What's the difference between a command and an event?](/en/whats_the_difference_between_event_and_command/) Both are messages. They convey specific information: a command indicating intent to do something, an event describes what has happened. From the computer's point of view, they are no different. Only the business logic and the interpretation of the message can distinguish between an event and a command.
 
 And that's the main difference: commands can be rejected by the command handler. Events can only be ignored. 
 
-If we send an event, we expect someone to be interested, but we don't know who or how many components will. We just inform.
+If we publish an event, we expect one or more consumers to be interested in it. Yet, we don't know which components will do it. We just broadcast information.
 
 This can easily change into passive-aggressive:
 
 > I did my work, now it's your turn.
 
-And here's the crucial moment. If we'll always have a single consumer for an event that needs to run the specific logic and expect to get the particular event back, then it should be a command. It's not an event, we don't inform. We just want someone to take the next specific step and let us know when they finish.
+And here's the crucial part. If we always have a single consumer for an event that needs to run the specific logic and expect to get the particular event back, then it should be a command. It's not an event, we don't inform. We want some component to take the next specific step and let us know when it's finished.
 
-But hey, aren't we making our communication synchronous?
+Aren't we making our communication synchronous?
 
-What does it even mean, synchronous or asynchronous? That's what [Sam Newman discussed in his great talk](https://www.youtube.com/watch?v=2LMEJ-WGFTk). The main conclusion is that synchronous vs asynchronous discussion is actually about blocking or non-blocking. And that's much broader than the technicalities of whether we call something in-process via an HTTP endpoint or a messaging system.
+What does it even mean, synchronous or asynchronous?
 
-It's a common misconception that events are published through a messaging system (e.g. Kafka, RabbitMQ, SQS, WhateverQueue) and commands are sent through WebAPI.
+That's what [Sam Newman discussed in his great talk](https://www.youtube.com/watch?v=2LMEJ-WGFTk). The main conclusion is that synchronous vs asynchronous discussion is actually about blocking or non-blocking processing. And that's much broader topic than the technical solution (so whether we call something in-process via an HTTP endpoint or a messaging system).
 
-Those are technicalities. As said, both events and commands are messages; we can send them through a messaging system or via HTTP (e.g., events via webhooks).
+It's a common misconception that events are published asynchronously through a messaging system (e.g. Kafka, RabbitMQ, SQS, WhateverQueue) and commands are sent through synchronous WebAPI. That can be true for a specific solution, but not as the general rule. As said, both events and commands are messages; we can send them through a messaging system or via HTTP (e.g. events via webhooks).
 
-This misleading split stemmed from our expectation about handling, so we expected the command to wait for the result. For events, we don't expect a specific result, at least in theory.
+This misleading split came out from our expectation about handling. We expected the command handler to give us the result. For event handler, we don't expect a specific result. At least in theory.
 
 **If we publish a specific event to the messaging system and expect a specific critical path of follow-up events, then we're not making our communication non-blocking. It's still sequential.** We cannot proceed until the expected sequence occurs.
 
@@ -95,25 +91,23 @@ Once we receive information about a successful shipment or payment registration,
 1. **Blocking** - We need to wait for information about payments and shipments. This is our critical path.
 2. **Non-blocking**- Order process shouldn't stop if the notification wasn't sent or the data warehouse wasn't able to process events. We'd like that to happen, but it's expected rather than critical.
 
-Now, both payments can fail (if our customer doesn't have enough money), and the shipment may not be completed (if it's Black Friday, and multiple people are competing for the same product).
+Now, both payments may fail (if our customer doesn't have enough money), and the shipment may not be completed (if it's Black Friday, and multiple people are competing for the same product).
 
-If that happens, as the ordering module, we also need to take action, for instance, do reimbursement if the shipment wasn't completed, and eventually cancel the order. 
+If that happens, ordering module needs to take action, for instance, do reimbursement if the shipment wasn't completed, and eventually cancel the order. 
 
-If we're just focused on events, we tend to forget about _"negative"_ scenarios. If all communication is through events, then it's too easy to stay in I-Alread-Did-My-Job mode.
+If we don't foresee that and stay in passive-aggressive mode,  we tend to forget about _"negative"_ scenarios. it's too easy to stay in I-Alread-Did-My-Job mode. This will have severe consequences: blocked orders, missed communication, and dissatisfied customers.
 
-We may not notice that another module can actually say no:
+We may lear too late that another module can actually say no:
 1. Payment module can say: _Man, that's not going to happen, you've already run out of money_.
 2. Shipment module can say: _Man, I'm sorry, but you weren't fast enough and we've run out of product_.
 
 And both of those scenarios will block successful order completion.
 
-If we don't foresee that and stay in passive-aggressive mode, this will have severe consequences: blocked orders, missed communication, and dissatisfied customers.
+How to find such cases? [Doing Example Mapping during modelling can be a good option for that](/en/intro_to_example_mapping/).
 
-How to find such scenarios? [Doing Example Mapping during modelling can be a good option for that](/en/intro_to_example_mapping/).
+Most importantly, we need to embrace the fact that some processes require direct, blocking communication, and others don't. Just like in real life, sometimes it's just more effective to tell someone to do something. We should avoid micromanagement and aim for autonomy, but not end up with anarchy.
 
-Most importantly, we need to embrace the fact that some scenarios require direct, blocking communication, and others don't. Just like in real life, sometimes it's just more effective to tell someone to do something. We should avoid micromanagement and aim for autonomy, but not end up with anarchy.
-
-In our case, it'd be better to have a coordinator ([workflow](/en/how_to_have_fun_with_typescript_and_workflow/), [saga, process manager](/en/saga_process_manager_distributed_transactions/), etc.) that publishes the _OrderConfirmed_ event for modules not on the critical path and sends commands like _RecordPayment_ and _InitiateShipment_.
+In our case, it'd be better to have a coordinator ([workflow](/en/how_to_have_fun_with_typescript_and_workflow/), [saga, process manager](/en/saga_process_manager_distributed_transactions/), [To-Do List](/en/to_do_list_and_passage_of_time_patterns_combined/) etc.) that publishes the _OrderConfirmed_ event for modules not on the critical path and sends commands like _RecordPayment_ and _InitiateShipment_.
 
 By that, we're separating responsibilities and making explicit what should be explicit. This also helps in understanding the business process, as you have a central place to see the critical flow and get proper observability. 
 
@@ -125,17 +119,15 @@ Is that all? Not quite, there's one more message type we model as events that sh
 
 What's the Document? It's a state. Or to be precise: self-contained data we have at a certain point in time. We can store it, but we can also publish information about its new value.
 
-That's probably why Martin Fowler frames it as [Event-Carried State Transfer](https://martinfowler.com/articles/201701-event-driven.html), and I don't like that term. For me, it's extremely misleading; it's not an event, as it doesn't tell of what has happened, but what has changed.
+That's probably why Martin Fowler frames it as [Event-Carried State Transfer](https://martinfowler.com/articles/201701-event-driven.html), and I don't like that term. For me, it's extremely misleading as, it doesn't tell what has happened, but what has changed. It just gathers the new version of the state (or the diff).
 
-It's a common anti-pattern, a variation of [State Obsession](/en/state-obsession/). Too many people believe it's fine to connect the messaging system to the database, use tools like [Change Data Capture](https://en.wikipedia.org/wiki/Change_data_capture), and publish it automatically to others.
-
-Still, we're ending up again in passive-aggressive communication:
+In my opinion, it's a variation of [State Obsession anti-pattern](/en/state-obsession/). Many people fell into that and believe it's fine to connect the messaging system to the database, use tools like [Change Data Capture](https://en.wikipedia.org/wiki/Change_data_capture), and publish it automatically to others. They end up with passive-aggressive communication style:
 
 > You have all you need. The whole state is in the _events_, just interpret it.
 
-But how can you reason about what has happened if instead of _OrderConfirmed_ you get _OrderCreated_, _OrderUpdated_, _OrderDeleted_? 
+How can you reason about what has happened if instead of _OrderConfirmed_ you get _OrderCreated_, _OrderUpdated_, _OrderDeleted_? You'd need to do the diff, compare with previous values, and do the guess about the reason of the specific change.
 
-You not only deal with [Clickbait Events](/en/clickbait_event/) but also have a leaking business abstraction. All consumers need to understand the internals of your processing to detect a specific type of change. I wrote about it in detail in [Internal and external events, or how to design event-driven API](/en/internal_external_events/).
+You deal with [Clickbait Events](/en/clickbait_event/) and have a leaking business abstraction. All consumers need to understand the internals of your processing to detect a specific type of change. I wrote about it in detail in [Internal and external events, or how to design event-driven API](/en/internal_external_events/).
 
 Again, the loose coupling of the event-driven processing is only loose for producers; consumers need to adapt. This can lead to hidden coupling, where a change in the producer breaks consumer flows. And that's the worst type of coupling you can get.
 
