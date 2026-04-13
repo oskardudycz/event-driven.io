@@ -17,6 +17,7 @@ If you don't, you better check the talk I gave at Kafka Summit 2024. Knowing onl
 - [Property Sourcing](/en/property-sourcing/),
 - [I'll just add one more field](/en/i_will_just_add_one_more_field/).
 - [Clickbait event](/en/clickbait_event/),
+- [Passive Aggressive Events](/en/passive_aggressive_events),
 - [Should you record multiple events from business logic?](/en/one_or_more_event_that_is_the_question/),
 - [Stream ids, event types prefixes and other event data you might not want to slice off](/en/on_putting_stream_id_in_event_data/).
 

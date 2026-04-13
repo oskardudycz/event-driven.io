@@ -218,6 +218,8 @@ Check also more in:
 - [Marc Klefter - Powering Event-Driven APIs with Event Sourcing](https://www.youtube.com/watch?v=Pph8TFPOfko),
 - [Pat Helland - Data on the Outside vs. Data on the Inside](https://queue.acm.org/detail.cfm?id=3415014).
 
+**If you're dealing with such issues, I'm happy to help you through consulting, [training](/pl/training) or mentoring. [Contact me](mailto:oskar@event-driven.io) and we'll find a way to unblock you!**
+
 Cheers!
 
 Oskar

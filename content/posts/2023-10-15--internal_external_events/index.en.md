@@ -51,7 +51,7 @@ Then we contact our colleague and say:
 
 **If we reach that point, we should stop and do a sanity check.** We may conclude that we were right in shouting _"What a moron!"_, but the target was wrong. Our colleague doesn't need to know about the details of our implementation. What's more, they should not know the details of our process. If they have to, then we have leaking abstractions.
 
-I wrote about that issue in detail in [Events should be as small as possible, right?](/pl/events_should_be_as_small_as_possible/). If we expose our internal events, we must communicate and consult each change we make with other teams. We have to assume that the event is being used by someone else and that they may need to use the new one.
+I wrote about that issue in detail in [Events should be as small as possible, right?](/en/events_should_be_as_small_as_possible/). If we expose our internal events, we must communicate and consult each change we make with other teams. We have to assume that the event is being used by someone else and that they may need to use the new one.
 
 **So, the easiness of just exposing everything will bite us hard.**
 
@@ -71,7 +71,7 @@ We already know that's not as _easy peasy_ as we thought. Instead of downplaying
 
 > _"I'm open to that, but before we agree on how to technically solve it. Could you explain me your need and business scenario?"_
 
-So we should ask our colleague to [bring us the problem instead of the solution](/pl/bring_me_problems_not_solutions/) and understand their use case. 
+So we should ask our colleague to [bring us the problem instead of the solution](/en/bring_me_problems_not_solutions/) and understand their use case. 
 
 **We can then define our API.** Yes, API. Events should be treated as such. We need to understand:
 - how many other modules will have a similar need,
@@ -162,11 +162,11 @@ class HandleCartFinalised: IEventHandler<EventEnvelope<ShoppingCartConfirmed>>
 3. Builds enriched external events from internal events and loaded data.
 4. Forwards it to messaging tooling.
 
-Event handler can be triggered by [outbox](/pl/outbox_inbox_patterns_and_delivery_guarantees_explained/), [subscription](en/integrating_Marten/) or your preferred messaging tooling. Event bus can store the message in the outbox to forward it later or just push it to your favourite messaging system.
+Event handler can be triggered by [outbox](/en/outbox_inbox_patterns_and_delivery_guarantees_explained/), [subscription](en/integrating_Marten/) or your preferred messaging tooling. Event bus can store the message in the outbox to forward it later or just push it to your favourite messaging system.
 
 If you're using Event Sourcing, you can append an event to the dedicated external stream (per shopping cart or per module, depending on your needs) and then forward it via subscription to the messaging system.
 
-**I'm using Marten's _AggregateStreamAsync_ method that [builds state from event](/pl/how_to_get_the_current_entity_state_in_event_sourcing/) for loading.** That's a big benefit of event sourcing, as I can pass the internal event stream position and get the state at a specific point in time. If I used a regular approach, I may face race conditions related to eventual consistency. The event handler could be triggered after there was another state change. Then, if I load it, I would get too recent state. It could mean that we're trying to enrich the event about shopping cart confirmation but getting cancelled if someone did that in the meantime. It doesn't have to be a big deal if our Summary Event is a final one, but that's something that we should keep in mind.
+**I'm using Marten's _AggregateStreamAsync_ method that [builds state from event](/en/how_to_get_the_current_entity_state_in_event_sourcing/) for loading.** That's a big benefit of event sourcing, as I can pass the internal event stream position and get the state at a specific point in time. If I used a regular approach, I may face race conditions related to eventual consistency. The event handler could be triggered after there was another state change. Then, if I load it, I would get too recent state. It could mean that we're trying to enrich the event about shopping cart confirmation but getting cancelled if someone did that in the meantime. It doesn't have to be a big deal if our Summary Event is a final one, but that's something that we should keep in mind.
 
 **We can use precisely the same techniques if our module is not generic but supportive.** The difference could be that our API should be then more like _[Backend for Frontends](https://learn.microsoft.com/en-us/azure/architecture/patterns/backends-for-frontends)_ and we publish more events fine-tuned for different customer needs. For instance, besides the internal channel, we could have two external channels:
 - _shopping\_cart\_finance-external_ - for all other modules needing information about financial aspects of the buying process,
@@ -216,6 +216,8 @@ Check also more in:
 - [Derek Comartin - Event-Driven Architecture Gotcha! Inside or Outside Events](https://www.youtube.com/watch?v=qf-BSAhbrWw),
 - [Marc Klefter - Powering Event-Driven APIs with Event Sourcing](https://www.youtube.com/watch?v=Pph8TFPOfko),
 - [Pat Helland - Data on the Outside vs. Data on the Inside](https://queue.acm.org/detail.cfm?id=3415014).
+
+**If you're dealing with such issues, I'm happy to help you through consulting, [training](/en/training) or mentoring. [Contact me](mailto:oskar@event-driven.io) and we'll find a way to unblock you!**
 
 Cheers!
 

@@ -245,6 +245,27 @@ I hope this post will make it easier to understand what you're signing for when 
 
 Getting the simple model is not easy. We must remember that we're modelling to solve the business process most efficiently. And I believe that keeping our code close to that process and explicit is one of the essential tools to achieve that.
 
+---
+
+**If you're dealing with such issues, I'm happy to help you through consulting, [training](/en/training) or mentoring. [Contact me](mailto:oskar@event-driven.io) and we'll find a way to unblock you!**
+
+**See also more in series about [event modelling anti-patterns](/en/anti-patterns/):**
+- [State Obsession](/en/state-obsession/),
+- [Property Sourcing](/en/property-sourcing/),
+- [I'll just add one more field](/en/i_will_just_add_one_more_field/),
+- [Clickbait event](/en/clickbait_event/),
+- [Passive Aggressive Events](/en/passive_aggressive_events),
+- [Should you record multiple events from business logic?](/en/one_or_more_event_that_is_the_question/),.
+
+**Check also more general considerations:**
+- [Events should be as small as possible, right?](/en/events_should_be_as_small_as_possible/),
+- [What's the difference between a command and an event?](/en/whats_the_difference_between_event_and_command/),
+- [Internal and external events, or how to design event-driven API](/en/internal_external_events/),
+- [Event Streaming is not Event Sourcing!](/en/event_streaming_is_not_event_sourcing/),
+- [Don't let Event-Driven Architecture buzzwords fool you](/en/dont_let_event_driven_architecture_buzzwords_fool_you/),
+- [How to design software architecture pragmatically](/en/how_to_design_software_architecture_pragmatically/),
+- [How to deal with privacy and GDPR in Event-Driven systems](/en/gdpr_in_event_driven_architecture/).
+
 Cheers!
 
 Oskar
