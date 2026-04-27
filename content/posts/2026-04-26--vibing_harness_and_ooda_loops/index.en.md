@@ -373,7 +373,7 @@ Could I do it better? Sure, but that's not the point. I wanted to show you my fi
 
 It's not about vibing, but it's also not about analysis paralysis.
 
-I hope you're now better equipped to think about when vibing — with beer or without, with LLMs or without — actually helps, and when it doesn't.
+I hope you're now better equipped to think about when vibing, with beer or without, with LLMs or without, actually helps, and when it doesn't.
 
 Vibe coding is just high-frequency steering. It only works if you have a Harness: a mechanical way to observe and orient, so you don't steer the whole project into a wall.
 
@@ -383,7 +383,7 @@ Harness is not magic, a new discipline, or the next buzzword; I hope I showed yo
 
 **So iterate fast, but wisely remembering to do the full loop.** It's great that LLMs can help us make Acting faster, but we should not skip other steps. We should aim for a fast feedback loop to iterate in the right direction and achieve continuous improvement, to deliver proper value.
 
-Just like Vibing isn't new, we shouldn't abandon _old_ engineering practices. We should also not replace collaboration with solitary self-high fives.
+Just like Vibing isn't new, we shouldn't abandon _”old”_ engineering practices. We should also not replace collaboration with solitary self-high fives.
 
 Check also:
 - [Emmett Pull Request with mentioned changes](https://github.com/event-driven-io/emmett/pull/335)
