@@ -18,8 +18,8 @@ Nie kupuję rzeczy pierwszych z brzegu, sprawdzam Ceneo, czytam fora, na Allegro
 
 Wczoraj po dwóch latach naprawiłem zepsutą żaluzję.
 
-– _Jaka jest Pana największa wada?_
-– _Jestem perfekcjonistą._
+- _Jaka jest Pana największa wada?_
+- _Jestem perfekcjonistą._
 
 Czasem mówię o sobie mistrz niedokończonych pomysłów. Jak większość z nas marzę o swoim własnym pomyśle, swoim własnym produkcie, startupie. Regularnie przystępuję do kolejnych błyskotliwych (w zamierzeniu) pomysłów i regularnie je nie dokańczam. Każda próba kończy się tak samo, "to samo miejsce inna dziewczyna". 
 
@@ -28,14 +28,14 @@ Oczywiście każdy mój projekt musi mieć solidne fundamenty. Najpierw architek
 W zeszłym tygodniu trafiła mi w ręce książka, w zasadzie ebook "Just Fucking Ship" napisana przez Amy Hoy. Świetnie trafiła w mój nastrój zadumy nad tym co robię źle. Dlaczego Borys jest tym pamiętanym przez wszystkich piłkarzem z podwórka, nie ja? Dlaczego mój tato mówi, że mam słomiany zapał? Dlaczego Xamarin i SignalR świecą sukcesy, a mój niedokończony framework z podobnymi założeniami leży gdzieś na końcu mojego dysku nie rozwijany od kilku lat? Przecież wydawałoby się, że robię wszystko jak należy. Rozsądek. Solidne podstawy. Wiedza. Doświadczenie. Mr Prim and Proper. 
 
 Może to właśnie dlatego, że popełniam te same błędy co wszyscy (no prawie wszyscy), czyli:
-– nie skupiam się na złapaniu króliczka tylko go gonieniu. Projekt zaczynam od frameworka, stronę od layoutu, a w ogóle to od wymyślenia nazwy domeny. Przez co tracę okres największego entuzjazmu na pierdoły, które z punktu widzenia produktu są najmniej ważne.
-– nie notuję, nie spisuję planów – "no bo po co? Nie potrzebuję tego – ćwiczę pamięć"
-– nie skupiam się na celu, nie wyznaczam sobie deadline'ów.
-– nie postępuję w myśl zasady "start small, grow big". 
+- nie skupiam się na złapaniu króliczka tylko go gonieniu. Projekt zaczynam od frameworka, stronę od layoutu, a w ogóle to od wymyślenia nazwy domeny. Przez co tracę okres największego entuzjazmu na pierdoły, które z punktu widzenia produktu są najmniej ważne.
+- nie notuję, nie spisuję planów - "no bo po co? Nie potrzebuję tego - ćwiczę pamięć"
+- nie skupiam się na celu, nie wyznaczam sobie deadline'ów.
+- nie postępuję w myśl zasady "start small, grow big". 
 
 https://twitter.com/abt_programming/status/561488797440176128
 
-Książka Amy nie jest wielce odkrywcza, nie da złotej recepty – nawet do tego nie aspiruje. To co na pewno da to powiew świeżości w głowie, otwarcie kilku zamkniętych zapadek i garść cennych, konkretnych, życiowych porad. Najważniejsza z nich to: wyznacz sobie cel, termin i po prostu to kurwa zrób. Najpierw cel i czas potem zakres i metody realizacji. Oczywiście, każdy z nas powie "e no, tak to się nie zawsze da zrobić. Tylko spójrzcie inaczej: czy chcąc zaprosić znajomych na obiad planujemy, że "może to za 2 tygodnie jednak, bo nie zdążę zrobić trzydaniowego obiadu, tortu i domowej nalewki". Przecież tak nie robimy. Dopasowujemy listę dań lub kupujemy coś gotowego. Czy nie da się tej polityki przenieść na grunt naszych też projektów? 
+Książka Amy nie jest wielce odkrywcza, nie da złotej recepty - nawet do tego nie aspiruje. To co na pewno da to powiew świeżości w głowie, otwarcie kilku zamkniętych zapadek i garść cennych, konkretnych, życiowych porad. Najważniejsza z nich to: wyznacz sobie cel, termin i po prostu to kurwa zrób. Najpierw cel i czas potem zakres i metody realizacji. Oczywiście, każdy z nas powie "e no, tak to się nie zawsze da zrobić. Tylko spójrzcie inaczej: czy chcąc zaprosić znajomych na obiad planujemy, że "może to za 2 tygodnie jednak, bo nie zdążę zrobić trzydaniowego obiadu, tortu i domowej nalewki". Przecież tak nie robimy. Dopasowujemy listę dań lub kupujemy coś gotowego. Czy nie da się tej polityki przenieść na grunt naszych też projektów? 
 
 Amy zauważa, że za bardzo skupiamy się na projekcie jako całości. Nie wyznaczamy sobie małych celów, których zrealizowanie pozwoliłoby nam być osiągnąć satysfakcję i motywację do kolejnych działań. Tak bardzo skupiamy się na ogólnej wizji, że w końcu zarzucamy nasz pomysł nie robiąc niczego. Boimy się, że nie jest on wystarczająco fajny, wystarczająco innowacyjny. Czemu nie damy innym szansy tego ocenić? Zostajemy w progach startowych zamiast po prostu biec i zobaczyć gdzie dobiegniemy. Zapominamy, że aby wejść na piętro należy pokonać schody krok po kroku. Stojąc na parterze, zastanawiając czy damy radę wejść niczego nie osiągniemy. Możemy nawet wjechać windą, bylebyśmy to kurwa zrobili. 
 
