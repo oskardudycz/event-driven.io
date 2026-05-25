@@ -11,7 +11,7 @@ author: oskar dudycz
 
 It took me hours and wasn't easy to reproduce, even though the fix is one line. I found it in [a Cybertec post](https://www.cybertec-postgresql.com/en/postgresql-now-vs-nowtimestamp-vs-clock_timestamp/), as I quite often do when I'm staring at something odd in PostgreSQL. I'm supposed to know my way around the database, but I missed it, which is another reason I want to write this down.
 
-I was working on distributed locking in [Emmett](https://github.com/event-driven-io/emmett). When you scale a service horizontally, you can easily end up with two instances of the same message processor running at once. That's bad. Both instances would pull the same events, both would write to the same projection storage, and we'd get duplicated side effects, overwritten state and broken checkpoints. So we need to guarantee that exactly one instance of each processor is active at any time. Emmett does that using two things working hand in glove: PostgreSQL advisory locks and a row in the `emt_processors` table. The row keeps the durable side of ownership: which instance currently holds the processor (`processor_instance_id`), when it last checked in (`last_updated`), and what state it's in (`status`). I described the full design in [Rebuilding Event-Driven Read Models in a safe and resilient way](/en/rebuilding_read_models_safely/), so I won't bore you with the whole picture here.
+I was working on distributed locking in [Emmett](https://github.com/event-driven-io/emmett). When you scale a service horizontally, you can easily end up with two instances of the same message processor running at once. That's bad. Both instances would pull the same events, both would write to the same projection storage, and we'd get duplicated side effects, overwritten state and broken checkpoints. So we need to guarantee that exactly one instance of each processor is active at any time. Emmett does that using two things working hand in glove: PostgreSQL advisory locks and a row in the `emt_processors` table. The row keeps the durable side of ownership: which instance currently holds the processor (`processor_instance_id`), when it last checked in (`last_updated`), and what state it's in (`status`). I described the full design in [Rebuilding Event-Driven Read Models in a safe and resilient way](/en/rebuilding_event_driven_read_models/), so I won't bore you with the whole picture here.
 
 For this story, the part that matters is what happens when an instance crashes. The crashed processor's connection is gone, so its advisory lock has already been released. A new instance can grab the advisory lock without resistance. But the row in `emt_processors` still says `status = 'running'` and still points to the previous owner, because the crash didn't give anyone a chance to clean it up.
 
@@ -185,7 +185,7 @@ Uff. That bug was nasty.
 ![](./2026-05-25-nasty.gif)
 
 Read also:
-- [Rebuilding Event-Driven Read Models in a safe and resilient way](/en/rebuilding_read_models_safely/), with the locking design this bug lives inside,
+- [Rebuilding Event-Driven Read Models in a safe and resilient way](/en/rebuilding_event_driven_read_models/), with the locking design this bug lives inside,
 - [Distributed Locking: A Practical Guide](https://www.architecture-weekly.com/p/distributed-locking-a-practical-guide),
 - [Consumers, projectors, reactors and all that messaging jazz in Emmett](/en/consumers_processors_in_emmett/),
 - [Checkpointing the message processing](/en/checkpointing_message_processing/),
