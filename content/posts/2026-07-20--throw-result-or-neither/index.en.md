@@ -347,15 +347,15 @@ We could, of course, do more advanced error or status mapping by returning exact
 
 ## **Several decisions on one stream**
 
-You may be wondering why I added middleware, which sounds poshy for a simple filtering. But let’s discuss one more scenario: a batch import from the external e-commerce system.
+You may be wondering why I added middleware, which sounds posh for simple filtering. But let's discuss one more scenario: a batch import from the external e-commerce system.
 
-A batch import often contains records for many business objects. Passing the complete list of them to one command handler would be the wrong boundary here: each cart has its own stream and its own concurrency check.
+A batch import often contains the contents of multiple shopping carts. Passing all of them to one command handler would be the wrong boundary here: each cart has its own stream and its own concurrency check.
 
-A single imported record can still require several operations on one aggregate. Suppose the shop imports draft carts from an external sales channel. One import file contains many carts, while each cart record contains several product lines. The importer handles the records separately, but all lines from one record target the same shopping-cart stream.
+Even a single imported shopping cart can still require several operations. Especially if we're trying to deduce what has happened to a shopping cart in the external system, or we should add some specific operations on top (e.g., discounts, etc.). 
 
-The integration contract requires the imported cart to match the source record. If one line is unavailable or the record exceeds the cart limit, storing the remaining lines would create a partial cart that exists in neither system. The importer therefore translates the lines into commands, but we’d like to handle them as one atomic transaction.
+The common scenario for imports is translating state changes (e.g., products in the shopping cart) into commands. This gives at least a chance to make our domain context meaningful. Not perfect, but we've got to save ourselves sometimes. 
 
-We could map a line of items to the sequence of our business logic:
+After translation, we may end up with a sequence of granular business operations. The mapping could look like that:
 
 ```typescript
 const importCartCommands: AddProductItem[] = importedCart.productItems.map(
@@ -382,11 +382,11 @@ const { events, nextExpectedStreamVersion } = await handle(
 );
 ```
 
-Every command uses the existing `addProductItem` decision and sees the provisional state produced by the previous accepted line. That allows the cart-limit rule to work across the complete record. Persistence waits until every line has been accepted.
+Every command uses the existing `addProductItem` decision and sees the provisional state produced by the previous accepted products. That allows us to apply our own rules and also handle [idempotence correctly](/en/idempotent_command_handling/). Persistence waits until every command has been accepted.
 
-Implementing that directly requires holding accepted events in memory and using them to build the state for the next decision. Only after the last line has been accepted can the application append them together. Technically it’s the same command logic, just wrapped with foreach, as we now have a sequence of decisions instead of the single one.
+After batch processing, we can gather the result events. What's more, each operation should use the state with the applied event from the previous command. We store the result in the shopping carts as a single atomic batch once the last command has been handled.
 
-If every line is accepted, the handler appends their events together to that cart stream.
+Technically it’s the same command logic, just wrapped with foreach, as we now have a sequence of decisions instead of the single one.
 
 What should happen if we encounter unwanted scenarios? So e.g. `ProductItemOutOfStock` or `ShoppingCartItemLimitReached`? Should we stop processing or continue? Let me be a consultant for a moment: It depends! Fine, but on what? On your business logic.
 
@@ -444,11 +444,11 @@ const handle = CommandHandler<ShoppingCart, ShoppingCartEvent>({
 
 Still, as you see, we’re building on top of our business logic. It remains the same; we’re just handling persistence, statuses, etc.
 
-Returned events show which lines passed before the rejection and which event stopped the import. The importer can report that outcome against the source record and continue with the next cart, which has a different stream.
+Returned events show which command handling passed before the rejection and which event stopped the import. The importer can report that outcome against the source record and continue with the next cart, which has a different stream.
 
-For one product, rejecting meant leaving the stream unchanged. For an imported cart, it also means discarding the accepted events produced earlier for the same record.
+For one product, rejecting meant leaving the stream unchanged. For an imported cart, it may also mean discarding the accepted events produced earlier for the same record.
 
-If every line is accepted, the handler appends their events together to that cart stream. If one decision returns `ProductItemOutOfStock` or `ShoppingCartItemLimitReached`, `result.events` contains the outcomes produced up to that point, the imported record makes no change to the cart, and later lines are not considered.
+If every command is accepted, the handler appends their events together to that cart stream. If one decision returns `ProductItemOutOfStock` or `ShoppingCartItemLimitReached`, `result.events` contains the outcomes produced up to that point, the imported record makes no change to the cart, and later commands are not considered.
 
 The import job can map those events to a record-level outcome. It can report the exact business issue to the source system and continue with the next cart:
 
@@ -531,9 +531,9 @@ If we’re getting the request from our UI, we’re the authority, so throwing c
 
 Still, should we throw on an import scenario? Who’s the authority here? What we’re doing is internalising decisions that someone else already made and is just informing us about, or telling us to do our job based on this information.
 
-So throwing is not a valid option here. The external system told us that its cart contains these product lines. That is true about the source system, but it does not mean our cart can accept them. The importer translates the external record into commands, and the returned events describe how our local model understood each line.
+So throwing is not a valid option here. The external system told us that its cart contains these products. That is true about the source system, but it does not mean our cart can accept them. The importer translates the external record into commands, and the returned events describe how our local model understood each products.
 
-For an accepted record, the `ProductItemAdded` events identify the imported lines and the resulting stream version is recorded. If stock is missing, the importer records the checked lines and the missing quantity. It can continue with other records, then rebuild this cart’s commands with current availability after an inventory update. Retrying the unchanged commands immediately would only reproduce the same outcome. If the cart exceeds its item limit, waiting for stock cannot help; the source record needs correcting, so the importer marks it as rejected.
+For an accepted record, the `ProductItemAdded` events identify the imported products and the resulting stream version is recorded. If stock is missing, the importer records the checked products and the missing quantity. It can continue with other records, then rebuild this cart’s commands with current availability after an inventory update. Retrying the unchanged commands immediately would only reproduce the same outcome. If the cart exceeds its item limit, waiting for stock cannot help; the source record needs correcting, so the importer marks it as rejected.
 
 Of course we could still throw if this operation is synchronous and we want to give quick feedback to the caller. Still, typically, we run batch operations as a background process; also, to have proper resilience, you already saw above how much integration could happen during such an import. Services we integrate with can be unavailable, have transient issues, time out, etc.
 
