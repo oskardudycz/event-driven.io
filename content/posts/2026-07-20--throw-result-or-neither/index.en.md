@@ -168,7 +168,7 @@ const handleAddProductItem = async (
   const state = await loadShoppingCart(command.data.shoppingCartId);
   const result = addProductItem(command, state);
 
-  if (result.success) 
+  if (result.success === false) 
     return PreconditionFailed();
   
   await eventStore.appendToStream(
