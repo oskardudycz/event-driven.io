@@ -26,7 +26,12 @@ const PageTemplate = (props) => {
         )}
       </ThemeContext.Consumer>
 
-      <Seo data={page} facebook={facebook} noIndex={page.fields.slug === "/success/"} />
+      <Seo
+        data={page}
+        facebook={facebook}
+        useDefaultLangCanonical={page.frontmatter.useDefaultLangCanonical}
+        noIndex={page.fields.slug === "/success/"}
+      />
     </React.Fragment>
   );
 };
@@ -43,7 +48,7 @@ export const pageQuery = graphql`
     page: markdownRemark(fields: { slug: { eq: $slug }, langKey: { eq: $langKey } }) {
       id
       html
-      excerpt
+      excerpt(pruneLength: 170)
       fields {
         slug
         langKey
@@ -51,6 +56,8 @@ export const pageQuery = graphql`
       }
       frontmatter {
         title
+        description
+        useDefaultLangCanonical
         cover {
           childImageSharp {
             resize(width: 1200) {

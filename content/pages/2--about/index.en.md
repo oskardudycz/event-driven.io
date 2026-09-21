@@ -1,6 +1,7 @@
 ---
 title: Hi! My name is Oskar Dudycz
 menuTitle: menu.about
+description: Oskar Dudycz is an independent software architect, consultant, trainer, speaker, and open-source maintainer specialising in Event Sourcing and event-driven systems.
 ---
 
 From over 15 years, I'm creating software close to the business. I started my career when StackOverflow didn't exist. I'm a developer, technical leader and architect.

@@ -5,6 +5,7 @@ import { Link } from "../Link";
 import { FaCalendar } from "react-icons/fa/";
 import { FaUser } from "react-icons/fa/";
 import { FaTag } from "react-icons/fa/";
+import kebabCase from "lodash/kebabCase";
 
 const Meta = (props) => {
   const { prefix, author: authorName, category, theme } = props;
@@ -20,7 +21,7 @@ const Meta = (props) => {
       {category && (
         <span>
           <FaTag size={18} />
-          <Link to={`/category?category=${category}`}>{category}</Link>
+          <Link to={`/category/${kebabCase(category)}/`}>{category}</Link>
         </span>
       )}
 

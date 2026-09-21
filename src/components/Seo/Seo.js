@@ -5,7 +5,7 @@ import config from "../../../content/meta/config";
 import { useTranslation } from "react-i18next";
 import { usePageContext } from "../../i18n/page-context";
 
-const normalizePath = path => {
+const normalizePath = (path) => {
   const pathWithoutSlashes = (path || "").replace(/^\/+|\/+$/g, "");
   return pathWithoutSlashes ? `/${pathWithoutSlashes}/` : "/";
 };
@@ -13,14 +13,14 @@ const normalizePath = path => {
 const absoluteUrl = (host, path) =>
   path && path.startsWith("http") ? path : `${host}${path || ""}`;
 
-const Seo = props => {
+const Seo = (props) => {
   const { t } = useTranslation();
   const {
     lang,
     originalPath,
     supportedLanguages = [],
     availableLanguages,
-    defaultLanguage = "en"
+    defaultLanguage = "en",
   } = usePageContext();
 
   const {
@@ -31,7 +31,7 @@ const Seo = props => {
     title: suppliedTitle,
     description: suppliedDescription,
     noIndex = false,
-    schemaType
+    schemaType,
   } = props;
   const frontmatter = (data || {}).frontmatter || {};
   const fields = (data || {}).fields || {};
@@ -61,11 +61,28 @@ const Seo = props => {
     ? defaultLanguage
     : languages[0] || canonicalLanguage;
   const isArticle = schemaType === "BlogPosting" || fields.source === "posts";
+  const isService =
+    fields.source === "pages" && /training|szkolenie|workshop|consult/i.test(pagePath);
+  const isProfile = fields.source === "pages" && pagePath === "/about/";
+  const person = {
+    "@type": "Person",
+    name: config.authorName,
+    url: `${host}/${canonicalLanguage}/about/`,
+    sameAs: Object.values(config.socialLinks || {})
+      .map((link) => link.url)
+      .filter(Boolean),
+  };
   const resolvedSchemaType =
-    schemaType || (isArticle ? "BlogPosting" : pagePath === "/" ? "WebSite" : "WebPage");
-  const authorSameAs = Object.values(config.socialLinks || {})
-    .map(link => link.url)
-    .filter(Boolean);
+    schemaType ||
+    (isArticle
+      ? "BlogPosting"
+      : isService
+      ? "Service"
+      : isProfile
+      ? "ProfilePage"
+      : pagePath === "/"
+      ? "WebSite"
+      : "WebPage");
   const structuredData = {
     "@context": "https://schema.org",
     "@type": resolvedSchemaType,
@@ -80,32 +97,26 @@ const Seo = props => {
           datePublished: fields.prefix,
           mainEntityOfPage: {
             "@type": "WebPage",
-            "@id": canonicalUrl
+            "@id": canonicalUrl,
           },
           ...(frontmatter.category ? { articleSection: frontmatter.category } : {}),
-          author: {
-            "@type": "Person",
-            name: config.authorName,
-            url: `${host}/en/about/`,
-            sameAs: authorSameAs
-          },
-          publisher: {
-            "@type": "Person",
-            name: config.authorName,
-            url: `${host}/en/about/`
-          }
+          author: person,
+          publisher: person,
         }
       : {}),
+    ...(resolvedSchemaType === "Service"
+      ? {
+          serviceType: pageTitle || "Software architecture consulting and training",
+          provider: person,
+          areaServed: "Worldwide",
+        }
+      : {}),
+    ...(resolvedSchemaType === "ProfilePage" ? { mainEntity: person } : {}),
     ...(resolvedSchemaType === "WebSite"
       ? {
-          author: {
-            "@type": "Person",
-            name: config.authorName,
-            url: `${host}/en/about/`,
-            sameAs: authorSameAs
-          }
+          author: person,
         }
-      : {})
+      : {}),
   };
 
   const metaTags = [
@@ -129,7 +140,7 @@ const Seo = props => {
     { name: "twitter:creator", content: config.authorTwitterAccount || "" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    { name: "twitter:image", content: image }
+    { name: "twitter:image", content: image },
   ].concat(meta || []);
 
   const linkTags = [
@@ -139,15 +150,15 @@ const Seo = props => {
           {
             rel: "alternate",
             hrefLang: "x-default",
-            href: `${host}/${defaultAlternateLanguage}${pagePath}`
+            href: `${host}/${defaultAlternateLanguage}${pagePath}`,
           },
-          ...languages.map(language => ({
+          ...languages.map((language) => ({
             rel: "alternate",
             hrefLang: language,
-            href: `${host}/${language}${pagePath}`
-          }))
+            href: `${host}/${language}${pagePath}`,
+          })),
         ]
-      : [])
+      : []),
   ];
 
   return (
@@ -162,8 +173,8 @@ const Seo = props => {
           : [
               {
                 type: "application/ld+json",
-                innerHTML: JSON.stringify(structuredData)
-              }
+                innerHTML: JSON.stringify(structuredData),
+              },
             ]
       }
     />
@@ -178,7 +189,7 @@ Seo.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
   noIndex: PropTypes.bool,
-  schemaType: PropTypes.string
+  schemaType: PropTypes.string,
 };
 
 export default Seo;

@@ -4,6 +4,8 @@
   "author": "oskar dudycz <oskar.dudycz@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "generate-llms": "node ./scripts/generate-llms-txt.js",
+    "prebuild": "node ./scripts/generate-llms-txt.js",
     "import-newsletter": "node ./import/import-newsletter.js",
     "import-architecture-weekly": "node ./import/import-architecture-weekly.js",
     "import-and-build": "yarn import-newsletter && yarn import-architecture-weekly && yarn build",

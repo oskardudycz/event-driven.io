@@ -1,6 +1,7 @@
 ---
 title: Szkolenie
 menuTitle: menu.training
+description: Praktyczne szkolenia z Event Sourcingu i architektury zdarzeniowej dla zespołów, dostępne online lub na miejscu i dopasowane do projektu.
 cover: training-social-cover.jpeg
 icon: FaUserGraduate
 ---

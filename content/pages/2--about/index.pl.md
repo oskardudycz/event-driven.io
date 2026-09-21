@@ -1,6 +1,7 @@
 ---
 title: Cześć! Nazywam się Oskar Dudycz
 menuTitle: menu.about
+description: Oskar Dudycz jest niezależnym architektem oprogramowania, konsultantem, trenerem i twórcą open source specjalizującym się w Event Sourcingu i systemach zdarzeniowych.
 ---
 
 Od ponad 18 lat, tworzę systemy informatyczne bliskie biznesowi. Zaczynałem karierę gdy StackOverflow jeszcze nie istniał. Jestem programistą, liderem technicznym, architektem.

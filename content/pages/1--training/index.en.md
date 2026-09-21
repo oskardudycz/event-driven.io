@@ -1,11 +1,12 @@
 ---
 title: Training
 menuTitle: menu.training
+description: Hands-on Event Sourcing and event-driven architecture training for development teams, available online or on site and tailored to your project.
 cover: training-social-cover.jpeg
 icon: FaUserGraduate
 ---
 
-**is the most effective way to learn Event Sourcing and Event-Driven Architectures.** I designed **two workshops** that should give you good **foundations** and a set of **skills** for a **practical** and pragmatic start to your **journey**.
+**Hands-on training is the most effective way to learn Event Sourcing and Event-Driven Architectures.** I designed **two workshops** that should give you good **foundations** and a set of **skills** for a **practical** and pragmatic start to your **journey**.
 - [Practical Introduction to Event Sourcing](#practical-introduction-to-event-sourcing)
 - [Event-Driven Architecture: The Light and the Dark Side](#event-driven-architecture-the-light-and-the-dark-side)
 

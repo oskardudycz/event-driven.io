@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import config from "../../../content/meta/config";
 import avatar from "../../images/jpg/avatar.jpg";
 
-const Author = props => {
+const Author = (props) => {
   const { note, theme } = props;
 
   return (
@@ -13,8 +13,7 @@ const Author = props => {
         <div className="avatar">
           <img src={avatar} alt={config.siteTitle} />
         </div>
-        <div className="note"><span className="authorName">Oskar Dudycz</span> For over 18 years, I have been creating IT systems close to the business. I started my career when StackOverflow didn't exist yet. I am a programmer, technical leader, architect. I like to create well-thought-out systems, tools and frameworks that are used in production and make people's lives easier. I believe Event Sourcing, CQRS, and in general, Event-Driven Architectures are a good foundation by which this can be achieved.</div>
-        {/* <div className="note" dangerouslySetInnerHTML={{ __html: note }} /> */}
+        <div className="note" dangerouslySetInnerHTML={{ __html: note }} />
       </div>
 
       {/* --- STYLES --- */}
@@ -46,8 +45,10 @@ const Author = props => {
           align-content: center;
           flex-direction: column;
         }
-        .authorName {
+        .note :global(a) {
+          color: ${theme.color.brand.primary};
           font-weight: bold;
+          text-decoration: underline;
         }
         @from-width tablet {
           .author {
@@ -64,7 +65,7 @@ const Author = props => {
 
 Author.propTypes = {
   note: PropTypes.string.isRequired,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
 };
 
 export default Author;

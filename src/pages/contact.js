@@ -6,23 +6,25 @@ import Article from "../components/Article";
 import Contact from "../components/Contact";
 import Headline from "../components/Article/Headline";
 import Seo from "../components/Seo";
+import { useTranslation } from "react-i18next";
 
-const ContactPage = props => {
+const ContactPage = (props) => {
+  const { t } = useTranslation();
   const {
     data: {
       site: {
-        siteMetadata: { facebook }
-      }
-    }
+        siteMetadata: { facebook },
+      },
+    },
   } = props;
 
   return (
     <React.Fragment>
       <ThemeContext.Consumer>
-        {theme => (
+        {(theme) => (
           <Article theme={theme}>
             <header>
-              <Headline title="Contact" theme={theme} />
+              <Headline title={t("contact.title")} theme={theme} />
             </header>
             <Contact theme={theme} />
           </Article>
@@ -31,15 +33,16 @@ const ContactPage = props => {
 
       <Seo
         facebook={facebook}
-        title="Contact Oskar Dudycz"
-        description="Contact Oskar Dudycz about Event Sourcing training, software architecture consulting, and speaking."
+        title={t("contact.seoTitle")}
+        description={t("contact.description")}
+        schemaType="ContactPage"
       />
     </React.Fragment>
   );
 };
 
 ContactPage.propTypes = {
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
 };
 
 export default ContactPage;

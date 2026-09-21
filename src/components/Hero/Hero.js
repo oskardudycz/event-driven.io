@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { FaArrowDown } from "react-icons/fa/";
 
 import { Trans, useTranslation } from "react-i18next";
+import { Link } from "../Link";
 
 const Hero = (props) => {
   const { scrollToContent, backgrounds, theme } = props;
@@ -13,17 +14,38 @@ const Hero = (props) => {
     <React.Fragment>
       <section className="hero">
         <h1>
-          <Trans i18nKey="hero.h1">Szukasz praktycznej wiedzy <br /> o <u>architekturze oprogramowania?</u></Trans><br />
+          <Trans i18nKey="hero.h1">
+            Szukasz praktycznej wiedzy <br /> o <u>architekturze oprogramowania?</u>
+          </Trans>
+          <br />
         </h1>
         <h2>
-          <Trans i18nKey="hero.h2">Zapoznaj się z moimi treściami - <span className="yellow">od artykułów po wideo</span></Trans>
+          <Trans i18nKey="hero.h2">
+            Zapoznaj się z moimi treściami - <span className="yellow">od artykułów po wideo</span>
+          </Trans>
         </h2>
         <h3>
-          <Trans i18nKey="hero.h3">Nazywam się <b className="yellow">Oskar Dudycz</b>. Od ponad 18 lat, tworzę systemy informatyczne bliskie biznesowi. <br />
-          Prowadzę warsztaty i szkolenia na temat <b className="yellow">Event Sourcing</b>, CQRS oraz architektur opartych o zdarzeniach. <br />
-          Jestem maintainerem biblioteki <a href="https://event-driven-io.github.io/emmett/getting-started.html" target="_parent" className="yellow">Emmett</a>, umożliwiającej pracę z Event Sourcing. <br />          
-          Na blogu dzielę się wiedzą jak pragmatycznie tworzyć, dobre modularne aplikacje.</Trans>
+          <Trans i18nKey="hero.h3">
+            Nazywam się <b className="yellow">Oskar Dudycz</b>. Od ponad 18 lat, tworzę systemy
+            informatyczne bliskie biznesowi. <br />
+            Prowadzę warsztaty i szkolenia na temat <b className="yellow">Event Sourcing</b>, CQRS
+            oraz architektur opartych o zdarzeniach. <br />
+            Jestem maintainerem biblioteki{" "}
+            <a
+              href="https://event-driven-io.github.io/emmett/getting-started.html"
+              target="_parent"
+              className="yellow"
+            >
+              Emmett
+            </a>
+            , umożliwiającej pracę z Event Sourcing. <br />
+            Na blogu dzielę się wiedzą jak pragmatycznie tworzyć, dobre modularne aplikacje.
+          </Trans>
         </h3>
+        <nav className="services" aria-label={t("hero.servicesLabel")}>
+          <Link to="/training/">{t("hero.trainingCta")}</Link>
+          <Link to="/contact/">{t("hero.consultingCta")}</Link>
+        </nav>
         <button onClick={scrollToContent} aria-label="scroll">
           <FaArrowDown />
         </button>
@@ -136,6 +158,32 @@ const Hero = (props) => {
 
         .yellow {
           color: yellow !important;
+        }
+
+        .services {
+          display: flex;
+          flex-wrap: wrap;
+          gap: ${theme.space.s};
+          margin: 0 0 ${theme.space.l};
+
+          :global(a) {
+            background: yellow;
+            border: 2px solid yellow;
+            border-radius: ${theme.size.radius.small};
+            color: ${theme.color.neutral.black};
+            font-weight: ${theme.font.weight.bold};
+            padding: ${theme.space.s} ${theme.space.m};
+          }
+
+          :global(a:last-child) {
+            background: transparent;
+            color: ${theme.color.neutral.white};
+          }
+
+          :global(a:hover),
+          :global(a:focus) {
+            text-decoration: underline;
+          }
         }
 
         button {

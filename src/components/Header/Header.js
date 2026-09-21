@@ -44,7 +44,7 @@ const Header = ({ pages, path, theme, }) => {
             <img src={avatar} alt={config.siteTitle} />
           </div>
           <div className="type">
-            <h1>{t("header.title") || config.headerTitle}</h1>
+            <span className="siteTitle">{t("header.title") || config.headerTitle}</span>
             <h2>{t("header.subTitle") || config.headerSubTitle}</h2>
           </div>
         </Link>
@@ -100,7 +100,8 @@ const Header = ({ pages, path, theme, }) => {
             }
           }
 
-          h1 {
+          .siteTitle {
+            display: block;
             font-size: ${theme.font.size.m};
             font-weight: ${theme.font.weight.standard};
             margin: ${theme.space.stack.xs};
@@ -161,7 +162,7 @@ const Header = ({ pages, path, theme, }) => {
               }
 
               :global(a.logoType),
-              h1 {
+              .siteTitle {
                 color: ${theme.color.neutral.white};
               }
               h2 {
@@ -191,7 +192,7 @@ const Header = ({ pages, path, theme, }) => {
                 width: 100%;
                 z-index: 1;
 
-                h1 {
+                .siteTitle {
                   margin: ${theme.space.stack.xxs};
                 }
 
@@ -202,7 +203,7 @@ const Header = ({ pages, path, theme, }) => {
 
               &.homepage:not(.fixed) {
                 :global(a.logoType),
-                h1 {
+                .siteTitle {
                   color: ${theme.color.neutral.white};
                 }
                 h2 {
