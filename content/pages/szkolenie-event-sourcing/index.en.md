@@ -33,7 +33,7 @@ Event Sourcing wymaga nowego zestawu praktyk i uzyskania pewności siebie w proj
 - wyzwania związane z Event Sourcing i zalecane rozwiązania,
 - Event Sourcing w połączeniu z CQRS, Vertical Slices i innymi wzorcami.
 
-**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/kqZg1tyPWhitNsmV6)**
+**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/YxfhZ9wUQetX9iue8)**
 
 ## O mnie
 
@@ -125,7 +125,7 @@ Zdobędziesz przewagę konkurencyjną nad innymi, wiedząc, jak sprawić, by Two
 
 Zrozumiesz gdzie używać i gdzie nie używać Event Sourcing. Zyskasz dobre fundamenty do podejmowania decyzji architektonicznych oraz dodatkowe materiały do dalszego poszerzenia wiedzy.
 
-**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/kqZg1tyPWhitNsmV6)**
+**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/YxfhZ9wUQetX9iue8)**
 
 ## Referencje
 
@@ -181,4 +181,4 @@ Jeśli powyższe Cię nie przekonało, zerknij na [opinie innych ludzi o moich w
 
 **To co, przekonałem Cię?**
 
-**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/kqZg1tyPWhitNsmV6)**
+**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/YxfhZ9wUQetX9iue8)**
