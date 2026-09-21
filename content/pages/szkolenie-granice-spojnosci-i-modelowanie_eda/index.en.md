@@ -1,6 +1,7 @@
 ---
 title: "Consistency Boundaries and Concurrency: From Model to Code"
 description: A two-day online workshop on drawing consistency boundaries, handling concurrency and event streams, and verifying your model before AI writes the code.
+cover: workshop.jpg
 ---
 
 **AI can very quickly generate code that looks correct.**

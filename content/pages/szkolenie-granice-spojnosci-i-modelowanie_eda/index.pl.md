@@ -1,6 +1,7 @@
 ---
 title: "Granice spójności i współbieżność: od modelu do kodu"
 description: Dwudniowy warsztat online o tym, jak wyznaczać granice spójności, panować nad współbieżnością i strumieniami zdarzeń oraz sprawdzać model, zanim AI napisze kod.
+cover: workshop.jpg
 ---
 
 **AI potrafi bardzo szybko wygenerować kod, który wygląda poprawnie.** 
