@@ -5,6 +5,9 @@
         "title": "Oskar Dudycz",
         "subTitle": "Pragmatic about programming"
       },
+      "seo": {
+        "siteDescription": "Practical articles, training, and consulting about Event Sourcing, event-driven architecture, CQRS, and software architecture."
+      },
       "menu": {
         "categories": "Categories",
         "contact": "Contact",
@@ -28,6 +31,9 @@
       "header": {
         "title": "Oskar Dudycz",
         "subTitle": "Pragmatycznie o programowaniu"
+      },
+      "seo": {
+        "siteDescription": "Praktyczne artykuły, szkolenia i konsultacje o Event Sourcingu, architekturze sterowanej zdarzeniami, CQRS i architekturze oprogramowania."
       },
       "menu": {
         "categories": "Kategorie",

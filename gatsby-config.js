@@ -1,20 +1,32 @@
 require("dotenv").config();
 const config = require("./content/meta/config");
 const transformer = require("./src/utils/algolia");
+const hasAlgoliaCredentials = Boolean(
+  process.env.ALGOLIA_APP_ID &&
+    process.env.ALGOLIA_ADMIN_API_KEY &&
+    process.env.ALGOLIA_INDEX_NAME
+);
+const isNonMainGitHubBuild =
+  process.env.GITHUB_ACTIONS === "true" && process.env.GITHUB_REF !== "refs/heads/main";
 
 const query = `{
   allMarkdownRemark( filter: { fields: { slug: { ne: null } } }) {
     edges {
       node {
-        objectID: fileAbsolutePath
+        excerpt(pruneLength: 240)
         fields {
           slug
+          langKey
+          source
+          prefix
         }
         internal {
           content
         }
         frontmatter {
           title
+          category
+          useDefaultLangCanonical
         }
       }
     }
@@ -26,6 +38,16 @@ const queries = [
     query,
     transformer: ({ data }) => {
       return data.allMarkdownRemark.edges.reduce(transformer, []);
+    },
+    settings: {
+      searchableAttributes: ["title", "category", "content"],
+      attributesForFaceting: ["filterOnly(langKey)", "filterOnly(source)", "searchable(category)"],
+      attributeForDistinct: "path",
+      distinct: true,
+      attributesToHighlight: ["title", "category"],
+      attributesToSnippet: ["content:32"],
+      snippetEllipsisText: "…",
+      customRanking: ["desc(publishedAt)"],
     },
   },
 ];
@@ -56,16 +78,17 @@ module.exports = {
         component: require.resolve(`./src/layouts/`),
       },
     },
-    // {
-    //   resolve: `gatsby-plugin-algolia`,
-    //   options: {
-    //     appId: process.env.ALGOLIA_APP_ID ? process.env.ALGOLIA_APP_ID : "",
-    //     apiKey: process.env.ALGOLIA_ADMIN_API_KEY ? process.env.ALGOLIA_ADMIN_API_KEY : "",
-    //     indexName: process.env.ALGOLIA_INDEX_NAME ? process.env.ALGOLIA_INDEX_NAME : "",
-    //     queries,
-    //     chunkSize: 10000, // default: 1000
-    //   },
-    // },
+    {
+      resolve: `gatsby-plugin-algolia`,
+      options: {
+        appId: process.env.ALGOLIA_APP_ID || "",
+        apiKey: process.env.ALGOLIA_ADMIN_API_KEY || "",
+        indexName: process.env.ALGOLIA_INDEX_NAME || "",
+        queries,
+        chunkSize: 10000,
+        skipIndexing: !hasAlgoliaCredentials || isNonMainGitHubBuild,
+      },
+    },
     `gatsby-transformer-json`,
     {
       resolve: `gatsby-source-filesystem`,
@@ -351,6 +374,41 @@ module.exports = {
     },
     {
       resolve: `gatsby-plugin-sitemap`,
+      options: {
+        output: `/sitemap`,
+        query: `
+          {
+            site {
+              siteMetadata {
+                siteUrl
+              }
+            }
+            allSitePage {
+              nodes {
+                path
+                context {
+                  excludeFromSitemap
+                }
+              }
+            }
+          }
+        `,
+        resolvePages: ({ allSitePage }) =>
+          allSitePage.nodes.filter(
+            page => !(page.context && page.context.excludeFromSitemap)
+          ),
+        excludes: [
+          `/en/404/`,
+          `/pl/404/`,
+          `/en/404.html`,
+          `/pl/404.html`,
+          `/**/account/`,
+          `/**/account/**`,
+          `/**/callback/`,
+          `/**/search/`,
+          `/**/success/`,
+        ],
+      },
     },
     {
       resolve: "gatsby-plugin-react-svg",

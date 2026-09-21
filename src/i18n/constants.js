@@ -1,6 +1,7 @@
 const defaultLanguage = 'en';
 const translations = require('./i18n.json');
 const supportedLanguages = ["en", "pl"]
+const { siteUrl } = require('../../content/meta/config');
 
 
 export const DEFAULT_OPTIONS = {
@@ -11,7 +12,7 @@ export const DEFAULT_OPTIONS = {
   defaultLanguage: defaultLanguage,
 
   // the domain (url) in which your web app is hosted in
-  siteUrl: process.env.URL || 'localhost:8080',
+  siteUrl,
 
   // the (optional) path in which your web app redirects in case of a 404
   notFoundPage: '/404/',

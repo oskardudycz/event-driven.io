@@ -75,7 +75,12 @@ const CategoryPage = (props) => {
         )}
       </ThemeContext.Consumer>
 
-      <Seo facebook={facebook} />
+      <Seo
+        facebook={facebook}
+        title="Posts by category"
+        description="Browse software architecture and event-driven design articles by topic."
+        schemaType="CollectionPage"
+      />
     </React.Fragment>
   );
 };

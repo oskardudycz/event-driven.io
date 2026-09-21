@@ -29,7 +29,11 @@ const ContactPage = props => {
         )}
       </ThemeContext.Consumer>
 
-      <Seo facebook={facebook} />
+      <Seo
+        facebook={facebook}
+        title="Contact Oskar Dudycz"
+        description="Contact Oskar Dudycz about Event Sourcing training, software architecture consulting, and speaking."
+      />
     </React.Fragment>
   );
 };

@@ -24,7 +24,7 @@ export const wrapRootElement = ({ element }, pluginOptions) => {
  * Wrap all pages with a Translation provider and set the language on SSR time
  */
 export const wrapPageElement = ({ element, props }, pluginOptions) => {
-  const { excludedPages, supportedLanguages, siteUrl, defaultLanguage, deleteOriginalPages } = {
+  const { excludedPages, supportedLanguages, defaultLanguage } = {
     ...DEFAULT_OPTIONS,
     ...pluginOptions,
   };
@@ -32,22 +32,13 @@ export const wrapPageElement = ({ element, props }, pluginOptions) => {
   // The fallbacks are for pages that are non-localized. The only pages that are non localized are
   // the original ones which are only there if `deleteOriginalPages` option is `false`
   const lang = props.pageContext.lang || defaultLanguage;
-  const originalPath = props.pageContext.originalPath || props.location.pathname;
-
   if (excludedPages.includes(props.location.pathname)) {
     return element;
   }
 
-  const canonicalUrl = deleteOriginalPages
-    ? `${siteUrl}/${lang}${originalPath}`
-    : `${siteUrl}${originalPath}`;
-
-  const languageFallbackUrl = `${siteUrl}${originalPath}`;
-
   const contextValue = merge({}, props.pageContext, {
     supportedLanguages,
     defaultLanguage,
-    siteUrl,
   });
 
   // Can't wrap this in a React effect, since it won't work correctly. This changes
@@ -66,22 +57,8 @@ export const wrapPageElement = ({ element, props }, pluginOptions) => {
 
   return (
     <React.Fragment>
-      <Helmet htmlAttributes={{ lang }}>
-        <meta property="og:locale" content={lang} />
-        <link rel="canonical" href={canonicalUrl} />
-        <link rel="alternate" href={languageFallbackUrl} hrefLang="x-default" />
-        {supportedLanguages.map(supportedLang => (
-          <link
-            rel="alternate"
-            href={`${siteUrl}/${supportedLang}${originalPath}`}
-            hrefLang={supportedLang}
-            key={supportedLang}
-          />
-        ))}
-        {/* <script id='pixel-script-poptin' src='https://cdn.popt.in/pixel.js?id=ef33d55fc38ef' async='true'></script>  */}
-      </Helmet>
+      <Helmet htmlAttributes={{ lang }} />
       <PageContext.Provider value={contextValue}>{element}</PageContext.Provider>
     </React.Fragment>
   );
 };
-

@@ -1,5 +1,4 @@
-User-agent: GPTBot
-Disallow: /
-
 User-agent: *
 Allow: /
+
+Sitemap: https://event-driven.io/sitemap/sitemap-index.xml

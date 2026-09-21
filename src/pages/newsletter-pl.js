@@ -44,7 +44,12 @@ class IndexPage extends React.Component {
           {theme => <Blog posts={posts} theme={theme} />}
         </ThemeContext.Consumer>
 
-        <Seo facebook={facebook} />
+        <Seo
+          facebook={facebook}
+          title="Newsletter"
+          description="Articles from Oskar Dudycz's software architecture newsletter."
+          schemaType="CollectionPage"
+        />
 
         <style jsx>{`
           hr {

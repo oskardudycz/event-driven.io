@@ -3,7 +3,8 @@ const siteUrl = "https://event-driven.io";
 module.exports = {
   siteTitle: "Event-Driven by Oskar Dudycz", // <title>
   shortSiteTitle: "Event-Driven.io", // <title> ending for posts and pages
-  siteDescription: "Event-Driven by Oskar Dudycz",
+  siteDescription:
+    "Practical articles, training, and consulting about Event Sourcing, event-driven architecture, CQRS, and software architecture.",
   siteUrl,
   pathPrefix: "",
   siteImage: "/preview.jpg",

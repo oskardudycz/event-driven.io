@@ -41,6 +41,7 @@ const PostTemplate = props => {
         data={post}
         facebook={facebook}
         useDefaultLangCanonical={post.frontmatter.useDefaultLangCanonical}
+        schemaType="BlogPosting"
       />
     </React.Fragment>
   );
@@ -64,6 +65,7 @@ export const postQuery = graphql`
         slug
         prefix
         langKey
+        source
       }
       frontmatter {
         title

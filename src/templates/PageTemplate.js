@@ -26,7 +26,7 @@ const PageTemplate = (props) => {
         )}
       </ThemeContext.Consumer>
 
-      <Seo data={page} facebook={facebook} />
+      <Seo data={page} facebook={facebook} noIndex={page.fields.slug === "/success/"} />
     </React.Fragment>
   );
 };
@@ -43,6 +43,12 @@ export const pageQuery = graphql`
     page: markdownRemark(fields: { slug: { eq: $slug }, langKey: { eq: $langKey } }) {
       id
       html
+      excerpt
+      fields {
+        slug
+        langKey
+        source
+      }
       frontmatter {
         title
         cover {

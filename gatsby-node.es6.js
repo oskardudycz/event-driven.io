@@ -89,6 +89,7 @@ export const createPages = ({ graphql, actions }) => {
                   frontmatter {
                     title
                     category
+                    useDefaultLangCanonical
                   }
                 }
               }
@@ -102,6 +103,15 @@ export const createPages = ({ graphql, actions }) => {
         }
 
         const items = result.data.allMarkdownRemark.edges;
+        const availableLanguagesFor = node =>
+          items
+            .filter(
+              item =>
+                item.node.fields.source === node.fields.source &&
+                item.node.fields.slug === node.fields.slug &&
+                !item.node.frontmatter.useDefaultLangCanonical
+            )
+            .map(item => item.node.fields.langKey);
 
         supportedLanguages.forEach(supportedLangKey => {
           // Create category list
@@ -127,13 +137,25 @@ export const createPages = ({ graphql, actions }) => {
           const categoryList = Array.from(categorySet);
 
           categoryList.forEach(category => {
+            const categorySlug = _.kebabCase(category);
+            const availableLanguages = supportedLanguages.filter(langKey =>
+              items.some(
+                item =>
+                  item.node.fields.source === "posts" &&
+                  item.node.fields.langKey === langKey &&
+                  _.kebabCase(item.node.frontmatter.category) === categorySlug
+              )
+            );
+
             createPage({
-              path: `/${supportedLangKey}/category/${_.kebabCase(category)}/`,
+              path: `/${supportedLangKey}/category/${categorySlug}/`,
               component: categoryTemplate,
               context: {
                 category,
                 lang: supportedLangKey,
-                langKey: supportedLangKey
+                langKey: supportedLangKey,
+                originalPath: `/category/${categorySlug}/`,
+                availableLanguages
               }
             });
           });
@@ -160,7 +182,10 @@ export const createPages = ({ graphql, actions }) => {
                 langKey,
                 prev,
                 next,
-                source
+                source,
+                originalPath: slug,
+                availableLanguages: availableLanguagesFor(node),
+                excludeFromSitemap: Boolean(node.frontmatter.useDefaultLangCanonical)
               }
             });
           });
@@ -191,7 +216,10 @@ export const createPages = ({ graphql, actions }) => {
                 langKey,
                 prev,
                 next,
-                source
+                source,
+                originalPath: slug,
+                availableLanguages: availableLanguagesFor(node),
+                excludeFromSitemap: Boolean(node.frontmatter.useDefaultLangCanonical)
               }
             });
           });
@@ -212,7 +240,10 @@ export const createPages = ({ graphql, actions }) => {
               slug,
               source,
               lang: langKey,
-              langKey
+              langKey,
+              originalPath: slug,
+              availableLanguages: availableLanguagesFor(node),
+              excludeFromSitemap: Boolean(node.frontmatter.useDefaultLangCanonical)
             }
           });
         });
@@ -300,7 +331,8 @@ export const onCreatePage = async (
           ...page.context,
           originalPath,
           lang,
-          langKey: lang
+          langKey: lang,
+          availableLanguages: supportedLanguages
         }
       });
     })

@@ -33,7 +33,7 @@ const SearchPage = props => {
         )}
       </ThemeContext.Consumer>
 
-      <Seo facebook={facebook} />
+      <Seo facebook={facebook} title="Search" noIndex />
 
       {/* --- STYLES --- */}
       <style jsx>{`

@@ -1,24 +1,77 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { InstantSearch, Hits, SearchBox, Pagination, Stats } from "react-instantsearch-dom";
+import {
+  Configure,
+  Hits,
+  InstantSearch,
+  Pagination,
+  SearchBox,
+  Stats,
+  connectStateResults
+} from "react-instantsearch-dom";
 import algoliasearch from "algoliasearch/lite";
 
 import Hit from "./Hit";
+import { usePageContext } from "../../i18n/page-context";
+
+const ResultList = ({ searchState, searchResults, lang }) => {
+  const query = (searchState && searchState.query) || "";
+  const copy =
+    lang === "pl"
+      ? {
+          prompt: "Wpisz wyszukiwaną frazę.",
+          empty: "Nie znaleziono pasujących wyników.",
+          stats: count => `${count} ${count === 1 ? "wynik" : "wyników"}`
+        }
+      : {
+          prompt: "Start typing to search.",
+          empty: "No matching results found.",
+          stats: count => `${count} ${count === 1 ? "result" : "results"}`
+        };
+
+  if (!query.trim()) return <p className="search-message">{copy.prompt}</p>;
+  if (searchResults && searchResults.nbHits === 0) {
+    return <p className="search-message">{copy.empty}</p>;
+  }
+
+  return (
+    <React.Fragment>
+      <Stats translations={{ stats: copy.stats }} />
+      <Hits hitComponent={Hit} />
+      <Pagination />
+    </React.Fragment>
+  );
+};
+
+ResultList.propTypes = {
+  searchState: PropTypes.object,
+  searchResults: PropTypes.object,
+  lang: PropTypes.string.isRequired
+};
+
+const SearchResults = connectStateResults(ResultList);
 
 const Search = props => {
   const { algolia, theme } = props;
+  const { lang = "en" } = usePageContext();
 
   const searchClient = algoliasearch(algolia.appId, algolia.searchOnlyApiKey);
+  const placeholder = lang === "pl" ? "Szukaj" : "Search";
 
   return (
     <React.Fragment>
       <div className="search">
         {algolia && algolia.appId && (
           <InstantSearch indexName={algolia.indexName} searchClient={searchClient}>
-            <SearchBox translations={{ placeholder: "Search" }} />
-            <Stats />
-            <Hits hitComponent={Hit} />
-            <Pagination />
+            <Configure
+              filters={`langKey:${lang}`}
+              distinct={1}
+              hitsPerPage={10}
+              attributesToSnippet={["content:32"]}
+              snippetEllipsisText="…"
+            />
+            <SearchBox translations={{ placeholder }} />
+            <SearchResults lang={lang} />
           </InstantSearch>
         )}
       </div>
@@ -52,6 +105,10 @@ const Search = props => {
           font-size: 0.9em;
           color: #999;
           display: block;
+        }
+        .search-message {
+          margin: 1.5em 0 0.5em;
+          color: #777;
         }
         .ais-Hits-list {
           list-style: none;

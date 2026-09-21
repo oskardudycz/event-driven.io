@@ -3,10 +3,15 @@ import { ThemeContext } from "../../layouts";
 import Article from "../../components/Article";
 import Billing from "../../components/Billing";
 import Headline from "../../components/Article/Headline";
+import Helmet from "react-helmet";
 
 const BillingPage = () => {
     return (
         <React.Fragment>
+            <Helmet>
+                <title>Billing - Event-Driven.io</title>
+                <meta name="robots" content="noindex, nofollow" />
+            </Helmet>
             <ThemeContext.Consumer>
                 {theme => (
                     <Article theme={theme}>

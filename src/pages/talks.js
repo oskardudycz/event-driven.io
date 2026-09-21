@@ -34,7 +34,12 @@ const TalksPage = props => {
         )}
       </ThemeContext.Consumer>
 
-      <Seo facebook={facebook} />
+      <Seo
+        facebook={facebook}
+        title="Talks"
+        description="Conference talks and presentations by Oskar Dudycz about software architecture and Event Sourcing."
+        schemaType="CollectionPage"
+      />
     </React.Fragment>
   );
 };

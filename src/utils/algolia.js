@@ -1,18 +1,49 @@
 module.exports = function(chunksTotal, { node }) {
   const {
-    fields: { slug },
-    frontmatter: { title },
+    excerpt,
+    fields: { slug, langKey, source, prefix },
+    frontmatter: { title, category, useDefaultLangCanonical },
     internal: { content }
   } = node;
 
-  const noEmojiContent = content.replace(/<img class="emoji-icon".+\/>/g, "");
+  if (useDefaultLangCanonical || !["posts", "pages", "newsletter-pl"].includes(source)) {
+    return chunksTotal;
+  }
 
-  const contentChunks = chunkString(noEmojiContent, 5000);
-  const record = { title, slug, content };
+  const path = `/${langKey}${slug}`;
+  const searchableContent = content
+    .replace(/<img class="emoji-icon".+?\/>/g, "")
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/```[^\n]*\n?/g, "")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/[*_~]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const contentChunks = chunkString(searchableContent, 4500);
+  const date = /^\d{4}-\d{2}-\d{2}$/.test(prefix || "") ? prefix : "";
+  const publishedAt = date ? Date.parse(`${date}T00:00:00Z`) / 1000 : 0;
+  const record = {
+    title,
+    path,
+    slug,
+    langKey,
+    source,
+    category: category || "",
+    date,
+    publishedAt,
+    excerpt: excerpt || ""
+  };
   const recordChunks = contentChunks.reduce((recordChunksTotal, contentChunksItem, idx) => {
     return [
       ...recordChunksTotal,
-      { ...record, ...{ content: contentChunksItem }, objectID: `${slug}${idx}` }
+      {
+        ...record,
+        content: contentChunksItem,
+        objectID: `${path}#${idx}`
+      }
     ];
   }, []);
 
@@ -20,5 +51,5 @@ module.exports = function(chunksTotal, { node }) {
 };
 
 function chunkString(str, length) {
-  return str.match(new RegExp("(.|[\r\n]){1," + length + "}", "g"));
+  return str.match(new RegExp("(.|[\r\n]){1," + length + "}", "g")) || [""];
 }

@@ -42,7 +42,12 @@ const CategoryTemplate = props => {
         )}
       </ThemeContext.Consumer>
 
-      <Seo facebook={facebook} />
+      <Seo
+        facebook={facebook}
+        title={`Posts about ${category}`}
+        description={`Articles about ${category} by Oskar Dudycz.`}
+        schemaType="CollectionPage"
+      />
     </React.Fragment>
   );
 };
@@ -56,11 +61,11 @@ export default CategoryTemplate;
 
 // eslint-disable-next-line no-undef
 export const categoryQuery = graphql`
-  query PostsByCategory($category: String) {
+  query PostsByCategory($category: String, $langKey: String!) {
     allMarkdownRemark(
       limit: 1000
       sort: { fields: [fields___prefix], order: DESC }
-      filter: { frontmatter: { category: { eq: $category } } }
+      filter: { frontmatter: { category: { eq: $category } }, fields: { langKey: { eq: $langKey } } }
     ) {
       totalCount
       edges {
