@@ -99,7 +99,13 @@ const Seo = (props) => {
             "@type": "WebPage",
             "@id": canonicalUrl,
           },
-          ...(frontmatter.category ? { articleSection: frontmatter.category } : {}),
+          ...([frontmatter.category, ...(frontmatter.categories || [])].filter(Boolean).length
+            ? {
+                articleSection: Array.from(
+                  new Set([frontmatter.category, ...(frontmatter.categories || [])].filter(Boolean))
+                ),
+              }
+            : {}),
           author: person,
           publisher: person,
         }
@@ -124,6 +130,7 @@ const Seo = (props) => {
     ...(noIndex ? [{ name: "robots", content: "noindex, nofollow" }] : []),
     { property: "og:title", content: title },
     { property: "og:image", content: image },
+    { property: "og:image:alt", content: pageTitle || config.siteTitle },
     { property: "og:type", content: isArticle ? "article" : "website" },
     { property: "og:description", content: description },
     { property: "og:locale", content: canonicalLanguage === "pl" ? "pl_PL" : "en_US" },
@@ -141,6 +148,7 @@ const Seo = (props) => {
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
     { name: "twitter:image", content: image },
+    { name: "twitter:image:alt", content: pageTitle || config.siteTitle },
   ].concat(meta || []);
 
   const linkTags = [

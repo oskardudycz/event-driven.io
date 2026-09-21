@@ -13,6 +13,7 @@ import {
   FaMastodon,
   FaYoutube,
   FaUserGraduate,
+  FaHandshake,
 } from "react-icons/fa/";
 import { FaSearch } from "react-icons/fa/";
 import { FaEnvelope } from "react-icons/fa/";
@@ -33,7 +34,12 @@ class Menu extends React.Component {
       label: page.node.frontmatter.menuTitle
         ? page.node.frontmatter.menuTitle
         : page.node.frontmatter.title,
-      icon: page.node.frontmatter.icon == "FaUserGraduate" ? FaUserGraduate : undefined,
+      icon:
+        page.node.frontmatter.icon === "FaUserGraduate"
+          ? FaUserGraduate
+          : page.node.frontmatter.icon === "FaHandshake"
+          ? FaHandshake
+          : undefined,
     }));
 
     this.items = [

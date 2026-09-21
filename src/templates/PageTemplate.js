@@ -57,6 +57,7 @@ export const pageQuery = graphql`
       frontmatter {
         title
         description
+        summary
         useDefaultLangCanonical
         cover {
           childImageSharp {

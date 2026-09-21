@@ -1,6 +1,9 @@
 ---
 title: Idempotent Command Handling
 category: "Event Sourcing"
+categories:
+  - Event-Driven Architecture
+  - CQRS
 cover: 2024-11-15-cover.png
 author: oskar dudycz
 ---

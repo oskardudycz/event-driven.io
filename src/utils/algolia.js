@@ -1,9 +1,9 @@
-module.exports = function(chunksTotal, { node }) {
+module.exports = function (chunksTotal, { node }) {
   const {
     excerpt,
     fields: { slug, langKey, source, prefix },
-    frontmatter: { title, category, useDefaultLangCanonical },
-    internal: { content }
+    frontmatter: { title, category, categories = [], useDefaultLangCanonical },
+    internal: { content },
   } = node;
 
   if (useDefaultLangCanonical || !["posts", "pages", "newsletter-pl"].includes(source)) {
@@ -11,6 +11,7 @@ module.exports = function(chunksTotal, { node }) {
   }
 
   const path = `/${langKey}${slug}`;
+  const additionalCategories = Array.isArray(categories) ? categories : [];
   const searchableContent = content
     .replace(/<img class="emoji-icon".+?\/>/g, "")
     .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1")
@@ -31,10 +32,10 @@ module.exports = function(chunksTotal, { node }) {
     slug,
     langKey,
     source,
-    category: category || "",
+    category: Array.from(new Set([category, ...additionalCategories].filter(Boolean))),
     date,
     publishedAt,
-    excerpt: excerpt || ""
+    excerpt: excerpt || "",
   };
   const recordChunks = contentChunks.reduce((recordChunksTotal, contentChunksItem, idx) => {
     return [
@@ -42,8 +43,8 @@ module.exports = function(chunksTotal, { node }) {
       {
         ...record,
         content: contentChunksItem,
-        objectID: `${path}#${idx}`
-      }
+        objectID: `${path}#${idx}`,
+      },
     ];
   }, []);
 

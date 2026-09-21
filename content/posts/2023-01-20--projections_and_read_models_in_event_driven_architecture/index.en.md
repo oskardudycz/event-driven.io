@@ -1,6 +1,9 @@
 ---
 title: Guide to Projections and Read Models in Event-Driven Architecture
 category: "Event Sourcing"
+categories:
+  - Event-Driven Architecture
+  - CQRS
 cover: 2023-01-20-cover.jpg
 author: oskar dudycz
 ---

@@ -14,10 +14,12 @@ import "antd/es/input/style/index.css";
 import "antd/es/button/style/index.css";
 import { ThemeContext } from "../../layouts";
 import { usePageContext } from "../../i18n";
+import { useTranslation } from "react-i18next";
 
 const Contact = (props) => {
   const { getFieldDecorator } = props.form;
   const { lang } = usePageContext();
+  const { t } = useTranslation();
 
   function encode(data) {
     return Object.keys(data)
@@ -43,11 +45,11 @@ const Contact = (props) => {
     })
       .then(() => {
         console.log("Form submission success");
-        navigate(`/${lang}/success`);
+        navigate(`/${lang}/success/`);
       })
       .catch((error) => {
         console.error("Form submission error:", error);
-        this.handleNetworkError();
+        handleNetworkError();
       });
   }
 
@@ -60,13 +62,23 @@ const Contact = (props) => {
       <ThemeContext.Consumer>
         {(theme) => (
           <div className="form">
+            <p className="intro">
+              {t("contact.intro")}{" "}
+              <a
+                href="https://calendly.com/oskar-dudycz/consulting"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t("contact.bookCall")}
+              </a>
+            </p>
             <Form
               name="contact"
               onSubmit={handleSubmit}
               data-netlify="true"
               data-netlify-honeypot="bot-field"
             >
-              <FormItem label="Name">
+              <FormItem label={t("contact.form.name")}>
                 {getFieldDecorator("name", {
                   rules: [
                     {
@@ -75,22 +87,22 @@ const Contact = (props) => {
                   ],
                 })(<Input name="name" />)}
               </FormItem>
-              <FormItem label="E-mail">
+              <FormItem label={t("contact.form.email")}>
                 {getFieldDecorator("email", {
                   rules: [
                     {
                       required: true,
-                      message: "Please input your e-mail address!",
+                      message: t("contact.form.emailError"),
                       whitespace: true,
                       type: "email",
                     },
                   ],
                 })(<Input name="email" />)}
               </FormItem>
-              <FormItem label="Message">
+              <FormItem label={t("contact.form.message")}>
                 {getFieldDecorator("message", {
                   rules: [
-                    { required: true, message: "Please input your message!", whitespace: true },
+                    { required: true, message: t("contact.form.messageError"), whitespace: true },
                   ],
                 })(
                   <TextArea name="message" placeholder="" autosize={{ minRows: 4, maxRows: 10 }} />
@@ -98,7 +110,7 @@ const Contact = (props) => {
               </FormItem>
               <FormItem>
                 <Button type="primary" htmlType="submit">
-                  Submit
+                  {t("contact.form.submit")}
                 </Button>
               </FormItem>
             </Form>
@@ -107,6 +119,16 @@ const Contact = (props) => {
             <style jsx>{`
               .form {
                 background: transparent;
+              }
+              .intro {
+                font-size: ${theme.font.size.s};
+                line-height: ${theme.font.lineHeight.l};
+                margin-bottom: ${theme.space.l};
+              }
+              .intro :global(a) {
+                color: ${theme.color.brand.primary};
+                font-weight: ${theme.font.weight.bold};
+                text-decoration: underline;
               }
               .form :global(.ant-row.ant-form-item) {
                 margin: 0 0 1em;

@@ -6,6 +6,12 @@ const Promise = require("bluebird");
 import { DEFAULT_OPTIONS } from "./src/i18n/constants";
 
 const { createFilePath } = require(`gatsby-source-filesystem`);
+const categoryGuides = require("./data/category-guides.json");
+
+const categoriesForNode = (node) =>
+  Array.from(
+    new Set([node.frontmatter.category, ...(node.frontmatter.categories || [])].filter(Boolean))
+  );
 
 export const onCreateNode = ({ node, getNode, actions }) => {
   const { createNodeField } = actions;
@@ -27,23 +33,23 @@ export const onCreateNode = ({ node, getNode, actions }) => {
         value: `${separtorIndex ? "/" : ""}${slug.substring(shortSlugStart)}`.replace(
           `/index.${langKey}/`,
           "/"
-        )
+        ),
       });
     }
     createNodeField({
       node,
       name: `prefix`,
-      value: separtorIndex ? slug.substring(1, separtorIndex) : ""
+      value: separtorIndex ? slug.substring(1, separtorIndex) : "",
     });
     createNodeField({
       node,
       name: `source`,
-      value: source
+      value: source,
     });
     createNodeField({
       node,
       name: `langKey`,
-      value: langKey
+      value: langKey,
     });
   }
 };
@@ -80,6 +86,8 @@ export const createPages = ({ graphql, actions }) => {
               edges {
                 node {
                   id
+                  excerpt(pruneLength: 170)
+                  timeToRead
                   fields {
                     slug
                     prefix
@@ -89,62 +97,106 @@ export const createPages = ({ graphql, actions }) => {
                   frontmatter {
                     title
                     category
+                    categories
                     useDefaultLangCanonical
+                    cover {
+                      childImageSharp {
+                        resize(
+                          width: 420
+                          height: 240
+                          quality: 78
+                          cropFocus: CENTER
+                          toFormat: WEBP
+                        ) {
+                          src
+                        }
+                      }
+                    }
                   }
                 }
               }
             }
           }
         `
-      ).then(result => {
+      ).then((result) => {
         if (result.errors) {
           console.log(result.errors);
           reject(result.errors);
         }
 
         const items = result.data.allMarkdownRemark.edges;
-        const availableLanguagesFor = node =>
+        const availableLanguagesFor = (node) =>
           items
             .filter(
-              item =>
+              (item) =>
                 item.node.fields.source === node.fields.source &&
                 item.node.fields.slug === node.fields.slug &&
                 !item.node.frontmatter.useDefaultLangCanonical
             )
-            .map(item => item.node.fields.langKey);
+            .map((item) => item.node.fields.langKey);
+        const relatedFor = (node) => {
+          const categories = categoriesForNode(node);
+          if (categories.length === 0) return [];
 
-        supportedLanguages.forEach(supportedLangKey => {
+          return items
+            .filter(
+              (item) =>
+                item.node.id !== node.id &&
+                item.node.fields.source === node.fields.source &&
+                item.node.fields.langKey === node.fields.langKey &&
+                !item.node.frontmatter.useDefaultLangCanonical &&
+                categoriesForNode(item.node).some((category) => categories.includes(category))
+            )
+            .slice(0, 3)
+            .map((item) => ({
+              node: {
+                fields: { slug: item.node.fields.slug },
+                frontmatter: { title: item.node.frontmatter.title },
+              },
+            }));
+        };
+
+        supportedLanguages.forEach((supportedLangKey) => {
           // Create category list
           const categorySet = new Set();
           items
             .filter(
-              edge =>
-                edge.node.fields.langKey === supportedLangKey && edge.node.fields.source === "posts"
+              (edge) =>
+                edge.node.fields.langKey === supportedLangKey &&
+                edge.node.fields.source === "posts" &&
+                !edge.node.frontmatter.useDefaultLangCanonical
             )
-            .forEach(edge => {
-              const {
-                node: {
-                  frontmatter: { category }
-                }
-              } = edge;
-
-              if (category && category !== null) {
-                categorySet.add(category);
-              }
+            .forEach((edge) => {
+              categoriesForNode(edge.node).forEach((category) => categorySet.add(category));
             });
 
           // Create category pages
           const categoryList = Array.from(categorySet);
 
-          categoryList.forEach(category => {
+          categoryList.forEach((category) => {
             const categorySlug = _.kebabCase(category);
-            const availableLanguages = supportedLanguages.filter(langKey =>
+            const availableLanguages = supportedLanguages.filter((langKey) =>
               items.some(
-                item =>
+                (item) =>
                   item.node.fields.source === "posts" &&
                   item.node.fields.langKey === langKey &&
-                  _.kebabCase(item.node.frontmatter.category) === categorySlug
+                  !item.node.frontmatter.useDefaultLangCanonical &&
+                  categoriesForNode(item.node).some(
+                    (itemCategory) => _.kebabCase(itemCategory) === categorySlug
+                  )
               )
+            );
+            const categoryPosts = items.filter(
+              (item) =>
+                item.node.fields.source === "posts" &&
+                item.node.fields.langKey === supportedLangKey &&
+                !item.node.frontmatter.useDefaultLangCanonical &&
+                categoriesForNode(item.node).some(
+                  (itemCategory) => _.kebabCase(itemCategory) === categorySlug
+                )
+            );
+            const guide = categoryGuides.find(
+              (item) => item.language === supportedLangKey && item.slug === categorySlug
             );
 
             createPage({
@@ -155,14 +207,17 @@ export const createPages = ({ graphql, actions }) => {
                 lang: supportedLangKey,
                 langKey: supportedLangKey,
                 originalPath: `/category/${categorySlug}/`,
-                availableLanguages
-              }
+                availableLanguages,
+                categoryPosts,
+                categoryDescription: guide ? guide.description : undefined,
+                recommendedSlugs: guide ? guide.recommended : [],
+              },
             });
           });
 
           // Create posts
           const posts = items.filter(
-            item =>
+            (item) =>
               item.node.fields.source === "posts" && item.node.fields.langKey == supportedLangKey
           );
           posts.forEach(({ node }, index) => {
@@ -185,14 +240,15 @@ export const createPages = ({ graphql, actions }) => {
                 source,
                 originalPath: slug,
                 availableLanguages: availableLanguagesFor(node),
-                excludeFromSitemap: Boolean(node.frontmatter.useDefaultLangCanonical)
-              }
+                related: relatedFor(node),
+                excludeFromSitemap: Boolean(node.frontmatter.useDefaultLangCanonical),
+              },
             });
           });
 
           // Create posts
           const newsletterPlPosts = items.filter(
-            item =>
+            (item) =>
               item.node.fields.source === "newsletter-pl" &&
               item.node.fields.langKey == supportedLangKey
           );
@@ -219,14 +275,15 @@ export const createPages = ({ graphql, actions }) => {
                 source,
                 originalPath: slug,
                 availableLanguages: availableLanguagesFor(node),
-                excludeFromSitemap: Boolean(node.frontmatter.useDefaultLangCanonical)
-              }
+                related: relatedFor(node),
+                excludeFromSitemap: Boolean(node.frontmatter.useDefaultLangCanonical),
+              },
             });
           });
         });
 
         // and pages.
-        const pages = items.filter(item => item.node.fields.source === "pages");
+        const pages = items.filter((item) => item.node.fields.source === "pages");
         pages.forEach(({ node }) => {
           const slug = node.fields.slug;
           const langKey = node.fields.langKey;
@@ -243,8 +300,8 @@ export const createPages = ({ graphql, actions }) => {
               langKey,
               originalPath: slug,
               availableLanguages: availableLanguagesFor(node),
-              excludeFromSitemap: Boolean(node.frontmatter.useDefaultLangCanonical)
-            }
+              excludeFromSitemap: Boolean(node.frontmatter.useDefaultLangCanonical),
+            },
           });
         });
       })
@@ -267,16 +324,11 @@ export const onCreatePage = async (
   // if (page.path.match(/^\/account/)) {
   //   page.matchPath = "/account/*"
   // }
-  const {
-    supportedLanguages,
-    defaultLanguage,
-    notFoundPage,
-    excludedPages,
-    deleteOriginalPages
-  } = {
-    ...DEFAULT_OPTIONS,
-    ...pluginOptions
-  };
+  const { supportedLanguages, defaultLanguage, notFoundPage, excludedPages, deleteOriginalPages } =
+    {
+      ...DEFAULT_OPTIONS,
+      ...pluginOptions,
+    };
 
   const isEnvDevelopment = process.env.NODE_ENV === "development";
   const originalPath = page.path;
@@ -300,8 +352,8 @@ export const onCreatePage = async (
         ...page.context,
         originalPath,
         lang: defaultLanguage,
-        langKey: defaultLanguage
-      }
+        langKey: defaultLanguage,
+      },
     });
   }
 
@@ -310,7 +362,7 @@ export const onCreatePage = async (
   // Regardless of whether the original page was deleted or not, create the localized versions of
   // the current page
   await Promise.all(
-    supportedLanguages.map(async lang => {
+    supportedLanguages.map(async (lang) => {
       const localizedPath = `/${lang}${page.path}`;
 
       // create a redirect based on the accept-language header
@@ -320,7 +372,7 @@ export const onCreatePage = async (
         Language: lang,
         isPermanent: false,
         redirectInBrowser: isEnvDevelopment,
-        statusCode: is404 ? 404 : 301
+        statusCode: is404 ? 404 : 301,
       });
 
       await createPage({
@@ -332,8 +384,8 @@ export const onCreatePage = async (
           originalPath,
           lang,
           langKey: lang,
-          availableLanguages: supportedLanguages
-        }
+          availableLanguages: supportedLanguages,
+        },
       });
     })
   );
@@ -347,7 +399,7 @@ export const onCreatePage = async (
       toPath: `/${defaultLanguage}${page.path}`,
       isPermanent: false,
       redirectInBrowser: isEnvDevelopment,
-      statusCode: is404 ? 404 : 301
+      statusCode: is404 ? 404 : 301,
     });
   }
 };
@@ -355,17 +407,19 @@ export const onCreatePage = async (
 export const onCreateWebpackConfig = ({ stage, loaders, actions }, options) => {
   switch (stage) {
     case `build-javascript`:
-      actions.setWebpackConfig({
-        plugins: [
-          new BundleAnalyzerPlugin({
-            analyzerMode: "static",
-            reportFilename: "./report/treemap.html",
-            openAnalyzer: true,
-            logLevel: "error",
-            defaultSizes: "gzip"
-          })
-        ]
-      });
+      if (process.env.ANALYZE === "true") {
+        actions.setWebpackConfig({
+          plugins: [
+            new BundleAnalyzerPlugin({
+              analyzerMode: "static",
+              reportFilename: "./report/treemap.html",
+              openAnalyzer: false,
+              logLevel: "error",
+              defaultSizes: "gzip",
+            }),
+          ],
+        });
+      }
       break;
     case "build-html":
       /*
@@ -380,10 +434,10 @@ export const onCreateWebpackConfig = ({ stage, loaders, actions }, options) => {
           rules: [
             {
               test: /auth0-js/,
-              use: loaders.null()
-            }
-          ]
-        }
+              use: loaders.null(),
+            },
+          ],
+        },
       });
       break;
   }
@@ -393,163 +447,163 @@ function createRedirectsToOldPosts(isEnvDevelopment, createRedirect) {
   [
     {
       from: "http://oskar-dudycz.pl",
-      to: "https://event-driven.io/pl"
+      to: "https://event-driven.io/pl",
     },
     {
       from: "https://oskar-dudycz.pl",
-      to: "https://event-driven.io/pl"
+      to: "https://event-driven.io/pl",
     },
     {
       from: "http://oskar-dudycz.pl/*",
-      to: "https://event-driven.io/:splat"
+      to: "https://event-driven.io/:splat",
     },
     {
       from: "https://oskar-dudycz.pl/*",
-      to: "https://event-driven.io/:splat"
+      to: "https://event-driven.io/:splat",
     },
     {
       from: "/2011/09/21/witam-jest-to-moj-pierwszy-wpis-na",
-      to: "/pl/inauguracja"
+      to: "/pl/inauguracja",
     },
     {
       from: "/2011/09/22/wielokrotny-join-we-fluentnhibernate",
-      to: "/pl/wielokrotny_join_we_fluentnhibernate"
+      to: "/pl/wielokrotny_join_we_fluentnhibernate",
     },
     {
       from: "/2011/10/01/jak-odblokowac-workspace-w-tfs",
-      to: "/pl/jak_odblokowac_workspace_w_tfs"
+      to: "/pl/jak_odblokowac_workspace_w_tfs",
     },
     {
       from: "/2011/10/06/bad-cannot-update-przy-pobieraniu",
-      to: "/pl/blad_cannot_update_przy_pobieraniu"
+      to: "/pl/blad_cannot_update_przy_pobieraniu",
     },
     {
       from: "/2011/10/17/ciekawostki-cz-1",
-      to: "/pl/ciekawostki_equals"
+      to: "/pl/ciekawostki_equals",
     },
     {
       from: "/2011/11/09/scrum-i-team-foundation-system-cz1",
-      to: "/pl/scrum_i_team_foundation_server_01"
+      to: "/pl/scrum_i_team_foundation_server_01",
     },
     {
       from: "/2011/11/11/scrum-i-team-foundation-server-cz2",
-      to: "/pl/scrum_i_team_foundation_server_02"
+      to: "/pl/scrum_i_team_foundation_server_02",
     },
     {
       from: "/2011/11/16/scrum-i-team-foundation-server-cz3",
-      to: "/pl/scrum_i_team_foundation_server_03"
+      to: "/pl/scrum_i_team_foundation_server_03",
     },
     {
       from: "/2011/11/22/scrum-i-team-foundation-server-cz4",
-      to: "/pl/scrum_i_team_foundation_server_04"
+      to: "/pl/scrum_i_team_foundation_server_04",
     },
     {
       from: "/2011/11/30/scrum-i-team-foundation-server-cz5",
-      to: "/pl/scrum_i_team_foundation_server_05"
+      to: "/pl/scrum_i_team_foundation_server_05",
     },
     {
       from: "/2011/12/10/scrum-i-team-foundation-server-cz6",
-      to: "/pl/scrum_i_team_foundation_server_06"
+      to: "/pl/scrum_i_team_foundation_server_06",
     },
     {
       from: "/2012/02/05/wspodzielenie-klas-w-net-silverlight-i",
-      to: "/pl/multiplatforomowe_aplikacje_w_net_01"
+      to: "/pl/multiplatforomowe_aplikacje_w_net_01",
     },
     {
       from: "/2012/02/05/multiplatforomowe-aplikacje-w-ne-2",
-      to: "/pl/multiplatforomowe_aplikacje_w_net_02"
+      to: "/pl/multiplatforomowe_aplikacje_w_net_02",
     },
     {
       from: "/2012/02/05/multiplatforomowe-aplikacje-w-net_05",
-      to: "/pl/multiplatforomowe_aplikacje_w_net_03"
+      to: "/pl/multiplatforomowe_aplikacje_w_net_03",
     },
     {
       from: "2012/03/23/wrocnet-team-foundation-server-to-nie",
-      to: "/pl/wrocnet_team_foundation_server_to_nie_svn"
+      to: "/pl/wrocnet_team_foundation_server_to_nie_svn",
     },
     {
       from: "2012/04/15/jak-z-kilku-dllek-zrobic-jedna-czyli",
-      to: "/pl/jak_z_kilku_dllek_zrobic_jedna_illmerge"
+      to: "/pl/jak_z_kilku_dllek_zrobic_jedna_illmerge",
     },
     {
       from: "/2012/10/30/serializacja-dla-net-45-oraz-windows",
-      to: "/pl/serializacja_dla_net_45_oraz_windows"
+      to: "/pl/serializacja_dla_net_45_oraz_windows",
     },
     {
       from: "/2012/11/08/prezent-od-microsoft-darmowa-ksiazka-o",
-      to: "/pl/darmowa_ksiazka_o_windows_8"
+      to: "/pl/darmowa_ksiazka_o_windows_8",
     },
     {
       from: "/2014/05/31/refleksyjnie-plus-pierwszy-w-historii-vlog",
-      to: "/pl/refleksyjnie_plus_pierwszy_w_historii_vlog"
+      to: "/pl/refleksyjnie_plus_pierwszy_w_historii_vlog",
     },
     {
       from: "/2014/06/10/na-temat-branzy",
-      to: "/pl/na_temat_branzy"
+      to: "/pl/na_temat_branzy",
     },
     {
       from: "/2015/01/31/borys-najlepiej-dryblowa",
-      to: "/pl/borys_najlepiej_dryblowal"
+      to: "/pl/borys_najlepiej_dryblowal",
     },
     {
       from: "/2015/02/17/sqlowa-ciekawostka-1-uwazaj-na-exists",
-      to: "/pl/sqlowa_ciekawostka_uwazaj_na_exists"
+      to: "/pl/sqlowa_ciekawostka_uwazaj_na_exists",
     },
     {
       from: "2015/03/29/englishman-in-new-york-czyli-jak",
-      to: "/pl/englishman_in_new_york_czyli_net_w_mssql"
+      to: "/pl/englishman_in_new_york_czyli_net_w_mssql",
     },
     {
       from: "/2015/10/31/what-really-grind-my-gears-1",
-      to: "/pl/what_really_grind_my_gears_if"
+      to: "/pl/what_really_grind_my_gears_if",
     },
     {
       from: "/2015/12/07/cierpienia-niemodego-bloggera-czyli",
-      to: "/pl/cierpienia_niemlodego_bloggera"
+      to: "/pl/cierpienia_niemlodego_bloggera",
     },
     {
       from: "/2016/01/06/nauka-uczenia-sie",
-      to: "/pl/nauka_uczenia_sie"
+      to: "/pl/nauka_uczenia_sie",
     },
     {
       from: "/2017/01/06/metallica-skonczyla-sie-na-kill-em-all-a-ja-ide-w-open-sourcey",
-      to: "/pl/metallica_skonczyla_sie_na_kill_em_all_a_ja_ide_w_open_sourcey"
+      to: "/pl/metallica_skonczyla_sie_na_kill_em_all_a_ja_ide_w_open_sourcey",
     },
     {
       from: "/2017/11/05/co-gra-na-gitarze-moze-dac-programiscie",
-      to: "/pl/o_tym_co_gra_na_gitarze_moze_dac_programiscie"
+      to: "/pl/o_tym_co_gra_na_gitarze_moze_dac_programiscie",
     },
     {
       from: "/2018/04/18/mezczyzna-w-it",
-      to: "/pl/mezczyzna_w_IT"
+      to: "/pl/mezczyzna_w_IT",
     },
     {
       from: "/2019/11/30/zrodla-otwartosci",
-      to: "/pl/zrodla_otwartosci"
+      to: "/pl/zrodla_otwartosci",
     },
     {
       from: "/2020/02/16/relacja-z-domain-driven-design-europe-2020-cz-1-event-sourcing",
-      to: "/pl/relacja_z_doman_driven_design_europe_2020"
+      to: "/pl/relacja_z_doman_driven_design_europe_2020",
     },
     {
       from: "/2020/10/01/jak-zaczac-z-open-source",
-      to: "/pl/jak_zaczac_z_open_source"
+      to: "/pl/jak_zaczac_z_open_source",
     },
     {
       from: "/pl/how_to_configure_algolia_for_your_site",
-      to: "/pl/how_to_configure_algolia_for_your_site_search"
+      to: "/pl/how_to_configure_algolia_for_your_site_search",
     },
     {
       from: "/en/how_to_configure_algolia_for_your_site",
-      to: "/en/how_to_configure_algolia_for_your_site_search"
-    }
-  ].forEach(r => {
+      to: "/en/how_to_configure_algolia_for_your_site_search",
+    },
+  ].forEach((r) => {
     createRedirect({
       fromPath: r.from,
       toPath: r.to,
       isPermanent: true,
       redirectInBrowser: isEnvDevelopment,
-      statusCode: 301
+      statusCode: 301,
     });
   });
 }
@@ -568,7 +622,7 @@ export const onPreBuild = ({ actions: { createRedirect } }, pluginOptions) => {
       toPath: notFoundPage,
       isPermanent: false,
       redirectInBrowser: isEnvDevelopment,
-      statusCode: 302
+      statusCode: 302,
     });
   }
 };

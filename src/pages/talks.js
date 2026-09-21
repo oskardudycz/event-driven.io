@@ -6,38 +6,49 @@ import Article from "../components/Article";
 import Talks from "../components/Talks";
 import Headline from "../components/Article/Headline";
 import Seo from "../components/Seo";
+import VideoGallery from "../components/VideoGallery";
+import { useTranslation } from "react-i18next";
 
-const TalksPage = props => {
+const TalksPage = (props) => {
+  const { t } = useTranslation();
   const {
     data: {
       site: {
-        siteMetadata: { facebook }
+        siteMetadata: { facebook },
       },
-      allTalksJson: {
-        edges: talksNodes
-      }
-    }
+      allTalksJson: { edges: talksNodes },
+      allVideosJson: { edges: videoNodes },
+    },
   } = props;
 
-  const talks = talksNodes.map(n => n.node);
+  const talks = talksNodes.map((n) => n.node);
+  const videos = videoNodes.map((n) => n.node);
 
   return (
     <React.Fragment>
       <ThemeContext.Consumer>
-        {theme => (
+        {(theme) => (
           <Article theme={theme}>
             <header>
-              <Headline title="Talks" theme={theme} />
+              <Headline title={t("talks.title")} theme={theme} />
             </header>
-            <Talks theme={theme} talks={talks}  />
+            <section>
+              <h2>{t("talks.videosTitle")}</h2>
+              <p>{t("talks.videosIntro")}</p>
+              <VideoGallery theme={theme} videos={videos} />
+            </section>
+            <section>
+              <h2>{t("talks.appearancesTitle")}</h2>
+            </section>
+            <Talks theme={theme} talks={talks} />
           </Article>
         )}
       </ThemeContext.Consumer>
 
       <Seo
         facebook={facebook}
-        title="Talks"
-        description="Conference talks and presentations by Oskar Dudycz about software architecture and Event Sourcing."
+        title={t("talks.title")}
+        description={t("talks.videosIntro")}
         schemaType="CollectionPage"
       />
     </React.Fragment>
@@ -45,7 +56,7 @@ const TalksPage = props => {
 };
 
 TalksPage.propTypes = {
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
 };
 
 export default TalksPage;
@@ -63,13 +74,25 @@ export const query = graphql`
     allTalksJson {
       edges {
         node {
-          Date,
-          Where,
-          Title,
-          Description,
-          Link,
-          Video,
-          HideVideo,
+          Date
+          Where
+          Title
+          Description
+          Link
+          Video
+          HideVideo
+          Language
+        }
+      }
+    }
+    allVideosJson(sort: { fields: [Order], order: ASC }) {
+      edges {
+        node {
+          Order
+          VideoId
+          Title
+          Channel
+          Duration
           Language
         }
       }

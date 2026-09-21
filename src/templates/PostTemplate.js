@@ -17,7 +17,7 @@ const PostTemplate = (props) => {
         siteMetadata: { facebook },
       },
     },
-    pageContext: { next, prev },
+    pageContext: { next, prev, related = [] },
   } = props;
 
   return (
@@ -30,6 +30,7 @@ const PostTemplate = (props) => {
               next={next}
               prev={prev}
               authornote={authorNote}
+              related={related}
               facebook={facebook}
               theme={theme}
             />
@@ -70,8 +71,10 @@ export const postQuery = graphql`
       frontmatter {
         title
         description
+        summary
         author
         category
+        categories
         disqusId
         useDefaultLangCanonical
         cover {

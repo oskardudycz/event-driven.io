@@ -4,14 +4,19 @@ import { Link } from "gatsby";
 import { Highlight, Snippet } from "react-instantsearch-dom";
 import { usePageContext } from "../../i18n/page-context";
 
-const Hit = props => {
+const Hit = (props) => {
   const { hit } = props;
   const { lang = "en" } = usePageContext();
   const sourceLabels =
     lang === "pl"
       ? { posts: "Artykuł", pages: "Strona", "newsletter-pl": "Newsletter" }
       : { posts: "Article", pages: "Page", "newsletter-pl": "Newsletter" };
-  const details = [sourceLabels[hit.source] || hit.source, hit.category, hit.date].filter(Boolean);
+  const categories = Array.isArray(hit.category)
+    ? hit.category
+    : hit.category
+    ? [hit.category]
+    : [];
+  const details = [sourceLabels[hit.source] || hit.source, ...categories, hit.date].filter(Boolean);
 
   return (
     <article className="search-hit">
@@ -77,7 +82,7 @@ const Hit = props => {
 };
 
 Hit.propTypes = {
-  hit: PropTypes.object.isRequired
+  hit: PropTypes.object.isRequired,
 };
 
 export default Hit;

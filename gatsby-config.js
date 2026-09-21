@@ -2,9 +2,7 @@ require("dotenv").config();
 const config = require("./content/meta/config");
 const transformer = require("./src/utils/algolia");
 const hasAlgoliaCredentials = Boolean(
-  process.env.ALGOLIA_APP_ID &&
-    process.env.ALGOLIA_ADMIN_API_KEY &&
-    process.env.ALGOLIA_INDEX_NAME
+  process.env.ALGOLIA_APP_ID && process.env.ALGOLIA_ADMIN_API_KEY && process.env.ALGOLIA_INDEX_NAME
 );
 const isNonMainGitHubBuild =
   process.env.GITHUB_ACTIONS === "true" && process.env.GITHUB_REF !== "refs/heads/main";
@@ -26,6 +24,7 @@ const query = `{
         frontmatter {
           title
           category
+          categories
           useDefaultLangCanonical
         }
       }
@@ -153,8 +152,8 @@ module.exports = {
               maxWidth: 800,
               backgroundColor: "transparent",
               wrapperStyle: "height: auto",
-              quality: 80
-            }
+              quality: 80,
+            },
           },
           {
             resolve: `gatsby-remark-responsive-iframe`,
@@ -394,9 +393,7 @@ module.exports = {
           }
         `,
         resolvePages: ({ allSitePage }) =>
-          allSitePage.nodes.filter(
-            page => !(page.context && page.context.excludeFromSitemap)
-          ),
+          allSitePage.nodes.filter((page) => !(page.context && page.context.excludeFromSitemap)),
         excludes: [
           `/en/404/`,
           `/pl/404/`,

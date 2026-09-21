@@ -1,6 +1,8 @@
 ---
 title: Handling Events Coming in an Unknown Order
 category: "Event Sourcing"
+categories:
+  - Event-Driven Architecture
 cover: 2025-11-03-cover.png
 author: oskar dudycz
 ---

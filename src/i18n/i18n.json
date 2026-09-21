@@ -10,6 +10,7 @@
       },
       "menu": {
         "categories": "Categories",
+        "consulting": "Consulting",
         "contact": "Contact",
         "talks": "Talks",
         "training": "Training",
@@ -18,10 +19,41 @@
       "hero": {
         "h1": "Are you looking for practical knowledge <1 /> about <3>software architecture?</3>",
         "h2": "Check out my content - <1>from articles to videos</1>",
-        "h3": "My name is <1>Oskar Dudycz</1>. From over 18 years, I'm creating software close to the business. <3 />I run workshops and training about <5>Event Sourcing</5>,  CQRS and event-driven architectures. <7 />I'm maintainer of <9>Emmett</9> OSS library that allows implementing Event Sourcing. <11 />On the blog, I share my knowledge of how to create good, modular applications pragmatically.",
+        "h3": "My name is <1>Oskar Dudycz</1>. For more than 18 years, I've built software close to the business. <3 />I run workshops and training about <5>Event Sourcing</5>, CQRS, and event-driven architecture. <7 />I maintain <9>Emmett</9>, an open-source library for implementing Event Sourcing. <11 />On this blog, I share practical ways to build well-designed, modular applications.",
         "servicesLabel": "Professional services",
         "trainingCta": "Explore training",
         "consultingCta": "Discuss consulting"
+      },
+      "blog": {
+        "browseAll": "Browse all articles"
+      },
+      "categories": {
+        "title": "Recommended reading by topic",
+        "intro": "Choose a topic to follow a recommended learning path or browse all related articles.",
+        "topic": "Topic",
+        "recommended": "Recommended reading order",
+        "recommendedDescription": "Read these in order to move from the foundations to practical trade-offs and production concerns.",
+        "moreArticles": "More articles",
+        "articles": "Articles",
+        "articleCount_one": "{{count}} article",
+        "articleCount_other": "{{count}} articles",
+        "defaultDescription": "Practical articles about {{category}}.",
+        "seoTitle": "{{category}} articles and learning path",
+        "seoTitleAll": "Software architecture topics and reading paths",
+        "seoDescription": "Recommended reading paths and practical articles about Event Sourcing, CQRS, event-driven architecture, and software design."
+      },
+      "talks": {
+        "title": "Talks and videos",
+        "videosTitle": "Selected videos",
+        "videosIntro": "Conference talks, webinars, and practical sessions about Event Sourcing, CQRS, event-driven architecture, and software design.",
+        "appearancesTitle": "Conference appearances and talks",
+        "watch": "Watch recording",
+        "play": "Play {{title}}",
+        "titleLabel": "Title",
+        "descriptionLabel": "Description"
+      },
+      "related": {
+        "title": "Related articles"
       },
       "404": {
         "title": "Not found",
@@ -30,7 +62,17 @@
       "contact": {
         "title": "Contact",
         "seoTitle": "Contact Oskar Dudycz",
-        "description": "Contact Oskar Dudycz about Event Sourcing training, software architecture consulting, and speaking."
+        "description": "Contact Oskar Dudycz about Event Sourcing training, software architecture consulting, and speaking.",
+        "intro": "For consulting, architecture reviews, or training, send a message below or",
+        "bookCall": "book a free introductory call.",
+        "form": {
+          "name": "Name",
+          "email": "Email",
+          "message": "Message",
+          "emailError": "Please enter a valid email address.",
+          "messageError": "Please enter your message.",
+          "submit": "Send message"
+        }
       }
     }
   },
@@ -45,6 +87,7 @@
       },
       "menu": {
         "categories": "Kategorie",
+        "consulting": "Konsulting",
         "contact": "Kontakt",
         "talks": "Wystąpienia",
         "training": "Szkolenia",
@@ -53,10 +96,43 @@
       "hero": {
         "h1": "Szukasz praktycznej wiedzy <1 /> o <3>architekturze oprogramowania?</3>",
         "h2": "Zapoznaj się z moimi treściami - <1>od artykułów po wideo</1>",
-        "h3": "Nazywam się <1>Oskar Dudycz</1>. Od ponad 18 lat, tworzę systemy informatyczne bliskie biznesowi. <3 />Prowadzę warsztaty i szkolenia na temat <5>Event Sourcing</5>, CQRS oraz architektur opartych o zdarzeniach. <7 />Jestem maintainerem biblioteki <9>Emmett</9>, umożliwiającej pracę z Event Sourcing. <11 />Na blogu dzielę się wiedzą jak pragmatycznie tworzyć, dobre modularne aplikacje.",
+        "h3": "Nazywam się <1>Oskar Dudycz</1>. Od ponad 18 lat tworzę systemy informatyczne bliskie biznesowi. <3 />Prowadzę warsztaty i szkolenia o <5>Event Sourcingu</5>, CQRS-ie oraz architekturze opartej na zdarzeniach. <7 />Rozwijam <9>Emmett</9>, bibliotekę open source ułatwiającą wdrażanie Event Sourcingu. <11 />Na blogu pokazuję, jak pragmatycznie budować dobrze zaprojektowane, modularne aplikacje.",
         "servicesLabel": "Usługi profesjonalne",
         "trainingCta": "Zobacz szkolenia",
         "consultingCta": "Porozmawiajmy o konsultingu"
+      },
+      "blog": {
+        "browseAll": "Zobacz wszystkie artykuły"
+      },
+      "categories": {
+        "title": "Polecana kolejność czytania według tematów",
+        "intro": "Wybierz temat, aby przejść polecaną ścieżkę nauki albo zobaczyć wszystkie powiązane artykuły.",
+        "topic": "Temat",
+        "recommended": "Polecana kolejność czytania",
+        "recommendedDescription": "Czytaj w tej kolejności, aby przejść od podstaw do praktycznych kompromisów i problemów produkcyjnych.",
+        "moreArticles": "Więcej artykułów",
+        "articles": "Artykuły",
+        "articleCount_one": "{{count}} artykuł",
+        "articleCount_few": "{{count}} artykuły",
+        "articleCount_many": "{{count}} artykułów",
+        "articleCount_other": "{{count}} artykułu",
+        "defaultDescription": "Praktyczne artykuły na temat {{category}}.",
+        "seoTitle": "{{category}} — artykuły i ścieżka nauki",
+        "seoTitleAll": "Tematy i ścieżki nauki architektury oprogramowania",
+        "seoDescription": "Polecane ścieżki czytania i praktyczne artykuły o Event Sourcingu, CQRS-ie, architekturze opartej na zdarzeniach i projektowaniu oprogramowania."
+      },
+      "talks": {
+        "title": "Wystąpienia i nagrania",
+        "videosTitle": "Wybrane nagrania",
+        "videosIntro": "Wystąpienia konferencyjne, webinary i praktyczne sesje o Event Sourcingu, CQRS-ie, architekturze opartej na zdarzeniach i projektowaniu oprogramowania.",
+        "appearancesTitle": "Konferencje i wystąpienia",
+        "watch": "Obejrzyj nagranie",
+        "play": "Odtwórz {{title}}",
+        "titleLabel": "Tytuł",
+        "descriptionLabel": "Opis"
+      },
+      "related": {
+        "title": "Powiązane artykuły"
       },
       "404": {
         "title": "Nie znaleziono",
@@ -65,7 +141,17 @@
       "contact": {
         "title": "Kontakt",
         "seoTitle": "Skontaktuj się z Oskarem Dudyczem",
-        "description": "Skontaktuj się z Oskarem Dudyczem w sprawie szkoleń z Event Sourcingu, konsultingu architektonicznego i wystąpień."
+        "description": "Skontaktuj się z Oskarem Dudyczem w sprawie szkoleń z Event Sourcingu, konsultingu architektonicznego i wystąpień.",
+        "intro": "W sprawie konsultingu, przeglądu architektury lub szkolenia napisz wiadomość albo",
+        "bookCall": "umów bezpłatną rozmowę wstępną.",
+        "form": {
+          "name": "Imię i nazwisko",
+          "email": "E-mail",
+          "message": "Wiadomość",
+          "emailError": "Podaj poprawny adres e-mail.",
+          "messageError": "Wpisz wiadomość.",
+          "submit": "Wyślij wiadomość"
+        }
       }
     }
   }

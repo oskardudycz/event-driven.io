@@ -22,7 +22,7 @@ Along the way, we'll also look at where GenAI helps with modelling and implement
 
 ![](./workshop.jpg)
 
-**23 and 24 November, and 30 November and 1 December 2026, online, in English, PLN 699 EUR.**
+**23 and 24 November, and 30 November and 1 December 2026, online, in English, EUR 699.**
 
 **[![Sign up!](./sign-up.png)](https://forms.gle/uMPEBpKjeP7FtN4k6)**
 
@@ -125,7 +125,7 @@ I write regularly about the workshop topics on this blog and in the [Architectur
 
 All sessions run from 9:00 to 15:00 CET. The workshop is run in English.
 
-**Price: EUR 699 + VAT.**
+**Price: EUR 699.**
 
 Limited to 12 places. The workshop will go ahead once at least 5 people have signed up.
 
@@ -181,7 +181,7 @@ See what participants say about [my workshops](https://www.linkedin.com/in/oskar
 
 **Can I get an invoice?**
 
-Yes. I issue VAT invoices, so you can easily put the workshop through your company.
+Yes. I issue VAT invoices, so you can easily put the workshop through your company. For companies outside Poland, VAT is reverse-charged.
 
 **What language is the workshop run in?**
 

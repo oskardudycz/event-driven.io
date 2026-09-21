@@ -13,12 +13,16 @@ Oskar Dudycz is an independent software architect, consultant, trainer, conferen
 
 ## Consulting, training, and workshops
 
+- [Software Architecture Consulting](https://event-driven.io/en/consulting/): Practical consulting for teams designing, reviewing, or improving Event Sourcing, CQRS, and event-driven systems with Oskar Dudycz.
+- [Konsulting architektury oprogramowania](https://event-driven.io/pl/consulting/): Praktyczny konsulting dla zespołów projektujących, oceniających i rozwijających systemy wykorzystujące Event Sourcing, CQRS i architekturę opartą na zdarzeniach.
 - [Training](https://event-driven.io/en/training/): Hands-on Event Sourcing and event-driven architecture training for development teams, available online or on site and tailored to your project.
 - [Szkolenie](https://event-driven.io/pl/training/): Praktyczne szkolenia z Event Sourcingu i architektury zdarzeniowej dla zespołów, dostępne online lub na miejscu i dopasowane do projektu.
+- [Event-Driven Architecture: The Light and the Dark Side](https://event-driven.io/en/light-and-dark-side-of-eda-workshop/): A four-day online cohort workshop on getting from business requirements, through a process model, to a working event-driven system with the right delivery, ordering and consistency guarantees.
+- [Architektury oparte na zdarzeniach: ciemne i jasne strony](https://event-driven.io/pl/light-and-dark-side-of-eda-workshop/): Czterodniowy warsztat online w formule kohortowej o tym, jak przejść od wymagań biznesowych przez model procesu do działającego systemu opartego na zdarzeniach, z właściwymi gwarancjami dostarczenia, kolejności i…
 - [Zrozum Event Sourcing w praktyce - otwarte szkolenie](https://event-driven.io/en/szkolenie-event-sourcing/): Event Sourcing jest bardzo kuszącym wzorcem. Pozwala śledzić wszystkie fakty biznesowe. Nie tracimy żadnej informacji biznesowej. Dzięki temu zyskujemy obserwowalność naszego przepływu biznesowego.…
 - [Zrozum Event Sourcing w praktyce - otwarte szkolenie](https://event-driven.io/pl/szkolenie-event-sourcing/): Event Sourcing jest bardzo kuszącym wzorcem. Pozwala śledzić wszystkie fakty biznesowe. Nie tracimy żadnej informacji biznesowej. Dzięki temu zyskujemy obserwowalność naszego przepływu biznesowego.…
-- [Zrozum Event Sourcing w praktyce - otwarte szkolenie](https://event-driven.io/en/szkolenie-granice-spojnosci-i-modelowanie_eda/): Event Sourcing jest bardzo kuszącym wzorcem. Pozwala śledzić wszystkie fakty biznesowe. Nie tracimy żadnej informacji biznesowej. Dzięki temu zyskujemy obserwowalność naszego przepływu biznesowego.…
-- [Granice spójności oraz strumienie zdarzeń w modelowaniu oprogramowania](https://event-driven.io/pl/szkolenie-granice-spojnosci-i-modelowanie_eda/): AI potrafi bardzo szybko wygenerować kod, który wygląda poprawnie. Znacznie trudniej jest mu ocenić, czy wygenerowany model zachowuje właściwe granice spójności, reguły biznesowe i gwarancje współbieżności.…
+- [Consistency Boundaries and Concurrency: From Model to Code](https://event-driven.io/en/szkolenie-granice-spojnosci-i-modelowanie_eda/): A two-day online workshop on drawing consistency boundaries, handling concurrency and event streams, and verifying your model before AI writes the code.
+- [Granice spójności i współbieżność: od modelu do kodu](https://event-driven.io/pl/szkolenie-granice-spojnosci-i-modelowanie_eda/): Dwudniowy warsztat online o tym, jak wyznaczać granice spójności, panować nad współbieżnością i strumieniami zdarzeń oraz sprawdzać model, zanim AI napisze kod.
 
 ## Other key pages
 

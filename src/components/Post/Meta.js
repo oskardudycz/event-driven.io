@@ -8,7 +8,9 @@ import { FaTag } from "react-icons/fa/";
 import kebabCase from "lodash/kebabCase";
 
 const Meta = (props) => {
-  const { prefix, author: authorName, category, theme } = props;
+  const { prefix, author: authorName, category, categories = [], theme } = props;
+  const additionalCategories = Array.isArray(categories) ? categories : [];
+  const allCategories = Array.from(new Set([category, ...additionalCategories].filter(Boolean)));
 
   return (
     <p className="meta">
@@ -18,12 +20,12 @@ const Meta = (props) => {
       <span>
         <FaUser size={18} /> {authorName}
       </span>
-      {category && (
-        <span>
+      {allCategories.map((categoryName) => (
+        <span key={categoryName}>
           <FaTag size={18} />
-          <Link to={`/category/${kebabCase(category)}/`}>{category}</Link>
+          <Link to={`/category/${kebabCase(categoryName)}/`}>{categoryName}</Link>
         </span>
-      )}
+      ))}
 
       {/* --- STYLES --- */}
       <style jsx>{`
@@ -59,6 +61,7 @@ Meta.propTypes = {
   prefix: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
   category: PropTypes.string,
+  categories: PropTypes.arrayOf(PropTypes.string),
   theme: PropTypes.object.isRequired,
 };
 

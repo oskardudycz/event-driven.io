@@ -1,0 +1,78 @@
+[
+  {
+    "language": "en",
+    "slug": "event-sourcing",
+    "description": "Start with the fundamentals, then move through modelling, business logic, projections, testing, evolution, and the situations where Event Sourcing is the wrong choice.",
+    "recommended": [
+      "introduction_to_event_sourcing",
+      "whats_the_difference_between_event_and_command",
+      "how_to_get_the_current_entity_state_in_event_sourcing",
+      "how_to_validate_business_logic",
+      "projections_and_read_models_in_event_driven_architecture",
+      "testing_event_sourcing",
+      "simple_events_versioning_patterns",
+      "when_not_to_use_event_sourcing"
+    ]
+  },
+  {
+    "language": "en",
+    "slug": "event-driven-architecture",
+    "description": "A practical path through distributed processes, delivery guarantees, idempotency, ordering, concurrency, and rebuilding read models safely.",
+    "recommended": [
+      "event_driven_distributed_processes_by_example",
+      "checkpointing_message_processing",
+      "idempotent_command_handling",
+      "strict_ordering_in_event_handling",
+      "dealing_with_race_conditions_in_eda_using_read_models",
+      "rebuilding_event_driven_read_models"
+    ]
+  },
+  {
+    "language": "en",
+    "slug": "cqrs",
+    "description": "Learn what CQRS is without the usual ceremony, then see commands, read models, and consistency trade-offs in practical examples.",
+    "recommended": [
+      "cqrs_facts_and_myths_explained",
+      "cqrs_is_simpler_than_you_think_with_net6",
+      "can_command_return_a_value",
+      "projections_and_read_models_in_event_driven_architecture",
+      "dealing_with_race_conditions_in_eda_using_read_models"
+    ]
+  },
+  {
+    "language": "en",
+    "slug": "software-architecture",
+    "description": "Pragmatic modelling and architecture guidance: understand the problem, expose assumptions, draw useful boundaries, and keep ownership explicit.",
+    "recommended": [
+      "intro_to_example_mapping",
+      "parse_dont_guess",
+      "on-mashing-up-modelling-techniques",
+      "vertical-slices-and-dependencies",
+      "addition-by-subtraction-in-software-design"
+    ]
+  },
+  {
+    "language": "pl",
+    "slug": "event-sourcing",
+    "description": "Artykuły o podstawach i praktycznym zastosowaniu Event Sourcingu, modelowaniu zdarzeń, projekcjach, testowaniu oraz utrzymaniu systemów na produkcji.",
+    "recommended": []
+  },
+  {
+    "language": "pl",
+    "slug": "event-driven-architecture",
+    "description": "Materiały o procesach rozproszonych, komunikacji asynchronicznej, gwarancjach dostarczania, kolejności i idempotencji.",
+    "recommended": []
+  },
+  {
+    "language": "pl",
+    "slug": "cqrs",
+    "description": "Praktyczne materiały o CQRS, komendach, modelach odczytu i kompromisach związanych ze spójnością danych.",
+    "recommended": []
+  },
+  {
+    "language": "pl",
+    "slug": "software-architecture",
+    "description": "Pragmatyczne materiały o modelowaniu, podejmowaniu decyzji i projektowaniu architektury oprogramowania.",
+    "recommended": []
+  }
+]

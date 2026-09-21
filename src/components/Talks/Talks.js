@@ -1,51 +1,55 @@
-/* eslint no-unused-vars: 0 */
-
 import React from "react";
 import PropTypes from "prop-types";
 
-import "@ant-design/compatible/assets/index.css";
-import "antd/es/input/style/index.css";
-import "antd/es/button/style/index.css";
 import { ThemeContext } from "../../layouts";
-import Video from "../Video";
+import { useTranslation } from "react-i18next";
 
-const Talks = props => {
+const Talks = (props) => {
   const { talks } = props;
-
+  const { t } = useTranslation();
 
   return (
     <React.Fragment>
       <ThemeContext.Consumer>
-        {theme => (
+        {(theme) => (
           <div>
             <ul>
-              {talks.map(talk => {
+              {talks.map((talk) => {
                 return (
-                  <li>
+                  <li key={`${talk.Date}-${talk.Title}`}>
                     <p className="date-container">
-                      <span className="date">📅 {talk.Date}</span> - <span className="where"><a href={talk.Link} target="_blank">{talk.Where}</a></span>
+                      <span className="date">📅 {talk.Date}</span> -{" "}
+                      <span className="where">
+                        {talk.Link ? (
+                          <a href={talk.Link} target="_blank" rel="noopener noreferrer">
+                            {talk.Where}
+                          </a>
+                        ) : (
+                          talk.Where
+                        )}
+                      </span>
                     </p>
                     <p className="title-container">
-                      <label className="title-label">Title:</label> <span className="title">{talk.Title}</span>
+                      <label className="title-label">{t("talks.titleLabel")}:</label>{" "}
+                      <span className="title">{talk.Title}</span>
                     </p>
-                    { talk.Description &&
+                    {talk.Description && (
                       <p className="description-container">
-                        <label className="description-label">Description:</label> <span className="description">{talk.Description}</span>
+                        <label className="description-label">{t("talks.descriptionLabel")}:</label>{" "}
+                        <span className="description">{talk.Description}</span>
                       </p>
-                    }
-                    {talk.Video && !talk.HideVideo && talk.Video.includes("youtube") && 
-                          <Video
-                            videoSrcURL={talk.Video}
-                            videoTitle="Official Music Video on YouTube"
-                          />
-                    }
+                    )}
+                    {talk.Video && !talk.HideVideo && talk.Video.includes("youtube") && (
+                      <p>
+                        <a href={talk.Video} target="_blank" rel="noopener noreferrer">
+                          {t("talks.watch")} →
+                        </a>
+                      </p>
+                    )}
                   </li>
                 );
               })}
             </ul>
-
-
-
             {/* --- STYLES --- */}
             <style jsx>{`
               ul {
@@ -56,8 +60,6 @@ const Talks = props => {
                 padding: ${theme.space.m} 0;
                 font-size: ${theme.font.size.s};
                 line-height: ${theme.font.lineHeight.l};
-
-                
                 border: 1px solid transparent;
                 border-radius: ${theme.size.radius.default};
                 margin: ${`calc(${theme.space.default} * 2) 0 calc(${theme.space.default} * 3)`};
@@ -123,9 +125,8 @@ const Talks = props => {
   );
 };
 
-Talks.propTypes = {  
-  talks: PropTypes.array
+Talks.propTypes = {
+  talks: PropTypes.array,
 };
-
 
 export default Talks;

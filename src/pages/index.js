@@ -9,7 +9,7 @@ import Seo from "../components/Seo";
 class IndexPage extends React.Component {
   separator = React.createRef();
 
-  scrollToContent = e => {
+  scrollToContent = (e) => {
     this.separator.current.scrollIntoView({ block: "start", behavior: "smooth" });
   };
 
@@ -18,30 +18,30 @@ class IndexPage extends React.Component {
       data: {
         posts: { edges: posts = [] },
         bgDesktop: {
-          resize: { src: desktop }
+          resize: { src: desktop },
         },
         bgTablet: {
-          resize: { src: tablet }
+          resize: { src: tablet },
         },
         bgMobile: {
-          resize: { src: mobile }
+          resize: { src: mobile },
         },
         site: {
-          siteMetadata: { facebook }
-        }
-      }
+          siteMetadata: { facebook },
+        },
+      },
     } = this.props;
 
     const backgrounds = {
       desktop,
       tablet,
-      mobile
+      mobile,
     };
 
     return (
       <React.Fragment>
         <ThemeContext.Consumer>
-          {theme => (
+          {(theme) => (
             <Hero scrollToContent={this.scrollToContent} backgrounds={backgrounds} theme={theme} />
           )}
         </ThemeContext.Consumer>
@@ -49,7 +49,7 @@ class IndexPage extends React.Component {
         <hr ref={this.separator} />
 
         <ThemeContext.Consumer>
-          {theme => <Blog posts={posts} theme={theme} />}
+          {(theme) => <Blog posts={posts} theme={theme} browseAllPath="/category/" />}
         </ThemeContext.Consumer>
 
         <Seo facebook={facebook} />
@@ -66,7 +66,7 @@ class IndexPage extends React.Component {
 }
 
 IndexPage.propTypes = {
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
 };
 
 export default IndexPage;
@@ -75,7 +75,12 @@ export default IndexPage;
 export const query = graphql`
   query IndexQuery($langKey: String!) {
     posts: allMarkdownRemark(
-      filter: { fileAbsolutePath: { regex: "//posts/[0-9]+.*--/" }, fields: { langKey: { eq: $langKey } } }
+      limit: 12
+      filter: {
+        fileAbsolutePath: { regex: "//posts/[0-9]+.*--/" }
+        fields: { langKey: { eq: $langKey } }
+        frontmatter: { useDefaultLangCanonical: { ne: true } }
+      }
       sort: { fields: [fields___prefix], order: DESC }
     ) {
       edges {
@@ -89,6 +94,7 @@ export const query = graphql`
           frontmatter {
             title
             category
+            categories
             author
             cover {
               children {
@@ -111,17 +117,17 @@ export const query = graphql`
       }
     }
     bgDesktop: imageSharp(fluid: { originalName: { regex: "/hero-background/" } }) {
-      resize(width: 1200, quality: 100, cropFocus: CENTER) {
+      resize(width: 1200, quality: 80, cropFocus: CENTER, toFormat: WEBP) {
         src
       }
     }
     bgTablet: imageSharp(fluid: { originalName: { regex: "/hero-background/" } }) {
-      resize(width: 800, height: 1100, quality: 100, cropFocus: CENTER) {
+      resize(width: 800, height: 1100, quality: 80, cropFocus: CENTER, toFormat: WEBP) {
         src
       }
     }
     bgMobile: imageSharp(fluid: { originalName: { regex: "/hero-background/" } }) {
-      resize(width: 450, height: 850, quality: 100, cropFocus: CENTER) {
+      resize(width: 450, height: 850, quality: 80, cropFocus: CENTER, toFormat: WEBP) {
         src
       }
     }

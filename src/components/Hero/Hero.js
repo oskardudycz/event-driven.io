@@ -44,7 +44,7 @@ const Hero = (props) => {
         </h3>
         <nav className="services" aria-label={t("hero.servicesLabel")}>
           <Link to="/training/">{t("hero.trainingCta")}</Link>
-          <Link to="/contact/">{t("hero.consultingCta")}</Link>
+          <Link to="/consulting/">{t("hero.consultingCta")}</Link>
         </nav>
         <button onClick={scrollToContent} aria-label="scroll">
           <FaArrowDown />
@@ -63,7 +63,6 @@ const Hero = (props) => {
           flex-flow: column nowrap;
           justify-content: center;
           min-height: 100vh;
-          height: 100px;
           padding: ${theme.space.inset.l};
           padding-top: ${theme.header.height.homepage};
         }

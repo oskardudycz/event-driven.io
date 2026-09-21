@@ -1,0 +1,186 @@
+[
+  {
+    "Order": 1,
+    "VideoId": "jnDchr5eabI",
+    "Title": "Practical Event Sourcing with Marten and .NET - Oskar Dudycz - NDC Oslo 2023",
+    "Channel": "NDC Conferences",
+    "Duration": "59:32",
+    "Language": "EN"
+  },
+  {
+    "Order": 2,
+    "VideoId": "gG6DGmYKk4I",
+    "Title": "How to model event-sourced systems efficiently - Oskar Dudycz - DDD Europe 2022",
+    "Channel": "Domain-Driven Design Europe",
+    "Duration": "50:16",
+    "Language": "EN"
+  },
+  {
+    "Order": 3,
+    "VideoId": "iY7LO289qnQ",
+    "Title": "CQRS is simpler than you think with C#11 and .NET 7! - Oskar Dudycz",
+    "Channel": "Swetugg",
+    "Duration": "50:03",
+    "Language": "EN"
+  },
+  {
+    "Order": 4,
+    "VideoId": "9COWKz1E32w",
+    "Title": "Fakty i mity o CQRS • Oskar Dudycz • Devoxx Polska 2023",
+    "Channel": "Devoxx Poland",
+    "Duration": "48:50",
+    "Language": "PL"
+  },
+  {
+    "Order": 5,
+    "VideoId": "gaoZdtQSOTo",
+    "Title": "Let's build event store in one hour! - Oskar Dudycz - NDC Oslo 2022",
+    "Channel": "NDC Conferences",
+    "Duration": "57:47",
+    "Language": "EN"
+  },
+  {
+    "Order": 6,
+    "VideoId": "0pYmuk0-N_4",
+    "Title": "Light and Dark Side of the Event-Driven Design • Oskar Dudycz • Devoxx Poland 2021",
+    "Channel": "Devoxx Poland",
+    "Duration": "53:03",
+    "Language": "EN"
+  },
+  {
+    "Order": 7,
+    "VideoId": "20zvAJAhqS0",
+    "Title": "Let's build the worst Event Sourcing system! - Oskar Dudycz - NDC London 2024",
+    "Channel": "NDC Conferences",
+    "Duration": "57:31",
+    "Language": "EN"
+  },
+  {
+    "Order": 8,
+    "VideoId": "7NGlYgobTyY",
+    "Title": "How to deal with privacy and GDPR in Event-Sourced systems by Oskar Dudycz",
+    "Channel": "Devoxx",
+    "Duration": "44:05",
+    "Language": "EN"
+  },
+  {
+    "Order": 9,
+    "VideoId": "b-rxOLzevqQ",
+    "Title": "Simplify your architecture with Wolverine with Jeremy D. Miller",
+    "Channel": "Oskar Dudycz",
+    "Duration": "1:47:34",
+    "Language": "EN"
+  },
+  {
+    "Order": 10,
+    "VideoId": "V5_MMtfPpKs",
+    "Title": "Event-driven revolution, from CRUD to Event Sourcing in practice - Oskar Dudycz - Devoxx For Ukraine",
+    "Channel": "Developers World Academy",
+    "Duration": "51:23",
+    "Language": "EN"
+  },
+  {
+    "Order": 11,
+    "VideoId": "rqYPVzjoxqI",
+    "Title": "Practical introduction to Event Sourcing with EventStoreDB",
+    "Channel": "Dot Net Liverpool",
+    "Duration": "1:17:08",
+    "Language": "EN"
+  },
+  {
+    "Order": 12,
+    "VideoId": "5pc7abhle_Q",
+    "Title": "Introduction to Event Sourcing in TypeScript and NodeJS with EventStoreDB",
+    "Channel": "Kurrent",
+    "Duration": "1:48:32",
+    "Language": "EN"
+  },
+  {
+    "Order": 13,
+    "VideoId": "CI7JPFLlpBw",
+    "Title": "How to deal with privacy and GDPR in Event-Sourced systems",
+    "Channel": "Kurrent",
+    "Duration": "1:19:11",
+    "Language": "EN"
+  },
+  {
+    "Order": 14,
+    "VideoId": "Lc2zV8KA16A",
+    "Title": "Pragmatyczne pozyskiwanie zdarzeń w .NET z Marten",
+    "Channel": "JetBrains",
+    "Duration": "1:20:10",
+    "Language": "PL"
+  },
+  {
+    "Order": 15,
+    "VideoId": "Lu-skMQ-vAw",
+    "Title": "Let's build the worst Event Sourcing system! - Oskar Dudycz - EventSourcing Live 2021",
+    "Channel": "EventSourcing Live",
+    "Duration": "45:15",
+    "Language": "EN"
+  },
+  {
+    "Order": 16,
+    "VideoId": "9WVJpitRDNU",
+    "Title": "Architecture Weekly 100 Edition - Live Q&A",
+    "Channel": "Oskar Dudycz",
+    "Duration": "1:24:31",
+    "Language": "EN"
+  },
+  {
+    "Order": 17,
+    "VideoId": "ArcypYS5XBQ",
+    "Title": "#24: Practical Introduction to Event Sourcing with EventStoreDB by Oskar Dudycz",
+    "Channel": "DDD Greece",
+    "Duration": "1:56:02",
+    "Language": "EN"
+  },
+  {
+    "Order": 18,
+    "VideoId": "fDC465jJoDk",
+    "Title": "Never Lose Data Again - Event Sourcing to the Rescue! with Oskar Dudycz - December 1st 2021",
+    "Channel": "NE Bytes",
+    "Duration": "1:29:50",
+    "Language": "EN"
+  },
+  {
+    "Order": 19,
+    "VideoId": "L_ized5xwww",
+    "Title": "4Developers 2020, Oskar Dudycz, .NET: Practical Event Sourcing with Marten",
+    "Channel": "PROIDEA Events",
+    "Duration": "44:01",
+    "Language": "EN"
+  },
+  {
+    "Order": 20,
+    "VideoId": "WY5dZD_0sgg",
+    "Title": "CQRS is simpler than you think with C#9 and .NET 5!",
+    "Channel": "Oskar Dudycz",
+    "Duration": "43:51",
+    "Language": "EN"
+  },
+  {
+    "Order": 21,
+    "VideoId": "eOPlg-eB4As",
+    "Title": "A practical guide to implementing CQRS with C# and .NET 5",
+    "Channel": "Kurrent",
+    "Duration": "1:19:04",
+    "Language": "EN"
+  },
+  {
+    "Order": 22,
+    "VideoId": "LaUSPtwFLSg",
+    "Title": "Practical introduction to Event Sourcing with Spring Boot and EventStoreDB",
+    "Channel": "Kurrent",
+    "Duration": "1:42:59",
+    "Language": "EN"
+  },
+  {
+    "Order": 23,
+    "VideoId": "_YJyeKI1xm8",
+    "Title": "PostgreSQL Superpowers in Practice | Oskar Dudycz",
+    "Channel": "Build Stuff",
+    "Duration": "39:07",
+    "Language": "EN"
+  }
+]
