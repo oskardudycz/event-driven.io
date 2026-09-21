@@ -24,7 +24,7 @@ Along the way, we'll also look at where GenAI helps with modelling and implement
 
 **23 and 24 November, and 30 November and 1 December 2026, online, in English, PLN 699 EUR.**
 
-**[![Sign up!](./sign-up.png)](https://forms.gle/YxfhZ9wUQetX9iue8)**
+**[![Sign up!](./sign-up.png)](https://forms.gle/uMPEBpKjeP7FtN4k6)**
 
 ## What you'll learn
 
@@ -67,7 +67,7 @@ The workshop is for developers, tech leads and architects who design event-drive
 - **Online, on Zoom, in English.** We model on a shared Miro board. The workshop won't be recorded.
 - **After the workshop, you'll get** the code repository, access to the Miro board with the results of our work, an ebook on modelling event-driven workflows and additional materials grouped by topic.
 
-**[![Sign up!](./sign-up.png)](https://forms.gle/YxfhZ9wUQetX9iue8)**
+**[![Sign up!](./sign-up.png)](https://forms.gle/uMPEBpKjeP7FtN4k6)**
 
 ![](./workshop-online.png)
 
@@ -108,7 +108,7 @@ The workshop is for developers, tech leads and architects who design event-drive
 
 Business processes are rarely easy to understand. Knowledge about them is spread across many people, and requirements arrive in fragments. Event-driven architecture helps put them in order and reflect them in code. Even when you manage to model them well, you still have to translate the model into architecture and implementation, and that's a challenge of its own. This workshop covers both.
 
-I also know the problems covered in this workshop from the tooling side. I created [Emmett](https://event-driven-io.github.io/emmett/), I'm one of the maintainers of [Marten](https://martendb.io/) and I contributed to [EventStoreDB](https://developers.eventstore.com/). On [GitHub](https://github.com/oskardudycz/), I share samples and exercises in .NET, Node.js and Java.
+I also know the problems covered in this workshop from the tooling side. I created [Emmett](https://event-driven-io.github.io/emmett/), I was one of the maintainers of [Marten](https://martendb.io/) and I contributed to [EventStoreDB](https://developers.eventstore.com/). On [GitHub](https://github.com/oskardudycz/), I share samples and exercises in .NET, Node.js and Java.
 
 I write regularly about the workshop topics on this blog and in the [Architecture Weekly](https://www.architecture-weekly.com/) newsletter, for example:
 - [Outbox, Inbox patterns and delivery guarantees explained](/en/outbox_inbox_patterns_and_delivery_guarantees_explained/)
@@ -129,7 +129,7 @@ All sessions run from 9:00 to 15:00 CET. The workshop is run in English.
 
 Limited to 12 places. The workshop will go ahead once at least 5 people have signed up.
 
-**[![Sign up!](./sign-up.png)](https://forms.gle/YxfhZ9wUQetX9iue8)**
+**[![Sign up!](./sign-up.png)](https://forms.gle/uMPEBpKjeP7FtN4k6)**
 
 ## What you'll gain
 
@@ -145,29 +145,37 @@ Limited to 12 places. The workshop will go ahead once at least 5 people have sig
 
 **You'll leave with tools, not just notes.** You can use the workshop code and the Miro board in your own project and team straight away.
 
-**[![Sign up!](./sign-up.png)](https://forms.gle/YxfhZ9wUQetX9iue8)**
+**[![Sign up!](./sign-up.png)](https://forms.gle/uMPEBpKjeP7FtN4k6)**
 
 ## Testimonials
 
-See what participants say about my workshops:
+See what participants say about [my workshops](https://www.linkedin.com/in/oskardudycz/details/recommendations/?detailScreenTabIndex=0):
 
 ![rekomendacja](./ro-08.png)
 
-![rekomendacja](./rk-01.png)
+![rekomendacja](../../../src/images/recommendations/r02.png)
 
 ![rekomendacja](./ro-06.png)
 
-![rekomendacja](./rk-02.png)
+![rekomendacja](../../../src/images/recommendations/r20.png)
 
-![rekomendacja](./ro-05.png)
+![rekomendacja](./ro-11.png)
 
-![rekomendacja](./rk-03.png)
+![rekomendacja](../../../src/images/recommendations/r10.png)
+
+![rekomendacja](./ro-12.png)
+
+![rekomendacja](../../../src/images/recommendations/r24.png)
 
 ![rekomendacja](./ro-04.png)
 
+![rekomendacja](../../../src/images/recommendations/r22.png)
+
+![rekomendacja](./ro-05.png)
+
 **So, have I convinced you?**
 
-**[![Sign up!](./sign-up.png)](https://forms.gle/YxfhZ9wUQetX9iue8)**
+**[![Sign up!](./sign-up.png)](https://forms.gle/uMPEBpKjeP7FtN4k6)**
 
 ## Frequently asked questions
 

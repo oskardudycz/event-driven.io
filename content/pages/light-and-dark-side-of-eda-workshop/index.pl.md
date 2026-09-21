@@ -24,7 +24,7 @@ Po drodze sprawdzimy też, w czym GenAI pomaga przy modelowaniu i implementacji,
 
 **23 i 24 listopada oraz 30 listopada i 1 grudnia 2026 r., online, po angielsku, 3000 PLN + VAT.**
 
-**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/YxfhZ9wUQetX9iue8)**
+**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/uMPEBpKjeP7FtN4k6)**
 
 ## Czego się nauczysz?
 
@@ -67,7 +67,7 @@ Szkolenie jest dla programistek i programistów, tech leadów oraz architektek i
 - **Online, na Zoomie, po angielsku.** Modelujemy na wspólnej tablicy Miro. Szkolenie nie będzie nagrywane.
 - **Po szkoleniu dostaniesz** repozytorium z kodem, dostęp do tablicy Miro z efektami naszej pracy, ebooka o modelowaniu przepływów opartych na zdarzeniach i materiały dodatkowe pogrupowane tematycznie.
 
-**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/YxfhZ9wUQetX9iue8)**
+**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/uMPEBpKjeP7FtN4k6)**
 
 ![](./workshop-online.png)
 
@@ -108,7 +108,7 @@ Szkolenie jest dla programistek i programistów, tech leadów oraz architektek i
 
 Procesy biznesowe rzadko są proste do zrozumienia. Wiedza o nich jest rozproszona między wiele osób, a wymagania przychodzą we fragmentach. Architektury oparte na zdarzeniach pomagają je uporządkować i odzwierciedlić w kodzie. Nawet gdy uda się je dobrze zamodelować, trzeba jeszcze przełożyć model na architekturę i implementację, a to osobne wyzwanie. Na tym szkoleniu zajmujemy się jednym i drugim.
 
-Problemy, o których mówię na szkoleniu, znam także od strony narzędzi. Stworzyłem [Emmetta](https://event-driven-io.github.io/emmett/), jestem jednym z maintainerów [Martena](https://martendb.io/) i współtworzyłem [EventStoreDB](https://developers.eventstore.com/). Na [GitHubie](https://github.com/oskardudycz/) udostępniam przykłady i ćwiczenia w .NET, Node.js i Javie.
+Problemy, o których mówię na szkoleniu, znam także od strony narzędzi. Stworzyłem [Emmetta](https://event-driven-io.github.io/emmett/), byłem jednym z maintainerów [Martena](https://martendb.io/) i współtworzyłem [EventStoreDB](https://developers.eventstore.com/). Na [GitHubie](https://github.com/oskardudycz/) udostępniam przykłady i ćwiczenia w .NET, Node.js i Javie.
 
 O tematach szkolenia regularnie piszę na tym blogu i w newsletterze [Architecture Weekly](https://www.architecture-weekly.com/), na przykład o:
 - [wzorcach Outbox i Inbox oraz gwarancjach dostarczenia](/pl/outbox_inbox_patterns_and_delivery_guarantees_explained/),
@@ -129,7 +129,7 @@ Wszystkie sesje trwają od 9:00 do 15:00. Szkolenie prowadzę po angielsku.
 
 Liczba miejsc: 12. Szkolenie ruszy, gdy zapisze się co najmniej 5 osób.
 
-**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/YxfhZ9wUQetX9iue8)**
+**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/uMPEBpKjeP7FtN4k6)**
 
 ## Co zyskasz?
 
@@ -145,29 +145,37 @@ Liczba miejsc: 12. Szkolenie ruszy, gdy zapisze się co najmniej 5 osób.
 
 **Zabierzesz ze sobą narzędzia, nie tylko notatki.** Kod z warsztatu i tablicę Miro możesz od razu wykorzystać we własnym projekcie i zespole.
 
-**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/YxfhZ9wUQetX9iue8)**
+**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/uMPEBpKjeP7FtN4k6)**
 
 ## Referencje
 
-Zobacz, co uczestnicy mówią o moich warsztatach:
+Zobacz, co uczestnicy mówią [o moich warsztatach](https://www.linkedin.com/in/oskardudycz/details/recommendations/?detailScreenTabIndex=0):
 
 ![rekomendacja](./ro-08.png)
 
-![rekomendacja](./rk-01.png)
+![rekomendacja](../../../src/images/recommendations/r02.png)
 
 ![rekomendacja](./ro-06.png)
 
-![rekomendacja](./rk-02.png)
+![rekomendacja](../../../src/images/recommendations/r20.png)
 
-![rekomendacja](./ro-05.png)
+![rekomendacja](./ro-11.png)
 
-![rekomendacja](./rk-03.png)
+![rekomendacja](../../../src/images/recommendations/r10.png)
+
+![rekomendacja](./ro-12.png)
+
+![rekomendacja](../../../src/images/recommendations/r24.png)
 
 ![rekomendacja](./ro-04.png)
 
+![rekomendacja](../../../src/images/recommendations/r22.png)
+
+![rekomendacja](./ro-05.png)
+
 **To co, przekonałem Cię?**
 
-**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/YxfhZ9wUQetX9iue8)**
+**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/uMPEBpKjeP7FtN4k6)**
 
 ## Najczęściej zadawane pytania
 
