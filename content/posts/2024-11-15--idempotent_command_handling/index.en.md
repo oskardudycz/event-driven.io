@@ -1,5 +1,7 @@
 ---
 title: Idempotent Command Handling
+description: "Practical command-handling patterns for preventing duplicate business effects with optimistic concurrency and explicit deduplication."
+summary: "Learn when command handling is naturally idempotent, when duplicates need explicit handling, and how optimistic concurrency can enforce business invariants safely."
 category: "Event Sourcing"
 categories:
   - Event-Driven Architecture

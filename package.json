@@ -5,6 +5,9 @@
   "license": "MIT",
   "scripts": {
     "generate-llms": "node ./scripts/generate-llms-txt.js",
+    "verify-seo": "node ./scripts/verify-seo-build.js",
+    "test": "yarn test:seo",
+    "test:seo": "node ./tests/seo-build.test.js",
     "prebuild": "node ./scripts/generate-llms-txt.js",
     "import-newsletter": "node ./import/import-newsletter.js",
     "import-architecture-weekly": "node ./import/import-architecture-weekly.js",

@@ -1,5 +1,7 @@
 ---
 title: Handling Events Coming in an Unknown Order
+description: "Learn how to detect missing or out-of-order events and where strict ordering can realistically be guaranteed in event-driven systems."
+summary: "Events from independent sources may arrive in an unknown order. This article explains how stream revisions expose missing information and where ordering guarantees should live."
 category: "Event Sourcing"
 categories:
   - Event-Driven Architecture

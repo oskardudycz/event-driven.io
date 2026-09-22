@@ -52,42 +52,30 @@ class IndexPage extends React.Component {
           {(theme) => (
             <section className="latestArticles" id="latest-articles" ref={this.separator}>
               <header className="sectionHeader">
-                <p>{t("blog.latestLabel")}</p>
                 <h2>{t("blog.latestTitle")}</h2>
-                <span>{t("blog.latestIntro")}</span>
               </header>
-              <Blog posts={posts} theme={theme} browseAllPath="/articles/" />
+              <Blog posts={posts} theme={theme} browseAllPath="/articles/" compactTop />
               <style jsx>{`
                 .latestArticles {
                   scroll-margin-top: ${theme.header.height.default};
                 }
                 .sectionHeader {
                   margin: 0 auto;
-                  max-width: ${theme.text.maxWidth.desktop};
-                  padding: ${theme.space.xl} ${theme.space.inset.default} 0;
-                }
-                .sectionHeader p {
-                  color: ${theme.color.brand.primary};
-                  font-size: ${theme.font.size.xs};
-                  font-weight: ${theme.font.weight.bold};
-                  letter-spacing: 0.08em;
-                  margin-bottom: ${theme.space.s};
-                  text-transform: uppercase;
+                  padding: ${theme.space.l} ${theme.space.inset.default} 0;
                 }
                 .sectionHeader h2 {
                   font-size: ${theme.font.size.xxl};
-                  margin-bottom: ${theme.space.s};
-                }
-                .sectionHeader span {
-                  display: block;
-                  font-size: ${theme.font.size.s};
-                  line-height: ${theme.font.lineHeight.l};
-                  max-width: 42rem;
                 }
                 @from-width tablet {
                   .sectionHeader {
+                    max-width: ${theme.text.maxWidth.tablet};
                     padding-left: 0;
                     padding-right: 0;
+                  }
+                }
+                @from-width desktop {
+                  .sectionHeader {
+                    max-width: ${theme.text.maxWidth.desktop};
                   }
                 }
               `}</style>

@@ -1,5 +1,7 @@
 ---
 title: How to validate business logic
+description: "Learn where request validation ends and domain validation begins, with a practical layered approach to protecting business rules."
+summary: "This article separates transport-level validation from domain invariants and shows where each check belongs so invalid input cannot leak into business logic."
 category: "Event Sourcing"
 cover: 2023-01-15-cover.jpg
 author: oskar dudycz

@@ -27,13 +27,11 @@
         "servicesLabel": "Professional services",
         "trainingCta": "Explore training",
         "consultingCta": "Discuss consulting",
-        "articlesCta": "View more"
+        "articlesCta": "Read latest articles"
       },
       "blog": {
         "browseAll": "Browse all articles",
-        "latestLabel": "From the blog",
         "latestTitle": "Latest articles",
-        "latestIntro": "Practical notes on Event Sourcing, event-driven architecture, CQRS, and software design.",
         "allTitle": "All articles",
         "allIntro": "Browse the complete archive, from the newest article back to the earliest posts."
       },
@@ -113,13 +111,11 @@
         "servicesLabel": "Usługi profesjonalne",
         "trainingCta": "Zobacz szkolenia",
         "consultingCta": "Porozmawiajmy o konsultingu",
-        "articlesCta": "Zobacz więcej"
+        "articlesCta": "Przeczytaj najnowsze artykuły"
       },
       "blog": {
         "browseAll": "Zobacz wszystkie artykuły",
-        "latestLabel": "Z bloga",
         "latestTitle": "Najnowsze artykuły",
-        "latestIntro": "Praktyczne materiały o Event Sourcingu, architekturze opartej na zdarzeniach, CQRS-ie i projektowaniu oprogramowania.",
         "allTitle": "Wszystkie artykuły",
         "allIntro": "Przejrzyj pełne archiwum — od najnowszego artykułu aż po najstarsze wpisy."
       },

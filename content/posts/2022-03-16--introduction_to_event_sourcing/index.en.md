@@ -1,5 +1,7 @@
 ---
 title: Introduction to Event Sourcing - Self Paced Kit
+description: "A practical introduction to Event Sourcing covering events, state reconstruction, business logic, concurrency, and projections."
+summary: "Start learning Event Sourcing through practical exercises that build from defining events and rebuilding state to handling business logic, concurrency, and projections."
 category: "Event Sourcing"
 cover: 2022-03-16-cover.png
 author: oskar dudycz

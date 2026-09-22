@@ -46,6 +46,7 @@ jobs:
           GATSBY_AUTH0_DOMAIN: ${{ secrets.GATSBY_AUTH0_DOMAIN }}
           GATSBY_DISQUS_NAME: ${{ secrets.GATSBY_DISQUS_NAME }}
           GOOGLE_TAG_ID: ${{ secrets.GOOGLE_TAG_ID }}
+      - run: yarn test
       - name: Build & Deploy docs preview
         run: yarn deploy
         if: ${{ github.ref != 'refs/heads/main' }}

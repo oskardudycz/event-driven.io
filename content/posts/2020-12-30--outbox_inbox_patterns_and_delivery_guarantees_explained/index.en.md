@@ -1,5 +1,7 @@
 ---
 title: Outbox, Inbox patterns and delivery guarantees explained
+description: "Understand at-most-once, at-least-once, and exactly-once semantics, plus how Outbox and Inbox patterns support reliable messaging."
+summary: "This guide explains message delivery guarantees and shows how transactional Outbox, Inbox, retries, and idempotency work together in distributed systems."
 category: "Architecture"
 cover: 2020-12-30-cover.png
 author: oskar dudycz

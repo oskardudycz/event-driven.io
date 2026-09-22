@@ -20,39 +20,7 @@ const ArticlesPage = (props) => {
   return (
     <React.Fragment>
       <ThemeContext.Consumer>
-        {(theme) => (
-          <React.Fragment>
-            <header className="archiveHeader">
-              <h1>{t("blog.allTitle")}</h1>
-            </header>
-            <Blog posts={posts} theme={theme} compactTop />
-            <style jsx>{`
-              .archiveHeader {
-                margin: 0 auto;
-                padding: ${theme.space.l} ${theme.space.inset.default} 0;
-              }
-
-              .archiveHeader h1 {
-                font-size: ${theme.font.size.xxl};
-                margin: 0;
-              }
-
-              @above tablet {
-                .archiveHeader {
-                  max-width: ${theme.text.maxWidth.tablet};
-                  padding-left: 0;
-                  padding-right: 0;
-                }
-              }
-
-              @above desktop {
-                .archiveHeader {
-                  max-width: ${theme.text.maxWidth.desktop};
-                }
-              }
-            `}</style>
-          </React.Fragment>
-        )}
+        {(theme) => <Blog posts={posts} theme={theme} compactTop heading={t("blog.allTitle")} />}
       </ThemeContext.Consumer>
 
       <Seo

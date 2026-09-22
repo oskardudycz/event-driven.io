@@ -1,5 +1,7 @@
 ---
 title: Testing business logic in Event Sourcing, and beyond!
+description: "Test Event Sourcing business logic through decider, event-driven aggregate, and state-based aggregate patterns."
+summary: "Event Sourcing business logic can be tested as a sequence of given events, a command, and expected events. This guide compares that approach across deciders and aggregate styles."
 category: "Event Sourcing"
 cover: 2022-10-07-cover.jpg
 author: oskar dudycz

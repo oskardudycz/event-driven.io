@@ -1,5 +1,7 @@
 ---
 title: When not to use Event Sourcing?
+description: "A practical guide to deciding when Event Sourcing adds value and when technical or organisational constraints make it a poor fit."
+summary: "Event Sourcing is a module-level design choice, not an all-or-nothing architecture. Use these technical and socio-technical criteria to decide where it helps and where it does not."
 category: "Event Sourcing"
 cover: 2021-06-23-cover.png
 author: oskar dudycz

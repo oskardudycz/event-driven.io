@@ -1,5 +1,7 @@
 ---
 title: Simple patterns for events schema versioning
+description: "Practical patterns for evolving event schemas with mapping, upcasting, transformations, and migrations."
+summary: "Learn the main ways to evolve event schemas without breaking existing streams, and how to choose between simple mapping, upcasting, transformations, and migrations."
 category: "Event Sourcing"
 cover: 2021-12-08-cover.png
 author: oskar dudycz

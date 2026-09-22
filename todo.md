@@ -47,8 +47,9 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Generate category cover WebPs once and reuse them through page context.
 - [x] Add automatic same-language related articles without an extra GraphQL query per post.
 - [x] Limit the homepage to 12 recent canonical articles and link to the topic index.
-- [x] Label the homepage blog section and add a quiet “View more” label beside the original circular down arrow.
+- [x] Reduce the homepage blog introduction to one “Latest articles” heading and label the original circular down-arrow control “Read latest articles.”
 - [x] Simplify the complete archive header by removing the article-count badge and eliminating the stacked long-form/list spacing.
+- [x] Keep the archive H1 in the same layout component as its article list so it remains visible after hydration, and tighten the first-card spacing on both article lists.
 - [x] Add a bilingual `/articles/` archive, link “Browse all articles” to it, and keep the category index as a separate curated destination.
 - [x] Fix the mixed-language hero sentence exposed by the visual production review.
 - [x] Include multiple categories and result context in Algolia records/results.
@@ -71,6 +72,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Add `.nvmrc` pinned to the current Node 16.20.2 baseline.
 - [x] Remove the obsolete `prettier/react` ESLint configuration entry.
 - [x] Document the Gatsby 3 → 4 → 5 migration and Node 24 target in `plan.md`.
+- [x] Add dependency-free post-build SEO assertions, expose them through `verify-seo`, `test:seo`, and `test` package scripts, and run the test in CI before deployment.
 
 ## Verification progress
 
@@ -80,6 +82,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Gatsby creates 562 pages and completes all page GraphQL queries.
 - [x] Gatsby completes production JavaScript/CSS bundling and writes all 562 `page-data.json` files.
 - [x] Pass targeted ESLint checks for the new archive and updated blog/hero components.
+- [x] Verify representative canonical URLs, language alternates, schema types, no-index routes, sitemap rules, `robots.txt`, and `llms.txt` from generated production files.
 - [x] Inspect generated page data for English and Polish consulting, Event Sourcing category, and talks routes.
 - [x] Complete Gatsby static HTML generation locally or confirm a successful GitHub Actions build.
   - The complete local build passed on Node 16.20.2 and Yarn 1.22.22 in 553.65 seconds, including the previously failing post.
@@ -97,17 +100,23 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [ ] Visually approve `/en/`, `/pl/`, `/en/articles/`, `/pl/articles/`, `/en/category/event-sourcing/`, and `/en/talks/` locally at desktop and mobile widths.
 - [ ] Commit and deploy the category, talks, homepage, and archive presentation refinements found during production review.
 - [ ] Deploy a preview and smoke-test `/en/consulting/`, `/pl/consulting/`, `/en/category/event-sourcing/`, `/en/talks/`, contact submission, and language switching.
-- [ ] Validate live canonical, alternate-language, robots, structured-data, sitemap, and `llms.txt` output.
+- [ ] Complete the release smoke test after the pending deployment.
+  - The currently deployed release returns HTTP 200 for both consulting pages, the Event Sourcing category, talks, `llms.txt`, and the robots-declared sitemap at `/sitemap/sitemap-index.xml`.
+  - Contact submission, interactive language switching, the pending `/articles/` routes, and the newly indexed Algolia results still need post-deployment checks.
+- [x] Validate live canonical, alternate-language, robots, structured-data, sitemap, and `llms.txt` output on the currently deployed release.
+  - The child sitemap contains 328 URLs, includes representative public pages, and excludes account, callback, search, and 404 routes.
+  - Representative pages expose canonical URLs, appropriate language alternates, descriptions, social metadata, and BlogPosting, Service, or CollectionPage structured data.
 - [ ] Confirm that Algolia indexing produces one canonical hit per document and displays multiple categories correctly.
 - [ ] Submit the sitemap in Google Search Console and Bing Webmaster Tools.
 - [ ] Request indexing for both consulting pages and selected cornerstone articles.
-- [ ] Check CDN/WAF behavior for Googlebot, Bingbot, GPTBot, OAI-SearchBot, ClaudeBot, and other desired crawlers.
+- [x] Check public CDN/WAF behavior for Googlebot, Bingbot, GPTBot, OAI-SearchBot, and ClaudeBot; each received HTTP 200 for the English consulting page.
 - [ ] Measure Core Web Vitals on representative production pages.
 
 ### P1 — content work
 
-- [ ] Translate `content/pages/szkolenie-event-sourcing/index.en.md`, which currently contains Polish content.
-- [ ] Add hand-written summaries to the cornerstone articles listed in `plan.md`.
+- [ ] Replace `content/pages/szkolenie-event-sourcing/index.en.md` with an accurate English offer.
+  - Current input is needed for the format, next dates or evergreen availability, price, and registration CTA; the Polish source still contains February/March 2025 dates and an old Google Form.
+- [x] Add hand-written descriptions and visible summaries to ten cornerstone English articles covering the subjects listed in `plan.md`.
 - [ ] Curate Polish reading paths after enough Polish articles are available.
 - [ ] Add permitted consulting case studies, outcomes, and testimonials.
 - [ ] Start translations of commercially important English-only articles.
@@ -124,7 +133,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 
 ### P3 — Gatsby and Node migration
 
-- [ ] Phase A: establish a repeatable Gatsby 3 build baseline and automated SEO assertions.
+- [ ] Phase A: finish the repeatable Gatsby 3 baseline; automated SEO assertions are now in place, while the legacy lint baseline and performance capture remain.
 - [ ] Phase B: migrate shared `gatsby-image` usage to `gatsby-plugin-image`, define the GraphQL schema explicitly, and audit community plugins.
 - [ ] Phase C: use Gatsby 4 as a short-lived compatibility checkpoint on Node 16/React 17.
 - [ ] Phase D: upgrade Gatsby packages to 5.16+, React to 18, and test Node 22 and Node 24 in CI.

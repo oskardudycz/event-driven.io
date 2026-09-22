@@ -6,12 +6,13 @@ import { Link } from "../Link";
 import { useTranslation } from "react-i18next";
 
 const Blog = (props) => {
-  const { posts, theme, browseAllPath, compactTop } = props;
+  const { posts, theme, browseAllPath, compactTop, heading } = props;
   const { t } = useTranslation();
 
   return (
     <React.Fragment>
-      <main className={`main${compactTop ? " compactTop" : ""}`}>
+      <div className={`main${compactTop ? " compactTop" : ""}`}>
+        {heading && <h1 className="heading">{heading}</h1>}
         <ul>
           {posts.map((post) => {
             const {
@@ -28,7 +29,7 @@ const Blog = (props) => {
             <Link to={browseAllPath}>{t("blog.browseAll")} →</Link>
           </div>
         )}
-      </main>
+      </div>
 
       {/* --- STYLES --- */}
       <style jsx>{`
@@ -40,6 +41,11 @@ const Blog = (props) => {
           list-style: none;
           margin: 0 auto;
           padding: ${`calc(${theme.space.default} * 1.5) 0 calc(${theme.space.default} * 0.5)`};
+        }
+
+        .heading {
+          font-size: ${theme.font.size.xxl};
+          margin: ${theme.space.l} auto 0;
         }
 
         .summary {
@@ -61,7 +67,7 @@ const Blog = (props) => {
         }
 
         .compactTop ul > :global(li:first-child) {
-          margin-top: ${theme.space.l};
+          margin-top: ${theme.space.m};
         }
 
         blockquote {
@@ -78,9 +84,15 @@ const Blog = (props) => {
           ul {
             max-width: ${theme.text.maxWidth.tablet};
           }
+          .heading {
+            max-width: ${theme.text.maxWidth.tablet};
+          }
         }
         @above desktop {
           ul {
+            max-width: ${theme.text.maxWidth.desktop};
+          }
+          .heading {
             max-width: ${theme.text.maxWidth.desktop};
           }
         }
@@ -94,6 +106,7 @@ Blog.propTypes = {
   theme: PropTypes.object.isRequired,
   browseAllPath: PropTypes.string,
   compactTop: PropTypes.bool,
+  heading: PropTypes.string,
 };
 
 export default Blog;

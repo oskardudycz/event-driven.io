@@ -44,8 +44,9 @@ This document records the improvements made to event-driven.io and the remaining
 - Recommended reading order is deliberately editorial rather than algorithmic. It is controlled by each topic's ordered `recommended` slug list in `data/category-guides.json`; changing that list changes the displayed sequence without changing article dates or URLs.
 - Posts surface automatically selected related articles in the same language and topic.
 - The homepage shows a focused recent selection and links to a dedicated complete article archive instead of rendering every post up front; the topic index remains a separate curated path.
-- The homepage labels the blog section explicitly, and a quiet “View more” label beside the original down-arrow control names its destination without competing with the service calls to action.
+- The homepage uses one concise “Latest articles” section heading, while a quiet “Read latest articles” label beside the original down-arrow control names its destination without competing with the service calls to action.
 - The complete article archive stays intentionally simple: one heading followed by the chronological article list, without a count badge, explanatory filler, or stacked layout spacing.
+- Ten English cornerstone articles now have hand-written search descriptions and visible summaries covering Event Sourcing fundamentals, projections, validation, testing, versioning, suitability, messaging guarantees, distributed processes, idempotency, and ordering.
 - Algolia records use stable canonical records, include multiple categories, and search results show content type, categories, and date.
 
 ### Talks and video
@@ -64,6 +65,7 @@ This document records the improvements made to event-driven.io and the remaining
 - Removed the contradictory fixed height from the full-height hero.
 - Removed unused Ant Design styles from the talks page.
 - Gated the webpack bundle analyzer behind `ANALYZE=true` and disabled automatic browser opening so normal CI builds do not run an interactive analysis step.
+- Added dependency-free post-build SEO assertions and an integration test for representative canonicals, language alternates, structured data, no-index routes, sitemap inclusion/exclusion, `robots.txt`, and `llms.txt`; CI runs the test before deployment. The shared verifier can move behind Vitest after the Node/Gatsby migration without rewriting the checks.
 
 ## Content frontmatter conventions
 
@@ -117,8 +119,8 @@ Reposting is not automatically harmful, but publishing identical full articles i
 
 ### P1 — high-value content work
 
-- Translate `content/pages/szkolenie-event-sourcing/index.en.md`; it currently contains Polish and should not be promoted as an English page until translated.
-- Add hand-written `summary` fields to cornerstone articles first: Event Sourcing basics, projections/read models, versioning, idempotency, ordering, sagas/process managers, and Outbox/Inbox.
+- Replace `content/pages/szkolenie-event-sourcing/index.en.md` with an accurate English offer. A literal translation is unsafe because the source currently advertises February/March 2025 dates, a 3000 PLN price, and an old registration form; confirm the current format, schedule, price, and call to action first.
+- Continue adding hand-written descriptions and summaries beyond the first ten cornerstone articles, prioritising pages with search impressions and articles linked from consulting or training.
 - Curate Polish recommended reading paths once enough Polish translations are available.
 - Add concise case studies to consulting: starting situation, constraints, intervention, and measurable outcome. Use anonymised examples if necessary.
 - Add specific testimonials or client evidence to the consulting page where permission allows.
@@ -138,7 +140,7 @@ Reposting is not automatically harmful, but publishing identical full articles i
 - Upgrade Gatsby in controlled stages using the migration plan below. The current CI intentionally uses Node 16 and Yarn; runtime and framework changes should not be mixed into the SEO release.
 - Revisit the global CSS and JavaScript payload after measuring production coverage. Ant Design remains necessary for the contact form but should not leak into unrelated routes.
 - Consider archive pagination if the topic and article indexes grow enough to create large HTML pages.
-- Add automated assertions for canonical URLs, `hreflang`, no-index routes, sitemap exclusions, and generated `llms.txt` entries.
+- Expand the automated SEO assertions when new page types or indexing rules are introduced.
 
 ## Gatsby upgrade plan
 
@@ -147,7 +149,7 @@ Yes, this can be gradual. Each phase should have a successful production build a
 ### Phase A — lock down the Gatsby 3 baseline
 
 - Keep the new `.nvmrc` at Node 16.20.2 so local and CI builds use the same runtime until the Gatsby upgrade starts.
-- Record representative HTML assertions for canonical URLs, language alternates, structured data, sitemap entries, and no-index routes.
+- Keep the representative post-build HTML assertions green for canonical URLs, language alternates, structured data, sitemap entries, and no-index routes.
 - Capture a baseline build duration and Lighthouse/Core Web Vitals results.
 - The obsolete `prettier/react` configuration mismatch is removed. Triage the remaining legacy lint backlog (currently 528 errors, mostly pre-existing formatting/CRLF and older rule violations) so lint can become a migration guard.
 - Remove or replace obviously unused plugins and dependencies before asking newer Gatsby versions to resolve them.

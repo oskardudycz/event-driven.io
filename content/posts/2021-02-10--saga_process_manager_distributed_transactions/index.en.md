@@ -1,5 +1,7 @@
 ---
 title: Saga and Process Manager - distributed processes in practice
+description: "Learn how Sagas and Process Managers coordinate distributed business processes without relying on distributed transactions."
+summary: "Use Sagas and Process Managers to coordinate multi-step workflows, handle failures, and apply compensating actions without pretending a distributed system is one transaction."
 category: "Design Patterns"
 cover: 2021-02-10-cover.png
 author: oskar dudycz
