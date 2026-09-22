@@ -142,68 +142,103 @@ Reposting is not automatically harmful, but publishing identical full articles i
 - Consider archive pagination if the topic and article indexes grow enough to create large HTML pages.
 - Expand the automated SEO assertions when new page types or indexing rules are introduced.
 
-## Gatsby upgrade plan
+## Node-first Gatsby upgrade plan
 
-Yes, this can be gradual. Each phase should have a successful production build and a short smoke-test checklist. Keep Yarn for the migration; changing the package manager at the same time would add risk without helping the Gatsby upgrade. Node should be raised at the first framework checkpoint that supports a maintained release rather than left on 16 after the migration.
+The primary goal is to move the build and deployment runtime to Node 24 LTS. The investigation therefore starts by running the current site on Node 24 and works backward from real failures. Yarn 1 remains the package manager throughout; changing it does not help the runtime upgrade.
 
-### Phase A — lock down the Gatsby 3 baseline
+Research snapshot (2026-09-22):
 
-- Keep the new `.nvmrc` at Node 16.20.2 so local and CI builds use the same runtime until the Gatsby upgrade starts.
-- Keep the representative post-build HTML assertions green for canonical URLs, language alternates, structured data, sitemap entries, and no-index routes.
-- Capture a baseline build duration and Lighthouse/Core Web Vitals results.
-- The obsolete `prettier/react` configuration mismatch is removed. Triage the remaining legacy lint backlog (currently 528 errors, mostly pre-existing formatting/CRLF and older rule violations) so lint can become a migration guard.
-- Remove or replace obviously unused plugins and dependencies before asking newer Gatsby versions to resolve them.
+| Checkpoint | Node | Gatsby | React | Purpose |
+| --- | --- | --- | --- | --- |
+| Known-good baseline | 16.20.2 | 3.12.0 | 17.0.2 | Current rollback point |
+| Compatibility checkpoint | 16.20.2 | 4.25.9 | 17.0.2 | Isolate Gatsby data-layer/plugin changes |
+| Supported target | latest 24.x LTS | 5.16.1 | 18.3.1 | Deployable result |
 
-Exit criterion: `yarn --frozen-lockfile`, lint, tests, and `yarn build` pass on the current main branch.
+Node 22 is not a planned intermediate deployment. Use it only as a diagnostic if Gatsby 5 succeeds there but fails on Node 24. React 19, a new package manager, Gatsby Slices, deferred static generation, and unrelated lint cleanup are separate work and are not required to reach Node 24.
 
-### Phase B — prepare while still on Gatsby 3
+### What the reverse investigation found
 
-- Replace deprecated `fields___prefix` sort syntax with the newer nested sort form where the installed GraphQL schema permits it; finish the syntax change during the v5 step if Gatsby 3 cannot express it.
-- Replace `gatsby-image` and legacy `fixed`/`fluid` fragments with `gatsby-plugin-image`, `GatsbyImage`, and `StaticImage` incrementally. Start with shared components, then article bodies and category cards.
-- Audit community plugins, especially `gatsby-plugin-i18n`, `gatsby-plugin-styled-jsx-postcss`, `gatsby-remark-responsive-iframe`, `gatsby-remark-embed-video`, and the older social/auth integrations. Replace abandoned plugins with small local Gatsby APIs or maintained alternatives.
-- Move any global layout data away from deprecated `StaticQuery` if found.
-- Add explicit GraphQL schema types for frontmatter fields such as `summary`, `categories`, and the future `updated` field so sparse content does not break inference.
+- A clean build of the unchanged site was attempted with Node 24.12.0 and Yarn 1.22.22. It reaches Gatsby, then fails in Gatsby 3's webpack hashing with `ERR_OSSL_EVP_UNSUPPORTED`.
+- Node documents `--openssl-legacy-provider` as a temporary workaround for this OpenSSL 3 failure. We will not add that flag: it would conceal the obsolete build toolchain instead of producing a supported Node 24 build.
+- Gatsby 5.16 is the first Gatsby release line with explicit Node 24 support. The current `gatsby@5.16.1` engine range is Node `>=18 <26`; Node 26 is therefore not a valid target yet.
+- Gatsby's official v5 migration guide recommends first reaching the latest Gatsby 4 release. Gatsby 4 is no longer a deployment target, so it will be only a local/CI checkpoint on Node 16 and React 17.
+- Gatsby 5 requires React 18 or 19. React 18.3.1 is the smaller required change and avoids mixing a React 19 migration into the Node upgrade.
+- The current Gatsby 3 install already contains three incompatible plugin versions: `gatsby-transformer-json@4.0.0`, `gatsby-remark-responsive-iframe@5.23.0`, and `gatsby-remark-autolink-headers@5.20.0` declare Gatsby 4 peer ranges. Moving core to Gatsby 4 resolves that mismatch; downgrading them first would be churn.
+- React 18 requires attention to direct dependencies. The installed `@reach/router`, `disqus-react`, `react-share`, and `theme-ui` versions have old React peer ranges. `@reach/router` is used by the account page; `disqus-react` and `react-share` have maintained React 18-compatible releases; `theme-ui` is not used by source code.
+- `gatsby-plugin-algolia@0.22.0` only declares Gatsby 2/3 support; its maintained 1.x release supports Gatsby 5. `gatsby-plugin-react-svg@3.0.1` also needs its maintained Gatsby 5-compatible update.
+- `gatsby-plugin-i18n@1.0.1` is old and has no Gatsby peer range. Its node/page hooks overlap with the site's own localization code. Keep it for the Gatsby 4 attempt; if it is the blocker, remove it and require an exact generated-route comparison rather than recreating its behavior speculatively.
+- `gatsby-plugin-styled-jsx-postcss` and `gatsby-remark-embed-video` are old but implement behavior the site actively uses. Keep and test them. If either actually blocks Gatsby 5, stop and choose a replacement with the user because replacing it changes CSS or article rendering.
+- The first fully clean Node 16 baseline took 1,482.1 seconds. Investigation showed that `onCreatePage` registered the entire legacy redirect list once per generated page. Moving that global work to `onPreBuild` reduced `createPagesStatefully` from 127.7 seconds to 0.22 seconds, `onPostBootstrap` from 241.4 seconds to 0.5 seconds, page queries from 846.6 seconds to 44.3 seconds, and the complete clean build to 220.9 seconds while preserving all 562 routes.
 
-Exit criterion: the Gatsby 3 build has no warnings that can reasonably be removed before a major upgrade.
+### Step 1 — preserve the working baseline
 
-### Phase C — short-lived Gatsby 4 compatibility checkpoint
+- Keep `.nvmrc` and CI at Node 16.20.2 until the complete Node 24 target build passes.
+- Keep the successful 562-page production build and the post-build SEO test as the comparison baseline.
+- Record the generated route list, redirects, RSS files, sitemap location and URLs, canonical/hreflang output, and representative image output before dependency changes.
+- Do not make the 528 pre-existing lint errors a migration gate. Run targeted lint on changed files; the production build and existing integration checks are the relevant baseline.
 
-- Create an upgrade branch and move all Gatsby-owned packages to their latest compatible v4 versions together; do not mix Gatsby 3 core with v4/v5 official plugins.
-- Keep Node 16 and React 17 only for this short-lived compatibility checkpoint. Do not treat Gatsby 4 as the final deployment target: Gatsby 4 and Node 16 are no longer supported.
-- Follow the official [Gatsby 3 to 4 migration guide](https://www.gatsbyjs.com/docs/reference/release-notes/migrating-from-v3-to-v4/), paying particular attention to persisted node storage and parallel query execution.
-- Update or replace community plugins whose peer ranges exclude Gatsby 4.
-- Compare generated routes, redirects, sitemap URLs, feed files, Algolia records, and image output against the baseline.
+Exit criterion: the current Node 16/Yarn build and `yarn test` pass from a frozen lockfile.
 
-Exit criterion: a Gatsby 4 preview behaves like production and does not regress indexing metadata or forms. Move directly to Phase D instead of leaving this combination in production longer than necessary.
+#### Automated regression guardrails
 
-### Phase D — Gatsby 5, React 18, and the Node upgrade
+- `yarn build` remains the first gate because it exercises plugin loading, schema creation, GraphQL queries, image processing, JavaScript/CSS bundling, and static HTML rendering.
+- `yarn test:seo` validates semantic output rather than byte-for-byte HTML. It checks representative schema types, metadata, no-index rules, crawler files, required Netlify headers, and every sitemap URL's generated HTML and canonical URL.
+- `yarn test:build-contract` compares the build with the committed `tests/fixtures/build-contract.json`. The contract contains the exact public route set, redirects, sitemap URLs, and RSS entry URLs, but deliberately excludes bundle hashes and complete HTML snapshots that change harmlessly between Gatsby releases.
+- `yarn test` runs both suites and is already the CI gate before deployment.
+- When a content or routing change is intentional, run `yarn update:build-contract` only after a successful build and review the fixture diff. Migration code must not update the fixture merely to make CI green.
+- Browser hydration and visual comparisons remain preview smoke tests for this migration. Adding Playwright or screenshot baselines would introduce a browser toolchain and brittle visual snapshots; consider a small browser suite after Node 24 only if static checks miss a real regression.
 
-- Upgrade React and React DOM to 18 and update all Gatsby-owned packages to Gatsby 5.16 or newer on the same release line.
-- Test the migration in CI on both Node 22 and Node 24. Node 24 is the preferred target because Gatsby 5.16 officially supports it; Node 22 is the temporary fallback if a community plugin or native dependency is not ready.
-- As soon as Node 24 is green, update `.nvmrc`, the GitHub Actions matrix, and the `engines.node` declaration together. Regenerate `yarn.lock` using that runtime and keep Yarn as the package manager.
-- Apply the official [Gatsby 4 to 5 migration guide](https://www.gatsbyjs.com/docs/reference/release-notes/migrating-from-v4-to-v5/), including the GraphQL sort/aggregation codemod and React 18 hydration checks.
-- Resolve server/client rendering differences revealed by stricter React 18 hydration.
-- Verify Netlify forms, redirects, headers, Auth0 callbacks, Algolia indexing, feeds, sitemap generation, and the YouTube facade on a preview deployment.
-- Upgrade CI only after the preview is green; keep the Gatsby 4 deployment available as a rollback point until production has been observed.
+The Node 16 contract currently records 562 routes, 89 redirects, 330 sitemap URLs, and both feed URL sets. One known SEO ambiguity is tracked explicitly: `/pl/anti-patterns/` is in the sitemap but declares the English URL as canonical because `content/pages/anti-patterns` and `content/posts/2024-04-07--anti-patterns` compete for the same localized routes. Resolving it requires an editorial routing choice; until then the verifier permits only this exact mismatch rather than disabling sitemap-wide canonical checks.
 
-Exit criterion: Gatsby 5 passes CI and production smoke tests on Node 24. If Node 24 is blocked only by a community dependency, ship Gatsby 5 on Node 22, record the exact blocker, and keep Node 24 as the next isolated change.
+### Step 2 — Gatsby 4 diagnostic checkpoint
 
-### Phase E — use newer Gatsby capabilities selectively
+- On a dedicated migration change, update Gatsby core to `4.25.9` and move Gatsby-maintained plugins to their latest versions whose peer ranges support Gatsby 4. Do this as one dependency batch so core and official plugins are not left mismatched.
+- Keep Node 16.20.2 and React 17.0.2 for this checkpoint. This isolates Gatsby's persisted node store and parallel query changes from React and Node changes.
+- Follow the official [Gatsby 3 to 4 migration guide](https://www.gatsbyjs.com/docs/reference/release-notes/migrating-from-v3-to-v4/).
+- Run a clean build and the existing SEO integration test, then compare routes, redirects, feeds, sitemap output, Algolia record generation, and images with the Gatsby 3 baseline.
+- Fix only failures that are relevant to reaching Gatsby 5. Do not deploy Gatsby 4 and do not add new Gatsby features.
 
-- Consider Gatsby Slices for the shared menu/footer/layout only after measuring whether incremental builds are a real problem.
-- Consider deferred static generation only for low-traffic archive pages, not for cornerstone articles or service pages that should always be present in the static build.
-- Re-run bundle analysis and remove compatibility packages that are no longer required after React 18 and the image migration.
+Exit criterion: Gatsby 4 builds on Node 16/React 17 with no route or SEO-output regression. If an old community plugin is the only blocker and replacing it would alter rendering, stop and ask before replacing it.
 
-The major-by-major path is intentional: Gatsby's own guidance recommends reaching the latest v4 and clearing its deprecations before moving to v5. It also gives us a useful midpoint for identifying whether a break comes from Gatsby's data layer, React 18, Node, or an unmaintained community plugin.
+### Step 3 — Node 24 target with Gatsby 5
+
+- Update Gatsby core and every Gatsby-maintained plugin together to the 5.16 release line, using `gatsby@5.16.1` as the current target.
+- Update React and React DOM to 18.3.1. Update only direct dependencies that block React 18 or Gatsby 5: use the maintained Algolia, React SVG, Disqus, and sharing packages, and replace the direct `@reach/router` import with Gatsby's React 18-compatible router fork.
+- Move the seven legacy GraphQL sort queries to Gatsby 5's nested sort input syntax. Gatsby can transform the old syntax at runtime, but committing valid v5 queries removes that compatibility layer and keeps GraphiQL accurate.
+- Set `trailingSlash: "always"` explicitly so Gatsby 5 does not silently change URL behavior. Preserve the explicitly configured `/sitemap` output path.
+- Install with Yarn 1 and run a clean build directly on the latest Node 24 LTS. Do not use the OpenSSL legacy-provider flag or ignored peer-dependency flags.
+- Only after that build passes, update `.nvmrc`, the GitHub Actions Node version, and a new `package.json` `engines.node` declaration together. Regenerate `yarn.lock` with Node 24.
+- Follow the official [Gatsby 4 to 5 migration guide](https://www.gatsbyjs.com/docs/reference/release-notes/migrating-from-v4-to-v5/) and check React 18 hydration output.
+
+Exit criterion: a frozen Yarn install, clean Gatsby build, and SEO integration test all pass on Node 24 without compatibility flags.
+
+### Step 4 — preview before production
+
+- Deploy a Netlify preview using Node 24 and the same lockfile as CI.
+- Verify redirects and headers, Netlify forms, Auth0 account/callback routes, Algolia indexing, RSS, the `/sitemap/sitemap-index.xml` location, `robots.txt`, `llms.txt`, article images, embedded videos, and language switching.
+- Compare the generated page count and canonical URLs with the baseline. A changed count is not accepted until every addition/removal is explained.
+- Keep the last Gatsby 3 production commit as the rollback point until the Node 24 preview and production smoke tests pass.
+
+Exit criterion: production runs Gatsby 5.16.x on Node 24 and passes the same checks as the preview.
+
+### Changes deliberately deferred unless a build proves they are necessary
+
+- Migrating the one `gatsby-image` consumer and three `fluid` queries to `gatsby-plugin-image` is worthwhile, but the API remains available as deprecated compatibility code. Do it during this migration only if Gatsby 5 cannot build or render it correctly.
+- Replacing `<StaticQuery>` with `useStaticQuery` is a Gatsby 6 concern, not a Gatsby 5 requirement.
+- Explicit GraphQL schema types are useful hardening for sparse frontmatter, but they are not currently required for the Node upgrade.
+- Removing all unused packages, modernising Ant Design, React 19, Vitest, global formatting/lint cleanup, Slices, and deferred static generation are separate follow-ups.
+
+This sequence is intentionally failure-driven. We will not rewrite working integrations pre-emptively; when an unmaintained plugin becomes an actual blocker and replacing it changes visible behavior, implementation pauses for a decision.
 
 ## Verification workflow
 
-Use the same runtime and package manager as CI:
+Use the same runtime and Yarn 1 package manager as each checkpoint. For the current baseline:
 
 ```sh
 yarn --frozen-lockfile
 yarn generate-llms
 yarn build
+yarn test
 ```
 
-Run these commands with Node 16. The existing project is not expected to build reliably on Node 24. After a production deployment, technical checks must be repeated against the live URLs because CDN, redirects, headers, and bot protection cannot be fully validated from the Gatsby build alone.
+Run those commands with Node 16.20.2 until Step 3. The target repeats them on Node 24 after `yarn clean`. The current Node 24 failure is expected and documented above; do not add `NODE_OPTIONS=--openssl-legacy-provider` to make it pass. After deployment, repeat technical checks against live URLs because CDN, redirects, headers, forms, authentication callbacks, and bot protection cannot be fully validated from Gatsby's generated files.

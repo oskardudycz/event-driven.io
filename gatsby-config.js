@@ -413,6 +413,16 @@ module.exports = {
         include: /svg-icons/,
       },
     },
-    `gatsby-plugin-netlify`,
+    {
+      resolve: `gatsby-plugin-netlify`,
+      options: {
+        headers: {
+          "/llms.txt": [
+            "Content-Type: text/plain; charset=UTF-8",
+            "Cache-Control: public, max-age=3600",
+          ],
+        },
+      },
+    },
   ],
 };

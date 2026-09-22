@@ -6,8 +6,11 @@
   "scripts": {
     "generate-llms": "node ./scripts/generate-llms-txt.js",
     "verify-seo": "node ./scripts/verify-seo-build.js",
-    "test": "yarn test:seo",
+    "test": "yarn test:seo && yarn test:build-contract",
     "test:seo": "node ./tests/seo-build.test.js",
+    "test:build-contract": "node ./tests/build-contract.test.js",
+    "verify:build-contract": "node ./scripts/verify-build-contract.js",
+    "update:build-contract": "node ./scripts/update-build-contract.js",
     "prebuild": "node ./scripts/generate-llms-txt.js",
     "import-newsletter": "node ./import/import-newsletter.js",
     "import-architecture-weekly": "node ./import/import-architecture-weekly.js",

@@ -86,6 +86,29 @@ function verifySeoBuild(publicDirectory) {
   );
 
   const sitemap = read("sitemap/sitemap-0.xml");
+  const sitemapUrls = Array.from(sitemap.matchAll(/<loc>([^<]+)<\/loc>/g), (match) => match[1]);
+  // A page and a post currently claim the same anti-patterns route. Keep this exception explicit
+  // until the editorial owner of that URL is chosen; every other sitemap canonical must self-match.
+  const knownCanonicalExceptions = new Map([
+    [
+      "https://event-driven.io/pl/anti-patterns/",
+      "https://event-driven.io/en/anti-patterns/",
+    ],
+  ]);
+  if (new Set(sitemapUrls).size !== sitemapUrls.length) {
+    failures.push("sitemap contains duplicate URLs");
+  }
+
+  for (const sitemapUrl of sitemapUrls) {
+    const pathname = new URL(sitemapUrl).pathname;
+    const relativePath = pathname.endsWith("/")
+      ? `${pathname.slice(1)}index.html`
+      : pathname.slice(1);
+    const html = read(relativePath);
+    const expectedCanonical = knownCanonicalExceptions.get(sitemapUrl) || sitemapUrl;
+    expectContains(relativePath, html, `rel="canonical" href="${expectedCanonical}"`);
+  }
+
   for (const publicRoute of [
     "/en/consulting/",
     "/pl/consulting/",
@@ -107,6 +130,12 @@ function verifySeoBuild(publicDirectory) {
   expectContains("llms.txt", llms, "https://event-driven.io/pl/consulting/");
   expectContains("llms.txt", llms, "https://event-driven.io/en/introduction_to_event_sourcing/");
   expectContains("llms.txt", llms, "https://event-driven.io/sitemap/sitemap-index.xml");
+
+  const headers = read("_headers");
+  expectContains("_headers", headers, "X-Frame-Options: DENY");
+  expectContains("_headers", headers, "X-Content-Type-Options: nosniff");
+  expectContains("_headers", headers, "/llms.txt");
+  expectContains("_headers", headers, "Content-Type: text/plain; charset=UTF-8");
 
   return failures;
 }

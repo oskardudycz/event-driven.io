@@ -9,7 +9,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Technical SEO and content-discovery implementation is prepared locally.
 - [x] Bilingual consulting pages and Calendly conversion paths are prepared locally.
 - [x] YouTube playlist gallery and broken embed fix are prepared locally.
-- [x] Gatsby and Node upgrade sequence is documented.
+- [x] Gatsby and Node upgrade sequence is documented and revised around the primary Node 24 target.
 - [x] Complete a full Node 16/Yarn production build through static HTML generation.
 - [x] Recover from the `categories: null` deployment failure recorded in [GitHub Actions run 35613946351](https://github.com/oskardudycz/event-driven.io/actions/runs/35613946351/job/106379761098); the null-safe fix is now deployed.
 - [x] Production review exposed category-page, talks-page, homepage, and article-archive clarity issues; refinements are implemented locally and pass a production build.
@@ -72,7 +72,14 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Add `.nvmrc` pinned to the current Node 16.20.2 baseline.
 - [x] Remove the obsolete `prettier/react` ESLint configuration entry.
 - [x] Document the Gatsby 3 → 4 → 5 migration and Node 24 target in `plan.md`.
+- [x] Reverse-test the unchanged Gatsby 3 site on Node 24.12.0 with Yarn 1; record the real `ERR_OSSL_EVP_UNSUPPORTED` webpack failure and reject the temporary OpenSSL legacy-provider workaround.
+- [x] Verify the supported target versions and constraints: Gatsby 4.25.9 is the diagnostic checkpoint; Gatsby 5.16.1, React 18.3.1, and the latest Node 24 LTS are the deployment target.
+- [x] Audit migration-sensitive dependencies and separate required compatibility work from optional modernisation.
 - [x] Add dependency-free post-build SEO assertions, expose them through `verify-seo`, `test:seo`, and `test` package scripts, and run the test in CI before deployment.
+- [x] Add a committed build contract for the exact route, redirect, sitemap URL, and feed-entry sets; `yarn test` now compares every build with that baseline before deployment.
+- [x] Check every sitemap URL for generated HTML and its expected canonical, and assert the generated Netlify security and `llms.txt` headers.
+- [x] Register the legacy redirect set once in `onPreBuild` instead of once per page and remove unused newsletter hero image queries.
+  - A clean 562-page build improved from 1,482.1 seconds to 220.9 seconds; `createPagesStatefully` fell from 127.7 seconds to 0.22 seconds and page queries from 846.6 seconds to 44.3 seconds.
 
 ## Verification progress
 
@@ -84,6 +91,8 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Pass targeted ESLint checks for the new archive and updated blog/hero components.
 - [x] Verify representative canonical URLs, language alternates, schema types, no-index routes, sitemap rules, `robots.txt`, and `llms.txt` from generated production files.
 - [x] Inspect generated page data for English and Polish consulting, Event Sourcing category, and talks routes.
+- [x] Pass the combined SEO and build-contract suite against the regenerated Node 16 build: 562 routes, 89 redirects, and 330 sitemap URLs.
+- [x] Confirm the generated Netlify `_headers` contains the `llms.txt` content type and one-hour cache rule.
 - [x] Complete Gatsby static HTML generation locally or confirm a successful GitHub Actions build.
   - The complete local build passed on Node 16.20.2 and Yarn 1.22.22 in 553.65 seconds, including the previously failing post.
   - CI built commit `46dd3b4` and exposed `TypeError: categories is not iterable` in `Post/Meta`. All remaining consumers now normalize `null` to an empty array, and the fix has since deployed successfully.
@@ -133,12 +142,17 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 
 ### P3 — Gatsby and Node migration
 
-- [ ] Phase A: finish the repeatable Gatsby 3 baseline; automated SEO assertions are now in place, while the legacy lint baseline and performance capture remain.
-- [ ] Phase B: migrate shared `gatsby-image` usage to `gatsby-plugin-image`, define the GraphQL schema explicitly, and audit community plugins.
-- [ ] Phase C: use Gatsby 4 as a short-lived compatibility checkpoint on Node 16/React 17.
-- [ ] Phase D: upgrade Gatsby packages to 5.16+, React to 18, and test Node 22 and Node 24 in CI.
-- [ ] Make Node 24 the default in `.nvmrc`, GitHub Actions, and `package.json` as soon as the Gatsby 5 build is green; use Node 22 only as a documented temporary fallback.
-- [ ] Phase E: measure before adopting Slices, deferred static generation, or further bundle changes.
+- [x] Complete the Node-first research and reverse probe. Gatsby 3 cannot build on Node 24 without the OpenSSL legacy-provider workaround, which will not be used.
+- [x] Step 1: preserve a route/redirect/feed/sitemap snapshot from the known-good 562-page Node 16 build and enforce it in CI.
+- [ ] Step 2: move Gatsby core and Gatsby-maintained plugins to their Gatsby 4-compatible releases as one batch; keep Node 16 and React 17, then run a clean build and output comparison.
+- [ ] Step 3: move to Gatsby 5.16.1, React 18.3.1, and Node 24; update only dependencies that actually block those versions.
+- [ ] Convert the seven legacy GraphQL sort queries to Gatsby 5 syntax and set `trailingSlash: "always"` during Step 3.
+- [ ] Once the Node 24 build is green, update `.nvmrc`, GitHub Actions, and `package.json` engines together and regenerate `yarn.lock` with Yarn 1 on Node 24.
+- [ ] Step 4: deploy a Node 24 preview and verify routes, SEO files, Netlify behavior, Auth0, Algolia, images, videos, and language switching before production.
+- [ ] Use Node 22 only to diagnose a Node 24-specific failure, not as a planned checkpoint or deployment target.
+- [ ] Do not include React 19, Vitest, Gatsby Slices, deferred static generation, full lint cleanup, `StaticQuery`, explicit schema typing, or the image API migration unless the Gatsby 5 build proves one is required.
+- [ ] Stop for a decision before replacing `gatsby-plugin-styled-jsx-postcss`, `gatsby-remark-embed-video`, or another integration where the replacement would change visible CSS/content behavior.
+- [ ] Resolve the `/en|pl/anti-patterns/` route collision between the page and post sources. Recommended direction: let the richer article own `/anti-patterns/` and move or retire the older talk landing page; this needs confirmation because it changes which template owns the existing URL.
 
 ## External input or access needed
 

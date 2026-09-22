@@ -357,8 +357,6 @@ export const onCreatePage = async (
     });
   }
 
-  createRedirectsToOldPosts(isEnvDevelopment, createRedirect);
-
   // Regardless of whether the original page was deleted or not, create the localized versions of
   // the current page
   await Promise.all(
@@ -611,6 +609,10 @@ function createRedirectsToOldPosts(isEnvDevelopment, createRedirect) {
 export const onPreBuild = ({ actions: { createRedirect } }, pluginOptions) => {
   const isEnvDevelopment = process.env.NODE_ENV === "development";
   const { notFoundPage } = { ...DEFAULT_OPTIONS, ...pluginOptions };
+
+  // These redirects are global. Register them once instead of once for every page handled by
+  // onCreatePage.
+  createRedirectsToOldPosts(isEnvDevelopment, createRedirect);
 
   // we add a generic redirect to the "not found path" for every path that's not present in the app.
   // This rule needs to be the last one (so that it only kicks in if nothing else matched before),
