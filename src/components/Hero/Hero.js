@@ -25,29 +25,34 @@ const Hero = (props) => {
           </Trans>
         </h2>
         <h3>
-          <Trans i18nKey="hero.h3">
-            Nazywam się <b className="yellow">Oskar Dudycz</b>. Od ponad 18 lat, tworzę systemy
-            informatyczne bliskie biznesowi. <br />
-            Prowadzę warsztaty i szkolenia na temat <b className="yellow">Event Sourcing</b>, CQRS
-            oraz architektur opartych o zdarzeniach. <br />
-            Jestem maintainerem biblioteki{" "}
-            <a
-              href="https://event-driven-io.github.io/emmett/getting-started.html"
-              target="_parent"
-              className="yellow"
-            >
-              Emmett
-            </a>
-            , umożliwiającej pracę z Event Sourcing. <br />
-            Na blogu dzielę się wiedzą jak pragmatycznie tworzyć, dobre modularne aplikacje.
-          </Trans>
+          {t("hero.introExperience")}
+          <br />
+          {t("hero.introTraining")}
+          <br />
+          <Trans
+            i18nKey="hero.introEmmett"
+            components={{
+              emmett: (
+                <a
+                  href="https://event-driven-io.github.io/emmett/getting-started.html"
+                  target="_parent"
+                  className="yellow"
+                />
+              ),
+            }}
+          />
+          <br />
+          {t("hero.introBlog")}
         </h3>
         <nav className="services" aria-label={t("hero.servicesLabel")}>
           <Link to="/training/">{t("hero.trainingCta")}</Link>
           <Link to="/consulting/">{t("hero.consultingCta")}</Link>
         </nav>
-        <button onClick={scrollToContent} aria-label="scroll">
-          <FaArrowDown />
+        <button onClick={scrollToContent} aria-label={t("hero.articlesCta")}>
+          <span className="articlesLabel">{t("hero.articlesCta")}</span>
+          <span className="arrowCircle">
+            <FaArrowDown />
+          </span>
         </button>
       </section>
 
@@ -186,29 +191,41 @@ const Hero = (props) => {
         }
 
         button {
-          background: ${theme.background.color.brand};
-          background: yellow;
+          align-items: center;
+          background: transparent;
           border: 0;
-          border-radius: 50%;
+          color: ${theme.color.neutral.white};
+          display: inline-flex;
+          gap: ${theme.space.s};
           font-size: ${theme.font.size.xs};
-          padding: ${theme.space.xs} ${theme.space.xs};
+          font-weight: ${theme.font.weight.bold};
+          justify-content: center;
+          padding: 0;
           cursor: pointer;
-          width: ${theme.space.m};
-          height: ${theme.space.m};
-          min-width: ${theme.space.l};
-          min-height: ${theme.space.l};
+          width: fit-content;
 
           &:focus {
-            outline-style: none;
-            background: ${theme.color.brand.primary.active};
+            outline: 3px solid ${theme.color.neutral.white};
+            outline-offset: 3px;
           }
+        }
+
+        button:hover .articlesLabel,
+        button:focus .articlesLabel {
+          text-decoration: underline;
+        }
+
+        .arrowCircle {
+          align-items: center;
+          background: yellow;
+          border-radius: 50%;
+          display: inline-flex;
+          height: ${theme.space.l};
+          justify-content: center;
+          width: ${theme.space.l};
 
           :global(svg) {
-            position: relative;
-            top: 5px;
             fill: ${theme.color.neutral.black};
-            stroke-width: 40;
-            stroke: ${theme.color.neutral.black};
             animation-duration: ${theme.time.duration.long};
             animation-name: buttonIconMove;
             animation-iteration-count: infinite;
@@ -220,7 +237,7 @@ const Hero = (props) => {
             transform: translateY(0);
           }
           50% {
-            transform: translateY(-10px);
+            transform: translateY(4px);
           }
           100% {
             transform: translateY(0);
@@ -253,9 +270,7 @@ const Hero = (props) => {
           }
 
           button {
-            font-size: ${theme.font.size.m};
-            min-width: ${theme.space.l};
-            min-height: ${theme.space.l};
+            font-size: ${theme.font.size.s};
           }
         }
 
@@ -285,9 +300,7 @@ const Hero = (props) => {
           }
 
           button {
-            font-size: ${theme.font.size.xl};
-            min-width: ${theme.space.xl};
-            min-height: ${theme.space.xl};
+            font-size: ${theme.font.size.s};
           }
         }
       `}</style>

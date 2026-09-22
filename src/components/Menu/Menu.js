@@ -4,6 +4,7 @@ require("core-js/fn/array/from");
 
 import {
   FaFacebook,
+  FaBookOpen,
   FaGithub,
   FaHome,
   FaLinkedin,
@@ -44,6 +45,7 @@ class Menu extends React.Component {
 
     this.items = [
       { to: "/", label: "Start", icon: FaHome },
+      { to: "/articles/", label: "menu.articles", icon: FaBookOpen },
       { to: "/category/", label: "menu.categories", icon: FaTag },
       ...pages,
       { to: "/contact/", label: "menu.contact", icon: FaEnvelope },

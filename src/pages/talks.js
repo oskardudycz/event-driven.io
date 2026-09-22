@@ -3,7 +3,6 @@ import React from "react";
 import { graphql } from "gatsby";
 import { ThemeContext } from "../layouts";
 import Article from "../components/Article";
-import Talks from "../components/Talks";
 import Headline from "../components/Article/Headline";
 import Seo from "../components/Seo";
 import VideoGallery from "../components/VideoGallery";
@@ -16,12 +15,10 @@ const TalksPage = (props) => {
       site: {
         siteMetadata: { facebook },
       },
-      allTalksJson: { edges: talksNodes },
       allVideosJson: { edges: videoNodes },
     },
   } = props;
 
-  const talks = talksNodes.map((n) => n.node);
   const videos = videoNodes.map((n) => n.node);
 
   return (
@@ -37,10 +34,6 @@ const TalksPage = (props) => {
               <p>{t("talks.videosIntro")}</p>
               <VideoGallery theme={theme} videos={videos} />
             </section>
-            <section>
-              <h2>{t("talks.appearancesTitle")}</h2>
-            </section>
-            <Talks theme={theme} talks={talks} />
           </Article>
         )}
       </ThemeContext.Consumer>
@@ -61,27 +54,13 @@ TalksPage.propTypes = {
 
 export default TalksPage;
 
-//eslint-disable-next-line no-undef
+// eslint-disable-next-line no-undef
 export const query = graphql`
   query TalksQuery {
     site {
       siteMetadata {
         facebook {
           appId
-        }
-      }
-    }
-    allTalksJson {
-      edges {
-        node {
-          Date
-          Where
-          Title
-          Description
-          Link
-          Video
-          HideVideo
-          Language
         }
       }
     }

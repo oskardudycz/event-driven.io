@@ -6,12 +6,12 @@ import { Link } from "../Link";
 import { useTranslation } from "react-i18next";
 
 const Blog = (props) => {
-  const { posts, theme, browseAllPath } = props;
+  const { posts, theme, browseAllPath, compactTop } = props;
   const { t } = useTranslation();
 
   return (
     <React.Fragment>
-      <main className="main">
+      <main className={`main${compactTop ? " compactTop" : ""}`}>
         <ul>
           {posts.map((post) => {
             const {
@@ -56,6 +56,14 @@ const Blog = (props) => {
           padding: ${theme.space.s} ${theme.space.m};
         }
 
+        .compactTop ul {
+          padding-top: 0;
+        }
+
+        .compactTop ul > :global(li:first-child) {
+          margin-top: ${theme.space.l};
+        }
+
         blockquote {
           font-style: italic;
           border-left: 7px solid orange;
@@ -85,6 +93,7 @@ Blog.propTypes = {
   posts: PropTypes.array.isRequired,
   theme: PropTypes.object.isRequired,
   browseAllPath: PropTypes.string,
+  compactTop: PropTypes.bool,
 };
 
 export default Blog;

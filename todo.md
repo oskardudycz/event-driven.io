@@ -11,8 +11,10 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] YouTube playlist gallery and broken embed fix are prepared locally.
 - [x] Gatsby and Node upgrade sequence is documented.
 - [x] Complete a full Node 16/Yarn production build through static HTML generation.
-- [ ] [GitHub Actions run 35613946351](https://github.com/oskardudycz/event-driven.io/actions/runs/35613946351/job/106379761098) failed during static HTML rendering because legacy posts expose missing `categories` frontmatter as `null`; the normalization fix is prepared locally and needs redeployment.
-- [ ] Validate the deployed site before beginning more implementation.
+- [x] Recover from the `categories: null` deployment failure recorded in [GitHub Actions run 35613946351](https://github.com/oskardudycz/event-driven.io/actions/runs/35613946351/job/106379761098); the null-safe fix is now deployed.
+- [x] Production review exposed category-page, talks-page, homepage, and article-archive clarity issues; refinements are implemented locally and pass a production build.
+- [ ] Approve the updated layouts in local `gatsby develop`, then commit and deploy them.
+- [ ] Finish validating the deployed site.
 
 ## Completed locally
 
@@ -41,9 +43,14 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Add curated English guides for Event Sourcing, Event-Driven Architecture, CQRS, and Software Architecture.
 - [x] Turn the category index into a topic overview with descriptions and article counts.
 - [x] Add recommended reading order and image cards to category pages.
+- [x] Refine category pages after production review with responsive two-column cards, consistent image ratios, reading-order badges, clamped excerpts, and working article-count pluralisation.
 - [x] Generate category cover WebPs once and reuse them through page context.
 - [x] Add automatic same-language related articles without an extra GraphQL query per post.
 - [x] Limit the homepage to 12 recent canonical articles and link to the topic index.
+- [x] Label the homepage blog section and add a quiet “View more” label beside the original circular down arrow.
+- [x] Simplify the complete archive header by removing the article-count badge and eliminating the stacked long-form/list spacing.
+- [x] Add a bilingual `/articles/` archive, link “Browse all articles” to it, and keep the category index as a separate curated destination.
+- [x] Fix the mixed-language hero sentence exposed by the visual production review.
 - [x] Include multiple categories and result context in Algolia records/results.
 
 ### Talks and video
@@ -52,7 +59,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Parse plain IDs, `watch?v=`, `youtu.be`, and `/embed/` YouTube URLs correctly.
 - [x] Prevent playlist query parameters from corrupting the embed ID.
 - [x] Use click-to-load thumbnails and `youtube-nocookie.com` embeds.
-- [x] Keep conference appearances separate from the video gallery.
+- [x] Remove the redundant conference-appearance list and keep the video gallery as the talks page's useful content.
 - [x] Remove unused Ant Design styles from the talks route.
 
 ### Performance and maintainability
@@ -70,12 +77,14 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Parse `src/i18n/i18n.json`, `data/category-guides.json`, and `data/videos.json` successfully.
 - [x] Pass `git diff --check`.
 - [x] Run `yarn generate-llms` successfully on Node 16.
-- [x] Gatsby creates 560 pages and completes all page GraphQL queries.
-- [x] Gatsby completes production JavaScript/CSS bundling and writes all 560 `page-data.json` files.
+- [x] Gatsby creates 562 pages and completes all page GraphQL queries.
+- [x] Gatsby completes production JavaScript/CSS bundling and writes all 562 `page-data.json` files.
+- [x] Pass targeted ESLint checks for the new archive and updated blog/hero components.
 - [x] Inspect generated page data for English and Polish consulting, Event Sourcing category, and talks routes.
 - [x] Complete Gatsby static HTML generation locally or confirm a successful GitHub Actions build.
   - The complete local build passed on Node 16.20.2 and Yarn 1.22.22 in 553.65 seconds, including the previously failing post.
-  - CI built commit `46dd3b4` and exposed `TypeError: categories is not iterable` in `Post/Meta`. All remaining consumers now normalize `null` to an empty array; the fix is still uncommitted locally and redeployment is pending.
+  - CI built commit `46dd3b4` and exposed `TypeError: categories is not iterable` in `Post/Meta`. All remaining consumers now normalize `null` to an empty array, and the fix has since deployed successfully.
+  - The latest local build, including the simplified archive and “View more” homepage control, generated all 562 pages and completed static HTML in 185.24 seconds.
 - [ ] Restore a clean full-project lint run.
   - ESLint now loads, but reports 528 legacy errors, primarily existing Prettier/CRLF and older rule violations.
 
@@ -83,8 +92,10 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 
 ### P0 — finish and validate this release
 
-- [ ] Redeploy the `categories: null` normalization fix and record the Node 16/Yarn build result.
+- [x] Redeploy the `categories: null` normalization fix successfully.
 - [x] Confirm static HTML generation is slow rather than hung locally; the complete production build finished successfully.
+- [ ] Visually approve `/en/`, `/pl/`, `/en/articles/`, `/pl/articles/`, `/en/category/event-sourcing/`, and `/en/talks/` locally at desktop and mobile widths.
+- [ ] Commit and deploy the category, talks, homepage, and archive presentation refinements found during production review.
 - [ ] Deploy a preview and smoke-test `/en/consulting/`, `/pl/consulting/`, `/en/category/event-sourcing/`, `/en/talks/`, contact submission, and language switching.
 - [ ] Validate live canonical, alternate-language, robots, structured-data, sitemap, and `llms.txt` output.
 - [ ] Confirm that Algolia indexing produces one canonical hit per document and displays multiple categories correctly.

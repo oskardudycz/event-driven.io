@@ -40,9 +40,12 @@ This document records the improvements made to event-driven.io and the remaining
 
 - Posts can now belong to a primary `category` and any number of additional `categories`.
 - Category landing pages show curated topic descriptions, article counts, and recommended reading paths.
-- Individual category pages show cover images and separate the recommended sequence from the remaining articles.
+- Individual category pages use compact responsive image cards, visible reading-order steps, and separate the recommended sequence from the remaining articles.
+- Recommended reading order is deliberately editorial rather than algorithmic. It is controlled by each topic's ordered `recommended` slug list in `data/category-guides.json`; changing that list changes the displayed sequence without changing article dates or URLs.
 - Posts surface automatically selected related articles in the same language and topic.
-- The homepage shows a focused recent selection and links to the complete topic index instead of rendering the full archive.
+- The homepage shows a focused recent selection and links to a dedicated complete article archive instead of rendering every post up front; the topic index remains a separate curated path.
+- The homepage labels the blog section explicitly, and a quiet “View more” label beside the original down-arrow control names its destination without competing with the service calls to action.
+- The complete article archive stays intentionally simple: one heading followed by the chronological article list, without a count badge, explanatory filler, or stacked layout spacing.
 - Algolia records use stable canonical records, include multiple categories, and search results show content type, categories, and date.
 
 ### Talks and video
@@ -50,7 +53,7 @@ This document records the improvements made to event-driven.io and the remaining
 - Added the 23 videos from the supplied YouTube playlist as a separate, ordered video gallery.
 - Fixed playlist URL parsing: only the 11-character YouTube video ID is passed to the player.
 - Replaced eager YouTube embeds with thumbnail facades. The privacy-enhanced `youtube-nocookie.com` player is created only after a visitor clicks play.
-- Conference appearances remain a separate chronological list, with recording links where available.
+- The talks page focuses on the useful video gallery; the redundant chronological conference-appearance list was removed.
 
 ### Accessibility, language, and performance
 
@@ -104,7 +107,8 @@ Reposting is not automatically harmful, but publishing identical full articles i
 
 ### P0 — validate the deployed result
 
-- Deploy and inspect representative English and Polish pages, category paths, consulting pages, the talks gallery, `robots.txt`, `llms.txt`, and the sitemap index.
+- Review the latest homepage, complete archive, category, and talks layouts locally with `gatsby develop` at desktop and mobile widths.
+- Commit and deploy the approved presentation refinements, then inspect representative English and Polish pages, category paths, consulting pages, the talks gallery, `robots.txt`, `llms.txt`, and the sitemap index.
 - Submit the sitemap index in Google Search Console and Bing Webmaster Tools; request indexing for the consulting pages and a few cornerstone articles.
 - Use URL Inspection to compare the declared and Google-selected canonical URLs.
 - Test Article and Service structured data with Google's Rich Results Test and Schema.org Validator.

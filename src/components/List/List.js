@@ -8,7 +8,7 @@ const List = (props) => {
 
   return (
     <React.Fragment>
-      <ListElement className={showImages ? "withImages" : ""}>
+      <ListElement className={showImages ? `withImages${ordered ? " ordered" : ""}` : ""}>
         {edges.map((edge) => {
           const {
             node: {
@@ -50,41 +50,82 @@ const List = (props) => {
 
       {/* --- STYLES --- */}
       <style jsx>{`
-        ul {
+        ul:not(.withImages),
+        ol:not(.withImages) {
           margin: ${theme.space.stack.m};
           padding: ${theme.space.m};
           list-style: circle;
         }
-        li {
+        ul:not(.withImages) li,
+        ol:not(.withImages) li {
           padding: ${theme.space.xs} 0;
           font-size: ${theme.font.size.s};
           line-height: ${theme.font.lineHeight.l};
         }
         .withImages {
-          list-style-position: outside;
-          padding-left: ${ordered ? theme.space.l : 0};
-        }
-        .withImages li {
-          margin: 0 0 ${theme.space.l};
+          display: grid;
+          gap: ${theme.space.l};
+          list-style: none;
+          margin: 0;
           padding: 0;
         }
+        .withImages li {
+          padding: 0;
+          position: relative;
+        }
+        .ordered {
+          counter-reset: reading-order;
+        }
+        .ordered li {
+          counter-increment: reading-order;
+        }
+        .ordered li::before {
+          align-items: center;
+          background: ${theme.color.brand.primary};
+          border: 3px solid ${theme.background.color.primary};
+          border-radius: 50%;
+          color: ${theme.text.color.primaryInverse};
+          content: counter(reading-order);
+          display: flex;
+          font-size: ${theme.font.size.xs};
+          font-weight: ${theme.font.weight.bold};
+          height: 2.25rem;
+          justify-content: center;
+          left: ${theme.space.s};
+          position: absolute;
+          top: ${theme.space.s};
+          width: 2.25rem;
+          z-index: 2;
+        }
         :global(.readingCard) {
+          background: ${theme.background.color.primary};
           border: 1px solid ${theme.line.color};
           border-radius: ${theme.size.radius.default};
           color: ${theme.text.color.primary};
-          display: grid;
-          gap: ${theme.space.m};
+          display: flex;
+          flex-direction: column;
+          height: 100%;
           overflow: hidden;
           text-decoration: none;
+          transition: border-color ${theme.time.duration.default},
+            box-shadow ${theme.time.duration.default}, transform ${theme.time.duration.default};
+        }
+        :global(.readingCard:hover),
+        :global(.readingCard:focus) {
+          border-color: ${theme.color.brand.primary};
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+          transform: translateY(-2px);
         }
         :global(.readingCardImage) {
-          height: 100%;
-          min-height: 10rem;
+          aspect-ratio: 16 / 9;
+          display: block;
           object-fit: cover;
           width: 100%;
         }
         .readingCardContent {
-          display: block;
+          display: flex;
+          flex: 1;
+          flex-direction: column;
           padding: ${theme.space.m};
         }
         .readingCardContent h3 {
@@ -99,12 +140,16 @@ const List = (props) => {
           margin-bottom: ${theme.space.s};
         }
         .excerpt {
-          display: block;
+          display: -webkit-box;
+          font-size: ${theme.font.size.xs};
           line-height: ${theme.font.lineHeight.l};
+          overflow: hidden;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 3;
         }
         @from-width tablet {
-          :global(.readingCard) {
-            grid-template-columns: minmax(12rem, 35%) 1fr;
+          .withImages {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
           }
         }
       `}</style>
