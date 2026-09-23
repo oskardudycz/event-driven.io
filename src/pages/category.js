@@ -146,7 +146,7 @@ export const query = graphql`
         fields: { langKey: { eq: $langKey } }
         frontmatter: { useDefaultLangCanonical: { ne: true } }
       }
-      sort: { fields: [fields___prefix], order: DESC }
+      sort: { fields: { prefix: DESC } }
     ) {
       edges {
         node {

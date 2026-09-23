@@ -1,6 +1,6 @@
 # SEO, content, and platform progress
 
-Last updated: 2026-09-22
+Last updated: 2026-09-23
 
 This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an item only when its implementation and proportionate verification are complete. Add a short note under blocked or partial items instead of presenting them as finished.
 
@@ -51,6 +51,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Simplify the complete archive header by removing the article-count badge and eliminating the stacked long-form/list spacing.
 - [x] Keep the archive H1 in the same layout component as its article list so it remains visible after hydration, and tighten the first-card spacing on both article lists.
 - [x] Add a bilingual `/articles/` archive, link “Browse all articles” to it, and keep the category index as a separate curated destination.
+- [x] Keep English placeholder articles visible in Polish “Latest” and “All articles” while linking cards to the canonical English URL; switching off `useDefaultLangCanonical` after translation automatically restores the Polish target.
 - [x] Fix the mixed-language hero sentence exposed by the visual production review.
 - [x] Include multiple categories and result context in Algolia records/results.
 
@@ -105,13 +106,14 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 ### P0 — finish and validate this release
 
 - [x] Redeploy the `categories: null` normalization fix successfully.
+- [ ] Keep the non-delivering contact form hidden and verify the English and Polish contact pages offer the Calendly call after deployment.
 - [x] Confirm static HTML generation is slow rather than hung locally; the complete production build finished successfully.
 - [ ] Visually approve `/en/`, `/pl/`, `/en/articles/`, `/pl/articles/`, `/en/category/event-sourcing/`, and `/en/talks/` locally at desktop and mobile widths.
 - [ ] Commit and deploy the category, talks, homepage, and archive presentation refinements found during production review.
-- [ ] Deploy a preview and smoke-test `/en/consulting/`, `/pl/consulting/`, `/en/category/event-sourcing/`, `/en/talks/`, contact submission, and language switching.
+- [ ] Deploy a preview and smoke-test `/en/consulting/`, `/pl/consulting/`, `/en/category/event-sourcing/`, `/en/talks/`, the contact-page Calendly CTA, and language switching.
 - [ ] Complete the release smoke test after the pending deployment.
   - The currently deployed release returns HTTP 200 for both consulting pages, the Event Sourcing category, talks, `llms.txt`, and the robots-declared sitemap at `/sitemap/sitemap-index.xml`.
-  - Contact submission, interactive language switching, the pending `/articles/` routes, and the newly indexed Algolia results still need post-deployment checks.
+  - The contact-page Calendly CTA, interactive language switching, the pending `/articles/` routes, and the newly indexed Algolia results still need post-deployment checks. The broken form remains hidden.
 - [x] Validate live canonical, alternate-language, robots, structured-data, sitemap, and `llms.txt` output on the currently deployed release.
   - The child sitemap contains 328 URLs, includes representative public pages, and excludes account, callback, search, and 404 routes.
   - Representative pages expose canonical URLs, appropriate language alternates, descriptions, social metadata, and BlogPosting, Service, or CollectionPage structured data.
@@ -144,12 +146,26 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 
 - [x] Complete the Node-first research and reverse probe. Gatsby 3 cannot build on Node 24 without the OpenSSL legacy-provider workaround, which will not be used.
 - [x] Step 1: preserve a route/redirect/feed/sitemap snapshot from the known-good 562-page Node 16 build and enforce it in CI.
-- [ ] Step 2: move Gatsby core and Gatsby-maintained plugins to their Gatsby 4-compatible releases as one batch; keep Node 16 and React 17, then run a clean build and output comparison.
-- [ ] After Gatsby 4 passes on Node 16, run its frozen dependency tree on Node 24 as a diagnostic; do not introduce an end-of-life Node 18 or 20 deployment checkpoint.
-- [ ] Step 3: move to Gatsby 5.16.1, React 18.3.1, and Node 24; update only dependencies that actually block those versions.
-- [ ] Convert the seven legacy GraphQL sort queries to Gatsby 5 syntax and set `trailingSlash: "always"` during Step 3.
-- [ ] Once the Node 24 build is green, update `.nvmrc`, GitHub Actions, and `package.json` engines together and regenerate `yarn.lock` with Yarn 1 on Node 24.
+- [x] Step 2: move Gatsby core and Gatsby-maintained plugins to their Gatsby 4-compatible releases as one batch; keep Node 16 and React 17, then run a clean build and output comparison.
+  - Gatsby 4.25.9 builds 562 pages on Node 16 and passes the SEO and exact route/redirect/feed/sitemap contracts.
+- [x] Run Gatsby 4 on Node 24 as a diagnostic. It fails in the legacy `url-loader`/`file-loader` MD4 hash path, so do not add an OpenSSL flag or webpack override; move directly to Gatsby 5 for Node 24.
+- [x] Step 3: move to Gatsby 5.16.1, React 18.3.1, and Node 24; update only dependencies that actually block those versions.
+  - Node 24.12.0 built all 562 pages in 120.6 seconds with local Algolia indexing disabled. Frozen Yarn install, `yarn smoke`, `yarn test`, and `git diff --check` pass.
+  - A genuinely fresh `node_modules` install from the frozen lockfile passed `yarn check --integrity`. Its first build failed on the styled-jsx PostCSS worker's 10-second timeout; the unchanged retry completed all 562 pages, and SEO, build-contract, and smoke tests passed. Treat cold-build reliability as unverified until CI confirms it.
+  - The legacy font-loader MD4 path was bypassed by self-hosting the same Open Sans files under `static/`; the generated stylesheet link and font files were checked.
+  - The upgraded Algolia plugin ignored the old `skipIndexing` option, so it is now loaded only on credentialed main-branch builds. Production indexing still needs a CI/live check.
+- [x] Remove the optional category-card reading-minute estimate from the global page-creation query; on Gatsby 5 it invokes full Markdown rendering and stalls creation, while the 562 pages now create in about 35 seconds.
+- [x] Convert the ten legacy GraphQL sort queries to Gatsby 5 syntax and set `trailingSlash: "always"` during Step 3; the Node 24 build will verify them.
+- [x] Align `.nvmrc`, GitHub Actions, and `package.json` engines on Node 24, refresh `yarn.lock`, and pass a frozen Yarn install.
 - [ ] Step 4: deploy a Node 24 preview and verify routes, SEO files, Netlify behavior, Auth0, Algolia, images, videos, and language switching before production.
+- [x] Verify `static/.well-known/webfinger`, the self-hosted font stylesheet/files, and the Calendly CTA on both generated contact pages.
+- [ ] After Gatsby 5/Node 24 is green, migrate Yarn 1 to npm in a separate change and verify `npm ci`, build, and tests.
+  - A plain `npm install --package-lock-only` failed on the unused GraphQL ESLint plugin, then on `gatsby-plugin-styled-jsx`'s `styled-jsx@^3` peer requirement. The unused lint plugin was removed. Do not add `--legacy-peer-deps`; decide how to handle the styled-jsx integration before switching lockfiles.
+- [ ] Verify that `static/.well-known/webfinger` is copied into generated `public/` after a clean build; commit the source file and remove the old tracked generated copy.
+- [x] Add and run `yarn smoke` for configuration, WebFinger, source syntax, and GraphQL parsing; keep the full build contract as the release gate.
+- [ ] After the runtime and package-manager changes, start incremental TypeScript adoption with shared types and a small source module.
+- [ ] Add an ESLint baseline for changed JavaScript/TypeScript files and expand it as the existing lint backlog is addressed.
+- [ ] After the migration, diagnose contact form email delivery and discuss a reliable alternative before restoring a form.
 - [ ] Use Node 22 only to diagnose a Node 24-specific failure, not as a planned checkpoint or deployment target.
 - [ ] Do not include React 19, Vitest, Gatsby Slices, deferred static generation, full lint cleanup, `StaticQuery`, explicit schema typing, or the image API migration unless the Gatsby 5 build proves one is required.
 - [ ] Stop for a decision before replacing `gatsby-plugin-styled-jsx-postcss`, `gatsby-remark-embed-video`, or another integration where the replacement would change visible CSS/content behavior.

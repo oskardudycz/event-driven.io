@@ -20,7 +20,7 @@ jobs:
         # selected operation systems to run CI
         os: [ubuntu-latest]
         # selected node version to run CI
-        node-version: [16.x]
+        node-version: [24.x]
 
     steps:
       - uses: actions/checkout@v4

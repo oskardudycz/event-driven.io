@@ -13,7 +13,6 @@ const List = (props) => {
           const {
             node: {
               excerpt,
-              timeToRead,
               frontmatter: { title, cover },
               fields: { slug, prefix },
             },
@@ -35,11 +34,7 @@ const List = (props) => {
                 )}
                 <span className="readingCardContent">
                   {showImages ? <h3>{title}</h3> : title}
-                  {showImages && (prefix || timeToRead) && (
-                    <small>
-                      {[prefix, timeToRead ? `${timeToRead} min` : ""].filter(Boolean).join(" · ")}
-                    </small>
-                  )}
+                  {showImages && prefix && <small>{prefix}</small>}
                   {showImages && excerpt && <span className="excerpt">{excerpt}</span>}
                 </span>
               </Link>

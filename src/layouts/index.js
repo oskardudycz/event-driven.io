@@ -1,8 +1,8 @@
-import "typeface-open-sans";
 import FontFaceObserver from "fontfaceobserver";
 import PropTypes from "prop-types";
 import React from "react";
-import { graphql, StaticQuery } from "gatsby";
+import { graphql, StaticQuery, withPrefix } from "gatsby";
+import { Helmet } from "react-helmet";
 
 import { getScreenWidth, timeoutThrottlerHandler } from "../utils/helpers";
 import Footer from "../components/Footer/";
@@ -82,7 +82,7 @@ class Layout extends React.Component {
           query LayoutgQuery {
             pages: allMarkdownRemark(
               filter: { fileAbsolutePath: { regex: "//pages//" }, fields: { prefix: { regex: "/^\\d+$/" } } }
-              sort: { fields: [fields___prefix], order: ASC }
+              sort: { fields: { prefix: ASC } }
             ) {
               edges {
                 node {
@@ -117,6 +117,9 @@ class Layout extends React.Component {
               <FontLoadedContext.Provider value={this.state.font400loaded}>
                 <ScreenWidthContext.Provider value={this.state.screenWidth}>
                   <React.Fragment>
+                    <Helmet>
+                      <link rel="stylesheet" href={withPrefix("/fonts/open-sans/index.css")} />
+                    </Helmet>
                     <Header
                       path={this.props.location.pathname}
                       pages={pages}
@@ -202,7 +205,7 @@ export const postQuery = graphql`
   query LayoutQuery {
     pages: allMarkdownRemark(
       filter: { fileAbsolutePath: { regex: "//pages//" }, fields: { prefix: { regex: "/^\\d+$/" } } }
-      sort: { fields: [fields___prefix], order: ASC }
+      sort: { fields: { prefix: ASC } }
     ) {
       edges {
         node {
