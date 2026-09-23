@@ -64,7 +64,7 @@ export const query = graphql`
         }
       }
     }
-    allVideosJson(sort: { fields: [Order], order: ASC }) {
+    allVideosJson(sort: { Order: ASC }) {
       edges {
         node {
           Order

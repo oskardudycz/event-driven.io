@@ -6,6 +6,8 @@ const hasAlgoliaCredentials = Boolean(
 );
 const isNonMainGitHubBuild =
   process.env.GITHUB_ACTIONS === "true" && process.env.GITHUB_REF !== "refs/heads/main";
+const shouldIndexAlgolia =
+  hasAlgoliaCredentials && !isNonMainGitHubBuild && process.env.ALGOLIA_SKIP_INDEXING !== "true";
 
 const query = `{
   allMarkdownRemark( filter: { fields: { slug: { ne: null } } }) {
@@ -52,6 +54,7 @@ const queries = [
 ];
 
 module.exports = {
+  trailingSlash: "always",
   siteMetadata: {
     title: config.siteTitle,
     description: config.siteDescription,
@@ -77,17 +80,18 @@ module.exports = {
         component: require.resolve(`./src/layouts/`),
       },
     },
-    {
-      resolve: `gatsby-plugin-algolia`,
-      options: {
-        appId: process.env.ALGOLIA_APP_ID || "",
-        apiKey: process.env.ALGOLIA_ADMIN_API_KEY || "",
-        indexName: process.env.ALGOLIA_INDEX_NAME || "",
-        queries,
-        chunkSize: 10000,
-        skipIndexing: !hasAlgoliaCredentials || isNonMainGitHubBuild,
-      },
-    },
+    ...(shouldIndexAlgolia
+      ? [{
+          resolve: `gatsby-plugin-algolia`,
+          options: {
+            appId: process.env.ALGOLIA_APP_ID,
+            apiKey: process.env.ALGOLIA_ADMIN_API_KEY,
+            indexName: process.env.ALGOLIA_INDEX_NAME,
+            queries,
+            chunkSize: 10000,
+          },
+        }]
+      : []),
     `gatsby-transformer-json`,
     {
       resolve: `gatsby-source-filesystem`,
@@ -294,6 +298,7 @@ module.exports = {
         `,
         feeds: [
           {
+            title: `${config.siteTitle} — articles`,
             serialize: ({ query: { site, allMarkdownRemark } }) => {
               return allMarkdownRemark.edges.map((edge) => {
                 return Object.assign({}, edge.node.frontmatter, {
@@ -308,7 +313,7 @@ module.exports = {
               {
                 allMarkdownRemark(
                   limit: 1000,
-                  sort: { order: DESC, fields: [fields___prefix] },
+                  sort: { fields: { prefix: DESC } },
                   filter: { fileAbsolutePath: { regex: "//posts/[0-9]+.*--/" }, fields: { slug: { ne: null }, langKey: { eq: "en" } } }
                 ) {
                   edges {
@@ -332,6 +337,7 @@ module.exports = {
           },
 
           {
+            title: `${config.siteTitle} — Architecture Weekly archive`,
             serialize: ({ query: { site, allMarkdownRemark } }) => {
               return allMarkdownRemark.edges.map((edge) => {
                 return Object.assign({}, edge.node.frontmatter, {
@@ -346,7 +352,7 @@ module.exports = {
               {
                 allMarkdownRemark(
                   limit: 1000,
-                  sort: { order: DESC, fields: [fields___prefix] },
+                  sort: { fields: { prefix: DESC } },
                   filter: { fileAbsolutePath: { regex: "//newsletter-pl/[0-9]+.*--/" }, fields: { slug: { ne: null }, langKey: { eq: "en" } } }
                 ) {
                   edges {
@@ -385,15 +391,15 @@ module.exports = {
             allSitePage {
               nodes {
                 path
-                context {
-                  excludeFromSitemap
-                }
+                pageContext
               }
             }
           }
         `,
         resolvePages: ({ allSitePage }) =>
-          allSitePage.nodes.filter((page) => !(page.context && page.context.excludeFromSitemap)),
+          allSitePage.nodes.filter(
+            (page) => !(page.pageContext && page.pageContext.excludeFromSitemap)
+          ),
         excludes: [
           `/en/404/`,
           `/pl/404/`,

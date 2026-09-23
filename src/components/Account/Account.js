@@ -1,7 +1,7 @@
 /* eslint no-unused-vars: 0 */
 
 import React from "react"
-import { Router } from "@reach/router"
+import { Router } from "@gatsbyjs/reach-router"
 import { login, logout, isAuthenticated, getProfile } from "../../utils/auth"
 import { Link } from "../Link"
 

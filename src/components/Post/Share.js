@@ -2,15 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import {
   FacebookShareButton,
-  GooglePlusShareButton,
   LinkedinShareButton,
   TwitterShareButton,
   FacebookShareCount,
-  GooglePlusShareCount,
-  LinkedinShareCount,
   FacebookIcon,
   TwitterIcon,
-  GooglePlusIcon,
   LinkedinIcon
 } from "react-share";
 
@@ -66,9 +62,6 @@ const PostShare = props => {
             }}
           >
             <LinkedinIcon round size={iconSize} />
-            {/* <LinkedinShareCount url={url}>
-              {count => <div className="share-count">{filter(count)}</div>}
-            </LinkedinShareCount> */}
           </LinkedinShareButton>
         </div>
       </div>

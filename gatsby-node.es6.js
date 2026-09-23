@@ -80,14 +80,13 @@ export const createPages = ({ graphql, actions }) => {
           {
             allMarkdownRemark(
               filter: { fields: { slug: { ne: null } } }
-              sort: { fields: [fields___prefix], order: DESC }
+              sort: { fields: { prefix: DESC } }
               limit: 1000
             ) {
               edges {
                 node {
                   id
                   excerpt(pruneLength: 170)
-                  timeToRead
                   fields {
                     slug
                     prefix
@@ -367,7 +366,7 @@ export const onCreatePage = async (
       createRedirect({
         fromPath: originalPath,
         toPath: localizedPath,
-        Language: lang,
+        conditions: { language: lang },
         isPermanent: false,
         redirectInBrowser: isEnvDevelopment,
         statusCode: is404 ? 404 : 301,
