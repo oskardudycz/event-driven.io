@@ -3,7 +3,6 @@ import React from "react";
 import { graphql } from "gatsby";
 import { ThemeContext } from "../layouts";
 import Article from "../components/Article";
-import Contact from "../components/Contact";
 import Headline from "../components/Article/Headline";
 import Seo from "../components/Seo";
 import { useTranslation } from "react-i18next";
@@ -26,7 +25,27 @@ const ContactPage = (props) => {
             <header>
               <Headline title={t("contact.title")} theme={theme} />
             </header>
-            <Contact theme={theme} />
+            <p>
+              {t("contact.intro")}{" "}
+              <a
+                href="https://calendly.com/oskar-dudycz/consulting"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t("contact.bookCall")}
+              </a>
+            </p>
+            <style jsx>{`
+              p {
+                font-size: ${theme.font.size.s};
+                line-height: ${theme.font.lineHeight.l};
+              }
+              a {
+                color: ${theme.color.brand.primary};
+                font-weight: ${theme.font.weight.bold};
+                text-decoration: underline;
+              }
+            `}</style>
           </Article>
         )}
       </ThemeContext.Consumer>
