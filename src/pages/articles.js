@@ -46,7 +46,6 @@ export const query = graphql`
       filter: {
         fileAbsolutePath: { regex: "//posts/[0-9]+.*--/" }
         fields: { langKey: { eq: $langKey } }
-        frontmatter: { useDefaultLangCanonical: { ne: true } }
       }
       sort: { fields: [fields___prefix], order: DESC }
     ) {
@@ -63,6 +62,7 @@ export const query = graphql`
             category
             categories
             author
+            useDefaultLangCanonical
             cover {
               children {
                 ... on ImageSharp {

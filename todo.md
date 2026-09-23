@@ -145,6 +145,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Complete the Node-first research and reverse probe. Gatsby 3 cannot build on Node 24 without the OpenSSL legacy-provider workaround, which will not be used.
 - [x] Step 1: preserve a route/redirect/feed/sitemap snapshot from the known-good 562-page Node 16 build and enforce it in CI.
 - [ ] Step 2: move Gatsby core and Gatsby-maintained plugins to their Gatsby 4-compatible releases as one batch; keep Node 16 and React 17, then run a clean build and output comparison.
+- [ ] After Gatsby 4 passes on Node 16, run its frozen dependency tree on Node 24 as a diagnostic; do not introduce an end-of-life Node 18 or 20 deployment checkpoint.
 - [ ] Step 3: move to Gatsby 5.16.1, React 18.3.1, and Node 24; update only dependencies that actually block those versions.
 - [ ] Convert the seven legacy GraphQL sort queries to Gatsby 5 syntax and set `trailingSlash: "always"` during Step 3.
 - [ ] Once the Node 24 build is green, update `.nvmrc`, GitHub Actions, and `package.json` engines together and regenerate `yarn.lock` with Yarn 1 on Node 24.

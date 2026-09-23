@@ -18,6 +18,7 @@ const Item = (props) => {
         category,
         categories = [],
         author,
+        useDefaultLangCanonical,
         cover: {
           children: [{ fluid }],
         },
@@ -29,7 +30,12 @@ const Item = (props) => {
   return (
     <React.Fragment>
       <li>
-        <Link to={slug} key={slug} className="link">
+        <Link
+          to={slug}
+          language={useDefaultLangCanonical ? "en" : undefined}
+          key={slug}
+          className="link"
+        >
           <div className="gatsby-image-outer-wrapper">
             <Img fluid={fluid} alt={title} />
           </div>
