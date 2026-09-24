@@ -11,7 +11,7 @@ const Blog = (props) => {
 
   return (
     <React.Fragment>
-      <div className={`main${compactTop ? " compactTop" : ""}`}>
+      <div className={`main${compactTop ? " compactTop" : ""}${heading ? " withHeading" : ""}`}>
         {heading && <h1 className="heading">{heading}</h1>}
         <ul>
           {posts.map((post) => {
@@ -94,6 +94,11 @@ const Blog = (props) => {
           }
           .heading {
             max-width: ${theme.text.maxWidth.desktop};
+          }
+        }
+        @from-width desktop {
+          .main.withHeading {
+            padding-top: ${theme.header.height.default};
           }
         }
       `}</style>

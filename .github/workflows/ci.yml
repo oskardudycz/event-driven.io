@@ -47,6 +47,28 @@ jobs:
           GATSBY_DISQUS_NAME: ${{ secrets.GATSBY_DISQUS_NAME }}
           GOOGLE_TAG_ID: ${{ secrets.GOOGLE_TAG_ID }}
       - run: yarn test
+      - name: Install Chromium for visual smoke tests
+        run: yarn playwright install --with-deps chromium
+      - name: Compare browser rendering with production snapshots
+        run: |
+          ./node_modules/.bin/gatsby serve -H 127.0.0.1 -p 9000 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl -fsS -o /dev/null http://127.0.0.1:9000/en/articles/; then
+              break
+            fi
+            sleep 1
+          done
+          curl -fsS -o /dev/null http://127.0.0.1:9000/en/articles/
+          yarn test:visual
+      - name: Upload visual comparison screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-comparison
+          path: visual-artifacts/
+          if-no-files-found: ignore
       - name: Build & Deploy docs preview
         run: yarn deploy
         if: ${{ github.ref != 'refs/heads/main' }}
