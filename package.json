@@ -12,6 +12,8 @@
     "test": "yarn test:seo && yarn test:build-contract",
     "test:seo": "node ./tests/seo-build.test.js",
     "test:build-contract": "node ./tests/build-contract.test.js",
+    "test:visual": "vitest run tests/visual.test.js",
+    "test:visual:update": "UPDATE_VISUAL_SNAPSHOTS=1 vitest run tests/visual.test.js",
     "smoke": "node ./scripts/smoke-migration.js",
     "verify:build-contract": "node ./scripts/verify-build-contract.js",
     "update:build-contract": "node ./scripts/update-build-contract.js",
@@ -120,6 +122,9 @@
     "eslint-plugin-react": "^7.10.0",
     "json-loader": "^0.5.7",
     "netlify-cli": "^6.7.1",
+    "pixelmatch": "^7.2.0",
+    "playwright": "^1.63.0",
+    "pngjs": "^7.0.0",
     "postcss": "^8.3.6",
     "postcss-cli": "^8.3.1",
     "postcss-custom-properties": "^11.0.0",
@@ -140,6 +145,8 @@
     "stylelint-config-css-modules": "^2.2.0",
     "stylelint-config-standard": "^22.0.0",
     "url-loader": "^4.1.1",
+    "vite": "^7",
+    "vitest": "^5.0.1",
     "webpack-bundle-analyzer": "^4.4.2"
   }
 }

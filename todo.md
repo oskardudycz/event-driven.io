@@ -1,6 +1,6 @@
 # SEO, content, and platform progress
 
-Last updated: 2026-09-23
+Last updated: 2026-09-24
 
 This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an item only when its implementation and proportionate verification are complete. Add a short note under blocked or partial items instead of presenting them as finished.
 
@@ -158,9 +158,17 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Convert the ten legacy GraphQL sort queries to Gatsby 5 syntax and set `trailingSlash: "always"` during Step 3; the Node 24 build will verify them.
 - [x] Align `.nvmrc`, GitHub Actions, and `package.json` engines on Node 24, refresh `yarn.lock`, and pass a frozen Yarn install.
 - [ ] Step 4: deploy a Node 24 preview and verify routes, SEO files, Netlify behavior, Auth0, Algolia, images, videos, and language switching before production.
+  - The preview revealed duplicated browser markup and blurred article images after hydration. Gatsby's browser-only `SessionCheck` root wrapper differed from SSR; the browser now reuses the SSR wrapper and checks Auth0 after the first client render.
+  - [x] Establish the first Playwright/Vitest archive test red on the broken preview (two H1 elements versus one in production; real cover never becomes usable) and green on the corrected local build.
+  - [x] Add a second category-index test and commit reviewed 1440×900 screenshots for both routes. The category reference came from production; the archive reference was updated from the corrected local build after making its hidden H1 visible. Normal tests use those local snapshots and do not request production. The preview fails both tests, while the corrected local build passes both.
+  - [x] Add a client-side navigation check. It fails on the old preview (two H1s) and passes locally with one H1, one footer, and scroll position 0.
+  - [x] Move the archive heading below the 80px desktop header without changing the homepage article-list spacing; confirm the H1 top-position assertion was red before the layout change and green afterward.
+  - [x] Run a clean-exit Gatsby 5 build outside the restricted sandbox, `yarn smoke`, `yarn test`, and `yarn test:visual` locally. The restricted-sandbox build's earlier non-zero exit was solely Gatsby's EROFS write to `~/.config/gatsby/`, after all 562 pages had generated.
+  - [ ] Confirm the three visual tests pass on GitHub Actions' Chromium/Linux runner and review its screenshot artifacts before deploying the fix.
 - [x] Verify `static/.well-known/webfinger`, the self-hosted font stylesheet/files, and the Calendly CTA on both generated contact pages.
 - [ ] After Gatsby 5/Node 24 is green, migrate Yarn 1 to npm in a separate change and verify `npm ci`, build, and tests.
   - A plain `npm install --package-lock-only` failed on the unused GraphQL ESLint plugin, then on `gatsby-plugin-styled-jsx`'s `styled-jsx@^3` peer requirement. The unused lint plugin was removed. Do not add `--legacy-peer-deps`; decide how to handle the styled-jsx integration before switching lockfiles.
+  - The site owner is open to a gradual styling migration, with a possible later Astro move. First establish browser screenshots/smoke checks, then migrate styled-jsx components incrementally to portable CSS Modules and CSS variables while preserving appearance. Remove the plugin only after its 35 consumers are migrated; retry npm afterward without overrides. Tailwind is optional, not the first migration step.
 - [ ] Verify that `static/.well-known/webfinger` is copied into generated `public/` after a clean build; commit the source file and remove the old tracked generated copy.
 - [x] Add and run `yarn smoke` for configuration, WebFinger, source syntax, and GraphQL parsing; keep the full build contract as the release gate.
 - [ ] After the runtime and package-manager changes, start incremental TypeScript adoption with shared types and a small source module.
