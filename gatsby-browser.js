@@ -1,8 +1,2 @@
-import { silentAuth } from "./src/utils/auth";
-
 // The browser and server must render the same tree for React 18 hydration.
 export { wrapRootElement, wrapPageElement } from "./gatsby-ssr";
-
-export const onInitialClientRender = () => {
-  silentAuth(() => {});
-};

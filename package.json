@@ -40,7 +40,6 @@
     "@gatsbyjs/reach-router": "^2.0.1",
     "@weknow/gatsby-remark-twitter": "^0.2.3",
     "antd": "^4.16.12",
-    "auth0-js": "^9.16.2",
     "disqus-react": "^1.1.7",
     "fontfaceobserver": "^2.0.13",
     "gatsby": "^5.16.1",

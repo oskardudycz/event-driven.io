@@ -24,7 +24,7 @@ This document records the improvements made to event-driven.io and the remaining
 - Public crawling is allowed in `robots.txt`, with the sitemap index declared explicitly.
 - Canonical URLs and language alternates are emitted consistently, including `x-default` where appropriate.
 - Duplicate fallback-language documents are excluded from indexable lists and the sitemap.
-- Utility routes such as account, callback, billing, search, and 404 are kept out of the search index.
+- Retired sign-in, callback, and billing routes are removed; remaining utility routes such as search and 404 are kept out of the search index.
 - Structured data covers articles, services, the author profile, and the website.
 - Open Graph and X/Twitter metadata include descriptions, images, and image alternative text.
 - `llms.txt` is generated from the site's canonical content during every build instead of being maintained by hand.
@@ -164,7 +164,7 @@ Node 22 is not a planned intermediate deployment. Use it only as a diagnostic if
 - Gatsby's official v5 migration guide recommends first reaching the latest Gatsby 4 release. Gatsby 4 is no longer a deployment target, so it will be only a local/CI checkpoint on Node 16 and React 17.
 - Gatsby 5 requires React 18 or 19. React 18.3.1 is the smaller required change and avoids mixing a React 19 migration into the Node upgrade.
 - The current Gatsby 3 install already contains three incompatible plugin versions: `gatsby-transformer-json@4.0.0`, `gatsby-remark-responsive-iframe@5.23.0`, and `gatsby-remark-autolink-headers@5.20.0` declare Gatsby 4 peer ranges. Moving core to Gatsby 4 resolves that mismatch; downgrading them first would be churn.
-- React 18 requires attention to direct dependencies. The installed `@reach/router`, `disqus-react`, `react-share`, and `theme-ui` versions have old React peer ranges. `@reach/router` is used by the account page; `disqus-react` and `react-share` have maintained React 18-compatible releases; `theme-ui` is not used by source code.
+- React 18 requires attention to direct dependencies. The installed `@reach/router`, `disqus-react`, `react-share`, and `theme-ui` versions had old React peer ranges. The retired account page was the only direct source consumer of the router; leave further dependency cleanup separate from the Auth0 removal. `disqus-react` and `react-share` have maintained React 18-compatible releases; `theme-ui` is not used by source code.
 - `gatsby-plugin-algolia@0.22.0` only declares Gatsby 2/3 support; its maintained 1.x release supports Gatsby 5. `gatsby-plugin-react-svg@3.0.1` also needs its maintained Gatsby 5-compatible update.
 - `gatsby-plugin-i18n@1.0.1` is old and has no Gatsby peer range. Its node/page hooks overlap with the site's own localization code. Keep it for the Gatsby 4 attempt; if it is the blocker, remove it and require an exact generated-route comparison rather than recreating its behavior speculatively.
 - `gatsby-plugin-styled-jsx-postcss` and `gatsby-remark-embed-video` are old but implement behavior the site actively uses. Keep and test them. If either actually blocks Gatsby 5, stop and choose a replacement with the user because replacing it changes CSS or article rendering.
@@ -186,9 +186,9 @@ Exit criterion: the current Node 16/Yarn build and `yarn test` pass from a froze
 - `yarn test:build-contract` compares the build with the committed `tests/fixtures/build-contract.json`. The contract contains the exact public route set, redirects, sitemap URLs, and RSS entry URLs, but deliberately excludes bundle hashes and complete HTML snapshots that change harmlessly between Gatsby releases.
 - `yarn test` runs both suites and is already the CI gate before deployment.
 - When a content or routing change is intentional, run `yarn update:build-contract` only after a successful build and review the fixture diff. Migration code must not update the fixture merely to make CI green.
-- The Gatsby 5 preview exposed a real React 18 hydration/visual regression that static checks missed. Add one Playwright-driven Vitest browser test at a time, first proving each test fails on the broken preview and passes on the corrected local build. Two desktop tests compare against committed, reviewed PNGs at 1440×900 with a 3% pixel-difference budget, plus structural and real-image assertions; a third checks client-side navigation. The category PNG is the production reference; the archive PNG was deliberately updated from the corrected local build after making its previously hidden H1 visible. CI runs the tests against its own built site and uploads current/diff screenshots; it does not query production. Refresh baselines explicitly after reviewing intentional design/content changes, never automatically to make a failure green.
+- The Gatsby 5 preview exposed a real React 18 hydration/visual regression that static checks missed. Add one Playwright-driven Vitest browser test at a time, first proving each test fails on the broken preview and passes on the corrected local build. Four desktop tests compare against committed, reviewed PNGs at 1440×900 with a 3% pixel-difference budget, plus structural and real-image assertions; a fifth checks client-side navigation. The category and English/Polish homepage PNGs are production references; the archive PNG was deliberately updated from the corrected local build after making its previously hidden H1 visible. CI runs the tests against its own built site and uploads current/diff screenshots; it does not query production. Refresh baselines explicitly after reviewing intentional design/content changes, never automatically to make a failure green.
 
-The Node 16 contract currently records 562 routes, 89 redirects, 330 sitemap URLs, and both feed URL sets. One known SEO ambiguity is tracked explicitly: `/pl/anti-patterns/` is in the sitemap but declares the English URL as canonical because `content/pages/anti-patterns` and `content/posts/2024-04-07--anti-patterns` compete for the same localized routes. Resolving it requires an editorial routing choice; until then the verifier permits only this exact mismatch rather than disabling sitemap-wide canonical checks.
+The original Node 16 contract recorded 562 routes, 89 redirects, 330 sitemap URLs, and both feed URL sets. After removing the disabled sign-in integration, the reviewed Gatsby 5 contract records 556 routes and 80 redirects; the six English/Polish account, billing, and callback routes and their nine redirects are the only removals. Sitemap URLs and feed URL sets are unchanged. One known SEO ambiguity is tracked explicitly: `/pl/anti-patterns/` is in the sitemap but declares the English URL as canonical because `content/pages/anti-patterns` and `content/posts/2024-04-07--anti-patterns` compete for the same localized routes. Resolving it requires an editorial routing choice; until then the verifier permits only this exact mismatch rather than disabling sitemap-wide canonical checks.
 
 ### Step 2 — Gatsby 4 diagnostic checkpoint
 
@@ -219,7 +219,7 @@ The current `gatsby-plugin-algolia` release no longer honors the site's old `ski
 - Only after that build passes, update `.nvmrc`, the GitHub Actions Node version, and a new `package.json` `engines.node` declaration together. Regenerate `yarn.lock` with Node 24.
 - Follow the official [Gatsby 4 to 5 migration guide](https://www.gatsbyjs.com/docs/reference/release-notes/migrating-from-v4-to-v5/) and check React 18 hydration output.
 
-Exit criterion: a frozen Yarn install, clean Gatsby build, and SEO integration test all pass on Node 24 without compatibility flags. This passed locally on 2026-09-23 with `ALGOLIA_SKIP_INDEXING=true`; the build generated 562 routes and passed the exact route and SEO contracts. CI and a Netlify preview remain the next release checks.
+Exit criterion: a frozen Yarn install, clean Gatsby build, and SEO integration test all pass on Node 24 without compatibility flags. The local build after Auth0 removal completed with `ALGOLIA_SKIP_INDEXING=true`, generated 556 routes, and passed the reviewed route and SEO contracts. All five local browser tests pass against the built site, including both-language homepage references. CI and a fresh Netlify preview remain the next release checks.
 
 After the Node 24/Gatsby 5 checkpoint is verified, migrate from Yarn 1 to npm as a separate change. Generate a single `package-lock.json`, replace the Yarn commands in package scripts, CI, Netlify, and contributor instructions with npm equivalents, remove `yarn.lock`, and verify `npm ci`, the build, and the same regression tests. Do not maintain two competing lockfiles.
 
@@ -230,7 +230,7 @@ The early npm probe exposed peer conflicts that Yarn 1 permits: `eslint-plugin-g
 ### Step 4 — preview before production
 
 - Deploy a Netlify preview using Node 24 and the same lockfile as CI.
-- Verify redirects and headers, Netlify forms, Auth0 account/callback routes, Algolia indexing, RSS, the `/sitemap/sitemap-index.xml` location, `robots.txt`, `llms.txt`, article images, embedded videos, and language switching.
+- Verify redirects and headers, Netlify forms, Algolia indexing, RSS, the `/sitemap/sitemap-index.xml` location, `robots.txt`, `llms.txt`, article images, embedded videos, and language switching. The retired sign-in, callback, and billing routes are intentionally absent in both languages.
 - Compare the generated page count and canonical URLs with the baseline. A changed count is not accepted until every addition/removal is explained.
 - Keep the last Gatsby 3 production commit as the rollback point until the Node 24 preview and production smoke tests pass.
 
@@ -265,4 +265,4 @@ yarn smoke
 yarn test
 ```
 
-The local skip flag prevents a build from changing the production search index. CI's main-branch build still uses its Algolia credentials and must verify indexing separately; preview builds must not write to the production index. After deployment, repeat technical checks against live URLs because CDN, redirects, headers, forms, authentication callbacks, and bot protection cannot be fully validated from Gatsby's generated files.
+The local skip flag prevents a build from changing the production search index. CI's main-branch build still uses its Algolia credentials and must verify indexing separately; preview builds must not write to the production index. After deployment, repeat technical checks against live URLs because CDN, redirects, headers, forms, and bot protection cannot be fully validated from Gatsby's generated files.

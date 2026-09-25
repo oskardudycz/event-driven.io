@@ -38,12 +38,6 @@ jobs:
           ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
           ALGOLIA_INDEX_NAME: ${{ secrets.ALGOLIA_INDEX_NAME }}
           ALGOLIA_SEARCH_ONLY_API_KEY: ${{ secrets.ALGOLIA_SEARCH_ONLY_API_KEY }}
-          AUTH0_CALLBACK: ${{ secrets.AUTH0_CALLBACK }}
-          AUTH0_CLIENTID: ${{ secrets.AUTH0_CLIENTID }}
-          AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
-          GATSBY_AUTH0_CALLBACK: ${{ secrets.GATSBY_AUTH0_CALLBACK }}
-          GATSBY_AUTH0_CLIENTID: ${{ secrets.GATSBY_AUTH0_CLIENTID }}
-          GATSBY_AUTH0_DOMAIN: ${{ secrets.GATSBY_AUTH0_DOMAIN }}
           GATSBY_DISQUS_NAME: ${{ secrets.GATSBY_DISQUS_NAME }}
           GOOGLE_TAG_ID: ${{ secrets.GOOGLE_TAG_ID }}
       - run: yarn test
