@@ -1,6 +1,6 @@
 # Visual reference screenshots
 
-These 1440×900 PNGs began as captures from `https://event-driven.io` on 2026-09-24. The category image remains that production reference. The archive image was deliberately refreshed from the corrected local build after its H1 was moved below the header. They are reviewed visual benchmarks, not a claim that every detail of the old design is final.
+These 1440×900 PNGs began as captures from `https://event-driven.io` on 2026-09-24. The category and English/Polish homepage images remain production references. The archive image was deliberately refreshed from the corrected local build after its H1 was moved below the header. They are reviewed visual benchmarks, not a claim that every detail of the old design is final.
 
 Normal tests compare a locally served build (or `VISUAL_BASE_URL`) with these files and never contact production. To review the current screenshots and differences, run `yarn test:visual` and open `visual-artifacts/`. CI uploads that directory as an artifact.
 

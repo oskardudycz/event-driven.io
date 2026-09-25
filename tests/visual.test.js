@@ -20,8 +20,8 @@ afterAll(async () => {
   await browser?.close();
 });
 
-async function compareScreenshot(page, name) {
-  const screenshot = await page.screenshot();
+async function compareScreenshot(page, name, options = {}) {
+  const screenshot = await page.screenshot(options);
   await writeFile(join(artifacts, `${name}.png`), screenshot);
   const referencePath = join(snapshots, `${name}.png`);
   if (updateSnapshots) {
@@ -131,3 +131,36 @@ test("client-side archive navigation keeps a single page at the top", async () =
     await page.close();
   }
 }, 30_000);
+
+for (const language of ["en", "pl"]) {
+  test(`${language} homepage renders one complete hero`, async () => {
+    const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+    try {
+      const response = await page.goto(new URL(`/${language}/`, baseUrl).href, {
+        waitUntil: "domcontentloaded",
+      });
+      expect(response?.status()).toBe(200);
+      await page.locator(".hero h1").waitFor({ state: "visible" });
+      await page.evaluate(async () => {
+        await document.fonts.ready;
+        const background = getComputedStyle(document.querySelector(".hero")).backgroundImage;
+        const url = background.match(/^url\(["']?(.*?)["']?\)$/)?.[1];
+        if (!url) throw new Error("Homepage hero background is missing");
+        const image = new Image();
+        image.src = url;
+        await image.decode();
+      });
+      await page.waitForTimeout(1000);
+      await compareScreenshot(page, `home-${language}-desktop`, { animations: "disabled" });
+      expect(await page.locator(".hero h1").count()).toBe(1);
+      expect(await page.locator("footer").count()).toBe(1);
+      expect(await page.evaluate(() => window.scrollY)).toBeLessThan(5);
+    } finally {
+      await page.screenshot({
+        path: join(artifacts, `home-${language}-desktop.png`),
+        animations: "disabled",
+      }).catch(() => {});
+      await page.close();
+    }
+  }, 60_000);
+}
