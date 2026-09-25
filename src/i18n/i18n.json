@@ -70,7 +70,7 @@
         "title": "Contact",
         "seoTitle": "Contact Oskar Dudycz",
         "description": "Contact Oskar Dudycz about Event Sourcing training, software architecture consulting, and speaking.",
-        "intro": "For consulting, architecture reviews, or training, send a message below or",
+        "intro": "For consulting, architecture reviews, or training,",
         "bookCall": "book a free introductory call.",
         "form": {
           "name": "Name",
@@ -155,7 +155,7 @@
         "title": "Kontakt",
         "seoTitle": "Skontaktuj się z Oskarem Dudyczem",
         "description": "Skontaktuj się z Oskarem Dudyczem w sprawie szkoleń z Event Sourcingu, konsultingu architektonicznego i wystąpień.",
-        "intro": "W sprawie konsultingu, przeglądu architektury lub szkolenia napisz wiadomość albo",
+        "intro": "W sprawie konsultingu, przeglądu architektury lub szkolenia",
         "bookCall": "umów bezpłatną rozmowę wstępną.",
         "form": {
           "name": "Imię i nazwisko",

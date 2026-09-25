@@ -65,8 +65,17 @@ function verifySeoBuild(publicDirectory) {
     expectContains("consulting language alternates", html, 'hrefLang="pl"');
   }
 
-  for (const utilityPage of ["en/account/index.html", "en/callback/index.html"]) {
-    expectContains(utilityPage, read(utilityPage), 'name="robots" content="noindex, nofollow"');
+  for (const retiredPage of [
+    "en/account/index.html",
+    "pl/account/index.html",
+    "en/account/billing/index.html",
+    "pl/account/billing/index.html",
+    "en/callback/index.html",
+    "pl/callback/index.html",
+  ]) {
+    if (fs.existsSync(path.join(publicDirectory, retiredPage))) {
+      failures.push(`Retired sign-in page still generated: public/${retiredPage}`);
+    }
   }
 
   const robots = read("robots.txt");
@@ -121,7 +130,16 @@ function verifySeoBuild(publicDirectory) {
     expectContains("sitemap", sitemap, `<loc>https://event-driven.io${publicRoute}</loc>`);
   }
 
-  for (const excludedRoute of ["/en/account/", "/en/callback/", "/en/search/", "/404/"]) {
+  for (const excludedRoute of [
+    "/en/account/",
+    "/pl/account/",
+    "/en/account/billing/",
+    "/pl/account/billing/",
+    "/en/callback/",
+    "/pl/callback/",
+    "/en/search/",
+    "/404/",
+  ]) {
     expectExcludes("sitemap", sitemap, `<loc>https://event-driven.io${excludedRoute}</loc>`);
   }
 

@@ -51,7 +51,7 @@ export const query = graphql`
   query NewsletterPlQuery($langKey: String!) {
     posts: allMarkdownRemark(
       filter: { fileAbsolutePath: { regex: "//newsletter-pl/[0-9]+.*--/" }, fields: { langKey: { eq: $langKey } } }
-      sort: { fields: [fields___prefix], order: DESC }
+      sort: { fields: { prefix: DESC } }
     ) {
       edges {
         node {

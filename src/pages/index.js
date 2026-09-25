@@ -105,7 +105,7 @@ export const query = graphql`
         fileAbsolutePath: { regex: "//posts/[0-9]+.*--/" }
         fields: { langKey: { eq: $langKey } }
       }
-      sort: { fields: [fields___prefix], order: DESC }
+      sort: { fields: { prefix: DESC } }
     ) {
       edges {
         node {
