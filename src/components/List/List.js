@@ -26,7 +26,7 @@ const List = (props) => {
                   <img
                     className="readingCardImage"
                     src={image.src}
-                    alt={title}
+                    alt=""
                     loading="lazy"
                     width="420"
                     height="240"
@@ -106,10 +106,14 @@ const List = (props) => {
             box-shadow ${theme.time.duration.default}, transform ${theme.time.duration.default};
         }
         :global(.readingCard:hover),
-        :global(.readingCard:focus) {
+        :global(.readingCard:focus-visible) {
           border-color: ${theme.color.brand.primary};
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
           transform: translateY(-2px);
+        }
+        :global(.readingCard:focus-visible) {
+          outline: 2px solid ${theme.color.brand.primary};
+          outline-offset: 2px;
         }
         :global(.readingCardImage) {
           aspect-ratio: 16 / 9;

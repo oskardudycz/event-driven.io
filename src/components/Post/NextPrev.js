@@ -1,11 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 import { Link } from "../Link";
 
 import { FaArrowRight } from "react-icons/fa/";
 import { FaArrowLeft } from "react-icons/fa/";
 
 const NextPrev = props => {
+  const { t } = useTranslation();
   const {
     theme,
     next: {
@@ -20,24 +22,28 @@ const NextPrev = props => {
 
   return (
     <React.Fragment>
-      <div className="links">
+      <nav className="links" aria-label={t("articleNavigation.title")}>
         {nextSlug && (
           <Link to={nextSlug}>
             <FaArrowRight />
-            <h4>
-              {nextTitle} <time>{nextPrefix} </time>
-            </h4>
+            <span className="linkContent">
+              <span className="direction">{t("articleNavigation.later")}</span>
+              <span className="title">{nextTitle}</span>
+              <time>{nextPrefix}</time>
+            </span>
           </Link>
         )}
         {prevSlug && (
           <Link to={prevSlug}>
             <FaArrowLeft />
-            <h4>
-              {prevTitle} <time>{prevPrefix}</time>
-            </h4>
+            <span className="linkContent">
+              <span className="direction">{t("articleNavigation.earlier")}</span>
+              <span className="title">{prevTitle}</span>
+              <time>{prevPrefix}</time>
+            </span>
           </Link>
         )}
-      </div>
+      </nav>
 
       {/* --- STYLES --- */}
       <style jsx>{`
@@ -66,10 +72,17 @@ const NextPrev = props => {
           }
         }
 
-        h4 {
+        .title {
+          display: block;
           font-weight: 600;
           margin: 0;
           font-size: 1.1em;
+        }
+        .direction {
+          color: ${theme.color.neutral.gray.h};
+          display: block;
+          font-size: 0.8em;
+          margin-bottom: ${theme.space.xs};
         }
         time {
           color: ${theme.color.neutral.gray.g};

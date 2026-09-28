@@ -57,9 +57,9 @@ const Post = (props) => {
       <Bodytext html={html} theme={theme} />
       <footer>
         <Substack />
+        <Related posts={related} theme={theme} />
         <Share post={post} theme={theme} />
         <Author note={authornote} theme={theme} />
-        <Related posts={related} theme={theme} />
         <NextPrev next={nextPost} prev={prevPost} theme={theme} />
         <DiscussionEmbed {...disqusConfig} />
       </footer>

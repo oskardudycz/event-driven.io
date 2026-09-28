@@ -45,7 +45,8 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Add recommended reading order and image cards to category pages.
 - [x] Refine category pages after production review with responsive two-column cards, consistent image ratios, reading-order badges, clamped excerpts, and working article-count pluralisation.
 - [x] Generate category cover WebPs once and reuse them through page context.
-- [x] Add automatic same-language related articles without an extra GraphQL query per post.
+- [x] Replace automatic category-based related articles with opt-in, same-language curated links; seed the vertical-slices article with its two cited predecessors.
+- [x] Reuse category cards for related reading, place it after the newsletter signup, label chronological navigation, and verify desktop/mobile layouts with screenshots and browser checks.
 - [x] Limit the homepage to 12 recent canonical articles and link to the topic index.
 - [x] Reduce the homepage blog introduction to one “Latest articles” heading and label the original circular down-arrow control “Read latest articles.”
 - [x] Simplify the complete archive header by removing the article-count badge and eliminating the stacked long-form/list spacing.
@@ -136,7 +137,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 ### P2 — structured content and quality
 
 - [ ] Add `updated` frontmatter, `dateModified`, and sitemap `lastmod` support.
-- [ ] Add hand-picked related-article overrides with automatic fallback.
+- [ ] Curate related links for more cornerstone posts when there is a clear editorial connection; no automatic fallback.
 - [ ] Audit article-body image alt text.
 - [ ] Add Breadcrumb structured data.
 - [ ] Add FAQ structured data only to eligible visible FAQs.
@@ -164,9 +165,10 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
   - [x] Add a client-side navigation check. It fails on the old preview (two H1s) and passes locally with one H1, one footer, and scroll position 0.
   - [x] Move the archive heading below the 80px desktop header without changing the homepage article-list spacing; confirm the H1 top-position assertion was red before the layout change and green afterward.
   - [x] Run a clean-exit Gatsby 5 build outside the restricted sandbox, `yarn smoke`, `yarn test`, and `yarn test:visual` locally. The restricted-sandbox build's earlier non-zero exit was solely Gatsby's EROFS write to `~/.config/gatsby/`, after all 562 pages had generated.
-  - [ ] Confirm all five visual tests pass on GitHub Actions' Chromium/Linux runner and review its screenshot artifacts before deploying the fix.
+  - [ ] Confirm all six visual tests pass on GitHub Actions' Chromium/Linux runner and review its screenshot artifacts before deploying the fix.
   - [x] Rebuild and confirm the six retired English/Polish sign-in, callback, and billing routes and their nine redirects are absent; update the committed route contract only for these intended removals. The Node 24/Gatsby 5 build produced 556 routes, 80 redirects, and the unchanged 330 sitemap URLs; `yarn test` passes.
-  - [x] Verify English and Polish homepage snapshots against the corrected local build. All five Playwright/Vitest tests pass locally, including the archive and category comparisons.
+  - [x] Verify English and Polish homepage snapshots against the corrected local build. All six Playwright/Vitest tests pass locally, including the archive, category, and article-footer comparisons.
+  - [x] Capture the production article-footer state for `/en/vertical-slices-and-dependencies/`, add a regression test, and fix the author-note query to select the dedicated `parts` content. The new test failed on the preview and all six visual tests passed on the corrected local build; a fresh preview still needs review.
 - [x] Verify `static/.well-known/webfinger`, the self-hosted font stylesheet/files, and the Calendly CTA on both generated contact pages.
 - [ ] After Gatsby 5/Node 24 is green, migrate Yarn 1 to npm in a separate change and verify `npm ci`, build, and tests.
   - A plain `npm install --package-lock-only` failed on the unused GraphQL ESLint plugin, then on `gatsby-plugin-styled-jsx`'s `styled-jsx@^3` peer requirement. The unused lint plugin was removed. Do not add `--legacy-peer-deps`; decide how to handle the styled-jsx integration before switching lockfiles.

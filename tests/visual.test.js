@@ -132,6 +132,102 @@ test("client-side archive navigation keeps a single page at the top", async () =
   }
 }, 30_000);
 
+test("article footer shows the author bio and links to further reading", async () => {
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  try {
+    const response = await page.goto(
+      new URL("/en/vertical-slices-and-dependencies/", baseUrl).href,
+      { waitUntil: "domcontentloaded" }
+    );
+    expect(response?.status()).toBe(200);
+    const author = page.locator(".author");
+    await author.waitFor({ state: "visible" });
+    await page.evaluate(() => document.fonts.ready);
+    const bio = await author.locator(".note").innerText();
+    expect(bio).toContain("Oskar Dudycz is an independent software architect");
+    expect(bio).not.toContain("Through my window");
+    expect(bio.length).toBeLessThan(500);
+    const furtherReading = page.locator(".author + .links");
+    expect(await page.locator("article footer > .substack + .related").count()).toBe(1);
+    const spacing = await page.evaluate(() => {
+      const iframe = document.querySelector(".substack iframe");
+      const related = document.querySelector(".related");
+      return {
+        gap: related.getBoundingClientRect().top - iframe.getBoundingClientRect().bottom,
+        border: getComputedStyle(related).borderTopWidth,
+      };
+    });
+    expect(spacing.border).toBe("0px");
+    expect(spacing.gap).toBeGreaterThanOrEqual(0);
+    expect(spacing.gap).toBeLessThanOrEqual(30);
+    expect(await page.locator(".related a").evaluateAll((links) => links.map((link) => link.getAttribute("href"))))
+      .toEqual([
+        "/en/how_to_slice_the_codebase_effectively/",
+        "/en/vertical_slices_in_practice/",
+      ]);
+    const firstCover = page.locator(".related img").first();
+    expect(await firstCover.getAttribute("alt")).toBe("");
+    await page.locator(".related").scrollIntoViewIfNeeded();
+    await page.waitForFunction((image) => image.complete && image.naturalWidth >= 200,
+      await firstCover.elementHandle());
+    await page.evaluate(() => {
+      const top = document.querySelector(".related").getBoundingClientRect().top + window.scrollY;
+      window.scrollTo(0, top - 100);
+    });
+    await compareScreenshot(page, "article-related-desktop", { animations: "disabled" });
+    expect(await furtherReading.locator("a").count()).toBeGreaterThan(0);
+    expect(await furtherReading.locator("a").first().getAttribute("href")).toMatch(/^\/en\//);
+    expect(await furtherReading.getAttribute("aria-label")).toBe("Articles by publication date");
+    expect(await furtherReading.innerText()).toContain("Earlier article");
+    const relatedLink = page.locator(".related a").first();
+    await relatedLink.focus();
+    expect(await relatedLink.evaluate((link) => getComputedStyle(link).outlineStyle)).toBe("solid");
+    await compareScreenshot(author, "article-footer-desktop", { animations: "disabled" });
+  } finally {
+    await page.close();
+  }
+}, 60_000);
+
+test("articles without curated recommendations do not show a related block", async () => {
+  const page = await browser.newPage();
+  try {
+    const response = await page.goto(
+      new URL("/en/checkpointing_message_processing/", baseUrl).href,
+      { waitUntil: "domcontentloaded" }
+    );
+    expect(response?.status()).toBe(200);
+    expect(await page.locator(".related").count()).toBe(0);
+  } finally {
+    await page.close();
+  }
+}, 30_000);
+
+test("curated article links fit on a narrow screen", async () => {
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  try {
+    await page.goto(new URL("/en/vertical-slices-and-dependencies/", baseUrl).href, {
+      waitUntil: "domcontentloaded",
+    });
+    await page.locator(".related a").first().waitFor({ state: "visible" });
+    const width = await page.evaluate(() => document.documentElement.scrollWidth);
+    expect(width).toBeLessThanOrEqual(390);
+    expect(await page.locator(".related a").count()).toBe(2);
+    await page.locator(".related img").last().scrollIntoViewIfNeeded();
+    await page.locator(".related img").first().scrollIntoViewIfNeeded();
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+      await Promise.all(Array.from(document.querySelectorAll(".related img"), (image) => image.decode()));
+    });
+    await page.evaluate(() => {
+      const top = document.querySelector(".related").getBoundingClientRect().top + window.scrollY;
+      window.scrollTo(0, top - 80);
+    });
+    await compareScreenshot(page, "article-related-mobile", { animations: "disabled" });
+  } finally {
+    await page.close();
+  }
+}, 30_000);
+
 for (const language of ["en", "pl"]) {
   test(`${language} homepage renders one complete hero`, async () => {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });

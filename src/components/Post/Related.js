@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { Link } from "../Link";
+import List from "../List";
 
 const Related = ({ posts, theme }) => {
   const { t } = useTranslation();
@@ -11,34 +11,16 @@ const Related = ({ posts, theme }) => {
     <React.Fragment>
       <aside className="related" aria-labelledby="related-title">
         <h2 id="related-title">{t("related.title")}</h2>
-        <ul>
-          {posts.map(({ node }) => (
-            <li key={node.fields.slug}>
-              <Link to={node.fields.slug}>{node.frontmatter.title}</Link>
-            </li>
-          ))}
-        </ul>
+        <List edges={posts} theme={theme} showImages />
       </aside>
       <style jsx>{`
         .related {
-          border-top: 1px solid ${theme.line.color};
-          margin-top: ${theme.space.xl};
-          padding-top: ${theme.space.l};
+          margin: ${theme.space.m} 0 ${theme.space.l};
         }
         .related h2 {
           font-size: ${theme.font.size.l};
-          margin-bottom: ${theme.space.m};
-        }
-        .related ul {
-          padding-left: ${theme.space.m};
-        }
-        .related li {
-          line-height: ${theme.font.lineHeight.l};
-          margin-bottom: ${theme.space.s};
-        }
-        .related :global(a) {
-          color: ${theme.color.brand.primary};
-          font-weight: ${theme.font.weight.bold};
+          line-height: ${theme.font.lineHeight.s};
+          margin: 0 0 ${theme.space.m};
         }
       `}</style>
     </React.Fragment>
