@@ -62,6 +62,11 @@
       "related": {
         "title": "Related articles"
       },
+      "articleNavigation": {
+        "title": "Articles by publication date",
+        "later": "Later article",
+        "earlier": "Earlier article"
+      },
       "404": {
         "title": "Not found",
         "description": "You just hit a route that doesn't exist... the sadness."
@@ -146,6 +151,11 @@
       },
       "related": {
         "title": "Powiązane artykuły"
+      },
+      "articleNavigation": {
+        "title": "Artykuły według daty publikacji",
+        "later": "Nowszy artykuł",
+        "earlier": "Starszy artykuł"
       },
       "404": {
         "title": "Nie znaleziono",

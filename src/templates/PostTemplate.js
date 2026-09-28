@@ -87,8 +87,8 @@ export const postQuery = graphql`
       }
     }
     authornote: markdownRemark(
-      fileAbsolutePath: { regex: "/author/" }
-      fields: { langKey: { eq: $langKey } }
+      frontmatter: { title: { eq: "author" } }
+      fields: { source: { eq: "parts" }, langKey: { eq: $langKey } }
     ) {
       id
       html

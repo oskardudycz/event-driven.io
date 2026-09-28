@@ -97,6 +97,7 @@ export const createPages = ({ graphql, actions }) => {
                     title
                     category
                     categories
+                    related
                     useDefaultLangCanonical
                     cover {
                       childImageSharp {
@@ -134,25 +135,33 @@ export const createPages = ({ graphql, actions }) => {
             )
             .map((item) => item.node.fields.langKey);
         const relatedFor = (node) => {
-          const categories = categoriesForNode(node);
-          if (categories.length === 0) return [];
-
-          return items
-            .filter(
+          const requested = node.frontmatter.related || [];
+          return requested.map((slug) => {
+            const match = items.find(
               (item) =>
                 item.node.id !== node.id &&
+                item.node.fields.slug === `/${slug}/` &&
                 item.node.fields.source === node.fields.source &&
                 item.node.fields.langKey === node.fields.langKey &&
-                !item.node.frontmatter.useDefaultLangCanonical &&
-                categoriesForNode(item.node).some((category) => categories.includes(category))
-            )
-            .slice(0, 3)
-            .map((item) => ({
+                !item.node.frontmatter.useDefaultLangCanonical
+            );
+            if (!match) {
+              throw new Error(`Invalid related article "${slug}" for ${node.fields.langKey}${node.fields.slug}`);
+            }
+            return {
               node: {
-                fields: { slug: item.node.fields.slug },
-                frontmatter: { title: item.node.frontmatter.title },
+                excerpt: match.node.excerpt,
+                fields: {
+                  slug: match.node.fields.slug,
+                  prefix: match.node.fields.prefix,
+                },
+                frontmatter: {
+                  title: match.node.frontmatter.title,
+                  cover: match.node.frontmatter.cover,
+                },
               },
-            }));
+            };
+          });
         };
 
         supportedLanguages.forEach((supportedLangKey) => {
