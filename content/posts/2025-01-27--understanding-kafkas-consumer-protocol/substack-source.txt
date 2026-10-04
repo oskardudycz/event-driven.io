@@ -1,0 +1,9 @@
+{
+  "url": "https://www.architecture-weekly.com/p/understanding-kafkas-consumer-protocol",
+  "date": "2025-01-27",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/497d83ed-cd36-42a7-8bd7-3339c58b3225_1117x329.png": "2025-01-27-cover.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/62c6301a-76dc-4b75-8930-23d5a40dd515_1023x687.png": "image-2.png"
+  },
+  "embeds": 0
+}

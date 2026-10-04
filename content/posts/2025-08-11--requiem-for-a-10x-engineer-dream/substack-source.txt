@@ -1,0 +1,8 @@
+{
+  "url": "https://www.architecture-weekly.com/p/requiem-for-a-10x-engineer-dream",
+  "date": "2025-08-11",
+  "assets": {
+    "https://substackcdn.com/image/youtube/w_728,c_limit/N0L_wal-0cI": "2025-08-11-cover.jpg"
+  },
+  "embeds": 2
+}

@@ -53,7 +53,7 @@ Why? We don’t need to be capable of everything; it’s often a fine choice not
 - It’d be good to do some exercises, keeping in mind my sitting style of work,
 - I had a swimming pool 10m by walk,
 - I had and still have a great teacher. Thanks, Justyna!
-    
+
 So I started learning to swim again in 2024. It’s an interesting exercise when you learn something new as an adult. It’s more challenging because you’re overthinking rather than acting on your instincts. Or maybe your old habits are making your instincts unintuitional. It also shows how everyone has a different way of learning.
 
 Take Breaststroke style (in Polish called “Żabka” - frog). Most people claim that it’s the easiest style to learn. For me? Madness, how much stuff you need to remember and coordinate: hands, back, legs.
@@ -129,6 +129,5 @@ p.s. if you liked this one, check also:
 - [Borys had the best dribbling](/en/borys_najlepiej_dryblowal/),
 - [How playing on guitar can help you to be a better developer?](/en/how_playing_on_guitar_helps_in_being_better_developer/)
 - [Don’t be like Ebenezer Scrooge. A few words about workaholism](/en/a_few_words_about_workaholism/)
-    
 
 **p.s.2. Ukraine is still under brutal Russian invasion. A lot of Ukrainian people are hurt, without shelter and need help.** You can help in various ways, for instance, directly helping refugees, spreading awareness, and putting pressure on your local government or companies. You can also support Ukraine by donating, e.g. to the [Ukraine humanitarian](https://savelife.in.ua/en/donate/) organisation, [Ambulances for Ukraine](https://www.gofundme.com/f/help-to-save-the-lives-of-civilians-in-a-war-zone) or [Red Cross](https://redcross.org.ua/en/).

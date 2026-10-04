@@ -12,7 +12,7 @@ One of the great benefits of Event Sourcing is that you don't lose any business 
 
 ![ES-Snapshots-2](image-3.svg)
 
-Isn't loading more than one event a performance issue? Frankly, it's not. Downloading even a dozen, or several dozens of small events is not a significant overhead. Events are concise, containing only the information needed. EventStoreDB is optimised for such operations, and the reads scale well. Still, you can't disagree that loading a few events will take longer than loading a single one. In the article ["Why a bank account is not the best example of Event Sourcing?"](https://event-driven.io/en/bank_account_event_sourcing/) I presented the following calculation:
+Isn't loading more than one event a performance issue? Frankly, it's not. Downloading even a dozen, or several dozens of small events is not a significant overhead. Events are concise, containing only the information needed. EventStoreDB is optimised for such operations, and the reads scale well. Still, you can't disagree that loading a few events will take longer than loading a single one. In the article ["Why a bank account is not the best example of Event Sourcing?"](/en/bank_account_event_sourcing/) I presented the following calculation:
 
 Suppose I opened a bank account at the age of 18. Let's assume that I was making three transactions a day. If we multiply these numbers (3 x 17 x 365), we get 18,615 transactions.
 
@@ -36,9 +36,9 @@ Let's get back to our shopping example. Instead of modelling our stream as all t
 -   cashier's shift,
 -   each receipt separately.
 
-If we ask "business", it may turn out that such a break-down reflects the reality. "Closing the books/end of business day" is a typical pattern for many industries. Very often, our technical assumptions are an oversimplification. That is why it is worth digging down and asking business [to bring problems, not solutions](https://event-driven.io/en/bring_me_problems_not_solutions/).
+If we ask "business", it may turn out that such a break-down reflects the reality. "Closing the books/end of business day" is a typical pattern for many industries. Very often, our technical assumptions are an oversimplification. That is why it is worth digging down and asking business [to bring problems, not solutions](/en/bring_me_problems_not_solutions/).
 
-**By modelling the stream as the events on a given cashier's shift, we can simplify the solution.** Streams will contain fewer events. The stream's lifecycle affects not only the performance, but most of all, it is easier to maintain. I wrote about it in [How to (not) do event versioning](https://event-driven.io/en/how_to_do_event_versioning/). If our stream is short-lived, schema versioning will be easier. We rarely care about records that are deleted or archived. Therefore, when we deploy new changes and have events with the old schema, we will have to support them as long as their streams exist. Thanks to this, we can break our deployment into "two steps". First, we deploy a version that supports both schemas and mark the old one as obsolete. Then when all streams with old schema are not active, we can remove the old code and create a new version.
+**By modelling the stream as the events on a given cashier's shift, we can simplify the solution.** Streams will contain fewer events. The stream's lifecycle affects not only the performance, but most of all, it is easier to maintain. I wrote about it in [How to (not) do event versioning](/en/how_to_do_event_versioning/). If our stream is short-lived, schema versioning will be easier. We rarely care about records that are deleted or archived. Therefore, when we deploy new changes and have events with the old schema, we will have to support them as long as their streams exist. Thanks to this, we can break our deployment into "two steps". First, we deploy a version that supports both schemas and mark the old one as obsolete. Then when all streams with old schema are not active, we can remove the old code and create a new version.
 
 ![ES-Snapshots-5](image-6.svg)
 
@@ -76,4 +76,4 @@ My advice, then, is to avoid snapshots whenever you can. If you need to use them
 
 * * *
 
-If you want more information, read this post on [Snapshotting Strategies](https://www.eventstore.com/blog/snapshotting-strategies).
+If you want more information, read this post on [Snapshotting Strategies](/en/snapshotting-strategies/).

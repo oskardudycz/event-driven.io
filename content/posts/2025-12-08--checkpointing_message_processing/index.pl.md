@@ -11,13 +11,13 @@ Let's start by asking you two questions.
 1. **What [Super Frog](https://en.wikipedia.org/wiki/Superfrog) has to do with messaging?**
 2. **When was the last time you wrote if statements in SQL?** If it's been a long time, have you at least seen them? If not, (don't) worry, you'll see them today.
 
-Will it be a post about weird SQL usage? Not necessarily. 
+Will it be a post about weird SQL usage? Not necessarily.
 
 **We'll talk today about checkpointing our processing.**
 
 ![](2025-12-08-cover.png)
 
-I've started my relationship with computers with games. I still have my Amiga 500. In those days, computers didn't always have a hard disk. You've got a bunch of diskettes with different chapters of the game. Not all of them were simple games; many were quite sophisticated, and it took some time to finish them. 
+I've started my relationship with computers with games. I still have my Amiga 500. In those days, computers didn't always have a hard disk. You've got a bunch of diskettes with different chapters of the game. Not all of them were simple games; many were quite sophisticated, and it took some time to finish them.
 
 Yet they were dealing with limited diskette space, so it was best if they didn't have to use any of it. How can you then allow you to stop playing and return to the previous state? Or how to not force you to start from the beginning of the game when you fell from the platform, and well, you died? You died in the game, ofc, that at least you should be able to recover, right?
 
@@ -25,11 +25,11 @@ As mentioned earlier, the limited space on diskettes and the additional complexi
 
 **After you passed a level, you got a code you could type when you started the game, and instead of starting from the beginning, you could go directly to the place where you left off.** That worked pretty well for the platform and race car games, since your game's storyline was always the same, immutable. If you had to go to level 27, the starting point and your character would always look the same. Of course, for RPG and strategy games, that's a different story.
 
-Surprisingly, this parallel also matches the recovery from a business process failure. 
+Surprisingly, this parallel also matches the recovery from a business process failure.
 
 Let's say we're using message-based communication to streamline and make it more resilient. We don't want to make it vulnerable to scenarios where we store information in one system, our process dies, and we don't manage to notify the other parts.
 
-We're using [Outbox pattern](/pl/outbox_inbox_patterns_and_delivery_guarantees_explained/) to enable that technically. We're storing messages in the relational table within the same transaction, updating the state after running business logic. Thanks to that, either both states are updated, and the message is scheduled, or none of it is. We're getting (eventual) consistency thanks to that. 
+We're using [Outbox pattern](/pl/outbox_inbox_patterns_and_delivery_guarantees_explained/) to enable that technically. We're storing messages in the relational table within the same transaction, updating the state after running business logic. Thanks to that, either both states are updated, and the message is scheduled, or none of it is. We're getting (eventual) consistency thanks to that.
 
 Now we're on the receiving end, so where we were in the previous article with the explanation of [Consumers, Processors and all that jazz](/pl/consumers_processors_in_emmett/).
 
@@ -57,7 +57,7 @@ As you can see, besides the message ID, type, and data, we're also storing the (
 Now we can be polling it with the query like:
 
 ```sql
-SELECT 
+SELECT
      position, message_id, message_type, data
 FROM
      outbox
@@ -125,8 +125,8 @@ BEGIN
   IF p_expected_position IS NOT NULL THEN
       -- Try to update if the position matches p_check_position
       UPDATE processor_checkpoints
-      SET 
-        "last_processed_position" = p_position, 
+      SET
+        "last_processed_position" = p_position,
         "last_processed_transaction_id" = p_transaction_id
       WHERE "processor_id" = p_processor_id AND "last_processed_position" = p_check_position;
 
@@ -189,13 +189,13 @@ That's why we're doing this fancy dance with IF statements and a stored procedur
 
 Detection assumes that we have a global ordering processing guarantee (thus, tricky bits with transaction ID).
 
-**It also shows why global ordering is useful.** 
+**It also shows why global ordering is useful.**
 
 By detecting that we've already handled a specific position, we can skip processing handling idempotency on the processor level.
 
 By detecting that there's another processor with the same id processing messages, we can make it more resilient and detect the _noisy neighbour_ issue.
 
-How would that look in the code? 
+How would that look in the code?
 
 ```ts
 async function handleBatch(messageBatch: RecordedMessage[], context: ProcessorContext): Promise<BatchHandlingResult> {
@@ -251,9 +251,9 @@ async function storeProcessorCheckpoint(
   const { result } = await single(
       execute.command<{ result: 0 | 1 | 2 | 3}>(
         SQL`SELECT store_processor_checkpoint(
-            ${options.processorId}, 
-            ${options.newCheckpoint}, 
-            ${options.lastProcessedCheckpoint}, 
+            ${options.processorId},
+            ${options.newCheckpoint},
+            ${options.lastProcessedCheckpoint},
             pg_current_xact_id()
         ) as result;`,
       ),
@@ -267,7 +267,7 @@ async function storeProcessorCheckpoint(
 
 As you can see, thanks to:
 - global ordering,
-- checkpoint detection, 
+- checkpoint detection,
 - storing checkpoint where our side effects will be stored,
 - transactional capabilities of our end storage,
 
@@ -275,7 +275,7 @@ We can ensure that the entire batch is processed or not. We could even optimise 
 
 We're getting by that generic idempotence check and detection of the noisy neighbour.
 
-Of course, I still believe that [idempotence check should happen on the business logic side](/pl/idempotent_command_handling/). But why not both? 
+Of course, I still believe that [idempotence check should happen on the business logic side](/pl/idempotent_command_handling/). But why not both?
 
 Being able to detect a noisy neighbour can help you automatically stop (or pause) one of the competing consumers and avoid inconsistency conflicts.
 

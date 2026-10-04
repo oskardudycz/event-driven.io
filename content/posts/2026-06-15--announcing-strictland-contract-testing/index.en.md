@@ -11,13 +11,11 @@ redirectAliases:
 
 ![cover](2026-06-15-cover.png)
 
-
 **I just released something. It's called Strictland.** And it's a contract testing library. Why did I do it?
 
 Before I go further, if you can’t wait, you can check it on:
 - GitHub - [https://github.com/event-driven-io/strictland](https://github.com/event-driven-io/strictland)
 - Maven Central - [https://github.com/event-driven-io/strictland](https://central.sonatype.com/artifact/io.event-driven/strictland)
-    
 
 **So now you already know that it’s a JVM (Java, Scala, Kotlin, etc.) Open Source library.**
 
@@ -41,9 +39,9 @@ What would you say if you saw such a test? Think about it, we’ll get back to i
 But again, why did I do it if there are mature solutions like [Pact](https://pact.io/), [Spring Cloud Contracts](https://spring.io/projects/spring-cloud-contract), or [Confluent Schema Registry](https://github.com/confluentinc/schema-registry)?
 
 If you've used consumer-driven contract testing, the usual approach is to run both the provider and the consumer, record the consumer's expectations against a mock, verify the provider against those expectations, and share those contracts through a broker.  
-  
+
 In Strictland, I took a smaller, simpler approach. It serialises the message in a standard unit test and saves the output as a snapshot file that you commit alongside your code.  
-  
+
 The test fails when the serialised shape changes, or when it contains a breaking change - up to you to specify expectations. A check confirms that an older and a newer version of the message can still read each other's data (or the other way round).
 
 **Because it's only serialisation and a file, the setup stays small:**
@@ -51,13 +49,12 @@ The test fails when the serialised shape changes, or when it contains a breaking
 - The contract is the serialised JSON committed alongside the test, so any format change appears in a normal diff and is reviewed like any other code.    
 - You write the check beside the message it covers and get the answer in the same fast feedback loop as the rest of your tests. The check uses your application's own serializer, so the snapshot is the exact bytes you ship.    
 - Strictland checks the serialised shape of a message and whether its versions stay compatible. It doesn't exercise a live exchange between running services, so it complements that kind of tooling rather than replacing it.
-    
 
 **Strictland checks the serialised shape of a message and whether its versions stay compatible.** It doesn't exercise a live exchange between running services, so it complements that kind of tooling rather than replacing it.
 
 It's not as powerful as popular tooling, but it's also much simpler to start catching our mistakes. Traditional solutions allow you to mock protocols, put a man in the middle, and even generate client code. All of that is great if you need it and have experience with it.
 
-Most of the [customers I’m helping through consultancy and training](https://event-driven.io/en/training/) aren't there yet. Setting up those tools is a lot of heavy lifting for them and adds additional complexity. And well, maybe they don’t need to be, as this approach served me well in my past projects. I always handcrafted such a tool in my projects, but finally decided to make it properly.
+Most of the [customers I’m helping through consultancy and training](/en/training/) aren't there yet. Setting up those tools is a lot of heavy lifting for them and adds additional complexity. And well, maybe they don’t need to be, as this approach served me well in my past projects. I always handcrafted such a tool in my projects, but finally decided to make it properly.
 
 ## Why such a name?
 
@@ -131,7 +128,6 @@ Strictland provides an implementation of a sensible Jackson setup: ISO-8601 date
 You can also define your own serializer if you’re using an unsupported (yet?) format or serializer type. See basic examples in:
 - [CsvMessageSerializer](https://github.com/event-driven-io/strictland/blob/main/src/jvm/src/test/java/io/eventdriven/strictland/CsvMessageSerializer.java) and its [tests](https://github.com/event-driven-io/strictland/blob/main/src/jvm/src/test/java/io/eventdriven/strictland/CsvMessageSerializerTests.java) or,
 - [SimpleBinaryMessageSerializer](https://github.com/event-driven-io/strictland/blob/main/src/jvm/src/test/java/io/eventdriven/strictland/SimpleBinaryMessageSerializer.java) and its [tests](https://github.com/event-driven-io/strictland/blob/main/src/jvm/src/test/java/io/eventdriven/strictland/SimpleBinaryMessageSerializerTests.java).
-    
 
 ## Should you use it?
 

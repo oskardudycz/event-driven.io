@@ -12,7 +12,7 @@ useDefaultLangCanonical: true
 
 I wanted to remind myself of the domain I used to know: hospitality management, to adjust my upcoming [workshop](/pl/training/#event-driven-architecture-the-light-and-the-dark-side). I selected LLM (Claude Opus) as a sparing partner. And boy, I got a loooot of details. I was swamped by them. The LLM modelled everything: marketing consent, loyalty timing, inventory management, revenue posting, regulatory submissions, data retention policies, all at the same level of detail, which buried the core checkout flow under noise, the thing I asked about.
 
-That's not much different from initial work with domain experts. When we're starting discovery, people tend to start by explaining everything they do and feel is important. Quite often, that means you'll get more domain-expert pet peeves in the surroundings than in the process descriptions. 
+That's not much different from initial work with domain experts. When we're starting discovery, people tend to start by explaining everything they do and feel is important. Quite often, that means you'll get more domain-expert pet peeves in the surroundings than in the process descriptions.
 
 You also get a lot of jargon, words that sound familiar but mean something different.
 
@@ -31,13 +31,13 @@ I researched how different tools handle the guest checkout process. I knew it, a
 - adjust loyalty points and update CRM,
 - etc.
 
-I remembered how it works, but not all the details, and I would like to double-check whether anything in the industry has changed. 
+I remembered how it works, but not all the details, and I would like to double-check whether anything in the industry has changed.
 
 I wanted to get the overall vision first, then gradually dive deeper. As mentioned, I was overwhelmed with naming like:
-- Folio, 
-- Drain Pending postings, 
-- Property, 
-- Account Receivables, 
+- Folio,
+- Drain Pending postings,
+- Property,
+- Account Receivables,
 etc.
 
 Don't get me wrong, those were valid names in these domains. Sounds plausible if you've never worked in hospitality. Sounds plausible if you have, too. So what's wrong with it?
@@ -46,29 +46,29 @@ They're valid terms, as people actually use them, but weird, as they don't tell 
 
 For instance, Property is a hotel, kind of makes sense. But Folio?
 
-This name comes from the Oracle Opera. Yes, Oracle has a system in this domain, a dominating one. At some point, authors decided to name things this way, and now 30 years later, that vocabulary is baked into how thousands of hoteliers talk about their work. "Drain pending postings" is a phrase real cashiers say. 
+This name comes from the Oracle Opera. Yes, Oracle has a system in this domain, a dominating one. At some point, authors decided to name things this way, and now 30 years later, that vocabulary is baked into how thousands of hoteliers talk about their work. "Drain pending postings" is a phrase real cashiers say.
 
 "Settle the folio" is a thing real cashiers do.
 
 The problem: none of it explains how our system should work. It only tells what current systems do.
 
-Also, when I asked about the business rules and policies, I got stuff like: 
+Also, when I asked about the business rules and policies, I got stuff like:
 
 > The system immediately posts room and tax charges for day-use reservations upon opening the Billing screen.
 
-Why are transactions such as night stay charges or taxes added when we open the billing screen? That sounds counterintuitive, but maybe it was a fair tradeoff 30 or 20 years ago for an on-premises system installed in the specific hotel (ekhm "property|). Yes, Opera had (and maybe still had) consultants, similar to SAP. They'd go to the hotel, go to the back office, log in to the server and hack stored procedures in the Oracle database to fine-tune Opera behaviour. 
+Why are transactions such as night stay charges or taxes added when we open the billing screen? That sounds counterintuitive, but maybe it was a fair tradeoff 30 or 20 years ago for an on-premises system installed in the specific hotel (ekhm "property|). Yes, Opera had (and maybe still had) consultants, similar to SAP. They'd go to the hotel, go to the back office, log in to the server and hack stored procedures in the Oracle database to fine-tune Opera behaviour.
 
 Also, is there really a "Draining Pending Postings" option before doing checkout nowadays? Maybe it is, but in modern systems, we shouldn't manually check all bills, etc., and explicitly pull them from integrated payment solutions. Nowadays, all the accommodation charges should already be recorded on the bill. The financial module continuously collects charges from payment gateways throughout the stay. There's no separate moment of "draining". The LLM invented a coordination command to match a phrase ("drain the interfaces") that real cashiers use as shorthand for "let me check that nothing's outstanding."
 
 As I asked, LLMs researched systems in this space: OPERA, Mews, Apaleo, and Cloudbeds. Each has its own vocabulary and mechanics, and the training data heavily favours OPERA because its documentation is everywhere. When I pushed back on terminology, the model would just swap in different OPERA jargon instead of actually thinking about what's modern. The blending happened invisibly, mixing vocabulary from one system with mechanics from another, all delivered with equal confidence. So ubiquitous language isn't the source of truth.
 
-**To be fair, the same happens quite often when talking to domain experts. They explain how it works now and what people do.** Quite often, they bring us [solutions instead of problems](/pl/bring_me_problems_not_solutions/). Usually, solutions are based on their experience and how they see the updated version. This can be fine as a brain dump, but it's not enough to translate it directly into the software design. 
+**To be fair, the same happens quite often when talking to domain experts. They explain how it works now and what people do.** Quite often, they bring us [solutions instead of problems](/pl/bring_me_problems_not_solutions/). Usually, solutions are based on their experience and how they see the updated version. This can be fine as a brain dump, but it's not enough to translate it directly into the software design.
 
 In Domain-Driven Design, finding and understanding the ubiquitous language is considered the most important aspect. **Yet, Ubiquitous Language is not the source of truth.** It's the way to keep our heads from exploding due to the constant split-brain situation. It's a tool to reduce cognitive load and the need for additional translation. That's why we separate domain contexts and bind them to specific departments, people, and the language they use.
 
 It's fine to start with the current state of the art. Understanding how people do their job. We need to understand, though, that what we get is a mixture of habits (both good and bad), tribal knowledge, jargon, etc. If you ask different tribes, each will tell you something different.
 
-Domain language is a cognitive tool, not gospel. LLMs compound this problem by reiterating competitor vocabulary without understanding the reasoning behind those systems, and they tend to align with whatever the prompter already believes. 
+Domain language is a cognitive tool, not gospel. LLMs compound this problem by reiterating competitor vocabulary without understanding the reasoning behind those systems, and they tend to align with whatever the prompter already believes.
 
 Domain experts also struggle to define what they want and how it should work. That's also why they hire us. It's our job to help them and to transfer those sometimes contradicting visions into working software. That's what we're learning and what we do when modelling and step-by-step shaping the working software. That's our work as engineers. We should work together to have a proper outcome. Collaborate.
 
@@ -84,7 +84,7 @@ We need to learn [how to communicate](/pl/a_few_words_on_communication/) with bu
 - Do not take others’ behaviour personally.
 - Be assertive, critical and sceptical. Also, to our own judgments.
 - Be curious about the business domain. Don't assume too much.
-- [Don't use "business won't let me" as an easy excuse](https://www.architecture-weekly.com/p/business-wont-let-me-and-other-lies).
+- [Don't use "business won't let me" as an easy excuse](/en/business-wont-let-me-and-other-lies/).
 
 For some people, that's too much. That's probably why they try to ask LLM instead of Domain Experts, hoping that we won't need to learn that, and we'll get a solution for free.
 
@@ -130,7 +130,7 @@ I see that (for unknown reasons) collaboration is not discussed anymore. Working
 
 And yes, they have all.
 
-All the same issues they would have with domain experts. 
+All the same issues they would have with domain experts.
 
 As much as we shouldn't trust domain experts blindly, but work with them, we shouldn't blindly trust LLMs. We shouldn't drop our engineering and design skills and outsource them.
 
@@ -140,12 +140,12 @@ Check also:
 - [Bring me problems, not solutions!](/pl/bring_me_problems_not_solutions/),
 - [A few words on communication](/pl/a_few_words_on_communication/),
 - [How to design software architecture pragmatically](/pl/how_to_design_software_architecture_pragmatically/),
-- [Business Won't Let Me and other lies we tell to ourselves](https://www.architecture-weekly.com/p/business-wont-let-me-and-other-lies)
+- [Business Won't Let Me and other lies we tell to ourselves](/en/business-wont-let-me-and-other-lies/)
 - [Vibing, Harness and OODA loop](/pl/vibing_harness_and_ooda_loops/),
 - [Interactive Rubber Ducking with GenAI](/pl/interactive_rubber_ducking_with_gen_ai/),
 - [The End of Coding? Wrong Question](/pl/the_end_of_coding_wrong_question/),
-- [Requiem for a 10x Engineer Dream](https://www.architecture-weekly.com/p/requiem-for-a-10x-engineer-dream),
-- [Tech Debt doesn't exist, but trade-offs do](https://www.architecture-weekly.com/p/tech-debt-doesnt-exist-but-trade)
+- [Requiem for a 10x Engineer Dream](/en/requiem-for-a-10x-engineer-dream/),
+- [Tech Debt doesn't exist, but trade-offs do](/en/tech-debt-doesnt-exist-but-trade/)
 
 Cheers!
 

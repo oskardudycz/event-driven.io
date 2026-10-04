@@ -1,0 +1,10 @@
+{
+  "url": "https://www.architecture-weekly.com/p/webinar-21-michael-drogalis-building",
+  "date": "2024-08-28",
+  "assets": {
+    "https://substack-video.s3.amazonaws.com/video_upload/post/148235681/24e75a8a-b325-4e9c-9348-2e0d7b58fe76/transcoded-36899.png": "2024-08-28-cover.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/6063dbe3-3683-42aa-aede-555bf331e84b_1280x1280.png": "image-2.png"
+  },
+  "embeds": 1,
+  "youtubeVideo": "JWoMWF4nVNU"
+}

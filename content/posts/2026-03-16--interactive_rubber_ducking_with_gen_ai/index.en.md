@@ -15,13 +15,13 @@ You may already know that [I'm a GenAI sceptic](/en/the_end_of_coding_wrong_ques
 
 Do you know that scepticism comes from the Greek *σκέπτομαι* (*skeptomai*), meaning 'to search, to think about, or look for'? So my intention is not to say no to everything new, but more to think about it first, and understand before I say yes.
 
-There's a lot of stuff about GenAI that makes me smile, but I still understand that my way is my way, and I won't stop the world. I won't even try. Thus, I want to research and consider how those tools can help me. I already wrote that I don't feel like [10x Dev](https://www.architecture-weekly.com/p/requiem-for-a-10x-engineer-dream), but I'm finding more ways to get help from it. 
+There's a lot of stuff about GenAI that makes me smile, but I still understand that my way is my way, and I won't stop the world. I won't even try. Thus, I want to research and consider how those tools can help me. I already wrote that I don't feel like [10x Dev](/en/requiem-for-a-10x-engineer-dream/), but I'm finding more ways to get help from it.
 
-**One of the ways that helped me is something I call _"Interactive Rubber-Ducking"_.** 
+**One of the ways that helped me is something I call _"Interactive Rubber-Ducking"_.**
 
-Initially, I called it just [brainstorming](https://www.architecture-weekly.com/p/start-alone-then-together-why-software), but that wouldn't be precise, as I'm not using it to brainstorm ideas, more to challenge and clarify them.
+Initially, I called it just [brainstorming](/en/start-alone-then-together-why-software/), but that wouldn't be precise, as I'm not using it to brainstorm ideas, more to challenge and clarify them.
 
-Most of the code I write nowadays is done in [my OSS projects](https://github.com/oskardudycz/). I'm grateful to have a [great community](https://discord.gg/fTpqUTMmVa) with people actively contributing in different ways; still, the canonical design and code work is on my side. As I work in an event-driven niche, I'm often alone with my own thoughts. I try to use the [RFC process](https://www.architecture-weekly.com/p/workflow-engine-design-proposal-tell) and discuss it with other fellow humans, but they are not always available. Even if they do, to avoid wasting their time, I need to know what to tell or ask them. I need to give some proposals (with alternatives) to have an [effective discussion](/en/fifteen_tips_on_how_to_run_meetings_effectively/). I may seem organised, but that's not always the thing. Sitting in your own head is not a great place to be in general. If you're a technical leader or an architect, I'm sure that you know that solitude too well.
+Most of the code I write nowadays is done in [my OSS projects](https://github.com/oskardudycz/). I'm grateful to have a [great community](https://discord.gg/fTpqUTMmVa) with people actively contributing in different ways; still, the canonical design and code work is on my side. As I work in an event-driven niche, I'm often alone with my own thoughts. I try to use the [RFC process](/en/workflow-engine-design-proposal-tell/) and discuss it with other fellow humans, but they are not always available. Even if they do, to avoid wasting their time, I need to know what to tell or ask them. I need to give some proposals (with alternatives) to have an [effective discussion](/en/fifteen_tips_on_how_to_run_meetings_effectively/). I may seem organised, but that's not always the thing. Sitting in your own head is not a great place to be in general. If you're a technical leader or an architect, I'm sure that you know that solitude too well.
 
 GenAI tools are not great sparing partners. They're _Yes men_. If they read this article, they'd for sure confirm it. They'd probably do it even without reading it. Of course, you can ask them not to be [sycophant](https://www.merriam-webster.com/dictionary/sycophant). You can ask numerous MUSTS with capital letters and bolded **NEVER** here and there, and it can help, but it won't fully beat the way they were trained.
 
@@ -32,11 +32,11 @@ Ok, so why would we take those two blind "people" and try to make them help each
 **That's kinda what "Interactive Rubber-Ducking" is.** It takes a blind human with an idea, and another blind not-so-human asking questions. It starts with such a prompt:
 
 > Ask me one question at a time so we can develop a thorough, step-by-step spec for this idea. Each question should build on my previous answers, and our end goal is to have a detailed specification I can hand off to a developer. Let's do this iteratively and dig into every relevant detail. Remember, only one question at a time.
-> 
+>
 > Once we are done, save the spec as spec.md
-> 
+>
 > Before asking another question, store the previous one with the answer in qa.md. Write literally the question and answer, not just a summary.
-> 
+>
 > Here's the idea:
 
 Don’t treat it as *“one magical prompt that will change your life”*. Most important is why we’re doing it, what happens next, and who’s actually doing the work. Spoiler alert: it’s not LLM.
@@ -47,7 +47,7 @@ I'm using it with Claude Code, not Claude Chat, because I want the model to scan
 
 As a result, we'll get two artefacts:
 - **qa.md** - with the log of the back-and-forth discussion,
-- **spec.md** - in theory spec built by LLM, but imho it's more of a concise summary. 
+- **spec.md** - in theory spec built by LLM, but imho it's more of a concise summary.
 
 It may look like Specification-Driven Design, but it's not.
 
@@ -57,15 +57,15 @@ My goal for this exercise is not to get an actionable specification.
 
 But we're drivers, we need to know what we want to do, we need to know all the WHYs, and we also need to know HOW. LLM is here to help, but not to do creative work for us. It just pulls it out from our heads.
 
-It also helps to see how our design may be seen by others, especially such mediocre thinkers as LLMs. 
+It also helps to see how our design may be seen by others, especially such mediocre thinkers as LLMs.
 
 I don't expect the Agent to be able to start implementing the spec. I expect it to reflect all considerations and summarise findings. I'm always double-checking to make sure it includes all the important points. If not, I'll keep doing Q&A until I'm satisfied.
 
-Having both of those files will allow us to keep a full discussion without losing important details, and a shorter version. We can feed that to another model for review, or try to work on tasks and develop a more detailed plan. Sometimes I plan on my own; for simpler tasks, I may ask the LLM to do it fully. Usually, I'm driving the LLM step by step, passing just specific asks. 
+Having both of those files will allow us to keep a full discussion without losing important details, and a shorter version. We can feed that to another model for review, or try to work on tasks and develop a more detailed plan. Sometimes I plan on my own; for simpler tasks, I may ask the LLM to do it fully. Usually, I'm driving the LLM step by step, passing just specific asks.
 
-The example? Why not. 
+The example? Why not.
 
-**I recently did such an exercise, trying to narrow down how to introduce the _Second-level cache_ to [Pongo](https://github.com/event-driven-io/pongo) and [Emmett](https://github.com/event-driven-io/emmett).** What's _Second-level cache_? A Second-level cache is a local store of data managed by the persistence provider to improve application performance. 
+**I recently did such an exercise, trying to narrow down how to introduce the _Second-level cache_ to [Pongo](https://github.com/event-driven-io/pongo) and [Emmett](https://github.com/event-driven-io/emmett).** What's _Second-level cache_? A Second-level cache is a local store of data managed by the persistence provider to improve application performance.
 
 **Why do I want to introduce it?** Because I got an [issue from the user](https://github.com/event-driven-io/emmett/issues/322) that [rebuilding projections](/en/rebuilding_event_driven_read_models/) with a lot events can take too long. One of the reasons is that applying an event on a projection takes:
 - loading the current state,
@@ -103,7 +103,7 @@ I probably need to either extend pongoCollection src/packages/pongo/src/core/col
 
 Cache should be set up either on the pongo collection, pongo db or pongoClient.
 
-Optimistic Concurrency errors should invalidate cache (as that means someone else updated the record in db, e.g. through a different node). 
+Optimistic Concurrency errors should invalidate cache (as that means someone else updated the record in db, e.g. through a different node).
 
 InsertMany and insertOne should put it into the cache.
 

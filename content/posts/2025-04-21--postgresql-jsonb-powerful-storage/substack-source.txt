@@ -1,0 +1,8 @@
+{
+  "url": "https://www.architecture-weekly.com/p/postgresql-jsonb-powerful-storage",
+  "date": "2025-04-21",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/eb84a961-9164-496e-9cfa-cc556740b336_1024x868.png": "2025-04-21-cover.png"
+  },
+  "embeds": 1
+}

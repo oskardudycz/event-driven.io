@@ -837,5 +837,11 @@
       "type": "newsletter",
       "status": "missing"
     }
-  ]
+  ],
+  "imported": {
+    "completedOn": "2026-10-04",
+    "posts": 63,
+    "images": 145,
+    "embeds": 32
+  }
 }

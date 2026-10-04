@@ -1,0 +1,9 @@
+{
+  "url": "https://www.architecture-weekly.com/p/secondary-indexes-and-the-specialized",
+  "date": "2025-06-16",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/9cbe75ee-9b41-4ff7-a0ef-0a7d300491c6_1051x481.png": "2025-06-16-cover.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/12ef25e5-9157-4319-a2fc-023d643fa456_800x346.png": "image-2.png"
+  },
+  "embeds": 0
+}

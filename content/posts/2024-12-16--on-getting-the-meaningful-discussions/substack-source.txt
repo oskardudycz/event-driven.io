@@ -1,0 +1,8 @@
+{
+  "url": "https://www.architecture-weekly.com/p/on-getting-the-meaningful-discussions",
+  "date": "2024-12-16",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/f73b3750-f037-4cad-9679-b9c3e29c84bb_800x532.jpeg": "2024-12-16-cover.jpg"
+  },
+  "embeds": 0
+}

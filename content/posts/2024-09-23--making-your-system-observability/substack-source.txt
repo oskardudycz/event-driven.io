@@ -1,0 +1,9 @@
+{
+  "url": "https://www.architecture-weekly.com/p/making-your-system-observability",
+  "date": "2024-09-23",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/c63857e0-60f0-48f8-927a-8c331b9d7338_1000x600.png": "2024-09-23-cover.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/28c0064d-c994-4dc1-9ca6-173a09bd8090_2484x1440.jpeg": "image-2.jpg"
+  },
+  "embeds": 1
+}

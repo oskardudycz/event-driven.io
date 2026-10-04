@@ -23,3 +23,26 @@ test("Netlify output sends the referrer YouTube requires and keeps other headers
     assert.match(headers, /Content-Type: text\/plain; charset=UTF-8/);
   } finally { await fs.rm(directory, { recursive: true, force: true }); }
 });
+
+test('Gatsby video plugin renders bare IDs and preserves URL timestamps and titles', () => {
+  const render = require('../plugins/gatsby-remark-video');
+  const remark = config.plugins.find(p => p.resolve === 'gatsby-transformer-remark');
+  const video = remark.options.plugins.find(p => typeof p === 'object' && p.resolve.includes('gatsby-remark-video'));
+  const ast = { type: 'root', children: [
+    { type: 'inlineCode', value: 'youtube: sQbkUl7-z_U' },
+    { type: 'inlineCode', value: 'youtube: [A titled video](https://www.youtube.com/watch?v=sQbkUl7-z_U&t=1m30s&end=120)' },
+    { type: 'inlineCode', value: 'youtube: [Another position](https://www.youtube-nocookie.com/embed/sQbkUl7-z_U?start=30)' },
+  ] };
+  render({ markdownAST: ast }, video.options);
+  for (const node of ast.children) {
+    assert.equal(node.type, 'html');
+    assert.match(node.value, /youtube-nocookie\.com\/embed\/sQbkUl7-z_U/);
+    assert.match(node.value, /referrerpolicy="strict-origin-when-cross-origin"/);
+    assert.match(node.value, /loading="lazy"/);
+    assert.doesNotMatch(node.value, /Error:|sandbox=/);
+  }
+  assert.match(ast.children[1].value, /start=90/);
+  assert.match(ast.children[1].value, /end=120/);
+  assert.match(ast.children[1].value, /title="A titled video"/);
+  assert.match(ast.children[2].value, /start=30/);
+});

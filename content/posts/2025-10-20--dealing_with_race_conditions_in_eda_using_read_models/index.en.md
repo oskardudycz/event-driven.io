@@ -20,29 +20,29 @@ redirectAliases:
 
 ![](tyson.png)
 
-We realise that our BBC Architecture is just a Box-Box Cylinder on paper; in reality, things get messy. We go from a 2D layout to a 3D or even a 4D view. 
+We realise that our BBC Architecture is just a Box-Box Cylinder on paper; in reality, things get messy. We go from a 2D layout to a 3D or even a 4D view.
 
 We see that our business processes are not so linear and predictable as we draw them. Of course, we have somewhere in the back of our mind that subprocesses can go in parallel, but somehow our tests go down the happy path. Then bugs and incidents come in.
 
-We learn the hard way that real processes have delays; they run in parallel. For instance, when you process a payment, fraud checking, risk assessment, and merchant validation happen simultaneously. That's efficiency, not a flaw. 
+We learn the hard way that real processes have delays; they run in parallel. For instance, when you process a payment, fraud checking, risk assessment, and merchant validation happen simultaneously. That's efficiency, not a flaw.
 
 And the sad part is that it's our role to provide this efficiency. Yelling at event-driven clouds won't help.
 
 ## Race Conditions in EDA
 
-When we distribute our systems, we're getting better isolation of failure, we can deploy changes at a different pace, but... But we also get communication going at various paces. We can no longer get a unified view of the business actions in the order of appearance. Now each service has its own linearity. 
+When we distribute our systems, we're getting better isolation of failure, we can deploy changes at a different pace, but... But we also get communication going at various paces. We can no longer get a unified view of the business actions in the order of appearance. Now each service has its own linearity.
 
 To integrate services predictably, we're using messaging tools. They provide us with durability, retries when the recipient is unavailable, and ensure that information flows and data are delivered effectively. Still, they're not magical creatures; they have their limits. We can't cheat physics.
 
-Between one service and the other, we're putting in a queue. That's the place where we can achieve an ordering guarantee. Typically, one queue, one consumer means that we can achieve ordering. Still, not all tools are giving us that. 
+Between one service and the other, we're putting in a queue. That's the place where we can achieve an ordering guarantee. Typically, one queue, one consumer means that we can achieve ordering. Still, not all tools are giving us that.
 
 Out of order issues may happen when the RabbitMQ queue has multiple consumers racing for messages. When we add consumers, we get better throughput, but we're risking ordering issues.
 
-Out of order issues may also happen when you're using tools like SQS or Google PubSub, which only guarantee best-effort ordering. 
+Out of order issues may also happen when you're using tools like SQS or Google PubSub, which only guarantee best-effort ordering.
 
 Or when your outbox pattern deletes processed messages and loses sequence.
 
-Or when network delays shuffle carefully ordered streams. 
+Or when network delays shuffle carefully ordered streams.
 
 It's safe to say that you won't get any ordering guarantee between different queues. Since queues represent communication flows between modules, we should not assume strict ordering in cross-module communication.
 
@@ -60,17 +60,17 @@ Those events that we store/publish are facts for us, or at least represent the c
 
 **The events from external systems are rumours at best. We need to interpret them to make them (our) facts.**
 
-Ok, but what can we do? Sit and cry? 
+Ok, but what can we do? Sit and cry?
 
 Of course, we can do more. We'll discuss today a simple technique with Read Models that can take you far enough.
 
-Let's say that you're using Event Sourcing in your system. You take all the messages coming from other systems, and you store them in your event store. 
+Let's say that you're using Event Sourcing in your system. You take all the messages coming from other systems, and you store them in your event store.
 
 Event Sourcing assumes you can rebuild state by replaying events in sequence. When _FraudScoreCalculated_ arrives before _PaymentInitiated_, the payment doesn't exist. You can't apply a fraud score to nothing. You realise that when your carefully designed domain model throws exceptions. This should never happen, aye?
 
 This isn't specific to Event Sourcing. Even if you don't use it but just update read models directly from events, you have the same problem. Your read model update handler for _FraudScoreCalculated_ looks for a payment document to update. No document exists. The update fails.
 
-Such issues are a recurring theme in my consulting, as they are a common concern for my customers. My advice is usually: Don't try to fight them. 
+Such issues are a recurring theme in my consulting, as they are a common concern for my customers. My advice is usually: Don't try to fight them.
 
 Store data as it arrives and "denoise" on your side. Interpret them and save your own "facts". Acknowledge the need for a [split between internal and external events](/en/internal_external_events/). Use an Anti-Corruption Layer (ACL) pattern to protect from external chaos.
 
@@ -80,7 +80,7 @@ Read models can be used as such an ACL. A read model document can have a partial
 
 Let's explore how to apply this in practice using our payment orchestration scenario. Let's say we're gathering information about the payment verification process, displaying its state, and performing follow-up operations once the process is complete.
 
-When we trigger payment, we need to correlate data from the external payment gateway with our own modules, which calculate fraud scores, check limits, and assess risk. 
+When we trigger payment, we need to correlate data from the external payment gateway with our own modules, which calculate fraud scores, check limits, and assess risk.
 
 We could define events using TypeScript, as:
 
@@ -159,7 +159,7 @@ Let's say the fraud system flagged the payment as high-risk before it even exist
 10:15:32.234 - MerchantLimitsChecked (within limits)
 ```
 
-If we assume that things go as on the whiteboard, and handlers can't process events for non-existent payments, then we'll be the ones who get punched in the mouth by reality. They will fail to find documents to update. 
+If we assume that things go as on the whiteboard, and handlers can't process events for non-existent payments, then we'll be the ones who get punched in the mouth by reality. They will fail to find documents to update.
 
 The first step is to embrace that we have a problem. Actually, it's not a problem, but rather a challenge - a scenario we just need to support.
 
@@ -232,26 +232,26 @@ function evolve (
   }
 
   switch (event.type) {
-    case "PaymentInitiated": 
+    case "PaymentInitiated":
       return onPaymentInitiated(current, event);
-    case "FraudScoreCalculated": 
+    case "FraudScoreCalculated":
       return onFraudScoreCalculated(current, event);
-    case "RiskAssessmentCompleted": 
+    case "RiskAssessmentCompleted":
       return onRiskAssessmentCompleted(current, event);
-    case "MerchantLimitsChecked": 
+    case "MerchantLimitsChecked":
       return onMerchantLimitsChecked(current, event);
-    case "PaymentCompleted": 
+    case "PaymentCompleted":
       return onPaymentCompleted(current, event);
-    case "PaymentDeclined": 
+    case "PaymentDeclined":
       return onPaymentDeclined(current, event);
 };
 
-const initialState: PaymentVerification = { 
-  paymentId: undefined!, 
-  status: 'unknown', 
-  completionPercentage: 0, 
-  lastUpdated: new Date(), 
-  dataQuality: 'partial' 
+const initialState: PaymentVerification = {
+  paymentId: undefined!,
+  status: 'unknown',
+  completionPercentage: 0,
+  lastUpdated: new Date(),
+  dataQuality: 'partial'
 };
 
 // Using Emmett it could be defined as
@@ -347,8 +347,8 @@ function onPaymentCompleted(
   if (current.decision)
     return current;
 
-  const decision = 
-    current.fraudAssessment?.riskLevel === 'high' 
+  const decision =
+    current.fraudAssessment?.riskLevel === 'high'
       ? {
         approval: 'declined',
         reason: `Approval attempted but overridden by fraud (score: ${current.fraudAssessment.score})`,
@@ -418,7 +418,7 @@ function onMerchantLimitsChecked(
           reason: "Verified",
           decidedAt: event.checkedAt,
         };
-        
+
   return {
     ...updated,
     status: decision.approval,
@@ -435,17 +435,17 @@ I'm sure you've used or seen Anti-Corruption Layers. They're usually places wher
 
 Yet, we should not push it to the limits, as we'll end up with an unmaintainable beast. With the last example, we've reached or even passed the limits of what projection should be responsible for. The projection should just interpret upcoming information and store the result. It should not make decisions. Business logic is responsible for making decisions.
 
-What we actually ended up with in the last step is a form of [process manager, or workflow](https://www.architecture-weekly.com/p/workflow-engine-design-proposal-tell), so a state machine that listens to events, gets its current state and makes further decisions. And what's the best way to inform the outside world about making new decisions? Well, producing a new event.
+What we actually ended up with in the last step is a form of [process manager, or workflow](/en/workflow-engine-design-proposal-tell/), so a state machine that listens to events, gets its current state and makes further decisions. And what's the best way to inform the outside world about making new decisions? Well, producing a new event.
 
 We could define an event as:
 
 ```typescript
 type PaymentVerificationCompleted = {
   type: "PaymentVerificationCompleted";
-  data: { 
+  data: {
     approval: "approved" | " declined";
     reason: string;
-    decidedAt: Date; 
+    decidedAt: Date;
   };
 }
 ```
@@ -608,17 +608,17 @@ Build your local models and live with partial state. Process events in any order
 **If you're dealing with such issues, I'm happy to help you through consulting or mentoring. [Contact me](mailto:oskar@event-driven.io) and we'll find a way to unblock you!**
 
 Read also more in:
-- [The Order of Things: Why You Can't Have Both Speed and Ordering in Distributed Systems](https://www.architecture-weekly.com/p/the-order-of-things-why-you-cant),
+- [The Order of Things: Why You Can't Have Both Speed and Ordering in Distributed Systems](/en/the-order-of-things-why-you-cant/),
 - [Internal and external events, or how to design event-driven API](/en/internal_external_events/),
 - [Dealing with Eventual Consistency and Idempotency in MongoDB projections](/en/simple_trick_for_idempotency_handling_in_elastic_search_readm_model/)
 - [Saga and Process Manager - distributed processes in practice](/en/saga_process_manager_distributed_transactions/),
-- [Predictable Identifiers: Enabling True Module Autonomy in Distributed Systems](https://www.architecture-weekly.com/p/predictable-identifiers-enabling)
-- [Dealing with Eventual Consistency, and Causal Consistency using Predictable Identifiers](https://www.architecture-weekly.com/p/dealing-with-eventual-consistency),
+- [Predictable Identifiers: Enabling True Module Autonomy in Distributed Systems](/en/predictable-identifiers-enabling/)
+- [Dealing with Eventual Consistency, and Causal Consistency using Predictable Identifiers](/en/dealing-with-eventual-consistency/),
 - [Event-driven distributed processes by example](/en/event_driven_distributed_processes_by_example/),
-- [Workflow Engine design proposal, tell me your thoughts](https://www.architecture-weekly.com/p/workflow-engine-design-proposal-tell),
+- [Workflow Engine design proposal, tell me your thoughts](/en/workflow-engine-design-proposal-tell/),
 - [How TypeScript can help in modelling business workflows](/en/how_to_have_fun_with_typescript_and_workflow/),
 - [Oops I did it again, or how to update past data in Event Sourcing](/en/how_to_update_past_data_in_event_sourcing/),
-- [Event transformations, a tool to keep our processes loosely coupled](/en/event_transformations_and_loosely_coupling/), 
+- [Event transformations, a tool to keep our processes loosely coupled](/en/event_transformations_and_loosely_coupling/),
 - [Testing asynchronous processes with a little help from .NET Channels](/en/testing_asynchronous_processes_with_a_little_help_from_dotnet_channels/).
 
 Cheers!

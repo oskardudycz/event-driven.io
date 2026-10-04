@@ -10,7 +10,7 @@ useDefaultLangCanonical: true
 
 Looking at resources from the Internet, you may conclude that snapshots are an essential part of the Event Sourcing system. It may be tempting to read the current state from a single record instead of multiple events. We could store it separate database in parallel to appending a business event. You cannot deny that reading a single entry is faster than reading more of them, right?
 
-In the [previous article](https://www.eventstore.com/blog/snapshots-in-event-sourcing), I explained that as inviting as it is, we should treat snapshots as a technical optimisation. As with all optimisations, if they're premature they may create more issues than they solve.
+In the [previous article](/en/snapshots-in-event-sourcing/), I explained that as inviting as it is, we should treat snapshots as a technical optimisation. As with all optimisations, if they're premature they may create more issues than they solve.
 
 Event Sourcing brings a temporal aspect to the modelling. The size of data grows with each event. Still, that doesn't have to lead to performance issues. Event Stores can handle a vast number of streams. The most important is to keep them short-lived. You can achieve that by using the patterns like _"Complete the Books"_. For example, instead of keeping the whole history of transactions in a single stream, you can keep them in streams partitioned by month or by day. Hence, snapshots can be not needed as performance may be good enough. Before applying an optimisation, we should always gather the expected metrics and make the benchmarks. Then we can decide if we need to optimise.
 
@@ -134,7 +134,7 @@ However, let's leave it for now and ignore read-only syntax for brevity. I don't
 
 * * *
 
-Let's take this from the [previous article](https://www.eventstore.com/blog/snapshots-in-event-sourcing): a cash register domain. We modelled our stream as all the events (e.g. transactions) registered for the cash register since it was placed at the workstation. We'll use snapshots to tactically resolve performance issues related to loading streams with thousands of events.
+Let's take this from the [previous article](/en/snapshots-in-event-sourcing/): a cash register domain. We modelled our stream as all the events (e.g. transactions) registered for the cash register since it was placed at the workstation. We'll use snapshots to tactically resolve performance issues related to loading streams with thousands of events.
 
 With that, we can define the Cash Register entity and its snapshot event type (`CashRegisterSnapshoted`) as:
 
@@ -957,7 +957,7 @@ We can also try strategies like caching the current stream state. We can apply e
 
 ## When to do snapshots?
 
-I described the popular tactics in the [previous article](https://www.eventstore.com/blog/snapshots-in-event-sourcing). Let's have a look at them once again.
+I described the popular tactics in the [previous article](/en/snapshots-in-event-sourcing/). Let's have a look at them once again.
 
 1.  **Snapshot after each event.** That's the most significant optimisation for the reads we can do. We're loading the least amount of events. However, this is also the worst for writes. We can use this tactic both for command handling and subscriptions. There is no need to check if we should do a snapshot, as this happens every time.
     

@@ -1,0 +1,8 @@
+{
+  "url": "https://www.architecture-weekly.com/p/show-me-the-money-practically-navigating",
+  "date": "2024-09-09",
+  "assets": {
+    "https://substackcdn.com/image/youtube/w_728,c_limit/IpwSXWq1wwU": "2024-09-09-cover.jpg"
+  },
+  "embeds": 2
+}

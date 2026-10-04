@@ -1,0 +1,9 @@
+{
+  "url": "https://www.architecture-weekly.com/p/workflow-engine-design-proposal-tell",
+  "date": "2025-07-28",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/309f0fbc-3700-4929-a13c-31e210dec0af_1034x493.png": "2025-07-28-cover.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/e1ce870a-3fe3-45b9-98f6-418245545a9a_1119x443.png": "image-2.png"
+  },
+  "embeds": 0
+}

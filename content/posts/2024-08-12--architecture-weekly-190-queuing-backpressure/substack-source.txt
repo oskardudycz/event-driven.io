@@ -1,0 +1,20 @@
+{
+  "url": "https://www.architecture-weekly.com/p/architecture-weekly-190-queuing-backpressure",
+  "date": "2024-08-12",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/0ce3867f-3e0a-4dc8-98e1-095a389045f5_602x398.png": "2024-08-12-cover.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/a190aeaa-2b60-47bf-9e5f-c165e62c0ea0_1106x1306.png": "image-2.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/e020f9e6-44b7-43af-b1e1-fa1517cf4c3d_1416x2116.png": "image-3.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/df4fcf01-56fd-4341-a1b9-1dbf8b79d85e_1296x1690.png": "image-4.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/08b099e3-925e-4473-ba6b-155937d86532_692x488.png": "image-5.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/078855ff-cb06-4637-9047-e28e70a4d156_1210x1008.png": "image-6.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/9888a00e-4c18-4daa-97a4-42e87270387f_1262x1902.png": "image-7.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/bb95420d-4cb7-4324-abfa-723a7e413c22_882x412.png": "image-8.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/24d3caed-3b9b-451d-b967-2c83a5811031_1588x1136.png": "image-9.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/dcae8c11-f5e3-4843-bcb8-7369475bb759_1192x796.png": "image-10.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/708e7a48-06a7-4792-bc93-b503c01cd5f6_1624x2584.png": "image-11.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/76d1213f-4693-4814-b99a-68a6e91d4458_1588x754.png": "image-12.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/329ec978-064a-4d17-8b0b-b3ce056cb12d_1416x1690.png": "image-13.png"
+  },
+  "embeds": 0
+}

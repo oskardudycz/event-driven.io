@@ -1,0 +1,12 @@
+{
+  "url": "https://www.architecture-weekly.com/p/fractal-architecture-cognitive-load",
+  "date": "2026-08-17",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/34f66f2e-036b-41cc-b8cf-06c3ee9bfe3a_1600x900.jpeg": "2026-08-17-cover.jpg",
+    "https://substack-post-media.s3.amazonaws.com/public/images/57be7570-4a1b-4c01-8d8a-d48867636726_1280x720.jpeg": "image-2.jpg",
+    "https://substack-post-media.s3.amazonaws.com/public/images/850bbf24-247f-4bb2-918f-6d05b2f0a36c_772x567.jpeg": "image-3.jpg",
+    "https://substack-post-media.s3.amazonaws.com/public/images/91ecdd80-54f3-454d-af60-db989bfa9cd1_397x471.jpeg": "image-4.jpg",
+    "https://substack-post-media.s3.amazonaws.com/public/images/77827d89-f472-4607-bab2-6b15765780e1_480x270.gif": "image-5.gif"
+  },
+  "embeds": 3
+}

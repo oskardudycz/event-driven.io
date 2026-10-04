@@ -44,7 +44,7 @@ With all this generated code, specs, and whatever else you get from Genie, you�
 
 I’m all for choosing a boring tech stack. As a default choice, the issue is whether that’s the only choice or if we’re making our solution simplistic instead of simple. Or complicated instead of complex.
 
-LLM training is as biased as the people who trained it, through weights, training data and whatever tuning sits on top. Same with the harness, or even more, as it’s the code someone put there. [I wrote about it some time ago in the pre-LLM AI era.](https://event-driven.io/en/computer_says_no_we_may_have_an_issue_with_ai_soon/)
+LLM training is as biased as the people who trained it, through weights, training data and whatever tuning sits on top. Same with the harness, or even more, as it’s the code someone put there. [I wrote about it some time ago in the pre-LLM AI era.](/en/computer_says_no_we_may_have_an_issue_with_ai_soon/)
 
 GenAI tools are statistical parrots; they repeat the most probable answer, which most of the time means either mediocre or good, decided by the person who set the weights during training. Training is always subjective. If you ship one default to everybody, you tune it for the widest audience, which lands in roughly the same spot.
 
@@ -54,22 +54,21 @@ With GenAI tooling we’re not only getting data and ideas on how to solve our d
 
 And now the question is: who’s putting the leash? Are we on our chosen design to ensure it’s as we want. Or is the GenAI harness putting the leash on us to provide the design it’s capable of or fine-tuned for?
 
-[I wrote about my vision of the harness](https://www.architecture-weekly.com/p/vibing-harness-and-ooda-loop). I see it more as a way to ensure our process is reproducible and follows our intention: tests, automation, traces, a setup. We design it to be able to iterate fast, but not just for going fast, but to get quickly feedback loop and validate our assumptions. Going fast, in my opinion, shouldn’t be ever a goal on it’s own.
+[I wrote about my vision of the harness](/en/vibing_harness_and_ooda_loops/). I see it more as a way to ensure our process is reproducible and follows our intention: tests, automation, traces, a setup. We design it to be able to iterate fast, but not just for going fast, but to get quickly feedback loop and validate our assumptions. Going fast, in my opinion, shouldn’t be ever a goal on it’s own.
 
 The vendor harness is a different animal. It’s created by vendor with the masses in mind. It has its own system prompt and tool definitions; it decides what gets pulled into context and what doesn’t, when the agent decides it’s done, and whether it asks you something or just guesses. It reflects the vision of authors on how the process look like. It’s not optimised for our approach; we need to fit into it if we want to get the benefit. Just like with application frameworks: we can benefit as long as our approach aligns with the framework’s author's vision; otherwise, we’ll struggle by not doing things idiomatically. The challenge with LLMs is that we don’t necessarily know the idioms, since big vendors aren't sharing them. They only provide guides as they see us working with their tools. And those guides don’t have to be optimised for doing things right, but for using those tools more. And we never know, as internals are hidden.
 
 So, we don’t know the weights or vendors training data; we don’t know how those harnesses work internally, and even if we did, they could change at any time. Between one release and the next, the tool making decisions inside our workflow can start behaving differently, and you won’t necessarily be told.
 
-**I’m not saying to drop using them. On my own I’m using those tools everyday, with mixed results.** Till this day what works best for me is the process I described in [Interactive Rubber Ducking with GenAI](https://www.architecture-weekly.com/p/interactive-rubber-ducking-with-genai):
+**I’m not saying to drop using them. On my own I’m using those tools everyday, with mixed results.** Till this day what works best for me is the process I described in [Interactive Rubber Ducking with GenAI](/en/interactive_rubber_ducking_with_gen_ai/):
 
 -   I’m using GenAI tool to ask me questions about my idea,
-    
+
 -   Then letting me answer and make decision without making them for me,
-    
+
 -   Then summarising into spec, that I work on,
-    
+
 -   Doing the work on my direction and review.
-    
 
 None of the workflow, automated multiagents etc. didn’t work for me in a proper, reliable way.
 
@@ -93,15 +92,14 @@ Oskar
 
 p.s. You may be also interested on my other articles on GenAI
 
--   [Vibing, Harness and OODA loop](https://www.architecture-weekly.com/p/vibing-harness-and-ooda-loop)
-    
--   [Requiem for a 10x Engineer Dream](https://www.architecture-weekly.com/p/requiem-for-a-10x-engineer-dream)
-    
--   [The End of Coding? Wrong Question](https://event-driven.io/en/the_end_of_coding_wrong_question/)
-    
--   [Interactive Rubber Ducking with GenAI](https://www.architecture-weekly.com/p/interactive-rubber-ducking-with-genai)
-    
--   [Computer says no! Why we might have an issue with Artificial Intelligence soon](https://event-driven.io/en/computer_says_no_we_may_have_an_issue_with_ai_soon/)
-    
+-   [Vibing, Harness and OODA loop](/en/vibing_harness_and_ooda_loops/)
+
+-   [Requiem for a 10x Engineer Dream](/en/requiem-for-a-10x-engineer-dream/)
+
+-   [The End of Coding? Wrong Question](/en/the_end_of_coding_wrong_question/)
+
+-   [Interactive Rubber Ducking with GenAI](/en/interactive_rubber_ducking_with_gen_ai/)
+
+-   [Computer says no! Why we might have an issue with Artificial Intelligence soon](/en/computer_says_no_we_may_have_an_issue_with_ai_soon/)
 
 p.s. **Ukraine is still under brutal Russian invasion. A lot of Ukrainian people are hurt, without shelter and need help.** You can help in various ways, for instance, directly helping refugees, spreading awareness, putting pressure on your local government or companies. You can also support Ukraine by donating e.g. to [Red Cross](https://www.icrc.org/pl/donate/ukraine), [Ukraine humanitarian organisation](https://savelife.in.ua/pl/donate/) or [donate Ambulances for Ukraine](https://www.gofundme.com/f/help-to-save-the-lives-of-civilians-in-a-war-zone).

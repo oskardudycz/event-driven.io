@@ -1,0 +1,9 @@
+{
+  "url": "https://www.architecture-weekly.com/p/killer-metrics-or-why-you-should",
+  "date": "2025-06-02",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/3a3a0801-5ce2-43c1-a728-1153b34c5ba7_833x500.jpeg": "2025-06-02-cover.jpg",
+    "https://substack-post-media.s3.amazonaws.com/public/images/06bd44c6-9d08-4ca0-bd7b-7395ad9f895d_220x220.gif": "image-2.gif"
+  },
+  "embeds": 0
+}

@@ -1,0 +1,12 @@
+{
+  "url": "https://www.architecture-weekly.com/p/react-query-a-solution-for-frontend",
+  "date": "2025-02-03",
+  "assets": {
+    "https://substack-video.s3.amazonaws.com/video_upload/post/156094205/897d331c-2111-4368-9b12-dfd3eec585ef/transcoded-00001.png": "2025-02-03-cover.png"
+  },
+  "embeds": 2,
+  "youtubeVideo": "MLO08iaRvBk",
+  "recordingEmbeds": {
+    "https://www.architecture-weekly.com/p/frontent-architecture-backend-architecture": "EXj9TTJQwNc"
+  }
+}

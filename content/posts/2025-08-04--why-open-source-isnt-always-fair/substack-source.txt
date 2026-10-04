@@ -1,0 +1,10 @@
+{
+  "url": "https://www.architecture-weekly.com/p/why-open-source-isnt-always-fair",
+  "date": "2025-08-04",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/44ff370e-c7a6-461a-b339-46ad76395ce7_773x370.jpeg": "2025-08-04-cover.jpg",
+    "https://substack-post-media.s3.amazonaws.com/public/images/6cd325b2-baf0-4c6b-8509-7e3e887c01fa_385x489.png": "image-2.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/32fdabf4-8e67-4e45-949e-495e9a74418c_1013x524.png": "image-3.png"
+  },
+  "embeds": 0
+}

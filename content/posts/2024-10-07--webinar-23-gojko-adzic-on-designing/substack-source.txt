@@ -1,0 +1,11 @@
+{
+  "url": "https://www.architecture-weekly.com/p/webinar-23-gojko-adzic-on-designing",
+  "date": "2024-10-07",
+  "assets": {
+    "https://substack-video.s3.amazonaws.com/video_upload/post/149905375/f1eaf3c1-c82d-4fb2-b041-f97f795b01af/transcoded-00001.png": "2024-10-07-cover.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/88f1d773-68ea-48cb-8a7c-19c3efca83ef_736x414.png": "image-2.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/c2f77189-2cb2-4bd9-bb48-862553e389ac_300x300.png": "image-3.png"
+  },
+  "embeds": 1,
+  "youtubeVideo": "BfI7KVWLKTE"
+}

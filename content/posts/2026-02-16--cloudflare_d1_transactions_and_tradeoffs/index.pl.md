@@ -53,8 +53,8 @@ And also do queries:
 
 ```ts
 const count = pool.execute.query<{count: number}>(
-  SQL`SELECT COUNT(*) as count 
-      FROM test_users 
+  SQL`SELECT COUNT(*) as count
+      FROM test_users
       WHERE ${SQL.in('id', userIds)}`,
 );
 ```
@@ -66,13 +66,13 @@ It can also handle transactions:
 ```ts
 const users = await pool.withTransaction(async (tx) => {
   await tx.execute.command(
-    SQL`INSERT INTO test_users (name) 
+    SQL`INSERT INTO test_users (name)
         VALUES (${firstUserName}), (${secondUserName})`,
   );
 
   return execute.query<User>(
     SQL`SELECT *
-        FROM test_users 
+        FROM test_users
         WHERE ${SQL.in('id', userIds)}`,
    );
 });
@@ -132,16 +132,16 @@ Essentially, that means that we're getting [repeatable reads](https://jepsen.io/
 **And now, the second ingredient: Batches. Per [Cloudflare docs](https://developers.cloudflare.com/d1/worker-api/d1-database/#batch)**
 
 > Sends multiple SQL statements inside a single call to the database. This can have a huge performance impact as it reduces latency from network round trips to D1. D1 operates in auto-commit. Our implementation guarantees that each statement in the list will execute and commit, sequentially, non-concurrently.
-> 
+>
 > Batched statements are [SQL transactions](https://www.sqlite.org/lang_transaction.html). If a statement in the sequence fails, then an error is returned for that specific statement, and it aborts or rolls back the entire sequence.
-> 
+>
 > To send batch statements, provide D1Database::batch a list of prepared statements and get the results in the same order.
 
 So Cloudflare didn't allow us to do the full, freehand transaction, but they allowed us to send multiple statements that internally will be executed as a SQLite Transaction. When the request is handled, it'll open a transaction, run the statements, and return the results.
 
 **Cool, let's mix this soup together, as having that, I decided to:**
 
-1. Fail automatically if someone tries to create a transaction on Cloudflare D1 with an error: 
+1. Fail automatically if someone tries to create a transaction on Cloudflare D1 with an error:
 
 > D1 does not support SQL transactions (BEGIN/COMMIT/ROLLBACK/SAVEPOINT).  Use { mode: "session_based" } to opt-in to session+batch semantics, or use 'connection.execute.batchCommand() for atomic multi-statement execution.
 
@@ -153,13 +153,13 @@ Then they get clear information on the first try.
 const users = await pool.withTransaction(
   async (tx) => {
     await tx.execute.command(
-      SQL`INSERT INTO test_users (name) 
+      SQL`INSERT INTO test_users (name)
       VALUES (${firstUserName}), (${secondUserName})`,
     );
 
     return tx.execute.query<User>(
       SQL`SELECT *
-              FROM test_users 
+              FROM test_users
               WHERE ${SQL.in('id', userIds)}`,
     );
   },  
@@ -167,7 +167,7 @@ const users = await pool.withTransaction(
 );
 ```
 
-When they do it, they will need to be aware of the limitations of the tool they have. So that this will internally create a D1 session, and only handle a single batch of operations properly. We're mimicking the sequential processing by the session-based repeatable reads capability. Still, we need to remember that we won't be able to roll back changes across multiple statements. Only a single command or batch command is an atomic operation. 
+When they do it, they will need to be aware of the limitations of the tool they have. So that this will internally create a D1 session, and only handle a single batch of operations properly. We're mimicking the sequential processing by the session-based repeatable reads capability. Still, we need to remember that we won't be able to roll back changes across multiple statements. Only a single command or batch command is an atomic operation.
 
 We can't, for instance, run a batch of updates, and fail the whole batch if one update didn't change any record. The batch will only fail if the database throws an exception. An exception can be in SQLite only called by a table constraint or trigger.
 
@@ -213,7 +213,7 @@ const eventStore = getSQLiteEventStore({
 });
 ```
 
-Still, even if you don't care about Emmett, Pongo, and my Open Source project, I hope that this will give you decent inspiration for your own tradeoffs analysis. 
+Still, even if you don't care about Emmett, Pongo, and my Open Source project, I hope that this will give you decent inspiration for your own tradeoffs analysis.
 
 I hope that you learned a bit about how design APIs work, how to check the guarantees of your tools and learn to walkaround them when you have to.
 

@@ -62,8 +62,8 @@ Now, guess who I am quoting:
 > - Your applications can be created across multiple platforms. Write your spec once, and you never need to port them—they will be recreated if you without your hand-rolled modification on multiple operating systems and hardware architectures.
 > - Your applications are adaptable to changing environments.
 > - Your end users can trust that your applications are secure, and you can use protection against viruses and tampering through security scans.
-> 
-> You don’t need to dream about these features. They’re here now. 
+>
+> You don’t need to dream about these features. They’re here now.
 
 And also this from another source:
 
@@ -74,7 +74,7 @@ And also this from another source:
 > Now, don’t get me wrong: there’s nothing wrong with LLN as an implementation tool.
 >
 > Wait a minute, I want to modify that statement. I’m not claiming, in this particular article, that there’s anything wrong with LLM as an implementation tool. There are lots of things wrong with it but those will have to wait for a different article.
-> 
+>
 > Instead what I’d like to claim is that LLM is not, generally, a hard enough programming tool that it can be used to discriminate between great programmers and mediocre programmers. It may be a fine tool to work in, but that’s not today’s topic. I would even go so far as to say that the fact that LLMs aere not hard enough is a feature, not a bug, but it does have this one problem.
 
 Well, I cheated you, but only a bit. I changed “Java” to “LLM ” and cut some phrases.

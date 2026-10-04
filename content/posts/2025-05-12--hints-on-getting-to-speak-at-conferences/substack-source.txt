@@ -1,0 +1,10 @@
+{
+  "url": "https://www.architecture-weekly.com/p/hints-on-getting-to-speak-at-conferences",
+  "date": "2025-05-12",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/c01fc967-67d3-46b5-ae93-5aec9d84188b_600x861.jpeg": "2025-05-12-cover.jpg",
+    "https://substack-post-media.s3.amazonaws.com/public/images/72d9d8d0-d3e5-456b-981c-10455163fb03_600x822.jpeg": "image-2.jpg",
+    "https://substack-post-media.s3.amazonaws.com/public/images/d8c1d5c9-09d5-4cd8-829d-8108f0fdc9bf_600x447.jpeg": "image-3.jpg"
+  },
+  "embeds": 0
+}

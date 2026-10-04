@@ -1,0 +1,12 @@
+{
+  "url": "https://www.architecture-weekly.com/p/the-write-ahead-log-a-foundation",
+  "date": "2024-12-07",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/cc9c4a3e-d71c-4a5f-9b61-fef11134402a_735x500.jpeg": "2024-12-07-cover.jpg",
+    "https://substack-post-media.s3.amazonaws.com/public/images/c16c0cb9-b79b-45e4-8fee-04aacfa73bc0_1394x715.png": "image-2.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/f4bf9266-f45f-4ae9-8c56-5a3ffec6aeeb_1340x756.png": "image-3.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/17af47cc-2df9-43e2-9408-78db059e6b0f_1340x756.png": "image-4.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/3d364cf1-900a-49ef-9368-7a851f1a3302_337x150.jpeg": "image-5.jpg"
+  },
+  "embeds": 0
+}

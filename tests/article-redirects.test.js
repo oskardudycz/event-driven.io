@@ -13,7 +13,7 @@ test("imported bare paths redirect permanently to English before the catch-all",
     const root = path.resolve(__dirname, "../content/posts");
     const names = await fs.readdir(root);
     const archive = require("../import/architecture-weekly-audit.json").posts.filter((post) => post.status === "existing");
-    const entries = [...archive, ...require("../import/eventstore-posts.json")];
+    const entries = [...archive, ...require("../import/architecture-weekly-missing.json"), ...require("../import/eventstore-posts.json")];
     const nodes = [];
     const expected = [];
     for (const entry of entries) {

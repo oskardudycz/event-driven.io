@@ -1,0 +1,9 @@
+{
+  "url": "https://www.architecture-weekly.com/p/thoughts-on-platforms-core-teams",
+  "date": "2025-01-06",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/9502ea16-ffa9-438f-90fb-4cf142f84c42_924x505.png": "2025-01-06-cover.png",
+    "https://bucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com/public/images/3ab6cef1-9ce5-47fa-9306-17854b383dc1_358x358.png": "image-2.png"
+  },
+  "embeds": 0
+}

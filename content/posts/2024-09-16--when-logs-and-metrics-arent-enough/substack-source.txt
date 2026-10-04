@@ -1,0 +1,8 @@
+{
+  "url": "https://www.architecture-weekly.com/p/when-logs-and-metrics-arent-enough",
+  "date": "2024-09-16",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/d7613fd2-8dc4-4103-ab2a-0a7c607393f4_1920x1080.jpeg": "2024-09-16-cover.jpg"
+  },
+  "embeds": 0
+}

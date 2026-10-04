@@ -16,7 +16,7 @@ It usually comes after someone sees a decision throwing an exception. They would
 
 **Some failures are worth retaining as business data.** An out-of-stock request can contribute to an unmet-demand report. A declined payment can start another process or be grouped by its reason. An item limit can explain why customers abandon an operation.
 
-Gojko Adzic calls the systematic use of unexpected or marginal usage patterns to improve a product **[lizard optimization](https://www.architecture-weekly.com/p/webinar-23-gojko-adzic-on-designing)**. Repeated out-of-stock requests can reveal demand we do not serve or a user experience that encourages impossible quantities. Turning every attempt into only a response or an exception log makes that pattern harder to find. An event gives the application data it can query, project, and use in another process.
+Gojko Adzic calls the systematic use of unexpected or marginal usage patterns to improve a product **[lizard optimization](/en/webinar-23-gojko-adzic-on-designing/)**. Repeated out-of-stock requests can reveal demand we do not serve or a user experience that encourages impossible quantities. Turning every attempt into only a response or an exception log makes that pattern harder to find. An event gives the application data it can query, project, and use in another process.
 
 Event Sourcing can help take advantage of unwanted and unexpected failures. We can model negative outcomes as events, just like regular ones. Our business logic informs us of what happened, not whether it’s a success or an error. It’s just an outcome of our decision.
 
@@ -25,7 +25,6 @@ So essentially we’re getting three options to deal with an unexpected scenario
 - throw an error (e.g. `OutOfStockError)` and catch it at the boundary;
 - return a `Result` with the failure on its error track;
 - return an event (e.g. `ProductItemOutOfStock`) and decide separately what we do with it.
-    
 
 Having that, my answer is rarely “just throw” or “just return `Result`.” Before choosing either, I need to know what should be persisted, what the caller should receive, and whether the failure belongs in the application’s exception path.
 
@@ -169,9 +168,9 @@ const handleAddProductItem = async (
   const state = await loadShoppingCart(command.data.shoppingCartId);
   const result = addProductItem(command, state);
 
-  if (result.success === false) 
+  if (result.success === false)
     return PreconditionFailed();
-  
+
   await eventStore.appendToStream(
     shoppingCartStreamName(command.data.shoppingCartId),
     [result.value],
@@ -190,9 +189,9 @@ const handleAddProductItem = async (
   const state = await loadShoppingCart(command.data.shoppingCartId);
   const event = addProductItem(command, state);
 
-  if (event.type === "ProductItemOutOfStock" || event.type === "ShoppingCartItemLimitReached") 
+  if (event.type === "ProductItemOutOfStock" || event.type === "ShoppingCartItemLimitReached")
     return PreconditionFailed();
-  
+
   await eventStore.appendToStream(
     shoppingCartStreamName(command.data.shoppingCartId),
     [result.value],
@@ -207,7 +206,7 @@ Both versions preserve the same three event types. `Result` adds a success-or-fa
 I saw many codebases where people were just blindly muting all errors by default, getting no benefit from it, but just polluting the codebase. Also keeping in mind that they still need to wrap the codebase with try/catch and have a conventional mapping layer.
 
 We can also see that the Result wrapper in our case doesn’t add much besides success/error classification. If we’d like to return different response status based on the _failure_ scenario, we’d need to add the same switch. So we’re not removing the decision; we’re just making it easier to ignore.  
-  
+
 Of course, many languages made it streamlined by adding pipe operator etc. Yet, again, many popular environments don’t have it. TypeScript has no pipe operator; the [TC39 proposal](https://github.com/tc39/proposal-pipeline-operator) is not (yet?) part of the language. Repeating the branch adds checks throughout the call chain; introducing a helper library adds vocabulary that is not native to the language. Those libraries are extremely noisy and require tribal knowledge and onboarding.
 
 Scott Wlaschin, who popularised railway-oriented programming, [makes the same qualification](https://fsharpforfunandprofit.com/posts/against-railway-oriented-programming/): `Result` models expected alternatives, but it is not intended to wrap every function or replace exceptions.
@@ -227,17 +226,16 @@ For this example, the decision returns `ProductItemOutOfStock` to the caller and
 Command Handling can be described by the following steps:
 
 1.  **[Read events from the stream and build the state from them](/en/how_to_get_the_current_entity_state_in_event_sourcing/)** (in other words _aggregate stream_).
-    
+
 2.  **Run the business logic using the command and the state.** Use the default (_initial_) state if the stream does not exist.
-    
+
 3.  **Append the result of the business logic (so events) at the end of the stream** from which you’ve read events. Use the read version (or the one provided by the user) for an [optimistic concurrency check](/en/optimistic_concurrency_for_pessimistic_times/).
-    
 
 In a nutshell, we could generalise it as:
 
 ```typescript
 function handleCommand<State, Command, Event>(
-  eventStore: EventStore, 
+  eventStore: EventStore,
   streamId: string,
   decide: (state: State) => Event[],
   evolve: (event: Event, state: State) => State,
@@ -254,9 +252,9 @@ function handleCommand<State, Command, Event>(
   // 2. Run business logic
   const events = decide(state);
 
-  // 3. Filter out "failure" events 
+  // 3. Filter out "failure" events
   const eventsToAppend = skipEvent ? events.filter(skipEvent) : events;
-  
+
   // 4. Append events
   const appendResult = await eventStore.appendToStream(streamName, [event], {
     expectedStreamVersion: currentStreamVersion,
@@ -285,7 +283,7 @@ const handle = CommandHandler<ShoppingCart, ShoppingCartEvent>({
   initialState,
   middleware: [
     skipOn(
-      (event) => event.type === "ProductItemOutOfStock" 
+      (event) => event.type === "ProductItemOutOfStock"
         || event.type === "ShoppingCartItemLimitReached"
     ),
   ],
@@ -330,8 +328,8 @@ const addProductItemApi = (router: Router) =>
       },
 
       const { events, nextExpectedStreamVersion } = await handle(
-        eventStore, 
-        shoppingCartId, 
+        eventStore,
+        shoppingCartId,
         (state) => addProductItem(state, command),
       );
 
@@ -352,9 +350,9 @@ You may be wondering why I added middleware, which sounds posh for simple filter
 
 A batch import often contains the contents of multiple shopping carts. Passing all of them to one command handler would be the wrong boundary here: each cart has its own stream and its own concurrency check.
 
-Even a single imported shopping cart can still require several operations. Especially if we're trying to deduce what has happened to a shopping cart in the external system, or we should add some specific operations on top (e.g., discounts, etc.). 
+Even a single imported shopping cart can still require several operations. Especially if we're trying to deduce what has happened to a shopping cart in the external system, or we should add some specific operations on top (e.g., discounts, etc.).
 
-The common scenario for imports is translating state changes (e.g., products in the shopping cart) into commands. This gives at least a chance to make our domain context meaningful. Not perfect, but we've got to save ourselves sometimes. 
+The common scenario for imports is translating state changes (e.g., products in the shopping cart) into commands. This gives at least a chance to make our domain context meaningful. Not perfect, but we've got to save ourselves sometimes.
 
 After translation, we may end up with a sequence of granular business operations. The mapping could look like that:
 
@@ -377,8 +375,8 @@ And feed it into our command handler:
 
 ```typescript
 const { events, nextExpectedStreamVersion } = await handle(
-  eventStore, 
-  shoppingCartId, 
+  eventStore,
+  shoppingCartId,
   importCartCommands.map(command => (state) => addProductItem(state, command)),
 );
 ```
@@ -588,7 +586,7 @@ Asynchronous handlers, the projections, reactors, and workflows that react to ev
 
 **A message handler can turn a declined shopping cart operation into a compensating workflow.** For instance, for `ProductItemOutOfStock` order more products from the producer. It can, of course, just skip a message that should not block processing, or stop without advancing further.
 
-**The same for [read models](http://event-driven.io/en/projections_and_read_models_in_event_driven_architecture/#idempotency).** A projection cannot prevent the source event from being recorded because that event is already in the stream. Throwing only prevents the read model from advancing. If an event carries a value the read model did not expect, throwing does not undo it. The check that should have stopped it belongs in the business logic, before the event was ever recorded; by the time the projection runs, it is too late.
+**The same for [read models](/en/projections_and_read_models_in_event_driven_architecture/#idempotency).** A projection cannot prevent the source event from being recorded because that event is already in the stream. Throwing only prevents the read model from advancing. If an event carries a value the read model did not expect, throwing does not undo it. The check that should have stopped it belongs in the business logic, before the event was ever recorded; by the time the projection runs, it is too late.
 
 It builds a read model from events that are already recorded, and a recorded event is a fact: the projection only interprets it, so it has nothing to reject. If an event carries a value the read model did not expect, throwing does not undo it. The check that should have stopped it belongs in the business logic, before the event was ever recorded; by the time the projection runs, it is too late.
 

@@ -16,30 +16,29 @@ It was such a success that the year after, the 3D Realms game studio co-founder 
 
 It’s a long story; look here: an almost hour-long video on that:
 
-<iframe src="https://www.youtube-nocookie.com/embed/dfV4rI_gR1g?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" frameborder="0" loading="lazy" gesture="media" allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" width="728" height="409" title="Embedded video" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+`youtube: [Embedded video](https://www.youtube.com/watch?rel=0&autoplay=0&showinfo=0&enablejsapi=0&v=dfV4rI_gR1g)`
 
 So let me be shorter and give you an even shorter version than the [Wikipedia Page](https://en.wikipedia.org/wiki/Development_of_Duke_Nukem_Forever):
 
 1.  They realised that the 2.5D engine was already obsolete, and in 1.5 years it’ll be even more so, so they bought a license for the Quake 2 engine. For 0.5 million bucks. A lot, keeping in mind that they got only 0.6 million bucks in advance from their publisher for the new game.
-    
+
 2.  They showed the nicely looking trailer; critics were happy, but creators wanted more. They wanted something better, and after 14months of investment, they bought the latest-the-greatest at that time Unreal Engine, because why not. Just half a year till the promised Christmas.
-    
+
 3.  Not surprisingly, changing the engine while building the ~car~ game wasn’t the best move for the deadlines, and the game was still unfinished and in moving parts, even more so than it was. So, in 1999, they decided to change the engine again: to the new Unreal Engine, which had multiplayer capabilities. Yes, they decided to add multiplayer to an initially single-player game. A bit of scope creep.
-    
+
 4.  They worked on it and even showed something that looked nice in 2001, which, as Broussard said, was actually smoke & mirrors. Take-Two Interactive bought them and got into a fight with the new owners, claiming it would be done when it was done.
-    
+
 5.  In 2004, they switched engines again, this time to Doom 3.
-    
+
 6.  In 2006, nothing was working yet; the team was “basically pulling it all together and trying to make it fun”
-    
+
 7.  In 2009, they laid off the staff, downsizing the company. Take-Two filed a lawsuit against 3D Realms over their failure to complete Duke Nukem Forever, citing $12 million paid to Infogrames in 2000 for the publishing rights
-    
+
 8.  Nine ex-employees continued development throughout 2009 from their homes. Eventually, they created Triptych Games, an independent studio.
-    
+
 9.  Somehow, they managed to complete something and release it in 2011.
-    
+
 10.  The outcome? The game was a total flop, nowhere near the success of Duke Nukem 3D.
-     
 
 Fun fact: until 2024, Duke Nukem Forever held the Guinness World Record for the longest development of a video game, at 14 years and 44 days.
 
@@ -47,11 +46,11 @@ Fun fact: until 2024, Duke Nukem Forever held the Guinness World Record for the 
 
 Because I’m also the one to blame. Not for the Duke Nukem delay, but for falling into the same trap. “Do as we tell, not as we do”.
 
-When [I started Emmett,](https://event-driven.io/en/introducing_emmett/) I went with the lean approach. I started by delivering the API for building Event-Driven applications. The first version didn’t even have any event store implementation.
+When [I started Emmett,](/en/introducing_emmett/) I went with the lean approach. I started by delivering the API for building Event-Driven applications. The first version didn’t even have any event store implementation.
 
 I showed that to the rest of the world, and I quickly got feedback from folks who wanted to use it and said they were happy with what they saw. So I added the storage I already had [in my samples: EventStoreDB storage](https://github.com/oskardudycz/EventSourcing.NodeJS).
 
-Then [I added, for fun, Pongo](https://event-driven.io/en/introducting_pongo/) - a MongoDB-compliant library that allows you to use PostgreSQL as a document database.
+Then [I added, for fun, Pongo](/en/introducting_pongo/) - a MongoDB-compliant library that allows you to use PostgreSQL as a document database.
 
 And I decided to add Dumbo, a shared package that will be responsible for connection management, SQL queries, etc. and use it to build the PostgreSQL event store.
 
@@ -66,23 +65,22 @@ And yes, it’s production-ready, but the new official versions are still unrele
 Why? For various reasons, some personal ones, but focusing on the development stuff:
 
 1.  I entirely rewrote connection management and implemented my own connection pooling.
-    
-2.  Decided to add more database types for Emmett and Pongo: SQLite, [Cloudflare D1](https://event-driven.io/en/cloudflare_d1_transactions_and_tradeoffs/). Fun fact: I used the sqlite3 Node.js driver, which has since become unmaintained.
-    
+
+2.  Decided to add more database types for Emmett and Pongo: SQLite, [Cloudflare D1](/en/cloudflare_d1_transactions_and_tradeoffs/). Fun fact: I used the sqlite3 Node.js driver, which has since become unmaintained.
+
 3.  That required making Dumbo drivers pluggable.
-    
+
 4.  I decided to add OpenTelemetry.
-    
+
 5.  I added resiliency and batching for processor implementations. Essentially rewrote the whole async processing.
-    
-6.  I added [Workflows](https://www.architecture-weekly.com/p/workflow-engine-design-proposal-tell) for business process coordination.
-    
+
+6.  I added [Workflows](/en/workflow-engine-design-proposal-tell/) for business process coordination.
+
 7.  And [many](https://github.com/event-driven-io/emmett/pulls?q=is%3Apr+is%3Aclosed+milestone%3A0.43.0), [many](https://github.com/event-driven-io/Pongo/pulls?q=is%3Apr+is%3Aclosed+milestone%3A0.17.0) other stuff.
-    
 
 Essentially, I locked myself into the big, great bang release. I also fell into:
 
-<iframe src="https://www.youtube-nocookie.com/embed/gAjR4_CbPpQ?rel=0&amp;autoplay=0&amp;showinfo=0&amp;enablejsapi=0" frameborder="0" loading="lazy" gesture="media" allow="autoplay; fullscreen" allowautoplay="true" allowfullscreen="true" width="728" height="409" title="Embedded video" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+`youtube: [Embedded video](https://www.youtube.com/watch?rel=0&autoplay=0&showinfo=0&enablejsapi=0&v=gAjR4_CbPpQ)`
 
 Which is fine, as those tools are great: Emmett 0.43.0 and Pongo 0.17.0 betas are totally different products: richer in features, more performant, resilient, etc.
 

@@ -1,0 +1,11 @@
+{
+  "url": "https://www.architecture-weekly.com/p/deduplication-in-distributed-systems",
+  "date": "2024-11-25",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/6e6ea664-0409-4e52-ace0-fb2133134895_570x431.png": "2024-11-25-cover.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/b7ac96bb-addb-448d-aaf9-318a115d9490_570x431.png": "image-2.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/601e40ff-1b33-4eb0-b84e-5e36e2412e08_594x447.png": "image-3.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/fb3d273e-f6dc-470d-bbe6-fe85663ce5b4_594x447.png": "image-4.png"
+  },
+  "embeds": 0
+}

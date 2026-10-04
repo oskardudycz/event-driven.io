@@ -1,0 +1,11 @@
+{
+  "url": "https://www.architecture-weekly.com/p/residuality-theory-a-rebellious-take",
+  "date": "2025-05-26",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/41f52b23-f728-4d55-ba55-1a7a497a6f33_674x324.jpeg": "2025-05-26-cover.jpg",
+    "https://substack-post-media.s3.amazonaws.com/public/images/af24dddf-e2a0-4d24-860d-76ffe2be9b7d_1600x1067.jpeg": "image-2.jpg",
+    "https://substack-post-media.s3.amazonaws.com/public/images/c47ebe32-90c0-4904-82f5-4c4064c06479_606x333.png": "image-3.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/9e672d80-9970-4b96-9c5c-d6f332c540bf_1033x455.png": "image-4.png"
+  },
+  "embeds": 1
+}

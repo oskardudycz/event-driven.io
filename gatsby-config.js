@@ -140,13 +140,18 @@ module.exports = {
       options: {
         plugins: [
           {
-            resolve: "gatsby-remark-embed-video",
+            resolve: require.resolve("./plugins/gatsby-remark-video"),
             options: {
-              maxWidth: 800,
+              width: 800,
               ratio: 1.77,
               height: 400,
               related: false,
-              noIframerder: true,
+              noIframeBorder: true,
+              loadingStrategy: "lazy",
+              urlOverrides: [{
+                id: "youtube",
+                embedURL: (id) => `https://www.youtube-nocookie.com/embed/${id}`,
+              }],
             },
           },
           `gatsby-plugin-sharp`,

@@ -1,0 +1,10 @@
+{
+  "url": "https://www.architecture-weekly.com/p/so-you-want-to-break-down-monolith",
+  "date": "2025-03-03",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/5dbdfbb3-c5f1-4dc2-aeaf-88799c932a25_1280x1038.jpeg": "2025-03-03-cover.jpg",
+    "https://bucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com/public/images/3ab6cef1-9ce5-47fa-9306-17854b383dc1_358x358.png": "image-2.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/16424ad0-c554-4079-881f-78367d08e818_1200x675.png": "image-3.png"
+  },
+  "embeds": 0
+}

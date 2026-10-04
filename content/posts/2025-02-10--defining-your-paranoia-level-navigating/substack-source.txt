@@ -1,0 +1,8 @@
+{
+  "url": "https://www.architecture-weekly.com/p/defining-your-paranoia-level-navigating",
+  "date": "2025-02-10",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/545a62c8-3ed9-44f9-bce0-975fb93c3937_500x547.jpeg": "2025-02-10-cover.jpg"
+  },
+  "embeds": 0
+}

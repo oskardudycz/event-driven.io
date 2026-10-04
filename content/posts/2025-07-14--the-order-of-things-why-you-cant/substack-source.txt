@@ -1,0 +1,8 @@
+{
+  "url": "https://www.architecture-weekly.com/p/the-order-of-things-why-you-cant",
+  "date": "2025-07-14",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/5d869f9a-d508-40d5-bde2-efeaa0f02654_429x480.png": "2025-07-14-cover.png"
+  },
+  "embeds": 1
+}
