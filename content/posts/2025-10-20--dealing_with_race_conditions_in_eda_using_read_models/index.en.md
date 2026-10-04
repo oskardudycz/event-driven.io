@@ -6,6 +6,10 @@ categories:
   - CQRS
 cover: 2025-10-20-cover.png
 author: oskar dudycz
+redirectFrom: /dealing_with_race_conditions_in_eda_using_read_models/
+redirectAliases:
+  - /dealing-with-race-conditions-in-event/
+  - /en/dealing-with-race-conditions-in-event/
 ---
 
 > My events came out of order! What should I do?!

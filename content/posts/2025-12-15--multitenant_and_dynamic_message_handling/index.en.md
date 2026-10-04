@@ -3,6 +3,10 @@ title: Multi-tenancy and dynamic messaging workload distribution
 category: "Event-Driven Architecture"
 cover: 2025-12-15-cover.png
 author: oskar dudycz
+redirectFrom: /multitenant_and_dynamic_message_handling/
+redirectAliases:
+  - /multi-tenancy-and-dynamic-messaging/
+  - /en/multi-tenancy-and-dynamic-messaging/
 ---
 
 There are several reasons why I'm blogging. 

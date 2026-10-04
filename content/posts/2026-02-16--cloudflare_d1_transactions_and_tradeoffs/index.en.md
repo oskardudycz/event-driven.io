@@ -3,6 +3,10 @@ title: How I cheated on transactions. Or how to make tradeoffs based on my Cloud
 category: "Software Architecture"
 cover: 2026-02-16-cover.png
 author: oskar dudycz
+redirectFrom: /cloudflare_d1_transactions_and_tradeoffs/
+redirectAliases:
+  - /how-i-cheated-on-transactions/
+  - /en/how-i-cheated-on-transactions/
 ---
 
 ![cover](2026-02-16-cover.png)

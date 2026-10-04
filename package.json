@@ -9,7 +9,7 @@
   "scripts": {
     "generate-llms": "node ./scripts/generate-llms-txt.js",
     "verify-seo": "node ./scripts/verify-seo-build.js",
-    "test": "yarn test:seo && yarn test:build-contract && yarn test:substack && yarn test:video && yarn test:redirects",
+    "test": "yarn test:seo && yarn test:build-contract && yarn test:substack && yarn test:video && yarn test:redirects && yarn test:archive",
     "test:seo": "node ./tests/seo-build.test.js",
     "test:build-contract": "node ./tests/build-contract.test.js",
     "test:visual": "vitest run tests/visual.test.js",
@@ -37,7 +37,8 @@
     "import-articles": "node ./import/import-articles.js",
     "test:substack": "node ./tests/substack-import.test.js",
     "test:video": "node ./tests/video-headers.test.js",
-    "test:redirects": "node ./tests/article-redirects.test.js"
+    "test:redirects": "node ./tests/article-redirects.test.js",
+    "test:archive": "node ./tests/architecture-weekly-manifest.test.js"
   },
   "dependencies": {
     "@ant-design/compatible": "^1.0.8",

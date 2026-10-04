@@ -3,6 +3,10 @@ title: Addition by subtraction in Software Design
 category: "Software Architecture"
 cover: 2026-07-06-cover.jpg
 author: oskar dudycz
+redirectFrom: /addition-by-subtraction-in-software-design/
+redirectAliases:
+  - /addition-by-subtraction-in-software/
+  - /en/addition-by-subtraction-in-software/
 ---
 
 I want it all, and I want it now. This is not only a Freddie Mercury quote but also, too often, a general plan for our software product. The picture tells more than words, so here it is, the typical product we designed:

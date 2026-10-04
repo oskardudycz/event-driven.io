@@ -3,6 +3,10 @@ title: Fixing bugs in Event Sourcing is hard, for real?
 category: "Event Sourcing"
 cover: 2026-07-27-cover.png
 author: oskar dudycz
+redirectFrom: /fixing-bugs-in-event-sourcing-is-hard/
+redirectAliases:
+  - /fixing-bugs-in-event-sourcing-is/
+  - /en/fixing-bugs-in-event-sourcing-is/
 ---
 
 Every system ends up with bad data. Some of it comes from integrations, some from users doing things nobody predicted, and a good part of it comes from us, because we shipped a change that looked fine in review.

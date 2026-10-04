@@ -1,0 +1,841 @@
+{
+  "checkedOn": "2026-10-04",
+  "archive": "https://www.architecture-weekly.com/archive",
+  "api": "https://www.architecture-weekly.com/api/v1/archive?sort=new&offset=0&limit=50",
+  "cutoff": "https://www.architecture-weekly.com/p/architecture-weekly-189-mastering",
+  "inclusive": true,
+  "counts": {
+    "total": 93,
+    "missing": 63,
+    "existing": 30,
+    "recordings": 10
+  },
+  "playlist": "https://www.youtube.com/playlist?list=PLw-VZz_H4iio_iA1B8IlG1EgA-b8Eh5Dq",
+  "channel": "https://www.youtube.com/channel/UC3M4_OgJS4lvZHVDzkOlxIg/videos",
+  "posts": [
+    {
+      "id": 215672278,
+      "url": "https://www.architecture-weekly.com/p/we-all-wanted-to-be-netflix-who-do",
+      "title": "We all wanted to be Netflix, who do we want to be next?",
+      "date": "2026-09-14T16:54:24.605Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-09-14--we-all-wanted-to-be-netflix-who-do",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 214553384,
+      "url": "https://www.architecture-weekly.com/p/avoid-duke-nukem-forever-mode",
+      "title": "Avoid Duke Nukem Forever Mode",
+      "date": "2026-09-07T11:49:46.318Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-09-07--avoid-duke-nukem-forever-mode",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 213588359,
+      "url": "https://www.architecture-weekly.com/p/start-small-grow-big-how-to-pick",
+      "title": "Start Small, Grow Big: how to pick the first feature for Event Sourcing",
+      "date": "2026-08-31T18:16:47.401Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-08-31--start-small-grow-big-how-to-pick",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 211555373,
+      "url": "https://www.architecture-weekly.com/p/fractal-architecture-cognitive-load",
+      "title": "Fractal Architecture, Cognitive Load, Vertical Slices and other terms that do(n't) fit in your head",
+      "date": "2026-08-17T13:12:59.065Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 210601920,
+      "url": "https://www.architecture-weekly.com/p/vertical-slices-their-ownership-and",
+      "title": "Vertical slices, their ownership and external dependencies",
+      "date": "2026-08-10T15:16:40.598Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-08-10--vertical-slices-and-dependencies",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 208681112,
+      "url": "https://www.architecture-weekly.com/p/fixing-bugs-in-event-sourcing-is",
+      "title": "Fixing bugs in Event Sourcing is hard, for real?",
+      "date": "2026-07-27T14:16:43.171Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-07-27--fixing-bugs-in-event-sourcing-is-hard",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 207805592,
+      "url": "https://www.architecture-weekly.com/p/throw-result-or-neither",
+      "title": "Throw, Result, or neither?",
+      "date": "2026-07-20T17:42:43.082Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-07-20--throw-result-or-neither",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 206839180,
+      "url": "https://www.architecture-weekly.com/p/on-swimming-learning-and-my-journey",
+      "title": "On swimming, learning and my journey to being the last one",
+      "date": "2026-07-13T12:32:44.463Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-07-13--on-swimming-learning-and-my-journey",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 205490597,
+      "url": "https://www.architecture-weekly.com/p/addition-by-subtraction-in-software",
+      "title": "Addition by subtraction in software design",
+      "date": "2026-07-06T13:18:54.433Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-07-06--addition-by-subtraction-in-software-design",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 202156132,
+      "url": "https://www.architecture-weekly.com/p/announcing-strictland-new-contract",
+      "title": "Announcing Strictland - new contract testing library for message compatibility",
+      "date": "2026-06-15T17:13:15.629Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-06-15--announcing-strictland-contract-testing",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 201145485,
+      "url": "https://www.architecture-weekly.com/p/you-can-fork-a-package-but-can-you",
+      "title": "You can fork a package, but can you own it?",
+      "date": "2026-06-08T14:56:15.687Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-06-08--you-can-fork-a-package-but-can-you-own-it",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 199180926,
+      "url": "https://www.architecture-weekly.com/p/how-soon-is-now-in-postgresql",
+      "title": "How soon is now in PostgreSQL?",
+      "date": "2026-05-25T12:29:58.205Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-05-25--how-soon-is-now-in-postgresql",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 198260672,
+      "url": "https://www.architecture-weekly.com/p/on-mashing-up-modelling-techniques",
+      "title": "On mashing up modelling techniques for fun and profit",
+      "date": "2026-05-18T13:54:31.639Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-05-18--on-mashing-up-modelling-techniques",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 197198877,
+      "url": "https://www.architecture-weekly.com/p/dont-overestimate-domain-expertise",
+      "title": "Don't overestimate domain expertise",
+      "date": "2026-05-11T10:43:52.952Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-05-11--should_we_trust_domain_experts",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 196427798,
+      "url": "https://www.architecture-weekly.com/p/borys-had-the-best-dribbling",
+      "title": "Borys had the best dribbling",
+      "date": "2026-05-04T14:47:28.738Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2015-01-31--borys_najlepiej_dryblowal",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 195546923,
+      "url": "https://www.architecture-weekly.com/p/vibing-harness-and-ooda-loop",
+      "title": "Vibing, Harness and OODA loop",
+      "date": "2026-04-27T05:27:27.890Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-04-26--vibing_harness_and_ooda_loops",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 194795296,
+      "url": "https://www.architecture-weekly.com/p/yoda-principle-for-better-integrations",
+      "title": "Yoda Principle for better integrations",
+      "date": "2026-04-20T13:17:33.266Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-04-20--yoda_principle_in_command_design",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 194057953,
+      "url": "https://www.architecture-weekly.com/p/passive-aggresive-event",
+      "title": "Anti-patterns in event modelling - Passive-Aggressive Events",
+      "date": "2026-04-13T11:00:45.980Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-04-13--passive_aggressive_events",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 192627049,
+      "url": "https://www.architecture-weekly.com/p/the-one-where-oskar-explains-example",
+      "title": "The one where Oskar explains Example Mapping",
+      "date": "2026-03-30T16:02:25.612Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-03-30--intro_to_example_mapping",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 191127846,
+      "url": "https://www.architecture-weekly.com/p/interactive-rubber-ducking-with-genai",
+      "title": "Interactive Rubber Ducking with GenAI",
+      "date": "2026-03-16T13:26:11.459Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-03-16--interactive_rubber_ducking_with_gen_ai",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 190367899,
+      "url": "https://www.architecture-weekly.com/p/the-end-of-coding-wrong-question",
+      "title": "The End of Coding? Wrong Question",
+      "date": "2026-03-09T10:54:24.488Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-03-09--the_end_of_coding_wrong_question",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 189672597,
+      "url": "https://www.architecture-weekly.com/p/parse-dont-guess",
+      "title": "Parse, Don't Guess",
+      "date": "2026-03-02T17:18:15.041Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-03-03--parse_dont_guess",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 188131828,
+      "url": "https://www.architecture-weekly.com/p/how-i-cheated-on-transactions",
+      "title": "How I cheated on transactions",
+      "date": "2026-02-16T16:53:30.079Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-02-16--cloudflare_d1_transactions_and_tradeoffs",
+      "match": "title prefix and matching opening paragraph"
+    },
+    {
+      "id": 185069527,
+      "url": "https://www.architecture-weekly.com/p/on-rebuilding-read-models-dead-letter",
+      "title": "On rebuilding read models, Dead-Letter Queues and Why Letting Go is Sometimes the Answer",
+      "date": "2026-01-19T18:01:47.271Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-01-19--rebuilding_read_models_skipping_events",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 183569528,
+      "url": "https://www.architecture-weekly.com/p/rebuilding-event-driven-read-models",
+      "title": "Rebuilding Event-Driven Read Models in a safe and resilient way",
+      "date": "2026-01-05T19:01:10.465Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2026-01-05--rebuilding_event_driven_read_models",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 182844029,
+      "url": "https://www.architecture-weekly.com/p/architecture-weekly-is-5-years-old",
+      "title": "Architecture Weekly is 5 years old! 🎉",
+      "date": "2025-12-29T10:40:08.764Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 181685404,
+      "url": "https://www.architecture-weekly.com/p/multi-tenancy-and-dynamic-messaging",
+      "title": "Multi-tenancy and dynamic messaging workload distribution",
+      "date": "2025-12-15T15:50:13.391Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2025-12-15--multitenant_and_dynamic_message_handling",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 181038322,
+      "url": "https://www.architecture-weekly.com/p/checkpointing-the-message-processing",
+      "title": "Checkpointing the message processing",
+      "date": "2025-12-08T15:15:49.930Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2025-12-08--checkpointing_message_processing",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 180414999,
+      "url": "https://www.architecture-weekly.com/p/consumers-projectors-reactors-and",
+      "title": "Consumers, projectors, reactors and all that messaging jazz in Emmett",
+      "date": "2025-12-01T16:02:26.732Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2025-12-01--consumers_processors_in_emmett",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 179146054,
+      "url": "https://www.architecture-weekly.com/p/requeuing-roulette-in-event-driven",
+      "title": "Requeuing Roulette in Event-Driven Architecture and Messaging",
+      "date": "2025-11-17T18:35:13.214Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2025-11-17--requeuing_roulette_in_messaging",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 177895476,
+      "url": "https://www.architecture-weekly.com/p/handling-events-coming-in-an-unknown",
+      "title": "Handling Events Coming in an Unknown Order",
+      "date": "2025-11-03T20:04:01.483Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2025-11-03--strict_ordering_in_event_handling",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 176638730,
+      "url": "https://www.architecture-weekly.com/p/dealing-with-race-conditions-in-event",
+      "title": "Dealing with Race Conditions in Event-Driven Architecture with Read Models",
+      "date": "2025-10-20T18:02:36.103Z",
+      "type": "newsletter",
+      "status": "existing",
+      "directory": "2025-10-20--dealing_with_race_conditions_in_eda_using_read_models",
+      "match": "normalized title or slug"
+    },
+    {
+      "id": 175963191,
+      "url": "https://www.architecture-weekly.com/p/on-messaging-and-distributed-systems",
+      "title": "On Messaging and Distributed Systems with Ian Cooper",
+      "date": "2025-10-13T05:01:59.422Z",
+      "type": "newsletter",
+      "status": "missing",
+      "youtubeVideo": "0NYwN_p2pFI",
+      "videoSource": "source-embed"
+    },
+    {
+      "id": 175407408,
+      "url": "https://www.architecture-weekly.com/p/new-recording-on-event-modelling",
+      "title": "New Recording on Event modelling anti-patterns from DDDEU",
+      "date": "2025-10-06T09:01:30.450Z",
+      "type": "newsletter",
+      "status": "missing",
+      "youtubeVideo": "Lf1MZlpbkGA",
+      "videoSource": "source-embed"
+    },
+    {
+      "id": 174237192,
+      "url": "https://www.architecture-weekly.com/p/sneaky-code-bites-back",
+      "title": "Sneaky Code Bites Back",
+      "date": "2025-09-22T12:05:28.880Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 173641507,
+      "url": "https://www.architecture-weekly.com/p/postgresql-partitioning-logical-replication",
+      "title": "PostgreSQL partitioning, logical replication and other Q&A about PostgreSQL Superpowers",
+      "date": "2025-09-15T10:39:40.997Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 173075649,
+      "url": "https://www.architecture-weekly.com/p/just-use-sql-they-say-or-on-how-accidental",
+      "title": "Just use SQL they say... Or how accidental complexity piles on",
+      "date": "2025-09-08T10:35:59.377Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 171869632,
+      "url": "https://www.architecture-weekly.com/p/my-thoughts-on-vertical-slices-cqrs",
+      "title": "My thoughts on Vertical Slices, CQRS, Semantic Diffusion and other fancy words",
+      "date": "2025-08-25T10:29:23.629Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 171269636,
+      "url": "https://www.architecture-weekly.com/p/compilation-isnt-just-for-programming",
+      "title": "Compilers Aren't Just for Programming Languages",
+      "date": "2025-08-18T13:18:03.299Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 170670098,
+      "url": "https://www.architecture-weekly.com/p/requiem-for-a-10x-engineer-dream",
+      "title": "Requiem for a 10x Engineer Dream",
+      "date": "2025-08-11T10:12:35.498Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 170073532,
+      "url": "https://www.architecture-weekly.com/p/why-open-source-isnt-always-fair",
+      "title": "Why Open Source Isn't Always Fair. Dual licenses explained",
+      "date": "2025-08-04T11:19:57.676Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 169475399,
+      "url": "https://www.architecture-weekly.com/p/workflow-engine-design-proposal-tell",
+      "title": "Workflow Engine design proposal, tell me your thoughts",
+      "date": "2025-07-28T17:14:02.616Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 168289413,
+      "url": "https://www.architecture-weekly.com/p/the-order-of-things-why-you-cant",
+      "title": "The Order of Things: Why You Can't Have Both Speed and Ordering in Distributed Systems",
+      "date": "2025-07-14T13:12:32.091Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 167715140,
+      "url": "https://www.architecture-weekly.com/p/dealing-with-eventual-consistency",
+      "title": "Dealing with Eventual Consistency, and Causal Consistency using Predictable Identifiers",
+      "date": "2025-07-07T13:05:16.088Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 167192604,
+      "url": "https://www.architecture-weekly.com/p/predictable-identifiers-enabling",
+      "title": "Predictable Identifiers: Enabling True Module Autonomy in Distributed Systems",
+      "date": "2025-06-30T17:17:03.085Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 166603288,
+      "url": "https://www.architecture-weekly.com/p/start-alone-then-together-why-software",
+      "title": "Start Alone, Then Together: Why Software Modelling Needs Solitary Brainstorming",
+      "date": "2025-06-23T15:35:06.578Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 166058763,
+      "url": "https://www.architecture-weekly.com/p/secondary-indexes-and-the-specialized",
+      "title": "Secondary Indexes and the Specialized Storage Dilemma",
+      "date": "2025-06-16T11:34:16.370Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 165535508,
+      "url": "https://www.architecture-weekly.com/p/do-we-still-need-the-qa-role",
+      "title": "Do we still need the QA role?",
+      "date": "2025-06-09T11:54:42.268Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 164929833,
+      "url": "https://www.architecture-weekly.com/p/killer-metrics-or-why-you-should",
+      "title": "Killer metrics, or why you should know upfront when to remove the new feature",
+      "date": "2025-06-02T06:01:48.538Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 164479752,
+      "url": "https://www.architecture-weekly.com/p/residuality-theory-a-rebellious-take",
+      "title": "Residuality Theory: A Rebellious Take on Building Systems That Actually Survive",
+      "date": "2025-05-26T19:09:25.921Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 163917833,
+      "url": "https://www.architecture-weekly.com/p/the-underestimated-power-of-hot-spots",
+      "title": "The Underestimated Power of Hot Spots and Notes in EventStorming",
+      "date": "2025-05-19T13:27:56.012Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 163389226,
+      "url": "https://www.architecture-weekly.com/p/hints-on-getting-to-speak-at-conferences",
+      "title": "Hints on getting to speak at conferences",
+      "date": "2025-05-12T12:16:44.119Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 162896716,
+      "url": "https://www.architecture-weekly.com/p/why-we-should-learn-multiple-programming",
+      "title": "Why We Should Learn Multiple Programming Languages",
+      "date": "2025-05-05T16:56:46.154Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 162313644,
+      "url": "https://www.architecture-weekly.com/p/business-wont-let-me-and-other-lies",
+      "title": "Business Won't Let Me and other lies we tell to ourselves",
+      "date": "2025-04-28T09:06:13.255Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 161593922,
+      "url": "https://www.architecture-weekly.com/p/postgresql-jsonb-powerful-storage",
+      "title": "PostgreSQL JSONB - Powerful Storage for Semi-Structured Data",
+      "date": "2025-04-21T07:51:23.602Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 161225285,
+      "url": "https://www.architecture-weekly.com/p/monolith-first-are-you-sure",
+      "title": "Monolith-First - are you sure?",
+      "date": "2025-04-14T06:02:08.387Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 160779682,
+      "url": "https://www.architecture-weekly.com/p/what-we-dont-know-that-we-dont-know",
+      "title": "What we don't know that we don't know",
+      "date": "2025-04-07T14:11:28.628Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 160242618,
+      "url": "https://www.architecture-weekly.com/p/we-are-no-superhumans",
+      "title": "We are no superhumans",
+      "date": "2025-03-31T08:55:39.827Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 159744317,
+      "url": "https://www.architecture-weekly.com/p/typescript-migrates-to-go-whats-really",
+      "title": "TypeScript Migrates to Go: What's Really Behind That 10x Performance Claim?",
+      "date": "2025-03-24T14:25:46.549Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 159237761,
+      "url": "https://www.architecture-weekly.com/p/whole-architecture-weekly-content",
+      "title": "Whole Architecture Weekly content is free now!",
+      "date": "2025-03-17T08:24:24.766Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 158708194,
+      "url": "https://www.architecture-weekly.com/p/practical-introduction-to-event-sourcing",
+      "title": "Practical Introduction to Event Sourcing with Emmett",
+      "date": "2025-03-10T07:00:35.233Z",
+      "type": "podcast",
+      "status": "missing",
+      "youtubeVideo": "SDXdcymKv-8",
+      "videoSource": "channel"
+    },
+    {
+      "id": 158161290,
+      "url": "https://www.architecture-weekly.com/p/so-you-want-to-break-down-monolith",
+      "title": "So you want to break down monolith? Read that first.",
+      "date": "2025-03-03T07:02:43.597Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 157742764,
+      "url": "https://www.architecture-weekly.com/p/how-does-kafka-know-what-was-the",
+      "title": "How does Kafka know what was the last message it processed? Deep dive into Offset Tracking",
+      "date": "2025-02-24T07:01:44.431Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 157055025,
+      "url": "https://www.architecture-weekly.com/p/documenting-event-driven-architecture",
+      "title": "Documenting Event-Driven Architecture with EventCatalog and David Boyne",
+      "date": "2025-02-17T08:02:37.772Z",
+      "type": "podcast",
+      "status": "missing",
+      "youtubeVideo": "bcfY-cPqNYo",
+      "videoSource": "channel"
+    },
+    {
+      "id": 156849436,
+      "url": "https://www.architecture-weekly.com/p/defining-your-paranoia-level-navigating",
+      "title": "Defining Your Paranoia Level: Navigating Change Without the Overkill",
+      "date": "2025-02-10T14:23:37.814Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 156094205,
+      "url": "https://www.architecture-weekly.com/p/react-query-a-solution-for-frontend",
+      "title": "React Query: A solution for Frontend State Management challenges? With Tomasz Ducin",
+      "date": "2025-02-03T06:18:28.036Z",
+      "type": "podcast",
+      "status": "missing",
+      "youtubeVideo": "MLO08iaRvBk",
+      "videoSource": "channel"
+    },
+    {
+      "id": 155829834,
+      "url": "https://www.architecture-weekly.com/p/understanding-kafkas-consumer-protocol",
+      "title": "Understanding Kafka's Consumer Protocol: A Deep Dive into How Consumers Talk to Brokers",
+      "date": "2025-01-27T16:52:01.607Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 155239200,
+      "url": "https://www.architecture-weekly.com/p/kafka-consumers-under-the-hood-of",
+      "title": "Kafka Consumers: Under the Hood of Message Processing",
+      "date": "2025-01-20T13:35:40.180Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 154747316,
+      "url": "https://www.architecture-weekly.com/p/how-a-kafka-like-producer-writes",
+      "title": "How Kafka Producer Works internally",
+      "date": "2025-01-13T13:58:09.536Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 154259126,
+      "url": "https://www.architecture-weekly.com/p/thoughts-on-platforms-core-teams",
+      "title": "Thoughts on Platforms, Core Teams, DORA Report and all that jazz",
+      "date": "2025-01-06T13:51:32.055Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 153792265,
+      "url": "https://www.architecture-weekly.com/p/locks-queues-and-business-workflows",
+      "title": "Locks, Queues and business workflows processing",
+      "date": "2024-12-30T09:53:45.989Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 153519736,
+      "url": "https://www.architecture-weekly.com/p/distributed-locking-a-practical-guide",
+      "title": "Distributed Locking: A Practical Guide",
+      "date": "2024-12-23T14:01:55.420Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 153199093,
+      "url": "https://www.architecture-weekly.com/p/on-getting-the-meaningful-discussions",
+      "title": "On getting the meaningful discussions, and why that's important",
+      "date": "2024-12-16T13:24:11.580Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 152749693,
+      "url": "https://www.architecture-weekly.com/p/the-write-ahead-log-a-foundation",
+      "title": "The Write-Ahead Log: The underrated Reliability Foundation for Databases and Distributed systems",
+      "date": "2024-12-07T12:04:15.326Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 152315567,
+      "url": "https://www.architecture-weekly.com/p/applying-observability-from-strategy",
+      "title": "Applying Observability: From Strategy to Practice with Hazel Weakly",
+      "date": "2024-12-02T07:09:42.629Z",
+      "type": "podcast",
+      "status": "missing",
+      "youtubeVideo": "d2eVzz3oxJY",
+      "videoSource": "channel"
+    },
+    {
+      "id": 152130442,
+      "url": "https://www.architecture-weekly.com/p/deduplication-in-distributed-systems",
+      "title": "Deduplication in Distributed Systems: Myths, Realities, and Practical Solutions",
+      "date": "2024-11-25T13:20:26.569Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 151818131,
+      "url": "https://www.architecture-weekly.com/p/ordering-grouping-and-consistency",
+      "title": "Ordering, Grouping and Consistency in Messaging systems",
+      "date": "2024-11-18T14:35:24.801Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 151506425,
+      "url": "https://www.architecture-weekly.com/p/building-your-own-ledger-database",
+      "title": "Building your own Ledger Database",
+      "date": "2024-11-11T18:10:46.190Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 151148886,
+      "url": "https://www.architecture-weekly.com/p/tech-debt-doesnt-exist-but-trade",
+      "title": "Tech Debt doesn't exist, but trade-offs do",
+      "date": "2024-11-04T12:36:38.858Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 150748050,
+      "url": "https://www.architecture-weekly.com/p/frontent-architecture-backend-architecture",
+      "title": "Frontend Architecture, Backend Architecture or just Architecture? With Tomasz Ducin",
+      "date": "2024-10-28T08:01:06.213Z",
+      "type": "podcast",
+      "status": "missing",
+      "youtubeVideo": "EXj9TTJQwNc",
+      "videoSource": "channel"
+    },
+    {
+      "id": 150507659,
+      "url": "https://www.architecture-weekly.com/p/dont-oversell-ideas-trunk-based-development",
+      "title": "Don't Oversell Ideas: Trunk-Based Development Edition",
+      "date": "2024-10-21T11:21:39.681Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 150202094,
+      "url": "https://www.architecture-weekly.com/p/why-to-measure-and-make-our-system",
+      "title": "Why to measure and make our system observable? How to reason on chaotic world",
+      "date": "2024-10-14T09:56:17.121Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 149905375,
+      "url": "https://www.architecture-weekly.com/p/webinar-23-gojko-adzic-on-designing",
+      "title": "Webinar #23 - Gojko Adzic on designing product development experiments with Lizard Optimization",
+      "date": "2024-10-07T06:59:36.801Z",
+      "type": "podcast",
+      "status": "missing",
+      "youtubeVideo": "BfI7KVWLKTE",
+      "videoSource": "channel"
+    },
+    {
+      "id": 149606238,
+      "url": "https://www.architecture-weekly.com/p/webinar-22-on-performance-testing",
+      "title": "Webinar #22 - On Performance Testing with Jarosław Pałka",
+      "date": "2024-09-30T13:23:22.918Z",
+      "type": "podcast",
+      "status": "missing",
+      "youtubeVideo": "eyy-voE6D5I",
+      "videoSource": "playlist"
+    },
+    {
+      "id": 149286456,
+      "url": "https://www.architecture-weekly.com/p/making-your-system-observability",
+      "title": "Making your system observability predictable",
+      "date": "2024-09-23T16:57:03.419Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 148972865,
+      "url": "https://www.architecture-weekly.com/p/when-logs-and-metrics-arent-enough",
+      "title": "When Logs and metrics are not enough: Discovering Modern Observability",
+      "date": "2024-09-16T18:11:44.238Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 148674128,
+      "url": "https://www.architecture-weekly.com/p/show-me-the-money-practically-navigating",
+      "title": "Show me the money! Practically navigating the Cloud Costs Complexity",
+      "date": "2024-09-09T13:41:22.455Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 148403275,
+      "url": "https://www.architecture-weekly.com/p/using-s3-but-not-the-way-you-expected",
+      "title": "Using S3 but not the way you expected. S3 as strongly consistent event store",
+      "date": "2024-09-02T13:20:44.190Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 148235681,
+      "url": "https://www.architecture-weekly.com/p/webinar-21-michael-drogalis-building",
+      "title": "Webinar #21 - Michael Drogalis: Building the product on your own terms",
+      "date": "2024-08-28T18:15:10.498Z",
+      "type": "podcast",
+      "status": "missing",
+      "youtubeVideo": "JWoMWF4nVNU",
+      "videoSource": "playlist"
+    },
+    {
+      "id": 148140785,
+      "url": "https://www.architecture-weekly.com/p/talk-is-cheap-show-me-the-numbers",
+      "title": "Talk is cheap, show me the numbers! Benchmarking and beyond!",
+      "date": "2024-08-26T12:19:41.897Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 147881588,
+      "url": "https://www.architecture-weekly.com/p/architecture-weekly-191-is-it-production",
+      "title": "Is It Production Ready?",
+      "date": "2024-08-19T13:32:38.598Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 147613456,
+      "url": "https://www.architecture-weekly.com/p/architecture-weekly-190-queuing-backpressure",
+      "title": "Queuing, Backpressure, Single Writer and other useful patterns for managing concurrency",
+      "date": "2024-08-12T16:09:58.738Z",
+      "type": "newsletter",
+      "status": "missing"
+    },
+    {
+      "id": 147364154,
+      "url": "https://www.architecture-weekly.com/p/architecture-weekly-189-mastering",
+      "title": "Mastering Database Connection Pooling",
+      "date": "2024-08-05T13:09:22.972Z",
+      "type": "newsletter",
+      "status": "missing"
+    }
+  ]
+}

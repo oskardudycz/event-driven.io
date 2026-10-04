@@ -1,0 +1,330 @@
+[
+  {
+    "url": "https://www.architecture-weekly.com/p/fractal-architecture-cognitive-load",
+    "title": "Fractal Architecture, Cognitive Load, Vertical Slices and other terms that do(n't) fit in your head",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/architecture-weekly-is-5-years-old",
+    "title": "Architecture Weekly is 5 years old! 🎉",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/on-messaging-and-distributed-systems",
+    "title": "On Messaging and Distributed Systems with Ian Cooper",
+    "category": "Software Architecture",
+    "youtubeVideo": "0NYwN_p2pFI"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/new-recording-on-event-modelling",
+    "title": "New Recording on Event modelling anti-patterns from DDDEU",
+    "category": "Software Architecture",
+    "youtubeVideo": "Lf1MZlpbkGA"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/sneaky-code-bites-back",
+    "title": "Sneaky Code Bites Back",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/postgresql-partitioning-logical-replication",
+    "title": "PostgreSQL partitioning, logical replication and other Q&A about PostgreSQL Superpowers",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/just-use-sql-they-say-or-on-how-accidental",
+    "title": "Just use SQL they say... Or how accidental complexity piles on",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/my-thoughts-on-vertical-slices-cqrs",
+    "title": "My thoughts on Vertical Slices, CQRS, Semantic Diffusion and other fancy words",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/compilation-isnt-just-for-programming",
+    "title": "Compilers Aren't Just for Programming Languages",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/requiem-for-a-10x-engineer-dream",
+    "title": "Requiem for a 10x Engineer Dream",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/why-open-source-isnt-always-fair",
+    "title": "Why Open Source Isn't Always Fair. Dual licenses explained",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/workflow-engine-design-proposal-tell",
+    "title": "Workflow Engine design proposal, tell me your thoughts",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/the-order-of-things-why-you-cant",
+    "title": "The Order of Things: Why You Can't Have Both Speed and Ordering in Distributed Systems",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/dealing-with-eventual-consistency",
+    "title": "Dealing with Eventual Consistency, and Causal Consistency using Predictable Identifiers",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/predictable-identifiers-enabling",
+    "title": "Predictable Identifiers: Enabling True Module Autonomy in Distributed Systems",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/start-alone-then-together-why-software",
+    "title": "Start Alone, Then Together: Why Software Modelling Needs Solitary Brainstorming",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/secondary-indexes-and-the-specialized",
+    "title": "Secondary Indexes and the Specialized Storage Dilemma",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/do-we-still-need-the-qa-role",
+    "title": "Do we still need the QA role?",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/killer-metrics-or-why-you-should",
+    "title": "Killer metrics, or why you should know upfront when to remove the new feature",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/residuality-theory-a-rebellious-take",
+    "title": "Residuality Theory: A Rebellious Take on Building Systems That Actually Survive",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/the-underestimated-power-of-hot-spots",
+    "title": "The Underestimated Power of Hot Spots and Notes in EventStorming",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/hints-on-getting-to-speak-at-conferences",
+    "title": "Hints on getting to speak at conferences",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/why-we-should-learn-multiple-programming",
+    "title": "Why We Should Learn Multiple Programming Languages",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/business-wont-let-me-and-other-lies",
+    "title": "Business Won't Let Me and other lies we tell to ourselves",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/postgresql-jsonb-powerful-storage",
+    "title": "PostgreSQL JSONB - Powerful Storage for Semi-Structured Data",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/monolith-first-are-you-sure",
+    "title": "Monolith-First - are you sure?",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/what-we-dont-know-that-we-dont-know",
+    "title": "What we don't know that we don't know",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/we-are-no-superhumans",
+    "title": "We are no superhumans",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/typescript-migrates-to-go-whats-really",
+    "title": "TypeScript Migrates to Go: What's Really Behind That 10x Performance Claim?",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/whole-architecture-weekly-content",
+    "title": "Whole Architecture Weekly content is free now!",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/practical-introduction-to-event-sourcing",
+    "title": "Practical Introduction to Event Sourcing with Emmett",
+    "category": "Software Architecture",
+    "youtubeVideo": "SDXdcymKv-8"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/so-you-want-to-break-down-monolith",
+    "title": "So you want to break down monolith? Read that first.",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/how-does-kafka-know-what-was-the",
+    "title": "How does Kafka know what was the last message it processed? Deep dive into Offset Tracking",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/documenting-event-driven-architecture",
+    "title": "Documenting Event-Driven Architecture with EventCatalog and David Boyne",
+    "category": "Software Architecture",
+    "youtubeVideo": "bcfY-cPqNYo"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/defining-your-paranoia-level-navigating",
+    "title": "Defining Your Paranoia Level: Navigating Change Without the Overkill",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/react-query-a-solution-for-frontend",
+    "title": "React Query: A solution for Frontend State Management challenges? With Tomasz Ducin",
+    "category": "Software Architecture",
+    "youtubeVideo": "MLO08iaRvBk",
+    "recordingEmbeds": {
+      "https://www.architecture-weekly.com/p/frontent-architecture-backend-architecture": "EXj9TTJQwNc"
+    }
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/understanding-kafkas-consumer-protocol",
+    "title": "Understanding Kafka's Consumer Protocol: A Deep Dive into How Consumers Talk to Brokers",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/kafka-consumers-under-the-hood-of",
+    "title": "Kafka Consumers: Under the Hood of Message Processing",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/how-a-kafka-like-producer-writes",
+    "title": "How Kafka Producer Works internally",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/thoughts-on-platforms-core-teams",
+    "title": "Thoughts on Platforms, Core Teams, DORA Report and all that jazz",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/locks-queues-and-business-workflows",
+    "title": "Locks, Queues and business workflows processing",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/distributed-locking-a-practical-guide",
+    "title": "Distributed Locking: A Practical Guide",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/on-getting-the-meaningful-discussions",
+    "title": "On getting the meaningful discussions, and why that's important",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/the-write-ahead-log-a-foundation",
+    "title": "The Write-Ahead Log: The underrated Reliability Foundation for Databases and Distributed systems",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/applying-observability-from-strategy",
+    "title": "Applying Observability: From Strategy to Practice with Hazel Weakly",
+    "category": "Software Architecture",
+    "youtubeVideo": "d2eVzz3oxJY"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/deduplication-in-distributed-systems",
+    "title": "Deduplication in Distributed Systems: Myths, Realities, and Practical Solutions",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/ordering-grouping-and-consistency",
+    "title": "Ordering, Grouping and Consistency in Messaging systems",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/building-your-own-ledger-database",
+    "title": "Building your own Ledger Database",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/tech-debt-doesnt-exist-but-trade",
+    "title": "Tech Debt doesn't exist, but trade-offs do",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/frontent-architecture-backend-architecture",
+    "title": "Frontend Architecture, Backend Architecture or just Architecture? With Tomasz Ducin",
+    "category": "Software Architecture",
+    "youtubeVideo": "EXj9TTJQwNc"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/dont-oversell-ideas-trunk-based-development",
+    "title": "Don't Oversell Ideas: Trunk-Based Development Edition",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/why-to-measure-and-make-our-system",
+    "title": "Why to measure and make our system observable? How to reason on chaotic world",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/webinar-23-gojko-adzic-on-designing",
+    "title": "Webinar #23 - Gojko Adzic on designing product development experiments with Lizard Optimization",
+    "category": "Software Architecture",
+    "youtubeVideo": "BfI7KVWLKTE"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/webinar-22-on-performance-testing",
+    "title": "Webinar #22 - On Performance Testing with Jarosław Pałka",
+    "category": "Software Architecture",
+    "youtubeVideo": "eyy-voE6D5I"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/making-your-system-observability",
+    "title": "Making your system observability predictable",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/when-logs-and-metrics-arent-enough",
+    "title": "When Logs and metrics are not enough: Discovering Modern Observability",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/show-me-the-money-practically-navigating",
+    "title": "Show me the money! Practically navigating the Cloud Costs Complexity",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/using-s3-but-not-the-way-you-expected",
+    "title": "Using S3 but not the way you expected. S3 as strongly consistent event store",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/webinar-21-michael-drogalis-building",
+    "title": "Webinar #21 - Michael Drogalis: Building the product on your own terms",
+    "category": "Software Architecture",
+    "youtubeVideo": "JWoMWF4nVNU"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/talk-is-cheap-show-me-the-numbers",
+    "title": "Talk is cheap, show me the numbers! Benchmarking and beyond!",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/architecture-weekly-191-is-it-production",
+    "title": "Is It Production Ready?",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/architecture-weekly-190-queuing-backpressure",
+    "title": "Queuing, Backpressure, Single Writer and other useful patterns for managing concurrency",
+    "category": "Software Architecture"
+  },
+  {
+    "url": "https://www.architecture-weekly.com/p/architecture-weekly-189-mastering",
+    "title": "Mastering Database Connection Pooling",
+    "category": "Software Architecture"
+  }
+]

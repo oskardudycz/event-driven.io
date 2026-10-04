@@ -3,6 +3,7 @@ title: On mashing up modelling techniques for fun and profit
 category: "Software Architecture"
 cover: 2026-05-18-cover.jpg
 author: oskar dudycz
+redirectFrom: /on-mashing-up-modelling-techniques/
 ---
 
 Many people believe there should be one, and only one, way to model software. I think differently, I like to mix different techniques.

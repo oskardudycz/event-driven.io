@@ -3,6 +3,10 @@ title: On rebuilding read models, Dead-Letter Queues and Why Letting Go is Somet
 category: "Event-Driven Architecture"
 cover: 2026-01-19-cover.png
 author: oskar dudycz
+redirectFrom: /rebuilding_read_models_skipping_events/
+redirectAliases:
+  - /on-rebuilding-read-models-dead-letter/
+  - /en/on-rebuilding-read-models-dead-letter/
 ---
 
 ![cover](2026-01-19-cover.png)

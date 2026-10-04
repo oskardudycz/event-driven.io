@@ -3,6 +3,7 @@ title: On swimming, learning and my journey to being the last one
 category: "Motivational BS"
 cover: 2026-07-13-cover.jpg
 author: oskar dudycz
+redirectFrom: /on-swimming-learning-and-my-journey/
 ---
 
 Work impacts how we live, and our lives impact how we do our work. My name is Oskar Dudycz, not Paulo Coelho, and today I’m not going to talk about software architecture or the event-driven world, but about the world in general, or to be precise, my world. I’ll let you say hello to it, but if you’re looking for a technical piece, that’s not happening today.
