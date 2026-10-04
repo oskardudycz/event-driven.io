@@ -38,7 +38,9 @@ const CategoryPage = (props) => {
 
   const guides = categoryGuides.filter((guide) => guide.language === lang);
   const guideFor = (category) => guides.find((guide) => guide.slug === kebabCase(category));
-  const categoryList = Array.from(categories.entries()).sort(([left], [right]) => {
+  const categoryList = Array.from(categories.entries()).filter(([, entries]) =>
+    entries.some(({ node }) => !node.frontmatter.useDefaultLangCanonical)
+  ).sort(([left], [right]) => {
     const leftGuide = guideFor(left);
     const rightGuide = guideFor(right);
     if (leftGuide && !rightGuide) return -1;
@@ -137,7 +139,6 @@ export const query = graphql`
       filter: {
         fileAbsolutePath: { regex: "//posts/[0-9]+.*--/" }
         fields: { langKey: { eq: $langKey } }
-        frontmatter: { useDefaultLangCanonical: { ne: true } }
       }
       sort: { fields: { prefix: DESC } }
     ) {
@@ -146,6 +147,7 @@ export const query = graphql`
           frontmatter {
             category
             categories
+            useDefaultLangCanonical
           }
         }
       }

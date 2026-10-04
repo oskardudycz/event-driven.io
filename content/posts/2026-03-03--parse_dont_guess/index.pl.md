@@ -179,7 +179,7 @@ What's in the database:
 
 What you get back:
 
-```js
+```typescript
 { name: 'Alice', createdAt: Date, ... }
 ```
 

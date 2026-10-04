@@ -15,12 +15,12 @@ const webfinger = JSON.parse(
 );
 assert.equal(webfinger.subject, "acct:oskardudycz@hachyderm.io");
 
-const files = ["gatsby-config.js", "gatsby-node.es6.js"];
+const files = ["gatsby-config.js", "gatsby-node.mjs"];
 function visitFiles(directory) {
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
     const file = path.join(directory, entry.name);
     if (entry.isDirectory()) visitFiles(file);
-    else if (entry.name.endsWith(".js")) files.push(path.relative(root, file));
+    else if (/\.m?js$/.test(entry.name)) files.push(path.relative(root, file));
   }
 }
 visitFiles(path.join(root, "src"));

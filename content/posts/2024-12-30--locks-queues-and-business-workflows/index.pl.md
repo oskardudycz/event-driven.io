@@ -28,7 +28,7 @@ Let’s now define a high-level API for locking. I’ll use TypeScript again bec
 
 It can look as follows:
 
-```
+```typescript
 interface Lock {
   acquire(options: LockOptions): Promise<void>;
   tryAcquire(options: LockOptions): Promise<boolean>;
@@ -78,7 +78,7 @@ Let’s use it in our case!
 
 Let’s use what we learn so far, starting with the Lock setup:
 
-```
+```typescript
 function InProcessLock(): Lock {
   const taskProcessor = new QueueBroker({
     maxActiveTasks: Number.MAX_VALUE,
@@ -106,7 +106,7 @@ We’re also keeping the currently held locks in map cache.
 
 Now, let’s implement the acquire function:
 
-```
+```typescript
 async acquire({ lockId }: LockOptions): Promise<void> {
   await new Promise<void>((resolve, reject) => {
     taskProcessor
@@ -133,7 +133,7 @@ The queue broker completes task, when _ack_ callback is called. In _acquire_ we�
 
 Try acquire will look similarily, we can reuse the acquire function here:
 
-```
+```typescript
 async tryAcquire({ lockId }: LockOptions): Promise<boolean> {
   // If lock is already held, fail immediately
   if (locks.has(lockId)) {
@@ -152,7 +152,7 @@ If the lock is already held we return _false_ immediately. Otherwise we call acq
 
 If we’re calling the _acquire_ and _release_ functions explicitly, then we’re assuming that we're know what we’re doing. **That means, that release will be called after we finished the processing on the resource we wanted to lock.** Having that the release function can look as follows:
 
-```
+```typescript
 release({ lockId }: LockOptions): Promise<boolean> {
   const ack = locks.get(lockId);
   if (ack === undefined) {
@@ -172,7 +172,7 @@ The logic is simple, we’re getting cached _ack_ handle for the specified lock.
 
 Let’s finish implementation with locking scope created in _withAcquire_ to easier handle locking scenarios.
 
-```
+```typescript
 async withAcquire<Result = unknown>(
   handle: () => Promise<Result>,
   { lockId }: LockOptions,
@@ -198,7 +198,7 @@ Not much to explain, as you know all of that. Such syntax makes it just easier a
 
 Example usage? Sure, for instance, if you’d like to ensure that only a single Test Container initialisatisation happens in parallel, this could look as follows:
 
-```
+```typescript
 let container: EventStoreDBContainer | null = null;
 let startedContainer: StartedEventStoreDBContainer | null = null;
 let startedCount = 0;

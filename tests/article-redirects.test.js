@@ -4,10 +4,10 @@ const os = require("node:os");
 const path = require("node:path");
 const { test } = require("node:test");
 const yaml = require("js-yaml");
-const { createPages, onPreBuild } = require("../gatsby-node");
 const writeRedirects = require("gatsby-plugin-netlify/create-redirects").default;
 
 test("imported bare paths redirect permanently to English before the catch-all", async () => {
+  const { createPages, onPreBuild } = await import("../gatsby-node.mjs");
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "article-redirects-"));
   try {
     const root = path.resolve(__dirname, "../content/posts");

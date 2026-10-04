@@ -39,7 +39,8 @@
     "test:video": "node ./tests/video-headers.test.js",
     "test:redirects": "node ./tests/article-redirects.test.js",
     "test:archive": "node ./tests/architecture-weekly-manifest.test.js",
-    "test:import-build": "node ./tests/article-import-build.test.js"
+    "test:import-build": "node ./tests/article-import-build.test.js",
+    "test:cache": "node ./scripts/verify-gatsby-cache.mjs"
   },
   "dependencies": {
     "@ant-design/compatible": "^1.0.8",
@@ -59,7 +60,6 @@
     "gatsby-plugin-layout": "^4.16.0",
     "gatsby-plugin-manifest": "^5.16.0",
     "gatsby-plugin-netlify": "^5.1.1",
-    "gatsby-plugin-offline": "^6.16.0",
     "gatsby-plugin-postcss": "^6.16.0",
     "gatsby-plugin-react-svg": "^3.3.0",
     "gatsby-plugin-remove-serviceworker": "^1.0.0",
@@ -72,7 +72,6 @@
     "gatsby-remark-copy-linked-files": "^6.16.0",
     "gatsby-remark-embed-video": "3.2.1",
     "gatsby-remark-emojis": "^0.4.3",
-    "gatsby-remark-external-links": "^0.0.4",
     "gatsby-remark-images": "^7.16.0",
     "gatsby-remark-prismjs": "^7.16.0",
     "gatsby-remark-responsive-iframe": "^6.16.0",
@@ -86,13 +85,11 @@
     "normalize.css": "^8.0.0",
     "prismjs": "^1.27.0",
     "react": "^18.3.1",
-    "react-addons-perf": "^15.4.2",
     "react-dom": "^18.3.1",
     "react-facebook": "^8.1.4",
     "react-i18next": "^11.11.4",
     "react-icons": "^4.2.0",
     "react-instantsearch": "^6.12.1",
-    "react-md-spinner": "^1.0.0",
     "react-obfuscate": "^3.6.8",
     "react-share": "^5.3.0",
     "react-visibility-sensor": "^5.1.1",
@@ -101,7 +98,15 @@
     "styled-jsx-plugin-postcss": "^4.0.1",
     "styled-jsx-plugin-stylelint": "^0.1.0",
     "tinycolor2": "^1.4.1",
-    "yaml-loader": "^0.6.0"
+    "yaml-loader": "^0.6.0",
+    "prop-types": "15.7.2",
+    "core-js": "2.6.12",
+    "lodash": "4.17.21",
+    "lodash.merge": "4.6.2",
+    "react-instantsearch-dom": "6.12.1",
+    "algoliasearch": "4.10.3",
+    "unist-util-visit": "2.0.3",
+    "bluebird": "3.7.2"
   },
   "keywords": [
     "gatsby"
@@ -109,13 +114,9 @@
   "devDependencies": {
     "@babel/preset-env": "^7.29.7",
     "@babel/preset-react": "^7.29.7",
-    "@babel/register": "^7.29.7",
     "@mapbox/stylelint-processor-arbitrary-tags": "^0.4.0",
     "babel-eslint": "^10.1.0",
-    "babel-plugin-dynamic-import-webpack": "^1.0.2",
     "babel-plugin-import": "^1.8.0",
-    "babel-plugin-syntax-dynamic-import": "^6.18.0",
-    "babel-webpack-plugin": "^0.1.1",
     "cheerio": "1.0.0-rc.12",
     "dotenv": "^10.0.0",
     "eslint": "^7.32.0",
@@ -125,7 +126,6 @@
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-prettier": "^3.4.1",
     "eslint-plugin-react": "^7.10.0",
-    "json-loader": "^0.5.7",
     "netlify-cli": "^6.7.1",
     "pixelmatch": "^7.2.0",
     "playwright": "^1.63.0",
@@ -152,9 +152,10 @@
     "stylelint-config-standard": "^22.0.0",
     "turndown": "7.2.4",
     "turndown-plugin-gfm": "1.0.2",
-    "url-loader": "^4.1.1",
     "vite": "^7",
     "vitest": "^5.0.1",
-    "webpack-bundle-analyzer": "^4.4.2"
+    "webpack-bundle-analyzer": "^4.4.2",
+    "postcss-preset-env": "6.7.0",
+    "svg-react-loader": "0.4.6"
   }
 }

@@ -36,7 +36,7 @@ Modern payment providers like Stripe have recognised this pattern. Their Payment
 
 Let's examine how coupling emerges in a traditional event-driven architecture. Imagine our payment module listening for events from various parts of the system:
 
-```
+```typescript
 interface OrderCreated {
   type: 'OrderCreated';
   orderId: string;
@@ -77,7 +77,7 @@ interface MarketplacePurchaseEvent {
 
 The pseudocode for handling that could look as follows:
 
-```
+```typescript
 class PaymentModule {
   constructor(
     private eventBus: EventBus,
@@ -151,7 +151,7 @@ The payment module also loses its generic nature. Instead of being a thin wrappe
 
 One approach to reducing coupling involves exposing a command interface instead of listening for specific events. Rather than the payment module knowing about orders, reimbursements, and subscriptions, other modules send generic payment requests:
 
-```
+```typescript
 interface RequestPayment {
   amount: number;
   currency: string;
@@ -163,7 +163,7 @@ interface RequestPayment {
 
 And handle it like:
 
-```
+```typescript
 class PaymentModule {
   // Generic payment processing - knows nothing about business context
   async requestPayment(command: RequestPayment): Promise<PaymentResult> {
@@ -190,7 +190,7 @@ This inverts the dependency. Instead of the payment module depending on other mo
 
 Now, business modules can use this generic interface:
 
-```
+```typescript
 class OrderModule {
   async processOrder(order: Order) {
     const paymentResult = await this..requestPayment({
@@ -224,7 +224,7 @@ What we need is a way for modules to correlate requests and responses without ex
 
 Consider this URN format for our payment system:
 
-```
+```text
 urn:payments:{version}:{source}:{tenantid}:{uniqueid}
 ```
 
@@ -232,7 +232,7 @@ Let's break down each component. The `payments` namespace identifies this as a p
 
 Here are concrete examples:
 
-```
+```text
 urn:payments:1:ORD:TN1:20240115-0jdfj93
 urn:payments:1:RMB:TN1:20240115-ksd8234
 urn:payments:1:SUB:TN2:20240115-mnb9821
@@ -248,7 +248,7 @@ The implementation requires careful consideration of field naming and placement.
 
 Let's update our payment request to use URNs:
 
-```
+```typescript
 interface PaymentRequest {
   correlationId: string;  // The URN
   amount: number;
@@ -261,7 +261,7 @@ interface PaymentRequest {
 
 And the implementation to:
 
-```
+```typescript
 class PaymentModule {
   async requestPayment(request: PaymentRequest): Promise<void> {
     // Process payment asynchronously
@@ -321,7 +321,7 @@ Source: https://www.cloudamqp.com/blog/part4-rabbitmq-for-beginners-exchanges-ro
 
 First, we'll set up the infrastructure configuration:
 
-```
+```typescript
 class PaymentsMessagingConfiguration {
   async setupRouting(channel: Channel) {
     // Main exchange for payment responses
@@ -359,7 +359,7 @@ class PaymentsMessagingConfiguration {
 
 Now let's implement the complete flow from order creation through payment completion:
 
-```
+```typescript
 class OrderModule {
   async payOrder(orderId: string) {
     const order = await this.load(orderId);
@@ -398,7 +398,7 @@ class OrderModule {
 
 The payment module processes requests and publishes responses without knowing the source:
 
-```
+```typescript
 class PaymentModule {
   async onPaymentCompletedProviderWebhook(result: PaymentGatewayPaymentCompleted) {    
     try {      
@@ -455,7 +455,7 @@ While predictable identifiers offer numerous benefits, they also introduce secur
 
 Protect against identifier traversal attacks logically can look as follows:
 
-```
+```typescript
 class SecurePaymentHandler {
   async handlePaymentResponse(
     message: Message,
@@ -491,7 +491,7 @@ class SecurePaymentHandler {
 
 Rate limiting can also leverage the URN structure:
 
-```
+```typescript
 class UrnBasedRateLimiter {
   async checkLimit(correlationId: string): Promise<boolean> {
     const source = this.extractSource(correlationId);
@@ -519,7 +519,7 @@ class UrnBasedRateLimiter {
 
 Consider encryption for sensitive components (or best avoid sending such):
 
-```
+```typescript
 class SecureUrnGenerator {
   generateUrn(source: string, tenantId: string, uniqueId: string): string {
     // Version 2 URNs use encryption

@@ -138,12 +138,12 @@ Reposting is not automatically harmful, but publishing identical full articles i
 
 ### P3 — larger engineering work
 
-- Upgrade Gatsby in controlled stages using the migration plan below. The current CI intentionally uses Node 16 and Yarn; runtime and framework changes should not be mixed into the SEO release.
+- Upgrade Gatsby in controlled stages using the migration plan below. The current baseline is Gatsby 5.16.1, React 18.3.1, Node 24 and Yarn 1. Earlier migration checkpoints below are historical.
 - Revisit the global CSS and JavaScript payload after measuring production coverage. Ant Design remains necessary for the contact form but should not leak into unrelated routes.
 - Consider archive pagination if the topic and article indexes grow enough to create large HTML pages.
 - Expand the automated SEO assertions when new page types or indexing rules are introduced.
 
-## Node-first Gatsby upgrade plan
+## Historical Node-first Gatsby upgrade investigation (completed)
 
 The primary goal is to move the build and deployment runtime to Node 24 LTS. The investigation therefore starts by running the current site on Node 24 and works backward from real failures. Yarn 1 remains the package manager throughout; changing it does not help the runtime upgrade.
 
@@ -155,7 +155,7 @@ Research snapshot (2026-09-22):
 | Compatibility checkpoint | 16.20.2 | 4.25.9 | 17.0.2 | Isolate Gatsby data-layer/plugin changes |
 | Supported target | latest 24.x LTS | 5.16.1 | 18.3.1 | Deployable result |
 
-Node 22 is not a planned intermediate deployment. Use it only as a diagnostic if Gatsby 5 succeeds there but fails on Node 24. React 19, a new package manager, Gatsby Slices, deferred static generation, and unrelated lint cleanup are separate work and are not required to reach Node 24.
+Node 24 is the verified runtime. React 19, a new package manager, Gatsby Slices, deferred static generation, and unrelated lint cleanup are separate work and are not required to reach Node 24.
 
 ### What the reverse investigation found
 
@@ -189,7 +189,7 @@ Exit criterion: the current Node 16/Yarn build and `yarn test` pass from a froze
 - When a content or routing change is intentional, run `yarn update:build-contract` only after a successful build and review the fixture diff. Migration code must not update the fixture merely to make CI green.
 - The Gatsby 5 preview exposed real browser regressions that static checks missed. Add one Playwright-driven Vitest browser test at a time, first proving each test fails on the broken preview and passes on the corrected local build. Five desktop tests compare against committed, reviewed PNGs at 1440×900 with a 3% pixel-difference budget, plus structural and real-image assertions; a sixth checks client-side navigation. The category and English/Polish homepage PNGs are production references. The archive PNG was updated from the corrected local build after making its H1 visible. The article-footer PNG was captured from the corrected local build after the production and preview both showed an unrelated full article in the author slot; separate production captures document that old state. CI runs the tests against its own built site and uploads current/diff screenshots; it does not query production. Refresh baselines explicitly after reviewing intentional design/content changes, never automatically to make a failure green.
 
-The original Node 16 contract recorded 562 routes, 89 redirects, 330 sitemap URLs, and both feed URL sets. After removing the disabled sign-in integration, the reviewed Gatsby 5 contract records 556 routes and 80 redirects; the six English/Polish account, billing, and callback routes and their nine redirects are the only removals. Sitemap URLs and feed URL sets are unchanged. One known SEO ambiguity is tracked explicitly: `/pl/anti-patterns/` is in the sitemap but declares the English URL as canonical because `content/pages/anti-patterns` and `content/posts/2024-04-07--anti-patterns` compete for the same localized routes. Resolving it requires an editorial routing choice; until then the verifier permits only this exact mismatch rather than disabling sitemap-wide canonical checks.
+The original Node 16 contract recorded 562 routes, 89 redirects, 330 sitemap URLs, and both feed URL sets. After removing the disabled sign-in integration, the post-auth-removal Gatsby 5 checkpoint recorded 556 routes and 80 redirects; the six English/Polish account, billing, and callback routes and their nine redirects are the only removals. Sitemap URLs and feed URL sets are unchanged. One known SEO ambiguity is tracked explicitly: `/pl/anti-patterns/` is in the sitemap but declares the English URL as canonical because `content/pages/anti-patterns` and `content/posts/2024-04-07--anti-patterns` compete for the same localized routes. Resolving it requires an editorial routing choice; until then the verifier permits only this exact mismatch rather than disabling sitemap-wide canonical checks.
 
 ### Step 2 — Gatsby 4 diagnostic checkpoint
 
@@ -224,7 +224,7 @@ Exit criterion: a frozen Yarn install, clean Gatsby build, and SEO integration t
 
 After the Node 24/Gatsby 5 checkpoint is verified, migrate from Yarn 1 to npm as a separate change. Generate a single `package-lock.json`, replace the Yarn commands in package scripts, CI, Netlify, and contributor instructions with npm equivalents, remove `yarn.lock`, and verify `npm ci`, the build, and the same regression tests. Do not maintain two competing lockfiles.
 
-The styling work should also remain incremental and portable to a possible Astro migration. First record browser screenshots and behavior for representative pages. Then move the 35 `styled-jsx` components to ordinary CSS Modules and shared CSS custom properties in small, visually checked groups; Gatsby and Astro both support this model. Consider Tailwind only after the design tokens and component boundaries are clear, not as a prerequisite for the runtime fix. Remove the styled-jsx plugins only when no component needs them, then retry npm without peer-dependency overrides. Keep Yarn as the working deployment path until that point.
+The styling work should also remain incremental and portable to a possible Astro migration. First record browser screenshots and behavior for representative pages. The selected subsequent styling direction is Tailwind plus semantic CSS custom properties, with ordinary scoped CSS for complex rules and article content. Migrate styled-jsx consumers incrementally while preserving appearance; introduce full dark mode and layout redesign separately. This pass deliberately precedes CSS changes. Remove the styled-jsx plugins only when no component needs them, then retry npm without peer-dependency overrides. Keep Yarn as the working deployment path until that point.
 
 The early npm probe exposed peer conflicts that Yarn 1 permits: `eslint-plugin-graphql@4` requires GraphQL <=15 although Gatsby 5 uses GraphQL 16, and `gatsby-plugin-styled-jsx@6.16.0` declares `styled-jsx@^3` although the site uses styled-jsx 4. The GraphQL lint plugin has no configured rules and can be removed. The styled-jsx integration renders much of the site's CSS, so do not suppress its peer conflict or replace/downgrade it without a site-owner decision and a visual regression check. Keep the npm switch pending until this compatibility choice is resolved.
 
@@ -245,12 +245,12 @@ Exit criterion: production runs Gatsby 5.16.x on Node 24 and passes the same che
 - Migrate source files to TypeScript incrementally after the Node 24/Gatsby 5 checkpoint. Start with shared data types and new code, then convert components in small batches while preserving routes and HTML behavior.
 - Establish an ESLint baseline that runs cleanly on touched files and TypeScript without reformatting the whole legacy project. Expand enforcement as modules are migrated; do not hide the existing 528 errors by treating a failing full-project lint command as green.
 
-### Changes deliberately deferred unless a build proves they are necessary
+### Superseded modernization decisions from the runtime-only phase
 
-- Migrating the one `gatsby-image` consumer and three `fluid` queries to `gatsby-plugin-image` is worthwhile, but the API remains available as deprecated compatibility code. Do it during this migration only if Gatsby 5 cannot build or render it correctly.
-- Replacing `<StaticQuery>` with `useStaticQuery` is a Gatsby 6 concern, not a Gatsby 5 requirement.
-- Explicit GraphQL schema types are useful hardening for sparse frontmatter, but they are not currently required for the Node upgrade.
-- Removing all unused packages, modernising Ant Design, React 19, Vitest, global formatting/lint cleanup, Slices, and deferred static generation are separate follow-ups.
+- Image migration and Gatsby Head migration are complete and verified.
+- Gatsby 5 deprecates `<StaticQuery>`; its replacement with `useStaticQuery` is included in the current modernization pass.
+- Explicit GraphQL schema types and proven-unused dependency cleanup are included in the current pre-redesign pass.
+- Ant Design modernization, React 19, global lint cleanup, Slices and deferred generation remain deferred. Vitest browser checks are already implemented.
 
 This sequence is intentionally failure-driven. We will not rewrite working integrations pre-emptively; when an unmaintained plugin becomes an actual blocker and replacing it changes visible behavior, implementation pauses for a decision.
 
@@ -267,3 +267,25 @@ yarn test
 ```
 
 The local skip flag prevents a build from changing the production search index. CI's main-branch build still uses its Algolia credentials and must verify indexing separately; preview builds must not write to the production index. After deployment, repeat technical checks against live URLs because CDN, redirects, headers, forms, and bot protection cannot be fully validated from Gatsby's generated files.
+
+
+## Gatsby 5 modernization before CSS redesign — 2026-10-04
+
+The build review in `docs/gatsby-5-review.md` is incorporated here. Verified locally: Gatsby Head replaces React Helmet; cards use gatsby-plugin-image; route creation queries only routing metadata; Prism aliases and Browserslist are updated; YouTube uses the maintained embed plugin with a timestamp/referrer adapter. All 96 requested articles have English and Polish files. The current verified output is 694 routes, 222 redirects, 399 sitemap URLs, and nine browser checks. Historical counts above describe earlier checkpoints, not the current release. CI/deployment and live Algolia verification remain separate pending checks.
+
+Implementation sequence: replace layout StaticQuery with useStaticQuery; clean up listeners, timers and font callbacks; convert Node hooks to native ESM (.mjs) and remove runtime Babel registration; remove proven-unused dependencies and declare direct imports; define nullable frontmatter/routing GraphQL types; cache Yarn and compatible Gatsby outputs in CI; measure cold/warm queries and validate modified/deleted content with warm caches. Preserve appearance, URLs, feeds, metadata and screenshot tolerances. Record verification in todo.md.
+
+Tailwind, semantic theme variables, dark mode, Slices, npm migration and visual redesign are deferred. Keep React 18, Yarn and static generation. Earlier restrictions on optional image/Head/testing modernization have been superseded by the completed work and this sequence. No deployment or third-party indexing is part of this pass.
+
+CI actions are included in this pass: checkout/setup-node/upload-artifact v7, cache v6, CodeQL v4, using GitHub-hosted Ubuntu runners. Validate workflow syntax locally; remote execution remains pending.
+
+Navigation includes existing Polish placeholder pages; SEO alternates remain limited to actual translations. Existing Polish category routes list placeholder articles with canonical English links, matching the article archive. Remove redundant category separators when no recommended section exists.
+
+Imported code fences must retain source syntax metadata, infer clear language patterns when absent, and preserve code bytes/spacing. Kurrent examples use TypeScript rather than plain text. Rewrite known article links across the blog; normalize EventStore/Kurrent blog domain aliases and archived URLs, while retaining unmigrated source references.
+
+
+### Pre-redesign pass result — 2026-10-04
+
+All listed local modernization tasks are complete: useStaticQuery/lifecycle cleanup, native ESM Node hooks, dependency audit, explicit types, compatible CI caching and action updates. Local frozen install, production build, full tests and 12 browser checks pass. Existing output contracts and screenshot tolerances are preserved. Warm-build verification covers modified/deleted/restored content without publishing a test fixture. Cold/warm builds measured 124.73/28.16 seconds locally; final content build passed in 54.39 seconds. CI execution and deployment are still separate release checks.
+
+The requested article-navigation/category fixes, social profile changes, README reading-order guidance and imported highlighting/cross-links are also verified. JavaScript/js snippet language tags use TypeScript throughout the blog and in future imports; snippet code is unchanged. Polish Event Sourcing shows its six translations plus 82 canonical-English placeholders. See todo.md for current verification evidence and pending external checks.

@@ -8,7 +8,7 @@ useDefaultLangCanonical: true
 
 Imagine you’re sending a message to Kafka by calling something simple like:
 
-```
+```text
 producer.send(new ProducerRecord<>("someTopic", "Hello, Kafka!"));
 ```
 
@@ -64,7 +64,7 @@ For example, if _[batch.size](https://docs.confluent.io/platform/current/install
 
 Below is a pseudocode that demonstrates **why** we do batching at all—**not** storing anything on disk or network, but collecting messages until we decide to flush:
 
-```
+```typescript
 class SimpleInMemoryProducer {
   private buffer: Buffer[] = [];
   constructor(private broker: Broker, private maxBatchSize: number) {}
@@ -106,7 +106,7 @@ As [explained in the article about WAL](/en/the-write-ahead-log-a-foundation/). 
 
 If we were to implement the broker side in a naive manner, we could keep a **single** file for all messages. Whenever a batch arrives, we append it to the end of that file, storing it in the following format:
 
-```
+```text
 [ offset: 4 bytes | dataLength: 4 bytes | data: N bytes ]
 ```
 
@@ -120,7 +120,7 @@ Where:
 
 Using Node.js _[fs (File System)](https://nodejs.org/api/fs.html)_ built-in library, we could code the basic append to log logic as:
 
-```
+```typescript
 import * as fs from 'fs';
 
 class SingleFilePartitionLog {
@@ -257,7 +257,7 @@ We’ll construct a “SegmentedPartitionLog” that:
 
 Let’s define the structure of our log segment and the record. Record will look as follows
 
-```
+```typescript
 interface SingleRecord {
   relativeOffset: number;
   timestamp: number;
@@ -275,7 +275,7 @@ It has:
 
 The segment will look:
 
-```
+```typescript
 interface Segment {
   fileFd: number;
   filePath: string;
@@ -303,7 +303,7 @@ Even if data is fully on disk (via OS flush or _fsync_), you can get only a part
 
 We’ll make a simplified approach: embed a small “magic byte,” a 4-byte CRC, and a record count (plus the compressed data). If we can’t read the entire batch or the CRC doesn’t match on startup, we truncate it. Let’s see how we code that “WAL” concept in segments.
 
-```
+```typescript
 function computeCRC(buf: Buffer): number {
   // Real Kafka: specialized CRC32C. We'll do MD5 => integer
   const md5 = crypto.createHash('md5').update(buf).digest('hex');
@@ -331,7 +331,7 @@ We define a function to turn an array of SingleRecord into a single binary chunk
 
 See:
 
-```
+```typescript
 function buildBatchBuffer(records: SingleRecord[]): Buffer {
   const rawParts: Buffer[] = [];
   for (const r of records) {
@@ -370,7 +370,7 @@ function buildBatchBuffer(records: SingleRecord[]): Buffer {
 
 Now we define the class that orchestrates everything: multiple segments, rolling, optional _fsync_, etc. We’ll also add a `recoverOnStartup()` method next to handle partial writes. First, the skeleton:
 
-```
+```typescript
 class SegmentedPartitionLog {
   private segments: Segment[] = [];
   private activeSegment!: Segment;
@@ -407,7 +407,7 @@ We assume we only do size-based rolling. Real Kafka is also time-based.
 
 When creating a segment, we open the segment file for reading and writing (so _a+)_. The data being written will be inserted at the end of the file. If the file doesn’t exist, it’ll be created. We track the base offset.
 
-```
+```typescript
 private createSegment(baseOffset: number): void {
   const filePath = path.join(this.baseDir, `partition-${this.partitionId}-${baseOffset}.log`);
   const fd = fs.openSync(filePath, 'a+');
@@ -428,7 +428,7 @@ private createSegment(baseOffset: number): void {
 
 If the active segment surpasses maximum segment bytes, we close it, and create a new one with _rollSegment_ method:
 
-```
+```text
 private rollSegment(): void {
   fs.closeSync(this.activeSegment.fileFd);
   this.createSegment(this.currentOffset);
@@ -455,7 +455,7 @@ When a batch of records is ready to be appended, we:
 
 8.  **Assign Offsets**: Allocate and return unique offsets for each record in the batch. Kafka meticulously tracks offsets to maintain message order and ensure accurate consumption.
 
-```
+```typescript
 public appendBatch(records: SingleRecord[]): number[] {
   if (records.length === 0) return [];
 

@@ -28,7 +28,7 @@ Then the actual work starts. Which reservations are wrong, by how much, and what
 
 Take the reservation support asked about. Seven nights, two guests, 27 March to 3 April, booked on 14 March, breakfast added two days later. Here’s the row:
 
-```plaintext
+```text
 | id    | check_in   | check_out  | rate_plan_id | total_amount | updated_at       |
 |-------|------------|------------|--------------|--------------|------------------|
 | 8f21  | 2026-03-27 | 2026-04-03 | RP-STD-2026  | 1358.00      | 2026-03-16 14:02 |
@@ -46,7 +46,7 @@ Around 900 of those rows genuinely came from the broken build. The other 340 wer
 
 `recalculate_total` reads the rate plan as it stands today, and the plans were revised on 15 March for the season. RP-STD-2026 went from 180.00 a night to 205.00. For reservation 8f21 that means:
 
-```plaintext
+```text
 |         | before      | after migration   | correct  |
 |---------|-------------|-------------------|----------|
 | rooms   | 1260.00     | 1435.00           | 1260.00  |
@@ -71,7 +71,7 @@ We can prepare for this in a state-based system, of course. Keep the breakdown i
 
 Here’s the stream for the same reservation:
 
-```plaintext
+```text
 | when         | event                        | data                                                       |
 |--------------|------------------------------|------------------------------------------------------------|
 | 14 Mar 09:40 | `ReservationInitiated`       | 27 Mar – 3 Apr, DBL, 2 guests                              |
@@ -84,7 +84,7 @@ Here’s the stream for the same reservation:
 
 The corrupted value is cityTax, and it’s sitting there in plain sight. With two guests, a March night costs 9.00 in tax and an April night 14.00, so five March nights and two April nights come to 45.00 + 28.00 = 73.00. The event says 98.00, which is all seven nights at 14.00. Everything else in that event is right, and RatePlanApplied still says the booking was made at 180.00 a night under version 4, so we can calculate the correct total without reconstructing anything:
 
-```plaintext
+```text
 | What    | recorded | correct |
 |---------|----------|---------|
 | cityTax | 98.00    | 73.00   |
@@ -171,7 +171,7 @@ That’s the loop from the state-based version broken. Each attempt adds a fact 
 
 Another reservation, four nights, two guests, 29 March to 2 April, at 210.00 a night. Rooms 840.00, tax charged 56.00, correct tax 41.00.
 
-```plaintext
+```text
 | when         | what                            |                                            |
 |--------------|---------------------------------|--------------------------------------------|
 | 14 Mar 09:41 | `ReservationPriceCalculated`    | cityTax 56.00, total 896.00, build a4f9c2e |

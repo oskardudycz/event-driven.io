@@ -120,7 +120,7 @@ Nevertheless, the idea is that, indeed, if we want our software to do what it do
 
 Ok, enough philosophy; let’s get back to the original example from the previous article. We discussed the following e-commerce order features:
 
-```
+```text
 📁 orders
     📁 verifying-order
     📁 confirming-order
@@ -131,7 +131,7 @@ Ok, enough philosophy; let’s get back to the original example from the previou
 
 Now, if we added a shopping cart, then it could look like:
 
-```
+```text
 📁 shopping-carts
     📁 adding-product-item
     📁 removing-product-item
@@ -142,7 +142,7 @@ Now, if we added a shopping cart, then it could look like:
 
 We could group that into the e-commerce module
 
-```
+```text
 📁 e-commerce
     📁 shopping-carts
         📁 adding-product-item
@@ -160,7 +160,7 @@ We could group that into the e-commerce module
 
 If we zip that into the e-commerce system, we’d see:
 
-```
+```text
 📁 e-commerce
     📁 shopping-carts
     📁 orders
@@ -168,7 +168,7 @@ If we zip that into the e-commerce system, we’d see:
 
 We could continue to elevate that into, e.g. the whole ERP system with other modules like marketing, sales, etc. Each of them would have its own sub-modules.
 
-```
+```text
 📁 erp
     📁 e-commerce
     📁 marketing
@@ -179,7 +179,7 @@ Looks familiar?
 
 Yes, the layout is the same as the order module. What’s more, this can also go down, so:
 
-```
+```text
 📁 orders
     📁 verifying-order
         📁 anti-fraud-detection
@@ -201,7 +201,7 @@ We already discussed with the features factory that no-boundaries is not a solut
 
 Let’s look again at this example
 
-```
+```typescript
 import { type OrderStorage } from '../order-storage;
 
 // Dependencies
@@ -241,7 +241,7 @@ We declare explicitly what our feature needs.
 
 Why couldn’t we do the same for the whole module?
 
-```
+```typescript
 import { verifyOrderHandler, type CheckDriver } from ‘verifying-order’;
 
 // Dependencies

@@ -45,6 +45,30 @@ Markdown articles use the syntax `` `youtube: [Video title](https://www.youtube.
 
 YouTube embeds require a cross-origin referrer. The Netlify plugin configuration overrides its default `same-origin` referrer policy with `strict-origin-when-cross-origin`; removing this override can cause YouTube player configuration error 153. The click-to-play component and imported YouTube iframes also set this policy explicitly. Run `npm run test:video` to check the generated Netlify headers. See [YouTube's client identity requirements](https://developers.google.com/youtube/terms/required-minimum-functionality#api-client-identity-and-credentials).
 
+Code blocks preserve source language labels; the importer recognizes clear TypeScript, SQL, C#, JSON, shell, XML and INI examples when labels are absent. JavaScript (`javascript`/`js`) labels and unlabelled TS/JS-style examples use `typescript`, as the blog uses TypeScript. Explicit labels for other languages are retained. Plain output and directory trees remain `text`. Set `"codeLanguage": "typescript"` on a manifest entry when the source marks all examples as plain text. Known EventStore/Kurrent domain aliases also resolve to relative blog URLs.
+
+## Category reading order
+
+Edit `data/category-guides.json`. Each entry is identified by `language` (`en` or `pl`) and the category's URL `slug`. Its `description` appears on the category pages. The `recommended` array controls the numbered reading sequence, in exactly the order listed:
+
+```json
+{
+  "language": "en",
+  "slug": "event-sourcing",
+  "description": "Learn Event Sourcing from the fundamentals to production.",
+  "recommended": [
+    "introduction_to_event_sourcing",
+    "projections_and_read_models_in_event_driven_architecture"
+  ]
+}
+```
+
+Use the article URL slug without `/en/`, `/pl/`, surrounding slashes or the date prefix. Each article must belong to that category through its `category` or `categories` frontmatter and have a file for the guide's language. Listed articles appear first with reading-order numbers; the remaining articles follow by publication date. An empty array shows the chronological list alone. Missing or out-of-category slugs are currently ignored, so check the rendered page after editing.
+
+English and Polish guides are independent. Polish category pages also show existing English placeholder articles; their cards link to the canonical English page until `useDefaultLangCanonical` is removed after translation. Adding a guide alone does not create a category route: at least one canonical article in that language must belong to the category.
+
+Run `yarn build && yarn test`, then inspect `/en/category/event-sourcing/` or its Polish counterpart. Reading order does not change article dates or URLs. Article-footer recommendations are separate: set an article's `related` frontmatter array to control those links.
+
 ## Gatsby 5 build checks
 
 See [the build review](docs/gatsby-5-review.md) for the image and query migrations, warning fixes and further improvements. `yarn test` includes `test:import-build`, which checks the generated HTML for all requested imports. Run the production build before these tests.

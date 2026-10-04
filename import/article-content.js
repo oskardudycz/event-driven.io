@@ -19,8 +19,10 @@ function youtubeMarkdown(input, title = 'Embedded video') {
 }
 
 function sourceKey(input) {
-  const url = new URL(input);
-  return `${url.hostname.replace(/^www\./, '')}${url.pathname.replace(/\/$/, '')}`;
+  const url = new URL(String(input).replace(/^https?:\/\/web\.archive\.org\/web\/\d+(?:[a-z]+_)?\//, ""));
+  const host = url.hostname.replace(/^www\./, "");
+  const site = /^(?:eventstore\.com|eventstore\.io|kurrent\.io|kurrentdb\.kurrent\.io)$/.test(host) && url.pathname.startsWith("/blog/") ? "eventstore-blog" : host;
+  return `${site}${url.pathname.replace(/\/$/, "")}`;
 }
 
 function buildArticleLinks(root = path.resolve(__dirname, '../content/posts'), entries = []) {
@@ -52,6 +54,11 @@ function buildArticleLinks(root = path.resolve(__dirname, '../content/posts'), e
       const slug = target.split('/').filter(Boolean).pop();
       if (fs.readdirSync(root).some(name => name.endsWith(`--${slug}`))) map.set(sourceKey(url), target);
     }
+  }
+  const externalAliases = JSON.parse(fs.readFileSync(path.join(__dirname, "article-link-aliases.json"), "utf8"));
+  for (const [url, target] of Object.entries(externalAliases)) {
+    const slug = target.split("/").filter(Boolean).pop();
+    if (fs.readdirSync(root).some(name => name.endsWith(`--${slug}`))) map.set(sourceKey(url), target);
   }
   return map;
 }

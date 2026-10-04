@@ -62,7 +62,7 @@ What’s more, we didn’t even want to have a direct relationship on the backen
 
 When users select a file, we could generate a URN immediately:
 
-```
+```text
 urn:files:1:CONSTRUCTION:SAFETY_CHECK:DAILY_INSPECTION:site-photo.jpg
 ```
 
@@ -108,7 +108,7 @@ For S3, generating a pre-signed URL requires only the target key and expiration.
 
 The presigned URLs are valid only for the specified duration:
 
-```
+```typescript
 async generatePresignedUrl(key: string): Promise<string> {
   const command = new PutObjectCommand({
     Bucket: this.bucket,
@@ -122,7 +122,7 @@ async generatePresignedUrl(key: string): Promise<string> {
 
 [Microsoft Graph API](https://learn.microsoft.com/en-us/graph/api/resources/onedrive) offers similar capabilities through upload sessions. According to Microsoft's documentation: _["Create an upload session to allow your app to upload files up to the maximum file size. An upload session allows your app to upload ranges of the file in sequential API requests. Upload sessions also allow the transfer to resume if a connection is dropped while the upload is in progress."](https://learn.microsoft.com/en-us/graph/api/driveitem-createuploadsession?view=graph-rest-1.0)_ The implementation follows a similar pattern:
 
-```
+```typescript
 async createUploadSession(path: string): Promise<UploadSession> {
   const response = await this.graphClient
     .api(`/drive/root:/${path}:/createUploadSession`)
@@ -175,7 +175,7 @@ Instead of explicit registration:
 
 Modules query for files matching their patterns:
 
-```
+```typescript
 class TaskModule {
   async getTaskWithAttachments(taskId: string): Promise<TaskWithFiles> {
     const task = await this.db.getTask(taskId);
@@ -214,7 +214,7 @@ This design provides the context needed for URN generation. When a safety inspec
 
 The flow works like this. We need a function to generate a derived URN. It can be either as dumb as this, or more likely a bit smarter:
 
-```
+```typescript
 // Client-side URN generation
 function generateFileUrn(
     module: string,
@@ -230,7 +230,7 @@ function generateFileUrn(
 
 Nevertheless, how creative we are in the mapping then we could use it as follows:
 
-```
+```typescript
 async function createRemediationTask(violationId: string, contractorId: string, file: File) {
   const urn = generateFileUrn('CONSTRUCTION', 'SAFETY_CHECK', 'VIOLATION_${violationId}', file);
 
@@ -255,7 +255,7 @@ async function createRemediationTask(violationId: string, contractorId: string, 
 
 The backend tracks these uploads using link metadata:
 
-```
+```typescript
 class DocumentService {
   async requestUploadUrl(urn: string, context: Context): Promise<{ uploadUrl: string }> {
     // Generate pre-signed URL using URN as the storage key
@@ -279,7 +279,7 @@ Accepting eventual consistency means accepting temporary inconsistency. But "tem
 
 We could also keep an explicit track of document links together with metadata, store them in the database when we’re initiating, and upload metadata.
 
-```
+```typescript
 interface DocumentLink {
   urn: string;
   uploadedAt?: Date;
@@ -293,7 +293,7 @@ interface DocumentLink {
 
 We could either subscribe to the storage notifications (if they give us such) or just run a background service that validates uploads and cleans up failures:
 
-```
+```sql
 class DocumentValidationService {
   async validatePendingUploads(): Promise<void> {
     // Find uploads pending for more than 15 minutes

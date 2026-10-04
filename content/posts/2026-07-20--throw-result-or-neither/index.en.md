@@ -406,7 +406,7 @@ Where:
 
 The example could be defined for all shopping cart events not to need repeat it in all functions:
 
-```javascript
+```typescript
 const mapShoppingCartDecision = (event: ShoppingCartEvent) => {
   switch(event.type) {
     case "ProductItemOutOfStock":

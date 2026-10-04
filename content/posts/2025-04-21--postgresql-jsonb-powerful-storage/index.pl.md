@@ -36,7 +36,7 @@ Let’s discuss today how it works, and if it’s the actual answer.
 
 To visualise this conceptual model, imagine if our database could access any path directly without scanning the entire document:
 
-```
+```text
 +----+---------------+--------------------------+--------------------+
 | id | customer.name | customer.contact.address | email              |
 +----+---------------+--------------------------+--------------------+
@@ -58,7 +58,7 @@ When Postgresql stores a JSONB document, it doesn't simply dump JSON text into a
 
 Have a look on the following JSON:
 
-```
+```json
 {
   "customer": {
     "name": "John Smith",
@@ -76,7 +76,7 @@ Have a look on the following JSON:
 
 This hierarchical structure could be flattened into a set of paths for each nested structure:
 
-```
+```text
 Path: customer.name = "John Smith"
 Path: customer.contact.email = "john@example.com"
 Path: customer.contact.phone = "555-1234"
@@ -96,7 +96,7 @@ Path: customer.contact.address.country = "USA"
 
 For example, using our customer data example:
 
-```
+```json
 {
   "id": "cust_web_123",
   "email": "web_user@example.com",
@@ -113,7 +113,7 @@ For example, using our customer data example:
 
 Would be tokenised and stored with internal tree-like structures tracking:
 
-```
+```text
 Root: Object {
   Count: 5,
   Children: [
@@ -166,7 +166,7 @@ Root: Object {
 
 So, when you search for:
 
-```
+```text
 customer_data->'customer'->'contact'->'address'->>'city'
 ```
 
@@ -204,7 +204,7 @@ To see how JSONB actually works, let's discuss a scenario that manages customer 
 
 Here's how a typical customer model might look in TypeScript:
 
-```
+```typescript
 interface Customer {
   id: string;
   email: string;
@@ -256,7 +256,7 @@ If you tried to model it with relational tables, you'd face a classic data model
 
 With JSONB, you can implement this in PostgreSQL without forcing every customer profile into the same rigid structure:
 
-```
+```sql
 CREATE TABLE customers (
     id TEXT PRIMARY KEY,
     email TEXT UNIQUE NOT NULL,
@@ -267,7 +267,7 @@ CREATE TABLE customers (
 
 This allows storing profiles with wildly different shapes while keeping common fields queryable. The SQL implementation might look like:
 
-```
+```sql
 INSERT INTO customers (id, email, customer_data) VALUES
 -- Web customer
 ('cust_web_123', 'web_user@example.com',
@@ -343,7 +343,7 @@ INSERT INTO customers (id, email, customer_data) VALUES
 
 Despite the varying structures, you can still query across all customer types:
 
-```
+```sql
 SELECT
     id,
     email,
@@ -390,7 +390,7 @@ PostgreSQL also has syntactic sugar called JSON\_TABLE see more in the [document
 
 Creating a GIN index is straightforward:
 
-```
+```sql
 CREATE INDEX idx_customer_data ON customers USING GIN (customer_data);
 ```
 
@@ -406,7 +406,7 @@ CREATE INDEX idx_customer_data ON customers USING GIN (customer_data);
 
 The resulting index is usefull for certain operations like:
 
-```
+```sql
 -- Find all customers with specific tags (contains operator)
 SELECT id FROM customers WHERE customer_data @> '{"tags": ["premium"]}';
 
@@ -419,7 +419,7 @@ SELECT id FROM customers WHERE customer_data ?| array['discount', 'coupon', 'pro
 
 These queries can use the GIN index directly without extracting paths, making them highly efficient even with large datasets. The execution plan would show something like:
 
-```
+```text
 Bitmap Heap Scan on customers  (cost=4.26..8.27 rows=1 width=32)
   Recheck Cond: (customer_data @> '{"tags": ["premium"]}'::jsonb)
   ->  Bitmap Index Scan on idx_customer_data  (cost=0.00..4.26 rows=1 width=0)
@@ -440,7 +440,7 @@ For each key or scalar value, the GIN index maintains a posting list of row IDs 
 
 When PostgreSQL executes a containment query like:
 
-```
+```text
 customer_data @> '{"status": "active", "type": "business"}
 ```
 
@@ -460,7 +460,7 @@ This set-based operation is highly efficient compared to extracting and comparin
 
 **For simpler cases where you frequently filter on a specific JSON path, creating a [B-Tree index](https://www.postgresql.org/docs/current/btree.html) on an extracted value is often more efficient:**
 
-```
+```sql
 -- Index for a specific extracted field
 CREATE INDEX idx_customer_source ON customers ((customer_data->>'source'));
 ```
@@ -469,7 +469,7 @@ This creates a traditional B-Tree index on the extracted string value. Internall
 
 The execution plan for a query using this index would show:
 
-```
+```text
 Index Scan using idx_customer_source on customers  (cost=0.28..8.29 rows=1 width=32)
   Index Cond: ((customer_data->>'source'::text) = 'website'::text)
 ```
@@ -492,7 +492,7 @@ Understanding the internal mechanisms helps explain why you might want different
 
 For more specific query patterns, you can combine these approaches:
 
-```
+```sql
 -- Location-based index for frequently filtered fields
 CREATE INDEX idx_customer_country ON customers ((customer_data->'contact'->'address'->>'country'));
 
@@ -503,7 +503,7 @@ WHERE customer_data->>'source' = 'website';
 
 The partial index only indexes rows where the condition _customer\_data->>'source' = 'website'_ is true. This makes the index much smaller while still accelerating queries for web customers:
 
-```
+```sql
 -- Query that can use the partial index
 SELECT id FROM customers
 WHERE customer_data->>'source' = 'website'
@@ -514,7 +514,7 @@ Internally, PostgreSQL maintains separate metadata about which index portions ap
 
 Suppose we have a table with 1 million customer records, and we frequently run queries to find customers from specific countries:
 
-```
+```sql
 -- Without an index, this requires scanning all records
 SELECT id FROM customers
 WHERE customer_data->'contact'->'address'->>'country' = 'Germany';
@@ -522,27 +522,27 @@ WHERE customer_data->'contact'->'address'->>'country' = 'Germany';
 
 The execution plan would show:
 
-```
+```text
 Seq Scan on customers  (cost=0.00..24053.00 rows=10000 width=32)
   Filter: ((customer_data->'contact'->'address'->>'country'::text) = 'Germany'::text)
 ```
 
 After adding an appropriate index:
 
-```
+```sql
 CREATE INDEX idx_country ON customers ((customer_data->'contact'->'address'->>'country'));
 ```
 
 The execution plan becomes:
 
-```
+```text
 Index Scan using idx_country on customers  (cost=0.42..341.50 rows=10000 width=32)
   Index Cond: ((customer_data->'contact'->'address'->>'country'::text) = 'Germany'::text)
 ```
 
 This can reduce query time from seconds to milliseconds. But the choice between GIN and B-Tree indexes isn't always obvious. If we frequently need to find customers with specific combinations of attributes, a GIN index might be better:
 
-```
+```sql
 -- Query that benefits from a GIN index
 SELECT id FROM customers
 WHERE customer_data @> '{"contact": {"address": {"country": "Germany"}}, "status": "active"}';
@@ -570,7 +570,7 @@ Read more in [Postgres performance cliffs with large JSONB values and TOAST](htt
 
 You don't have to abandon all data validation when using JSONB. PostgreSQL allows you to enforce constraints on JSONB documents:
 
-```
+```sql
 -- Ensuring required fields regardless of customer source
 ALTER TABLE customers ADD CONSTRAINT valid_customer
 CHECK (
@@ -594,7 +594,7 @@ These constraints leverage PostgreSQL's ability to check path existence and valu
 
 PostgreSQL 12+ introduces a powerful new way to work with JSONB through the SQL/JSON path language. This provides a more expressive syntax for complex data extraction:
 
-```
+```sql
 SELECT jsonb_path_query(
     customer_data,
     '$.purchases[*] ? (@.amount > 10 && @.subscription == true)'
@@ -610,7 +610,7 @@ Internally, PostgreSQL parses the path expression into an execution plan specifi
 
 JSONB works well with PostgreSQL's aggregation functions:
 
-```
+```sql
 -- Find average purchase amount across all customers
 SELECT AVG(
     (jsonb_array_elements(customer_data->'purchases')->>'amount')::numeric
@@ -636,7 +636,7 @@ Of course, you can mix traditional columns with JSONB ones.
 
 **For those columns that you know will always exist, or are the same, you can set up regular tables, and those with weaker schema, you can use JSONB.**
 
-```
+```sql
 CREATE TABLE customers (
     id TEXT PRIMARY KEY,
     email TEXT UNIQUE NOT NULL,

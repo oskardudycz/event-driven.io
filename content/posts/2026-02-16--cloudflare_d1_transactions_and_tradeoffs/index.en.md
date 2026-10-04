@@ -182,7 +182,7 @@ If you'd like to try it, you can check Emmett's or Pongo's beta versions.
 
 For Pongo, you can install it with:
 
-```shell
+```bash
 npm install @event-driven-io/pongo@0.17.0-beta.21
 ```
 
@@ -200,7 +200,7 @@ const client = pongoClient({
 
 Or in Emmett by installing:
 
-```shell
+```bash
 npm install @event-driven-io/emmett-sqlite@0.43.0-beta.1
 ```
 

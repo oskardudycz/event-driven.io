@@ -56,7 +56,7 @@ Naming the operation is also what gives you something to slice along. If every o
 
 So we get:
 
-```
+```text
 📁 orders
     📁 verifying-order
     📁 confirming-order

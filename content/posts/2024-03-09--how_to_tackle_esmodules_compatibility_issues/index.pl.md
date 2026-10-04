@@ -28,7 +28,7 @@ What are ES Modules? They brought a standardised module system to JavaScript, ad
 
 All that sounds great, but migration can be tedious. You need to change not only your build tooling but also the syntax in the code. For instance, in CommonJS, your module declaration could look like:
 
-```javascript
+```typescript
 const add = (a, b) => a + b;
 const subtract = (a, b) => a - b;
 
@@ -37,7 +37,7 @@ module.exports = { add, subtract };
 
 And usage with imports as:
 
-```javascript
+```typescript
 const math = require('./math');
 
 console.log(math.add(2, 3));
@@ -46,14 +46,14 @@ console.log(math.subtract(5, 2));
 
 In ES modules, the declaration looks:
 
-```javascript
+```typescript
 export const add = (a, b) => a + b;
 export const subtract = (a, b) => a - b;
 ```
 
 And usage:
 
-```javascript
+```typescript
 import { add, subtract } from './math.js';
 
 console.log(add(2, 3));

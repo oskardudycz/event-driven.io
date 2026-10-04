@@ -103,7 +103,7 @@ We need to subtract all the stuff that’s not needed, leaving only the useful r
 
 For my case, I realised that if I chose the single strategy, it would organise my contract into the root test folder like this:
 
-```plaintext
+```text
 📁 src/test/resources/
   📁 contract-registry/
     📁 com/acme/orders/OrderPlaced/

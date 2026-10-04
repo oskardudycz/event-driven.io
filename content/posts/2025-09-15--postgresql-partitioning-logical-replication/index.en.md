@@ -52,7 +52,7 @@ Ok, let’s move into the questions that I didn’t manage to cover during the w
 
 If we follow the example from our webinar, the trips table looks like this:
 
-```
+```sql
 CREATE TABLE trips (
     trip_time TIMESTAMPTZ NOT NULL,
     vehicle_id INT NOT NULL,
@@ -111,7 +111,7 @@ What about the rest? They can be moved either to cheaper, slower storage. Postgr
 
 We can do it by calling a SQL statement:
 
-```
+```sql
 -- Create cheap storage
 CREATE TABLESPACE cold_storage LOCATION '/mnt/slow_disk';
 
@@ -124,7 +124,7 @@ ALTER TABLE trips_2025_01 SET TABLESPACE cold_storage;
 
 We could also use the [pg\_partman](https://github.com/pgpartman/pg_partman) extension to automate it:
 
-```
+```sql
 -- Tell partman to keep only 2 years attached
 UPDATE partman.part_config
 SET retention = '3 months',
@@ -153,7 +153,7 @@ Yes, PostgreSQL uses partition pruning to automatically skip irrelevant partitio
 
 Here's how it works with our trips table when using the [Explain tool](https://www.postgresql.org/docs/current/sql-explain.html):
 
-```
+```sql
 EXPLAIN (ANALYZE, BUFFERS)
 SELECT * FROM trips
 WHERE trip_time >= '2025-06-15'
@@ -162,7 +162,7 @@ WHERE trip_time >= '2025-06-15'
 
 We’ll get something close to:
 
-```
+```text
 Append  (cost=0.00..241.00 rows=4800 width=64) (actual time=0.015..0.467 rows=4752 loops=1)
   Subplans Removed: 10    -- ← 10 partitions skipped
   ->  Seq Scan on trips_2025_06  (cost=0.00..48.20 rows=1200 width=64) (actual time=0.014..0.128 rows=1188 loops=1)
@@ -193,7 +193,7 @@ PostgreSQL doesn't have automatic partition rebalancing like distributed databas
 
 The most common issue? You chose the wrong partition size. Maybe you started with yearly partitions, but now queries are slow because each partition has too much data. You need to split them, e.g.:
 
-```
+```sql
 -- Can't just alter boundaries - must detach and recreate
 ALTER TABLE trips DETACH PARTITION trips_2025;
 
@@ -211,7 +211,7 @@ DROP TABLE trips_2025;
 
 Another case is when you have data in the wrong partitions. Updating your partition key value won’t move your data to a different partition, so instead of updating the partition key value, you need to insert it into the new partition with the new key and drop it from the old one. You can do it as follows:
 
-```
+```sql
 WITH moved AS (
   DELETE FROM trips_2024_12  
   -- condition to find record(s) you want to move
@@ -233,7 +233,7 @@ FROM moved;
 
 In the same way, if you have a table that’s not yet partitioned but has existing data, then PostgreSQL will refuse to partition it. You have two options. Either manually create new partitioned tables and migrate data first, or use pg\_partman, which can partition existing tables:
 
-```
+```sql
 SELECT partman.create_parent('public.trips', 'trip_time', 'native', 'monthly');
 CALL partman.partition_data_proc('public.trips');
 ```
@@ -328,7 +328,7 @@ With slots, PostgreSQL also checks every slot position before deletion. One slow
 
 If you want Kafka-like behaviour where data is available for future subscribers, you need WAL archiving:
 
-```
+```text
 -- Archive WAL to long-term storage
 archive_mode = on
 archive_command = 'cp %p /mnt/wal_archive/%f'
@@ -338,7 +338,7 @@ This copies WAL files before deletion. Future subscribers can replay from the ar
 
 You can also set the maximum size of data to keep for the slot:
 
-```
+```text
 ALTER SYSTEM SET max_slot_wal_keep_size = '10GB';
 ```
 

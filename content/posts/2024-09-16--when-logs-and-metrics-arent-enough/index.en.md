@@ -54,7 +54,7 @@ In a traditional system, metrics provide real-time, aggregated data that helps y
 
 You can imagine the basic metrics dashboard:
 
-```
+```text
 Active connections: 95/100
 Queue size: 12 tasks
 Connection wait time: 200ms
@@ -78,7 +78,7 @@ Along with metrics, logs are traditionally used to track events in real-time. Yo
 
 Example log entries for a connection pool might look like this:
 
-```
+```text
 INFO: Task enqueued at 12:01:03, queue size: 10
 INFO: Connection acquired by Task 101 at 12:01:05
 INFO: Query executed for Task 101 at 12:01:10, query time: 500ms
@@ -127,7 +127,7 @@ This manual process is slow and inefficient, especially in high-concurrency syst
 
 You notice that queries take longer than expected to execute, contributing to the exhaustion of the connection pool. The logs show when a query was started and completed, but they don't tell you why it took so long. You might have logs that say:
 
-```
+```text
 INFO: Query executed for Task 102 at 12:02:00, query time: 2000ms
 INFO: Connection released by Task 102 at 12:02:03
 ```
@@ -192,7 +192,7 @@ Think of spans as the building blocks of a trace. They give detailed insights in
 
 The basic open telemetry setup can look as follows.
 
-```
+```typescript
 import { trace } from "@opentelemetry/api";
 
 // setup tracer for connection pool
@@ -241,7 +241,7 @@ You've already instrumented your connection pool and database queries with OpenT
 
 **We can start by finding long-lived connections by querying all spans where the** _**connection-acquired**_ **span took longer than 1 second to release the connection.**
 
-```
+```text
 span.duration > 1000ms and name = "connection-acquired"
 ```
 
@@ -257,7 +257,7 @@ Next, you want to see which specific tasks are holding connections for too long.
 
 **We can drill down into specific tasks with long connection durations and correlate these long-lived connections by task ID to understand what operations are performed while the connection is being held.**
 
-```
+```text
 span.duration > 1000ms and name = "connection-acquired" | group_by task-id
 ```
 
@@ -271,13 +271,13 @@ To understand what this task was doing while holding the connection, you'll need
 
 We need to find the long-running queries for _(task-id: 12345)_ by querying the `db-query` spans related to this task to see what queries were executed.
 
-```
+```text
 task-id = "12345" and name = "db-query"
 ```
 
 You find that task 12345 executed a SELECT query on the orders table:
 
-```
+```sql
 SELECT * FROM orders WHERE order_date > '2023-01-01'
 ```
 
@@ -289,7 +289,7 @@ Next, you want to understand why this query is taking so long. To do this, you c
 
 **You can analyse query duration and rows returned** by looking at the _db.rows\_returned_ attribute to see how many rows this query returned, as returning too many rows could be causing the slowdown.
 
-```
+```text
 task-id = "12345" and name = "db-query" | select db.rows_returned
 ```
 
@@ -301,7 +301,7 @@ Now that you've identified the problematic query, you want to check if this is a
 
 We can try to find all long-running SELECT Queries on the orders table
 
-```
+```text
 name = "db-query" and db.table = "orders" and span.duration > 2000ms
 ```
 
@@ -317,7 +317,7 @@ Now that you know the query pattern causing the problem, you can check if these 
 
 You can correlate the timing of these long-running queries with connection pool usage by querying for spans where the pool was under pressure.
 
-```
+```text
 span.duration > 2000ms and name = "db-query" and connection.pool.activeConnections > 90
 ```
 

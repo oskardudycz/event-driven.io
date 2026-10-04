@@ -16,7 +16,7 @@ And they may be right, but…
 
 Let’s say that you want to query users. In TypeScript, this could look like:
 
-```
+```typescript
 const sql = 'SELECT userName, email FROM users';
 
 const result = await connection.execute.query(sql);
@@ -26,7 +26,7 @@ Easy peasy!
 
 Now, let’s add a bit more, so filtering, let’s say that we’d like to find users with a specific e-mail.
 
-```
+```sql
 const email = 'oskar@event-driven.io';
 const sql = `
   SELECT userName, email
@@ -40,7 +40,7 @@ Still a piece of cake, right? We’re using [Template Strings](https://developer
 
 This will work, but what if the email wasn’t the constant value, as I did, but was provided by the user? Well, then one could give an email with the value:
 
-```
+```typescript
 const email = `'; DROP TABLE users; SELECT 'drop da base!`;
 ```
 
@@ -52,7 +52,7 @@ One solution would be to try to validate or sanitise the email value. Still, hav
 
 Luckily, databases give us parameterised queries so that we can provide params that will be sanitised and mapped. For instance, like that:
 
-```
+```sql
 const sql = `
   SELECT userName, email
   FROM users
@@ -63,7 +63,7 @@ const result = await connection.execute.query(sql, [email]);
 
 Cool, but let’s say that we’d like to have email, be just one of the params, and our filtering params look as follows:
 
-```
+```typescript
 type UsersFilter = {
    userName?: string;
    email?: string
@@ -109,7 +109,7 @@ We’re getting into the _[Stringly Typed](https://wiki.c2.com/?StringlyTyped)_ 
 
 What can we do about it? Let’s try to simplify the filtering query generation first.
 
-```
+```typescript
 type ParametrizedQuery {
   sql: string,
   params: unknown[]
@@ -122,7 +122,7 @@ We’re benefiting from the dynamic nature of the JS/TS here: each object is a r
 
 Cool, now we can use it in our method:
 
-```
+```typescript
 function filterUsers(filter?: UsersFilter): Promise<User[]> {
   const sql = `SELECT userName, email FROM users`;
 
@@ -136,7 +136,7 @@ That solved the issue for some time, but… What if we’d like to support not o
 
 Then we’d need to try harder!
 
-```
+```typescript
 type ColumnOperator = 'eq' | 'like' | 'gt' | 'lt' | 'gte' | 'lte';
 
 type ColumnFilter = {
@@ -157,7 +157,7 @@ We could define a column filter to contain the column name, value and operator. 
 
 We could map our filter object to the WhereFilter using:
 
-```
+```typescript
 type BuildWhereFilterOptions = {
    map?: (property: string, value: unknown) => ColumnFilter;
    operator?: WhereOperator
@@ -188,7 +188,7 @@ Besides the filter, we’re also allowing an optional pass mapping function to c
 
 We could use it in the where SQL generation:
 
-```
+```typescript
 function mapToSQL(columnFilter: ColumnFilter): string {
   const { columnName, operator } = columnFilter;
 
@@ -224,7 +224,7 @@ function where(filter: WhereFilter): ParametrizedQuery {
 
 And now we can customise our filtering, adding LIKE for user name with:
 
-```
+```typescript
 function filterUsers(usersFilter?: UsersFilter): Promise<User[]> {
   const sql = `SELECT userName, email FROM users`;
 

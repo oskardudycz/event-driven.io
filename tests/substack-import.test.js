@@ -57,7 +57,7 @@ test("imports full article and local assets in both languages, preserving embeds
     assert.doesNotMatch(enBody, /^\[$/m);
     assert.match(enBody, /A caption\./);
     assert.match(enBody, /## A heading/);
-    assert.match(enBody, /```js\nif \(x < 2\) return true;/);
+    assert.match(enBody, /```typescript\nif \(x < 2\) return true;/);
     assert.match(enBody, /\| Name \| Value \|/);
     assert.match(enBody, /<iframe[^>]+start=30[^>]+allowfullscreen/);
     assert.match(enBody, /referrerpolicy="strict-origin-when-cross-origin"/);
@@ -241,4 +241,27 @@ test('future imports remove paid prompts and use relative URLs for available blo
     assert.match(en, /Full introduction/);
     assert.match(en, /Full ending/);
   } finally { await fs.rm(output, { recursive: true, force: true }); }
+});
+
+test("code language inference preserves source languages and recognizes typed examples", async () => {
+  const { codeLanguage, labelCodeFences } = await import('../import/code-languages.mjs');
+  assert.equal(codeLanguage('export type ShiftOpened = Event<"opened", { amount: number }>;'), 'typescript');
+  assert.equal(codeLanguage('SELECT id FROM events;'), 'sql');
+  assert.equal(codeLanguage('sudo service pgbouncer start'), 'bash');
+  assert.equal(codeLanguage('{"stream": "orders"}'), 'json');
+  assert.equal(codeLanguage('public class Order {}'), 'csharp');
+  assert.equal(codeLanguage('📁 orders\n  📁 confirming-order'), 'text');
+  assert.equal(codeLanguage('await appendToStream(streamName, events)', 'text', 'typescript'), 'typescript');
+  assert.equal(codeLanguage('example', 'js'), 'typescript');
+  const markdown = '```\nSELECT id FROM events;\n```\n\nNext paragraph.\n';
+  assert.equal(labelCodeFences(markdown), '```sql\nSELECT id FROM events;\n```\n\nNext paragraph.\n');
+});
+
+test("known EventStore and Kurrent article aliases resolve to canonical blog links", () => {
+  const { buildArticleLinks, relativeArticleLink } = require('../import/article-content');
+  const links = buildArticleLinks();
+  for (const host of ['www.eventstore.com', 'kurrent.io', 'kurrentdb.kurrent.io']) {
+    assert.equal(relativeArticleLink(`https://${host}/blog/how-to-get-the-current-entity-state-from-events?utm_source=source#example`, source, links), '/en/how_to_get_the_current_entity_state_in_event_sourcing/#example');
+    assert.equal(relativeArticleLink(`https://${host}/blog/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention`, source, links), '/en/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention/');
+  }
 });

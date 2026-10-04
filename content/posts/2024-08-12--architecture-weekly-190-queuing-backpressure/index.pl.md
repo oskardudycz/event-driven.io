@@ -164,7 +164,7 @@ The refactored connection pool implementation will look as follows:
 
 This is the critical line responsible for finishing the queue task:
 
-```
+```text
 onRelease: ack, // ACK queue task on connection release
 ```
 

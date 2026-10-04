@@ -60,7 +60,7 @@ Still, this issue with the name highlights the main challenge. In theory, a modu
 
 Consider a typical e-commerce platform with “Orders,” “Products,” and “Customers” modules. Without physical separation, developers inevitably create shortcuts:
 
-```
+```csharp
 public void ProcessOrder(Order order)
 {
     // Direct access to another module's repository
@@ -82,7 +82,7 @@ public void ProcessOrder(Order order)
 
 Of course, we can try to refactor, and instead of using the repository with direct access to the storage, we can have a “well defined public API” and use it as hexagonal architecture, e.g.
 
-```
+```csharp
 public void ProcessOrder(ICustomerService customerService, Order order)
 {
     var discount =

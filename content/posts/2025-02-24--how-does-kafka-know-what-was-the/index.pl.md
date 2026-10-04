@@ -82,7 +82,7 @@ In this simplified flow, a consumer sends an offset commit to the Kafka broker, 
 
 Under the hood, each offset commit is stored as a small message. While the actual format is internal to Kafka, you can think of it in a simplified TypeScript-esque interface:
 
-```
+```typescript
 interface OffsetCommit {
   groupId: string;         // e.g. 'payment-service'
   topic: string;           // e.g. 'transactions'

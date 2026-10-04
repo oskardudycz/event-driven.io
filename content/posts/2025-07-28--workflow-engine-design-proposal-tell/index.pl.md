@@ -180,7 +180,7 @@ This flow ensures durability at each step:
 
 Let's see how this works with a group checkout workflow that coordinates multiple individual checkouts:
 
-```
+```typescript
 export const GroupCheckoutWorkflow: Workflow
  GroupCheckoutInput,
  GroupCheckout,
@@ -194,7 +194,7 @@ export const GroupCheckoutWorkflow: Workflow
 
 The state tracks which guests have checked out:
 
-```
+```typescript
 export type GroupCheckout =
   | { status: 'NotExisting' }
   | {
@@ -206,7 +206,7 @@ export type GroupCheckout =
 
 The decide function contains our business logic:
 
-```
+```typescript
 export const decide = (
   input: GroupCheckoutInput,
   state: GroupCheckout,
@@ -230,7 +230,7 @@ export const decide = (
 
 and state evolution:
 
-```
+```typescript
 export const evolve = (
   state: GroupCheckout,
   {
@@ -278,7 +278,7 @@ export const evolve = (
 
 We register it with routing and type information:
 
-```
+```typescript
 export const groupCheckoutWorkflowProcessor = workflowProcessor({
   processorId: 'GroupCheckoutWorkflow',
   workflow: GroupCheckoutWorkflow,
@@ -308,7 +308,7 @@ See the full usage sample:
 
 The workflow's stream name comes from the `getWorkflowId` function. Here's what the stream contains as the workflow executes:
 
-```
+```text
 Pos |  Kind   | Direction | Message
 ----|---------|-----------|------------------------------------------
 1   | Command | Input     | InitiateGroupCheckout {groupId: '123'}
@@ -358,7 +358,7 @@ Recovery isn't a special case - it's just reading the stream and rebuilding stat
 
 Workflows are pure functions. Testing them is straightforward:
 
-```
+```typescript
 // Unit test
 const state = { status: 'Pending', guestStayAccountIds: new Map(...) };
 const input = { type: 'GuestCheckedOut', data: { guestId: 'g1' } };
@@ -368,7 +368,7 @@ const outputs = decide(input, state);
 
 You can test it without workflow runtime using regular tests, or built-in Emmett Behaviour-Driven Design testing capabilities, e.g.:
 
-```
+```typescript
 it('handles partial failures', () =>
   given([
     { type: 'GroupCheckoutInitiated', data: { guestIds: ['g1', 'g2'] } },
@@ -468,7 +468,7 @@ Workflows may sometimes need external data. How should they fetch it determinist
 
 **Option 3 - Request/Response**:
 
-```
+```text
 Workflow → FetchPrices query → Wait for Prices result.
 ```
 

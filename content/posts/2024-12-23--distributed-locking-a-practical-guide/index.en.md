@@ -101,7 +101,7 @@ Let’s look at each tool’s big-picture purpose—why you’d even consider it
 
 To create a lock, you need to create a “lock key” using a Redis command, for instance:
 
-```
+```text
 SET lockKey node123 NX EX 30
 ```
 
@@ -181,7 +181,7 @@ They serve different needs, but both let you say, “I want exclusive access to 
 
 You can lock specific rows in a table by issuing something like:
 
-```
+```sql
 BEGIN;
 SELECT * FROM locks WHERE lock_id = @loc_key FOR UPDATE;
 /* make changes */
@@ -200,14 +200,14 @@ You may also use regular rows instead of a dedicated locks table. It’s natural
 
 Instead of tying a lock to a specific row, you can lock an **arbitrary** identifier:
 
-```
+```sql
 -- PostgreSQL
 SELECT pg_advisory_lock(12345);
 /* do something exclusive */
 SELECT pg_advisory_unlock(12345);
 ```
 
-```
+```sql
 -- MySQL
 SELECT GET_LOCK('readModel', 10);
 /* do something exclusive */

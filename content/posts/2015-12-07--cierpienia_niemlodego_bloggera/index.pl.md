@@ -49,7 +49,7 @@ A po co ta moja wspaniała klasa skoro Knockout sam w sobie taki fajny? Komponen
 Po co to robić? A np. dlatego, że mnie.:
 * nie podoba się domyślna definicja komponentu przez podanie anonimowej klasy i kodu html bezpośrednio w defnicji komponentu
 
-```javascript
+```typescript
 ko.components.register('login-component', {
     viewModel: function(params) {
         this.username = ko.observable();
@@ -112,7 +112,7 @@ Aby przeładować Knockoutowy mechanizm loaderów komponentów należy utworzyć
 
 Potem wystarczy taką klasę zarejestrować. Przykładzik:
 
-```javascript
+```typescript
 function ComponentByNamingConventionLoader(){
     this.loadTemplate = function(name, templateConfig, callback){
         // Logic
@@ -139,7 +139,7 @@ Zatem do dzieła. Do kodu! Jak mówił Linus Torvalds: _"Talk is cheap. Show me 
 
 Metoda przyjmuje dwa parametry: nazwę komponentu i callback, który wywoła mechanizmy Knockouta do dalszego procesowania konfiguracji. Funkcja najpierw sprawdza czy w ogóle powinna używać konwencji nazewniczej czy nie. Jeśli nie, to wywołuje domyślny mechanizm w przeciwnym razie odpala wczytywanie komponentów ze zmodyfikowaną konfiguracją podając ścieżkę do pliku na bazie konwencji nazewniczej.
 
-```javascript
+```typescript
 function getConfig(name, callback) {
     if (shouldUseNamingConventionForComponent(name)) {
         callDefaultBehaviour(callback);
@@ -157,19 +157,19 @@ function getConfig(name, callback) {
 
 Metoda przyjmuje trzy parametry: nazwę komponentu, obiekt z konfiguracją ViewModelu oraz callback. Obiekt z konfiguracją będzie wyglądał  np.  
 
-```javascript
+```typescript
 {name: 'NameOfAClass'} 
 ```
 
 lub w naszym przypadku 
 
-```javascript
+```typescript
 { fromUrl: '/Scripts/Components/ComponentName/ComponentNameViewModel'}
 ```
 
 Zasada działania jest analogiczna jak GetConfig. Sprawdzamy czy powinniśmy w ogóle używać konwencji nazewniczych czy nie i w zależności od tego wywołujemy domyślne zachowanie lub nasze zaczytywanie z pliku.
 
-```javascript
+```typescript
 function loadViewModel(name, viewModelConfig, callback) {
     if (!shouldUseNamingConventionForViewModel(viewModelConfig)) {
         callDefaultBehaviour(callback);
@@ -191,7 +191,7 @@ function loadViewModel(name, viewModelConfig, callback) {
 
 No tego to nie będę tłumaczył. Analogicznie jak LoadViewModel tylko dla pliku html.
 
-```javascript
+```typescript
 function loadTemplate(name, templateConfig, callback) {
     if (!shouldUseNamingConventionForView(templateConfig)) {
         callDefaultBehaviour(callback);
@@ -215,7 +215,7 @@ Jak widać sam algorytm jest bardzo prosty i zrobiony przez analogię. Dobra Mak
 
 Dzięcioł jaki jest każdy widzi. Preparujemy url poprzez dodanie prefiksu do ścieżki i sufiksu z ustawieniami cache'owania strony (w celach optymalizacji). Potem wywołujemy pobranie pliku poprzez jQuery‘owy $.get, a pobrany html wstrzykujemy do Knockouta przy pomocy wbudowanej metody. Jeśli coś poszło nie tak – wywołujemy domyślny mechanizm.
 
-```javascript
+```typescript
 var componentsPrefix = "Scripts/Components/";
 
 function loadViewFromUrl(options) {
@@ -237,7 +237,7 @@ Potem są robione dwa triki:
 – _window[getViewModelNameFromUrl(options.relativeUrl)]_ – pobieranie konstruktora klasy ViewModelu po jego nazwie. W JavaScript wszystkie definicje klas są dostępne jako propertiesy, można się odwołać do niego poprzez klasyczny indekser na obiekcie okna – np. window["LoginViewModel"]
 – drugi trick to metoda viewModelInitialization, która tworzy nam najpierw obiekt ViewModelu (na bazie zaczytanego konstruktora). Sprawdza czy ma on dostępną metodę "init". Jeśli ma to pozwala uruchamia ją z przesłanymi  parametrami. Taki ficzer.
 
-```javascript
+```typescript
 function loadViewModelFromUrl(options) {
     var fullUrl = componentsPrefix + options.relativeUrl;
 

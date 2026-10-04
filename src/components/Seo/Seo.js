@@ -33,6 +33,7 @@ const Seo = (props) => {
     originalPath,
     supportedLanguages = [],
     availableLanguages,
+    canonicalLanguages,
     defaultLanguage = "en",
   } = props.pageContext;
 
@@ -66,7 +67,7 @@ const Seo = (props) => {
   const pagePath = normalizePath(originalPath || postSlug || "/");
   const canonicalLanguage = useDefaultLangCanonical ? defaultLanguage : lang || defaultLanguage;
   const canonicalUrl = `${host}/${canonicalLanguage}${pagePath}`;
-  const requestedLanguages = availableLanguages || supportedLanguages;
+  const requestedLanguages = canonicalLanguages || availableLanguages || supportedLanguages;
   const languages = requestedLanguages
     .filter(Boolean)
     .filter((language, index, allLanguages) => allLanguages.indexOf(language) === index);
@@ -156,8 +157,10 @@ const Seo = (props) => {
       : []),
     ...(facebook.appId ? [{ property: "fb:app_id", content: facebook.appId }] : []),
     { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:site", content: config.authorTwitterAccount || "" },
-    { name: "twitter:creator", content: config.authorTwitterAccount || "" },
+    ...(config.authorTwitterAccount ? [
+      { name: "twitter:site", content: config.authorTwitterAccount },
+      { name: "twitter:creator", content: config.authorTwitterAccount },
+    ] : []),
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
     { name: "twitter:image", content: image },

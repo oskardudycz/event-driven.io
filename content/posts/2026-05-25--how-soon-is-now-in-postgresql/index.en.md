@@ -67,7 +67,7 @@ COMMIT;
 
 You'll get something like:
 
-```
+```text
             tx_now             |          wall_clock
 -------------------------------+-------------------------------
  2026-05-25 10:00:00.123456+00 | 2026-05-25 10:00:00.124012+00
@@ -94,7 +94,7 @@ pool.withTransaction((tx) =>
 
 `pool.withTransaction` opens a database transaction and passes its executor to the body. `asyncRetry` then repeatedly calls the stored procedure on that same executor, with a backoff between attempts. So even though the retries are spread out in real time, every call runs inside the same database transaction:
 
-```
+```text
 withTransaction        (transaction starts at T)
   └── asyncRetry
        ├── call lock function    → now() = T

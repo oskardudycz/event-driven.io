@@ -8,7 +8,7 @@ useDefaultLangCanonical: true
 
 ![cover](2024-02-24-cover.png)
 
-**[In the last article](https://event-driven.io/en/closing_the_books_in_practice/) and [others](https://www.eventstore.com/blog/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention) I did my best explaining why keeping streams short is important in Event Sourcing. I also showed you how.** That should take you far enough, especially if you [talk to your business](/pl/a_few_words_on_communication/). That will help you to find the lifecycle. But what if it doesn't?
+**[In the last article](https://event-driven.io/en/closing_the_books_in_practice/) and [others](/en/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention/) I did my best explaining why keeping streams short is important in Event Sourcing. I also showed you how.** That should take you far enough, especially if you [talk to your business](/pl/a_few_words_on_communication/). That will help you to find the lifecycle. But what if it doesn't?
 
 **What if your entity doesn't have such a lifecycle?** Should we _artificially_ find it for the sake of the specifics of the event model? Example? Personal or company data like names, addresses, etc.
 

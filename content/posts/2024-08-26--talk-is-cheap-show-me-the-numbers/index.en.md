@@ -128,7 +128,7 @@ Nevertheless, even such simple benchmarks [gave me enough food for thought](htt
 
 For **non-pooled** connection, I got:
 
-```
+```text
 Appending events x 1.98 ops/sec ±28.76% (15 runs sampled)
 Reading events x 3.05 ops/sec ±12.89% (19 runs sampled)
 
@@ -149,7 +149,7 @@ Benchmark: Reading events
 
 And for **Pooled connection,** I got:
 
-```
+```text
 Appending events x 7.52 ops/sec ±29.75% (46 runs sampled)
 Reading events x 25.10 ops/sec ±3.40% (61 runs sampled)
 
@@ -194,7 +194,7 @@ To validate that, [I updated the benchmark setup](https://github.com/event-driv
 
 Then I reran benchmarks with schema generated upfront and the results look as follows for **non-pooled** connection:
 
-```
+```text
 Appending events x 2.40 ops/sec ±13.17% (16 runs sampled)
 Reading events x 2.90 ops/sec ±18.93% (18 runs sampled)
 
@@ -215,7 +215,7 @@ Benchmark: Reading events
 
 And for **pooled:**
 
-```
+```text
 Appending events x 9.17 ops/sec ±0.72% (47 runs sampled)
 Reading events x 27.58 ops/sec ±0.34% (65 runs sampled)
 
@@ -256,7 +256,7 @@ The benchmark [could look as follows](https://github.com/event-driven-io/Pongo/
 
 After running it, I got the following results for **non-pooled** connection:
 
-```
+```text
 Opening and closing raw connection x 3.46 ops/sec ±14.99% (21 runs sampled)
 Opening and closing connection x 3.19 ops/sec ±17.17% (21 runs sampled)
 INSERTING records in transaction x 2.50 ops/sec ±13.55% (16 runs sampled)
@@ -293,7 +293,7 @@ Benchmark: READING records
 
 And for **pooled:**
 
-```
+```text
 Opening and closing raw connection x 348 ops/sec ±195.81% (87 runs sampled)
 Opening and closing connection x 122,531 ops/sec ±0.85% (83 runs sampled)
 INSERTING records in transaction x 8.81 ops/sec ±1.53% (45 runs sampled)

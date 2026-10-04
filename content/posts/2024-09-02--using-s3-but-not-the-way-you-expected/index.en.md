@@ -168,7 +168,7 @@ An autoincremented, gapless version based on the previous file name would not al
 
 Such a key structure also allows for finding the latest chunk. We can use the [list objects API together with filtering](https://docs.aws.amazon.com/cli/v1/userguide/cli-usage-filter.html#cli-usage-filter-server-side) and determine the latest chunk by checking the LastModified timestamp provided by S3. For instance, using the AWS CLI:
 
-```
+```bash
 aws s3api list-objects-v2 --bucket your-bucket-name --prefix 'ecommerce/tenantA/orders/12345/' --query 'Contents | sort_by(@, &LastModified)[-1].Key' --output text
 ```
 
@@ -202,7 +202,7 @@ And here’s where the S3 costs start to add up: S3 charges you for each GET req
 
 Here comes the part that I’m afraid of the most. I spend months explaining not to use snapshots. E.g. through articles:
 
--   [Keep your streams short! Temporal modeling for fast reads and optimal data retention](https://www.eventstore.com/blog/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention)
+-   [Keep your streams short! Temporal modeling for fast reads and optimal data retention](/en/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention/)
 
 -   [Implementing Closing the Books pattern](/en/closing_the_books_in_practice/)
 
@@ -232,7 +232,7 @@ _**{streamPrefix}/{streamtType}/{streamId}/{streamVersion}.{chunkVersion}**_
 
 Having the example series of chunks:
 
-```
+```text
 ecommerce/orders/12345/001.000.json
 ecommerce/orders/12345/002.000.json
 ecommerce/orders/12345/003.000.json
@@ -241,7 +241,7 @@ ecommerce/orders/12345/004.000.json
 
 After merging those chunks and reconciliation, we’ll get a new file:
 
-```
+```text
 ecommerce/orders/12345/004.001.json
 ```
 

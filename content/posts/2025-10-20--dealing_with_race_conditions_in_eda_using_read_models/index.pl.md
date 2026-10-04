@@ -145,7 +145,7 @@ type PaymentDeclined = {
 
 Let's say the fraud system flagged the payment as high-risk before it even existed in your system. Approval happened before the risk assessment was completed. The example race condition can look as follows:
 
-```
+```text
 10:15:32.123 - FraudScoreCalculated (score: 85, high risk)
 10:15:32.145 - PaymentInitiated (amount: $500)
 10:15:32.167 - PaymentCompleted (approved by automated system)

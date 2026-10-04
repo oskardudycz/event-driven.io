@@ -28,7 +28,7 @@ When you add or change a feature, you're touching many different layers - the UI
 
 So Instead of:
 
-```
+```text
 📁 controllers
   📄 ProductController.cs
   📄 OrderController.cs
@@ -42,7 +42,7 @@ So Instead of:
 
 You organise more or less like:
 
-```
+```text
 📁 ecommerce
   📁 products
     📁 create-product
@@ -83,7 +83,7 @@ During our Discord discussion, I found myself drawing diagrams to explain two di
 
 In this approach, each slice is completely self-contained:
 
-```
+```text
 📁 room-reservations
   📁 reserving-room
     📄 reserveRoomEndpoint.ts    // ⬅️ API endpoint definition
@@ -98,7 +98,7 @@ In this approach, each slice is completely self-contained:
 
 The endpoint file handles HTTP concerns and application logic:
 
-```
+```typescript
 app.post('/api/reservations/:id/confirm', async (req, res) => {
   const reservation =
     await reservationRepository.findById(req.params.id);
@@ -117,7 +117,7 @@ app.post('/api/reservations/:id/confirm', async (req, res) => {
 
 The business logic is pure:
 
-```
+```typescript
 function confirmReservation(
   reservation: Reservation,
   command: ConfirmReservation
@@ -160,7 +160,7 @@ Sometimes you need some coordination - maybe all your reservation endpoints shar
 
 In this case, you might have:
 
-```
+```text
 📁 room-reservations
   📁 api
     📄 reservationsController.ts // ⬅️ Thin routing layer
@@ -174,7 +174,7 @@ In this case, you might have:
 
 The routes file acts as a facade, handling HTTP concerns and orchestration:
 
-```
+```typescript
 export const reservationController = (app: Express) => {
   app.use('/api/reservations', authenticate);
 
@@ -251,7 +251,7 @@ When you're working on a reservation feature, you don't need to keep a mental ma
 
 In practice, this often means nesting your vertical slices within larger business modules:
 
-```
+```text
 📁 reservations
   📁 room-reservations
     📄 api.ts                    // ⬅️ Public API of room reservations
