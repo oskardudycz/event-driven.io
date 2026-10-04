@@ -55,7 +55,7 @@ export const onCreateNode = ({ node, getNode, actions }) => {
 };
 
 export const createPages = ({ graphql, actions }) => {
-  const { createPage } = actions;
+  const { createPage, createRedirect } = actions;
 
   return new Promise((resolve, reject) => {
     const postTemplate = path.resolve("./src/templates/PostTemplate.js");
@@ -98,6 +98,7 @@ export const createPages = ({ graphql, actions }) => {
                     category
                     categories
                     related
+                    redirectFrom
                     useDefaultLangCanonical
                     cover {
                       childImageSharp {
@@ -235,6 +236,16 @@ export const createPages = ({ graphql, actions }) => {
             const prev = index === posts.length - 1 ? undefined : posts[index + 1].node;
             const source = node.fields.source;
             const path = `/${langKey}${slug}`;
+
+            if (langKey === "en" && node.frontmatter.redirectFrom) {
+              createRedirect({
+                fromPath: node.frontmatter.redirectFrom,
+                toPath: path,
+                isPermanent: true,
+                statusCode: 301,
+                redirectInBrowser: process.env.NODE_ENV === "development",
+              });
+            }
 
             createPage({
               path,

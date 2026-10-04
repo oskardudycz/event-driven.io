@@ -1,0 +1,256 @@
+const fs = require("node:fs/promises");
+const path = require("node:path");
+const { parseArgs } = require("node:util");
+const cheerio = require("cheerio");
+const TurndownService = require("turndown");
+const { gfm } = require("turndown-plugin-gfm");
+const yaml = require("js-yaml");
+
+const postsDirectory = path.resolve(__dirname, "../content/posts");
+
+function normalizeUrl(input) {
+  const url = new URL(input);
+  if (url.hostname === "web.archive.org") {
+    const capture = url.pathname.match(/^\/web\/(\d{14})(?:id_|im_)?\/(https?:\/\/.+)$/);
+    if (!capture) throw new Error(`Expected a dated Wayback capture URL: ${input}`);
+    const original = normalizeUrl(capture[2]);
+    if (new URL(original).hostname === "web.archive.org") throw new Error("Nested archive URL");
+    return `https://web.archive.org/web/${capture[1]}id_/${original}`;
+  }
+  const isSubstack = /^\/p\/[a-z0-9-]+\/?$/i.test(url.pathname);
+  const isBlog = /^(kurrentdb\.kurrent\.io|www\.eventstore\.com)$/.test(url.hostname) &&
+    /^\/blog\/[a-z0-9-]+\/?$/i.test(url.pathname);
+  if (!/^https?:$/.test(url.protocol) || !(isSubstack || isBlog)) {
+    throw new Error(`Expected a Substack post or Kurrent/EventStore article URL: ${input}`);
+  }
+  url.hash = "";
+  url.search = "";
+  url.pathname = url.pathname.replace(/\/$/, "");
+  return url.href;
+}
+
+function sourceLocation(source) {
+  const capture = source.match(/^https:\/\/web\.archive\.org\/web\/(\d{14})id_\/(https?:\/\/.+)$/);
+  return capture ? { base: capture[2], archive: `https://web.archive.org/web/${capture[1]}id_/` } : { base: source };
+}
+
+// Use the original asset rather than a CDN crop or a format negotiated as WebP.
+function originalImageUrl(input, base) {
+  const url = new URL(input, base);
+  const archived = url.href.match(/^https:\/\/web\.archive\.org\/web\/\d+(?:id_|im_)?\/(https?:\/\/.+)$/);
+  if (archived) return originalImageUrl(archived[1], base);
+  if (url.hostname === "substackcdn.com" && url.pathname.startsWith("/image/fetch/")) {
+    const original = url.pathname.match(/\/(https?(?:%3A|:).*)$/i);
+    if (original) return new URL(decodeURIComponent(original[1])).href;
+  }
+  return url.href;
+}
+
+function extractPost(html, source) {
+  const $ = cheerio.load(html);
+  const body = $(".available-content .body.markup, .body.markup, #blog-post-content, #hs_cos_wrapper_post_body").first();
+  if (!body.length || !body.text().trim()) throw new Error(`Article body missing: ${source}`);
+  if ($(".paywall, .paywall-content, .paywall-jump").length) {
+    throw new Error(`Paywalled article; refusing to import a preview: ${source}`);
+  }
+  let article = {};
+  $("script[type='application/ld+json']").each((_, node) => {
+    try {
+      const data = JSON.parse($(node).text());
+      const entries = Array.isArray(data) ? data : data["@graph"] || [data];
+      article = entries.find((entry) => /^(NewsArticle|Article|BlogPosting)$/.test(entry["@type"])) || article;
+    } catch { /* Other structured data is not required for importing. */ }
+  });
+  const title = $("meta[property='og:title']").attr("content") || article.headline;
+  const published = article.datePublished || $("meta[property='article:published_time']").attr("content") ||
+    $("time[datetime]").first().attr("datetime");
+  if (!title || !published || Number.isNaN(Date.parse(published))) {
+    throw new Error(`Article title or publication date missing: ${source}`);
+  }
+  body.find("script, style, button, .subscription-widget-wrap, .subscribe-widget, .share-post, .post-footer").remove();
+  body.find("pre[data-language] > code").each((_, node) => {
+    $(node).attr("class", `language-${$(node).parent().attr("data-language")}`);
+  });
+  return {
+    $, body, title, date: new Date(published).toISOString().slice(0, 10),
+    cover: $("#blog-post-content").length ? $("article img").first().attr("src") :
+      $("meta[property='og:image']").attr("content") || body.find("img").first().attr("src"),
+  };
+}
+
+async function request(url) {
+  const response = await fetch(url, {
+    signal: AbortSignal.timeout(60000),
+    headers: { "User-Agent": "event-driven.io article importer", Accept: "*/*" },
+  });
+  if (!response.ok) throw new Error(`HTTP ${response.status} fetching ${url}`);
+  return response;
+}
+
+function imageExtension(bytes) {
+  if (bytes.subarray(0, 3).equals(Buffer.from([0xff, 0xd8, 0xff]))) return ".jpg";
+  if (bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))) return ".png";
+  if (/^GIF8[79]a/.test(bytes.subarray(0, 6).toString())) return ".gif";
+  if (bytes.subarray(0, 4).toString() === "RIFF" && bytes.subarray(8, 12).toString() === "WEBP") return ".webp";
+  if (/^\s*(?:<\?xml[^>]*>\s*)?(?:<!--[\s\S]*?-->\s*)*<svg[\s>]/i.test(bytes.toString("utf8"))) return ".svg";
+  throw new Error("Unsupported image format or non-image download (expected JPEG, PNG, GIF, WebP or SVG)");
+}
+
+async function convertPost(post, source, directory, download = request) {
+  const { $, body } = post;
+  const location = sourceLocation(source);
+  const assets = new Map();
+  async function saveImage(input, isCover = false) {
+    const original = originalImageUrl(input, location.base);
+    const url = location.archive ? `${location.archive}${original}` : original;
+    if (assets.has(url)) return assets.get(url);
+    const response = await download(url);
+    const bytes = Buffer.from(await response.arrayBuffer());
+    const filename = `${isCover ? `${post.date}-cover` : `image-${assets.size + 1}`}${imageExtension(bytes)}`;
+    await fs.writeFile(path.join(directory, filename), bytes);
+    assets.set(url, filename);
+    return filename;
+  }
+  let cover = post.cover ? await saveImage(post.cover, true) : undefined;
+  if (cover?.endsWith(".svg")) {
+    const sharp = require("sharp");
+    const png = cover.replace(/\.svg$/, ".png");
+    await sharp(path.join(directory, cover)).resize({ width: 1200 }).png().toFile(path.join(directory, png));
+    cover = png;
+  }
+  for (const image of body.find("img").toArray()) {
+    const element = $(image);
+    const src = element.attr("src") || element.attr("data-src");
+    if (!src) throw new Error(`Image without a source in ${source}`);
+    element.attr("src", await saveImage(src));
+    element.removeAttr("srcset").removeAttr("sizes").removeAttr("style");
+    // Gatsby provides image zoom itself. Unwrap Substack's block-level image
+    // links so they don't become invalid multiline Markdown links.
+    const anchor = element.closest("a.image-link");
+    if (anchor.length) anchor.replaceWith(anchor.contents());
+  }
+  body.find("picture source").remove();
+  body.find("picture, .image2-inset").each((_, node) => {
+    const element = $(node);
+    element.replaceWith(element.contents());
+  });
+  body.find("a[href]").each((_, node) => {
+    const element = $(node), href = element.attr("href");
+    if (!href.startsWith("#") && ![...assets.values()].includes(href)) {
+      const resolved = new URL(href, location.base).href;
+      element.attr("href", resolved.replace(/^https:\/\/web\.archive\.org\/web\/\d+(?:[a-z]+_)?\//, ""));
+    }
+  });
+  const converter = new TurndownService({
+    headingStyle: "atx", codeBlockStyle: "fenced", bulletListMarker: "-",
+  });
+  converter.use(gfm);
+  // Substack can put emphasis boundaries inside words (e.g. <em>you'</em>re).
+  // Markdown delimiters cannot express every such boundary; retain inline HTML.
+  converter.addRule("partialWordEmphasis", {
+    filter: (node) => ["EM", "I", "STRONG", "B"].includes(node.nodeName) &&
+      /[^\p{L}\p{N}\s]$/u.test(node.textContent) &&
+      /^[\p{L}\p{N}]/u.test(node.nextSibling?.textContent || ""),
+    replacement: (_, node) => node.outerHTML,
+  });
+  converter.addRule("caption", {
+    filter: "figcaption", replacement: (content) => `\n\n${content}\n\n`,
+  });
+  // Markdown cannot represent these players. Gatsby already handles raw iframes.
+  converter.addRule("players", {
+    filter: ["iframe", "video", "audio"],
+    replacement: (_, node) => {
+      const media = cheerio.load(node.outerHTML, null, false);
+      const element = media(node.nodeName.toLowerCase()).first();
+      element.find("script").remove();
+      for (const child of [...element.toArray(), ...element.find("*").toArray()]) {
+        for (const attribute of Object.keys(child.attribs || {})) {
+          if (/^on/i.test(attribute) || ["srcdoc", "style"].includes(attribute)) media(child).removeAttr(attribute);
+        }
+      }
+      element.find("[src]").addBack("[src]").each((_, child) => {
+        const src = new URL(media(child).attr("src"), location.base);
+        if (!/^https?:$/.test(src.protocol)) throw new Error(`Unsupported embed URL: ${src}`);
+        media(child).attr("src", src.href);
+      });
+      if (node.nodeName === "IFRAME" && !element.attr("title")) element.attr("title", "Embedded video");
+      if (node.nodeName === "IFRAME" && /^(www\.)?(youtube\.com|youtube-nocookie\.com)$/.test(new URL(element.attr("src"), location.base).hostname)) {
+        element.attr("referrerpolicy", "strict-origin-when-cross-origin");
+      }
+      return `\n\n${media.html()}\n\n`;
+    },
+  });
+  converter.addRule("socialEmbeds", {
+    filter: (node) => node.nodeName === "BLOCKQUOTE" && /twitter-tweet|instagram-media/.test(node.getAttribute("class") || ""),
+    replacement: (_, node) => `\n\n${node.outerHTML}\n\n`,
+  });
+  const markdown = converter.turndown(body.html());
+  if (!markdown.trim()) throw new Error(`Conversion produced an empty article: ${source}`);
+  return { markdown, cover, assets: Object.fromEntries(assets), embeds: body.find("iframe, video, audio").length };
+}
+
+async function importPost(entry, options = {}) {
+  const source = normalizeUrl(entry.url);
+  const download = options.download || request;
+  const html = options.html || await (await download(source)).text();
+  const post = extractPost(html, source);
+  const slug = entry.slug || new URL(sourceLocation(source).base).pathname.split("/").pop();
+  if (!/^[a-z0-9][a-z0-9_-]*$/.test(slug)) throw new Error(`Invalid slug: ${slug}`);
+  const root = options.output || postsDirectory;
+  const destination = path.join(root, `${post.date}--${slug}`);
+  await fs.mkdir(root, { recursive: true });
+  // Also prevent date changes or custom slugs from silently duplicating an article.
+  for (const name of await fs.readdir(root)) {
+    if (name.endsWith(`--${slug}`)) throw new Error(`Article already exists: ${name}. Import never overwrites existing posts.`);
+  }
+  const staging = await fs.mkdtemp(path.join(root, ".substack-import-"));
+  try {
+    const converted = await convertPost(post, source, staging, download);
+    for (const language of ["en", "pl"]) {
+      const frontmatter = {
+        title: post.title,
+        category: entry.category || "Software Architecture",
+        ...(converted.cover ? { cover: converted.cover } : {}),
+        author: "oskar dudycz",
+        ...(language === "en" ? { redirectFrom: `/${slug}/` } : {}),
+        ...(language === "pl" ? { useDefaultLangCanonical: true } : {}),
+      };
+      await fs.writeFile(path.join(staging, `index.${language}.md`), `---\n${yaml.dump(frontmatter, { lineWidth: -1 })}---\n\n${converted.markdown}\n`);
+    }
+    // .txt avoids gatsby-transformer-json treating source URLs as GraphQL fields.
+    const provenance = new URL(sourceLocation(source).base).pathname.startsWith("/p/") ? "substack-source.txt" : "article-source.txt";
+    await fs.writeFile(path.join(staging, provenance), `${JSON.stringify({
+      url: source, ...(sourceLocation(source).archive ? { originalUrl: sourceLocation(source).base } : {}),
+      date: post.date, assets: converted.assets, embeds: converted.embeds,
+    }, null, 2)}\n`);
+    await fs.rename(staging, destination);
+    console.log(`Imported ${post.title}\n  ${destination} (${Object.keys(converted.assets).length} images, ${converted.embeds} embeds)`);
+    return destination;
+  } finally {
+    await fs.rm(staging, { recursive: true, force: true });
+  }
+}
+
+async function main() {
+  const { values, positionals } = parseArgs({
+    allowPositionals: true,
+    options: {
+      manifest: { type: "string" }, category: { type: "string" },
+      html: { type: "string" }, help: { type: "boolean", short: "h" },
+    },
+  });
+  if (values.help || (!values.manifest && !positionals.length)) {
+    console.log("Usage: npm run import-articles -- URL [URL...] [--category 'Event Sourcing']\n       npm run import-articles -- --manifest import/eventstore-posts.json\n       npm run import-articles -- URL --html saved-page.html\nSupports Substack, Kurrent/EventStore and dated Wayback captures. Creates identical English and Polish articles with local images. Existing posts are never overwritten.");
+    if (!values.help) process.exitCode = 1;
+    return;
+  }
+  if (values.html && (values.manifest || positionals.length !== 1)) throw new Error("--html requires exactly one URL and no manifest");
+  const entries = values.manifest ? JSON.parse(await fs.readFile(values.manifest, "utf8")) : [];
+  if (!Array.isArray(entries)) throw new Error("Manifest must contain an array of post entries");
+  entries.push(...positionals.map((url) => ({ url, category: values.category })));
+  const html = values.html ? await fs.readFile(values.html, "utf8") : undefined;
+  for (const entry of entries) await importPost({ ...entry, ...(values.category ? { category: values.category } : {}) }, { html });
+}
+
+if (require.main === module) main().catch((error) => { console.error(error.message); process.exitCode = 1; });
+module.exports = { normalizeUrl, sourceLocation, originalImageUrl, extractPost, convertPost, importPost, main };

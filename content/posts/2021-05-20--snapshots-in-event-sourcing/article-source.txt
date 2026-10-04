@@ -1,0 +1,14 @@
+{
+  "url": "https://web.archive.org/web/20230325182019id_/https://www.eventstore.com/blog/snapshots-in-event-sourcing",
+  "originalUrl": "https://www.eventstore.com/blog/snapshots-in-event-sourcing",
+  "date": "2021-05-20",
+  "assets": {
+    "https://web.archive.org/web/20230325182019id_/https://www.eventstore.com/hubfs/snapshot-feat.png": "2021-05-20-cover.png",
+    "https://web.archive.org/web/20230325182019id_/https://www.eventstore.com/hubfs/ES-Snapshots-1.svg": "image-2.svg",
+    "https://web.archive.org/web/20230325182019id_/https://www.eventstore.com/hubfs/ES-Snapshots-2.svg": "image-3.svg",
+    "https://web.archive.org/web/20230325182019id_/https://www.eventstore.com/hubfs/ES-Snapshots-3.svg": "image-4.svg",
+    "https://web.archive.org/web/20230325182019id_/https://www.eventstore.com/hubfs/ES-Snapshots-4.svg": "image-5.svg",
+    "https://web.archive.org/web/20230325182019id_/https://www.eventstore.com/hubfs/ES-Snapshots-5.svg": "image-6.svg"
+  },
+  "embeds": 0
+}

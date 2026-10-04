@@ -26,6 +26,7 @@ const Video = ({ videoSrcURL, videoTitle, playLabel = "Play video" }) => {
       {playing ? (
         <iframe
           src={`https://www.youtube-nocookie.com/embed/${embedId}?autoplay=1`}
+          referrerPolicy="strict-origin-when-cross-origin"
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen

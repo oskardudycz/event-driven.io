@@ -1,0 +1,14 @@
+{
+  "url": "https://web.archive.org/web/20230322172050id_/https://www.eventstore.com/blog/snapshotting-strategies",
+  "originalUrl": "https://www.eventstore.com/blog/snapshotting-strategies",
+  "date": "2021-07-16",
+  "assets": {
+    "https://web.archive.org/web/20230322172050id_/https://www.eventstore.com/hubfs/Snapshotting-Strategies-Feat.png": "2021-07-16-cover.png",
+    "https://web.archive.org/web/20230322172050id_/https://www.eventstore.com/hubfs/Snapshotting-Strategies-Feat.svg": "image-2.svg",
+    "https://web.archive.org/web/20230322172050id_/https://www.eventstore.com/hubfs/Snapshotting-Strategies-1.svg": "image-3.svg",
+    "https://web.archive.org/web/20230322172050id_/https://www.eventstore.com/hubfs/Snapshotting-Strategies-2.svg": "image-4.svg",
+    "https://web.archive.org/web/20230322172050id_/https://www.eventstore.com/hubfs/Snapshotting-Strategies-3.svg": "image-5.svg",
+    "https://web.archive.org/web/20230322172050id_/https://www.eventstore.com/hubfs/Snapshotting-Strategies-4.svg": "image-6.svg"
+  },
+  "embeds": 0
+}

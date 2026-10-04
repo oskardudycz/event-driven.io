@@ -1,0 +1,9 @@
+{
+  "url": "https://www.architecture-weekly.com/p/start-small-grow-big-how-to-pick",
+  "date": "2026-08-31",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/03eb3200-b345-478b-b642-25ef2bfc0b99_612x408.jpeg": "2026-08-31-cover.jpg",
+    "https://substack-post-media.s3.amazonaws.com/public/images/b4b5fd5b-7b3d-488d-9fae-09e5766ec570_800x450.jpeg": "image-2.jpg"
+  },
+  "embeds": 0
+}
