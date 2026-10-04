@@ -122,12 +122,13 @@ export const query = graphql`
             author
             useDefaultLangCanonical
             cover {
-              children {
-                ... on ImageSharp {
-                  fluid(maxWidth: 800, maxHeight: 360) {
-                    ...GatsbyImageSharpFluid_withWebp
-                  }
-                }
+              childImageSharp {
+                gatsbyImageData(
+                  aspectRatio: 2.2222222222
+                  layout: FULL_WIDTH
+                  formats: [AUTO, WEBP]
+                  placeholder: BLURRED
+                )
               }
             }
           }
@@ -141,17 +142,17 @@ export const query = graphql`
         }
       }
     }
-    bgDesktop: imageSharp(fluid: { originalName: { regex: "/hero-background/" } }) {
+    bgDesktop: imageSharp(original: { src: { regex: "/hero-background/" } }) {
       resize(width: 1200, quality: 80, cropFocus: CENTER, toFormat: WEBP) {
         src
       }
     }
-    bgTablet: imageSharp(fluid: { originalName: { regex: "/hero-background/" } }) {
+    bgTablet: imageSharp(original: { src: { regex: "/hero-background/" } }) {
       resize(width: 800, height: 1100, quality: 80, cropFocus: CENTER, toFormat: WEBP) {
         src
       }
     }
-    bgMobile: imageSharp(fluid: { originalName: { regex: "/hero-background/" } }) {
+    bgMobile: imageSharp(original: { src: { regex: "/hero-background/" } }) {
       resize(width: 450, height: 850, quality: 80, cropFocus: CENTER, toFormat: WEBP) {
         src
       }

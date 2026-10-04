@@ -9,7 +9,7 @@
   "scripts": {
     "generate-llms": "node ./scripts/generate-llms-txt.js",
     "verify-seo": "node ./scripts/verify-seo-build.js",
-    "test": "yarn test:seo && yarn test:build-contract && yarn test:substack && yarn test:video && yarn test:redirects && yarn test:archive",
+    "test": "yarn test:seo && yarn test:build-contract && yarn test:substack && yarn test:video && yarn test:redirects && yarn test:archive && yarn test:import-build",
     "test:seo": "node ./tests/seo-build.test.js",
     "test:build-contract": "node ./tests/build-contract.test.js",
     "test:visual": "vitest run tests/visual.test.js",
@@ -38,7 +38,8 @@
     "test:substack": "node ./tests/substack-import.test.js",
     "test:video": "node ./tests/video-headers.test.js",
     "test:redirects": "node ./tests/article-redirects.test.js",
-    "test:archive": "node ./tests/architecture-weekly-manifest.test.js"
+    "test:archive": "node ./tests/architecture-weekly-manifest.test.js",
+    "test:import-build": "node ./tests/article-import-build.test.js"
   },
   "dependencies": {
     "@ant-design/compatible": "^1.0.8",
@@ -49,12 +50,12 @@
     "disqus-react": "^1.1.7",
     "fontfaceobserver": "^2.0.13",
     "gatsby": "^5.16.1",
-    "gatsby-image": "^3.11.0",
     "gatsby-plugin-algolia": "^1.0.3",
     "gatsby-plugin-catch-links": "^5.16.0",
     "gatsby-plugin-feed": "^5.16.0",
     "gatsby-plugin-google-tagmanager": "^5.16.0",
     "gatsby-plugin-i18n": "^1.0.1",
+    "gatsby-plugin-image": "^3.16.0",
     "gatsby-plugin-layout": "^4.16.0",
     "gatsby-plugin-manifest": "^5.16.0",
     "gatsby-plugin-netlify": "^5.1.1",

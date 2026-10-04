@@ -86,7 +86,6 @@ export const createPages = ({ graphql, actions }) => {
               edges {
                 node {
                   id
-                  excerpt(pruneLength: 170)
                   fields {
                     slug
                     prefix
@@ -101,19 +100,6 @@ export const createPages = ({ graphql, actions }) => {
                     redirectFrom
                     redirectAliases
                     useDefaultLangCanonical
-                    cover {
-                      childImageSharp {
-                        resize(
-                          width: 420
-                          height: 240
-                          quality: 78
-                          cropFocus: CENTER
-                          toFormat: WEBP
-                        ) {
-                          src
-                        }
-                      }
-                    }
                   }
                 }
               }
@@ -150,19 +136,7 @@ export const createPages = ({ graphql, actions }) => {
             if (!match) {
               throw new Error(`Invalid related article "${slug}" for ${node.fields.langKey}${node.fields.slug}`);
             }
-            return {
-              node: {
-                excerpt: match.node.excerpt,
-                fields: {
-                  slug: match.node.fields.slug,
-                  prefix: match.node.fields.prefix,
-                },
-                frontmatter: {
-                  title: match.node.frontmatter.title,
-                  cover: match.node.frontmatter.cover,
-                },
-              },
-            };
+            return match.node.id;
           });
         };
 
@@ -218,7 +192,7 @@ export const createPages = ({ graphql, actions }) => {
                 langKey: supportedLangKey,
                 originalPath: `/category/${categorySlug}/`,
                 availableLanguages,
-                categoryPosts,
+                categoryPostIds: categoryPosts.map(({ node }) => node.id),
                 categoryDescription: guide ? guide.description : undefined,
                 recommendedSlugs: guide ? guide.recommended : [],
               },
@@ -265,7 +239,7 @@ export const createPages = ({ graphql, actions }) => {
                 source,
                 originalPath: slug,
                 availableLanguages: availableLanguagesFor(node),
-                related: relatedFor(node),
+                relatedIds: relatedFor(node),
                 excludeFromSitemap: Boolean(node.frontmatter.useDefaultLangCanonical),
               },
             });
@@ -300,7 +274,7 @@ export const createPages = ({ graphql, actions }) => {
                 source,
                 originalPath: slug,
                 availableLanguages: availableLanguagesFor(node),
-                related: relatedFor(node),
+                relatedIds: relatedFor(node),
                 excludeFromSitemap: Boolean(node.frontmatter.useDefaultLangCanonical),
               },
             });

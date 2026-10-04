@@ -66,12 +66,13 @@ export const query = graphql`
             category
             author
             cover {
-              children {
-                ... on ImageSharp {
-                  fluid(maxWidth: 800, maxHeight: 360) {
-                    ...GatsbyImageSharpFluid_withWebp
-                  }
-                }
+              childImageSharp {
+                gatsbyImageData(
+                  aspectRatio: 2.2222222222
+                  layout: FULL_WIDTH
+                  formats: [AUTO, WEBP]
+                  placeholder: BLURRED
+                )
               }
             }
           }

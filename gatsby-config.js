@@ -171,7 +171,10 @@ module.exports = {
             },
           },
           `gatsby-remark-autolink-headers`,
-          `gatsby-remark-prismjs`,
+          {
+            resolve: `gatsby-remark-prismjs`,
+            options: { aliases: { sh: "bash", env: "bash" } },
+          },
           `gatsby-remark-copy-linked-files`,
           `gatsby-remark-smartypants`,
           {
@@ -198,6 +201,7 @@ module.exports = {
         ],
       },
     },
+    `gatsby-plugin-image`,
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-react-helmet`,

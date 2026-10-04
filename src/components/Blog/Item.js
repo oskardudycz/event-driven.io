@@ -2,7 +2,7 @@ import { FaArrowRight } from "react-icons/fa/";
 import { FaCalendar } from "react-icons/fa/";
 import { FaTag } from "react-icons/fa/";
 import { FaUser } from "react-icons/fa/";
-import Img from "gatsby-image";
+import { GatsbyImage, getImage } from "gatsby-plugin-image";
 import { Link } from "../Link";
 import PropTypes from "prop-types";
 import React from "react";
@@ -19,9 +19,7 @@ const Item = (props) => {
         categories = [],
         author,
         useDefaultLangCanonical,
-        cover: {
-          children: [{ fluid }],
-        },
+        cover,
       },
     },
   } = props;
@@ -37,7 +35,7 @@ const Item = (props) => {
           className="link"
         >
           <div className="gatsby-image-outer-wrapper">
-            <Img fluid={fluid} alt={title} />
+            <GatsbyImage image={getImage(cover)} alt={title} />
           </div>
           <h2>
             {title} <FaArrowRight className="arrow" />
