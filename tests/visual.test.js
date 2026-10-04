@@ -52,7 +52,7 @@ async function inspectArchive() {
       waitUntil: "domcontentloaded",
     });
     expect(response?.status()).toBe(200);
-    const firstCover = page.locator(".gatsby-image-wrapper > picture img").first();
+    const firstCover = page.locator(".gatsby-image-wrapper img[data-main-image]").first();
     await firstCover.waitFor();
     await page.waitForFunction(
       (image) => image.complete && image.naturalWidth >= 200,
@@ -123,7 +123,7 @@ test("client-side archive navigation keeps a single page at the top", async () =
     await page.goto(new URL("/en/", baseUrl).href, { waitUntil: "domcontentloaded" });
     await page.locator('a[href="/en/articles/"]').first().click();
     await page.waitForURL("**/en/articles/");
-    await page.locator(".gatsby-image-wrapper > picture img").first().waitFor();
+    await page.locator(".gatsby-image-wrapper img[data-main-image]").first().waitFor();
     expect(await page.evaluate(() => window.scrollY)).toBeLessThan(5);
     expect(await page.locator("h1").count()).toBe(1);
     expect(await page.locator("footer").count()).toBe(1);

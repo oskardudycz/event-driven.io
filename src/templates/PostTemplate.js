@@ -12,12 +12,13 @@ const PostTemplate = (props) => {
   const {
     data: {
       post,
+      relatedPosts,
       authornote: { html: authorNote },
       site: {
         siteMetadata: { facebook },
       },
     },
-    pageContext: { next, prev, related = [] },
+    pageContext: { next, prev, relatedIds = [] },
   } = props;
 
   return (
@@ -30,7 +31,7 @@ const PostTemplate = (props) => {
               next={next}
               prev={prev}
               authornote={authorNote}
-              related={related}
+              related={relatedIds.map((id) => relatedPosts.edges.find(({ node }) => node.id === id)).filter(Boolean)}
               facebook={facebook}
               theme={theme}
             />
@@ -57,7 +58,24 @@ export default PostTemplate;
 
 //eslint-disable-next-line no-undef
 export const postQuery = graphql`
-  query PostBySlug($slug: String!, $langKey: String!) {
+  query PostBySlug($slug: String!, $langKey: String!, $relatedIds: [String!]!) {
+    relatedPosts: allMarkdownRemark(filter: { id: { in: $relatedIds } }) {
+      edges {
+        node {
+          id
+          excerpt(pruneLength: 170)
+          fields { slug prefix }
+          frontmatter {
+            title
+            cover {
+              childImageSharp {
+                resize(width: 420, height: 240, quality: 78, cropFocus: CENTER, toFormat: WEBP) { src }
+              }
+            }
+          }
+        }
+      }
+    }
     post: markdownRemark(fields: { slug: { eq: $slug }, langKey: { eq: $langKey } }) {
       id
       html

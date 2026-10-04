@@ -1,0 +1,40 @@
+# Gatsby 5 build review
+
+Reviewed on 2026-10-04 against Gatsby 5.16.1 and the 694-page build.
+
+## Changes made
+
+- Route creation queries only IDs, routing metadata, categories and titles. Excerpts and processed covers are queried by the category and article templates instead of being duplicated in page context. Recommendation order remains the frontmatter order. The first local build measured `createPages` at 0.436 seconds; the reported CI run took 36.703 seconds. These are different machines, so this is a diagnostic comparison rather than a controlled benchmark.
+- Blog, homepage and newsletter cards use `gatsby-plugin-image` and `gatsbyImageData`, replacing `gatsby-image` and deprecated `fluid` fields. The crop retains the previous 800:360 ratio. JPEG/PNG and WebP remain enabled; AVIF is deliberately omitted to avoid extra image processing.
+- Hero image lookup uses the original image path rather than a deprecated `fluid` filter.
+- Prism aliases `sh` and `env` to Bash, supporting shell commands and environment variable assignments without changing article text.
+- Browserslist's `caniuse-lite` database was updated in `yarn.lock`.
+- The Babel registration in `gatsby-node.js` only transforms the two local Node modules that need it. It no longer processes Gatsby's generated SSR bundle, which produced the misleading 500 KB deoptimization message.
+- YouTube Markdown uses `gatsby-remark-embed-video` 3.2.1 through a local adapter that preserves timestamps and applies the referrer policy required by YouTube.
+- `yarn test` now checks the actual HTML of all 192 requested language pages for migrated links, article content and recording markup.
+
+The migration build completed successfully in 267.63 seconds, with 56.847 seconds spent running page queries and 132.013 seconds processing 659 image jobs. Some archive and category queries still exceed the 15-second warning threshold; moving work out of route creation enables parallel execution but does not eliminate the cost of computing excerpts and image data. CI caching is the next performance improvement to measure. React Helmet also still emits its migration notice.
+
+The schema-definition message and node counts are normal informational output. The Babel deoptimization message concerns code formatting, not an unsuccessful build.
+
+## Further improvements
+
+| Priority | Improvement | Reason and validation |
+| --- | --- | --- |
+| High | Cache Gatsby `.cache` and generated `public` between compatible CI builds | The workflow currently installs and rebuilds without a Gatsby cache. Image processing dominates cold builds. Key caches by OS, Node and lockfile/configuration; compare warm build timings and verify the existing output contract. Avoid unconditional `gatsby clean`. |
+| Medium | Move SEO from React Helmet to Gatsby's `Head` exports | Gatsby provides head deduplication and a smaller client bundle. The current SEO component depends on localized page context, so migrate all templates and static pages together, checking canonical URLs, language alternates, structured data and client navigation. |
+| Medium | Use Gatsby Slices for the shared header and footer | Updating shared content currently affects every page. Prototype on the layout first and measure rebuild time; verify the existing hydration, scrolling and visual tests. |
+| Medium | Audit legacy React dependencies and unused Gatsby plugins | `react-addons-perf`, old InstantSearch, Facebook widgets and the old internationalization plugin have old peer requirements. Check actual usage before removing or upgrading; verify search and language navigation independently. |
+| Low | Convert the remaining Babel-transpiled Gatsby Node hook to CommonJS | This would remove the runtime Babel registration entirely. Keep the shared browser localization constants compatible. |
+| Low | Explicit GraphQL types for stable frontmatter | This can improve schema stability. Schema generation currently takes less than a second, so it is not the current performance bottleneck. |
+
+## Verification
+
+Run `GATSBY_CPU_COUNT=4 yarn build`, then `yarn test`. Start `yarn serve --host 127.0.0.1 --port 9000` and run `yarn test:visual`. Review screenshot differences rather than increasing the comparison tolerance.
+
+## References
+
+- [Gatsby build performance: query only the fields needed to create pages](https://www.gatsbyjs.com/docs/how-to/performance/improving-build-performance/)
+- [Migration from gatsby-image](https://www.gatsbyjs.com/docs/reference/release-notes/image-migration-guide/)
+- [Gatsby image API](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/)
+- [Gatsby Head API](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-head/)

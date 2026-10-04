@@ -1,6 +1,7 @@
 import { FaTag } from "react-icons/fa/";
 import PropTypes from "prop-types";
 import React from "react";
+import { graphql } from "gatsby";
 import Seo from "../components/Seo";
 import { ThemeContext } from "../layouts";
 import Article from "../components/Article";
@@ -11,11 +12,11 @@ import { useTranslation } from "react-i18next";
 const CategoryTemplate = (props) => {
   const { t } = useTranslation();
   const {
+    data: { posts: { edges } },
     pageContext: {
       category,
       categoryDescription,
       recommendedSlugs = [],
-      categoryPosts: edges = [],
     },
   } = props;
   const totalCount = edges.length;
@@ -138,7 +139,33 @@ const CategoryTemplate = (props) => {
 };
 
 CategoryTemplate.propTypes = {
+  data: PropTypes.object.isRequired,
   pageContext: PropTypes.object.isRequired,
 };
 
 export default CategoryTemplate;
+
+
+export const query = graphql`
+  query CategoryPosts($categoryPostIds: [String!]!) {
+    posts: allMarkdownRemark(
+      filter: { id: { in: $categoryPostIds } }
+      sort: { fields: { prefix: DESC } }
+    ) {
+      edges {
+        node {
+          excerpt(pruneLength: 170)
+          fields { slug prefix }
+          frontmatter {
+            title
+            cover {
+              childImageSharp {
+                resize(width: 420, height: 240, quality: 78, cropFocus: CENTER, toFormat: WEBP) { src }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;

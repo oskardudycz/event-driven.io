@@ -45,6 +45,10 @@ Markdown articles use the syntax `` `youtube: [Video title](https://www.youtube.
 
 YouTube embeds require a cross-origin referrer. The Netlify plugin configuration overrides its default `same-origin` referrer policy with `strict-origin-when-cross-origin`; removing this override can cause YouTube player configuration error 153. The click-to-play component and imported YouTube iframes also set this policy explicitly. Run `npm run test:video` to check the generated Netlify headers. See [YouTube's client identity requirements](https://developers.google.com/youtube/terms/required-minimum-functionality#api-client-identity-and-credentials).
 
+## Gatsby 5 build checks
+
+See [the build review](docs/gatsby-5-review.md) for the image and query migrations, warning fixes and further improvements. `yarn test` includes `test:import-build`, which checks the generated HTML for all requested imports. Run the production build before these tests.
+
 ## License
 
 This blog is licensed under [License Creative Commons BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
