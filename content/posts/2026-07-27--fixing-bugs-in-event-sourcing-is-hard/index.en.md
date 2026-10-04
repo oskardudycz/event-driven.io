@@ -142,7 +142,7 @@ Without the SHA, we’re still ahead, because the position and timestamp of an a
 
 ## Fix forward, don’t rewrite
 
-The instinct is to go into the store and edit those events. I’d steer you away from that. Events are immutable, and, surprising as it sounds, having precise history, bugs included, is a valid scenario. It’s often the only way to see later what really went wrong. I put it this way in the migration section of [Simple patterns for events schema versioning](https://event-driven.io/en/simple_events_versioning_patterns/): _“you should not change the past... even including bugs, is a valid scenario.”_
+The instinct is to go into the store and edit those events. I’d steer you away from that. Events are immutable, and, surprising as it sounds, having precise history, bugs included, is a valid scenario. It’s often the only way to see later what really went wrong. I put it this way in the migration section of [Simple patterns for events schema versioning](/en/simple_events_versioning_patterns/): _“you should not change the past... even including bugs, is a valid scenario.”_
 
 Instead, we could append a corrective event:
 
@@ -226,9 +226,9 @@ Our bulk fix then goes through that command, with the same rules and the same ev
 
 And when the business says something can never happen, the follow-up is still: fine, how often?
 
-There’s a harder version of this. I once watched a hotel checkout get stuck on a blocked financial account, which then jammed the entire night audit, with no way out except a migration or a hotfix. That’s the worst place to end up, telling a customer they can’t operate until we ship code. Bugs, bad data and stuck processes aren’t edge cases we can design away, which is the argument in [No, it can never happen!](https://event-driven.io/en/no_it_can_never_happen/): _“We cannot assume that we won’t have a bug, or our hardware or network won’t have any random failure.”_ And if there’s no way to correct something inside the application, someone will do it with an `UPDATE` at 23:00. Read the horror story described there.
+There’s a harder version of this. I once watched a hotel checkout get stuck on a blocked financial account, which then jammed the entire night audit, with no way out except a migration or a hotfix. That’s the worst place to end up, telling a customer they can’t operate until we ship code. Bugs, bad data and stuck processes aren’t edge cases we can design away, which is the argument in [No, it can never happen!](/en/no_it_can_never_happen/): _“We cannot assume that we won’t have a bug, or our hardware or network won’t have any random failure.”_ And if there’s no way to correct something inside the application, someone will do it with an `UPDATE` at 23:00. Read the horror story described there.
 
-And check [What texting your Ex has to do with Event-Driven Design](https://event-driven.io/en/what_texting_ex_has_to_do_with_event_driven_design/).
+And check [What texting your Ex has to do with Event-Driven Design](/en/what_texting_ex_has_to_do_with_event_driven_design/).
 
 ## “But now the history contains a bug”
 

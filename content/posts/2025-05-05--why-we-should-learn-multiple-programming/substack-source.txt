@@ -1,0 +1,8 @@
+{
+  "url": "https://www.architecture-weekly.com/p/why-we-should-learn-multiple-programming",
+  "date": "2025-05-05",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/c434ed67-378d-4294-8cac-ef541c65274e_1200x878.jpeg": "2025-05-05-cover.jpg"
+  },
+  "embeds": 0
+}

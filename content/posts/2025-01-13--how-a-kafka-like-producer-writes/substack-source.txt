@@ -1,0 +1,8 @@
+{
+  "url": "https://www.architecture-weekly.com/p/how-a-kafka-like-producer-writes",
+  "date": "2025-01-13",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/22893512-0a42-4eed-81f4-1aa2f7a68adf_1007x797.png": "2025-01-13-cover.png"
+  },
+  "embeds": 0
+}

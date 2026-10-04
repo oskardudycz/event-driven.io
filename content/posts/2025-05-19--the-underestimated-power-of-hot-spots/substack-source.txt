@@ -1,0 +1,9 @@
+{
+  "url": "https://www.architecture-weekly.com/p/the-underestimated-power-of-hot-spots",
+  "date": "2025-05-19",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/f16e2ecd-6eef-405f-9ab3-2aa54c87cdc4_443x451.png": "2025-05-19-cover.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/2408245b-b50f-4ea4-9a57-76f158241343_443x451.png": "image-2.png"
+  },
+  "embeds": 1
+}

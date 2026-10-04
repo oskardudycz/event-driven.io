@@ -1,0 +1,12 @@
+{
+  "url": "https://www.architecture-weekly.com/p/tech-debt-doesnt-exist-but-trade",
+  "date": "2024-11-04",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/2d349aa6-105f-4c20-8850-0835b597fbcb_503x499.jpeg": "2024-11-04-cover.jpg",
+    "https://substack-post-media.s3.amazonaws.com/public/images/7da64bba-743a-4a70-b77d-929d19c81812_500x292.gif": "image-2.gif",
+    "https://substack-post-media.s3.amazonaws.com/public/images/622203d7-353f-4aef-8e2e-02768ec7fb5c_576x433.jpeg": "image-3.jpg",
+    "https://bucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com/public/images/3ab6cef1-9ce5-47fa-9306-17854b383dc1_358x358.png": "image-4.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/db67ed9d-dbfd-41d1-87c0-135f36f8a1a5_324x470.png": "image-5.png"
+  },
+  "embeds": 0
+}

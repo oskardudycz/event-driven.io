@@ -1,0 +1,8 @@
+{
+  "url": "https://www.architecture-weekly.com/p/architecture-weekly-is-5-years-old",
+  "date": "2025-12-29",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/50caeedf-229d-41f2-a0c5-0f1ddec01669_3088x2316.jpeg": "2025-12-29-cover.jpg"
+  },
+  "embeds": 0
+}

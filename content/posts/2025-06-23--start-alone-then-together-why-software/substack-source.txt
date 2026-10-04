@@ -1,0 +1,8 @@
+{
+  "url": "https://www.architecture-weekly.com/p/start-alone-then-together-why-software",
+  "date": "2025-06-23",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/5e692336-0568-49e4-a18f-5235c6d54a17_1920x1080.png": "2025-06-23-cover.png"
+  },
+  "embeds": 0
+}

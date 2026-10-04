@@ -1,0 +1,8 @@
+{
+  "url": "https://www.architecture-weekly.com/p/sneaky-code-bites-back",
+  "date": "2025-09-22",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/f2c15624-c7ec-4bc5-b4de-0fc4851db328_780x438.jpeg": "2025-09-22-cover.jpg"
+  },
+  "embeds": 0
+}

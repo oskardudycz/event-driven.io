@@ -1,0 +1,11 @@
+{
+  "url": "https://www.architecture-weekly.com/p/typescript-migrates-to-go-whats-really",
+  "date": "2025-03-24",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/ae1f42e6-e524-4825-af51-5711630fef16_800x501.png": "2025-03-24-cover.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/e47f68f2-b348-4424-aa4b-16ef13f707d1_220x220.gif": "image-2.gif",
+    "https://substack-post-media.s3.amazonaws.com/public/images/de1fbc66-8e43-4da8-9bff-dcf5b0fe7455_478x276.png": "image-3.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/2b1d2383-e6bf-46a9-838a-771682cc8239_640x360.gif": "image-4.gif"
+  },
+  "embeds": 0
+}

@@ -21,7 +21,7 @@ I don't buy the first thing I see; I check price-comparison sites, read forums, 
 
 Yesterday, after two years, I finally fixed the broken blinds.
 
-- "What's your biggest weakness?" 
+- "What's your biggest weakness?"
 - "I'm a perfectionist."
 
 Sometimes I call myself the master of unfinished ideas. Like most of us, I dream of having my own idea, my own product, my own startup. I regularly throw myself at the next brilliant (in intent) idea, and I regularly fail to finish it. Every attempt ends the same way - "the same place, different girlfriend."
@@ -30,11 +30,11 @@ Of course, every project of mine has to have solid foundations. Architecture fir
 
 Last week, a book landed in my hands, well, an ebook: ["Just Fucking Ship"](https://shop.stackingthebricks.com/just-fucking-ship) by Amy Hoy. It hit my mood of brooding over what I'm doing wrong perfectly. Why is Borys the schoolyard footballer everyone remembers, and not me? Why does my dad say I'm all gas, no follow-through, that I burn hot and burn out fast? Why are Xamarin and SignalR thriving, while my unfinished framework with similar ambitions sits at the back of my hard drive, untouched for years? You'd think I'm doing everything right. Reason. Solid foundations. Knowledge. Experience. Mr. Prim and Proper.
 
-Maybe it's exactly because I make the same mistakes everyone (well, almost everyone) makes: 
+Maybe it's exactly because I make the same mistakes everyone (well, almost everyone) makes:
 
 - I focus on chasing the rabbit, not catching it. I start a project from the framework, a website from the layout, and before any of that, from picking the domain name. So I burn through my peak motivation on bullshit that's least important from a product perspective.
-- I don't take notes, I don't write down plans, "why would I? I don't need to, I'm exercising my memory." 
-- I don't focus on the goal, I don't set deadlines. 
+- I don't take notes, I don't write down plans, "why would I? I don't need to, I'm exercising my memory."
+- I don't focus on the goal, I don't set deadlines.
 - I don't follow the "start small, grow big" principle.
 
 https://twitter.com/abt_programming/status/561488797440176128

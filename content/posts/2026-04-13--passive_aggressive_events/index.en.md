@@ -23,13 +23,13 @@ Or
 
 > Heads up: the coffee machine is empty again.
 
-Or 
+Or
 
-> It's fine, I already walked the dog. 
+> It's fine, I already walked the dog.
 
 I'm sure you either heard or used such phrases.
 
-We all know that there's some intention behind it. 
+We all know that there's some intention behind it.
 
 The intention is not to inform, but to trigger some action.
 
@@ -37,9 +37,9 @@ Formally, we're reporting on events to announce the facts, but in practice, they
 
 We don't want to inform you that the trash bin is full, but we want someone to take it out. We don't want to inform you that the coffee machine requires a coffee bean refill, but we want someone to do it.
 
-Passive-aggressive tone is the worst. It's toxic for both sides of the communication. Usually, it's just better to ask someone to do it. 
+Passive-aggressive tone is the worst. It's toxic for both sides of the communication. Usually, it's just better to ask someone to do it.
 
-The same rule also works in Event-Driven Modelling. We should avoid passive-aggressive communication at all costs. 
+The same rule also works in Event-Driven Modelling. We should avoid passive-aggressive communication at all costs.
 
 **We should watch out for Passive-Agressive Events. So events that should be commands.**
 
@@ -59,7 +59,7 @@ It's parliament, per the official definition: a room full of angry, shouting peo
 
 [What's the difference between a command and an event?](/en/whats_the_difference_between_event_and_command/) Both are messages. They convey specific information: a command indicating intent to do something, or an event describing what happened. From the computer’s point of view, they are no different. Only the business logic and the interpretation of the message can distinguish between an event and a command.
 
-And that's the main difference: commands can be rejected by the command handler. Events can only be ignored. 
+And that's the main difference: commands can be rejected by the command handler. Events can only be ignored.
 
 If we send an event, we expect someone to be interested, but we don't know who or how many components will. We just inform.
 
@@ -83,9 +83,9 @@ This misleading split stemmed from our expectation about handling, so we expecte
 
 Whether something is blocking or not is not established by the tools we use, but by how our business process looks.
 
-Speaking about it. 
+Speaking about it.
 
-Let's get back to our favourite E-Commerce Order scenario (read more in [Predictable Identifiers: Enabling True Module Autonomy in Distributed Systems](https://www.architecture-weekly.com/p/predictable-identifiers-enabling)).
+Let's get back to our favourite E-Commerce Order scenario (read more in [Predictable Identifiers: Enabling True Module Autonomy in Distributed Systems](/en/predictable-identifiers-enabling/)).
 
 We could model it so we just publish the _OrderConfirmed_ event and passively-aggressively expect that others will take it from there. So:
 - The payment module will initiate the payment.
@@ -101,7 +101,7 @@ Once we receive information about a successful shipment or payment registration,
 
 Now, both payments can fail (if our customer doesn't have enough money), and the shipment may not be completed (if it's Black Friday, and multiple people are competing for the same product).
 
-If that happens, as the ordering module, we also need to take action, for instance, do reimbursement if the shipment wasn't completed, and eventually cancel the order. 
+If that happens, as the ordering module, we also need to take action, for instance, do reimbursement if the shipment wasn't completed, and eventually cancel the order.
 
 If we're just focused on events, we tend to forget about _"negative"_ scenarios. If all communication is through events, then it's too easy to stay in I-Alread-Did-My-Job mode.
 
@@ -119,7 +119,7 @@ Most importantly, we need to embrace the fact that some scenarios require direct
 
 In our case, it'd be better to have a coordinator ([workflow](/en/how_to_have_fun_with_typescript_and_workflow/), [saga, process manager](/en/saga_process_manager_distributed_transactions/), etc.) that publishes the _OrderConfirmed_ event for modules not on the critical path and sends commands like _RecordPayment_ and _InitiateShipment_.
 
-By that, we're separating responsibilities and making explicit what should be explicit. This also helps in understanding the business process, as you have a central place to see the critical flow and get proper observability. 
+By that, we're separating responsibilities and making explicit what should be explicit. This also helps in understanding the business process, as you have a central place to see the critical flow and get proper observability.
 
 Lacking tracing and observability of the business process is one of the most common issues [I see in my clients' projects](/en/training/). As said, if we don't want to end up with parliament instead of proper communication in our system, we need to be explicit about our intention.
 
@@ -137,7 +137,7 @@ Still, we're ending up again in passive-aggressive communication:
 
 > You have all you need. The whole state is in the _events_, just interpret it.
 
-But how can you reason about what has happened if instead of _OrderConfirmed_ you get _OrderCreated_, _OrderUpdated_, _OrderDeleted_? 
+But how can you reason about what has happened if instead of _OrderConfirmed_ you get _OrderCreated_, _OrderUpdated_, _OrderDeleted_?
 
 You not only deal with [Clickbait Events](/en/clickbait_event/) but also have a leaking business abstraction. All consumers need to understand the internals of your processing to detect a specific type of change. I wrote about it in detail in [Internal and external events, or how to design event-driven API](/en/internal_external_events/).
 
@@ -157,7 +157,7 @@ We tend to be all about events these days, but they're not the only message type
 
 Event-Driven Architectures enable loose coupling, but only for producers. To make consumers loosely coupled, we need to take extra steps, embrace different message types, and have them participate in modelling business processes.
 
-If we go too far with an event-all-the-things communication style, we'll make our system a room full of shouting people, with a passive-aggressive communication style. Or just aggressive. 
+If we go too far with an event-all-the-things communication style, we'll make our system a room full of shouting people, with a passive-aggressive communication style. Or just aggressive.
 
 In consequence, we won't know what's happening in our system, will see only noise, and will have a hard time making it reliable, observable and predictable. We should treat our messages as a communication contract, API and model their flow in a way that shapes our regular communication.
 

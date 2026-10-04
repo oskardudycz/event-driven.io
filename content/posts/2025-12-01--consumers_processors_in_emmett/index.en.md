@@ -17,7 +17,7 @@ redirectAliases:
 
 It's a fun coding exercise, but using the outcome in production? Not as much fun running and maintaining it. Why though? How hard can it be?
 
-Event Sourcing systems have two phases: appending events and processing them afterwards. The write side gets most of the attention in tutorials and talks - commands, deciders, event stores, optimistic concurrency, as you saw, I'm also one to blame. 
+Event Sourcing systems have two phases: appending events and processing them afterwards. The write side gets most of the attention in tutorials and talks - commands, deciders, event stores, optimistic concurrency, as you saw, I'm also one to blame.
 
 Providing the guarantees on the write side is relatively simple, especially if you use a database like PostgreSQL as a storage. You need to provide features like:
 - appending an event at the end of the stream,
@@ -40,15 +40,15 @@ I've been working on the message processing architecture in [Emmett](https://git
 
 When processing messages, we already know that someone produced them. We're on the receiving end. Facts are already known; now we need to do something about them.
 
-When we process them, do we care about the source? Typically, we take the information it gathers and reason about it. For instance, when we received an event indicating that a room reservation was made, we may need to send an email with details to the consumer, update the reservations dashboard, and generate a pro forma invoice. We may have specific logic, depending whether it came from our internal reservation platform or Booking.com, but we know the source from the message payload. 
+When we process them, do we care about the source? Typically, we take the information it gathers and reason about it. For instance, when we received an event indicating that a room reservation was made, we may need to send an email with details to the consumer, update the reservations dashboard, and generate a pro forma invoice. We may have specific logic, depending whether it came from our internal reservation platform or Booking.com, but we know the source from the message payload.
 
-That seems obvious, but it was an important realisation for me. When we're building a read model in MongoDB, we don't care if events come from PostgreSQL event store, EventStoreDB, RabbitMQ queue or Kafka topic. 
+That seems obvious, but it was an important realisation for me. When we're building a read model in MongoDB, we don't care if events come from PostgreSQL event store, EventStoreDB, RabbitMQ queue or Kafka topic.
 
-It needs events and the projection logic. Of course, it needs to know the guarantees around: delivery, ordering, idempotency, etc., but besides that? The message's source doesn't matter to its logic. 
+It needs events and the projection logic. Of course, it needs to know the guarantees around: delivery, ordering, idempotency, etc., but besides that? The message's source doesn't matter to its logic.
 
 Similarly, a component polling PostgreSQL for messages to publish them doesn't care what happens to those events - whether they update read models or trigger webhooks is irrelevant to polling logic.
 
-These concerns are orthogonal. 
+These concerns are orthogonal.
 
 I realised that much of the complexity comes from coupling those two together. We wouldn't like to change our processing logic because of an internal change in how they're produced, or vice versa. I concluded that separating them means each can evolve independently. And I came with the initial idea for the split: Consumers and Message Processors.
 
@@ -138,12 +138,12 @@ Those are general promises and common stuff for the message processing logic. St
 - **Workflows** coordinate multi-step processes across multiple streams. An order might involve payment processing, inventory reservation, and shipping coordination - each with its own state and events.
 - **Integration** means forwarding events to other systems. Other services in your systems might need to know about orders. External partners might need webhook notifications. You might publish to messaging systems for downstream consumers.
 
-All of those processing needs a bit different ways to handle reliability, ordering, throughput, etc. Also, all tools we integrate with require a different approach: storing the read model in PostgreSQL will be _quite_ different from forwarding a message to Kafka. 
+All of those processing needs a bit different ways to handle reliability, ordering, throughput, etc. Also, all tools we integrate with require a different approach: storing the read model in PostgreSQL will be _quite_ different from forwarding a message to Kafka.
 
 I wouldn't like to handwave all of those specifics and end up with the lowest common denominator. That's why I decided to group them into the following _archetypes_:
 - projectors,
 - reactors,
-- [workflows](https://www.architecture-weekly.com/p/workflow-engine-design-proposal-tell),
+- [workflows](/en/workflow-engine-design-proposal-tell/),
 - allow custom message processors to allow people to tune it fully to their needs,
 - and in the future, stuff like forwarders, web hooks and others we find useful.
 
@@ -155,7 +155,7 @@ I believe that this focused responsibility, different archetypes, and specific i
 
 Read also more in:
 - [My RFC for Workflow Processing](https://github.com/event-driven-io/emmett/pull/257/files)
-- [How message pipelines can be technically implemented](https://www.architecture-weekly.com/p/compilation-isnt-just-for-programming).
+- [How message pipelines can be technically implemented](/en/compilation-isnt-just-for-programming/).
 
 The example projector can look like that:
 
@@ -170,7 +170,6 @@ const projection = pongoSingleStreamProjection({
  }),
 });
 
-
 const postgreSQLProjector = postgreSQLProjector({ projection });
 ```
 
@@ -178,12 +177,12 @@ const postgreSQLProjector = postgreSQLProjector({ projection });
 const reactor = postgreSQLReactor({
     processorId: 'order-notifications',
     canHandle: ['ShoppingCartConfirmed'],
-    eachMessage: (event) => 
+    eachMessage: (event) =>
       emailService.sendOrderConfirmation(event.data.customerId);    
   }
 ```
 
-## Native implementations of processors 
+## Native implementations of processors
 
 Different storage requirements require different capabilities, and getting proper guarantees might involve deeper knowledge. For instance, [Postgres sequences issues can impact your messaging guarantees](/en/ordering_in_postgres_outbox/). Those are cases where, when you're starting, you might not anticipate. Test environments may not even catch it; you might realise you're losing business data when you reach production. That's why it's, imho, better to have a tool that solves it rather than trying to maintain it on your own, making technical infrastructure something you need to keep working on instead of your business features. How does [Emmett](https://github.com/event-driven-io/emmett) solve them? Let's discuss them briefly. I'll try to expand in the future posts about the details.
 
@@ -213,7 +212,7 @@ That's also why you can freely group processors within consumers. Best if they s
 
 In Emmett, **processors own their checkpoints**. Each processor independently tracks the last message it processed. The consumer doesn't maintain any checkpoint state.
 
-When a consumer starts up, it asks all registered processors for their last processed position and starts polling from the earliest one. 
+When a consumer starts up, it asks all registered processors for their last processed position and starts polling from the earliest one.
 
 It has several benefits:
 - **Independent progress**: Processors can move at different speeds. If your MongoDB projector is fast and your analytics processor can get slow at times, they each track their own progress. The slow one doesn't hold back the fast one.
@@ -258,13 +257,13 @@ I'm leaning toward making this configurable per consumer, with sensible defaults
 
 ## Scaling: Current State and Future Plans
 
-For now, the big benefit of having dumb consumers is that you can scale them horizontally. Of course, this works for offset-based solutions like event stores and streaming tools like Kafka. It may not always work for systems that remove the message once it's handled. Still, current consumers are using only event stores as sources; Kafka will likely come next. 
+For now, the big benefit of having dumb consumers is that you can scale them horizontally. Of course, this works for offset-based solutions like event stores and streaming tools like Kafka. It may not always work for systems that remove the message once it's handled. Still, current consumers are using only event stores as sources; Kafka will likely come next.
 
 You can group processors into consumers by that, reducing the number of polling jobs (one consumer polls/subscribes to one source).
 
 I already mentioned batching, which should also increase the throughput.
 
-Running multiple instances of the same processor causes conflicts. Both process the same events, update the same read models, and corrupt the state. [Emmett](https://github.com/event-driven-io/emmett) already has the basic capability to do [distributed locking](https://www.architecture-weekly.com/p/distributed-locking-a-practical-guide), but it's not fully plugged yet. This will come in future releases. 
+Running multiple instances of the same processor causes conflicts. Both process the same events, update the same read models, and corrupt the state. [Emmett](https://github.com/event-driven-io/emmett) already has the basic capability to do [distributed locking](/en/distributed-locking-a-practical-guide/), but it's not fully plugged yet. This will come in future releases.
 
 For now, checkpointing can detect whether a newer checkpoint is already stored (which can suggest another processor is running) and stop processing.
 

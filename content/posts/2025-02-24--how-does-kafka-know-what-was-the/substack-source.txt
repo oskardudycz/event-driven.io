@@ -1,0 +1,9 @@
+{
+  "url": "https://www.architecture-weekly.com/p/how-does-kafka-know-what-was-the",
+  "date": "2025-02-24",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/14e54070-c442-4bd1-9b51-80ee8b297550_728x408.jpeg": "2025-02-24-cover.jpg",
+    "https://substack-post-media.s3.amazonaws.com/public/images/6f957f6c-ceda-47f0-933f-98f3a58d771d_1015x589.png": "image-2.png"
+  },
+  "embeds": 0
+}

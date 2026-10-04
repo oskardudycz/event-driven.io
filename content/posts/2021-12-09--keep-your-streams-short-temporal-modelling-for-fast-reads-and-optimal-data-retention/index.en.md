@@ -8,13 +8,13 @@ redirectFrom: /keep-your-streams-short-temporal-modelling-for-fast-reads-and-opt
 
 Modeling is hard. We need to take so many things into account. This article will explain the basics of temporal modeling, a foundation for keeping your stream short living. It helps you efficiently use EventStoreDB, reducing the need for schema versioning and enabling you to evolve your event model with alignment to the business workflow.
 
-As I wrote in this [previous article](https://www.eventstore.com/blog/snapshots-in-event-sourcing), each data storage model has its specifics. Relational databases have normalization. Document databases are denormalized. Key-value stores have strategies for key definition. Event stores also have their specifics.
+As I wrote in this [previous article](/en/snapshots-in-event-sourcing/), each data storage model has its specifics. Relational databases have normalization. Document databases are denormalized. Key-value stores have strategies for key definition. Event stores also have their specifics.
 
 In Event Sourcing, in contrast to traditional approaches, no data is lost. Instead of changing/overwriting the current state, we store the result of each business operation as a new event. Events that happened for the specific business object or process (e.g. bank account, order, ticket reservation) are grouped into a sequence called stream. That has positive implications as we have a clear history of what has happened. It may also have other unforeseen consequences. The more operations occur on the particular object, the longer stream gets.
 
 To get the current state of events, we need to read all of them from the specific stream. The longer it is, the longer it takes. Usually, it’s not an issue if we have ten or a hundred events, but it may become an issue if our stream continues to grow. It has not only performance implications; over time, our business process changes, which has an impact on our event model. We may need to reshape the structure (e.g. add, remove or rename properties). If our stream is long-living, we have to support the structure of the old event for as long as that stream’s events live in our store, and we have logic operating on that event in that stream. If we’re invited to the event stream birthday party, then “a long life” shouldn’t be our first wish.
 
-It’s tempting to keep all the events in the same stream. It’s easier to deal with invariants, as you can use [optimistic concurrency](https://event-driven.io/en/optimistic_concurrency_for_pessimistic_times/) to ensure you’re always making decisions on the actual state. You could decide to [use snapshots](https://www.eventstore.com/blog/snapshotting-strategies) to reduce the need to read the whole stream. Those ideas sound good when you first think of them but are becoming more painful when you have to maintain the results. As the model grows, it’s getting harder to keep the consistency between the state in events and snapshots. You also have to constantly migrate or recreate them. This also takes time and becomes problematic when you want high availability. You’re also getting concurrency conflicts more often, as your model does too much, and the chance of having conflicting updates increases.
+It’s tempting to keep all the events in the same stream. It’s easier to deal with invariants, as you can use [optimistic concurrency](/en/optimistic_concurrency_for_pessimistic_times/) to ensure you’re always making decisions on the actual state. You could decide to [use snapshots](/en/snapshotting-strategies/) to reduce the need to read the whole stream. Those ideas sound good when you first think of them but are becoming more painful when you have to maintain the results. As the model grows, it’s getting harder to keep the consistency between the state in events and snapshots. You also have to constantly migrate or recreate them. This also takes time and becomes problematic when you want high availability. You’re also getting concurrency conflicts more often, as your model does too much, and the chance of having conflicting updates increases.
 
 It doesn’t have to be like that if we spend more time on modeling. Let’s get back to the domain known from the previous posts: cash registers in the department store. If we approached it classically, we would likely create an aggregate for the cash register. It would contain all the transactions that were registered for the specific workstation. All of them will be stored as events in a stream per cash register. Stream identifier could be in the format of `cashregister-{cashRegisterId}`, and sample stream could look as:
 
@@ -72,7 +72,7 @@ You should decide on the strategy based on your business use case.
 
 Nevertheless, the events’ definition and entity representing the stream state will be similar.
 
-I’ll be using the TypeScript samples for illustration, but translating them into other languages should be straightforward. We’ll use the event type definition used in the [“Snapshotting Strategies” article](https://www.eventstore.com/blog/snapshotting-strategies).
+I’ll be using the TypeScript samples for illustration, but translating them into other languages should be straightforward. We’ll use the event type definition used in the [“Snapshotting Strategies” article](/en/snapshotting-strategies/).
 
 ```text
 export type Event<
@@ -339,7 +339,7 @@ Based on that, we could build the read model, storing the current stream revisio
 
 Accordingly, to the current stream name, we can define the endpoint URI, as `/cash-registers/:cashRegisterId/shifts/current`. We could get the cash register id from the URI param and the rest of the command data from the body.
 
-You can get the expected stream revision from the request ETag header. After successfully running business logic in the command handler, the result event should be appended. If it failed, then appropriate HTTP status should be returned. Read more on that in the [How to use ETag header for optimistic concurrency](https://event-driven.io/en/how_to_use_etag_header_for_optimistic_concurrency/).
+You can get the expected stream revision from the request ETag header. After successfully running business logic in the command handler, the result event should be appended. If it failed, then appropriate HTTP status should be returned. Read more on that in the [How to use ETag header for optimistic concurrency](/en/how_to_use_etag_header_for_optimistic_concurrency/).
 
 ```text
 export const route = (router: Router) =>
@@ -770,7 +770,7 @@ So you got to the last point, congratulations! You’re a patient person. Let’
 
 Talk with the business experts and ask enough whys to understand the lifecycle of your business use case. Listen for the keywords like open/close/end, summary, daily, monthly, etc. For business experts, lifecycle may be so apparent that they won’t mention it straight away, but if you dig and ask enough questions, they’re typically more than happy to reveal it. Workshops like [Event Storming](https://www.eventstorming.com/) or [Event Modeling](https://eventmodeling.org/) can help you with that.
 
-Also check out my article [“Bring me problems, not solutions!”](https://event-driven.io/en/bring_me_problems_not_solutions/) for more guidance on how to make the proper relationship with the business.
+Also check out my article [“Bring me problems, not solutions!”](/en/bring_me_problems_not_solutions/) for more guidance on how to make the proper relationship with the business.
 
 ### Define invariants
 

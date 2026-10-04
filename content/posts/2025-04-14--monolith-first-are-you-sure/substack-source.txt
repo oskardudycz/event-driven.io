@@ -1,0 +1,8 @@
+{
+  "url": "https://www.architecture-weekly.com/p/monolith-first-are-you-sure",
+  "date": "2025-04-14",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/6980f4f7-e886-4649-b0b1-1648bbe82dcd_1000x553.jpeg": "2025-04-14-cover.jpg"
+  },
+  "embeds": 1
+}

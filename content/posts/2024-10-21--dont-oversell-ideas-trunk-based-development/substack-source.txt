@@ -1,0 +1,9 @@
+{
+  "url": "https://www.architecture-weekly.com/p/dont-oversell-ideas-trunk-based-development",
+  "date": "2024-10-21",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/00a8b46a-fccc-48e0-9936-58570049b404_1056x452.svg": "2024-10-21-cover.svg",
+    "https://bucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com/public/images/3ab6cef1-9ce5-47fa-9306-17854b383dc1_358x358.png": "image-2.png"
+  },
+  "embeds": 0
+}

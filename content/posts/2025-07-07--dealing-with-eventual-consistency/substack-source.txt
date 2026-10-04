@@ -1,0 +1,9 @@
+{
+  "url": "https://www.architecture-weekly.com/p/dealing-with-eventual-consistency",
+  "date": "2025-07-07",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/6d2e0070-90d8-49f8-a3c3-fec60a69d12a_640x618.webp": "2025-07-07-cover.webp",
+    "https://substack-post-media.s3.amazonaws.com/public/images/04b0687c-e039-4af9-8729-cdc51a12a64d_1139x1003.png": "image-2.png"
+  },
+  "embeds": 0
+}

@@ -7,6 +7,21 @@ const audit = require('../import/architecture-weekly-audit.json');
 const manifest = require('../import/architecture-weekly-missing.json');
 const root = path.resolve(__dirname, '../content/posts');
 
+test('all 96 requested source posts have English and Polish article files', () => {
+  const directories = fs.readdirSync(root), seen = new Set();
+  const sources = [...audit.posts, ...require('../import/eventstore-posts.json')];
+  for (const entry of sources) {
+    const slug = entry.slug || entry.url.replace(/\/$/, '').split('/').pop();
+    const directory = entry.directory || directories.find(name => name.endsWith(`--${slug}`));
+    assert(directory, `Missing requested article: ${entry.url}`);
+    assert(!seen.has(directory), `Duplicate article mapping: ${entry.url}`);
+    seen.add(directory);
+    for (const language of ['en', 'pl']) assert(fs.statSync(path.join(root, directory, `index.${language}.md`)).size > 0);
+  }
+  assert.equal(seen.size, 96);
+  for (const entry of require('../import/substack-posts.json')) assert(audit.posts.some(post => post.url === entry.url));
+});
+
 test('every archive post through the inclusive cutoff is accounted for exactly once', () => {
   const posts = audit.posts;
   assert.equal(posts.length, 93);
@@ -51,4 +66,56 @@ test('all podcast posts and recording articles have matching YouTube overrides',
   }
   const react = manifest.find(p => p.url.endsWith('/react-query-a-solution-for-frontend'));
   assert.equal(react.recordingEmbeds['https://www.architecture-weekly.com/p/frontent-architecture-backend-architecture'], 'EXj9TTJQwNc');
+});
+
+test('all 63 migrated posts have complete matching language copies, local assets and recording embeds', () => {
+  const directories = fs.readdirSync(root);
+  let images = 0, embeds = 0;
+  for (const entry of manifest) {
+    const slug = entry.url.split('/').pop();
+    const matches = directories.filter(name => name.endsWith(`--${slug}`));
+    assert.equal(matches.length, 1, `Missing or duplicate article: ${slug}`);
+    const directory = path.join(root, matches[0]);
+    const en = fs.readFileSync(path.join(directory, 'index.en.md'), 'utf8');
+    const pl = fs.readFileSync(path.join(directory, 'index.pl.md'), 'utf8');
+    const fm = yaml.load(en.split('---')[1]), polish = yaml.load(pl.split('---')[1]);
+    const body = text => text.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, '');
+    assert.equal(body(en), body(pl), `Language bodies differ: ${slug}`);
+    assert(body(en).trim().length > 0);
+    assert.equal(fm.redirectFrom, `/${slug}/`);
+    assert.equal(polish.useDefaultLangCanonical, true);
+    assert.equal(polish.redirectFrom, undefined);
+    const metadata = JSON.parse(fs.readFileSync(path.join(directory, 'substack-source.txt'), 'utf8'));
+    assert.equal(metadata.url, entry.url);
+    for (const image of [...Object.values(metadata.assets), fm.cover].filter(Boolean)) assert(fs.statSync(path.join(directory, image)).size > 0);
+    for (const match of body(en).matchAll(/!\[[^\]]*\]\(([^\s)]+)/g)) {
+      assert(!/^https?:/.test(match[1]), `Remote image in ${slug}`);
+      assert(fs.existsSync(path.join(directory, match[1])), `Missing image in ${slug}: ${match[1]}`);
+    }
+    if (entry.youtubeVideo) assert.equal(body(en).split(`v=${entry.youtubeVideo}`).length - 1, 1, `Wrong recording: ${slug}`);
+    for (const id of Object.values(entry.recordingEmbeds || {})) assert(body(en).includes(`v=${id}`));
+    images += Object.keys(metadata.assets).length;
+    embeds += metadata.embeds;
+  }
+  assert.deepEqual(audit.imported, { completedOn: '2026-10-04', posts: 63, images, embeds });
+});
+
+test('migrated pages contain no paid prompts, raw YouTube players or source links to available blog posts', () => {
+  const { isSubscriptionPromotion, buildArticleLinks, sourceKey } = require('../import/article-content');
+  const links = buildArticleLinks(), directories = fs.readdirSync(root);
+  for (const post of [...audit.posts, ...require('../import/eventstore-posts.json')]) {
+    const directory = post.directory || directories.find(name => name.endsWith(`--${post.url.replace(/\/$/, '').split('/').pop()}`));
+    for (const language of ['en', 'pl']) {
+      const file = path.join(root, directory, `index.${language}.md`);
+      if (!fs.existsSync(file)) continue;
+      const text = fs.readFileSync(file, 'utf8');
+      assert.doesNotMatch(text, /paywall-jump|<iframe[^>]*src="https?:\/\/(?:www\.)?youtube(?:-nocookie)?\.com/);
+      for (const block of text.split(/\n\s*\n/)) assert(!isSubscriptionPromotion(block.replace(/^#+\s*/, '')), `Paid prompt in ${file}`);
+      for (const match of text.matchAll(/(?:\]\(|href=")(https?:\/\/[^\s)"]+)/g)) {
+        const url = new URL(match[1]);
+        assert(!links.has(sourceKey(url)), `Source link to an available blog article in ${file}: ${url}`);
+        assert(!/^(www\.)?event-driven\.io$/.test(url.hostname), `Absolute blog link in ${file}: ${url}`);
+      }
+    }
+  }
 });

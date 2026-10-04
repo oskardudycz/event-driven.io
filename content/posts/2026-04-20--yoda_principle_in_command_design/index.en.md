@@ -13,9 +13,9 @@ redirectAliases:
 
 > Try not. Do. Or do not. There is no try!
 
-I'm calling this the Yoda Principle. 
+I'm calling this the Yoda Principle.
 
-[Master Yoda said that to Luke Skywalker a long time ago in a galaxy far, far away](https://www.youtube.com/watch?v=BQ4yd2W50No). He was teaching Luke how to name commands properly while trying to untangle some legacy enterprise mess. 
+[Master Yoda said that to Luke Skywalker a long time ago in a galaxy far, far away](https://www.youtube.com/watch?v=BQ4yd2W50No). He was teaching Luke how to name commands properly while trying to untangle some legacy enterprise mess.
 
 I'm sure you've also seen a death star of weirdly-named stuff. Some of them have already tripped you hours of thinking whether someone named this thing badly, or there's some hidden truth behind it.
 
@@ -29,7 +29,7 @@ The first step is checking product availability before confirming the order. We 
 
 We have dedicated modules for order fulfilment and for inventory. Fulfilment is the orchestrator, and inventory is responsible for tracking the state in warehouses.
 
-The ordering module would need to call the inventory module to verify product availability. We could send a command (through the messaging system or web api). How would we name it? 
+The ordering module would need to call the inventory module to verify product availability. We could send a command (through the messaging system or web api). How would we name it?
 
 What about **_VerifyProductExists_**? We'd send the product id and quantity from the order information, and return true if we have enough products, false otherwise. Sounds fair, right?
 
@@ -37,9 +37,9 @@ Well, it may seem nice at first glance, but what happens if more than one order 
 
 Then we're vulnerable to race conditions I described in [Tell, don't ask! Or, how to keep an eye on boiling milk](/en/tell_dont_ask_how_to_keep_an_eye_on_boiling_milk/). The information we get is only valid at the time of querying. If we don't lock the product quantity, it can change before we get a response (think: Black Friday-like demand).
 
-**Naming our command like _VerifyProductExists_ is a mistake**. 
+**Naming our command like _VerifyProductExists_ is a mistake**.
 
-_VerifyProductExists_ is not even a command; it's a query. Command is a request (intention) to run business logic. Query is a request to return data. 
+_VerifyProductExists_ is not even a command; it's a query. Command is a request (intention) to run business logic. Query is a request to return data.
 
 Of course, pragmatically, our [command can return status information about the result of our operation](/en/can_command_return_a_value/). But the intention is different.
 
@@ -47,7 +47,7 @@ Of course, pragmatically, our [command can return status information about the r
 
 The real intention is that we'd like to reserve products so we can ship them and get payment for them, not to verify if they exist. It'd be better to name our command as ReserveProducts or LockProducts.
 
-Why does it matter? 
+Why does it matter?
 
 If we're naming our commands with Verify/Validate/Check prefixes, we're putting ourselves into the wrong mindset. We're not focused on actions and integrations, but just brief checking. If we're in such a mode, it's easy to handwave the integration complexity.
 
@@ -69,15 +69,15 @@ The same goes for cases like:
 - validate if the shipment has been completed,
 - etc.
 
-All of them either hide a missing business concept or should be a business rule verified within the specific action (e.g., confirming an order). 
+All of them either hide a missing business concept or should be a business rule verified within the specific action (e.g., confirming an order).
 
 I recognise this may seem nitpicky, but big things are built on small details.
 
-If we don't think about such things, we'll not only end up with misnamed integrations but also fight [race conditions](/en/dealing_with_race_conditions_in_eda_using_read_models/) and incorrect boundaries. 
+If we don't think about such things, we'll not only end up with misnamed integrations but also fight [race conditions](/en/dealing_with_race_conditions_in_eda_using_read_models/) and incorrect boundaries.
 
 Then [we'll be doomed](https://www.youtube.com/watch?v=cTwZZz0HV8I).
 
-So better think twice and do or do not. 
+So better think twice and do or do not.
 
 May the force be with you!
 

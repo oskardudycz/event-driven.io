@@ -1,0 +1,9 @@
+{
+  "url": "https://www.architecture-weekly.com/p/on-messaging-and-distributed-systems",
+  "date": "2025-10-13",
+  "assets": {
+    "https://substackcdn.com/image/youtube/w_728,c_limit/0NYwN_p2pFI": "2025-10-13-cover.jpg"
+  },
+  "embeds": 1,
+  "youtubeVideo": "0NYwN_p2pFI"
+}

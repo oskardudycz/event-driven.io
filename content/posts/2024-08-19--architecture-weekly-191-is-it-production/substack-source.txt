@@ -1,0 +1,10 @@
+{
+  "url": "https://www.architecture-weekly.com/p/architecture-weekly-191-is-it-production",
+  "date": "2024-08-19",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/268ca1f5-386a-4adf-b4d6-8e8cc13d448e_1618x1152.png": "2024-08-19-cover.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/6019700a-205c-4f2f-8903-1c436414fc7a_1500x996.svg": "image-2.svg",
+    "https://substack-post-media.s3.amazonaws.com/public/images/fbe822b9-7793-4363-acfd-afa88241aa70_800x450.png": "image-3.png"
+  },
+  "embeds": 0
+}

@@ -11,7 +11,7 @@ redirectAliases:
 
 ![cover](2025-11-17-cover.png)
 
-I'm always saying that there's a thin line between good and bad practice, and this thin line is named "Context". 
+I'm always saying that there's a thin line between good and bad practice, and this thin line is named "Context".
 
 **That's also true for the (anti-)pattern I'm calling _"Requeuing Roulette"_**. Let's discuss it today, continuing the "race condition series":
 - [Dealing with Race Conditions in Event-Driven Architecture with Read Models](/en/dealing_with_race_conditions_in_eda_using_read_models/),
@@ -21,13 +21,13 @@ What's the Requeuing Roulette? As the name suggests, this _technique_ involves p
 
 The basic primitive for a messaging system is a queue. The producer is putting messages into the queue, and the consumer is getting them on the other end. If everything goes well, the consumer receives them in the order the producer put them (thus, a queue, like a queue in a shop).
 
-If the consumer is not available, the messaging system will try to deliver messages and handle retries for us. 
+If the consumer is not available, the messaging system will try to deliver messages and handle retries for us.
 
-We discussed it in detail in: 
-- [Queuing, Backpressure, Single Writer and other useful patterns for managing concurrency](https://www.architecture-weekly.com/p/architecture-weekly-190-queuing-backpressure)
-- [Ordering, Grouping and Consistency in Messaging systems](https://www.architecture-weekly.com/p/the-order-of-things-why-you-cant)
-- [The Order of Things: Why You Can't Have Both Speed and Ordering in Distributed Systems](https://www.architecture-weekly.com/p/the-order-of-things-why-you-cant)
-- [Dealing with Eventual Consistency, and Causal Consistency using Predictable Identifiers](https://www.architecture-weekly.com/p/dealing-with-eventual-consistency)
+We discussed it in detail in:
+- [Queuing, Backpressure, Single Writer and other useful patterns for managing concurrency](/en/architecture-weekly-190-queuing-backpressure/)
+- [Ordering, Grouping and Consistency in Messaging systems](/en/the-order-of-things-why-you-cant/)
+- [The Order of Things: Why You Can't Have Both Speed and Ordering in Distributed Systems](/en/the-order-of-things-why-you-cant/)
+- [Dealing with Eventual Consistency, and Causal Consistency using Predictable Identifiers](/en/dealing-with-eventual-consistency/)
 
 Ordering of processing works if we have a single consumer for a single queue. If we have more than one consumer, we lose the ordering guarantee. Why would we want to have more than one consumer? Obviously, to speed up processing. If messages in the queue are not causally correlated, then we can process them in parallel.
 
@@ -43,7 +43,7 @@ So if we set up a queue to process money transfer events, then it could look as 
 
 ![queue1](./queue1.png)
 
-I assumed that we're following the advice from the [previous article](/en/strict_ordering_in_event_handling/). Besides the event type and payload, we'd also pass the record revision, which represents the logical order of events. It comes from the number incremented with each change. Assuming we're publishing events after each successful business logic handling, it should be gapless. 
+I assumed that we're following the advice from the [previous article](/en/strict_ordering_in_event_handling/). Besides the event type and payload, we'd also pass the record revision, which represents the logical order of events. It comes from the number incremented with each change. Assuming we're publishing events after each successful business logic handling, it should be gapless.
 
 You may notice that our queue actually has multiple timelines for each causally correlated message sequence. If we simplify our considerations and assume that all events from a certain account are causally correlated, then we could visualise them as:
 
@@ -71,14 +71,14 @@ We can also apply techniques like the [_Phantom record_](/en/dealing_with_race_c
 
 But I promised you to talk today about the _Requeuing Roulette_ (anti)pattern, aye? So let's do it!
 
-If we're using tools like RabbitMQ, SQS and other classical messaging tooling (so not you Kafka! You're a streaming or log solution!), then we can put the message back in the queue. 
+If we're using tools like RabbitMQ, SQS and other classical messaging tooling (so not you Kafka! You're a streaming or log solution!), then we can put the message back in the queue.
 
 [RabbitMQ message ordering documentation states](https://www.rabbitmq.com/docs/semantics#ordering):
 
 > Messages published in one channel, passing through one exchange and one queue and one outgoing channel will be received in the same order that they were sent. RabbitMQ offers stronger guarantees since release 2.7.0.
-> 
+>
 > Messages can be returned to the queue using AMQP methods that feature a requeue parameter (basic.recover, basic.reject and basic.nack), or due to a channel closing while holding unacknowledged messages. Any of these scenarios caused messages to be requeued at the back of the queue for RabbitMQ releases earlier than 2.7.0. From RabbitMQ release 2.7.0, messages are always held in the queue in publication order, even in the presence of requeueing or channel closure.
-> 
+>
 > With release 2.7.0 and later it is still possible for individual consumers to observe messages out of order if the queue has multiple subscribers. This is due to the actions of other subscribers who may requeue messages. From the perspective of the queue the messages are always held in the publication order.
 
 The last paragraph seems promising, as it suggests the message will be put back before the next messages, since it was placed in the queue.
@@ -109,9 +109,9 @@ As you see, those assumptions can be fragile and classical _famous last words_.
 
 Of course, we can use one of the techniques like:
 - RabbitMQ routing key, correlation id,
-- AWS SQS message group id, visibility timeout, 
+- AWS SQS message group id, visibility timeout,
 - Azure Service Bus sessions,
-- etc. see [Ordering, Grouping and Consistency in Messaging systems](https://www.architecture-weekly.com/p/the-order-of-things-why-you-cant) for details.
+- etc. see [Ordering, Grouping and Consistency in Messaging systems](/en/the-order-of-things-why-you-cant/) for details.
 
 Making this trade-off more in favour of the ordering guarantee or parallelism may reduce it to an acceptable level, but you need to be aware of the risk of an unexpected traffic spike or a different message distribution than you expected.
 
@@ -124,28 +124,28 @@ Suppose you reject the message with requeue set to true. In that case, it can be
 Let's say you have a message that fails because a downstream service is down. You requeue it. It immediately returns to the consumer (maybe even the same one), fails again, and is requeued. This can happen hundreds of times per second. It can also swamp the slow consumer, preventing it from even recovering.
 
 In the worst case, your CPU can be spent processing and requeueing the same 10 messages over and over, while thousands of processable messages sit behind them in the queue (because RabbitMQ will try to put requeued messages before the next messages).
- 
+
 ## What about Kafka?
 
-Well, in Kafka, this issue doesn't exist as Messages with the same record key go to the same partition, maintaining order within that partition while allowing parallel processing across partitions. 
+Well, in Kafka, this issue doesn't exist as Messages with the same record key go to the same partition, maintaining order within that partition while allowing parallel processing across partitions.
 
 So Kafka, for the win? Hold your horses!
 
 Only one consumer from the consumer group can handle a specific partition. So, within a single partition, parallelisation isn't possible. If we map the RabbitMQ queue to Kafka's partition, then the conclusion can be that Kafka solved it by removing this feature.
 
-Also, when we consume a message from the classical messaging system (like RabbitMQ), it will be removed from the queue. In a streaming solution like Kafka/Pulsar, etc., they will remain in the log until the [retention policy kicks in and drops old messages from the partition](https://event-driven.io/en/gdpr_in_event_driven_architecture/#log-compaction).
+Also, when we consume a message from the classical messaging system (like RabbitMQ), it will be removed from the queue. In a streaming solution like Kafka/Pulsar, etc., they will remain in the log until the [retention policy kicks in and drops old messages from the partition](/en/gdpr_in_event_driven_architecture/#log-compaction).
 
 Kafka maintains the offset of the last processed message in each topic partition. You don't need to requeue messages; you can just rewind the offset to an older position when you want to reprocess messages.
 
-Read more in [Kafka Consumers: Under the Hood of Message Processing](https://www.architecture-weekly.com/p/kafka-consumers-under-the-hood-of)
+Read more in [Kafka Consumers: Under the Hood of Message Processing](/en/kafka-consumers-under-the-hood-of/)
 
 ## TLDR
 
-The "requeueing roulette" is a symptom of trying to solve a distributed systems problem with a technical solution. 
+The "requeueing roulette" is a symptom of trying to solve a distributed systems problem with a technical solution.
 
 The requeueing roulette is seductive because it promises something impossible: maintaining strict order in a distributed, concurrent system without sacrificing throughput. It's trying to cheat the fundamental trade-offs of distributed systems.
 
-Still, cheating can take us far enough, but there's always a danger that we'll be caught and handcuffed. 
+Still, cheating can take us far enough, but there's always a danger that we'll be caught and handcuffed.
 
 If you're considering using Requeuing Roulette, then consider the other techniques I described in previous articles. I'd treat Requeuing Roulette as a temporary solution and a tradeoff.
 
@@ -155,13 +155,13 @@ The real skill isn't in making requeueing work - it's in understanding your actu
 
 Read also more in:
 - [Dealing with Race Conditions in Event-Driven Architecture with Read Models](/en/dealing_with_race_conditions_in_eda_using_read_models/)
-- [The Order of Things: Why You Can't Have Both Speed and Ordering in Distributed Systems](https://www.architecture-weekly.com/p/the-order-of-things-why-you-cant),
+- [The Order of Things: Why You Can't Have Both Speed and Ordering in Distributed Systems](/en/the-order-of-things-why-you-cant/),
 - [Internal and external events, or how to design event-driven API](/en/internal_external_events/),
 - [Dealing with Eventual Consistency and Idempotency in MongoDB projections](/en/simple_trick_for_idempotency_handling_in_elastic_search_readm_model/)
-- [Queuing, Backpressure, Single Writer and other useful patterns for managing concurrency](https://www.architecture-weekly.com/p/architecture-weekly-190-queuing-backpressure)
-- [Ordering, Grouping and Consistency in Messaging systems](https://www.architecture-weekly.com/p/the-order-of-things-why-you-cant)
-- [The Order of Things: Why You Can't Have Both Speed and Ordering in Distributed Systems](https://www.architecture-weekly.com/p/the-order-of-things-why-you-cant)
-- [Dealing with Eventual Consistency, and Causal Consistency using Predictable Identifiers](https://www.architecture-weekly.com/p/dealing-with-eventual-consistency).
+- [Queuing, Backpressure, Single Writer and other useful patterns for managing concurrency](/en/architecture-weekly-190-queuing-backpressure/)
+- [Ordering, Grouping and Consistency in Messaging systems](/en/the-order-of-things-why-you-cant/)
+- [The Order of Things: Why You Can't Have Both Speed and Ordering in Distributed Systems](/en/the-order-of-things-why-you-cant/)
+- [Dealing with Eventual Consistency, and Causal Consistency using Predictable Identifiers](/en/dealing-with-eventual-consistency/).
 
 Cheers!
 

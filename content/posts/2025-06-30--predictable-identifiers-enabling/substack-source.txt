@@ -1,0 +1,10 @@
+{
+  "url": "https://www.architecture-weekly.com/p/predictable-identifiers-enabling",
+  "date": "2025-06-30",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/fe46b000-7127-4ef9-8542-05be934350d7_1128x610.png": "2025-06-30-cover.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/3ce05402-963c-4e6d-8c5a-c8c6ed62e74a_760x833.svg": "image-2.svg",
+    "https://substack-post-media.s3.amazonaws.com/public/images/8ed4614d-1327-402c-8d80-4953062df6cc_1128x610.png": "image-3.png"
+  },
+  "embeds": 0
+}

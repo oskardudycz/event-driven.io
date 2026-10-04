@@ -1,0 +1,10 @@
+{
+  "url": "https://www.architecture-weekly.com/p/why-to-measure-and-make-our-system",
+  "date": "2024-10-14",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/0de741c4-3ca7-4d14-a392-8fd1756bd9dc_800x711.jpeg": "2024-10-14-cover.jpg",
+    "https://substack-post-media.s3.amazonaws.com/public/images/380144f0-a2fb-4524-8811-4c417c7eb087_2108x1542.png": "image-2.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/a91481cc-54fb-465c-b630-7f9fd351c6d0_220x154.gif": "image-3.gif"
+  },
+  "embeds": 0
+}

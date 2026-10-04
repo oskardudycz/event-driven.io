@@ -20,7 +20,7 @@ From the outside, we can't tell whether the previous owner has crashed or is jus
 
 ## The bug
 
-The takeover decision lives in the upsert against `emt_processors`. In the real function, that upsert sits inside a Common Table Expression (CTE) alongside a `pg_try_advisory_xact_lock` call. 
+The takeover decision lives in the upsert against `emt_processors`. In the real function, that upsert sits inside a Common Table Expression (CTE) alongside a `pg_try_advisory_xact_lock` call.
 
 For the record: the snippets below skip that wrapping (and trim a couple of unused parameters) to keep the focus on the upsert, where the bug lives. The full version is in [the source](https://github.com/event-driven-io/emmett/blob/4c5909982313654f7df383a44b02a14a04f30b50/src/packages/emmett-postgresql/src/eventStore/schema/processors/processorsLocks.ts).
 
@@ -103,7 +103,7 @@ withTransaction        (transaction starts at T)
        └── ...
 ```
 
-`last_updated < now() - timeout` evaluates the same way every iteration. The predicate is effectively constant for the lifetime of that transaction. From the database's perspective, no time was passing between attempts, even though the retries were spread across real seconds. (of course, the valid question is whether retries should happen inside a transaction, but let's say that this is out of scope of today's article, deal?). 
+`last_updated < now() - timeout` evaluates the same way every iteration. The predicate is effectively constant for the lifetime of that transaction. From the database's perspective, no time was passing between attempts, even though the retries were spread across real seconds. (of course, the valid question is whether retries should happen inside a transaction, but let's say that this is out of scope of today's article, deal?).
 
 So what was the fix? Change the time source inside the function. PL/pgSQL lets you declare local variables, so I added one at the top, initialised from `clock_timestamp()`, and used it everywhere the function previously called `now()`:
 
@@ -187,7 +187,7 @@ Uff. That bug was nasty.
 
 Read also:
 - [Rebuilding Event-Driven Read Models in a safe and resilient way](/en/rebuilding_event_driven_read_models/), with the locking design this bug lives inside,
-- [Distributed Locking: A Practical Guide](https://www.architecture-weekly.com/p/distributed-locking-a-practical-guide),
+- [Distributed Locking: A Practical Guide](/en/distributed-locking-a-practical-guide/),
 - [Consumers, projectors, reactors and all that messaging jazz in Emmett](/en/consumers_processors_in_emmett/),
 - [Checkpointing the message processing](/en/checkpointing_message_processing/),
 - [Cybertec: PostgreSQL `now()` vs `now()::timestamp` vs `clock_timestamp()`](https://www.cybertec-postgresql.com/en/postgresql-now-vs-nowtimestamp-vs-clock_timestamp/),
@@ -195,11 +195,11 @@ Read also:
 
 Or my other articles about PostgreSQL:
 - [Postgres Superpowers in Practice](/en/postgres_superpowers/),
-- [PostgreSQL partitioning, logical replication and other Q&A](https://www.architecture-weekly.com/p/postgresql-partitioning-logical-replication)
-- [PostgreSQL JSONB - Powerful Storage for Semi-Structured Data](https://www.architecture-weekly.com/p/postgresql-jsonb-powerful-storage)
+- [PostgreSQL partitioning, logical replication and other Q&A](/en/postgresql-partitioning-logical-replication/)
+- [PostgreSQL JSONB - Powerful Storage for Semi-Structured Data](/en/postgresql-jsonb-powerful-storage/)
 - [Push-based Outbox Pattern with Postgres Logical Replication](/en/push_based_outbox_pattern_with_postgres_logical_replication/)
 - [How to get all messages through Postgres logical replication](/en/how_to_get_all_messages_through_postgres_logical_replication/)
-- [The Write-Ahead Log: The underrated Reliability Foundation for Databases and Distributed systems](https://www.architecture-weekly.com/p/the-write-ahead-log-a-foundation)
+- [The Write-Ahead Log: The underrated Reliability Foundation for Databases and Distributed systems](/en/the-write-ahead-log-a-foundation/)
 - [How Postgres sequences issues can impact your messaging guarantees](/en/ordering_in_postgres_outbox/)
 
 Cheers!

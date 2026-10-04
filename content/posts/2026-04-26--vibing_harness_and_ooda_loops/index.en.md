@@ -37,7 +37,7 @@ In software, the "dogfight" is the gap between your intent and the production-re
 1. **Observe** - This is the intake of raw, unfiltered information. In our world, this means looking at the state of the system.
 2. **Orient** - This is the most critical and difficult stage. It's where you filter your observations through your experience, culture, and technical knowledge.
 3. **Decide** - Based on your orientation, you formulate a hypothesis.
-4. **Act** - You execute. 
+4. **Act** - You execute.
 
 Getting back to my favourite founder and LLM-based tools.
 
@@ -47,7 +47,7 @@ If we skip or brush past the observation step, it feels like lightning speed. If
 
 **Observation is the intake of raw data.** In a professional environment, our eyes aren't enough. We need a Harness. If we don't have automations,  tests, integration tests, and pristine traces, we aren't observing the system; we're just looking at it. If the inputs are messy, our observation is clouded.
 
-But real engineering, the kind that takes those "two weeks", is about closing the loop properly. That's also where we need different perspectives and knowledge sharing. 
+But real engineering, the kind that takes those "two weeks", is about closing the loop properly. That's also where we need different perspectives and knowledge sharing.
 
 **Orientation is where you process those observations.** This is the part where LLMs make us feel smarter than we are. If we don't understand how a database handles concurrent connections, our "orientation" of a generated script will be shallow. We'll see code that "looks" right, decide it's fine, and act by deploying it.
 
@@ -73,7 +73,7 @@ So I decided to plug it into the [sample](https://github.com/event-driven-io/emm
 
 To do it, I decided to use [Grafana stack](https://grafana.com/) and set it up with Docker Compose. So, stable, boring stack. Not going to lie, I vibed the config. Not that there are no docs, but I intentionally wanted to see the typical config people use.
 
-If someone says LLM-based tools are great at proof of concepts, they don't run the stuff they vibed. If I made the observation based on the initial config, then an oriented decision would be that it won't work. Of course, then I did the typical back-and-forth, with the LLM tool doing some Linux command Voodoo to make it work. Once. Then, if you try to repeat it, you won't know how to do it without doing Voodoo again. 
+If someone says LLM-based tools are great at proof of concepts, they don't run the stuff they vibed. If I made the observation based on the initial config, then an oriented decision would be that it won't work. Of course, then I did the typical back-and-forth, with the LLM tool doing some Linux command Voodoo to make it work. Once. Then, if you try to repeat it, you won't know how to do it without doing Voodoo again.
 
 Again, that's not much different from the other stuff we do. I'm sure that you had multiple cases, when someone didn't use Continuous Deployment tools, but clicked through Azure, AWS, GCP portal, deployed the stack, and then there was no trace on how to set it up again (e.g. to have a different environment for testing or demos for customers).
 
@@ -90,10 +90,10 @@ I ended up with the following tools:
 - [native fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) for calling http endpoints,
 - [native Node.js test tools](https://nodejs.org/api/test.html) for checking if the stack works as expected.
 
-Then I asked it to create the script to automate the shell Voodoo they did to make Grafana stack and Docker Compose work. 
+Then I asked it to create the script to automate the shell Voodoo they did to make Grafana stack and Docker Compose work.
 
 **Essentially, it should:**
-1. Run Docker Compose script starting up services (Grafana, Prometheus, Loki, Tempo, PostgreSQL, etc.). 
+1. Run Docker Compose script starting up services (Grafana, Prometheus, Loki, Tempo, PostgreSQL, etc.).
 2. Wait for them to check when they're ready (it usually takes some time).
 3. Start the application and make a request.
 4. Check if the predefined dashboard with Emmett metrics appears, and shows expected traces and metrics.
@@ -189,7 +189,6 @@ const CONFIRM_ENDPOINT = `${URLS.app}/clients/${CLIENT_ID}/shopping-carts/curren
 
 // Matches the .http file — unitPrice is resolved server-side.
 const ADD_PRODUCT_BODY = JSON.stringify({ productId: randomUUID(), quantity: 10 });
-
 
 before(async () => {
   console.log(`\n▶ client ID for this run: ${CLIENT_ID}\n`);
@@ -365,7 +364,7 @@ test('OTel collector exposes Emmett metrics on port 8889', async () => {
 });
 ```
 
-I put it into a [single file](https://github.com/event-driven-io/emmett/blob/a937ff98ba39d3e504540886d8cd918843b28149/samples/webApi/expressjs-with-postgresql/src/observability.spec.ts) that can be run as a regular Node.js script. 
+I put it into a [single file](https://github.com/event-driven-io/emmett/blob/a937ff98ba39d3e504540886d8cd918843b28149/samples/webApi/expressjs-with-postgresql/src/observability.spec.ts) that can be run as a regular Node.js script.
 
 It already showed me (and Claude) that what they initially did wasn't working if you try to run it multiple times. It also showed that doing a full cleanup and rebuild, and making it reproducible, needs more work.
 

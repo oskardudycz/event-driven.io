@@ -1,0 +1,11 @@
+{
+  "url": "https://www.architecture-weekly.com/p/locks-queues-and-business-workflows",
+  "date": "2024-12-30",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/7ffb9fd1-c29f-4eea-b15c-a6250ef2d5bd_1256x601.png": "2024-12-30-cover.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/15b08a14-6a0f-42b6-95b2-73f07d12ec46_825x795.png": "image-2.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/7a666246-8a54-446a-bbdc-464f542bfc12_1100x618.png": "image-3.png",
+    "https://bucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com/public/images/3ab6cef1-9ce5-47fa-9306-17854b383dc1_358x358.png": "image-4.png"
+  },
+  "embeds": 0
+}

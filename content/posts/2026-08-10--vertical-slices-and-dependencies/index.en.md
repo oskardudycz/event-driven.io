@@ -28,7 +28,7 @@ Calling every area of an application a bounded context sets the bar for separati
 
 The assumption doing the damage rarely gets stated because it feels too obvious: a slice ought to be self-contained, so needing something from elsewhere means the cut was wrong. I held it myself for a while.
 
-I've written before about [how to slice the codebase effectively](/en/how_to_slice_the_codebase_effectively/) and shown [a worked module](/en/vertical_slices_in_practice/), and I listed "you can't share code between slices" as [one of the myths that grew around the pattern](https://www.architecture-weekly.com/p/my-thoughts-on-vertical-slices-cqrs). What I didn't do was show the positive answer. Minimise isn't zero, so what does the non-zero look like once you type it out?
+I've written before about [how to slice the codebase effectively](/en/how_to_slice_the_codebase_effectively/) and shown [a worked module](/en/vertical_slices_in_practice/), and I listed "you can't share code between slices" as [one of the myths that grew around the pattern](/en/my-thoughts-on-vertical-slices-cqrs/). What I didn't do was show the positive answer. Minimise isn't zero, so what does the non-zero look like once you type it out?
 
 Vocabulary is where this gets tangled, so let me start there.
 
@@ -235,7 +235,7 @@ That keeps the slice movable. Because it defines its own dependencies, changing 
 
 **What about the module's public API?**
 
-If you've read my [Architecture Weekly piece on VSA](https://www.architecture-weekly.com/p/my-thoughts-on-vertical-slices-cqrs), you'll have seen me recommend an `api.ts` per module, exposing what's public and hiding the rest. That may seem to contradict what I've just described.
+If you've read my [Architecture Weekly piece on VSA](/en/my-thoughts-on-vertical-slices-cqrs/), you'll have seen me recommend an `api.ts` per module, exposing what's public and hiding the rest. That may seem to contradict what I've just described.
 
 They point in opposite directions across the same boundary. `api.ts` is what a module **offers**: the surface it's willing to support and that the module owns. `CheckContractor` is what a slice **asks for**: a need, owned by the consumer, expressed in the consumer's terms.
 

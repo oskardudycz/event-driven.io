@@ -10,7 +10,7 @@ Many people believe there should be one, and only one, way to model software. I 
 
 For instance, I believe there’s a strong synergy between [C4 Model](https://c4model.com/), [Context Maps](https://github.com/ddd-crew/context-mapping), and [EventStorming](https://www.eventstorming.com/). They all allow us to look at the system from a different angle and act as simulations, providing different feedback on whether our model will fly.
 
-Look below for the diagram I prepared for my upcoming [workshop](https://event-driven.io/en/training/).
+Look below for the diagram I prepared for my upcoming [workshop](/en/training/).
 
 ![cover](2026-05-18-cover.jpg)
 

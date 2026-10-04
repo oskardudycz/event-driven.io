@@ -1,0 +1,13 @@
+{
+  "url": "https://www.architecture-weekly.com/p/architecture-weekly-189-mastering",
+  "date": "2024-08-05",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/e098dac5-f1eb-4e50-b231-ca5c97ca8fe5_1210x1136.png": "2024-08-05-cover.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/419b5f0f-39e9-4b53-b832-c3e3cbb7e709_499x345.png": "image-2.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/c659594f-68ca-4eb2-88d9-abcfd4168ffa_1262x1392.png": "image-3.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/8a6eb2f0-701e-4c1a-a9df-a04a0a9297de_1262x1774.png": "image-4.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/694b46e6-dc06-4614-9a13-c6394435d9e1_1140x1434.png": "image-5.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/03499d54-8155-4a1b-9192-5bd2c723c75a_1140x1604.png": "image-6.png"
+  },
+  "embeds": 0
+}

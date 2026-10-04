@@ -1,0 +1,9 @@
+{
+  "url": "https://www.architecture-weekly.com/p/applying-observability-from-strategy",
+  "date": "2024-12-02",
+  "assets": {
+    "https://substack-video.s3.amazonaws.com/video_upload/post/152315567/6db99295-051f-434f-8eb3-7a74d9fa7bda/transcoded-611589.png": "2024-12-02-cover.png"
+  },
+  "embeds": 1,
+  "youtubeVideo": "d2eVzz3oxJY"
+}

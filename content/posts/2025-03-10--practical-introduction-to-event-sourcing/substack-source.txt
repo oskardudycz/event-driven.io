@@ -1,0 +1,9 @@
+{
+  "url": "https://www.architecture-weekly.com/p/practical-introduction-to-event-sourcing",
+  "date": "2025-03-10",
+  "assets": {
+    "https://substack-video.s3.amazonaws.com/video_upload/post/158708194/66de5a22-7284-46a4-8d52-6dfc7b6a6e6f/transcoded-00001.png": "2025-03-10-cover.png"
+  },
+  "embeds": 1,
+  "youtubeVideo": "SDXdcymKv-8"
+}

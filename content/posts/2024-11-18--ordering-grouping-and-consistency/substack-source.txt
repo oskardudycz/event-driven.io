@@ -1,0 +1,8 @@
+{
+  "url": "https://www.architecture-weekly.com/p/ordering-grouping-and-consistency",
+  "date": "2024-11-18",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/585fef78-8e1a-47ab-aaca-b2c953924132_1200x680.jpeg": "2024-11-18-cover.jpg"
+  },
+  "embeds": 0
+}

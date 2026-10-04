@@ -8,7 +8,7 @@ useDefaultLangCanonical: true
 
 ![cover](2026-03-03-cover.png)
 
-[Last time, I shared with you how sneaky I was on transaction handling.](/pl/cloudflare_d1_transactions_and_tradeoffs/). Today, the opposite: I'll tell you how I fixed the issue when I tried to be too sneaky. I already told you that [Sneaky Code Bites Back](https://www.architecture-weekly.com/p/sneaky-code-bites-back). The moral? Do as I tell, not how I do.
+[Last time, I shared with you how sneaky I was on transaction handling.](/pl/cloudflare_d1_transactions_and_tradeoffs/). Today, the opposite: I'll tell you how I fixed the issue when I tried to be too sneaky. I already told you that [Sneaky Code Bites Back](/en/sneaky-code-bites-back/). The moral? Do as I tell, not how I do.
 
 In some environments, we're spoiled. We're getting a lot from a Base Class Library or standard frameworks, so we stop thinking that those issues can exist. For instance, serialisation. Do you know how many data types JSON has? 6. Six. Sześć.
 
@@ -71,7 +71,7 @@ const invoiceNumber = 123n;
 const invoice = await invoices.findOne({ invoiceNumber });
 ```
 
-That gets translated into a [fancy JSONB SQL query](https://www.architecture-weekly.com/p/postgresql-jsonb-powerful-storage).
+That gets translated into a [fancy JSONB SQL query](/en/postgresql-jsonb-powerful-storage/).
 
 Of course, I could work around it by encoding the value, but... But I was lazy!
 
@@ -91,7 +91,7 @@ const bigIntReviver: JSONReviver = (_key, value) => {
 
 Yes, it's either DNS or Regex. Or both.
 
-I [explained in another article](https://www.architecture-weekly.com/p/typescript-migrates-to-go-whats-really) that JavaScript runtime doesn't like where you do CPU-heavy computations.
+I [explained in another article](/en/typescript-migrates-to-go-whats-really/) that JavaScript runtime doesn't like where you do CPU-heavy computations.
 
 Small Regex isn't CPU-heavy, but if you consider that this will be done for each string in each document or event you try to deserialise, and multiply that by the number of concurrent requests? That can cause the [JavaScript event loop to freeze](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Execution_model).
 
@@ -107,7 +107,7 @@ Fortunately, a user, Dawid, benchmarked and noticed CPU freezes. It wasn’t cat
 
 Because that's the actual mistake here, not the Regex. The _pg_ driver has no idea what your schema looks like. It doesn't know that _"928391"_ is a bigint and _"John Doe"_ is a name. It doesn't know that _"123"_ is an invoice number (bigint!) and _"90210"_ is a zip code (string!). I asked it to guess, and it guessed wrong, because there is no right guess at that level.
 
-Enough is enough. I had been planning to do this properly for a while, and the performance issue gave me the push I needed. 
+Enough is enough. I had been planning to do this properly for a while, and the performance issue gave me the push I needed.
 
 **[Old rule says: "Make it work, make it right, make it pretty".](https://wiki.c2.com/?MakeItWorkMakeItRightMakeItFast)** I had _"make it work"_ covered for a long time. Now it was time for _"make it right"_.
 
@@ -171,7 +171,7 @@ const collection = pongoDb.collection<UserDoc, UserDocStored>(
 );
 ```
 
-What's in the database: 
+What's in the database:
 
 ```json
 { "name": "Alice", "createdAt": "2024-01-15T10:30:00.000Z", ... }
@@ -272,16 +272,16 @@ What's stored (downcasted, both shapes for compatibility):
 
 ```json
 {
-  "name": "Alice", 
+  "name": "Alice",
   "createdAt": "2024-01-15T10:30:00.000Z",
   "lastLogin": "2024-06-20T14:45:00.000Z",
-  "profile": { 
-    "name": "Alice" 
+  "profile": {
+    "name": "Alice"
   },
-  "timestamps": { 
+  "timestamps": {
     "createdAt": "2024-01-15T10:30:00.000Z",
-    "lastLogin": "2024-06-20T14:45:00.000Z" 
-  } 
+    "lastLogin": "2024-06-20T14:45:00.000Z"
+  }
 }
 ```
 
@@ -294,13 +294,13 @@ And get upcasted to V2 data in your application code:
 
 ```json
 {
-  "profile": { 
-    "name": "Alice" 
+  "profile": {
+    "name": "Alice"
   },
-  "timestamps": { 
+  "timestamps": {
     "createdAt": "2024-01-15T10:30:00.000Z",
-    "lastLogin": "2024-06-20T14:45:00.000Z" 
-  } 
+    "lastLogin": "2024-06-20T14:45:00.000Z"
+  }
 }
 ```
 
@@ -427,8 +427,8 @@ Dawid raised a performance issue with Pongo projections, but the same Regex was 
 
 You can recover from shortcuts. You should. But you also shouldn't be afraid to take them in the first place, as long as you come back and do it properly.
 
-Full changes: 
-- [Pongo PR #149](https://github.com/event-driven-io/Pongo/pull/149), 
+Full changes:
+- [Pongo PR #149](https://github.com/event-driven-io/Pongo/pull/149),
 - [Emmett PR #292](https://github.com/event-driven-io/emmett/pull/292).
 
 Cheers!

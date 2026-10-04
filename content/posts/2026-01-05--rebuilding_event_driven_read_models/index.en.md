@@ -22,7 +22,7 @@ Let's make a soup today: a blog soup. We'll mix multiple ingredients like:
 - distributed locking,
 - PostgreSQL and its Advisory Locks.
 
-Sounds a lot? Well, the soup should be nutritious. 
+Sounds a lot? Well, the soup should be nutritious.
 
 In an event-driven way, after handling business logic, we record new facts and call them events. They gather information about what has happened. That brings many benefits, such as business observability by keeping a log of them. Especially if we're doing Event Sourcing, we can make the next decision based on them.
 
@@ -38,7 +38,7 @@ Also, as [Bastian Waidelich](https://www.linkedin.com/in/bastian-waidelich-84865
 
 My thumb rule is that for single stream, simple projections, I prefer inline projections, but for more complex or workflow processing, I'd go with async.
 
-The big benefit of a durable event log is that we can correct past mistakes and gain more insights from existing data. 
+The big benefit of a durable event log is that we can correct past mistakes and gain more insights from existing data.
 
 How does it look in practice? Let's say we initially had a basic read model that showed a summary of the specific shopping cart. In TypeScript this could look as follows:
 
@@ -50,7 +50,7 @@ type ShoppingCartSummary = {
 };
 ```
 
-Besides the data, we also need a method that represents how we apply events on top of the existing state to get the next, evolved state. 
+Besides the data, we also need a method that represents how we apply events on top of the existing state to get the next, evolved state.
 
 ```ts
 const evolve = (
@@ -164,7 +164,7 @@ That's why there's another option. Instead of truncating existing data, we can k
 
 Then, once this new read model catches up (so it has processed all events, or is close enough to the latest event with a defined threshold), we can switch queries from the old to the new read model storage.
 
-This is actually the preferred way, but it's a bit more challenging when it comes to dynamically switching the query target. If you're using Pongo, that's not that hard, since you just switch the text-based collection name, which is just another table. But if you're using an ORM, adding a new table dynamically and mapping it can be much more challenging. 
+This is actually the preferred way, but it's a bit more challenging when it comes to dynamically switching the query target. If you're using Pongo, that's not that hard, since you just switch the text-based collection name, which is just another table. But if you're using an ORM, adding a new table dynamically and mapping it can be much more challenging.
 
 ## Concurrency issues while (re)building read models
 
@@ -180,7 +180,7 @@ How do we solve it? Let me explain my plan for [Emmett](https://github.com/event
 
 ## Distributed Locking and PostgreSQL advisory locks
 
-I encourage you to check my other article: [Distributed Locking: A Practical Guide](https://www.architecture-weekly.com/p/distributed-locking-a-practical-guide). Yet, don't worry, I won't leave you with Read-The-Fucking-Manual type of answer.
+I encourage you to check my other article: [Distributed Locking: A Practical Guide](/en/distributed-locking-a-practical-guide/). Yet, don't worry, I won't leave you with Read-The-Fucking-Manual type of answer.
 
 Distributed locks are a fundamental tool for coordinating concurrency across systems. We can use a central place, typically scalable on its own, that'll be used in multiple instances of our service, to ensure that exactly one can request a lock and run specific code.
 
@@ -209,7 +209,7 @@ CREATE TABLE IF NOT EXISTS emt_projections(
 );
 ```
 
-The background worker could lock the projection by a specific name and version and set the status to "rebuilding". Then, during handling the inline projection, we could use the same lock and check whether the status is "active"; if not, skip processing. Using a lock-in inline projection would also prevent the rebuilding process from starting, as they wouldn't acquire the lock. 
+The background worker could lock the projection by a specific name and version and set the status to "rebuilding". Then, during handling the inline projection, we could use the same lock and check whether the status is "active"; if not, skip processing. Using a lock-in inline projection would also prevent the rebuilding process from starting, as they wouldn't acquire the lock.
 
 And that's a nuke option, as it would work but could create a performance problem. If every inline projection needs to grab a row lock on a coordination row, they will all be processed sequentially, one at a time. That's a throughput killer when you're appending thousands of events per second. Each of these append would require access to the lock for the specific projection type (e.g. our shopping cart summary), making not only updates but also event appends sequential. That's not acceptable for most cases.
 
@@ -225,13 +225,13 @@ SELECT pg_advisory_lock(12345);
 
 Those locks are either scoped to an open connection session or an opened transaction (with _xact_ with name) and released automatically once they end.  
 
-Shared locks allow multiple sessions to access the lock with the same value. Exclusive lock blocks both other exclusive locks and new shared locks. 
+Shared locks allow multiple sessions to access the lock with the same value. Exclusive lock blocks both other exclusive locks and new shared locks.
 
 **This allows a design where shared locks are used for readers**, and exclusive locks for writers and maps directly to our problem:
 - Inline projections take **shared** locks as they run concurrently, and just need to check if there's no async job updating these projections
 - Rebuilds take **exclusive** locks - they block inlines and other instances of async processing.
 
-We just need to do one more thing: since advisory locks take integers, we need to map our projection name and version to them. We can do it by a consistent hash algorithm, either in the application code or in PostgreSQL. 
+We just need to do one more thing: since advisory locks take integers, we need to map our projection name and version to them. We can do it by a consistent hash algorithm, either in the application code or in PostgreSQL.
 
 PostgreSQL provides a built-in MD5 hash function. It's not perfect, as it's not a sophisticated hash, but it's fast enough and predictable. In our case, we won't have thousands of projections in our application, so the risk of a [hash collision](https://en.wikipedia.org/wiki/Hash_collision) is negligible. If you're still worried it's too high, we could store id in our projections table and use it instead of hash-mapping. Still, if we used md5 function, it could look as follows:
 
@@ -249,7 +249,7 @@ SELECT pg_try_advisory_xact_lock(
 
 Where as query param, we'd pass the joined projection name and its version.
 
-Thanks to that, multiple inline projections can access the lock if it's not held exclusively by the async (re)building worker. Thanks to that, we're not blocking event appends because of the lock on the inline projections. 
+Thanks to that, multiple inline projections can access the lock if it's not held exclusively by the async (re)building worker. Thanks to that, we're not blocking event appends because of the lock on the inline projections.
 
 An exclusive lock can be held only when there's no single inline projection being applied at the moment.
 
@@ -282,9 +282,9 @@ CREATE TABLE IF NOT EXISTS emt_projections(
     type            VARCHAR(1)  NOT NULL,
     name            TEXT        NOT NULL,
     partition       TEXT        NOT NULL DEFAULT 'emt:default',
-    kind            TEXT        NOT NULL, 
-    status          TEXT        NOT NULL, 
-    definition      JSONB       NOT NULL DEFAULT '{}'::jsonb, 
+    kind            TEXT        NOT NULL,
+    status          TEXT        NOT NULL,
+    definition      JSONB       NOT NULL DEFAULT '{}'::jsonb,
     PRIMARY KEY (name, partition, version)
 ) PARTITION BY LIST (partition);
 
@@ -293,7 +293,7 @@ CREATE TABLE IF NOT EXISTS emt_processors(
     version                       INT     NOT NULL DEFAULT 1,
     processor_id                  TEXT    NOT NULL,
     partition                     TEXT    NOT NULL DEFAULT 'emt:default',
-    status                        TEXT    NOT NULL DEFAULT 'stopped', 
+    status                        TEXT    NOT NULL DEFAULT 'stopped',
     last_processed_checkpoint     TEXT    NOT NULL,    
     processor_instance_id         TEXT    DEFAULT 'emt:unknown',
     PRIMARY KEY (processor_id, partition, version)
@@ -302,7 +302,7 @@ CREATE TABLE IF NOT EXISTS emt_processors(
 
 The _status_ column in the projections table can do what advisory locks can't: persist status between connection crashes. Even if the connection dies, _status = 'rebuilding'_ stays in the table. Inlines could check this and skip processing.
 
-The processor's table tracks checkpoint progress. When a rebuild runs, it updates _last_processed_checkpoint_ as it goes. If it crashes and restarts, it can resume from where it left off rather than starting over. 
+The processor's table tracks checkpoint progress. When a rebuild runs, it updates _last_processed_checkpoint_ as it goes. If it crashes and restarts, it can resume from where it left off rather than starting over.
 
 Potentially, we could reuse the processor's table, but having a dedicated projection table could also be useful for diagnostics (e.g., storing the projection definition) and for switching queries when a new projection version catches up. We could select the highest active projection version.
 
@@ -362,7 +362,7 @@ SELECT
 
 Together Advisory locks prevent the race at the transition point where the connection was closed, and the rebuilding job is restarting. The status check handles crash recovery
 
-The rebuild acquires the exclusive lock *before* updating the status. It waits for in-flight inlines (which hold shared locks) to finish. 
+The rebuild acquires the exclusive lock *before* updating the status. It waits for in-flight inlines (which hold shared locks) to finish.
 
 If the checkpoint is null, the UPDATE matched no rows, then another instance owns the processor and is actively running. Back off.
 
@@ -427,7 +427,7 @@ Neither alone is sufficient. Together, they provide the guarantees we need witho
 
 The cost on the hot path is microseconds: one in-memory lock check, one indexed read on a tiny cached table. For most systems, that's an acceptable tradeoff.
 
-I hope this article also shows you how to use distributed locking in practice. 
+I hope this article also shows you how to use distributed locking in practice.
 
 **Please tell me your thoughts and concerns, especially if you see any blind spots in this design!** You can do that in our [Emmett Discord](https://discord.gg/fTpqUTMmVa), come on in, we have a nice community!
 
@@ -436,7 +436,7 @@ I hope this article also shows you how to use distributed locking in practice.
 Or check also other related resources:
 - [Emmett's Pull Request implementing described approach](https://github.com/event-driven-io/emmett/pull/286)
 - [Guide to Projections and Read Models in Event-Driven Architecture](/en/projections_and_read_models_in_event_driven_architecture/),
-- [Distributed Locking: A Practical Guide](https://www.architecture-weekly.com/p/distributed-locking-a-practical-guide),
+- [Distributed Locking: A Practical Guide](/en/distributed-locking-a-practical-guide/),
 - [Consumers, projectors, reactors and all that messaging jazz in Emmett](/en/consumers_processors_in_emmett/),
 - [How to scale projections in the event-driven systems?](/en/how_to_scale_projections_in_the_event_driven_systems/),
 - [Checkpointing the message processing](/en/checkpointing_message_processing/),

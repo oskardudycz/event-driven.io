@@ -70,7 +70,7 @@
     "gatsby-plugin-styled-jsx-postcss": "^2.0.2",
     "gatsby-remark-autolink-headers": "^6.16.0",
     "gatsby-remark-copy-linked-files": "^6.16.0",
-    "gatsby-remark-embed-video": "^3.1.1",
+    "gatsby-remark-embed-video": "3.2.1",
     "gatsby-remark-emojis": "^0.4.3",
     "gatsby-remark-external-links": "^0.0.4",
     "gatsby-remark-images": "^7.16.0",

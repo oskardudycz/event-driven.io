@@ -1,0 +1,10 @@
+{
+  "url": "https://www.architecture-weekly.com/p/kafka-consumers-under-the-hood-of",
+  "date": "2025-01-20",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/f4bf9266-f45f-4ae9-8c56-5a3ffec6aeeb_1340x756.png": "2025-01-20-cover.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/4aa3f275-7597-4c84-b104-5e664417aca7_1102x378.png": "image-2.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/7f9a04a4-41a2-4842-a801-93d1e390672f_700x799.png": "image-3.png"
+  },
+  "embeds": 0
+}

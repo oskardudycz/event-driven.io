@@ -1,0 +1,8 @@
+{
+  "url": "https://www.architecture-weekly.com/p/whole-architecture-weekly-content",
+  "date": "2025-03-17",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/ccc24135-c735-41cb-8d8d-8a4dd324f93a_1199x674.jpeg": "2025-03-17-cover.jpg"
+  },
+  "embeds": 0
+}

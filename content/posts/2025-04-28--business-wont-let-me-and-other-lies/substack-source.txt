@@ -1,0 +1,8 @@
+{
+  "url": "https://www.architecture-weekly.com/p/business-wont-let-me-and-other-lies",
+  "date": "2025-04-28",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/619faae7-a52a-448b-83bf-1f959c1bc7b7_1600x1600.png": "2025-04-28-cover.png"
+  },
+  "embeds": 0
+}

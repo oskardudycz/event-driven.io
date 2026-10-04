@@ -1,0 +1,10 @@
+{
+  "url": "https://www.architecture-weekly.com/p/webinar-22-on-performance-testing",
+  "date": "2024-09-30",
+  "assets": {
+    "https://substack-video.s3.amazonaws.com/video_upload/post/149606238/070c717e-55d0-4884-8675-01c63cf1e6b2/transcoded-429484.png": "2024-09-30-cover.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/b65df0f5-f729-458e-85a2-0965ac2168e6_1500x1000.jpeg": "image-2.jpg"
+  },
+  "embeds": 1,
+  "youtubeVideo": "eyy-voE6D5I"
+}

@@ -1,0 +1,9 @@
+{
+  "url": "https://www.architecture-weekly.com/p/documenting-event-driven-architecture",
+  "date": "2025-02-17",
+  "assets": {
+    "https://substack-video.s3.amazonaws.com/video_upload/post/157055025/0e5b621c-596c-4bbd-8ee6-2c5fb76dbc28/transcoded-00001.png": "2025-02-17-cover.png"
+  },
+  "embeds": 1,
+  "youtubeVideo": "bcfY-cPqNYo"
+}

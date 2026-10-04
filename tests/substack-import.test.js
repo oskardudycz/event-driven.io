@@ -171,7 +171,7 @@ test("webinar overrides add the native recording and replace only mapped recordi
     const en = await fs.readFile(path.join(dir, "index.en.md"), "utf8");
     const pl = await fs.readFile(path.join(dir, "index.pl.md"), "utf8");
     assert.equal(en.split('---\n\n')[1], pl.split('---\n\n')[1]);
-    for (const id of ["MLO08iaRvBk", "EXj9TTJQwNc", "7IkHIqPeFjY"]) assert.equal(en.split(`/embed/${id}`).length - 1, 1);
+    for (const id of ["MLO08iaRvBk", "EXj9TTJQwNc", "7IkHIqPeFjY"]) assert.equal(en.split(`v=${id}`).length - 1, 1);
     assert.match(en, /Original introduction/);
     assert.match(en, /Original ending/);
     assert.match(en, /\[article\]\(https:\/\/another.substack.com\/p\/other\)/);
@@ -188,9 +188,57 @@ test("recording overrides preserve existing players without adding duplicates", 
     const page = html.replace("/embed/abc?start=30", "/embed/0NYwN_p2pFI?start=30");
     const dir = await importPost({ url: source, youtubeVideo: "0NYwN_p2pFI" }, { output, html: page, download: async () => new Response(png) });
     const en = await fs.readFile(path.join(dir, "index.en.md"), "utf8");
-    assert.equal(en.split('/embed/0NYwN_p2pFI').length - 1, 1);
+    assert.equal(en.split('v=0NYwN_p2pFI').length - 1, 1);
     assert.match(en, /start=30/);
     await assert.rejects(importPost({ url: source, slug: "invalid-recording", youtubeVideo: 'bad" onload="oops' }, { output, html }), /Invalid YouTube/);
     assert.deepEqual(await fs.readdir(output), [path.basename(dir)]);
+  } finally { await fs.rm(output, { recursive: true, force: true }); }
+});
+
+test('accepts former paywall markers only with a matching complete public body', () => {
+  const body = '<p>Full public introduction.</p><div class="paywall-jump"></div><p>Full public ending.</p>';
+  const page = (audience, content = body) => `<meta property="og:title" content="Formerly paid article">
+    <meta property="article:published_time" content="2025-03-03"><div class="body markup">${body}</div>
+    <script>window._preloads = JSON.parse(${JSON.stringify(JSON.stringify({ post: { audience, body_html: content } }))});</script>`;
+  assert.match(extractPost(page('everyone'), source).body.text(), /Full public ending/);
+  assert.throws(() => extractPost(page('only_paid'), source), /Paywalled/);
+  assert.throws(() => extractPost(page('everyone', '<p>Preview only.</p>'), source), /Paywalled/);
+  assert.throws(() => extractPost(page('everyone') + '<div class="paywall">Locked</div>', source), /Paywalled/);
+});
+
+test('uses the cached Substack image when its original S3 asset is unavailable', async () => {
+  const output = await fs.mkdtemp(path.join(os.tmpdir(), 'substack-cdn-fallback-'));
+  const fetched = [];
+  try {
+    const dir = await importPost({ url: source }, { output, html, download: async (url) => {
+      fetched.push(url);
+      if (url === image) throw new Error('HTTP 403');
+      assert.equal(url, cdn);
+      return new Response(png);
+    } });
+    assert.deepEqual(fetched, [image, cdn]);
+    assert.deepEqual(await fs.readFile(path.join(dir, '2026-09-07-cover.png')), png);
+  } finally { await fs.rm(output, { recursive: true, force: true }); }
+});
+
+test('future imports remove paid prompts and use relative URLs for available blog articles', async () => {
+  const output = await fs.mkdtemp(path.join(os.tmpdir(), 'substack-local-links-'));
+  const { sourceKey } = require('../import/article-content');
+  const existing = 'https://www.architecture-weekly.com/p/original-source-slug';
+  const page = `<meta property="og:title" content="A migrated article"><meta property="article:published_time" content="2025-01-01">
+    <div class="body markup"><p>Full introduction.</p><p>The next part of the article is for paid users. Get a free trial.</p>
+    <p><a href="${existing}?utm_source=email#details">Existing article</a> and <a href="https://www.architecture-weekly.com/p/not-yet-imported">Older article</a>.</p>
+    <p><a href="https://event-driven.io/en/another/">Another blog article</a>.</p>
+    <iframe src="https://www.youtube-nocookie.com/embed/sQbkUl7-z_U?start=30" title="My recording"></iframe><p>Full ending.</p></div>`;
+  try {
+    const dir = await importPost({ url: source }, { output, html: page, links: new Map([[sourceKey(existing), '/en/blog-slug/']]) });
+    const en = await fs.readFile(path.join(dir, 'index.en.md'), 'utf8');
+    assert.match(en, /\[Existing article\]\(\/en\/blog-slug\/#details\)/);
+    assert.match(en, /\[Older article\]\(https:\/\/www.architecture-weekly.com\/p\/not-yet-imported\)/);
+    assert.match(en, /\[Another blog article\]\(\/en\/another\/\)/);
+    assert.match(en, /`youtube: \[My recording\]\(https:\/\/www.youtube.com\/watch\?start=30&v=sQbkUl7-z_U\)`/);
+    assert.doesNotMatch(en, /paid users|free trial|<iframe/);
+    assert.match(en, /Full introduction/);
+    assert.match(en, /Full ending/);
   } finally { await fs.rm(output, { recursive: true, force: true }); }
 });

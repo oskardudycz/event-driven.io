@@ -26,6 +26,7 @@ const parseMarkdown = (filePath) => {
 const plainText = (markdown) =>
   markdown
     .replace(/```[\s\S]*?```/g, " ")
+    .replace(/`(?:youtube|video|vimeo):[^`]*`/gi, " ")
     .replace(/`([^`]+)`/g, "$1")
     .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
     .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")

@@ -5,6 +5,7 @@ const cheerio = require("cheerio");
 const TurndownService = require("turndown");
 const { gfm } = require("turndown-plugin-gfm");
 const yaml = require("js-yaml");
+const { isSubscriptionPromotion, youtubeMarkdown, buildArticleLinks, relativeArticleLink } = require("./article-content");
 
 const postsDirectory = path.resolve(__dirname, "../content/posts");
 
@@ -50,7 +51,20 @@ function extractPost(html, source) {
   const $ = cheerio.load(html);
   const body = $(".available-content .body.markup, .body.markup, #blog-post-content, #hs_cos_wrapper_post_body").first();
   if (!body.length || !body.text().trim()) throw new Error(`Article body missing: ${source}`);
-  if ($(".paywall, .paywall-content, .paywall-jump").length) {
+  let completePublicBody = false;
+  // Previously paid posts can retain an empty paywall-jump after becoming
+  // public. Only accept that marker when Substack explicitly exposes the full
+  // public body and it matches the rendered article; never evaluate scripts.
+  const preloads = html.match(/window\._preloads\s*=\s*JSON\.parse\(("(?:\\.|[^"\\])*")\)/);
+  if (preloads) {
+    try {
+      const data = JSON.parse(JSON.parse(preloads[1]));
+      const text = (value) => value.replace(/\s+/g, " ").trim();
+      completePublicBody = data.post?.audience === "everyone" && typeof data.post.body_html === "string" &&
+        text(body.text()) === text(cheerio.load(data.post.body_html).text());
+    } catch { /* A marker without verifiable public content remains blocked. */ }
+  }
+  if ($(".paywall, .paywall-content").length || ($(".paywall-jump").length && !completePublicBody)) {
     throw new Error(`Paywalled article; refusing to import a preview: ${source}`);
   }
   let article = {};
@@ -67,7 +81,10 @@ function extractPost(html, source) {
   if (!title || !published || Number.isNaN(Date.parse(published))) {
     throw new Error(`Article title or publication date missing: ${source}`);
   }
-  body.find("script, style, button, .subscription-widget-wrap, .subscribe-widget, .share-post, .post-footer").remove();
+  body.find("script, style, button, .subscription-widget-wrap, .subscribe-widget, .share-post, .post-footer, .paywall-jump").remove();
+  body.find("p, h2").each((_, node) => {
+    if (isSubscriptionPromotion($(node).text())) $(node).remove();
+  });
   body.find("pre[data-language] > code").each((_, node) => {
     $(node).attr("class", `language-${$(node).parent().attr("data-language")}`);
   });
@@ -143,7 +160,7 @@ function applyRecordingEmbeds(post, source, entry) {
   if (post.coverIsBodyFallback) post.cover = body.find("img").first().attr("src");
 }
 
-async function convertPost(post, source, directory, download = request, entry = {}) {
+async function convertPost(post, source, directory, download = request, entry = {}, links = new Map()) {
   const { $, body } = post;
   // Replace recording thumbnails before downloading images; Substack's native
   // player often lives outside the article body and needs an explicit mapping.
@@ -154,7 +171,15 @@ async function convertPost(post, source, directory, download = request, entry = 
     const original = originalImageUrl(input, location.base);
     const url = location.archive ? `${location.archive}${original}` : original;
     if (assets.has(url)) return assets.get(url);
-    const response = await download(url);
+    let response;
+    try { response = await download(url); }
+    catch (error) {
+      // Some old Substack S3 assets are private now while the publication's
+      // CDN still serves their cached image. Preserve that available image.
+      const cdn = new URL(input, location.base);
+      if (location.archive || cdn.hostname !== "substackcdn.com" || cdn.href === url) throw error;
+      response = await download(cdn.href);
+    }
     const bytes = Buffer.from(await response.arrayBuffer());
     const filename = `${isCover ? `${post.date}-cover` : `image-${assets.size + 1}`}${imageExtension(bytes)}`;
     await fs.writeFile(path.join(directory, filename), bytes);
@@ -188,7 +213,8 @@ async function convertPost(post, source, directory, download = request, entry = 
     const element = $(node), href = element.attr("href");
     if (!href.startsWith("#") && ![...assets.values()].includes(href)) {
       const resolved = new URL(href, location.base).href;
-      element.attr("href", resolved.replace(/^https:\/\/web\.archive\.org\/web\/\d+(?:[a-z]+_)?\//, ""));
+      const original = resolved.replace(/^https:\/\/web\.archive\.org\/web\/\d+(?:[a-z]+_)?\//, "");
+      element.attr("href", relativeArticleLink(original, location.base, links));
     }
   });
   const converter = new TurndownService({
@@ -212,6 +238,10 @@ async function convertPost(post, source, directory, download = request, entry = 
     replacement: (_, node) => {
       const media = cheerio.load(node.outerHTML, null, false);
       const element = media(node.nodeName.toLowerCase()).first();
+      if (node.nodeName === "IFRAME" && element.attr("src")) {
+        const youtube = youtubeMarkdown(new URL(element.attr("src"), location.base).href, element.attr("title") || "Embedded video");
+        if (youtube) return youtube;
+      }
       element.find("script").remove();
       for (const child of [...element.toArray(), ...element.find("*").toArray()]) {
         for (const attribute of Object.keys(child.attribs || {})) {
@@ -256,7 +286,8 @@ async function importPost(entry, options = {}) {
   }
   const staging = await fs.mkdtemp(path.join(root, ".substack-import-"));
   try {
-    const converted = await convertPost(post, source, staging, download, entry);
+    const converted = await convertPost(post, source, staging, download, entry,
+      options.links || buildArticleLinks(root, [entry]));
     for (const language of ["en", "pl"]) {
       const frontmatter = {
         title: post.title,
@@ -305,7 +336,8 @@ async function main() {
   if (!Array.isArray(entries)) throw new Error("Manifest must contain an array of post entries");
   entries.push(...positionals.map((url) => ({ url, category: values.category })));
   const html = values.html ? await fs.readFile(values.html, "utf8") : undefined;
-  for (const entry of entries) await importPost({ ...entry, ...(values.category ? { category: values.category } : {}) }, { html });
+  const links = buildArticleLinks(postsDirectory, entries);
+  for (const entry of entries) await importPost({ ...entry, ...(values.category ? { category: values.category } : {}) }, { html, links });
 }
 
 if (require.main === module) main().catch((error) => { console.error(error.message); process.exitCode = 1; });

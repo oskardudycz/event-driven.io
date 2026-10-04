@@ -1,0 +1,11 @@
+{
+  "url": "https://www.architecture-weekly.com/p/using-s3-but-not-the-way-you-expected",
+  "date": "2024-09-02",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/7e201a45-f07f-476b-8f23-8545f7da3cbb_631x807.png": "2024-09-02-cover.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/e3892899-71c8-4db7-ae0f-463cfb0d8ad3_866x1562.png": "image-2.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/315ecffb-4040-4f82-84d9-d737626439a9_1114x807.png": "image-3.png",
+    "https://bucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com/public/images/3ab6cef1-9ce5-47fa-9306-17854b383dc1_358x358.png": "image-4.png"
+  },
+  "embeds": 2
+}

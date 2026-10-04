@@ -1,0 +1,8 @@
+{
+  "url": "https://www.architecture-weekly.com/p/building-your-own-ledger-database",
+  "date": "2024-11-11",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/ca2b9a77-6713-4b56-a51e-266a1c4b303e_860x640.png": "2024-11-11-cover.png"
+  },
+  "embeds": 0
+}

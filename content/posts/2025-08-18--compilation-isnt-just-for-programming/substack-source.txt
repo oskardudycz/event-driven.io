@@ -1,0 +1,8 @@
+{
+  "url": "https://www.architecture-weekly.com/p/compilation-isnt-just-for-programming",
+  "date": "2025-08-18",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/c6d4842c-c9ca-43c9-bc25-4d6faf315d38_630x733.png": "2025-08-18-cover.png"
+  },
+  "embeds": 0
+}

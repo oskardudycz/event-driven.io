@@ -1,0 +1,9 @@
+{
+  "url": "https://www.architecture-weekly.com/p/do-we-still-need-the-qa-role",
+  "date": "2025-06-09",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/79c2877b-e148-40f2-a8e1-2270508db786_236x236.jpeg": "2025-06-09-cover.jpg",
+    "https://substack-post-media.s3.amazonaws.com/public/images/ac04aef3-4a42-44d3-9131-dd9044528917_236x236.jpeg": "image-2.jpg"
+  },
+  "embeds": 0
+}

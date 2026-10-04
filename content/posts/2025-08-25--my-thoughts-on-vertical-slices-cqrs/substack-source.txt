@@ -1,0 +1,9 @@
+{
+  "url": "https://www.architecture-weekly.com/p/my-thoughts-on-vertical-slices-cqrs",
+  "date": "2025-08-25",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/842308f3-2f22-4b2c-a415-de0d3a911a1d_581x379.bin": "2025-08-25-cover.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/5f72d2cf-eb4b-4fbb-9203-1a5c4b86fd75_500x756.jpeg": "image-2.jpg"
+  },
+  "embeds": 2
+}

@@ -62,7 +62,7 @@ When rebuild is ready to complete, record sealing_txid = current_transaction_id
 Any event from a transaction with ID lower than the sealing point was "in flight" during rebuild, so it should be handled by async
 Events from transactions with higher IDs started after sealing, so they can safely use inline projections (the read model will be ready)
 
-Sounds reasonable? 
+Sounds reasonable?
 
 Here's why it doesn't work.
 
@@ -175,7 +175,7 @@ The system messages table could mirror the structure of regular messages with:
 - Archiving support via *is_archived* flag
 - Partitioning for performance
 
-If we created a throwaway "skipped events" table, we'd need to solve all these problems again. We'd essentially be building a second event log with the same guarantees. 
+If we created a throwaway "skipped events" table, we'd need to solve all these problems again. We'd essentially be building a second event log with the same guarantees.
 
 The skip could be stored as a system message where:
 - **Stream ID** = the projection identifier (name + version), so we can query all skips for a specific projection
@@ -232,7 +232,6 @@ The "drain skipped events" phase can be automatically triggered by finishing pro
 
 This flexibility lets user choose the approach based on the specific operational requirements.
 
-
 ## The Dead Letter Queue Pattern
 
 What we've built is essentially a **Dead Letter Queue (DLQ)**—a place where messages that couldn't be processed normally are stored for later handling.
@@ -252,7 +251,7 @@ It starts innocently. You configure the DLQ "just in case." A few messages end u
 
 More messages accumulate. The DLQ becomes background noise—a number on a dashboard that nobody checks. Eventually, something critical lands there, and nobody notices until a customer complains.
 
-That's why in the discussed design, skip records aren't meant to accumulate indefinitely. The rebuild processor drains them during completion. 
+That's why in the discussed design, skip records aren't meant to accumulate indefinitely. The rebuild processor drains them during completion.
 
 Retention policies clean up archived records after a reasonable period. If skip records exist for too long, that's a signal that something is wrong with the rebuild process - and users should know about it.
 
@@ -266,7 +265,7 @@ When we find a race condition, the instinct is to fix it. Add a lock. Add a chec
 
 At some point, I had to ask myself: am I making this system more reliable, or just more complicated?
 
-The answer came when I changed the question. Instead of asking "how do I prevent events from being skipped?" I asked, "How do I know when an event was skipped, and how do I make sure it gets processed eventually?" 
+The answer came when I changed the question. Instead of asking "how do I prevent events from being skipped?" I asked, "How do I know when an event was skipped, and how do I make sure it gets processed eventually?"
 
 The first question has no good answer, not without blocking appends, which defeats the purpose. The second question is straightforward: record the skip in the same transaction as the event, and process it later.
 
@@ -278,7 +277,7 @@ What we can control is recording skipped items, ensuring those skips are process
 
 The blind spot I found wasn't really about the specific race condition. It was a reminder that distributed systems have fundamental constraints we can't engineer around, at least not without trade-offs worse than the original problem.
 
-Transaction isolation and concurrent systems mean we can't have zero-downtime rebuilds with perfect inline projection consistency and no coordination overhead, all at the same time. 
+Transaction isolation and concurrent systems mean we can't have zero-downtime rebuilds with perfect inline projection consistency and no coordination overhead, all at the same time.
 
 Something has to give.
 
@@ -294,7 +293,7 @@ Or check also other related resources:
 - [Rebuilding Event-Driven Read Models in a safe and resilient way](/en/rebuilding_event_driven_read_models/)
 - [How Postgres sequences issues can impact your messaging guarantees](/en/ordering_in_postgres_outbox/)
 - [Guide to Projections and Read Models in Event-Driven Architecture](/en/projections_and_read_models_in_event_driven_architecture/),
-- [Distributed Locking: A Practical Guide](https://www.architecture-weekly.com/p/distributed-locking-a-practical-guide),
+- [Distributed Locking: A Practical Guide](/en/distributed-locking-a-practical-guide/),
 - [Consumers, projectors, reactors and all that messaging jazz in Emmett](/en/consumers_processors_in_emmett/),
 - [How to scale projections in the event-driven systems?](/en/how_to_scale_projections_in_the_event_driven_systems/),
 - [Checkpointing the message processing](/en/checkpointing_message_processing/),

@@ -9,11 +9,11 @@ useDefaultLangCanonical: true
 ![cover](2026-06-08-cover.jpg)
 
 > Fork your dependencies, trim them to only your use case, never update unless it breaks for your users. I’ve been vocal about this for 10+ years. I’ve always said that updating is way riskier than latent bugs (which can be tracked and CVEs monitored).
-> 
+>
 > If you are updating a dependency, it’s on you to analyze every single commit in the full transitive set of dependencies. If you dont see anything compelling, dont update!
-> 
+>
 > I remember at HashiCorp once in awhile an engineer would try to update a dep or replace a DIY lib with an external one and id always ask “show me the commit we need.” Dont update for the sake of it.
-> 
+>
 > Feeling pretty swell about this mentality with all the supply chain attacks happening.
 
 **[That's from Mitchell Hashimoto](https://x.com/mitchellh/status/2057171518027887035). A friend sent it to me, and the first word he reached for was _bold_.** Mine too. I mostly agree with Mitchell, honestly. But the second I read it, my head jumped to a caveat, and the caveat turned out to be the thing I actually wanted to write about.
@@ -85,13 +85,13 @@ And there’s a bit of maths that quietly settles most of these arguments, if an
 
 Almost every time, paying the maintainer comes out cheaper, and on top of that, we’ve lowered the bus factor on something we already lean on, which is its own kind of supply chain security. “We’d write it ourselves, but then we’d have to maintain it” is true. I just read it as the argument for paying the person who already does, not against it. If we depend on something, its survival is our problem too. That’s part of owning the decision.
 
-[I know this case too well](https://www.architecture-weekly.com/p/why-open-source-isnt-always-fair).
+[I know this case too well](/en/why-open-source-isnt-always-fair/).
 
 ## LLM as a fork
 
 Getting back to Mitchell’s thought. The part I find most interesting is because of the moment we’re in. I keep hearing that LLMs change all of this, that writing our own small things is suddenly trivial, so the whole dependency question softens. I don’t buy it. It’s never that easy. Writing the small thing was never the hard part anyway. Owning it, understanding it, maintaining it, being the one on the hook when it breaks at 2 am, that’s the hard part, and no model takes that off our plate.
 
-I don’t see how LLMs can change the cost of owning code. They can ([maybe](https://www.architecture-weekly.com/p/the-end-of-coding-wrong-question)) change the cost of producing it. That doesn’t fix the “install without deciding”. The old move was install and move on. The new move is “vibe it” and move on. Same missing decision, new flavour. The same lack of responsibility and ownership.
+I don’t see how LLMs can change the cost of owning code. They can ([maybe](/en/the_end_of_coding_wrong_question/)) change the cost of producing it. That doesn’t fix the “install without deciding”. The old move was install and move on. The new move is “vibe it” and move on. Same missing decision, new flavour. The same lack of responsibility and ownership.
 
 This trend isn’t new. It’s a classic [Shadow IT](https://en.wikipedia.org/wiki/Shadow_IT). If you haven’t been around long enough to run into the term, Shadow IT refers to the tools and systems people build or adopt within a company without going through whoever is officially meant to approve them. The spreadsheet that quietly runs a whole department. The little script someone wrote on a Friday that half the team now depends on. Nobody in the platform group has ever heard of the integration. It has always existed because people route around slow governance to get their job done, and most of the time, nobody notices until it breaks.
 

@@ -1,0 +1,9 @@
+{
+  "url": "https://www.architecture-weekly.com/p/just-use-sql-they-say-or-on-how-accidental",
+  "date": "2025-09-08",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/10c4a5c1-5e1b-4748-b819-bceb4ad39f73_1080x810.jpeg": "2025-09-08-cover.jpg",
+    "https://substack-post-media.s3.amazonaws.com/public/images/6f8e292c-1f7f-41c9-9bb8-a0e55ff1bf65_1280x720.jpeg": "image-2.jpg"
+  },
+  "embeds": 0
+}

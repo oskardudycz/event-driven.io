@@ -155,7 +155,7 @@ This works fine, as we know precisely which steps need to happen, so we know wha
 Let's have a look at the case brought by Ben: the e-commerce flow. First, we complete the shopping cart by adding and removing items, then we confirm it. The example event flow could look as follows for the online food ordering:
 
 ```
-ItemAddedToCart     (cartId: 1, name: Pizza Napoletana) 
+ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
 CartConfirmed       (cartId:1, confirmedAt: 2025-11-03 11:44:27)
@@ -168,16 +168,16 @@ Then, if that was an online ordering system and we had it integrated with the ki
 ```
 ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
 CartConfirmed       (cartId: 1, confirmedAt: 2025-11-03 11:44:27)
-ItemAddedToCart     (cartId: 1, name: Pizza Napoletana) 
+ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 ```
 
-We see that someone removed one Pizza from their shopping cart, which suggests that some information is missing. When we get a confirmation event, we still know that there's more to come, as an order with a removed item doesn't make sense. The same goes for the information that one pizza was added; when we correlate it with the removal event having the same cart identifier, we still see zero items in the shopping cart. Once we get the next event, we will finally know that we have more than one item in our shopping cart. 
+We see that someone removed one Pizza from their shopping cart, which suggests that some information is missing. When we get a confirmation event, we still know that there's more to come, as an order with a removed item doesn't make sense. The same goes for the information that one pizza was added; when we correlate it with the removal event having the same cart identifier, we still see zero items in the shopping cart. Once we get the next event, we will finally know that we have more than one item in our shopping cart.
 
 Can we then proceed? Maybe yes and maybe no. For this particular order, it'd be correct, but what if our real order:
 
 ```
-ItemAddedToCart     (cartId: 1, name: Pizza Napoletana) 
+ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
 ItemAddedToCart     (cartId: 1, name: Spaghetti Carbonara)
@@ -190,7 +190,7 @@ Also, since messaging systems retry to ensure delivery, how would we know that t
 For instance, in such a delivery case:
 
 ```
-ItemAddedToCart     (cartId: 1, name: Pizza Napoletana) 
+ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
 CartConfirmed       (cartId: 1, confirmedAt: 2025-11-03 11:44:27)
@@ -207,7 +207,7 @@ Let's discuss a few strategies to deal with that!
 
 ![doctor](./2025-11-03-pun-small.jpg)
 
-One of the most common mistakes we learn too late is separating our events into internal and external (or private and public). [Internal information can and should be more granular](/en/events_should_be_as_small_as_possible/). We need it to be precise in capturing the business context and making our decision. 
+One of the most common mistakes we learn too late is separating our events into internal and external (or private and public). [Internal information can and should be more granular](/en/events_should_be_as_small_as_possible/). We need it to be precise in capturing the business context and making our decision.
 
 Yet, other parts of our system don't need to know all of that. Is the kitchen interested in the details of all the changes procrastinating customer made to their shopping cart? No, they just want the final information on which meal they need to prepare.
 
@@ -215,13 +215,13 @@ So in our example, if we published to the outside world just:
 
 ```
 CartConfirmed  {
-    cartId: 1, 
+    cartId: 1,
     items: [ { name: "Spaghetti Carbonara" } ],
     confirmedAt: "2025-11-03 11:44:27"
 }
 ```
 
-Such a type of event is also called a **Summary Event**. We should not mistake it with _the latest state_. It's still an event because it tells what has happened business-wise. It gathers all the information needed for other modules and summarises the changes. And no more than that. It should still be as small as possible and expose only the information that other modules need. It's a contract made between different teams. I wrote about it in detail [Internal and external events, or how to design event-driven API](/en/internal_external_events/). 
+Such a type of event is also called a **Summary Event**. We should not mistake it with _the latest state_. It's still an event because it tells what has happened business-wise. It gathers all the information needed for other modules and summarises the changes. And no more than that. It should still be as small as possible and expose only the information that other modules need. It's a contract made between different teams. I wrote about it in detail [Internal and external events, or how to design event-driven API](/en/internal_external_events/).
 
 We can define such an internal event API as:
 
@@ -346,14 +346,14 @@ Maybe it's sweet enough for you, but you may also say:
 
 > But Oskar, I'm not producing those events, it's the other team and the external service. If I was responsible for that, I'd go this way, but I can't change it how messages are published.
 
-I could handwave it and say I pity you, but well, this actually can happen. Let's see what else we could do about it. 
+I could handwave it and say I pity you, but well, this actually can happen. Let's see what else we could do about it.
 
 The first idea could be: Let's add timestamps!
 
 Let's see how it looks for our example:
 
 ```
-11:40:10 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana) 
+11:40:10 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 11:40:10 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 11:42:13 - ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
 11:43:18 - ItemAddedToCart     (cartId: 1, name: Spaghetti Carbonara)
@@ -364,7 +364,7 @@ Let's see how it looks for our example:
 And the out of order delivery:
 
 ```
-11:40:10 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana) 
+11:40:10 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 11:40:10 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 11:44:23 - ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
 11:44:27 - CartConfirmed       (cartId: 1, confirmedAt: 2025-11-03 11:44:27)
@@ -377,7 +377,7 @@ Would that help? No, because how would we know, based on timestamps, that there 
 What we actually need is the logical clock. One that increments after each operation. So something like:
 
 ```
-1 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana) 
+1 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 2 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 3 - ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
 4 - ItemAddedToCart     (cartId: 1, name: Spaghetti Carbonara)
@@ -388,7 +388,7 @@ What we actually need is the logical clock. One that increments after each opera
 If we had such, then our delivery would look as follows:
 
 ```
-2 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana) 
+2 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 1 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 5 - ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
 6 - CartConfirmed       (cartId: 1, confirmedAt: 2025-11-03 11:44:27)
@@ -402,7 +402,7 @@ We still need to define the completion criteria and determine, from a business p
 
 In this case, we got the events in the following order: 2, 1, 5, 6.  
 
-We know we're missing events 3 and 4, so we need to wait for them. Only when we receive them can we proceed. Ok, but how to do it? 
+We know we're missing events 3 and 4, so we need to wait for them. Only when we receive them can we proceed. Ok, but how to do it?
 
 What if we kept a list of pending events in our data model? Let's try that!
 
@@ -445,7 +445,7 @@ type DocumentWithPendingCommands<State, Command> = State & {
 
 As you see, besides the regular data, we have two other properties: pending commands and last processed revision.
 
-You can think about pending commands as your git repository on your local disk. It contains the list of all operations that you'll eventually commit. The rest of the data is like the remote git repository. They will be updated when you push your changes there. Then, the last processed revision will be updated with the revision of the last applied command. 
+You can think about pending commands as your git repository on your local disk. It contains the list of all operations that you'll eventually commit. The rest of the data is like the remote git repository. They will be updated when you push your changes there. Then, the last processed revision will be updated with the revision of the last applied command.
 
 The code for that workflow could look as follows:
 
@@ -668,24 +668,24 @@ Then you can use this incremented state revision and pass it in your events meta
 
 > But Oskar, what if I have more than one record?
 
-Well, then you either need to store multiple revisions. But this won't help if you need to correlate data between them, as revision is monotonic and gapless for the specific record. 
+Well, then you either need to store multiple revisions. But this won't help if you need to correlate data between them, as revision is monotonic and gapless for the specific record.
 
 What about global positions? Well, they're useful for knowing the order of things, but they won't help here, as they're monotonic but may have gaps.
 
 Read more on why in:
-- [How does Kafka know what was the last message it processed? Deep dive into Offset Tracking](https://www.architecture-weekly.com/p/how-does-kafka-know-what-was-the),
+- [How does Kafka know what was the last message it processed? Deep dive into Offset Tracking](/en/how-does-kafka-know-what-was-the/),
 - [Let's talk about positions in event stores](/en/lets_talk_about_positions_in_event_stores/),
 - [How Postgres sequences issues can impact your messaging guarantees](/en/ordering_in_postgres_outbox/).
 
-Then you're back to square one, and the [previous article](https://www.architecture-weekly.com/p/dealing-with-race-conditions-in-event).
+Then you're back to square one, and the [previous article](/en/dealing_with_race_conditions_in_eda_using_read_models/).
 
 ## TLDR
 
-Proper modelling in Event-Driven Architecture can spare you a lot of complicated implementation tricks. 
+Proper modelling in Event-Driven Architecture can spare you a lot of complicated implementation tricks.
 
-If you 
+If you
 - define essential events for your process,
-- ensure that they have completeness of information, 
+- ensure that they have completeness of information,
 - shape contracts and communication between modules, respecting the internal and external split.
 
 Then, when things get easier to handle, we can define conditions that tell us when to take action.
@@ -701,17 +701,17 @@ Then, using revision can be a decent option to solve things in an organised way.
 
 Read also more in:
 - [Dealing with Race Conditions in Event-Driven Architecture with Read Models](/en/dealing_with_race_conditions_in_eda_using_read_models/)
-- [The Order of Things: Why You Can't Have Both Speed and Ordering in Distributed Systems](https://www.architecture-weekly.com/p/the-order-of-things-why-you-cant),
+- [The Order of Things: Why You Can't Have Both Speed and Ordering in Distributed Systems](/en/the-order-of-things-why-you-cant/),
 - [Internal and external events, or how to design event-driven API](/en/internal_external_events/),
 - [Dealing with Eventual Consistency and Idempotency in MongoDB projections](/en/simple_trick_for_idempotency_handling_in_elastic_search_readm_model/)
 - [Saga and Process Manager - distributed processes in practice](/en/saga_process_manager_distributed_transactions/),
-- [Predictable Identifiers: Enabling True Module Autonomy in Distributed Systems](https://www.architecture-weekly.com/p/predictable-identifiers-enabling)
-- [Dealing with Eventual Consistency, and Causal Consistency using Predictable Identifiers](https://www.architecture-weekly.com/p/dealing-with-eventual-consistency),
+- [Predictable Identifiers: Enabling True Module Autonomy in Distributed Systems](/en/predictable-identifiers-enabling/)
+- [Dealing with Eventual Consistency, and Causal Consistency using Predictable Identifiers](/en/dealing-with-eventual-consistency/),
 - [Event-driven distributed processes by example](/en/event_driven_distributed_processes_by_example/),
-- [Workflow Engine design proposal, tell me your thoughts](https://www.architecture-weekly.com/p/workflow-engine-design-proposal-tell),
+- [Workflow Engine design proposal, tell me your thoughts](/en/workflow-engine-design-proposal-tell/),
 - [How TypeScript can help in modelling business workflows](/en/how_to_have_fun_with_typescript_and_workflow/),
 - [Oops I did it again, or how to update past data in Event Sourcing](/en/how_to_update_past_data_in_event_sourcing/),
-- [Event transformations, a tool to keep our processes loosely coupled](/en/event_transformations_and_loosely_coupling/), 
+- [Event transformations, a tool to keep our processes loosely coupled](/en/event_transformations_and_loosely_coupling/),
 - [Testing asynchronous processes with a little help from .NET Channels](/en/testing_asynchronous_processes_with_a_little_help_from_dotnet_channels/).
 
 Cheers!

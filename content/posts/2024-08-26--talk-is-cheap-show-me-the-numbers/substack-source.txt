@@ -1,0 +1,12 @@
+{
+  "url": "https://www.architecture-weekly.com/p/talk-is-cheap-show-me-the-numbers",
+  "date": "2024-08-26",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/88522e3e-938d-4555-8b24-07143eb42cb2_1468x2286.png": "2024-08-26-cover.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/1b6c60b9-6095-4d2f-b855-1d59af2839c6_1468x1732.png": "image-2.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/a5a398ec-d428-4df5-bc40-d5bcd34ef967_1468x2286.png": "image-3.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/eb66ad25-ba76-46ac-8b2a-b9603b365186_1140x882.png": "image-4.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/b5db01bc-c955-402d-964b-a11962879271_1296x4798.png": "image-5.png"
+  },
+  "embeds": 2
+}

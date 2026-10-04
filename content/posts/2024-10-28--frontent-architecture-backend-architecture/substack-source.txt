@@ -1,0 +1,10 @@
+{
+  "url": "https://www.architecture-weekly.com/p/frontent-architecture-backend-architecture",
+  "date": "2024-10-28",
+  "assets": {
+    "https://substack-video.s3.amazonaws.com/video_upload/post/150748050/076e6456-4001-4ca4-b2ff-dd28dc97e9e3/transcoded-00001.png": "2024-10-28-cover.png",
+    "https://substack-post-media.s3.amazonaws.com/public/images/c24d458f-c7ad-4898-9c4d-946ae6bd0d6a_2105x2106.jpeg": "image-2.jpg"
+  },
+  "embeds": 1,
+  "youtubeVideo": "EXj9TTJQwNc"
+}

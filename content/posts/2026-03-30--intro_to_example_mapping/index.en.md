@@ -17,7 +17,7 @@ Recently, I realised during [my workshops](/en/training/) that referencing Frien
 
 > It always starts with "The one where".
 >
-> Just like in Friends. 
+> Just like in Friends.
 
 I started to notice a bit slower head nodding and a bit more awkward smiles from the attendees. I repeated
 
@@ -39,7 +39,7 @@ We could start by asking the business how it works. We could get an answer that:
 
 > The guest approaches the desk and requests checkout. The clerk inquires about the quality of the products and services, and after receiving an answer, requests the room key. After gathering, the key clerk checks whether the balance is settled. If it's settled, then proceed with the checkout. Marking the stay as completed.
 
-Sounds straightforward, but we should already have several questions popping up, e.g. what does it mean that "balance is settled"? We could get quick feedback that: 
+Sounds straightforward, but we should already have several questions popping up, e.g. what does it mean that "balance is settled"? We could get quick feedback that:
 
 > This means that the difference between the sums of all charges and payments is equal to zero.
 
@@ -47,7 +47,7 @@ Then we could try to come up with an example:
 
 > Ah, so for instance, when guests haven't paid upfront for their stay, right?
 
-Right. 
+Right.
 
 > Oh, then we need to charge them, right?
 
@@ -90,7 +90,7 @@ Here's the updated flow. The one where Oskar pays for his entire stay with a cre
 ![](./em04.jpg)
 
 Now, we found out:
-- **A new outcome**, failed payment, 
+- **A new outcome**, failed payment,
 - **A new rule**, that we need Internet access to authorise credit card payment,
 - **A new feature**, the shift manager can authorise unsettled balance checkout and register a charge with a delayed due date.
 
@@ -114,7 +114,7 @@ You don’t need a big setup, a huge ceremon, you don't need sticky notes, you c
 
 ![](./em07.jpg)
 
-Business people don't need to give them to you in such form. You can use the interview as I showed above and note it on your own, while you're discussing stuff. It's also a nice way to collaborate and visualise your discussions. 
+Business people don't need to give them to you in such form. You can use the interview as I showed above and note it on your own, while you're discussing stuff. It's also a nice way to collaborate and visualise your discussions.
 
 You don't even need to start with an interview; you can use the Example Mapping as a brainstorming tool to generate as many examples of your (part of the) system. Then, try to model it as you see fit and ask the business for clarifications in the preferred form. It can help facilitate discussion with your team, not only with business stakeholders.
 
@@ -133,21 +133,21 @@ Example Mapping plays nicely with other collaboration techniques like Event Stor
 [![source: https://cucumber.io/blog/bdd/example-mapping-introduction/](./em08.png)](https://cucumber.io/blog/bdd/example-mapping-introduction/)
 
 I'm typically using it during modelling sessions to:
-- brainstorm (read more in [Start Alone, Then Together: Why Software Modelling Needs Solitary Brainstorming](https://www.architecture-weekly.com/p/start-alone-then-together-why-software)),
+- brainstorm (read more in [Start Alone, Then Together: Why Software Modelling Needs Solitary Brainstorming](/en/start-alone-then-together-why-software/)),
 - challenging existing models with real-world examples,
 - expanding the model with uncovered (through examples) use cases,
 - finding business rules,
 - helping with facilitation by looking at the model from a different perspective.
 
-And hot spots and notes, as known from EventStorming, are super helpful here. Read also more in [The Underestimated Power of Hot Spots and Notes in EventStorming](https://www.architecture-weekly.com/p/the-underestimated-power-of-hot-spots).
+And hot spots and notes, as known from EventStorming, are super helpful here. Read also more in [The Underestimated Power of Hot Spots and Notes in EventStorming](/en/the-underestimated-power-of-hot-spots/).
 
-What's more, if you look at the Given/When/Then pattern, you may notice that it works nicely with Behaviour-Driven Design. I already wrote that [Behaviour-Driven Design is more than tests](/en/behaviour_driven_design_is_not_about_tests/). How to do it? Check [here](/en/testing_event_sourcing_emmett_edition/). 
+What's more, if you look at the Given/When/Then pattern, you may notice that it works nicely with Behaviour-Driven Design. I already wrote that [Behaviour-Driven Design is more than tests](/en/behaviour_driven_design_is_not_about_tests/). How to do it? Check [here](/en/testing_event_sourcing_emmett_edition/).
 
 I'll also expand on it in the next articles. I'm doing the extreme Example Mapping with events, so stay tuned, the more will come.
 
 For now, check also those materials:
 - [Seb Rose - short, practical and actionable intro to Example Mapping](https://www.youtube.com/watch?v=EtoTML8cuko)
-- [Kenny Baas-Schwegler - showing how to use Example Mapping with EventStorming](https://www.youtube.com/watch?v=WvkBKvMnyuc) 
+- [Kenny Baas-Schwegler - showing how to use Example Mapping with EventStorming](https://www.youtube.com/watch?v=WvkBKvMnyuc)
 - [An introduction by Matt Wynne himself](https://cucumber.io/blog/bdd/example-mapping-introduction/),
 - [Other quick intro by Gojko Adzic](https://draft.io/example/example-mapping).
 
