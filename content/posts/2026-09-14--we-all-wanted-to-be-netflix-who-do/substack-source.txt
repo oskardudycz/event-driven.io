@@ -1,0 +1,8 @@
+{
+  "url": "https://www.architecture-weekly.com/p/we-all-wanted-to-be-netflix-who-do",
+  "date": "2026-09-14",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/f6df2f11-2483-4277-9a84-8b49ae440e4a_1000x500.jpeg": "2026-09-14-cover.jpg"
+  },
+  "embeds": 0
+}

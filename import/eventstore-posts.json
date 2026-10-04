@@ -1,0 +1,14 @@
+[
+  {
+    "url": "https://kurrentdb.kurrent.io/blog/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention/",
+    "category": "Event Sourcing"
+  },
+  {
+    "url": "https://web.archive.org/web/20230322172050/https://www.eventstore.com/blog/snapshotting-strategies",
+    "category": "Event Sourcing"
+  },
+  {
+    "url": "https://web.archive.org/web/20230325182019/https://www.eventstore.com/blog/snapshots-in-event-sourcing",
+    "category": "Event Sourcing"
+  }
+]

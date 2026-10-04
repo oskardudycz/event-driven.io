@@ -1,0 +1,8 @@
+{
+  "url": "https://www.architecture-weekly.com/p/avoid-duke-nukem-forever-mode",
+  "date": "2026-09-07",
+  "assets": {
+    "https://substack-post-media.s3.amazonaws.com/public/images/e997b9f4-43d2-4639-9bfd-8503655f7b5d_728x455.jpeg": "2026-09-07-cover.jpg"
+  },
+  "embeds": 2
+}

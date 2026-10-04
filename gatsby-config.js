@@ -420,6 +420,8 @@ module.exports = {
       resolve: `gatsby-plugin-netlify`,
       options: {
         headers: {
+          // YouTube requires a Referer; Netlify's default same-origin suppresses it.
+          "/*": ["Referrer-Policy: strict-origin-when-cross-origin"],
           "/llms.txt": [
             "Content-Type: text/plain; charset=UTF-8",
             "Cache-Control: public, max-age=3600",

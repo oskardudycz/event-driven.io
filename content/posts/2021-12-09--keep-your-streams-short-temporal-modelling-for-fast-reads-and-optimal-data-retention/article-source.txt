@@ -1,0 +1,17 @@
+{
+  "url": "https://kurrentdb.kurrent.io/blog/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention",
+  "date": "2021-12-09",
+  "assets": {
+    "https://kurrentdb.kurrent.io/_astro/a09f9aa49267adf9d7c880185bb2aacc43c6c931-3424x782.CdIGGmNy_1vabGf.svg": "2021-12-09-cover.svg",
+    "https://kurrentdb.kurrent.io/_astro/a09f9aa49267adf9d7c880185bb2aacc43c6c931-3424x782.CdIGGmNy_DlD10.svg": "image-2.svg",
+    "https://kurrentdb.kurrent.io/_astro/5d6fbec6c3bacc66fdeb37cc98f388f5c7f5e123-3424x782.CYNUTnS4_DlD10.svg": "image-3.svg",
+    "https://kurrentdb.kurrent.io/_astro/4d9e17e6a15c4906042e59a7f9f9462757eabfc1-3508x782._EoG69Te_1CzG2J.svg": "image-4.svg",
+    "https://kurrentdb.kurrent.io/_astro/3bea3683be843d043d6361b454ad1c327572e1de-3918x1558.fUq6KnUm_1eQaVQ.svg": "image-5.svg",
+    "https://kurrentdb.kurrent.io/_astro/0c701842159d481d6f74688d8fd87dddcf02cf68-2946x1680.DQ02bG3h_RDLDK.svg": "image-6.svg",
+    "https://kurrentdb.kurrent.io/_astro/df956386d6aa8616da22734747bb300e8392c27f-2946x1680.BGVFOIxn_RDLDK.svg": "image-7.svg",
+    "https://kurrentdb.kurrent.io/_astro/c13c5a6998e8e7b0c24922c59d820c8994a26b7a-4326x2536.CBAcB6n7_jRVhv.svg": "image-8.svg",
+    "https://kurrentdb.kurrent.io/_astro/0a08ec02660a5b870e077e9dafec7f7db6b1e927-3176x1862.BAbpYwbS_1Qz9lk.svg": "image-9.svg",
+    "https://kurrentdb.kurrent.io/_astro/0e9c30b7a683dc52ed2b5af0d83d078a4cbeb15a-2946x1680.BpoPWGZE_RDLDK.svg": "image-10.svg"
+  },
+  "embeds": 0
+}
