@@ -1,7 +1,6 @@
 import React from 'react';
 import i18next from 'i18next';
 import merge from 'lodash.merge';
-import { Helmet } from 'react-helmet';
 import { I18nextProvider } from 'react-i18next';
 import { DEFAULT_OPTIONS } from './src/i18n/constants';
 import { PageContext } from './src/i18n/page-context';
@@ -15,7 +14,9 @@ export const wrapRootElement = ({ element }, pluginOptions) => {
   }
   i18nextConfig.fallbackLng = defaultLanguage;
 
-  i18next.init(i18nextConfig);
+  // Gatsby also wraps Head with this provider. Reinitializing here would reset
+  // the page language during hydration when Head mounts.
+  if (!i18next.isInitialized) i18next.init(i18nextConfig);
 
   return <I18nextProvider i18n={i18next}>{element}</I18nextProvider>;
 };
@@ -31,7 +32,6 @@ export const wrapPageElement = ({ element, props }, pluginOptions) => {
 
   // The fallbacks are for pages that are non-localized. The only pages that are non localized are
   // the original ones which are only there if `deleteOriginalPages` option is `false`
-  const lang = props.pageContext.lang || defaultLanguage;
   if (excludedPages.includes(props.location.pathname)) {
     return element;
   }
@@ -57,7 +57,6 @@ export const wrapPageElement = ({ element, props }, pluginOptions) => {
 
   return (
     <React.Fragment>
-      <Helmet htmlAttributes={{ lang }} />
       <PageContext.Provider value={contextValue}>{element}</PageContext.Provider>
     </React.Fragment>
   );

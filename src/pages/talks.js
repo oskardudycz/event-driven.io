@@ -4,7 +4,7 @@ import { graphql } from "gatsby";
 import { ThemeContext } from "../layouts";
 import Article from "../components/Article";
 import Headline from "../components/Article/Headline";
-import Seo from "../components/Seo";
+import { createHead } from "../components/Seo";
 import VideoGallery from "../components/VideoGallery";
 import { useTranslation } from "react-i18next";
 
@@ -37,13 +37,6 @@ const TalksPage = (props) => {
           </Article>
         )}
       </ThemeContext.Consumer>
-
-      <Seo
-        facebook={facebook}
-        title={t("talks.title")}
-        description={t("talks.videosIntro")}
-        schemaType="CollectionPage"
-      />
     </React.Fragment>
   );
 };
@@ -78,3 +71,6 @@ export const query = graphql`
     }
   }
 `;
+
+
+export const Head = createHead(({ t }) => ({ title: t("talks.title"), description: t("talks.videosIntro"), schemaType: "CollectionPage" }));

@@ -11,9 +11,10 @@ Reviewed on 2026-10-04 against Gatsby 5.16.1 and the 694-page build.
 - Browserslist's `caniuse-lite` database was updated in `yarn.lock`.
 - The Babel registration in `gatsby-node.js` only transforms the two local Node modules that need it. It no longer processes Gatsby's generated SSR bundle, which produced the misleading 500 KB deoptimization message.
 - YouTube Markdown uses `gatsby-remark-embed-video` 3.2.1 through a local adapter that preserves timestamps and applies the referrer policy required by YouTube.
+- Every page and template now exports Gatsby `Head`; `react-helmet` and its Gatsby plugin have been removed. Head receives page context explicitly and uses a fixed-language translator, preserving SEO during parallel SSR and client navigation. The shared font stylesheet is emitted from Head as well. The root translation provider initializes its shared instance once; Gatsby also wraps Head with that provider, so repeated initialization would reset the Polish page to English during hydration. A browser regression check covers both visible headings and metadata.
 - `yarn test` now checks the actual HTML of all 192 requested language pages for migrated links, article content and recording markup.
 
-The migration build completed successfully in 267.63 seconds, with 56.847 seconds spent running page queries and 132.013 seconds processing 659 image jobs. Some archive and category queries still exceed the 15-second warning threshold; moving work out of route creation enables parallel execution but does not eliminate the cost of computing excerpts and image data. CI caching is the next performance improvement to measure. React Helmet also still emits its migration notice.
+The image migration build completed successfully in 267.63 seconds, with 56.847 seconds spent running page queries and 132.013 seconds processing 659 image jobs. The subsequent Head migration build completed in 138.66 seconds with 45.117 seconds spent running page queries; cached image outputs required no new image jobs. The final rebuild with the translation-provider fix completed in 84.50 seconds. The full `yarn test` suite and all nine browser checks passed. Some archive and category queries still exceed the 15-second warning threshold; moving work out of route creation enables parallel execution but does not eliminate the cost of computing excerpts and image data. CI caching is the next performance improvement to measure.
 
 The schema-definition message and node counts are normal informational output. The Babel deoptimization message concerns code formatting, not an unsuccessful build.
 
@@ -22,7 +23,6 @@ The schema-definition message and node counts are normal informational output. T
 | Priority | Improvement | Reason and validation |
 | --- | --- | --- |
 | High | Cache Gatsby `.cache` and generated `public` between compatible CI builds | The workflow currently installs and rebuilds without a Gatsby cache. Image processing dominates cold builds. Key caches by OS, Node and lockfile/configuration; compare warm build timings and verify the existing output contract. Avoid unconditional `gatsby clean`. |
-| Medium | Move SEO from React Helmet to Gatsby's `Head` exports | Gatsby provides head deduplication and a smaller client bundle. The current SEO component depends on localized page context, so migrate all templates and static pages together, checking canonical URLs, language alternates, structured data and client navigation. |
 | Medium | Use Gatsby Slices for the shared header and footer | Updating shared content currently affects every page. Prototype on the layout first and measure rebuild time; verify the existing hydration, scrolling and visual tests. |
 | Medium | Audit legacy React dependencies and unused Gatsby plugins | `react-addons-perf`, old InstantSearch, Facebook widgets and the old internationalization plugin have old peer requirements. Check actual usage before removing or upgrading; verify search and language navigation independently. |
 | Low | Convert the remaining Babel-transpiled Gatsby Node hook to CommonJS | This would remove the runtime Babel registration entirely. Keep the shared browser localization constants compatible. |
@@ -30,7 +30,7 @@ The schema-definition message and node counts are normal informational output. T
 
 ## Verification
 
-Run `GATSBY_CPU_COUNT=4 yarn build`, then `yarn test`. Start `yarn serve --host 127.0.0.1 --port 9000` and run `yarn test:visual`. Review screenshot differences rather than increasing the comparison tolerance.
+Run `GATSBY_CPU_COUNT=4 yarn build`, then `yarn test`. Start `yarn serve --host 127.0.0.1 --port 9000` and run `yarn test:visual`. This includes a metadata check across client navigation and both languages. Review screenshot differences rather than increasing the comparison tolerance.
 
 ## References
 

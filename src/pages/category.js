@@ -9,7 +9,7 @@ import { usePageContext } from "../i18n/page-context";
 import Article from "../components/Article/";
 import Headline from "../components/Article/Headline";
 import { Link } from "../components/Link";
-import Seo from "../components/Seo";
+import { createHead } from "../components/Seo";
 import categoryGuides from "../../data/category-guides.json";
 
 const categoriesFor = (frontmatter) =>
@@ -120,13 +120,6 @@ const CategoryPage = (props) => {
           </Article>
         )}
       </ThemeContext.Consumer>
-
-      <Seo
-        facebook={facebook}
-        title={t("categories.seoTitleAll")}
-        description={t("categories.seoDescription")}
-        schemaType="CollectionPage"
-      />
     </React.Fragment>
   );
 };
@@ -166,3 +159,6 @@ export const query = graphql`
     }
   }
 `;
+
+
+export const Head = createHead(({ t }) => ({ title: t("categories.seoTitleAll"), description: t("categories.seoDescription"), schemaType: "CollectionPage" }));

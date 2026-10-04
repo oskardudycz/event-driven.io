@@ -260,3 +260,34 @@ for (const language of ["en", "pl"]) {
     }
   }, 60_000);
 }
+
+test("Gatsby Head replaces metadata during navigation and keeps language-specific titles", async () => {
+  const page = await browser.newPage();
+  try {
+    for (const [language, title] of [["en", "All articles"], ["pl", "Wszystkie artykuły"]]) {
+      await page.goto(new URL(`/${language}/articles/`, baseUrl).href, { waitUntil: "domcontentloaded" });
+      await page.waitForFunction((expected) => document.title.startsWith(expected), title);
+      expect(await page.locator('head link[rel="canonical"]').count()).toBe(1);
+      expect(await page.locator('head link[rel="canonical"]').getAttribute("href"))
+        .toBe(`https://event-driven.io/${language}/articles/`);
+      expect(await page.locator("html").getAttribute("lang")).toBe(language);
+      expect(await page.locator("h1").innerText()).toBe(title);
+      expect(await page.locator('head script[type="application/ld+json"]').count()).toBe(1);
+    }
+    await page.goto(new URL("/en/articles/", baseUrl).href, { waitUntil: "domcontentloaded" });
+    const link = page.locator(".main li a.link").first();
+    const articlePath = await link.getAttribute("href");
+    await link.click();
+    await page.waitForURL(`**${articlePath}`);
+    await page.waitForFunction(() => {
+      const script = document.querySelector('head script[type="application/ld+json"]');
+      return script && JSON.parse(script.textContent)["@type"] === "BlogPosting";
+    });
+    expect(await page.locator('head link[rel="canonical"]').count()).toBe(1);
+    expect(await page.locator('head link[rel="canonical"]').getAttribute("href"))
+      .toBe(`https://event-driven.io${articlePath}`);
+    expect(await page.locator('head meta[name="description"]').count()).toBe(1);
+    expect(await page.locator('head link[href="/fonts/open-sans/index.css"]').count()).toBe(1);
+    expect(await page.title()).not.toContain("All articles");
+  } finally { await page.close(); }
+}, 60_000);

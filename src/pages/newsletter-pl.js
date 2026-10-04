@@ -3,7 +3,7 @@ import React from "react";
 import { graphql } from "gatsby";
 import { ThemeContext } from "../layouts";
 import Blog from "../components/Blog";
-import Seo from "../components/Seo";
+import { createHead } from "../components/Seo";
 
 class IndexPage extends React.Component {
   render() {
@@ -21,13 +21,6 @@ class IndexPage extends React.Component {
         <ThemeContext.Consumer>
           {theme => <Blog posts={posts} theme={theme} />}
         </ThemeContext.Consumer>
-
-        <Seo
-          facebook={facebook}
-          title="Newsletter"
-          description="Articles from Oskar Dudycz's software architecture newsletter."
-          schemaType="CollectionPage"
-        />
 
         <style jsx>{`
           hr {
@@ -88,3 +81,6 @@ export const query = graphql`
     }
   }
 `;
+
+
+export const Head = createHead({ title: "Newsletter", description: "Articles from Oskar Dudycz's software architecture newsletter.", schemaType: "CollectionPage" });
