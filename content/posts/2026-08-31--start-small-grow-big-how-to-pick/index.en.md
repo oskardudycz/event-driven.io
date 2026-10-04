@@ -142,7 +142,7 @@ They ask for a return; we check whether it’s still within the return window an
 
 The events in a warehouse could look like that (pardon me if you’re a Warehousing expert; honestly, I’m not):
 
-```
+```text
 ReturnRequested
 ReturnRefused
 ReturnLabelSent

@@ -13,7 +13,7 @@ const List = (props) => {
           const {
             node: {
               excerpt,
-              frontmatter: { title, cover },
+              frontmatter: { title, cover, useDefaultLangCanonical },
               fields: { slug, prefix },
             },
           } = edge;
@@ -21,7 +21,7 @@ const List = (props) => {
 
           return (
             <li key={slug}>
-              <Link to={slug} className={showImages ? "readingCard" : ""}>
+              <Link to={slug} language={useDefaultLangCanonical ? "en" : undefined} className={showImages ? "readingCard" : ""}>
                 {showImages && image && (
                   <img
                     className="readingCardImage"

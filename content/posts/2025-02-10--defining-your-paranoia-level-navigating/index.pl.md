@@ -103,7 +103,7 @@ Each addition makes sense alone, but together, they create a tangled web of data
 
 Now, look at event sourcing. It follows a natural pattern - just write down what happened:
 
-```
+```text
 PlayerQueuedForMatch
 
 SkillLevelAssessed

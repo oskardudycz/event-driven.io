@@ -3,14 +3,12 @@ import PropTypes from "prop-types";
 require("core-js/fn/array/from");
 
 import {
-  FaFacebook,
   FaBookOpen,
   FaGithub,
   FaHome,
   FaLinkedin,
   FaMicrophone,
   FaRss,
-  FaTwitter,
   FaMastodon,
   FaYoutube,
   FaUserGraduate,
@@ -22,6 +20,7 @@ import { FaTag } from "react-icons/fa/";
 import LanguagePicker from "../LanguagePicker";
 
 import Item from "./Item";
+import BlueskyIcon from "./BlueskyIcon";
 import Expand from "./Expand";
 import config from "../../../content/meta/config";
 
@@ -52,12 +51,11 @@ class Menu extends React.Component {
       { to: "/talks/", label: "menu.talks", icon: FaMicrophone },
       { to: "/search/", icon: FaSearch },
 
-      { to: config.socialLinks.twitter.url, icon: FaTwitter },
+      { to: config.socialLinks.linkedin.url, icon: FaLinkedin },
       { to: config.socialLinks.github.url, icon: FaGithub },
       { to: config.socialLinks.mastodon.url, icon: FaMastodon },
+      { to: config.socialLinks.bluesky.url, icon: BlueskyIcon },
       { to: config.socialLinks.youtube.url, icon: FaYoutube },
-      { to: config.socialLinks.linkedin.url, icon: FaLinkedin },
-      { to: config.socialLinks.facebook.url, icon: FaFacebook },
       { to: config.socialLinks.rss.url, icon: FaRss },
     ];
 

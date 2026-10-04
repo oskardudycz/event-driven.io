@@ -134,7 +134,7 @@ Amazon SQS FIFO offers deduplication through **message group IDs**. Messages wit
 
 How would our implementation look like if we tried to add deduplication capabilities? Let’s wrap our queue broker with additional code:
 
-```
+```typescript
 class SQSDeduplicationQueueBroker {
   private deduplicationCache: DeduplicationCache;
 
@@ -177,7 +177,7 @@ Our queue broker ensures that tasks are run sequentially, so we wrap task proces
 
 The dummy duplication cache implementation can look as follows (warning: it’s not thread-safe, but as we have sequential processing within a message group, then it should work fine).
 
-```
+```typescript
 class DeduplicationCache {
   private deduplicationCache: Map<
     string,
@@ -288,7 +288,7 @@ Still, logically, those two implementations will be similar to what you saw in t
 
 **What would our QueueBroker implementation look like following Azure Service Bus implementation?** There you have it!
 
-```
+```typescript
 class AzureServiceBusDedublicationQueueBroker {
   private sessionCache: SessionCache;
 
@@ -326,7 +326,7 @@ class AzureServiceBusDedublicationQueueBroker {
 
 The session cache will look as follow:
 
-```
+```typescript
 class SessionCache {
   private sessionData: Map<
     string,

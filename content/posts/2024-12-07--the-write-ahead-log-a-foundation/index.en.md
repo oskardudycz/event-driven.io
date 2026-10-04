@@ -72,7 +72,7 @@ For example, imagine this process in practice with a database:
 
 **Step 1:** A user transaction updates the balance column of a user’s table. The system writes a WAL entry like this:
 
-```
+```text
 {
   offset: 34958,
   transaction_id: 123,

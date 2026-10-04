@@ -10,7 +10,7 @@ useDefaultLangCanonical: true
 
 **When you think upfront and want to make things right, there's an interesting feedback loop. Quite often, things start to click, often in a surprising way.**
 
-**I recently wrote on [Architecture Weekly about my performance investigations](https://www.architecture-weekly.com/p/talk-is-cheap-show-me-the-numbers) in [Emmett](https://event-driven-io.github.io/emmett/getting-started.html) and [Pongo](https://event-driven-io.github.io/Pongo/getting-started.html).** One of the conclusions was that schema needs to be generated upfront. Initially, it was generated once on the first call. That reduced boilerplate and was good enough for many cases but not for serverless.
+**I recently wrote on [Architecture Weekly about my performance investigations](/en/talk-is-cheap-show-me-the-numbers/) in [Emmett](https://event-driven-io.github.io/emmett/getting-started.html) and [Pongo](https://event-driven-io.github.io/Pongo/getting-started.html).** One of the conclusions was that schema needs to be generated upfront. Initially, it was generated once on the first call. That reduced boilerplate and was good enough for many cases but not for serverless.
 
 To generate the [Emmett](https://event-driven-io.github.io/emmett/getting-started.html) PostgreSQL schema, I also wanted to be able to generate it for [Pongo](https://event-driven-io.github.io/Pongo/getting-started.html) documents that I use for read models. 
 

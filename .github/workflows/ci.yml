@@ -23,14 +23,35 @@ jobs:
         node-version: [24.x]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           # use the node version defined in matrix above
           node-version: ${{ matrix.node-version }}
+          cache: yarn
+      - name: Compute Gatsby cache compatibility
+        id: gatsby-cache-key
+        run: node scripts/gatsby-cache-key.mjs
+        env:
+          ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
+          ALGOLIA_ADMIN_API_KEY: ${{ secrets.ALGOLIA_ADMIN_API_KEY }}
+          ALGOLIA_INDEX_NAME: ${{ secrets.ALGOLIA_INDEX_NAME }}
+          ALGOLIA_SEARCH_ONLY_API_KEY: ${{ secrets.ALGOLIA_SEARCH_ONLY_API_KEY }}
+          GATSBY_DISQUS_NAME: ${{ secrets.GATSBY_DISQUS_NAME }}
+          GOOGLE_TAG_ID: ${{ secrets.GOOGLE_TAG_ID }}
+      - name: Restore Gatsby build cache
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            .cache
+            public
+          key: gatsby-${{ runner.os }}-${{ steps.gatsby-cache-key.outputs.compatibility }}-${{ github.sha }}
+          restore-keys: |
+            gatsby-${{ runner.os }}-${{ steps.gatsby-cache-key.outputs.compatibility }}-
       # install dependencies
       - run: yarn --frozen-lockfile
+      - run: yarn smoke
       # build
       - run: yarn build
         env:
@@ -56,9 +77,16 @@ jobs:
           done
           curl -fsS -o /dev/null http://127.0.0.1:9000/en/articles/
           yarn test:visual
+      - name: Save validated Gatsby build cache
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            .cache
+            public
+          key: gatsby-${{ runner.os }}-${{ steps.gatsby-cache-key.outputs.compatibility }}-${{ github.sha }}
       - name: Upload visual comparison screenshots
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: visual-comparison
           path: visual-artifacts/

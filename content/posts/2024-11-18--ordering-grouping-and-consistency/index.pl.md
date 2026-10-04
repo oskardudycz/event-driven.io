@@ -92,7 +92,7 @@ RabbitMQ ensures message ordering within a queue. Messages are delivered in the 
 
 In code it can look as follows:
 
-```
+```typescript
 async function idempotent <T>(
   handler: () => Promise<T>,
   options: IdempotentOptions<T>,
@@ -130,7 +130,7 @@ type IdempotentOptions<T> = {
 
 The store can be defined as:
 
-```
+```typescript
 type IdempotencyKeyStore = {
   tryLock: (
     key: string,
@@ -167,7 +167,7 @@ The other tasks will wait in the queue to be processed. Our Queue Broker uses a 
 
 **That’s what we need today: limit the concurrency processing per task group.** Let’s adapt our initial implementation to handle those needs. Let’s start by adding tracking of the active task groups (_note: I’m using TypeScript here)_:
 
-```
+```typescript
 type Queue = QueueItem[];
 
 class QueueBroker {
@@ -194,7 +194,7 @@ We’re adding a simple set to keep the list of currently active task groups.
 
 **Now, we need to update the enqueue method to allow specifying the task group id:**
 
-```
+```typescript
 type Queue = QueueItem[];
 
 type QueueTaskOptions = { taskGroupId?: string };
@@ -251,7 +251,7 @@ class QueueBroker {
 
 The real code happens in the queue processing. Just to recap, only a single call of a _processQueue method_ can happen at a time (for details, [check the previous article](https://www.architecture-weekly.com/i/147613456/single-writer-pattern)).
 
-```
+```typescript
 class QueueBroker {
   // (...)  
   private processQueue(): void {
@@ -294,7 +294,7 @@ Now, besides the concurrency check based on the currently active tasks, we’re 
 
 We achieve that by searching for the first eligible task using the _takeFirstAvailableItem_ method:
 
-```
+```typescript
 class QueueBroker {
   // (...)  
   private takeFirstAvailableItem = (): QueueItem | null => {
@@ -326,7 +326,7 @@ class QueueBroker {
 
 **Eligible means, in this context, without task group id or task group id that’s not processed currently.** We return null and stop processing if an eligible item isn’t found. This means that we have exhausted the maximum number of active tasks, and all remaining are task group ids currently being processed. We can stop scheduling tasks, which will be rescheduled after task processing.
 
-```
+```typescript
 class QueueBroker {
   // (...)  
   private async executeItem({ task, options }: QueueItem): Promise<void> {
@@ -439,7 +439,7 @@ Of course, the order is related to the time of task processing and maximum activ
 
 Having that, we can use our Queue Broker to implement our Idempotency Key Store.
 
-```
+```typescript
 class IdempotencyKeyStore {
   private lockedKeys: Map<string, 'Locking' | 'Accepted'> = new Set();
 

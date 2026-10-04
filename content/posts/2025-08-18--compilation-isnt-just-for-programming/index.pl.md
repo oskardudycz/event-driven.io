@@ -10,7 +10,7 @@ Welcome to the new week!
 
 What does this streaming pipeline have to do with a programming language compiler?
 
-```
+```typescript
 const deliveryPipeline = pipe(
   Async.map(async order => {
     const restaurant = await fetchRestaurantDetails(order.restaurantId);
@@ -51,7 +51,7 @@ But here's the reality: [Web Streams in Node.js](https://nodejs.org/api/stream.h
 
 A naive implementation would force an impossible choice. Use Node.js streams, and your code won't run in browsers. Use Web Streams, and you sacrifice performance in Node.js. Use async generators as a lowest common denominator, and you lose the benefits of native streaming entirely. Try to support everything with runtime checks, and you end up with:
 
-```
+```typescript
 async function processStream(source) {
   if (typeof window !== 'undefined' && source instanceof ReadableStream) {
     // Web Streams path
@@ -82,7 +82,7 @@ As I outlined in [my workflow engine design](/en/workflow-engine-design-proposal
 
 Understanding how FusionStreams could work requires building it from the ground up. First, operations need representation as data:
 
-```
+```typescript
 interface Step {
   type: string | symbol;
   fn?: Function;
@@ -111,7 +111,7 @@ During the analysis phase, the compiler examines the pipeline structure. It iden
 
 Consider this sequence:
 
-```
+```text
 map(x => x + 1)
 filter(x => x > 10)  
 map(x => x * 2)
@@ -147,7 +147,7 @@ Each system recognised that separating "what you want" from "how to do it" enabl
 
 Let's see how this works with a more complex operation. When processing multiple async operations, you might naturally reach for parallel execution:
 
-```
+```text
 Async.map(async order => {
   const [driver, route] = await Promise.all([
     findNearestDriver(order.restaurant.location),
@@ -165,7 +165,7 @@ In Node.js, it might use worker threads for CPU-intensive operations. In a brows
 
 For instance, real-world streaming pipelines rarely follow a simple linear flow. They branch, merge, and coordinate complex operations. The fanout pattern shows how compilation enables these sophisticated patterns while maintaining performance. When processing a food delivery order, you need to notify the kitchen, find a driver, and process payment simultaneously:
 
-```
+```text
 fanout({
   kitchen: pipe(
     Async.map(order => notifyKitchen(order)),
@@ -189,7 +189,7 @@ During compilation, this pattern transforms based on the environment's capabilit
 
 Want rate limiting? Define what it means declaratively, then provide compilers that implement it efficiently for each environment.
 
-```
+```typescript
 const RATE_LIMIT = Symbol('rateLimit');
 
 function rateLimit(requestsPerSecond: number): Step {
@@ -205,7 +205,7 @@ The rate-limiting compiler could use token buckets in memory for single-instance
 
 Naive implementation could work as:
 
-```
+```typescript
 builder.registerSyncCompiler(RATE_LIMIT, (step) => {
   const { requestsPerSecond } = step.options;
   let tokens = requestsPerSecond;

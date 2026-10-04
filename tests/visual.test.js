@@ -291,3 +291,60 @@ test("Gatsby Head replaces metadata during navigation and keeps language-specifi
     expect(await page.title()).not.toContain("All articles");
   } finally { await page.close(); }
 }, 60_000);
+
+test("layout keeps fonts, sticky header and mobile navigation after resizing", async () => {
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  try {
+    await page.goto(new URL("/en/articles/", baseUrl).href);
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForFunction(() => getComputedStyle(document.body).fontFamily.includes("Open Sans"));
+    await page.evaluate(() => window.scrollTo(0, 600));
+    await page.waitForFunction(() => document.querySelector("header").classList.contains("fixed"));
+    await page.setViewportSize({ width: 390, height: 844 });
+    const expand = page.getByRole("button", { name: "expand" });
+    await expand.waitFor({ state: "visible" });
+    await expand.click();
+    expect(await page.locator("nav.menu").evaluate((menu) => menu.classList.contains("open"))).toBe(true);
+    await page.locator('nav.menu a[data-slug="/contact/"]').click();
+    await page.waitForURL("**/en/contact/");
+    await page.waitForFunction(() => !document.querySelector("nav.menu").classList.contains("open"));
+    expect(await page.locator("h1").count()).toBe(1);
+    expect(await page.locator("footer").count()).toBe(1);
+  } finally {
+    await page.close();
+  }
+}, 60_000);
+
+test("article language switch stays visible before and after scrolling", async () => {
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  try {
+    const slug = "fractal-architecture-cognitive-load";
+    await page.goto(new URL(`/en/${slug}/`, baseUrl).href);
+    const polish = page.getByRole("link", { name: "Change language to pl" });
+    await polish.waitFor({ state: "visible" });
+    await page.evaluate(() => window.scrollTo(0, 600));
+    await page.waitForFunction(() => document.querySelector("header").classList.contains("fixed"));
+    expect(await polish.isVisible()).toBe(true);
+    await polish.click();
+    await page.waitForURL(`**/pl/${slug}/`);
+    await page.waitForFunction(() => document.documentElement.lang === "pl");
+    const english = page.getByRole("link", { name: "Change language to en" });
+    await english.waitFor({ state: "visible" });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await english.waitFor({ state: "visible" });
+    await english.click();
+    await page.waitForURL(`**/en/${slug}/`);
+    expect(await page.locator("h1").count()).toBe(1);
+  } finally { await page.close(); }
+}, 60_000);
+
+test("imported TypeScript examples display syntax colors", async () => {
+  const page = await browser.newPage();
+  try {
+    await page.goto(new URL('/en/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention/', baseUrl).href);
+    const keyword = page.locator('pre.language-typescript .token.keyword').first();
+    await keyword.waitFor({ state: 'visible' });
+    const colors = await keyword.evaluate(token => ({ keyword: getComputedStyle(token).color, code: getComputedStyle(token.closest('code')).color }));
+    expect(colors.keyword).not.toBe(colors.code);
+  } finally { await page.close(); }
+}, 60_000);

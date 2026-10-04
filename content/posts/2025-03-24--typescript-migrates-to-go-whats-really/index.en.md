@@ -148,7 +148,7 @@ In these scenarios, the bottleneck isn't waiting for external systems—it's raw
 
 JavaScript was designed with a single-threaded event loop model. This model works best for handling concurrent I/O (where most time is spent waiting) but becomes problematic for CPU-intensive operations:
 
-```
+```typescript
 // Pseudocode of how the Node.js event loop works
 while (thereAreEvents()) {
   const event = getNextEvent();
@@ -166,7 +166,7 @@ This is why running a complex algorithm in Node.js can make your entire web serv
 
 Writing efficient CPU-intensive code in JavaScript requires understanding and respecting the [event loop](https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick#the-nodejs-event-loop). The code must be structured to yield control, allowing other operations to proceed periodically:
 
-```
+```typescript
 //////////////////////////////////////////////
 // Naive approach - blocks the event loop
 /////////////////////////////////////////////
@@ -180,7 +180,7 @@ function processLargeData(data) {
 }
 ```
 
-```
+```typescript
 
 //////////////////////////////////
 // Event-loop friendly approach
@@ -236,7 +236,7 @@ The performance gap between the JavaScript and Go implementations isn't just abo
 
 As mentioned, Node.js operates on an event loop model:
 
-```
+```text
    ┌───────────────────────────┐
 ┌─>│           timers          │
 │  └─────────────┬─────────────┘
@@ -273,7 +273,7 @@ For a compiler, this creates significant design challenges:
 
 Go, by contrast, offers goroutines—lightweight threads managed by the Go runtime:
 
-```
+```text
 ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐
 │Goroutine│ │Goroutine│ │Goroutine│ │Goroutine│ ...  more
 └────┬────┘ └────┬────┘ └────┬────┘ └────┬────┘
@@ -349,7 +349,7 @@ It's a fair question. Node.js introduced the `worker_threads` module in v10 as a
 
 Unlike the single-threaded event loop that characterizes most Node.js applications, worker threads allow JavaScript to be executed in parallel:
 
-```
+```typescript
 // main.js
 const { Worker } = require('worker_threads')
 
@@ -375,7 +375,7 @@ Promise.all([
 })
 ```
 
-```
+```typescript
 // worker.js
 const { parentPort, workerData } = require('worker_threads')
 

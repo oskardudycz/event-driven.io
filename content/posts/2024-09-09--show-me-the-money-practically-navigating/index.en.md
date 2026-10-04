@@ -32,7 +32,7 @@ As event stores are databases, they should give strong consistency guarantees li
 
 **As** _**If-None-Match**_ **header works only during the file creation, we need the following naming schema (or similar) to guarantee that:**
 
-```
+```text
 {streamPrefix}/{streamtType}/{streamId}/{streamVersion}.{chunkVersion}
 ```
 
@@ -388,7 +388,7 @@ Here are some **partitioning strategies** to distribute your load more effective
 
 If you run a **multi-tenant** system, separating each tenant’s data reduces the chances of one tenant’s spike affecting others. For example:
 
-```
+```text
 s3://tenantA-bucket/orders/ORD-293e/001.parquet
 s3://tenantB-bucket/orders/ORD-293e/002.parquet
 s3://tenantB-bucket/orders/ORD-f354/001.parquet
@@ -400,7 +400,7 @@ By isolating tenants in separate partitions, you ensure better performance and a
 
 For systems that manage **multiple business areas** (e.g., orders, payments, and shipments), partitioning by module helps spread the load. For example:
 
-```
+```text
 s3://policies-bucket/tenantA/POL-mmc6/001.parquet
 s3://claims-bucket/tenantB/CLA-9jnvj/001.parquet
 s3://payments-bucket/tenantA/PAY-12f3/001.parquet
@@ -414,7 +414,7 @@ This approach ensures that spikes in one module (say, orders during Black Friday
 
 For systems with heavy **batch processing** or time-sensitive data, partitioning by time (year/month/day) is an effective way to reduce hot spots and organize data logically:
 
-```
+```text
 s3://2023-bucket/tenantA/POL-mmc6/001.parquet
 s3://2024-bucket/tenantA/POL-mmc6/002.parquet
 s3://2024-bucket/claims/tenantB/CLA-9jnvj/001.parquet

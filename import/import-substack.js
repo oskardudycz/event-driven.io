@@ -221,6 +221,21 @@ async function convertPost(post, source, directory, download = request, entry = 
     headingStyle: "atx", codeBlockStyle: "fenced", bulletListMarker: "-",
   });
   converter.use(gfm);
+  const { codeLanguage } = await import("./code-languages.mjs");
+  converter.addRule("sourceCodeLanguage", {
+    filter: "pre",
+    replacement: (_, node) => {
+      const code = node.querySelector("code") || node;
+      const supplied = code.getAttribute("data-language") || code.getAttribute("data-lang") ||
+        node.getAttribute("data-language") || node.getAttribute("data-lang") ||
+        (code.className.match(/(?:language-|lang-)([\w#+-]+)/) || [])[1] ||
+        (node.className.match(/(?:language-|lang-)([\w#+-]+)/) || [])[1] || "";
+      const text = code.textContent.replace(/\n$/, "");
+      const runs = text.match(/`+/g) || [];
+      const fence = "`".repeat(Math.max(3, ...runs.map(run => run.length + 1)));
+      return `\n\n${fence}${codeLanguage(text, supplied, entry.codeLanguage)}\n${text}\n${fence}\n\n`;
+    },
+  });
   // Substack can put emphasis boundaries inside words (e.g. <em>you'</em>re).
   // Markdown delimiters cannot express every such boundary; retain inline HTML.
   converter.addRule("partialWordEmphasis", {
@@ -307,6 +322,7 @@ async function importPost(entry, options = {}) {
     await fs.writeFile(path.join(staging, provenance), `${JSON.stringify({
       url: source, ...(sourceLocation(source).archive ? { originalUrl: sourceLocation(source).base } : {}),
       date: post.date, assets: converted.assets, embeds: converted.embeds,
+      ...(entry.codeLanguage ? { codeLanguage: entry.codeLanguage } : {}),
       ...(entry.youtubeVideo ? { youtubeVideo: entry.youtubeVideo } : {}),
       ...(entry.recordingEmbeds ? { recordingEmbeds: entry.recordingEmbeds } : {}),
     }, null, 2)}\n`);

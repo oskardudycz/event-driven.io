@@ -74,7 +74,7 @@ Nevertheless, the events’ definition and entity representing the stream state 
 
 I’ll be using the TypeScript samples for illustration, but translating them into other languages should be straightforward. We’ll use the event type definition used in the [“Snapshotting Strategies” article](/en/snapshotting-strategies/).
 
-```text
+```typescript
 export type Event<
   EventType extends string = string,
   EventData extends object = object,
@@ -88,7 +88,7 @@ export type Event<
 
 Event is defined by its type name, data definition, plus optional metadata. For example, the `ShiftOpened` event can be defined as such:
 
-```text
+```typescript
 export type ShiftOpened = Event<
   'shift-opened',
   {
@@ -103,7 +103,7 @@ export type ShiftOpened = Event<
 
 Type for opened cashier shift can look like:
 
-```text
+```typescript
 type OpenCashierShift = {
   number: number;
   cashRegisterId: string;
@@ -128,7 +128,7 @@ All the events should contain information about:
 
 Closing shift event and closed shift state could be modeled as:
 
-```text
+```typescript
 export type ShiftClosed = Event<
   "shift-closed",
   {
@@ -163,7 +163,7 @@ export type ClosedCashierShift = {
 
 As you can see, it extends information from the opened shift state with additional pieces of information related to close operation. The final Cashier Shift can be defined as:
 
-```text
+```typescript
 export type CashierShift = OpenCashierShift | ClosedCashierShift;
 ```
 
@@ -171,7 +171,7 @@ _Note:_ TypeScript supports a [Union Types](https://www.typescriptlang.org/doc
 
 Let’s also define an event used for registering transactions:
 
-```text
+```typescript
 export type TransactionRegistered = Event<
   "transaction-registered",
   {
@@ -184,9 +184,9 @@ export type TransactionRegistered = Event<
 >;
 ```
 
-To [get the current state from events](https://www.eventstore.com/blog/how-to-get-the-current-entity-state-from-events), we’ll use the following method:
+To [get the current state from events](/en/how_to_get_the_current_entity_state_in_event_sourcing/), we’ll use the following method:
 
-```text
+```typescript
 export type CashierShiftEvent =
   | ShiftOpened
   | TransactionRegistered
@@ -230,7 +230,7 @@ export function when(
 
 You might have noticed that I introduced here a new type: `StreamEvent`. It’s a simple wrapper that represents the event read from EventStoreDB. It contains information about the stream name and revision.
 
-```text
+```typescript
 export type StreamEvent<EventType = Event> = Readonly<{
   event: EventType;
   streamRevision: bigint;
@@ -251,7 +251,7 @@ We can define the following rules:
 
 The easiest way to perform a uniqueness check, such as making sure that there is only a single open shift, is enforcing it by the proper stream identifier design. In EventStoreDB, you can specify while appending events that you expect the stream to not exist.
 
-```text
+```typescript
 await eventStore.appendToStream(streamName, [newEvent], {
   expectedRevision: NO_STREAM,
 }),
@@ -296,7 +296,7 @@ The exact mechanism can be used to enforce our cashier shift invariants. Instead
 
 The event handler code could look like this:
 
-```text
+```typescript
 export async function handleCashRegisterPlacedAtWorkStation(
   event: PlacedAtWorkStation
 ): Promise<void> {
@@ -341,7 +341,7 @@ Accordingly, to the current stream name, we can define the endpoint URI, as `/c
 
 You can get the expected stream revision from the request ETag header. After successfully running business logic in the command handler, the result event should be appended. If it failed, then appropriate HTTP status should be returned. Read more on that in the [How to use ETag header for optimistic concurrency](/en/how_to_use_etag_header_for_optimistic_concurrency/).
 
-```text
+```typescript
 export const route = (router: Router) =>
   router.post(
     '/cash-registers/:cashRegisterId/shifts/current',
@@ -420,7 +420,7 @@ export function handleOpenShift(
 
 The `getAndUpdate` method is a simple wrapper that reads the current events from the stream, passes them together with the command to the handler, and append the result event. It uses revision from command metadata to support optimistic concurrency.
 
-```text
+```typescript
 export async function getAndUpdate<
   CommandType extends Command,
   StreamEventType extends Event
@@ -499,7 +499,7 @@ The best option to trigger the process is subscribing to EventStoreDB and listen
 
 In the subscription handler, we can read all events from the stream and copy them into the specific cold storage (e.g. store them in other databases, file storage, S3 bucket, etc).
 
-```text
+```typescript
 export async function archiveClosedShift(
   streamEvent: StreamEvent<ShiftOpened:>
 ): Promise<void> {
@@ -548,7 +548,7 @@ This may be a good solution if our streams are short and our end storage allows 
 
 We’ll start with the subscription as described above. We could use a subscription to $all or dedicated subscriptions filtered by event type (read more in [documentation](https://developers.eventstore.com/clients/grpc/subscriptions.html#filtering-by-event-type)). After receiving the business event triggering the archiving process (e.g. `ShiftOpened`), we won’t start copying immediately. We’ll append the event schedule to the process. This event can be made more generic, e.g. `StreamArchivingScheduled`. It will contain the stream name and stream revision before which we want to archive events. In TypeScript, it could look like that:
 
-```text
+```typescript
 export type StreamArchivingScheduled = Event<
   'stream-archiving-scheduled',
   {
@@ -563,7 +563,7 @@ If we have a design with dedicated streams (so, e.g. streams per cashier shift),
 
 Having such an event, we can provide unified logic of archiving stream events. We can store all of those events in the same stream, but as we want to keep our streams short, then the best would be to store it in the stream with an `archivingFor-${streamName}` identifier. We’ll have the whole history of the stream archiving process. We could even split events into batches adding `fromRevision` information.
 
-```text
+```typescript
 export async function scheduleStreamBatchArchivisation(
   event: StreamArchivingScheduled
 ): Promise<void> {
@@ -655,7 +655,7 @@ After successfully copying events to cold storage, we have to delete them. Event
 -   soft delete: uses internally `$tb` and marks the whole stream as _“to-be-deleted”_. This operation is reversible. You can also reuse the stream name in the further business logic.
 -   tombstoning (a.k.a “hard delete”): appends a tombstone event to the stream, permanently deleting it. You cannot recreate the stream or append an event to it again. Tombstone events are appended with the event type `$streamDeleted`.
 
-```text
+```typescript
 export async function archiveStreamBatch(
   streamEvent: StreamEvent<StreamBatchArchivingScheduled>
 ): Promise<void> {

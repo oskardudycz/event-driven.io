@@ -36,7 +36,7 @@ Think of it like a team of workers in a warehouse - instead of one person trying
 
 At its core, a consumer group is just what it sounds like - a group of consumers working together. When you create a consumer in Kafka, you assign it to a group:
 
-```
+```typescript
 const consumer = kafka.consumer({
   groupId: 'order-processing'
 });
@@ -118,7 +118,7 @@ Think of the generation ID as a group membership version number. When it changes
 
 We could model Consumer Group metadata to keep track of it as:
 
-```
+```typescript
 interface ConsumerGroupMetadata {
   groupId: string;
   generationId: number; // ⬅️ Increments with each membership change
@@ -131,7 +131,7 @@ interface ConsumerGroupMetadata {
 
 It allows the provided settings to detect how long the consumer group should wait for an answer from the consumer and also how long the consumer should wait to end rebalancing. In other words, employees can go home if there’s no work for them as stocktaking is happening.
 
-```
+```typescript
 const consumer = kafka.consumer({
   groupId: 'order-processing',
 
@@ -154,7 +154,7 @@ Now that we have recapped consumer groups and why we need them, let's examine ho
 
 Let's start with something that might seem mundane but is actually fascinating: the request header. Every single message between a consumer and broker starts with this structured header:
 
-```
+```typescript
 interface RequestHeader {
 
   apiKey: number;        // Identifies request type
@@ -210,7 +210,7 @@ You might think, "Well, just pick a broker from the bootstrap list", but it's mo
 
 Here's what the process looks like:
 
-```
+```typescript
 class KafkaConsumer {
   private coordinator: Broker | null = null;
   private isGroupLeader: boolean = false;
@@ -246,7 +246,7 @@ While sometimes referred to as [consistent hashing](https://en.wikipedia.org/wik
 
 Here’s how you might see it in pseudo-code:
 
-```
+```typescript
 class KafkaConsumer {
   private offsetsTopicPartitionCount = 50; // Example count
 
@@ -280,7 +280,7 @@ This design is smart in its simplicity. By piggybacking notifications on the exi
 
 The [heartbeat protocol](https://kafka.apache.org/protocol#The_Messages_Heartbeat) looks like this:
 
-```
+```typescript
 interface HeartbeatRequest {
   apiKey: 12;
   apiVersion: 4;
@@ -314,7 +314,7 @@ At the heart of Kafka's consumer protocol lies the fetch mechanism. While it mig
 
 Let's look at what a fetch request actually looks like:
 
-```
+```typescript
 interface FetchRequest {
 
   replicaId: number;        // -1 for consumers
@@ -357,7 +357,7 @@ This structure might look complex, but each field tells an interesting story abo
 
 Here's how it works in practice:
 
-```
+```typescript
 class KafkaConsumer {
   private async fetch(): Promise<FetchResponse> {
     const request = {
@@ -385,7 +385,7 @@ This parallel fetching is crucial for performance but introduces its complexitie
 
 **Let's start with one of the most common failures: leader changes.** When a partition leader changes (due to broker failure or rebalancing), consumers need to discover the new leader:
 
-```
+```typescript
 private async handleLeaderChange(
   topic: string,
   partition: number
@@ -408,7 +408,7 @@ private async handleLeaderChange(
 
 But leader changes are just one type of failure. Network partitions, for instance, require a different handling strategy:
 
-```
+```typescript
 private async handleNetworkPartition(): Promise<void> {
   // Stop heartbeats during partition
   this.pauseHeartbeats();
@@ -437,7 +437,7 @@ Notice the exponential backoff in the reconnection logic. This isn't just a nice
 
 Coordinator failures present yet another challenge. When a group coordinator fails, all its consumers need to find a new coordinator:
 
-```
+```typescript
 private async handleCoordinatorFailure(): Promise<void> {
   while (true) {
     try {
@@ -469,7 +469,7 @@ Understanding Kafka's consumer protocol is one thing - tuning it for optimal per
 
 When you need messages processed as quickly as possible:
 
-```
+```typescript
 const lowLatencyConfig = {
   // Quick failure detection
   'session.timeout.ms': 10000,
@@ -491,7 +491,7 @@ This configuration prioritizes speed over efficiency. Small fetch sizes and shor
 
 When you need to process large volumes of data efficiently:
 
-```
+```typescript
 const highThroughputConfig = {
   // More tolerant of delays
   'session.timeout.ms': 30000,
@@ -513,7 +513,7 @@ These settings maximize throughput but might increase latency. Larger batch size
 
 One common mistake is setting the heartbeat interval too close to the session timeout:
 
-```
+```typescript
 // 👎 Risky timing
 const riskyConfig = {
   'session.timeout.ms': 10000,

@@ -69,3 +69,65 @@ test('category template queries preserve curated reading order, excerpts and loc
     });
   }
 });
+
+test('article navigation includes existing placeholder languages without advertising duplicate translations', () => {
+  for (const source of sources) {
+    const slug = source.directory?.split('--')[1] || source.slug || source.url.replace(/\/$/, '').split('/').pop();
+    for (const language of ['en', 'pl']) {
+      const $ = cheerio.load(fs.readFileSync(path.join(publicRoot, language, slug, 'index.html'), 'utf8'));
+      const target = language === 'en' ? 'pl' : 'en';
+      assert.equal($(`.language-selector-container a[href="/${target}/${slug}/"]`).length, 1, `Missing language switch: ${language}/${slug}`);
+    }
+  }
+});
+
+test('Polish Event Sourcing lists placeholders with canonical links and one section separator', () => {
+  const yaml = require('js-yaml');
+  const expected = new Map();
+  for (const directory of fs.readdirSync(path.join(__dirname, '../content/posts'))) {
+    const file = path.join(__dirname, '../content/posts', directory, 'index.pl.md');
+    if (!fs.existsSync(file)) continue;
+    const metadata = yaml.load(fs.readFileSync(file, 'utf8').split('---')[1]);
+    if (![metadata.category, ...(metadata.categories || [])].includes('Event Sourcing')) continue;
+    const slug = directory.split('--')[1];
+    expected.set(`/${metadata.useDefaultLangCanonical ? 'en' : 'pl'}/${slug}/`, metadata.title);
+  }
+  const $ = cheerio.load(fs.readFileSync(path.join(publicRoot, 'pl/category/event-sourcing/index.html'), 'utf8'));
+  const cards = $('a.readingCard');
+  assert(expected.size > 6);
+  assert.equal(cards.length, expected.size);
+  cards.each((_, card) => assert(expected.has($(card).attr('href')), `Unexpected card target: ${$(card).attr('href')}`));
+  assert.equal($('.moreArticles').length, 0, 'Unneeded second separator without recommended reading');
+});
+
+test('Kurrent TypeScript examples render with Prism syntax tokens in both languages', () => {
+  const slug = 'keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention';
+  for (const language of ['en', 'pl']) {
+    const $ = cheerio.load(fs.readFileSync(path.join(publicRoot, language, slug, 'index.html'), 'utf8'));
+    assert.equal($('.bodytext pre.language-typescript').length, 16);
+    assert($('.bodytext pre.language-typescript .token.keyword').length > 0, 'Missing highlighted keywords');
+  }
+});
+
+test('known migrated source URLs are relative throughout blog content and social links use the requested order', () => {
+  const links = buildArticleLinks();
+  function visit(directory) {
+    for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+      const file = path.join(directory, entry.name);
+      if (entry.isDirectory()) visit(file);
+      else if (entry.name.endsWith('.md')) {
+        for (const url of fs.readFileSync(file, 'utf8').match(/https?:\/\/[^\s)<>"\]]+/g) || []) {
+          if (!/^https?:\/\/(?:www\.)?(?:architecture-weekly\.com|eventstore\.com|eventstore\.io|kurrent\.io|kurrentdb\.kurrent\.io|web\.archive\.org)\//.test(url)) continue;
+          assert(!links.has(sourceKey(url)), `Known source URL remains in ${file}: ${url}`);
+        }
+      }
+    }
+  }
+  visit(path.join(__dirname, '../content'));
+  const $ = cheerio.load(fs.readFileSync(path.join(publicRoot, 'en/articles/index.html'), 'utf8'));
+  assert.deepEqual($('nav .itemList a[href^="http"]').map((_, item) => $(item).attr('href')).get(), [
+    'https://www.linkedin.com/in/oskardudycz/', 'https://github.com/oskardudycz',
+    'https://hachyderm.io/@oskardudycz', 'https://bsky.app/profile/oskardudycz.bsky.social',
+    'https://www.youtube.com/channel/UC3M4_OgJS4lvZHVDzkOlxIg', 'https://event-driven.io/rss.xml',
+  ]);
+});

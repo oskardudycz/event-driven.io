@@ -9,7 +9,7 @@ Reviewed on 2026-10-04 against Gatsby 5.16.1 and the 694-page build.
 - Hero image lookup uses the original image path rather than a deprecated `fluid` filter.
 - Prism aliases `sh` and `env` to Bash, supporting shell commands and environment variable assignments without changing article text.
 - Browserslist's `caniuse-lite` database was updated in `yarn.lock`.
-- The Babel registration in `gatsby-node.js` only transforms the two local Node modules that need it. It no longer processes Gatsby's generated SSR bundle, which produced the misleading 500 KB deoptimization message.
+- The intermediate Babel restriction removed the SSR formatting warning. The current pass removes registration entirely: the original ES6 hooks live in native `gatsby-node.mjs`, sharing browser-safe ESM localization settings. Gatsby supports native ESM entrypoints from 5.3.
 - YouTube Markdown uses `gatsby-remark-embed-video` 3.2.1 through a local adapter that preserves timestamps and applies the referrer policy required by YouTube.
 - Every page and template now exports Gatsby `Head`; `react-helmet` and its Gatsby plugin have been removed. Head receives page context explicitly and uses a fixed-language translator, preserving SEO during parallel SSR and client navigation. The shared font stylesheet is emitted from Head as well. The root translation provider initializes its shared instance once; Gatsby also wraps Head with that provider, so repeated initialization would reset the Polish page to English during hydration. A browser regression check covers both visible headings and metadata.
 - `yarn test` now checks the actual HTML of all 192 requested language pages for migrated links, article content and recording markup.
@@ -22,11 +22,11 @@ The schema-definition message and node counts are normal informational output. T
 
 | Priority | Improvement | Reason and validation |
 | --- | --- | --- |
-| High | Cache Gatsby `.cache` and generated `public` between compatible CI builds | The workflow currently installs and rebuilds without a Gatsby cache. Image processing dominates cold builds. Key caches by OS, Node and lockfile/configuration; compare warm build timings and verify the existing output contract. Avoid unconditional `gatsby clean`. |
+| Implemented; CI verification pending | Cache Gatsby `.cache` and generated `public` between compatible CI builds | The workflow now restores compatible Gatsby caches and saves them after successful build and test gates. Image processing dominates cold builds. Key caches by OS, Node and lockfile/configuration; compare warm build timings and verify the existing output contract. Avoid unconditional `gatsby clean`. |
 | Medium | Use Gatsby Slices for the shared header and footer | Updating shared content currently affects every page. Prototype on the layout first and measure rebuild time; verify the existing hydration, scrolling and visual tests. |
-| Medium | Audit legacy React dependencies and unused Gatsby plugins | `react-addons-perf`, old InstantSearch, Facebook widgets and the old internationalization plugin have old peer requirements. Check actual usage before removing or upgrading; verify search and language navigation independently. |
-| Low | Convert the remaining Babel-transpiled Gatsby Node hook to CommonJS | This would remove the runtime Babel registration entirely. Keep the shared browser localization constants compatible. |
-| Low | Explicit GraphQL types for stable frontmatter | This can improve schema stability. Schema generation currently takes less than a second, so it is not the current performance bottleneck. |
+| Medium | Audit legacy React dependencies and unused Gatsby plugins | `react-addons-perf` was removed as unused. Active InstantSearch, Facebook widgets and the old internationalization plugin still warrant a separate compatibility review. Check actual usage before removing or upgrading; verify search and language navigation independently. |
+| Implemented | Native ESM Gatsby Node hooks | Original ES6 hooks are preserved in gatsby-node.mjs; runtime Babel registration is removed. |
+| Implemented | Explicit GraphQL types for stable frontmatter | This can improve schema stability. Schema generation currently takes less than a second, so it is not the current performance bottleneck. |
 
 ## Verification
 
@@ -38,3 +38,21 @@ Run `GATSBY_CPU_COUNT=4 yarn build`, then `yarn test`. Start `yarn serve --host 
 - [Migration from gatsby-image](https://www.gatsbyjs.com/docs/reference/release-notes/image-migration-guide/)
 - [Gatsby image API](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/)
 - [Gatsby Head API](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-head/)
+
+
+## Pre-redesign modernization pass
+
+Layout StaticQuery is replaced by useStaticQuery with its class behavior preserved. Resize listeners/timers are cleaned up and font callbacks are guarded after unmount. Stable nullable frontmatter and routing fields have explicit GraphQL types. Proven unused performance/spinner/offline/external-link and obsolete loader/Babel dependencies were removed; directly imported libraries are declared at their existing versions. Search, comments and styled-jsx APIs remain intact.
+
+Build and CodeQL workflow actions now follow current upstream majors (checkout/setup-node/upload-artifact v7, cache v6, CodeQL v4). Yarn downloads and Gatsby output caches are configured; Gatsby cache compatibility includes actual Node runtime, lockfile/configuration, local plugin code, theme/localization and generated public environment values plus indexing mode. Cache save follows build and both test gates. actionlint and YAML parsing pass locally; GitHub execution is pending.
+
+Polish category pages include existing untranslated placeholders with English canonical links. Article navigation includes existing placeholder-language routes, independently of SEO alternates, which still list only genuine translations. Category pages without recommended reading use one divider. Social navigation is LinkedIn, GitHub, Mastodon, Bluesky, YouTube and RSS; README documents per-language category reading order.
+
+`yarn test:cache` is an opt-in integration check using an existing article and its non-indexed Polish placeholder. It modifies/deletes/restores content across warm builds, restores sources and llms.txt in finally, and always disables Algolia indexing. It creates no test publication. Run it only against a local production build with no concurrent source edits.
+
+
+Final validation: frozen installation, smoke checks, full yarn test, twelve browser checks and actionlint pass. Output remains 694 routes / 222 redirects / 399 sitemap URLs. Final production build: 54.39 seconds. Compatible cold/warm builds: 124.73 / 28.16 seconds, with page-query phases 45.960 / 0.200 seconds. The revised cache integration check passed in 80.53 seconds.
+
+Remaining cold-query work includes MarkdownRemark.excerpt (which invokes the transformed Markdown AST pipeline) and Sharp cover data. Source inspection identifies these as expensive dependencies of the archive/category queries; these measurements are phase timings, not isolated per-resolver timings. The attempted OpenTracing run did not emit resolver spans, so no resolver-level speedup is claimed. Retain needed excerpts/media, preserve caches and profile further before changing their semantics.
+
+Imported code blocks now have explicit syntax labels; JavaScript/js snippets use TypeScript as requested. The Kurrent article's sixteen formerly plain-text examples render Prism keyword tokens and syntax colors. Known source links are relative across article bodies and inbound blog references; unmigrated sources remain external. No temporary cache fixture remains in llms.txt or source content.

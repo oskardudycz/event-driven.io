@@ -8,7 +8,7 @@ useDefaultLangCanonical: true
 
 ![](2025-01-10-cover.png)
 
-**I have always said that MongoDB is not the best choice for event storage, and guess what?** I [just released](https://github.com/event-driven-io/emmett/releases/tag/0.23.0) the stable version of the MongoDB event store in [Emmett](https://github.com/event-driven-io/emmett). 
+**I have always said that MongoDB is not the best choice for event storage, and guess what?** I [just released](https://github.com/event-driven-io/emmett/releases/tag/0.23.0) the stable version of the MongoDB event store in [Emmett](https://github.com/event-driven-io/emmett).
 
 **And let me explain today how to do it.** It'll be a detailed article, but I think it's an interesting piece, so fasten your seat belts!
 
@@ -34,13 +34,13 @@ Event stores are not messaging tools. They may have similar capabilities as Even
 
 In event stores, the stream is built from:
 - **the key** represents a record identifier (e.g. order id, invoice number, car license plate number, etc.), 
-- **the value** represents a sequence of business events that happened for the specific record (e.g. _OrderInitiated_, _ShipmentScheduled_, _OrderCompleted_). 
+- **the value** represents a sequence of business events that happened for the specific record (e.g. _OrderInitiated_, _ShipmentScheduled_, _OrderCompleted_).
 
 Simple as that, still, most of the time, we were taught that event stores are append-only logs looking more or less like that:
 
 ![append only log](./append_only_log.png)
 
-**Indeed, physically, most of them are append-only logs.** See: [Emmett PostgreSQL storage](/pl/emmett_postgresql_event_store/), [EventStoreDB](https://developers.eventstore.com/), [Marten](https://martendb.io/), [Axon Server](https://www.axoniq.io/products/axon-server). But well, [the same can be said for the relational databases](/pl/relational_databases_are_event_stores/). Internally, each operation (INSERT/UPDATE/DELETE) is appended to the [Write-Ahead/Transaction Log](https://www.architecture-weekly.com/p/the-write-ahead-log-a-foundation). Then, upon transaction commit, they're applied to specific tables.
+**Indeed, physically, most of them are append-only logs.** See: [Emmett PostgreSQL storage](/pl/emmett_postgresql_event_store/), [EventStoreDB](https://developers.eventstore.com/), [Marten](https://martendb.io/), [Axon Server](https://www.axoniq.io/products/axon-server). But well, [the same can be said for the relational databases](/pl/relational_databases_are_event_stores/). Internally, each operation (INSERT/UPDATE/DELETE) is appended to the [Write-Ahead/Transaction Log](/en/the-write-ahead-log-a-foundation/). Then, upon transaction commit, they're applied to specific tables.
 
 I haven't seen many (if at all) introductions to relational databases explaining them as append-only logs, and that's fine, as it wouldn't be accessible. We should also stop doing that for event stores.
 
@@ -279,7 +279,7 @@ There are multiple ways to do it:
 - we can change the first parameter to be an object containing stream name and stream type,
 - we can use the [URN-bases](https://en.wikipedia.org/wiki/Uniform_Resource_Name) format of Stream Name to include a stream type, e.g. "{streamType}:{streamId}".
 
-All of them can be valid, but my personal preference is the last one. Why? Again, event stores are key-value databases. For them, [the key to consistency is a proper key strategy](https://www.architecture-weekly.com/p/using-s3-but-not-the-way-you-expected). 
+All of them can be valid, but my personal preference is the last one. Why? Again, event stores are key-value databases. For them, [the key to consistency is a proper key strategy](/en/using-s3-but-not-the-way-you-expected/).
 We'd like to enforce our stream's uniqueness for each type of stream. It's okay if different stream types share the same id (e.g., the date when a reservation was made or an order was placed) as long as the combined stream name is unique.
 
 We could then redefine our stream name to:
@@ -663,7 +663,7 @@ We're using [updateOne](https://www.mongodb.com/docs/manual/reference/method/db.
 
 ### Optimistic Concurrency
 
-The final bit to provide the proper consistency guarantees is optimistic concurrency. You can read my [general introduction](/pl/optimistic_concurrency_for_pessimistic_times/) and [technical implementation guidance](/pl/how_to_use_etag_header_for_optimistic_concurrency/). 
+The final bit to provide the proper consistency guarantees is optimistic concurrency. You can read my [general introduction](/pl/optimistic_concurrency_for_pessimistic_times/) and [technical implementation guidance](/pl/how_to_use_etag_header_for_optimistic_concurrency/).
 
 We want to detect conflicting updates and race conditions. In other words, it handles concurrency correctly. 
 
@@ -855,7 +855,7 @@ First, MongoDB’s atomic updates and transactions work best on single documents
 
 **In Emmett, we provided the option to have [_inline_ projections](https://github.com/event-driven-io/emmett/blob/e8e0b3c8f9620dc42c4888f9dccbf4fd3e69d384/src/packages/emmett-mongodb/src/eventStore/projections/mongoDBInlineProjection.ts#L147) stored in the stream document, together with events.** That allows atomic updates in the same operation as events append. I'll expand on it in the follow-up post.
 
-**There's also a valid concern [raised by Robert Kawecki](https://www.reddit.com/r/node/comments/1hy5n9t/comment/m6etazv). The maximum size of the MongoDB document is 16MB.** This is, actually, more than the raw JSON size, as BSON used in MongoDB is a binary format. If we [keep our streams short](https://www.kurrent.io/blog/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention), that should be sufficient for most cases. The stream per document will need to be chunked into multiple documents. The proposed structure could be expanded to include chunk numbers and setting a unique index on streamName and chunk number. That will allow moving events to the new document once the size is reached. We may also need to use [snapshots](https://www.eventstore.com/blog/snapshots-in-event-sourcing). I'll cover this _2nd-day issue_ in the dedicated blog article.
+**There's also a valid concern [raised by Robert Kawecki](https://www.reddit.com/r/node/comments/1hy5n9t/comment/m6etazv). The maximum size of the MongoDB document is 16MB.** This is, actually, more than the raw JSON size, as BSON used in MongoDB is a binary format. If we [keep our streams short](/en/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention/), that should be sufficient for most cases. The stream per document will need to be chunked into multiple documents. The proposed structure could be expanded to include chunk numbers and setting a unique index on streamName and chunk number. That will allow moving events to the new document once the size is reached. We may also need to use [snapshots](/en/snapshots-in-event-sourcing/). I'll cover this _2nd-day issue_ in the dedicated blog article.
 
 Lastly, from a durability perspective, past [Jepsen tests](https://jepsen.io/analyses/mongodb-4.2.6) have flagged edge cases under certain configurations and failover scenarios, indicating you’ll want to pay close attention to cluster setup and operational practices. None of that rules MongoDB out—it just means that if you absolutely need a strict global ordering or bulletproof multi-document consistency, a specialized event store (or a fully ACID relational system) might be a better fit.
 
@@ -881,7 +881,7 @@ npm install @event-driven-io/emmett-mongodb
 
 And use it.
 
-**You can also check the fully working WebApi sample using it.** You'll find it [here](https://github.com/event-driven-io/emmett/tree/main/samples/webApi/expressjs-with-mongodb). 
+**You can also check the fully working WebApi sample using it.** You'll find it [here](https://github.com/event-driven-io/emmett/tree/main/samples/webApi/expressjs-with-mongodb).
 
 If you're not in Node.js land and want me to help you build it [contact me](mailto:oskar@event-driven.io), I'll try to help. You can have a look at [Emmet's implementation](https://github.com/event-driven-io/emmett/tree/main/src/packages/emmett-mongodb/src/eventStore).
 
@@ -891,7 +891,7 @@ If you liked this article, you may also find those interesting:
 - [Event stores are key-value databases!](/pl/event_stores_are_key_value_stores)
 - [Event Streaming is not Event Sourcing!](/pl/event_streaming_is_not_event_sourcing/)
 - [Let's build event store in one hour!](/pl/lets_build_event_store_in_one_hour/)
-- [Using S3 but not the way you expected. S3 as strongly consistent event store](https://www.architecture-weekly.com/p/using-s3-but-not-the-way-you-expected)
+- [Using S3 but not the way you expected. S3 as strongly consistent event store](/en/using-s3-but-not-the-way-you-expected/)
 - [Let's talk about positions in event stores](/pl/lets_talk_about_positions_in_event_stores/)
 
 Cheers!

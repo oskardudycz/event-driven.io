@@ -154,7 +154,7 @@ This works fine, as we know precisely which steps need to happen, so we know wha
 
 Let's have a look at the case brought by Ben: the e-commerce flow. First, we complete the shopping cart by adding and removing items, then we confirm it. The example event flow could look as follows for the online food ordering:
 
-```
+```text
 ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
@@ -165,7 +165,7 @@ We see here that someone added the first Pizza, then maybe accidentally added it
 
 Then, if that was an online ordering system and we had it integrated with the kitchen ordering, then we could get those events in a different order, for instance:
 
-```
+```text
 ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
 CartConfirmed       (cartId: 1, confirmedAt: 2025-11-03 11:44:27)
 ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
@@ -176,7 +176,7 @@ We see that someone removed one Pizza from their shopping cart, which suggests t
 
 Can we then proceed? Maybe yes and maybe no. For this particular order, it'd be correct, but what if our real order:
 
-```
+```text
 ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
@@ -189,7 +189,7 @@ Also, since messaging systems retry to ensure delivery, how would we know that t
 
 For instance, in such a delivery case:
 
-```
+```text
 ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
@@ -213,7 +213,7 @@ Yet, other parts of our system don't need to know all of that. Is the kitchen in
 
 So in our example, if we published to the outside world just:
 
-```
+```text
 CartConfirmed  {
     cartId: 1,
     items: [ { name: "Spaghetti Carbonara" } ],
@@ -352,7 +352,7 @@ The first idea could be: Let's add timestamps!
 
 Let's see how it looks for our example:
 
-```
+```text
 11:40:10 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 11:40:10 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 11:42:13 - ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
@@ -363,7 +363,7 @@ Let's see how it looks for our example:
 
 And the out of order delivery:
 
-```
+```text
 11:40:10 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 11:40:10 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 11:44:23 - ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
@@ -376,7 +376,7 @@ Would that help? No, because how would we know, based on timestamps, that there 
 
 What we actually need is the logical clock. One that increments after each operation. So something like:
 
-```
+```text
 1 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 2 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 3 - ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)
@@ -387,7 +387,7 @@ What we actually need is the logical clock. One that increments after each opera
 
 If we had such, then our delivery would look as follows:
 
-```
+```text
 2 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 1 - ItemAddedToCart     (cartId: 1, name: Pizza Napoletana)
 5 - ItemRemovedFromCart (cartId: 1, name: Pizza Napoletana)

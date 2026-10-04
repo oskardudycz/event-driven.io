@@ -28,13 +28,13 @@ If you've used MongoDB, you know the API collection.find(), collection.insertOne
 
 Why would anyone want this? Teams often know MongoDB's API but need PostgreSQL's guarantees: real ACID transactions, mature replication, and existing infrastructure. Or they have PostgreSQL but want document storage without learning PostgreSQL's JSON query syntax, which looks like this:
 
-```
+```sql
 SELECT data FROM users
 
 WHERE jsonb_path_exists(data, '$.address.history[*] ? (@.street == "Elm St")')
 ```
 
-```
+```text
 users.find({ "address.history": { $elemMatch: { street: "Elm St" } } })
 ```
 
@@ -50,7 +50,7 @@ Adding multi-database support meant dealing with drivers. Database drivers are h
 
 The straightforward approach: make developers explicitly import the driver they need:
 
-```
+```typescript
 import { pongoClient } from '@event-driven-io/pongo';
 
 import { databaseDriver } from '@event-driven-io/pongo/pg';
@@ -74,7 +74,7 @@ I built a deferred loading pattern in Dumbo, my database abstraction layer. Dumb
 
 Here's the pattern:
 
-```
+```typescript
 export const createDeferredConnectionPool = <Connector, ConnectionType>(
   connector: Connector,
   importPool: () => Promise<ConnectionPool<Connection<Connector>>>,
@@ -108,7 +108,7 @@ The connection pool appears to exist immediately, but it's actually a proxy. Eve
 
 In JavaScript, a Promise is an object. Once created, it has an identity. You can await the same Promise multiple times, and the function will be evaluated once, the result will be cached and reused in subsequent awaits:
 
-```
+```typescript
 const work = doSomethingAsync();
 const a = await work;
 const b = await work; // Same Promise object, same eventual result
@@ -116,7 +116,7 @@ const b = await work; // Same Promise object, same eventual result
 
 This is different from calling the async function twice:
 
-```
+```typescript
 const a = await doSomethingAsync(); // Creates Promise #1
 const b = await doSomethingAsync(); // Creates Promise #2, does work again
 ```
@@ -135,7 +135,7 @@ To support automatic driver selection in Pongo, I'd need to defer everything.
 
 Currently, when you create a Pongo client, it knows its driver:
 
-```
+```typescript
 const client = pongoClient({ connectionString });
 const db = client.db('myapp');
 const users = db.collection('users');
@@ -147,7 +147,7 @@ Each level—client, database, collection—is a concrete object with real metho
 
 **Here's what a deferred collection would look like:**
 
-```
+```typescript
 class DeferredPongoCollection<T> implements PongoCollection<T> {
   private realCollectionPromise: Promise<PongoCollection<T>> | null = null;
 
@@ -204,7 +204,7 @@ Now add TypeScript generics that need to flow through all these layers. Add erro
 
 The driver would register itself through a side effect:
 
-```
+```typescript
 // In @event-driven-io/pongo/pg
 import { registerDriver } from '@event-driven-io/pongo';
 registerDriver('postgresql', () => import('./postgresqlDriver'));
@@ -212,7 +212,7 @@ registerDriver('postgresql', () => import('./postgresqlDriver'));
 
 Then you could add just the import anywhere in the app:
 
-```
+```typescript
 import * from '@event-driven-io/pongo/pg';
 ```
 
@@ -262,7 +262,7 @@ In production, this means that one failed connection attempt during startup brea
 
 Let's say you're debugging this in production. You add logging:
 
-```
+```typescript
 async insertOne(doc: T): Promise<InsertOneResult> {
   console.log('insertOne called');
   const collection = await this.getRealCollection();
@@ -293,7 +293,7 @@ Now imagine explaining this to a contributor who wants to add a DuckDB driver.
 
 I chose explicit driver injection instead:
 
-```
+```typescript
 import { pongoClient } from '@event-driven-io/pongo';
 import { databaseDriver } from '@event-driven-io/pongo/pg';
 

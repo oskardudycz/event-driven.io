@@ -13,9 +13,9 @@ Classically, in Event Sourcing, we create a default object and apply events from
 [Marten](https://martendb.io/events/), of course, allows this default behaviour. We have a built-in method _AggregateStream_ that does all the needed steps. We can apply events both to the default and to a non-empty object. It can be helpful, for example, when taking snapshots. In short, a snapshot is the state of a stream at a specific point in time. They are used to optimise performance. They should not be the first choice, but they are an option for performance-critical functionality.
 
 Read more in my other articles on why you may not need Snapshots and/or what are the general strategies of dealing with them:
-- [Snapshots in Event Sourcing](https://www.eventstore.com/blog/snapshots-in-event-sourcing),
-- [Snapshotting Strategies](https://www.eventstore.com/blog/snapshotting-strategies),
-- [Keep your streams short! Temporal modeling for fast reads and optimal data retention](https://www.eventstore.com/blog/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention).
+- [Snapshots in Event Sourcing](/en/snapshots-in-event-sourcing/),
+- [Snapshotting Strategies](/en/snapshotting-strategies/),
+- [Keep your streams short! Temporal modeling for fast reads and optimal data retention](/en/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention/).
 
 However, if you decide to use snapshots as a performance optimisation, be careful to not make things worse. If you want to do a snapshot after each event append,  you can speed up the readings but significantly slow down the write side. As a middle ground, you could do a snapshot once per a set of events, e.g. after a specific event type, periodically, or a number of events.
 

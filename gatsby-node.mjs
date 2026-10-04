@@ -1,12 +1,13 @@
-//const webpack = require("webpack");
-const _ = require("lodash");
-const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
-const path = require("path");
-const Promise = require("bluebird");
-import { DEFAULT_OPTIONS } from "./src/i18n/constants";
+import _ from "lodash";
+import analyzer from "webpack-bundle-analyzer";
+import path from "node:path";
+import Promise from "bluebird";
+import filesystem from "gatsby-source-filesystem";
+import { DEFAULT_OPTIONS_BASE as DEFAULT_OPTIONS } from "./src/i18n/settings.mjs";
+import categoryGuides from "./data/category-guides.json" with { type: "json" };
 
-const { createFilePath } = require(`gatsby-source-filesystem`);
-const categoryGuides = require("./data/category-guides.json");
+const { BundleAnalyzerPlugin } = analyzer;
+const { createFilePath } = filesystem;
 
 const categoriesForNode = (node) =>
   Array.from(
@@ -118,10 +119,14 @@ export const createPages = ({ graphql, actions }) => {
             .filter(
               (item) =>
                 item.node.fields.source === node.fields.source &&
-                item.node.fields.slug === node.fields.slug &&
-                !item.node.frontmatter.useDefaultLangCanonical
+                item.node.fields.slug === node.fields.slug
             )
             .map((item) => item.node.fields.langKey);
+        const canonicalLanguagesFor = (node) => availableLanguagesFor(node).filter((language) =>
+          items.some(({ node: candidate }) => candidate.fields.source === node.fields.source &&
+            candidate.fields.slug === node.fields.slug && candidate.fields.langKey === language &&
+            !candidate.frontmatter.useDefaultLangCanonical)
+        );
         const relatedFor = (node) => {
           const requested = node.frontmatter.related || [];
           return requested.map((slug) => {
@@ -174,7 +179,6 @@ export const createPages = ({ graphql, actions }) => {
               (item) =>
                 item.node.fields.source === "posts" &&
                 item.node.fields.langKey === supportedLangKey &&
-                !item.node.frontmatter.useDefaultLangCanonical &&
                 categoriesForNode(item.node).some(
                   (itemCategory) => _.kebabCase(itemCategory) === categorySlug
                 )
@@ -239,6 +243,7 @@ export const createPages = ({ graphql, actions }) => {
                 source,
                 originalPath: slug,
                 availableLanguages: availableLanguagesFor(node),
+                canonicalLanguages: canonicalLanguagesFor(node),
                 relatedIds: relatedFor(node),
                 excludeFromSitemap: Boolean(node.frontmatter.useDefaultLangCanonical),
               },
@@ -274,6 +279,7 @@ export const createPages = ({ graphql, actions }) => {
                 source,
                 originalPath: slug,
                 availableLanguages: availableLanguagesFor(node),
+                canonicalLanguages: canonicalLanguagesFor(node),
                 relatedIds: relatedFor(node),
                 excludeFromSitemap: Boolean(node.frontmatter.useDefaultLangCanonical),
               },
@@ -299,6 +305,7 @@ export const createPages = ({ graphql, actions }) => {
               langKey,
               originalPath: slug,
               availableLanguages: availableLanguagesFor(node),
+                canonicalLanguages: canonicalLanguagesFor(node),
               excludeFromSitemap: Boolean(node.frontmatter.useDefaultLangCanonical),
             },
           });
@@ -602,4 +609,36 @@ export const onPreBuild = ({ actions: { createRedirect } }, pluginOptions) => {
       statusCode: 302,
     });
   }
+};
+
+
+export const createSchemaCustomization = ({ actions }) => {
+  actions.createTypes(`
+    type MarkdownRemark implements Node {
+      frontmatter: MarkdownRemarkFrontmatter
+      fields: MarkdownRemarkFields
+    }
+    type MarkdownRemarkFrontmatter @dontInfer {
+      title: String
+      description: String
+      summary: String
+      category: String
+      categories: [String]
+      related: [String]
+      cover: File @fileByRelativePath
+      author: String
+      disqusId: String
+      useDefaultLangCanonical: Boolean
+      redirectFrom: String
+      redirectAliases: [String]
+      menuTitle: String
+      icon: String
+    }
+    type MarkdownRemarkFields @dontInfer {
+      slug: String
+      prefix: String
+      source: String
+      langKey: String
+    }
+  `);
 };

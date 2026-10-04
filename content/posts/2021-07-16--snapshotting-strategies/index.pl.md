@@ -159,7 +159,7 @@ type CashRegisterEvent =
   | CashRegisterSnapshoted;
 ```
 
-We also defined the union type containing all the cash register events. We can use it to define our state application logic (read more details about this process in [my other article](https://www.eventstore.com/blog/how-to-get-the-current-entity-state-from-events)):
+We also defined the union type containing all the cash register events. We can use it to define our state application logic (read more details about this process in [my other article](/en/how_to_get_the_current_entity_state_in_event_sourcing/)):
 
 ```typescript
 function when(
@@ -599,7 +599,7 @@ The examples I explained above assume that the snapshotting happens together wit
 
 * * *
 
-As explained in [my other article](https://www.eventstore.com/blog/how-to-get-the-current-entity-state-from-events). The process of rebuilding the state based on events is called stream aggregation. The generic method for that can be defined as:
+As explained in [my other article](/en/how_to_get_the_current_entity_state_in_event_sourcing/). The process of rebuilding the state based on events is called stream aggregation. The generic method for that can be defined as:
 
 ```typescript
 export function aggregateStream<Aggregate, StreamEvent extends Event>(

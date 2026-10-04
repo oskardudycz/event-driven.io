@@ -51,7 +51,7 @@ const CategoryTemplate = (props) => {
               </section>
             )}
             {remaining.length > 0 && (
-              <section className="articleSection moreArticles">
+              <section className={`articleSection${recommended.length > 0 ? " moreArticles" : ""}`}>
                 <div className="sectionHeader">
                   <h2>
                     {recommended.length > 0
@@ -152,6 +152,7 @@ export const query = graphql`
           fields { slug prefix }
           frontmatter {
             title
+            useDefaultLangCanonical
             cover {
               childImageSharp {
                 resize(width: 420, height: 240, quality: 78, cropFocus: CENTER, toFormat: WEBP) { src }

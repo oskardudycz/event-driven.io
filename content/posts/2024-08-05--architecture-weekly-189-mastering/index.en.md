@@ -170,13 +170,13 @@ We’ll use the last one as an example.
 
 To configure it, we need to install it on our server:
 
-```
+```bash
 sudo apt-get install pgbouncer
 ```
 
 Setup the configuration and reference to our PostgreSQL database in _pgbouncer.ini_:
 
-```
+```ini
 [databases]
 
 mydb = host=localhost port=5432 dbname=mydb
@@ -200,7 +200,7 @@ default_pool_size = 20
 
 Having that, we can launch the service
 
-```
+```bash
 sudo service pgbouncer start
 ```
 

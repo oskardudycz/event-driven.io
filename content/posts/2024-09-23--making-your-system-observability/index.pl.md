@@ -74,7 +74,7 @@ Some metrics can be highly contextual to the business features (e.g., the number
 
 In Node.js and TypeScript, the simplest setup for them could look as follows:
 
-```
+```typescript
 import {
   MeterProvider,
 } from '@opentelemetry/sdk-metrics';
@@ -91,7 +91,7 @@ const meterProvider = new MeterProvider({
 
 And yes, you need to install the following packages:
 
-```
+```bash
 npm install --save @opentelemetry/api @opentelemetry/sdk-metrics @opentelemetry/sdk-trace-base
 ```
 
@@ -135,7 +135,7 @@ Let’s try to instrument our Connection Pool in a Test-Driven Way. We’ll use 
 
 Let’s start with the basic telemetry setup for our tests:
 
-```
+```typescript
 import {
   AggregationTemporality,
   InMemoryMetricExporter,
@@ -188,7 +188,7 @@ I’m using the simple in-memory setup here. For now, I don’t want to export i
 
 For in-memory metrics, I had to [steal the code from the official repo](https://github.com/open-telemetry/opentelemetry-js/blob/6515ed8098333646a63a74a8c0150cc2daf520db/experimental/packages/opentelemetry-instrumentation-http/test/utils/TestMetricReader.ts):
 
-```
+```typescript
 import {
   MetricReader,
   type PushMetricExporter,
@@ -233,7 +233,7 @@ Nothing fancy. The goal of this class is to collect and export metrics data usin
 
 Having that, we can set up our tests:
 
-```
+```typescript
 import assert from 'assert';
 import { beforeEach, describe, it } from 'node:test';
 import { SimpleConnectionPool } from './connectionPool';
@@ -269,7 +269,7 @@ Let’s say we’d like to provide information on connection acquisition. This i
 
 The simplest test could look as follows:
 
-```
+```typescript
 void it('exports span with acquisition information', async () => {
   const connection = await pool.connect();
   assert.ok(connection, 'Connection should be successful');
@@ -295,7 +295,7 @@ Of course, such a test will fail, as we haven’t added any instrumentation yet.
 
 Let’s add some instrumentation:
 
-```
+```typescript
 export class SimpleConnectionPool implements ConnectionPool {
   private isEnded = false;
   private queueBroker: QueueBroker;
@@ -358,7 +358,7 @@ We’re injecting here a tracer, which is responsible for recording new spans. H
 
 The final touch is to update the test setup to pass the trace provider:
 
-```
+```typescript
 void describe('Connection Pool', () => {
   let pool: SimpleConnectionPool;
   let connectionString: string;
@@ -387,7 +387,7 @@ void describe('Connection Pool', () => {
 
 Few more things here. Naming conventions. We named our span as follows:
 
-```
+```text
 aw.db.connection_pool.connection_acquisition
 ```
 
@@ -415,7 +415,7 @@ In OpenTelemetry, we can define the following types of metrics:
 
 **Let’s define a metric showcasing the connection acquisition time.** We’ll use the histogram, as each acquisition will have a different value. Based on that, we can calculate measurements like mean, median, etc.
 
-```
+```typescript
 import {
   type Histogram,
   type Meter,
@@ -439,7 +439,7 @@ const connectionPoolMetrics = (meter: Meter): ConnectionPoolMetrics => ({
 
 Let’s also add a helper for tests to collect recorded histogram values:
 
-```
+```typescript
 const collectHistogramDataPoints = async (
   metricName: string,
   metricsReader: TestMetricReader,
@@ -464,7 +464,7 @@ const collectHistogramDataPoints = async (
 
 And add the new test ensuring that metrics recording was made:
 
-```
+```typescript
 void describe('Connection Pool', () => {
   void it('exports acquisition time metric', async () => {
     const connection = await pool.connect();
@@ -496,7 +496,7 @@ Yup, simple as that. Method _collectHistogramDataPoints_ is also an example of h
 
 Having it, we can instrument our code to record those times.
 
-```
+```typescript
 export class SimpleConnectionPool implements ConnectionPool
   constructor(
     private tracer: Tracer,

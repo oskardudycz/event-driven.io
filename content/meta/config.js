@@ -11,7 +11,6 @@ module.exports = {
   siteLanguage: "en",
   // author
   authorName: "Oskar Dudycz",
-  authorTwitterAccount: "oskar_at_net",
   // info
   headerTitle: "Oskar Dudycz",
   headerSubTitle: "Pragmatycznie o programowaniu",
@@ -25,12 +24,11 @@ module.exports = {
 
   // social
   socialLinks: {
-    github: { url: "https://github.com/oskardudycz" },
-    twitter: { url: "https://twitter.com/oskar_at_net" },
-    mastodon: { url: "https://fosstodon.org/@oskardudycz" },
-    facebook: { url: "https://www.facebook.com/Oskar.At.NET" },
-    youtube: { url: "https://www.youtube.com/channel/UC3M4_OgJS4lvZHVDzkOlxIg" },
     linkedin: { url: "https://www.linkedin.com/in/oskardudycz/" },
-    rss: { url: `${siteUrl}/rss.xml` }
-  }
+    github: { url: "https://github.com/oskardudycz" },
+    youtube: { url: "https://www.youtube.com/channel/UC3M4_OgJS4lvZHVDzkOlxIg" },
+    mastodon: { url: "https://hachyderm.io/@oskardudycz" },
+    bluesky: { url: "https://bsky.app/profile/oskardudycz.bsky.social" },
+    rss: { url: `${siteUrl}/rss.xml` },
+  },
 };

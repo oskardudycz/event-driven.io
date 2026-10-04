@@ -86,7 +86,7 @@ Here’s how it works:
 
 **To see this process in action, the naive implementation could look as follows:**
 
-```
+```typescript
 class GroupCoordinator {
   // tracking asignment of consumer to partitions
   private assignments: Map<string, number[]> = new Map();
@@ -144,7 +144,7 @@ This ensures that only consumers aware of the latest group state can participate
 
 The pseudo-code showcasing heartbeats handling can look as follows:
 
-```
+```typescript
 type ConsumerHealth = { lastHeartbeat: number; consumerGeneration: number };
 
 class GroupCoordinator {
@@ -212,7 +212,7 @@ class GroupCoordinator {
 
 Having all of that, the more real-world code showing how the assignment works looks as follows:
 
-```
+```typescript
 class GroupCoordinator {
   // Partition assignments
   private assignments: Map<string, number[]> = new Map();
@@ -274,7 +274,7 @@ Partition assignment is managed by the **Group Coordinator**, a special broker d
 
 Let’s see this in action with a simple round-robin assignment:
 
-```
+```typescript
 class GroupCoordinator {
   private assignments: Map<string, number[]> = new Map();
 
@@ -331,7 +331,7 @@ In our simple implementation, we could set the _isRebalancing_ flag and [use the
 
 This method is triggered by events like:
 
-```
+```text
 private startRebalance(): void {
   if (this.isRebalancing) {
     throw new Error("Rebalance already in progress.");
@@ -355,7 +355,7 @@ The increment of the generation number is essential for synchronization. It mark
 
 This is the phase where the actual redistribution of partitions happens. This involves removing stale assignments, recalculating new ones, and ensuring all active consumers are notified.
 
-```
+```typescript
 private rebalance(): void {
   const consumerList = Array.from(this.consumers.keys());
 
@@ -404,7 +404,7 @@ If a consumer group is processing a high-throughput topic, ensuring partitions a
 
 Once the partition assignments are calculated and communicated to consumers, `Kafka` wraps up the process, you can think of it as the second step of a two-phase commit or [releasing the lock](/en/distributed-locking-a-practical-guide/).
 
-```
+```text
 private completeRebalance(): void {
   this.isRebalancing = false; // Unlock the rebalance
   console.log(`Rebalance completed. Generation: ${this.generation}`);

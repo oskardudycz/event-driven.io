@@ -1,6 +1,6 @@
 # SEO, content, and platform progress
 
-Last updated: 2026-09-24
+Last updated: 2026-10-04
 
 This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an item only when its implementation and proportionate verification are complete. Add a short note under blocked or partial items instead of presenting them as finished.
 
@@ -26,7 +26,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Emit Article, Service, ProfilePage, WebSite, and CollectionPage structured data.
 - [x] Add Open Graph and X/Twitter descriptions, images, and image alt metadata.
 - [x] Generate `static/llms.txt` during builds from canonical content.
-- [x] Confirm generated `llms.txt` includes both consulting pages and 266 articles.
+- [x] Confirm generated `llms.txt` includes both consulting pages and 335 articles.
 
 ### Consulting, training, and conversion
 
@@ -44,7 +44,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Turn the category index into a topic overview with descriptions and article counts.
 - [x] Add recommended reading order and image cards to category pages.
 - [x] Refine category pages after production review with responsive two-column cards, consistent image ratios, reading-order badges, clamped excerpts, and working article-count pluralisation.
-- [x] Generate category cover WebPs once and reuse them through page context.
+- [x] Generate category cover WebPs through template queries; page context now carries IDs only.
 - [x] Replace automatic category-based related articles with opt-in, same-language curated links; seed the vertical-slices article with its two cited predecessors.
 - [x] Reuse category cards for related reading, place it after the newsletter signup, label chronological navigation, and verify desktop/mobile layouts with screenshots and browser checks.
 - [x] Limit the homepage to 12 recent canonical articles and link to the topic index.
@@ -71,7 +71,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Remove the contradictory fixed hero height.
 - [x] Fix static-route language switching and store the selected target language.
 - [x] Gate webpack bundle analysis behind `ANALYZE=true` and prevent browser auto-open.
-- [x] Add `.nvmrc` pinned to the current Node 16.20.2 baseline.
+- [x] Align `.nvmrc`, package engines and CI on Node 24 (Node 16 was the historical baseline).
 - [x] Remove the obsolete `prettier/react` ESLint configuration entry.
 - [x] Document the Gatsby 3 → 4 → 5 migration and Node 24 target in `plan.md`.
 - [x] Reverse-test the unchanged Gatsby 3 site on Node 24.12.0 with Yarn 1; record the real `ERR_OSSL_EVP_UNSUPPORTED` webpack failure and reject the temporary OpenSSL legacy-provider workaround.
@@ -83,7 +83,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Register the legacy redirect set once in `onPreBuild` instead of once per page and remove unused newsletter hero image queries.
   - A clean 562-page build improved from 1,482.1 seconds to 220.9 seconds; `createPagesStatefully` fell from 127.7 seconds to 0.22 seconds and page queries from 846.6 seconds to 44.3 seconds.
 
-## Verification progress
+## Historical verification checkpoints
 
 - [x] Parse `src/i18n/i18n.json`, `data/category-guides.json`, and `data/videos.json` successfully.
 - [x] Pass `git diff --check`.
@@ -143,7 +143,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [ ] Add FAQ structured data only to eligible visible FAQs.
 - [ ] Tune Algolia ranking using production query analytics.
 
-### P3 — Gatsby and Node migration
+### P3 — completed migration checkpoints and remaining follow-ups
 
 - [x] Complete the Node-first research and reverse probe. Gatsby 3 cannot build on Node 24 without the OpenSSL legacy-provider workaround, which will not be used.
 - [x] Step 1: preserve a route/redirect/feed/sitemap snapshot from the known-good 562-page Node 16 build and enforce it in CI.
@@ -165,21 +165,20 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
   - [x] Add a client-side navigation check. It fails on the old preview (two H1s) and passes locally with one H1, one footer, and scroll position 0.
   - [x] Move the archive heading below the 80px desktop header without changing the homepage article-list spacing; confirm the H1 top-position assertion was red before the layout change and green afterward.
   - [x] Run a clean-exit Gatsby 5 build outside the restricted sandbox, `yarn smoke`, `yarn test`, and `yarn test:visual` locally. The restricted-sandbox build's earlier non-zero exit was solely Gatsby's EROFS write to `~/.config/gatsby/`, after all 562 pages had generated.
-  - [ ] Confirm all six visual tests pass on GitHub Actions' Chromium/Linux runner and review its screenshot artifacts before deploying the fix.
+  - [ ] Confirm all twelve current browser checks pass on GitHub Actions' Chromium/Linux runner and review its screenshot artifacts before deploying the fix.
   - [x] Rebuild and confirm the six retired English/Polish sign-in, callback, and billing routes and their nine redirects are absent; update the committed route contract only for these intended removals. The Node 24/Gatsby 5 build produced 556 routes, 80 redirects, and the unchanged 330 sitemap URLs; `yarn test` passes.
   - [x] Verify English and Polish homepage snapshots against the corrected local build. All six Playwright/Vitest tests pass locally, including the archive, category, and article-footer comparisons.
   - [x] Capture the production article-footer state for `/en/vertical-slices-and-dependencies/`, add a regression test, and fix the author-note query to select the dedicated `parts` content. The new test failed on the preview and all six visual tests passed on the corrected local build; a fresh preview still needs review.
 - [x] Verify `static/.well-known/webfinger`, the self-hosted font stylesheet/files, and the Calendly CTA on both generated contact pages.
 - [ ] After Gatsby 5/Node 24 is green, migrate Yarn 1 to npm in a separate change and verify `npm ci`, build, and tests.
   - A plain `npm install --package-lock-only` failed on the unused GraphQL ESLint plugin, then on `gatsby-plugin-styled-jsx`'s `styled-jsx@^3` peer requirement. The unused lint plugin was removed. Do not add `--legacy-peer-deps`; decide how to handle the styled-jsx integration before switching lockfiles.
-  - The site owner is open to a gradual styling migration, with a possible later Astro move. First establish browser screenshots/smoke checks, then migrate styled-jsx components incrementally to portable CSS Modules and CSS variables while preserving appearance. Remove the plugin only after its 35 consumers are migrated; retry npm afterward without overrides. Tailwind is optional, not the first migration step.
-- [ ] Verify that `static/.well-known/webfinger` is copied into generated `public/` after a clean build; commit the source file and remove the old tracked generated copy.
+  - The site owner is open to a gradual styling migration, with a possible later Astro move. First establish browser screenshots/smoke checks, then migrate styled-jsx components incrementally to portable CSS Modules and CSS variables while preserving appearance. Remove the plugin only after its 35 consumers are migrated; retry npm afterward without overrides. The selected future direction is Tailwind plus CSS variables; this pre-redesign pass defers all CSS migration.
+- [x] Verify static WebFinger is copied to public; the smoke/build checks cover the source and generated output.
 - [x] Add and run `yarn smoke` for configuration, WebFinger, source syntax, and GraphQL parsing; keep the full build contract as the release gate.
 - [ ] After the runtime and package-manager changes, start incremental TypeScript adoption with shared types and a small source module.
 - [ ] Add an ESLint baseline for changed JavaScript/TypeScript files and expand it as the existing lint backlog is addressed.
 - [ ] After the migration, diagnose contact form email delivery and discuss a reliable alternative before restoring a form.
-- [ ] Use Node 22 only to diagnose a Node 24-specific failure, not as a planned checkpoint or deployment target.
-- [ ] Do not include React 19, Vitest, Gatsby Slices, deferred static generation, full lint cleanup, `StaticQuery`, explicit schema typing, or the image API migration unless the Gatsby 5 build proves one is required.
+- [ ] Keep React 19, Gatsby Slices, deferred static generation and full lint cleanup deferred. Vitest and image/Head migration are complete; StaticQuery and explicit schema typing are now scheduled below.
 - [ ] Stop for a decision before replacing `gatsby-plugin-styled-jsx-postcss`, `gatsby-remark-embed-video`, or another integration where the replacement would change visible CSS/content behavior.
 - [ ] Resolve the `/en|pl/anti-patterns/` route collision between the page and post sources. Recommended direction: let the richer article own `/anti-patterns/` and move or retire the older talk landing page; this needs confirmation because it changes which template owns the existing URL.
 
@@ -198,3 +197,42 @@ When implementation continues, update this file in the same change:
 2. Record partial verification and exact blockers beneath the item.
 3. Add newly discovered strategic work to `plan.md`; add its next executable step here.
 4. Keep Node/runtime changes aligned across `.nvmrc`, GitHub Actions, `package.json`, and `yarn.lock`.
+
+
+## Current Gatsby 5 modernization — 2026-10-04
+
+Current baseline: Gatsby 5.16.1 / React 18.3.1 / Node 24 / Yarn 1. Historical build counts above are retained as checkpoint evidence.
+
+- [x] Merge docs/gatsby-5-review.md into plan.md and this checklist before implementation.
+- [x] Previous pass: Head API, gatsby-plugin-image, lean route queries, Prism/Browserslist fixes, YouTube adapter and all 96 requested imports (192 language files).
+- [x] Previous local verification: production build, full test suite and nine browser checks; 694 routes, 222 redirects and 399 sitemap URLs.
+- [x] Replace layout StaticQuery with useStaticQuery without changing markup/styles.
+- [x] Clean up resize listeners/timers and asynchronous font callbacks.
+- [x] Convert Gatsby Node hooks to native ESM (.mjs); remove runtime Babel registration.
+- [x] Remove proven-unused dependencies and declare directly imported packages.
+- [x] Define nullable frontmatter/routing types with relative cover-file resolution.
+- [x] Cache Yarn downloads and compatible Gatsby outputs in CI; save validated builds only.
+- [x] Measure cold/warm builds and verify modified/deleted content against warm caches.
+- [x] Run frozen installation, smoke, full production tests and browser checks.
+- [ ] Verify CI/deployment and live Algolia independently; local checks do not complete these tasks.
+
+Deferred: Tailwind/theme variables, dark mode, Slices, npm migration, layout redesign. Preserve current appearance and existing output contracts; no deployment/index mutation in this pass.
+
+- [x] Update and validate build/CodeQL workflow actions against their current upstream releases.
+
+- [x] Fix disappearing article language switcher while preserving canonical-language alternates; include placeholder posts on existing Polish category routes and remove duplicated separator.
+
+- [x] Verify imported code languages/highlighting, importer regression tests, and inbound/outbound relative cross-links across all blog content.
+- [x] Verify updated social navigation and README category reading-order documentation.
+
+### Current verification results
+
+- Frozen Yarn installation passed with registry access; the local Sharp binary was rebuilt after dependency relinking. Smoke checks cover 70 source files and 17 GraphQL queries.
+- Final production build passed in 54.39 seconds. Full `yarn test` passed in 7.38 seconds, including 14 importer tests and six generated-content/navigation checks. All 12 browser checks passed in 32.44 seconds; existing screenshot baselines and tolerances were retained.
+- Exact output contract remains 694 routes, 222 redirects and 399 sitemap URLs. All 96 requested articles retain 192 language files.
+- Compatible cold/warm builds measured 124.73/28.16 seconds; page queries measured 45.960/0.200 seconds. The revised cache integration check passed in 80.53 seconds and verified modified text, deleted HTML/page data, and restored content. These are local measurements, not CI guarantees.
+- Workflow YAML and actionlint validation passed. GitHub execution, live Algolia indexing and deployment remain pending.
+- Polish Event Sourcing lists 88 articles (six translations plus 82 English placeholders). Language-switch navigation includes existing placeholders, while SEO alternates still exclude duplicate translations. No duplicate category separator remains.
+- Requested imported English files have 439 explicitly labelled code blocks; all JavaScript/js fence labels throughout content were changed to TypeScript. The Kurrent article renders all 16 TypeScript examples with Prism tokens and visible syntax colors. Code bodies were preserved.
+- Eight additional known source links in requested articles and 36 inbound links elsewhere were rewritten to relative canonical blog URLs. Older/unmigrated references remain external, as previously requested.
+- No cache-test publication, temporary source marker or fixture entry remains in content or llms.txt. The reusable cache check now uses only an existing non-indexed placeholder and restores sources/index in finally.

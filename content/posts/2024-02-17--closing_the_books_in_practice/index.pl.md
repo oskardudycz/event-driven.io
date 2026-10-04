@@ -14,7 +14,7 @@ Event Sourcing works as bookkeeping; we record new entries for each business ope
 
 **For instance, we can use the "Closing the Books" pattern to model the lifecycle process effectively.** [Its name comes from the accounting domain](https://courses.lumenlearning.com/sac-finaccounting/chapter/journalizing-and-posting-closing-entries/). All financial numbers are summarised and verified, and the final report is created at the end of each cycle (e.g., month and year). This data is used as a base for the next period. For accounting calculations, you don't need to bring forward the entire history; it's enough to summarise the crucial aspects to be carried forward, i.e. the opening balances, etc. The same pattern can be used for temporal modelling.
 
-I explained this pattern in detail in [Keep your streams short! Temporal modelling for fast reads and optimal data retention](https://www.eventstore.com/blog/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention).
+I explained this pattern in detail in [Keep your streams short! Temporal modelling for fast reads and optimal data retention](/en/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention/).
 
 And the talk:
 
@@ -619,7 +619,7 @@ public static class DocumentSessionExtensions
 
 Keeping streams short is the most important modelling practice in Event Sourcing. Closing the Books pattern is the biggest enabler for that. I hope that after this article, you'll know how to implement that effectively using Marten.
 
-There are other options to do it, that I described in [Keep your streams short! Temporal modelling for fast reads and optimal data retention](https://www.eventstore.com/blog/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention) like:
+There are other options to do it, that I described in [Keep your streams short! Temporal modelling for fast reads and optimal data retention](/en/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention/) like:
 - opening periods asynchronously,
 - There may be scenarios where you have multiple open shifts (e.g. cash register in the restaurant used by multiple waiters),
 - you might not be able to get (or even want to have) predictable ids.

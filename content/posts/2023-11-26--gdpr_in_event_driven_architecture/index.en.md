@@ -157,7 +157,7 @@ Want more? Check my talk where I explained that in detail:
 
 `youtube: https://www.youtube.com/watch?v=gG6DGmYKk4I`
 
-Or read my other article [Keep your streams short! Temporal modeling for fast reads and optimal data retention](https://www.eventstore.com/blog/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention).
+Or read my other article [Keep your streams short! Temporal modeling for fast reads and optimal data retention](/en/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention/).
 
 ## Crypto Shredding
 
