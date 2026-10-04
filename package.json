@@ -40,12 +40,12 @@
     "test:redirects": "node ./tests/article-redirects.test.js",
     "test:archive": "node ./tests/architecture-weekly-manifest.test.js",
     "test:import-build": "node ./tests/article-import-build.test.js",
-    "test:cache": "node ./scripts/verify-gatsby-cache.mjs"
+    "test:cache": "node ./scripts/verify-gatsby-cache.mjs",
+    "lint:modern": "eslint --no-eslintrc --config .eslintrc.modern.json --max-warnings 0 gatsby-node.mjs \"scripts/*.mjs\" \"src/i18n/*.{js,mjs,ts,tsx}\" src/layouts/index.js \"src/components/Menu/*.{js,ts,tsx}\" \"src/components/Seo/*.{js,ts,tsx}\" \"src/components/Video/*.{js,ts,tsx}\" \"src/components/VideoGallery/*.{js,ts,tsx}\" \"src/components/Search/*.{js,ts,tsx}\" src/components/Post/Related.js src/templates/CategoryTemplate.js import/code-languages.mjs"
   },
   "dependencies": {
     "@ant-design/compatible": "^1.0.8",
     "@babel/core": "^7.29.7",
-    "@gatsbyjs/reach-router": "^2.0.1",
     "@weknow/gatsby-remark-twitter": "^0.2.3",
     "antd": "^4.16.12",
     "disqus-react": "^1.1.7",
@@ -55,7 +55,6 @@
     "gatsby-plugin-catch-links": "^5.16.0",
     "gatsby-plugin-feed": "^5.16.0",
     "gatsby-plugin-google-tagmanager": "^5.16.0",
-    "gatsby-plugin-i18n": "^1.0.1",
     "gatsby-plugin-image": "^3.16.0",
     "gatsby-plugin-layout": "^4.16.0",
     "gatsby-plugin-manifest": "^5.16.0",
@@ -89,7 +88,6 @@
     "react-facebook": "^8.1.4",
     "react-i18next": "^11.11.4",
     "react-icons": "^4.2.0",
-    "react-instantsearch": "^6.12.1",
     "react-obfuscate": "^3.6.8",
     "react-share": "^5.3.0",
     "react-visibility-sensor": "^5.1.1",
@@ -156,6 +154,9 @@
     "vitest": "^5.0.1",
     "webpack-bundle-analyzer": "^4.4.2",
     "postcss-preset-env": "6.7.0",
-    "svg-react-loader": "0.4.6"
+    "svg-react-loader": "0.4.6",
+    "@babel/eslint-parser": "7.29.9",
+    "@typescript-eslint/parser": "5.62.0",
+    "eslint-plugin-react-hooks": "4.6.2"
   }
 }

@@ -25,11 +25,13 @@ export function codeLanguage(code, supplied = "", fallback = "") {
   if (fallback) return fallback;
   const text = code.trim();
   try {
-    if (/^[\[{]/.test(text)) {
+    if (/^[[{]/.test(text)) {
       JSON.parse(text);
       return "json";
     }
-  } catch {}
+  } catch {
+    // A JSON-shaped example may be another language; continue inference.
+  }
   if (/^\s*public\s+(?:static |async )?(?:void|Task(?:<[^>]*>)?)\s+[A-Z]\w+\(/m.test(text))
     return "csharp";
   if (

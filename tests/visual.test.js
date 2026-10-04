@@ -348,3 +348,65 @@ test("imported TypeScript examples display syntax colors", async () => {
     expect(colors.keyword).not.toBe(colors.code);
   } finally { await page.close(); }
 }, 60_000);
+
+for (const language of ["en", "pl"]) {
+  test(`${language} search renders results through the retained DOM integration`, async () => {
+    const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
+    const searches = [];
+    const title = language === "pl" ? "Wprowadzenie do Event Sourcing" : "Event Sourcing introduction";
+    try {
+      // Supply public test settings only to client navigation; no production
+      // credentials or index writes are needed to exercise the search UI.
+      await page.route(`**/page-data/${language}/search/page-data.json`, async route => {
+        const response = await route.fetch();
+        const data = await response.json();
+        data.result.data.site.siteMetadata.algolia = {
+          appId: "G5LOCALTEST",
+          searchOnlyApiKey: "local-search-test",
+          indexName: "local-search-test",
+        };
+        await route.fulfill({ response, json: data });
+      });
+      await page.route(/https:\/\/[^/]*\.algolia(?:\.net|net\.com)\//, async route => {
+        // Algolia sends JSON with a form content type to avoid a preflight.
+        const body = JSON.parse(route.request().postData());
+        const results = body.requests.map(request => {
+          const params = new URLSearchParams(request.params);
+          searches.push({ query: params.get("query"), filters: params.get("filters") });
+          const hits = params.get("query") ? [{
+            objectID: "local-search-result",
+            title,
+            path: `/${language}/introduction_to_event_sourcing/`,
+            source: "posts",
+            category: ["Event Sourcing", "CQRS"],
+            date: "2026-10-04",
+            content: "Events preserve business history.",
+            _highlightResult: { title: { value: title, matchLevel: "none" } },
+            _snippetResult: { content: { value: "Events preserve business history.", matchLevel: "none" } },
+          }] : [];
+          return { hits, nbHits: hits.length, page: 0, nbPages: hits.length, hitsPerPage: 10,
+            processingTimeMS: 1, exhaustiveNbHits: true, query: params.get("query") || "" };
+        });
+        await route.fulfill({ json: { results } });
+      });
+      await page.goto(new URL(`/${language}/articles/`, baseUrl).href);
+      await page.locator(`nav a[href="/${language}/search/"]`).first().click();
+      await page.waitForURL(`**/${language}/search/`);
+      const input = page.getByPlaceholder(language === "pl" ? "Szukaj" : "Search", { exact: true });
+      await input.waitFor({ state: "visible" });
+      expect(await page.locator(".search-message").innerText())
+        .toBe(language === "pl" ? "Wpisz wyszukiwaną frazę." : "Start typing to search.");
+      await input.fill("events");
+      const result = page.locator(".search-hit");
+      await result.waitFor({ state: "visible" });
+      expect(await result.locator("h2").innerText()).toBe(title);
+      expect(await result.locator("a").getAttribute("href"))
+        .toBe(`/${language}/introduction_to_event_sourcing/`);
+      expect(await result.locator(".search-hit-meta").innerText())
+        .toBe(`${language === "pl" ? "Artykuł" : "Article"} · Event Sourcing · CQRS · 2026-10-04`.toUpperCase());
+      expect(await result.locator(".search-hit-snippet").innerText()).toBe("Events preserve business history.");
+      expect(searches.some(search => search.query === "events" && search.filters === `langKey:${language}`))
+        .toBe(true);
+    } finally { await page.close(); }
+  }, 60_000);
+}

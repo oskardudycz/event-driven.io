@@ -138,7 +138,7 @@ Reposting is not automatically harmful, but publishing identical full articles i
 
 ### P3 — larger engineering work
 
-- Upgrade Gatsby in controlled stages using the migration plan below. The current baseline is Gatsby 5.16.1, React 18.3.1, Node 24 and Yarn 1. Earlier migration checkpoints below are historical.
+- Continue Gatsby 5 modernization from the completed runtime migration. The current baseline is Gatsby 5.16.1, React 18.3.1, Node 24 and Yarn 1. Earlier migration checkpoints below are historical.
 - Revisit the global CSS and JavaScript payload after measuring production coverage. Ant Design remains necessary for the contact form but should not leak into unrelated routes.
 - Consider archive pagination if the topic and article indexes grow enough to create large HTML pages.
 - Expand the automated SEO assertions when new page types or indexing rules are introduced.
@@ -271,9 +271,9 @@ The local skip flag prevents a build from changing the production search index. 
 
 ## Gatsby 5 modernization before CSS redesign — 2026-10-04
 
-The build review in `docs/gatsby-5-review.md` is incorporated here. Verified locally: Gatsby Head replaces React Helmet; cards use gatsby-plugin-image; route creation queries only routing metadata; Prism aliases and Browserslist are updated; YouTube uses the maintained embed plugin with a timestamp/referrer adapter. All 96 requested articles have English and Polish files. The current verified output is 694 routes, 222 redirects, 399 sitemap URLs, and nine browser checks. Historical counts above describe earlier checkpoints, not the current release. CI/deployment and live Algolia verification remain separate pending checks.
+The build review in `docs/gatsby-5-review.md` is incorporated here. Verified locally: Gatsby Head replaces React Helmet; cards use gatsby-plugin-image; route creation queries only routing metadata; Prism aliases and Browserslist are updated; YouTube uses the maintained embed plugin with a timestamp/referrer adapter. All 96 requested articles have English and Polish files. The current verified output is 694 routes, 222 redirects, 399 sitemap URLs, and twelve browser checks. Historical counts above describe earlier checkpoints, not the current release. CI/deployment and live Algolia verification remain separate pending checks.
 
-Implementation sequence: replace layout StaticQuery with useStaticQuery; clean up listeners, timers and font callbacks; convert Node hooks to native ESM (.mjs) and remove runtime Babel registration; remove proven-unused dependencies and declare direct imports; define nullable frontmatter/routing GraphQL types; cache Yarn and compatible Gatsby outputs in CI; measure cold/warm queries and validate modified/deleted content with warm caches. Preserve appearance, URLs, feeds, metadata and screenshot tolerances. Record verification in todo.md.
+Completed local implementation sequence: replace layout StaticQuery with useStaticQuery; clean up listeners, timers and font callbacks; convert Node hooks to native ESM (.mjs) and remove runtime Babel registration; remove proven-unused dependencies and declare direct imports; define nullable frontmatter/routing GraphQL types; cache Yarn and compatible Gatsby outputs in CI; measure cold/warm queries and validate modified/deleted content with warm caches. Preserve appearance, URLs, feeds, metadata and screenshot tolerances. Record verification in todo.md.
 
 Tailwind, semantic theme variables, dark mode, Slices, npm migration and visual redesign are deferred. Keep React 18, Yarn and static generation. Earlier restrictions on optional image/Head/testing modernization have been superseded by the completed work and this sequence. No deployment or third-party indexing is part of this pass.
 
@@ -289,3 +289,10 @@ Imported code fences must retain source syntax metadata, infer clear language pa
 All listed local modernization tasks are complete: useStaticQuery/lifecycle cleanup, native ESM Node hooks, dependency audit, explicit types, compatible CI caching and action updates. Local frozen install, production build, full tests and 12 browser checks pass. Existing output contracts and screenshot tolerances are preserved. Warm-build verification covers modified/deleted/restored content without publishing a test fixture. Cold/warm builds measured 124.73/28.16 seconds locally; final content build passed in 54.39 seconds. CI execution and deployment are still separate release checks.
 
 The requested article-navigation/category fixes, social profile changes, README reading-order guidance and imported highlighting/cross-links are also verified. JavaScript/js snippet language tags use TypeScript throughout the blog and in future imports; snippet code is unchanged. Polish Event Sourcing shows its six translations plus 82 canonical-English placeholders. See todo.md for current verification evidence and pending external checks.
+
+
+### Next pre-redesign pass — legacy routing and lint guardrails
+
+Audit the overlapping gatsby-plugin-i18n hooks against the site's native localization hooks. Remove the plugin only if the exact route/redirect/feed/sitemap contract and English/Polish browser checks pass. Preserve the active react-i18next provider, search UI, and comments. Remove unused direct routing and InstantSearch umbrella dependencies after checking source/configuration/scripts; retain directly used react-instantsearch-dom and Algolia APIs.
+
+Establish a separate correctness-focused ESLint baseline for the modern modules, using native ESM/JSX parsing and React hook checks. Include a TypeScript parser for incremental adoption, without converting the whole project or enforcing legacy formatting. Run the baseline in CI; retain the existing full-project lint command and its documented backlog. Expand the explicit baseline as files are modernized. CSS, Tailwind, dark mode, Slices, search API upgrades and deployment remain separate work.
