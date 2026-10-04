@@ -6,6 +6,10 @@ author: oskar dudycz
 related:
   - how_to_slice_the_codebase_effectively
   - vertical_slices_in_practice
+redirectFrom: /vertical-slices-and-dependencies/
+redirectAliases:
+  - /vertical-slices-their-ownership-and/
+  - /en/vertical-slices-their-ownership-and/
 ---
 
 ![cover](2026-08-10-cover.png)

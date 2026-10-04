@@ -3,6 +3,7 @@ title: Throw, Result, or neither?
 category: "Event Sourcing"
 cover: 2026-07-20-cover.jpg
 author: oskar dudycz
+redirectFrom: /throw-result-or-neither/
 ---
 
 ![cover](./2026-07-20-cover.jpg)

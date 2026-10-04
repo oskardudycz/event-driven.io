@@ -99,6 +99,7 @@ export const createPages = ({ graphql, actions }) => {
                     categories
                     related
                     redirectFrom
+                    redirectAliases
                     useDefaultLangCanonical
                     cover {
                       childImageSharp {
@@ -237,14 +238,19 @@ export const createPages = ({ graphql, actions }) => {
             const source = node.fields.source;
             const path = `/${langKey}${slug}`;
 
-            if (langKey === "en" && node.frontmatter.redirectFrom) {
-              createRedirect({
-                fromPath: node.frontmatter.redirectFrom,
+            if (langKey === "en") {
+              const aliases = new Set([
+                node.frontmatter.redirectFrom,
+                ...(node.frontmatter.redirectAliases || []),
+              ].filter(Boolean));
+              aliases.delete(path);
+              aliases.forEach((fromPath) => createRedirect({
+                fromPath,
                 toPath: path,
                 isPermanent: true,
                 statusCode: 301,
                 redirectInBrowser: process.env.NODE_ENV === "development",
-              });
+              }));
             }
 
             createPage({

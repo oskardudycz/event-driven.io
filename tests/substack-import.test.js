@@ -123,6 +123,9 @@ test("custom import slugs also receive a bare-path redirect", async () => {
     const markdown = await fs.readFile(path.join(dir, "index.en.md"), "utf8");
     assert.match(dir, /--custom-slug$/);
     assert.match(markdown, /redirectFrom: \/custom-slug\//);
+    assert.deepEqual(yaml.load(markdown.split('---')[1]).redirectAliases, ['/example/', '/en/example/']);
+    const polish = await fs.readFile(path.join(dir, 'index.pl.md'), 'utf8');
+    assert.equal(yaml.load(polish.split('---')[1]).redirectAliases, undefined);
   } finally { await fs.rm(output, { recursive: true, force: true }); }
 });
 
@@ -150,5 +153,44 @@ test("Kurrent SVG diagrams stay local, covers become PNG and code keeps its lang
     assert.equal(cover.format, "png");
     assert.equal(cover.width, 1200);
     assert.equal(await fs.readFile(path.join(dir, "image-2.svg"), "utf8"), svg);
+  } finally { await fs.rm(output, { recursive: true, force: true }); }
+});
+
+test("webinar overrides add the native recording and replace only mapped recording cards", async () => {
+  const output = await fs.mkdtemp(path.join(os.tmpdir(), "webinar-test-"));
+  const recording = "https://www.architecture-weekly.com/p/frontent-architecture-backend-architecture";
+  const page = `<meta property="og:title" content="A webinar"><meta property="article:published_time" content="2025-01-01">
+    <video src="https://substack.com/native-player.mp4"></video><div class="body markup">
+    <p>Original introduction.</p><div class="embedded-post-wrap"><a href="${recording}?utm_source=email"><img src="https://example.com/recording-thumbnail.png">Listen now</a></div>
+    <p>Related <a href="https://another.substack.com/p/other">article</a>.</p>
+    <iframe src="https://www.youtube.com/embed/7IkHIqPeFjY"></iframe><p>Original ending.</p></div>`;
+  try {
+    const dir = await importPost({ url: source, youtubeVideo: "MLO08iaRvBk", recordingEmbeds: { [recording]: "EXj9TTJQwNc" } }, {
+      output, html: page, download: async (url) => { throw new Error(`Unexpected image download: ${url}`); },
+    });
+    const en = await fs.readFile(path.join(dir, "index.en.md"), "utf8");
+    const pl = await fs.readFile(path.join(dir, "index.pl.md"), "utf8");
+    assert.equal(en.split('---\n\n')[1], pl.split('---\n\n')[1]);
+    for (const id of ["MLO08iaRvBk", "EXj9TTJQwNc", "7IkHIqPeFjY"]) assert.equal(en.split(`/embed/${id}`).length - 1, 1);
+    assert.match(en, /Original introduction/);
+    assert.match(en, /Original ending/);
+    assert.match(en, /\[article\]\(https:\/\/another.substack.com\/p\/other\)/);
+    assert.doesNotMatch(en, /recording-thumbnail|Listen now|native-player/);
+    const metadata = JSON.parse(await fs.readFile(path.join(dir, 'substack-source.txt')));
+    assert.equal(metadata.embeds, 3);
+    assert.equal(metadata.youtubeVideo, "MLO08iaRvBk");
+  } finally { await fs.rm(output, { recursive: true, force: true }); }
+});
+
+test("recording overrides preserve existing players without adding duplicates", async () => {
+  const output = await fs.mkdtemp(path.join(os.tmpdir(), "webinar-duplicate-"));
+  try {
+    const page = html.replace("/embed/abc?start=30", "/embed/0NYwN_p2pFI?start=30");
+    const dir = await importPost({ url: source, youtubeVideo: "0NYwN_p2pFI" }, { output, html: page, download: async () => new Response(png) });
+    const en = await fs.readFile(path.join(dir, "index.en.md"), "utf8");
+    assert.equal(en.split('/embed/0NYwN_p2pFI').length - 1, 1);
+    assert.match(en, /start=30/);
+    await assert.rejects(importPost({ url: source, slug: "invalid-recording", youtubeVideo: 'bad" onload="oops' }, { output, html }), /Invalid YouTube/);
+    assert.deepEqual(await fs.readdir(output), [path.basename(dir)]);
   } finally { await fs.rm(output, { recursive: true, force: true }); }
 });

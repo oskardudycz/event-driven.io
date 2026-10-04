@@ -75,6 +75,7 @@ function extractPost(html, source) {
     $, body, title, date: new Date(published).toISOString().slice(0, 10),
     cover: $("#blog-post-content").length ? $("article img").first().attr("src") :
       $("meta[property='og:image']").attr("content") || body.find("img").first().attr("src"),
+    coverIsBodyFallback: !$("#blog-post-content").length && !$("meta[property='og:image']").attr("content"),
   };
 }
 
@@ -96,8 +97,57 @@ function imageExtension(bytes) {
   throw new Error("Unsupported image format or non-image download (expected JPEG, PNG, GIF, WebP or SVG)");
 }
 
-async function convertPost(post, source, directory, download = request) {
+function youtubeId(value) {
+  if (!/^[a-zA-Z0-9_-]{11}$/.test(value)) throw new Error(`Invalid YouTube video ID: ${value}`);
+  return value;
+}
+
+function applyRecordingEmbeds(post, source, entry) {
   const { $, body } = post;
+  const present = new Set();
+  body.find("iframe[src]").each((_, node) => {
+    const url = new URL($(node).attr("src"), sourceLocation(source).base);
+    if (/^(www\.)?(youtube\.com|youtube-nocookie\.com)$/.test(url.hostname)) {
+      const id = url.pathname.match(/^\/embed\/([^/]+)/)?.[1];
+      if (id) present.add(id);
+    }
+  });
+  const player = (id) => $("<iframe>").attr({
+    src: `https://www.youtube-nocookie.com/embed/${youtubeId(id)}`,
+    title: "Webinar recording", width: "728", height: "409",
+    allow: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
+    allowfullscreen: "true", referrerpolicy: "strict-origin-when-cross-origin",
+  });
+  if (entry.youtubeVideo && !present.has(youtubeId(entry.youtubeVideo))) {
+    body.prepend(player(entry.youtubeVideo));
+    present.add(entry.youtubeVideo);
+  }
+  const replacements = new Map(Object.entries(entry.recordingEmbeds || {}).map(([url, id]) => [normalizeUrl(url), youtubeId(id)]));
+  body.find("a[href]").each((_, node) => {
+    const link = $(node);
+    let url;
+    try { url = normalizeUrl(new URL(link.attr("href"), sourceLocation(source).base).href); }
+    catch { return; }
+    const id = replacements.get(url);
+    if (!id) return;
+    const card = link.closest(".embedded-post-wrap, figure, .captioned-image-container");
+    if (card.length) {
+      card.replaceWith(present.has(id) ? "" : player(id));
+    } else {
+      const paragraph = link.closest("p, li");
+      if (!present.has(id)) (paragraph.length ? paragraph : link).after(player(id));
+      link.replaceWith(link.contents().filter((_, child) => child.type !== "tag" || child.name !== "img"));
+    }
+    present.add(id);
+  });
+  if (post.coverIsBodyFallback) post.cover = body.find("img").first().attr("src");
+}
+
+async function convertPost(post, source, directory, download = request, entry = {}) {
+  const { $, body } = post;
+  // Replace recording thumbnails before downloading images; Substack's native
+  // player often lives outside the article body and needs an explicit mapping.
+  applyRecordingEmbeds(post, source, entry);
   const location = sourceLocation(source);
   const assets = new Map();
   async function saveImage(input, isCover = false) {
@@ -194,7 +244,8 @@ async function importPost(entry, options = {}) {
   const download = options.download || request;
   const html = options.html || await (await download(source)).text();
   const post = extractPost(html, source);
-  const slug = entry.slug || new URL(sourceLocation(source).base).pathname.split("/").pop();
+  const sourceSlug = new URL(sourceLocation(source).base).pathname.split("/").pop();
+  const slug = entry.slug || sourceSlug;
   if (!/^[a-z0-9][a-z0-9_-]*$/.test(slug)) throw new Error(`Invalid slug: ${slug}`);
   const root = options.output || postsDirectory;
   const destination = path.join(root, `${post.date}--${slug}`);
@@ -205,14 +256,17 @@ async function importPost(entry, options = {}) {
   }
   const staging = await fs.mkdtemp(path.join(root, ".substack-import-"));
   try {
-    const converted = await convertPost(post, source, staging, download);
+    const converted = await convertPost(post, source, staging, download, entry);
     for (const language of ["en", "pl"]) {
       const frontmatter = {
         title: post.title,
         category: entry.category || "Software Architecture",
         ...(converted.cover ? { cover: converted.cover } : {}),
         author: "oskar dudycz",
-        ...(language === "en" ? { redirectFrom: `/${slug}/` } : {}),
+        ...(language === "en" ? {
+          redirectFrom: `/${slug}/`,
+          ...(slug !== sourceSlug ? { redirectAliases: [`/${sourceSlug}/`, `/en/${sourceSlug}/`] } : {}),
+        } : {}),
         ...(language === "pl" ? { useDefaultLangCanonical: true } : {}),
       };
       await fs.writeFile(path.join(staging, `index.${language}.md`), `---\n${yaml.dump(frontmatter, { lineWidth: -1 })}---\n\n${converted.markdown}\n`);
@@ -222,6 +276,8 @@ async function importPost(entry, options = {}) {
     await fs.writeFile(path.join(staging, provenance), `${JSON.stringify({
       url: source, ...(sourceLocation(source).archive ? { originalUrl: sourceLocation(source).base } : {}),
       date: post.date, assets: converted.assets, embeds: converted.embeds,
+      ...(entry.youtubeVideo ? { youtubeVideo: entry.youtubeVideo } : {}),
+      ...(entry.recordingEmbeds ? { recordingEmbeds: entry.recordingEmbeds } : {}),
     }, null, 2)}\n`);
     await fs.rename(staging, destination);
     console.log(`Imported ${post.title}\n  ${destination} (${Object.keys(converted.assets).length} images, ${converted.embeds} embeds)`);

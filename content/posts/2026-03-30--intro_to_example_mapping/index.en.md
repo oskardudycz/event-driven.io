@@ -3,6 +3,10 @@ title: The one where Oskar explains Example Mapping
 category: "Software Architecture"
 cover: 2026-03-30-cover.png
 author: oskar dudycz
+redirectFrom: /intro_to_example_mapping/
+redirectAliases:
+  - /the-one-where-oskar-explains-example/
+  - /en/the-one-where-oskar-explains-example/
 ---
 
 ![cover](2026-03-30-cover.png)

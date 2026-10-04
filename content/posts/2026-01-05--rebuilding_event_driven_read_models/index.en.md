@@ -3,6 +3,10 @@ title: Rebuilding Event-Driven Read Models in a safe and resilient way
 category: "Event-Driven Architecture"
 cover: 2026-01-05-cover.png
 author: oskar dudycz
+redirectFrom: /rebuilding_event_driven_read_models/
+redirectAliases:
+  - /rebuilding-event-driven-read-models/
+  - /en/rebuilding-event-driven-read-models/
 ---
 
 ![cover](2026-01-05-cover.png)

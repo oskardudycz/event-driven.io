@@ -12,18 +12,26 @@ test("imported bare paths redirect permanently to English before the catch-all",
   try {
     const root = path.resolve(__dirname, "../content/posts");
     const names = await fs.readdir(root);
-    const entries = [...require("../import/substack-posts.json"), ...require("../import/eventstore-posts.json")];
+    const archive = require("../import/architecture-weekly-audit.json").posts.filter((post) => post.status === "existing");
+    const entries = [...archive, ...require("../import/eventstore-posts.json")];
     const nodes = [];
     const expected = [];
     for (const entry of entries) {
-      const slug = entry.slug || entry.url.replace(/\/$/, "").split("/").pop();
-      const name = names.find((name) => name.endsWith(`--${slug}`));
+      const slug = entry.directory?.split("--")[1] || entry.slug || entry.url.replace(/\/$/, "").split("/").pop();
+      const name = entry.directory || names.find((name) => name.endsWith(`--${slug}`));
       assert(name, `Missing imported article: ${slug}`);
       expected.push(`/${slug}/ /en/${slug}/ 301`);
       for (const lang of ["en", "pl"]) {
         const markdown = await fs.readFile(path.join(root, name, `index.${lang}.md`), "utf8");
         const frontmatter = yaml.load(markdown.split("---")[1]);
         assert.equal(frontmatter.redirectFrom, lang === "en" ? `/${slug}/` : undefined);
+        if (lang === "en") {
+          for (const alias of frontmatter.redirectAliases || []) expected.push(`${alias} /en/${slug}/ 301`);
+          const sourceSlug = entry.url.replace(/\/$/, "").split("/").pop();
+          assert([frontmatter.redirectFrom, ...(frontmatter.redirectAliases || [])].includes(`/${sourceSlug}/`));
+        }
+        // This test concerns redirects; related content is verified by the SEO tests.
+        frontmatter.related = [];
         nodes.push({ node: {
           id: `${lang}-${slug}`, frontmatter,
           fields: { slug: `/${slug}/`, langKey: lang, source: "posts" },
@@ -42,7 +50,7 @@ test("imported bare paths redirect permanently to English before the catch-all",
       assert.match(query, /redirectFrom/);
       return { data: { allMarkdownRemark: { edges: nodes } } };
     } });
-    assert.equal(redirects.length, entries.length);
+    assert.equal(redirects.length, expected.length);
     for (const redirect of redirects) {
       assert.equal(redirect.isPermanent, true);
       assert.equal(redirect.statusCode, 301);

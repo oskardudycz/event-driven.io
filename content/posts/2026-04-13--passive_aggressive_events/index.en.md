@@ -3,6 +3,10 @@ title: Anti-patterns in event modelling - Passive-Aggressive Events
 category: "Event Sourcing"
 cover: 2026-04-13-cover.png
 author: oskar dudycz
+redirectFrom: /passive_aggressive_events/
+redirectAliases:
+  - /passive-aggresive-event/
+  - /en/passive-aggresive-event/
 ---
 
 ![cover](2026-04-13-cover.png)

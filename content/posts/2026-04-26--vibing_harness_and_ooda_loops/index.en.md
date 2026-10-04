@@ -3,6 +3,10 @@ title: Vibing, Harness and OODA loop
 category: "Software Architecture"
 cover: 2026-04-26-cover.png
 author: oskar dudycz
+redirectFrom: /vibing_harness_and_ooda_loops/
+redirectAliases:
+  - /vibing-harness-and-ooda-loop/
+  - /en/vibing-harness-and-ooda-loop/
 ---
 
 ![cover](2026-04-26-cover.png)

@@ -7,6 +7,10 @@ categories:
   - Event-Driven Architecture
 cover: 2025-11-03-cover.png
 author: oskar dudycz
+redirectFrom: /strict_ordering_in_event_handling/
+redirectAliases:
+  - /handling-events-coming-in-an-unknown/
+  - /en/handling-events-coming-in-an-unknown/
 ---
 
 ![](2025-11-03-cover.png)

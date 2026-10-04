@@ -3,6 +3,7 @@ title: How soon is now in PostgreSQL?
 category: "PostgreSQL"
 cover: 2026-05-25-cover.png
 author: oskar dudycz
+redirectFrom: /how-soon-is-now-in-postgresql/
 ---
 
 ![cover](2026-05-25-cover.png)

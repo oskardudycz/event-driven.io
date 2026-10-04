@@ -3,6 +3,10 @@ title: Yoda Principle for better integrations
 category: "Event Sourcing"
 cover: 2026-04-20-cover.png
 author: oskar dudycz
+redirectFrom: /yoda_principle_in_command_design/
+redirectAliases:
+  - /yoda-principle-for-better-integrations/
+  - /en/yoda-principle-for-better-integrations/
 ---
 
 ![cover](2026-04-20-cover.png)

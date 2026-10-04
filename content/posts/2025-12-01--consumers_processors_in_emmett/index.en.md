@@ -3,6 +3,10 @@ title: Consumers, projectors, reactors and all that messaging jazz in Emmett
 category: "Event-Driven Architecture"
 cover: 2025-12-01-cover.jpg
 author: oskar dudycz
+redirectFrom: /consumers_processors_in_emmett/
+redirectAliases:
+  - /consumers-projectors-reactors-and/
+  - /en/consumers-projectors-reactors-and/
 ---
 
 **Did you know that you can build an event store in one hour?** I even did it a few times on the conference stage. Actually, it took me usually around 25 minutes; the rest was mistyping, lame jokes and a bit of explanation. See:

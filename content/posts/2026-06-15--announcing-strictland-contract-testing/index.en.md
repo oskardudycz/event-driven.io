@@ -3,6 +3,10 @@ title: Announcing Strictland - new contract testing library for message compatib
 category: "Testing"
 cover: 2026-06-15-cover.png
 author: oskar dudycz
+redirectFrom: /announcing-strictland-contract-testing/
+redirectAliases:
+  - /announcing-strictland-new-contract/
+  - /en/announcing-strictland-new-contract/
 ---
 
 ![cover](2026-06-15-cover.png)

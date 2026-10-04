@@ -3,6 +3,10 @@ title: You can fork a package, but can you own it?
 category: "Software Architecture"
 cover: 2026-06-08-cover.jpg
 author: oskar dudycz
+redirectFrom: /you-can-fork-a-package-but-can-you-own-it/
+redirectAliases:
+  - /you-can-fork-a-package-but-can-you/
+  - /en/you-can-fork-a-package-but-can-you/
 ---
 
 ![cover](2026-06-08-cover.jpg)
