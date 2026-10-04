@@ -1,8 +1,7 @@
 import FontFaceObserver from "fontfaceobserver";
 import PropTypes from "prop-types";
 import React from "react";
-import { graphql, StaticQuery, withPrefix } from "gatsby";
-import { Helmet } from "react-helmet";
+import { graphql, StaticQuery } from "gatsby";
 
 import { getScreenWidth, timeoutThrottlerHandler } from "../utils/helpers";
 import Footer from "../components/Footer/";
@@ -117,9 +116,6 @@ class Layout extends React.Component {
               <FontLoadedContext.Provider value={this.state.font400loaded}>
                 <ScreenWidthContext.Provider value={this.state.screenWidth}>
                   <React.Fragment>
-                    <Helmet>
-                      <link rel="stylesheet" href={withPrefix("/fonts/open-sans/index.css")} />
-                    </Helmet>
                     <Header
                       path={this.props.location.pathname}
                       pages={pages}

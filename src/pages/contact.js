@@ -4,7 +4,7 @@ import { graphql } from "gatsby";
 import { ThemeContext } from "../layouts";
 import Article from "../components/Article";
 import Headline from "../components/Article/Headline";
-import Seo from "../components/Seo";
+import { createHead } from "../components/Seo";
 import { useTranslation } from "react-i18next";
 
 const ContactPage = (props) => {
@@ -49,13 +49,6 @@ const ContactPage = (props) => {
           </Article>
         )}
       </ThemeContext.Consumer>
-
-      <Seo
-        facebook={facebook}
-        title={t("contact.seoTitle")}
-        description={t("contact.description")}
-        schemaType="ContactPage"
-      />
     </React.Fragment>
   );
 };
@@ -78,3 +71,6 @@ export const query = graphql`
     }
   }
 `;
+
+
+export const Head = createHead(({ t }) => ({ title: t("contact.seoTitle"), description: t("contact.description"), schemaType: "ContactPage" }));

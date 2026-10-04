@@ -4,7 +4,7 @@ import { graphql } from "gatsby";
 import { ThemeContext } from "../layouts";
 import Blog from "../components/Blog";
 import Hero from "../components/Hero";
-import Seo from "../components/Seo";
+import { createHead } from "../components/Seo";
 import { withTranslation } from "react-i18next";
 
 class IndexPage extends React.Component {
@@ -82,8 +82,6 @@ class IndexPage extends React.Component {
             </section>
           )}
         </ThemeContext.Consumer>
-
-        <Seo facebook={facebook} />
       </React.Fragment>
     );
   }
@@ -161,3 +159,6 @@ export const query = graphql`
 `;
 
 //hero-background
+
+
+export const Head = createHead();

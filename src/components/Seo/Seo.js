@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Helmet from "react-helmet";
+import { withPrefix } from "gatsby";
+import i18next from "i18next";
+import { DEFAULT_OPTIONS } from "../../i18n/constants";
 import config from "../../../content/meta/config";
-import { useTranslation } from "react-i18next";
-import { usePageContext } from "../../i18n/page-context";
 
 const normalizePath = (path) => {
   const pathWithoutSlashes = (path || "").replace(/^\/+|\/+$/g, "");
@@ -13,15 +13,28 @@ const normalizePath = (path) => {
 const absoluteUrl = (host, path) =>
   path && path.startsWith("http") ? path : `${host}${path || ""}`;
 
+// Head renders outside wrapPageElement. Use its explicit page context and a
+// fixed-language translator so parallel SSR and navigation cannot mix locales.
+const headI18n = i18next.createInstance();
+headI18n.init({ ...DEFAULT_OPTIONS.i18nextConfig, initImmediate: false });
+
+export const createHead = (options = {}) => function Head({ data = {}, pageContext = {} }) {
+  const context = { ...DEFAULT_OPTIONS, ...pageContext };
+  context.lang = pageContext.lang || DEFAULT_OPTIONS.defaultLanguage;
+  const t = headI18n.getFixedT(context.lang);
+  const seoProps = typeof options === "function" ? options({ data, pageContext: context, t }) : options;
+  return <Seo facebook={data.site?.siteMetadata?.facebook} {...seoProps} pageContext={context} />;
+};
+
 const Seo = (props) => {
-  const { t } = useTranslation();
+  const t = headI18n.getFixedT(props.pageContext.lang);
   const {
     lang,
     originalPath,
     supportedLanguages = [],
     availableLanguages,
     defaultLanguage = "en",
-  } = usePageContext();
+  } = props.pageContext;
 
   const {
     data,
@@ -170,26 +183,19 @@ const Seo = (props) => {
   ];
 
   return (
-    <Helmet
-      htmlAttributes={{ lang }}
-      title={title}
-      meta={metaTags}
-      link={linkTags}
-      script={
-        noIndex
-          ? []
-          : [
-              {
-                type: "application/ld+json",
-                innerHTML: JSON.stringify(structuredData),
-              },
-            ]
-      }
-    />
+    <React.Fragment>
+      <html lang={lang} />
+      <title id="page-title">{title}</title>
+      <link rel="stylesheet" href={withPrefix("/fonts/open-sans/index.css")} id="site-fonts" />
+      {metaTags.map((tag) => <meta key={tag.name || tag.property} {...tag} id={`meta-${tag.name || tag.property}`} />)}
+      {linkTags.map((tag) => <link key={tag.hrefLang || tag.rel} {...tag} id={`link-${tag.hrefLang || tag.rel}`} />)}
+      {!noIndex && <script type="application/ld+json" id="page-schema" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }} />}
+    </React.Fragment>
   );
 };
 
 Seo.propTypes = {
+  pageContext: PropTypes.object.isRequired,
   data: PropTypes.object,
   facebook: PropTypes.object,
   meta: PropTypes.array,

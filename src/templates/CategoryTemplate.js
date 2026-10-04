@@ -2,7 +2,7 @@ import { FaTag } from "react-icons/fa/";
 import PropTypes from "prop-types";
 import React from "react";
 import { graphql } from "gatsby";
-import Seo from "../components/Seo";
+import { createHead } from "../components/Seo";
 import { ThemeContext } from "../layouts";
 import Article from "../components/Article";
 import Headline from "../components/Article/Headline";
@@ -128,12 +128,6 @@ const CategoryTemplate = (props) => {
           </Article>
         )}
       </ThemeContext.Consumer>
-
-      <Seo
-        title={t("categories.seoTitle", { category })}
-        description={categoryDescription || t("categories.defaultDescription", { category })}
-        schemaType="CollectionPage"
-      />
     </React.Fragment>
   );
 };
@@ -169,3 +163,6 @@ export const query = graphql`
     }
   }
 `;
+
+
+export const Head = createHead(({ pageContext, t }) => ({ title: t("categories.seoTitle", { category: pageContext.category }), description: pageContext.categoryDescription || t("categories.defaultDescription", { category: pageContext.category }), schemaType: "CollectionPage" }));

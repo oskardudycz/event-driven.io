@@ -6,7 +6,7 @@ require("core-js/fn/array/find");
 import Article from "../components/Article";
 import Search from "../components/Search";
 import { ThemeContext } from "../layouts";
-import Seo from "../components/Seo";
+import { createHead } from "../components/Seo";
 
 import AlgoliaIcon from "!svg-react-loader!../images/svg-icons/search-by-algolia.svg?name=AlgoliaLogo";
 
@@ -32,8 +32,6 @@ const SearchPage = props => {
           </Article>
         )}
       </ThemeContext.Consumer>
-
-      <Seo facebook={facebook} title="Search" noIndex />
 
       {/* --- STYLES --- */}
       <style jsx>{`
@@ -73,3 +71,6 @@ export const query = graphql`
     }
   }
 `;
+
+
+export const Head = createHead({ title: "Search", noIndex: true });

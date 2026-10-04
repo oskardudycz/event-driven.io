@@ -16,6 +16,13 @@ test('all 192 requested language pages build with local article links and workin
     for (const language of ['en', 'pl']) {
       const file = path.join(publicRoot, language, slug, 'index.html');
       const $ = cheerio.load(fs.readFileSync(file, 'utf8'));
+      assert.equal($('html').attr('lang'), language, `Wrong document language: ${language}/${slug}`);
+      assert.equal($('head title').length, 1, `Duplicate/missing title: ${language}/${slug}`);
+      assert.equal($('head link[rel=canonical]').length, 1, `Duplicate/missing canonical: ${language}/${slug}`);
+      assert.equal($('head meta[name=description]').length, 1, `Duplicate/missing description: ${language}/${slug}`);
+      const schemas = $('head script[type="application/ld+json"]');
+      assert.equal(schemas.length, 1, `Duplicate/missing schema: ${language}/${slug}`);
+      assert.equal(JSON.parse(schemas.text())['@type'], 'BlogPosting');
       const body = $('.bodytext');
       assert(body.text().trim().length > 0, `Empty article: ${language}/${slug}`);
       body.find('p, h2').each((_, element) => assert(!isSubscriptionPromotion($(element).text()), `Paid prompt: ${language}/${slug}`));

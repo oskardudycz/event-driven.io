@@ -4,7 +4,7 @@ import { graphql } from "gatsby";
 import { useTranslation } from "react-i18next";
 import { ThemeContext } from "../layouts";
 import Blog from "../components/Blog";
-import Seo from "../components/Seo";
+import { createHead } from "../components/Seo";
 
 const ArticlesPage = (props) => {
   const { t } = useTranslation();
@@ -22,13 +22,6 @@ const ArticlesPage = (props) => {
       <ThemeContext.Consumer>
         {(theme) => <Blog posts={posts} theme={theme} compactTop heading={t("blog.allTitle")} />}
       </ThemeContext.Consumer>
-
-      <Seo
-        facebook={facebook}
-        title={t("blog.allTitle")}
-        description={t("blog.allIntro")}
-        schemaType="CollectionPage"
-      />
     </React.Fragment>
   );
 };
@@ -86,3 +79,6 @@ export const query = graphql`
     }
   }
 `;
+
+
+export const Head = createHead(({ t }) => ({ title: t("blog.allTitle"), description: t("blog.allIntro"), schemaType: "CollectionPage" }));

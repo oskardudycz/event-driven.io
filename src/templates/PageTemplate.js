@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { graphql } from "gatsby";
-import Seo from "../components/Seo";
+import { createHead } from "../components/Seo";
 import Article from "../components/Article";
 import Page from "../components/Page";
 import { ThemeContext } from "../layouts";
@@ -25,13 +25,6 @@ const PageTemplate = (props) => {
           </Article>
         )}
       </ThemeContext.Consumer>
-
-      <Seo
-        data={page}
-        facebook={facebook}
-        useDefaultLangCanonical={page.frontmatter.useDefaultLangCanonical}
-        noIndex={page.fields.slug === "/success/"}
-      />
     </React.Fragment>
   );
 };
@@ -77,3 +70,6 @@ export const pageQuery = graphql`
     }
   }
 `;
+
+
+export const Head = createHead(({ data }) => ({ data: data.page, useDefaultLangCanonical: data.page.frontmatter.useDefaultLangCanonical, noIndex: data.page.fields.slug === "/success/" }));
