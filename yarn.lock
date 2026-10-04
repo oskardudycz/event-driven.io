@@ -253,7 +253,7 @@
     json5 "^2.2.3"
     semver "^6.3.1"
 
-"@babel/eslint-parser@^7.19.1":
+"@babel/eslint-parser@7.29.9", "@babel/eslint-parser@^7.19.1":
   version "7.29.9"
   resolved "https://registry.yarnpkg.com/@babel/eslint-parser/-/eslint-parser-7.29.9.tgz#48005ed01026fd31875257d504d7186ccb591484"
   integrity sha512-GmrJTAtiRbNip+eKFqeuSvoHMJhKlH36j8U0yE3Gqn45B+SIO7NvsEiHtsmzkBqV1hLSMqYr41dI1aZLTkJ37g==
@@ -4397,7 +4397,7 @@
     semver "^7.3.7"
     tsutils "^3.21.0"
 
-"@typescript-eslint/parser@^5.60.1":
+"@typescript-eslint/parser@5.62.0", "@typescript-eslint/parser@^5.60.1":
   version "5.62.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-5.62.0.tgz#1b63d082d849a2fcae8a569248fbe2ee1b8a56c7"
   integrity sha512-VlJEV0fOQ7BExOsHYAGrgbEiZoi8D+Bl2+f6V2RrXerRSylnp+ZBHmPvaIa8cz0Ajx7WO7Z5RqfgYg7ED1nRhA==
@@ -4823,7 +4823,7 @@ algoliasearch-helper@^3.5.3:
   dependencies:
     events "^1.1.1"
 
-algoliasearch@4.10.3, "algoliasearch@>= 3.27.1 < 5", algoliasearch@^4.9.1:
+algoliasearch@4.10.3, algoliasearch@^4.9.1:
   version "4.10.3"
   resolved "https://registry.npmjs.org/algoliasearch/-/algoliasearch-4.10.3.tgz"
   integrity sha512-OLY0AWlPKGLbSaw14ivMB7BT5fPdp8VdzY4L8FtzZnqmLKsyes24cltGlf7/X96ACkYEcT390SReCDt/9SUIRg==
@@ -9123,7 +9123,7 @@ eslint-plugin-prettier@^3.4.1:
   dependencies:
     prettier-linter-helpers "^1.0.0"
 
-eslint-plugin-react-hooks@^4.6.0:
+eslint-plugin-react-hooks@4.6.2, eslint-plugin-react-hooks@^4.6.0:
   version "4.6.2"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-4.6.2.tgz#c829eb06c0e6f484b3fbb85a97e57784f328c596"
   integrity sha512-QzliNJq4GinDBcD8gPB5v0wh6g8q3SUi6EFF0x8N/BL9PoVs0atuGc47ozMRyOWAKdwaZ5OnbOEa3WR+dSGKuQ==
@@ -10132,11 +10132,6 @@ folder-walker@^3.2.0:
   dependencies:
     from2 "^2.1.0"
 
-folktale@^2.0.1:
-  version "2.3.2"
-  resolved "https://registry.npmjs.org/folktale/-/folktale-2.3.2.tgz"
-  integrity sha512-+8GbtQBwEqutP0v3uajDDoN64K2ehmHd0cjlghhxh0WpcfPzAIjPA03e1VvHlxL02FVGR0A6lwXsNQKn3H1RNQ==
-
 follow-redirects@^1.0.0:
   version "1.14.8"
   resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.14.8.tgz"
@@ -10540,15 +10535,6 @@ gatsby-plugin-google-tagmanager@^5.16.0:
   dependencies:
     "@babel/runtime" "^7.20.13"
     web-vitals "^1.1.2"
-
-gatsby-plugin-i18n@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/gatsby-plugin-i18n/-/gatsby-plugin-i18n-1.0.1.tgz"
-  integrity sha512-6Cucb15sLQp9cTVgmRC34MeWVJu0a09G7LRrCNV87PgMlbS5iVUX00TwDnIUB0b+f6RUq3z5+V6/sIBIvsz8/Q==
-  dependencies:
-    folktale "^2.0.1"
-    graphql "^0.11.7"
-    ptz-i18n "^1.0.0"
 
 gatsby-plugin-image@^3.16.0:
   version "3.16.0"
@@ -11610,13 +11596,6 @@ graphql-type-json@0.3.2:
   version "0.3.2"
   resolved "https://registry.npmjs.org/graphql-type-json/-/graphql-type-json-0.3.2.tgz"
   integrity sha512-J+vjof74oMlCWXSvt0DOf2APEdZOCdubEvGDUAlqH//VBYcOYsGgRW7Xzorr44LvkjiuvecWc8fChxuZZbChtg==
-
-graphql@^0.11.7:
-  version "0.11.7"
-  resolved "https://registry.npmjs.org/graphql/-/graphql-0.11.7.tgz"
-  integrity sha512-x7uDjyz8Jx+QPbpCFCMQ8lltnQa4p4vSYHx6ADe8rVYRTdsyhCJbvSty5DAsLVmU6cGakl+r8HQYolKHxk/tiw==
-  dependencies:
-    iterall "1.1.3"
 
 graphql@^16.7.1:
   version "16.14.2"
@@ -13262,11 +13241,6 @@ isurl@^1.0.0-alpha5:
   dependencies:
     has-to-string-tag-x "^1.2.0"
     is-object "^1.0.1"
-
-iterall@1.1.3:
-  version "1.1.3"
-  resolved "https://registry.npmjs.org/iterall/-/iterall-1.1.3.tgz"
-  integrity sha512-Cu/kb+4HiNSejAPhSaN1VukdNTTi/r4/e+yykqjlG/IW+1gZH5b4+Bq3whDX4tvbYugta3r8KTMUiqT3fIGxuQ==
 
 iterator.prototype@^1.1.5:
   version "1.1.5"
@@ -17752,14 +17726,6 @@ pseudomap@^1.0.1, pseudomap@^1.0.2:
   resolved "https://registry.npmjs.org/pseudomap/-/pseudomap-1.0.2.tgz"
   integrity sha1-8FKijacOYYkX7wqKw0wa5aaChrM=
 
-ptz-i18n@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/ptz-i18n/-/ptz-i18n-1.0.0.tgz"
-  integrity sha512-3buuv2T+Qo2tyo3A1pSx2arxheW0vd+tPGizmWdvr9RWJKfQlrNw8GtnYXdjChUKN0s2UO/JJkWswOTRYBi/OQ==
-  dependencies:
-    folktale "^2.0.1"
-    ramda "^0.24.1"
-
 pump@^1.0.0:
   version "1.0.3"
   resolved "https://registry.npmjs.org/pump/-/pump-1.0.3.tgz"
@@ -17863,11 +17829,6 @@ ramda@0.21.0:
   version "0.21.0"
   resolved "https://registry.npmjs.org/ramda/-/ramda-0.21.0.tgz"
   integrity sha1-oAGr7bP/YQd9T/HVd9RN536NCjU=
-
-ramda@^0.24.1:
-  version "0.24.1"
-  resolved "https://registry.npmjs.org/ramda/-/ramda-0.24.1.tgz"
-  integrity sha1-w7d1UZfzW43DUCIoJixMkd22uFc=
 
 random-bytes@~1.0.0:
   version "1.0.0"
@@ -18448,7 +18409,7 @@ react-instantsearch-core@^6.12.1:
     prop-types "^15.6.2"
     react-fast-compare "^3.0.0"
 
-react-instantsearch-dom@6.12.1, react-instantsearch-dom@^6.12.1:
+react-instantsearch-dom@6.12.1:
   version "6.12.1"
   resolved "https://registry.npmjs.org/react-instantsearch-dom/-/react-instantsearch-dom-6.12.1.tgz"
   integrity sha512-KXk2UDmJ3OP9B57owPC0+7fdcVtmYAA6/UWimR9CXhvFGCMi11xlR/wscYMYxdPuxs9IkmnnLDIJSjSGADYnow==
@@ -18459,25 +18420,6 @@ react-instantsearch-dom@6.12.1, react-instantsearch-dom@^6.12.1:
     prop-types "^15.6.2"
     react-fast-compare "^3.0.0"
     react-instantsearch-core "^6.12.1"
-
-react-instantsearch-native@^6.12.1:
-  version "6.12.1"
-  resolved "https://registry.npmjs.org/react-instantsearch-native/-/react-instantsearch-native-6.12.1.tgz"
-  integrity sha512-WxMNeirSzTxQ00HFQL8ALtS26GPfMOSDIGYNpdtOAc82mxW60kDJt7PFRuzktspy0Z7OVw2F47+cwC7iL7/3iA==
-  dependencies:
-    "@babel/runtime" "^7.1.2"
-    algoliasearch ">= 3.27.1 < 5"
-    react-instantsearch-core "^6.12.1"
-
-react-instantsearch@^6.12.1:
-  version "6.12.1"
-  resolved "https://registry.npmjs.org/react-instantsearch/-/react-instantsearch-6.12.1.tgz"
-  integrity sha512-ULklenxoM6rtltCoj6wi0pqEkKLu5i3mu8JDcGYfSjMbRgBe0YsDn4o/TAGLURGCjY9PTlg1IFyWQXqc4vlYHA==
-  dependencies:
-    "@babel/runtime" "^7.1.2"
-    react-instantsearch-core "^6.12.1"
-    react-instantsearch-dom "^6.12.1"
-    react-instantsearch-native "^6.12.1"
 
 react-is@^16.12.0, react-is@^16.13.1, react-is@^16.7.0, react-is@^16.8.1:
   version "16.13.1"

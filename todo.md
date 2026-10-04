@@ -178,7 +178,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [ ] After the runtime and package-manager changes, start incremental TypeScript adoption with shared types and a small source module.
 - [ ] Add an ESLint baseline for changed JavaScript/TypeScript files and expand it as the existing lint backlog is addressed.
 - [ ] After the migration, diagnose contact form email delivery and discuss a reliable alternative before restoring a form.
-- [ ] Keep React 19, Gatsby Slices, deferred static generation and full lint cleanup deferred. Vitest and image/Head migration are complete; StaticQuery and explicit schema typing are now scheduled below.
+- [ ] Keep React 19, Gatsby Slices, deferred static generation and full lint cleanup deferred. Vitest, image/Head migration, StaticQuery replacement and explicit schema typing are complete; see current verification below.
 - [ ] Stop for a decision before replacing `gatsby-plugin-styled-jsx-postcss`, `gatsby-remark-embed-video`, or another integration where the replacement would change visible CSS/content behavior.
 - [ ] Resolve the `/en|pl/anti-patterns/` route collision between the page and post sources. Recommended direction: let the richer article own `/anti-patterns/` and move or retire the older talk landing page; this needs confirmation because it changes which template owns the existing URL.
 
@@ -236,3 +236,12 @@ Deferred: Tailwind/theme variables, dark mode, Slices, npm migration, layout red
 - Requested imported English files have 439 explicitly labelled code blocks; all JavaScript/js fence labels throughout content were changed to TypeScript. The Kurrent article renders all 16 TypeScript examples with Prism tokens and visible syntax colors. Code bodies were preserved.
 - Eight additional known source links in requested articles and 36 inbound links elsewhere were rewritten to relative canonical blog URLs. Older/unmigrated references remain external, as previously requested.
 - No cache-test publication, temporary source marker or fixture entry remains in content or llms.txt. The reusable cache check now uses only an existing non-indexed placeholder and restores sources/index in finally.
+
+
+### Next pre-redesign pass — 2026-10-04
+
+- [ ] Audit and remove overlapping gatsby-plugin-i18n only after exact output and browser verification.
+- [ ] Remove unused direct reach-router and InstantSearch umbrella dependencies; preserve active search/comments APIs.
+- [ ] Add a clean, scoped correctness lint baseline for modern ESM/JSX modules and future TypeScript files; enforce it in CI without suppressing the full-project backlog.
+- [ ] Verify frozen install, smoke/lint, production build, full tests and English/Polish browser checks; record results here.
+- [ ] Confirm the new gates on GitHub Actions independently of local results.

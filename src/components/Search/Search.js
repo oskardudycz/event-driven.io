@@ -52,7 +52,7 @@ ResultList.propTypes = {
 const SearchResults = connectStateResults(ResultList);
 
 const Search = props => {
-  const { algolia, theme } = props;
+  const { algolia } = props;
   const { lang = "en" } = usePageContext();
 
   const searchClient = algoliasearch(algolia.appId, algolia.searchOnlyApiKey);

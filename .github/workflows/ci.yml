@@ -52,6 +52,7 @@ jobs:
       # install dependencies
       - run: yarn --frozen-lockfile
       - run: yarn smoke
+      - run: yarn lint:modern
       # build
       - run: yarn build
         env:

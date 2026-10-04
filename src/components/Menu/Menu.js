@@ -130,7 +130,7 @@ class Menu extends React.Component {
       { visibleItems: [], cumulativeWidth: 0, hiddenItems: [] }
     );
 
-    this.setState((prevState) => ({ hiddenItems: menu.hiddenItems }));
+    this.setState({ hiddenItems: menu.hiddenItems });
   };
 
   toggleMenu = (e) => {
@@ -151,8 +151,7 @@ class Menu extends React.Component {
     this.setState((prevState) => ({ open: !prevState.open }));
   };
 
-  closeMenu = (e) => {
-    //e.preventDefault();
+  closeMenu = () => {
 
     if (this.state.open) {
       this.setState({ open: false });
