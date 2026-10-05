@@ -18,7 +18,9 @@ const Substack = () => {
           src="https://www.architecture-weekly.com/embed"
           width="100%"
           height="320"
-          frameborder="0"
+          title="Subscribe to Architecture Weekly"
+          loading="lazy"
+          frameBorder="0"
           scrolling="no"
         ></iframe>
       </div>

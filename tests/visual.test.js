@@ -20,6 +20,44 @@ afterAll(async () => {
   await browser?.close();
 });
 
+test("newsletter defers its offscreen request and loads automatically on scroll", async () => {
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  const requests = [];
+  try {
+    await page.route("https://www.architecture-weekly.com/embed", async route => {
+      requests.push(route.request().url());
+      await route.fulfill({ contentType: "text/html", body: "<!doctype html><html><body>Newsletter form</body></html>" });
+    });
+    await page.goto(new URL("/en/introduction_to_event_sourcing/", baseUrl).href, { waitUntil: "networkidle" });
+    const iframe = page.locator('#substack iframe');
+    expect(await iframe.getAttribute("loading")).toBe("lazy");
+    expect(await iframe.getAttribute("title")).toBe("Subscribe to Architecture Weekly");
+    expect(requests).toHaveLength(0);
+    await iframe.scrollIntoViewIfNeeded();
+    await expect.poll(() => requests.length).toBe(1);
+    await expect.poll(() => page.frameLocator('#substack iframe').locator("body").innerText()).toBe("Newsletter form");
+  } finally {
+    await page.close();
+  }
+}, 60_000);
+
+test("training pages retain one main heading after hydration and language navigation", async () => {
+  const page = await browser.newPage();
+  try {
+    await page.goto(new URL("/pl/training/", baseUrl).href, { waitUntil: "networkidle" });
+    expect(await page.locator("h1").count()).toBe(1);
+    expect(await page.locator("h1").innerText()).toBe("Szkolenie");
+    await page.locator('a[href="/en/training/"]').first().click();
+    await page.waitForURL("**/en/training/");
+    await expect.poll(() => page.locator("h1").allTextContents()).toEqual(["Training"]);
+    await page.reload({ waitUntil: "networkidle" });
+    expect(await page.locator("h1").count()).toBe(1);
+    expect(await page.locator("h1").innerText()).toBe("Training");
+  } finally {
+    await page.close();
+  }
+}, 60_000);
+
 async function compareScreenshot(page, name, options = {}) {
   const screenshot = await page.screenshot(options);
   await writeFile(join(artifacts, `${name}.png`), screenshot);
@@ -394,6 +432,8 @@ for (const language of ["en", "pl"]) {
       await page.waitForURL(`**/${language}/search/`);
       const input = page.getByPlaceholder(language === "pl" ? "Szukaj" : "Search", { exact: true });
       await input.waitFor({ state: "visible" });
+      expect(await page.locator("h1").count()).toBe(1);
+      expect(await page.locator("h1").innerText()).toBe(language === "pl" ? "Szukaj" : "Search");
       expect(await page.locator(".search-message").innerText())
         .toBe(language === "pl" ? "Wpisz wyszukiwaną frazę." : "Start typing to search.");
       await input.fill("events");

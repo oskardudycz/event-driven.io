@@ -11,7 +11,7 @@ const Author = (props) => {
     <React.Fragment>
       <div className="author">
         <div className="avatar">
-          <img src={avatar} alt={config.siteTitle} />
+          <img src={avatar} alt={config.siteTitle} width="60" height="60" />
         </div>
         <div className="note" dangerouslySetInnerHTML={{ __html: note }} />
       </div>
@@ -36,6 +36,7 @@ const Author = (props) => {
         }
         .avatar img {
           width: 100%;
+          height: auto;
         }
         .note {
           font-size: 0.9em;

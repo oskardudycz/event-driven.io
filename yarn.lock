@@ -3672,6 +3672,13 @@
     chrome-trace-event "^1.0.2"
     nullthrows "^1.1.1"
 
+"@playwright/browser-chromium@1.63.0":
+  version "1.63.0"
+  resolved "https://registry.yarnpkg.com/@playwright/browser-chromium/-/browser-chromium-1.63.0.tgz#983f71d6d7e2922150a8af8e2738600a72581808"
+  integrity sha512-m2daAx2QmBFeO8iqVjeCrYlihlhw1FchLQayCCZsZ2IdvA7Uk7sFsjNm7RleAt2rDARH/ZEtXQi7e65WB1VGPQ==
+  dependencies:
+    playwright-core "1.63.0"
+
 "@pmmmwh/react-refresh-webpack-plugin@0.5":
   version "0.5.17"
   resolved "https://registry.yarnpkg.com/@pmmmwh/react-refresh-webpack-plugin/-/react-refresh-webpack-plugin-0.5.17.tgz#8c2f34ca8651df74895422046e11ce5a120e7930"
@@ -16511,7 +16518,7 @@ playwright-core@1.63.0:
   resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.63.0.tgz#e57665bc32846c213ac39a1e4d5bc6228e76b376"
   integrity sha512-rYCsBF/M5HjUch52bbtVONEFjv6Xu8sm8h72dNlR5bzIE1fvC/bxgspzkjSfU+MweEMmPM8KJebG6nnyxo5mCg==
 
-playwright@^1.63.0:
+playwright@1.63.0:
   version "1.63.0"
   resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.63.0.tgz#99b56f9f69b1b70c44f00bf84b2fe52348ae2511"
   integrity sha512-+7ziBLidS4NaNCdt57SUDT+wYmmd5fmiQejUic/kb+YsYSCPyOOE9sebzMjNmQrsnNpDJqd4WHvV/8lfKfUDUg==

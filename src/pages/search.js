@@ -7,10 +7,13 @@ import Article from "../components/Article";
 import Search from "../components/Search";
 import { ThemeContext } from "../layouts";
 import { createHead } from "../components/Seo";
+import Headline from "../components/Article/Headline";
+import { usePageContext } from "../i18n/page-context";
 
 import AlgoliaIcon from "!svg-react-loader!../images/svg-icons/search-by-algolia.svg?name=AlgoliaLogo";
 
 const SearchPage = props => {
+  const { lang = "en" } = usePageContext();
   const {
     data: {
       site: {
@@ -24,6 +27,7 @@ const SearchPage = props => {
       <ThemeContext.Consumer>
         {theme => (
           <Article theme={theme}>
+            <Headline title={lang === "pl" ? "Szukaj" : "Search"} theme={theme} />
             <div className="icon">
               <AlgoliaIcon />
             </div>

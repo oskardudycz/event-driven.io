@@ -41,7 +41,7 @@ const Header = ({ pages, path, theme, }) => {
       <header className={`header ${getHeaderSize()}`}>
         <Link to="/" className="logoType">
           <div className="logo">
-            <img src={avatar} alt={config.siteTitle} />
+            <img src={avatar} alt={config.siteTitle} width="60" height="60" />
           </div>
           <div className="type">
             <span className="siteTitle">{t("header.title") || config.headerTitle}</span>
@@ -131,6 +131,7 @@ const Header = ({ pages, path, theme, }) => {
 
             img {
               width: 100%;
+              height: auto;
             }
           }
 

@@ -104,7 +104,7 @@ const Seo = (props) => {
     ...(isArticle ? { headline: pageTitle || config.siteTitle } : {}),
     description,
     url: canonicalUrl,
-    inLanguage: canonicalLanguage,
+    ...(resolvedSchemaType !== "Service" ? { inLanguage: canonicalLanguage } : {}),
     ...(image ? { image } : {}),
     ...(isArticle && fields.prefix
       ? {
