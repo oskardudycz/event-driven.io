@@ -63,6 +63,7 @@ export const query = graphql`
                 gatsbyImageData(
                   aspectRatio: 2.2222222222
                   layout: FULL_WIDTH
+                  breakpoints: [360, 610, 850, 1220, 1700]
                   formats: [AUTO, WEBP]
                   placeholder: BLURRED
                 )

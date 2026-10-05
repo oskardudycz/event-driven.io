@@ -7,10 +7,12 @@ import { ScreenWidthContext, FontLoadedContext } from "../../layouts";
 import config from "../../../content/meta/config";
 import Menu from "../Menu";
 
-import avatar from "../../images/jpg/avatar.jpg";
+import { withPrefix } from "gatsby";
 
 import { usePageContext } from "../../i18n";
 import { useTranslation } from 'react-i18next'
+
+const avatar = withPrefix("/images/avatar.webp");
 
 const Header = ({ pages, path, theme, }) => {
   const { t } = useTranslation();
@@ -41,7 +43,7 @@ const Header = ({ pages, path, theme, }) => {
       <header className={`header ${getHeaderSize()}`}>
         <Link to="/" className="logoType">
           <div className="logo">
-            <img src={avatar} alt={config.siteTitle} width="60" height="60" />
+            <img src={avatar} alt={config.siteTitle} width="180" height="180" />
           </div>
           <div className="type">
             <span className="siteTitle">{t("header.title") || config.headerTitle}</span>

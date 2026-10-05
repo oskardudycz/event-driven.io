@@ -22,6 +22,7 @@ import LanguagePicker from "../LanguagePicker";
 import Item from "./Item";
 import BlueskyIcon from "./BlueskyIcon";
 import Expand from "./Expand";
+import { getOverflowedItems } from "./overflow.mjs";
 import config from "../../../content/meta/config";
 
 class Menu extends React.Component {
@@ -102,35 +103,11 @@ class Menu extends React.Component {
   hideOverflowedMenuItems = () => {
     const PADDING_AND_SPACE_FOR_MORELINK = this.props.screenWidth >= 1024 ? 60 : 0;
 
-    const itemsContainer = this.itemList.current;
-    const maxWidth = itemsContainer.offsetWidth - PADDING_AND_SPACE_FOR_MORELINK;
-
-    this.setState({ hiddenItems: [] }); // clears previous state
-
-    const menu = this.renderedItems.reduce(
-      (result, item) => {
-        item.classList.add("item");
-        item.classList.remove("hideItem");
-
-        const currentCumulativeWidth = result.cumulativeWidth + item.offsetWidth;
-        result.cumulativeWidth = currentCumulativeWidth;
-
-        if (!item.classList.contains("more") && currentCumulativeWidth > maxWidth) {
-          const link = item.querySelector("a");
-
-          item.classList.add("hideItem");
-          item.classList.remove("item");
-          result.hiddenItems.push({
-            to: link.getAttribute("data-slug"),
-            label: link.text,
-          });
-        }
-        return result;
-      },
-      { visibleItems: [], cumulativeWidth: 0, hiddenItems: [] }
-    );
-
-    this.setState({ hiddenItems: menu.hiddenItems });
+    this.setState({
+      hiddenItems: getOverflowedItems(
+        this.itemList.current, this.renderedItems, PADDING_AND_SPACE_FOR_MORELINK
+      ),
+    });
   };
 
   toggleMenu = (e) => {

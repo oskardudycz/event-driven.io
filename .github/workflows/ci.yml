@@ -64,7 +64,7 @@ jobs:
           GOOGLE_TAG_ID: ${{ secrets.GOOGLE_TAG_ID }}
       - run: yarn test
       - name: Install Chromium for visual smoke tests
-        run: yarn playwright install --with-deps chromium
+        run: yarn browsers:install:ci
       - name: Compare browser rendering with production snapshots
         run: |
           ./node_modules/.bin/gatsby serve -H 127.0.0.1 -p 9000 &

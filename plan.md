@@ -348,3 +348,11 @@ Subscription and comments must remain automatically available without an extra c
 Discuss Giscus as the preferred comment-provider migration candidate, including GitHub login/moderation requirements, stable bilingual thread mapping and an offline dry run of Disqus history migration. No provider switch or external comment writes are authorized by the research request. Keep this decision ahead of spending substantial effort on Disqus-specific work.
 
 Use the repeatable `yarn audit:performance` command with pinned Lighthouse, lockfile Chromium, fresh profiles and three sequential mobile runs per page. Preserve before/after JSON artifacts and compare median metrics; keep live scores outside deterministic deployment gates.
+
+### Authorized safe PageSpeed implementation — 2026-10-05
+
+Implement responsive card sizes, WebP Markdown images with original-format fallback, priority for the known Introduction cover only, the same portrait at higher resolution, selected existing-font preloads and batched menu measurements. Preserve CSS, automatic subscription/comments, routing and content. Add deterministic generated-output and browser regressions; retain existing screenshots. Playwright and its matching official Chromium browser package are project development dependencies. Record review-only choices and their reasons explicitly in the performance review; do not implement provider, interaction, color, timestamp or security-policy changes here.
+
+Local result: final build, full tests including 14 performance regressions, all 18 browser checks, frozen install, smoke and scoped lint pass. The measured 800px Introduction WebP saves about 80% versus PNG with the existing visual tolerance. Native iframe lazy loading defers distant embeds but does not defer Introduction's nearer embed in Chromium; stricter automatic viewport loading remains a review-only decision. Keep CI/deployed checks and any whole-page performance claims separate from these local results.
+
+CI navigation regression follow-up: browser readiness uses DOM plus explicit font/hydration/iframe checks, never networkidle. The newsletter regression deliberately holds a request open to ensure analytics/comment network activity cannot reintroduce the reported navigation timeout. Preserve the native-lazy proximity caveat and real distant-article test.

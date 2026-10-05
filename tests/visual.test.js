@@ -20,16 +20,37 @@ afterAll(async () => {
   await browser?.close();
 });
 
-test("newsletter defers its offscreen request and loads automatically on scroll", async () => {
-  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+test("distant newsletter defers its request and loads automatically on scroll", async () => {
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
   const requests = [];
+  let pendingRequestStarted = false;
+  let releasePendingRequest;
+  let pendingRequestFinished;
+  const pendingRequest = new Promise(resolve => { releasePendingRequest = resolve; });
   try {
+    // Keep a request open to reproduce the CI failure: readiness must not
+    // depend on analytics/comments or any other network activity stopping.
+    await page.route("**/__visual_pending_request__", async route => {
+      pendingRequestStarted = true;
+      pendingRequestFinished = pendingRequest.then(() => route.fulfill({ body: "ready" }));
+      await pendingRequestFinished;
+    });
+    await page.addInitScript(() => {
+      if (window !== window.top) return;
+      document.addEventListener("DOMContentLoaded", () => {
+        fetch("/__visual_pending_request__").catch(() => {});
+      }, { once: true });
+    });
     await page.route("https://www.architecture-weekly.com/embed", async route => {
       requests.push(route.request().url());
       await route.fulfill({ contentType: "text/html", body: "<!doctype html><html><body>Newsletter form</body></html>" });
     });
-    await page.goto(new URL("/en/introduction_to_event_sourcing/", baseUrl).href, { waitUntil: "networkidle" });
+    await page.goto(new URL("/en/gdpr_for_busy_developers/", baseUrl).href, { waitUntil: "domcontentloaded" });
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForFunction(() => getComputedStyle(document.body).fontFamily.includes("Open Sans"));
+    await expect.poll(() => pendingRequestStarted).toBe(true);
     const iframe = page.locator('#substack iframe');
+    await iframe.waitFor({ state: "attached" });
     expect(await iframe.getAttribute("loading")).toBe("lazy");
     expect(await iframe.getAttribute("title")).toBe("Subscribe to Architecture Weekly");
     expect(requests).toHaveLength(0);
@@ -37,6 +58,8 @@ test("newsletter defers its offscreen request and loads automatically on scroll"
     await expect.poll(() => requests.length).toBe(1);
     await expect.poll(() => page.frameLocator('#substack iframe').locator("body").innerText()).toBe("Newsletter form");
   } finally {
+    releasePendingRequest();
+    await pendingRequestFinished;
     await page.close();
   }
 }, 60_000);
@@ -44,13 +67,14 @@ test("newsletter defers its offscreen request and loads automatically on scroll"
 test("training pages retain one main heading after hydration and language navigation", async () => {
   const page = await browser.newPage();
   try {
-    await page.goto(new URL("/pl/training/", baseUrl).href, { waitUntil: "networkidle" });
+    await page.goto(new URL("/pl/training/", baseUrl).href, { waitUntil: "domcontentloaded" });
+    await page.waitForFunction(() => getComputedStyle(document.body).fontFamily.includes("Open Sans"));
     expect(await page.locator("h1").count()).toBe(1);
     expect(await page.locator("h1").innerText()).toBe("Szkolenie");
     await page.locator('a[href="/en/training/"]').first().click();
     await page.waitForURL("**/en/training/");
     await expect.poll(() => page.locator("h1").allTextContents()).toEqual(["Training"]);
-    await page.reload({ waitUntil: "networkidle" });
+    await page.reload({ waitUntil: "domcontentloaded" });
     expect(await page.locator("h1").count()).toBe(1);
     expect(await page.locator("h1").innerText()).toBe("Training");
   } finally {
@@ -479,4 +503,41 @@ test("Event Sourcing keeps shared membership and reading order when switching to
     await page.waitForFunction(() => document.documentElement.lang === "en");
     expect(await page.locator("h1").count()).toBe(1);
   } finally { await page.close(); }
+}, 60_000);
+
+test("responsive covers match actual card widths across breakpoints and device pixel ratios", async () => {
+  for (const deviceScaleFactor of [1, 2]) {
+    const page = await browser.newPage({ deviceScaleFactor });
+    try {
+      for (const width of [390, 600, 768, 1024, 1440]) {
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto(new URL("/en/articles/", baseUrl).href);
+        const image = page.locator("img[data-main-image]").first();
+        await expect.poll(() => image.evaluate(e => e.complete && e.naturalWidth > 0)).toBe(true);
+        const result = await image.evaluate(e => {
+          const picture = e.closest("picture");
+          const sizes = picture.querySelector("source").sizes || e.sizes;
+          const slots = sizes.split(",").map(s => s.trim());
+          let slot;
+          for (const candidate of slots) {
+            const conditional = candidate.match(/^(\([^)]*\)) (.+)$/);
+            if (!conditional || matchMedia(conditional[1]).matches) {
+              slot = conditional ? conditional[2] : candidate;
+              break;
+            }
+          }
+          const probe = document.createElement("div");
+          probe.style.cssText = `position:absolute;width:${slot};height:0`;
+          document.body.append(probe);
+          const declared = probe.getBoundingClientRect().width;
+          probe.remove();
+          return { declared, actual: e.getBoundingClientRect().width, src: e.currentSrc };
+        });
+        expect(Math.abs(result.declared - result.actual)).toBeLessThanOrEqual(2);
+        expect(result.src).toContain(".webp");
+      }
+    } finally {
+      await page.close();
+    }
+  }
 }, 60_000);

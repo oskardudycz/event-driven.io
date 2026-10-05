@@ -159,10 +159,14 @@ module.exports = {
             resolve: `gatsby-remark-images`,
             options: {
               maxWidth: 800,
+              withWebp: { quality: 80 },
               backgroundColor: "transparent",
               wrapperStyle: "height: auto",
               quality: 80,
             },
+          },
+          {
+            resolve: require.resolve("./plugins/gatsby-remark-image-priority"),
           },
           {
             resolve: `gatsby-remark-responsive-iframe`,
