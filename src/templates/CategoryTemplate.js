@@ -45,7 +45,7 @@ const CategoryTemplate = (props) => {
                   <h2>{t('categories.recommended')}</h2>
                   <p>{t('categories.recommendedDescription')}</p>
                 </div>
-                <List edges={recommended} theme={theme} ordered showImages />
+                <List edges={recommended} ordered showImages />
               </section>
             )}
             {remaining.length > 0 && (
@@ -57,7 +57,7 @@ const CategoryTemplate = (props) => {
                       : t('categories.articles')}
                   </h2>
                 </div>
-                <List edges={remaining} theme={theme} showImages />
+                <List edges={remaining} showImages />
               </section>
             )}
             <style jsx>{`

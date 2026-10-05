@@ -7,16 +7,21 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 ## Current CSS stage — 2026-10-05
 
 - [x] Expose existing YAML theme values as semantic CSS variables; keep one source of values. Native TypeScript generator produces plain CSS usable by Gatsby and Astro.
-- [x] Migrate article summaries and the site footer to CSS Modules, preserving existing selectors. Configure the installed PostCSS plugin for Node 24-compatible SHA-256 class hashes. The first batch passes visual checks; the final default-import adjustment awaits its regression rerun.
+- [x] Migrate article summaries and the site footer to CSS Modules, preserving existing selectors. Configure the installed PostCSS plugin for Node 24-compatible SHA-256 class hashes. The rebased final default-import build passes its regression rerun.
 - [x] Verify the first batch: production build, full tests and all 27 browser checks pass; stylesheet regression also covers both languages without JavaScript.
 - [x] Verify the final default CSS Module import adjustment: production build and full lint/format pass.
-- [ ] Rerun `yarn test` and all 27 browser checks against the final default-import build before starting the next component batch. Serve with `yarn serve --host 127.0.0.1 --port 9000`, then run `yarn test:visual` in another terminal.
+- [x] Rerun `yarn test` and all 27 browser checks against the final default-import build before accepting the next component batch. Serve with `yarn serve --host 127.0.0.1 --port 9000`, then run `yarn test:visual` in another terminal.
 - [ ] Verify hosted CI, CodeQL alert 5 closure and deployment; local checks do not establish those results.
 - [x] Finish localization regressions and distinguish local acceptance from pending CI/deployment.
 
+- [x] Validate the rebased baseline: production build (536.06s, dominated by 3,373 image jobs), full suite (44.81s) and all 27 existing browser checks (52.81s). The first browser attempt overlapped build output writes and is not an acceptance result. Local build retry used a 4 GB heap and four workers; no CI/runtime configuration change.
+- [x] Migrate Related and NextPrev to CSS Modules: production build (44.86s) and all 28 browser checks (52.61s command time) pass, including unchanged screenshots and EN/PL styles with JavaScript disabled.
+- [x] Migrate shared List reading cards to CSS Modules; remove obsolete theme props from Related/Post and CategoryTemplate callers. Keep public selectors and reading-order counters.
+- [x] Verify final lint/format (17.12s), smoke (77 files / 18 queries), production build (49.13s), full suite (31.30s) and all 28 browser checks (63.68s command time), including EN/PL with JavaScript enabled/disabled, 600px/1024px breakpoints, keyboard focus, reduced motion, theme-variable overrides and unchanged screenshots. Routes, redirects, sitemap and feed contracts pass.
+
 Modern defaults for new work: ESM/TypeScript, semantic variables, scoped CSS/logical properties, accessible focus/contrast and reduced-motion handling when adding animation, minimal client JavaScript and measured verification. Keep CSS/data/routing boundaries portable to Astro.
 
-Next batches after the pending local gate: Related and NextPrev, then shared reading cards, followed by article typography/navigation. Tailwind integration, dark-mode palette/behavior and layout redesign require their own concrete review. This first batch changes styling implementation only.
+Related, NextPrev and shared List reading cards are migrated and accepted locally. Five components now use CSS Modules; 29 styled-jsx source files remain. Next: article typography/metadata, archive/category styles, shared navigation, then remaining integrations and shells (see plan.md). Tailwind integration, dark-mode palette/behavior and layout redesign require their own concrete review. This first batch changes styling implementation only.
 
 ## Current status
 
@@ -186,7 +191,7 @@ Next batches after the pending local gate: Related and NextPrev, then shared rea
 - [x] Verify `static/.well-known/webfinger`, the self-hosted font stylesheet/files, and the Calendly CTA on both generated contact pages.
 - [ ] After Gatsby 5/Node 24 is green, migrate Yarn 1 to npm in a separate change and verify `npm ci`, build, and tests.
   - A plain `npm install --package-lock-only` failed on the unused GraphQL ESLint plugin, then on `gatsby-plugin-styled-jsx`'s `styled-jsx@^3` peer requirement. The unused lint plugin was removed. Do not add `--legacy-peer-deps`; decide how to handle the styled-jsx integration before switching lockfiles.
-  - The site owner is open to a gradual styling migration, with a possible later Astro move. First establish browser screenshots/smoke checks, then migrate styled-jsx components incrementally to portable CSS Modules and CSS variables while preserving appearance. Remove the plugin only after its 35 consumers are migrated; retry npm afterward without overrides. The selected future direction is Tailwind plus CSS variables; this pre-redesign pass defers all CSS migration.
+  - The site owner is open to a gradual styling migration, with a possible later Astro move. First establish browser screenshots/smoke checks, then migrate styled-jsx components incrementally to portable CSS Modules and CSS variables while preserving appearance. Remove the plugin only after all remaining consumers are migrated (29 source files at the current CSS stage); retry npm afterward without overrides. The selected future direction is Tailwind plus CSS variables; the CSS Modules foundation and small batches are now authorized; Tailwind integration and layout redesign remain deferred.
 - [x] Verify static WebFinger is copied to public; the smoke/build checks cover the source and generated output.
 - [x] Add and run `yarn smoke` for configuration, WebFinger, source syntax, and GraphQL parsing; keep the full build contract as the release gate.
 - [ ] After the runtime and package-manager changes, start incremental TypeScript adoption with shared types and a small source module.
@@ -440,13 +445,13 @@ Portable CSS foundation: theme.yaml is the single value source; a native TypeScr
 
 First-batch local acceptance, before the final default-import adjustment: frozen install passed (16.32s), complete lint/format and smoke passed (77 source files / 18 GraphQL queries), production build passed (150.57s), full suite passed (24.61s), and all 27 browser checks passed (56.00s command time). The CSS-specific check also passes in both languages with JavaScript enabled/disabled (3.65s), covering exact default values, the 1024px footer breakpoint and live variable overrides. The new localization test scopes the site footer separately from the existing article footer. The archive screenshot alone is updated after reviewing the newly imported first card; all other baselines and the 3% tolerance are preserved. Existing cold category-query warnings remain.
 
-The final standard default-import build subsequently succeeded; its log reports 2582.87s elapsed across the interrupted session, which is not a comparable build-performance measurement. Final lint/format passed (16.29s). Full-suite and browser reruns after that adjustment remain pending; no final browser pass is inferred from the earlier checks.
+The final standard default-import build subsequently succeeded; its log reports 2582.87s elapsed across the interrupted session, which is not a comparable build-performance measurement. Final lint/format passed (16.29s). The rebased full-suite/browser reruns subsequently pass; see the current CSS stage above.
 
-- [ ] Rerun `yarn test` and `yarn test:visual` against the final build before accepting the next CSS batch.
+- [x] Rerun `yarn test` and all 27 existing browser checks against the rebased final default-import build.
 - [x] Warm-cache modification/deletion/restoration verification passed (134.56s): all three builds succeeded, language indexes reflect modified/deleted content, stale pages/assets are removed, and article sources plus llms.txt are restored exactly.
 - [ ] Verify hosted CI, CodeQL alert 5 closure and deployment for these changes; no push/deployment was performed.
 
-Next CSS batch: migrate the small Related and NextPrev components to scoped native styles, then shared reading cards. Verify each batch before moving to article typography and navigation. Keep theme values and style definitions independent of Gatsby data/routing so Astro can reuse them. Tailwind integration, dark-mode palette/behavior and visual redesign remain later reviewed stages.
+Related and NextPrev are migrated and verified; List reading-card migration also passes its final checks above. Next: article typography and metadata. Keep theme values and style definitions independent of Gatsby data/routing so Astro can reuse them. Tailwind integration, dark-mode palette/behavior and visual redesign remain later reviewed stages.
 
 ## Active CI browser repair — 2026-10-05
 
@@ -455,6 +460,14 @@ Next CSS batch: migrate the small Related and NextPrev components to scoped nati
 - [x] Run production build, full tests, all browser checks, smoke and lint on the reverted checkout. Production build passed in 152.46s, full tests in 24.94s and all 26 browser checks in 52.70s. Smoke checked 77 source files/18 queries; lint/format passed. Existing category slow-query warnings remain.
 - [ ] Confirm the next hosted CI run succeeds; deployment remains on the owner's previous version meanwhile.
 
-The repair results above cover the pre-CSS checkout. The rebase restores the CSS foundation alongside these fixes; combined-build and 27-browser-check acceptance remain pending.
+The repair results above cover the pre-CSS checkout. The rebase restores the CSS foundation alongside these fixes; combined-build and all 27 existing browser checks now pass (see the current CSS stage).
 
 - [x] Add an archive-only snapshot update command with an explicit expected-slug guard and document review/rerun steps in README and the fixture guide. Verify a wrong-slug attempt fails while preserving the PNG hash; the reviewed correct-slug update and subsequent complete browser comparison pass.
+
+## Reading CSS Modules acceptance — 2026-10-05
+
+Related, NextPrev and List retire three more styled-jsx consumers. Native scoped styles reuse generated YAML tokens; Link receives module classes directly. Remaining framework styling integrations stay installed for their 29 source-file consumers. Existing routes, content, default appearance, breakpoints, cover images and keyboard focus are preserved. Reduced-motion preferences suppress the existing card translation and arrow scaling. README explains the portable styles and regression checks.
+
+Both component batches pass separately: Related/navigation build and all 28 browser checks, then the List build, complete suite and all 28 browser checks. No screenshot or build-contract fixture was updated; the existing 3% visual tolerance remains. Final warm build has no Gatsby warning lines; existing dependency/deprecation notices remain. The baseline image-generation cost is not a CSS performance improvement. Hosted CI/CodeQL and deployment are still pending.
+
+Next: Article/Headline/Bodytext typography, then Meta/Author, in another appearance-preserving batch. Keep Tailwind, dark mode, npm migration and visual redesign deferred.

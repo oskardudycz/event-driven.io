@@ -1,0 +1,117 @@
+.plain {
+  margin: var(--space-stack-md);
+  padding: var(--space-md);
+  list-style: circle;
+}
+.plain li {
+  padding: var(--space-xs) 0;
+  font-size: var(--font-size-body-large);
+  line-height: var(--line-height-summary);
+}
+.withImages {
+  display: grid;
+  gap: var(--space-lg);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.withImages li {
+  padding: 0;
+  position: relative;
+}
+.ordered {
+  counter-reset: reading-order;
+}
+.ordered li {
+  counter-increment: reading-order;
+}
+.ordered li::before {
+  align-items: center;
+  background: var(--color-brand);
+  border: 3px solid var(--color-surface);
+  border-radius: 50%;
+  color: var(--color-text-inverse);
+  content: counter(reading-order);
+  display: flex;
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-bold);
+  height: 2.25rem;
+  justify-content: center;
+  left: var(--space-sm);
+  position: absolute;
+  top: var(--space-sm);
+  width: 2.25rem;
+  z-index: 2;
+}
+.readingCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  color: var(--color-text);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  text-decoration: none;
+  transition:
+    border-color var(--duration-default),
+    box-shadow var(--duration-default),
+    transform var(--duration-default);
+}
+.readingCard:hover,
+.readingCard:focus-visible {
+  border-color: var(--color-brand);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+.readingCard:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+.readingCardImage {
+  aspect-ratio: 16 / 9;
+  display: block;
+  object-fit: cover;
+  width: 100%;
+}
+.readingCardContent {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: var(--space-md);
+}
+.readingCardContent h3 {
+  font-size: var(--font-size-summary);
+  line-height: var(--line-height-card);
+  margin: 0 0 var(--space-sm);
+}
+.readingCardContent small {
+  color: var(--color-text);
+  opacity: 0.7;
+  display: block;
+  margin-bottom: var(--space-sm);
+}
+.excerpt {
+  display: -webkit-box;
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-summary);
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+@media (min-width: 600px) {
+  .withImages {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .readingCard {
+    transition: none;
+  }
+
+  .readingCard:hover,
+  .readingCard:focus-visible {
+    transform: none;
+  }
+}
