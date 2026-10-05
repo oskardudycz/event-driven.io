@@ -315,3 +315,36 @@ Production baseline: the owner reports deployment since 99519a3c. Its GitHub Bui
 ### Category parity result — 2026-10-05
 
 Shared category selection and the Polish Event Sourcing guide are verified: both languages have 89 unique articles and eight ordered steps, with actual translations preferred and missing translations linked to a canonical available language. The production build, full tests, four category-selection regressions and all 15 browser checks pass; route/redirect/sitemap/feed contracts and existing screenshot tolerances remain unchanged. This simplifies one source of custom localization logic without replacing the provider or route generation. Production checks still showed the pre-fix Polish category; later commits require their own deployment/CI check.
+
+
+## Next planned Gatsby 5 improvements — 2026-10-05
+
+Implement these before the CSS redesign, in separate stages so search and localization regressions can be isolated. Keep Node 24, React 18, Yarn, existing styles and static generation.
+
+### 1. Replace Algolia with local MiniSearch
+
+Generate language-specific search indexes during the Gatsby build and lazy-load the index/engine when search is used. Prefer genuine translations, include canonical-language fallbacks for untranslated articles, and return one result per article. Preserve relative URLs, localized labels, categories/dates, pagination, keyboard accessibility and useful highlighted snippets, including code identifiers.
+
+First measure compressed index size, initialization time and mobile responsiveness, then integrate the replacement into the existing search layout. Validate English/Polish queries, diacritics, fuzzy/prefix matches, loading/empty/error states and modified/deleted-content updates. After build, full tests and browser checks pass without Algolia requests, remove Algolia/InstantSearch packages, indexing hooks, workflow/configuration references and obsolete cache-key inputs. External account/index deletion is outside this work.
+
+### 2. Simplify localization with gatsby-plugin-react-i18next
+
+Adopt the Gatsby 5/React 18-compatible plugin through a staged migration, upgrading i18next/react-i18next to compatible versions. Start with static routes, the translation provider, localized links and the language picker, then remove the superseded custom logic as each replacement passes verification. Keep article-specific canonical/placeholder policy explicit where the plugin does not cover it.
+
+Preserve `/en/` and `/pl/` URLs, import/original-slug redirects, actual translation availability, placeholder navigation, canonical/hreflang/sitemap/feed rules, category membership/reading order and Gatsby Head behavior during SSR, hydration and navigation. Avoid running overlapping locale route generators. Require the exact output contract and all browser checks to pass before removing old hooks/providers. Record local results separately from CI and deployed verification.
+
+Both stages use the package comparison and acceptance criteria in `docs/gatsby-search-and-localization-review.md`. Tailwind, theme variables, dark mode, Slices, npm migration and layout redesign remain later stages.
+
+### Main-heading regression guard — 2026-10-05
+
+Require exactly one H1 in every generated standalone HTML page, including translated placeholders, utility routes and 404 pages. Exclude Gatsby's internal HTML fragments. Enforce this through the existing SEO test and CI gate; keep representative hydration/navigation browser checks as a separate guard. The site-wide audit found and corrected duplicate article-body H1s in both GDPR language files and missing headings on the search/newsletter routes. Live training HTML and hydrated pages already have one H1; Bing's indexed report requires a fresh crawl before its warning can be reassessed.
+
+### Production performance and validator follow-up
+
+Use [docs/pagespeed-review.md](docs/pagespeed-review.md) as the research and decision record before further performance changes. Apply obvious fixes that preserve appearance/behavior; obtain agreement before changing interactions, branding, comment providers, publication-time assumptions or restrictive security policies. Compare repeated mobile audits, separating lab/field and first-party/vendor evidence. Keep CSS redesign deferred.
+
+Subscription and comments must remain automatically available without an extra click. Do not introduce click-to-load buttons for these integrations; the owner explicitly rejected that interaction change.
+
+Discuss Giscus as the preferred comment-provider migration candidate, including GitHub login/moderation requirements, stable bilingual thread mapping and an offline dry run of Disqus history migration. No provider switch or external comment writes are authorized by the research request. Keep this decision ahead of spending substantial effort on Disqus-specific work.
+
+Use the repeatable `yarn audit:performance` command with pinned Lighthouse, lockfile Chromium, fresh profiles and three sequential mobile runs per page. Preserve before/after JSON artifacts and compare median metrics; keep live scores outside deterministic deployment gates.

@@ -269,10 +269,55 @@ Deferred: Tailwind/theme variables, dark mode, Slices, npm migration, layout red
 - [ ] Verify CI and deployment for the later routing/lint/category changes and all 15 current browser checks. Production still showed English Event Sourcing 89/eight steps versus Polish 88/no steps during the recorded probe.
 - [ ] Keep live Algolia behavior/indexing, CodeQL execution, Search Console/Bing submission and Core Web Vitals as independent external follow-ups.
 
-### Next implementation candidates
+### Next planned improvements — before CSS redesign
 
-Research is in [docs/gatsby-search-and-localization-review.md](docs/gatsby-search-and-localization-review.md), with primary-source links and published peer ranges.
+Implementation order: local search first, then localization simplification. Research and compatibility findings are in [docs/gatsby-search-and-localization-review.md](docs/gatsby-search-and-localization-review.md).
 
-- [ ] Prototype MiniSearch local indexes and measure compressed payload, initialization/mobile responsiveness and English/Polish quality before replacing Algolia. Preserve the search layout, relative links and canonical article deduplication; load search assets only when needed.
-- [ ] Prototype gatsby-plugin-react-i18next 3.0.1 on static routes/provider/links with compatible i18next/react-i18next upgrades. Preserve prefixed English routes, import redirects, placeholder navigation versus canonical metadata and the exact output contract. The published official theme still targets Gatsby 4/React 17/Helmet.
-- [ ] Keep CSS/Tailwind/dark mode/Slices and npm migration deferred; neither search nor localization integrations were replaced in this pass.
+#### 1. Replace Algolia with MiniSearch
+
+- [ ] Generate per-language indexes from canonical content with translation preference, fallback links and article deduplication.
+- [ ] Measure compressed payload, initialization time and mobile responsiveness; lazy-load the engine/index only when search is used.
+- [ ] Replace the search integration while preserving the existing layout, localized labels, categories/dates, pagination, keyboard access and safe highlighted snippets.
+- [ ] Verify English/Polish queries, diacritics, code identifiers, fuzzy/prefix matches and loading/empty/error states.
+- [ ] Test modified/deleted-content index updates and browser search without Algolia credentials or requests.
+- [ ] Remove Algolia/InstantSearch dependencies, indexing hooks, configuration/workflow references and obsolete cache-key inputs after the replacement passes.
+- [ ] Pass frozen install, smoke/lint, production build, full tests and browser checks; verify CI and deployment separately. Keep route/SEO/feed contracts unchanged.
+
+#### 2. Simplify multilingual routing and providers
+
+- [ ] Integrate gatsby-plugin-react-i18next with compatible i18next/react-i18next upgrades; start with static routes, provider, localized links and language picker.
+- [ ] Preserve prefixed English/Polish URLs and original-slug/import redirects; prevent overlapping locale route generators.
+- [ ] Preserve actual translation availability and placeholder navigation separately from canonical/hreflang/sitemap/feed rules.
+- [ ] Verify shared category membership, independent editorial reading orders and canonical-language fallback links.
+- [ ] Verify Gatsby Head metadata, fonts, SSR/hydration and client navigation in both languages against the existing browser tests.
+- [ ] Remove superseded custom hooks/providers only after their replacements pass; retain explicit article-specific canonical policy where needed.
+- [ ] Pass frozen install, smoke/lint, production build, the exact output contract and browser checks; record local, CI and deployment results separately.
+
+Deferred: CSS/Tailwind/theme variables, dark mode, Slices, npm migration and layout redesign. Neither search nor localization migration is implemented yet.
+
+### Site-wide H1 validation — 2026-10-05
+
+Additional research: [production audit review](docs/pagespeed-review.md). Apply only obvious fixes preserving appearance/behavior; review other candidates before implementation. Date/time policy, Giscus, colors/fonts, broader image configuration, navigation wording and security-header enforcement remain proposals.
+
+- [x] Remove the rejected subscription/comment click-to-load controls and restore automatic rendering. Revert the experimental brand color, font behavior, navigation wording, image configuration, replacement avatar and guessed publication timestamps. After the owner's clarification, retain only the small Service/iframe/dimension fixes listed below.
+
+- [x] Verify live English/Polish training pages: each has one H1 in raw HTML and after hydration. The indexed Bing warning does not reproduce on the current production pages.
+- [x] Require exactly one H1 across all 694 generated standalone HTML pages, including placeholders, noindex routes and 404; exclude only Gatsby's internal HTML fragments. The existing `yarn test:seo`/CI gate enforces this.
+- [x] Demonstrate the new check fails on six previous outputs: duplicate article-body H1s on both GDPR pages and missing H1s on both search/newsletter routes; fix the sources and verify the rebuilt output passes.
+- [x] Add a training hydration/language-navigation browser test and verify search H1s in the existing bilingual search tests.
+- [x] Production build passed (91.79s), full tests passed (15.62s), all 16 browser checks passed (48.26s command time), smoke, scoped lint and git diff --check passed. Exact routes, redirects, sitemap URLs and feeds remain unchanged.
+- [ ] Verify these additions on CI and deploy the article/search/newsletter fixes. In Bing inspect `/pl/training/` using Live URL, then Request indexing; reassess the indexed warning after Bing recrawls. No deployment or indexing request was performed by the agent.
+
+### Performance research and repeatable audits — 2026-10-05
+
+- [x] Research the supplied homepage/article reports and reproduce request, image, contrast and schema findings; document options, risks and approval boundaries in docs/pagespeed-review.md.
+- [x] Review Giscus and Andrew Lock's migration approach, including login requirements, historical authorship/replies, stable thread mappings, dry-run counts and idempotency. Add the discussion to plan.md without replacing Disqus.
+- [x] Add `yarn audit:performance`: Lighthouse 13.5.0, lockfile Chromium, sequential fresh sessions, JSON artifacts/summary and temporary profile cleanup. Help, scoped lint and a one-run production smoke pass. No application dependency added.
+- [x] Remove two accidentally generated Lighthouse profile folders; subsequent runner verification writes only designated reports and temporary profiles.
+- [x] Validate the small local fixes: omit Service.inLanguage; title/native-lazy subscription iframe; intrinsic dimensions on the existing portrait, preserving visible sizing. Build passed in 129.28s, full tests in 11.36s, all 16 browser checks in 29.52s, smoke, scoped lint and git diff --check passed. Screenshot baselines/tolerances and exact route/redirect/sitemap/feed contracts are unchanged. Final SEO assertions also passed after tightening iframe/schema checks.
+- [ ] Verify these small fixes and the audit tooling on CI; confirm Service/iframe output on production after the owner's deployment. No production change was performed here.
+- [ ] Agree on a publication timestamp policy before resolving date-only validator warnings; source dates do not record an exact time.
+- [ ] Discuss Giscus versus automatically viewport-loaded Disqus and the subscription embed's large application payload. No extra click controls.
+- [ ] Review scoped accessible link/footer colors, high-resolution portrait, responsive cover variants, above-fold image priority and font/layout measurements.
+- [ ] Review CSP/COOP/Trusted Types and third-party analytics changes separately; retain current integration behavior until approved.
+- [ ] Establish repeated before/after baselines and agreed payload budgets before adding any Lighthouse CI threshold. Live provider scores are not deterministic release gates.

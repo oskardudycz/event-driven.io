@@ -19,7 +19,7 @@ class IndexPage extends React.Component {
     return (
       <React.Fragment>
         <ThemeContext.Consumer>
-          {theme => <Blog posts={posts} theme={theme} />}
+          {theme => <Blog posts={posts} theme={theme} heading="Newsletter" />}
         </ThemeContext.Consumer>
 
         <style jsx>{`

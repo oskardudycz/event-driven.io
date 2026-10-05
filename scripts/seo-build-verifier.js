@@ -59,6 +59,34 @@ function verifySeoBuild(publicDirectory) {
   verifyPage("pl/articles/index.html", "https://event-driven.io/pl/articles/", "CollectionPage");
   verifyPage("en/talks/index.html", "https://event-driven.io/en/talks/", "CollectionPage");
 
+  // Validate every rendered page, including translated placeholders and noindex routes.
+  // Gatsby's internal HTML fragments are not standalone pages.
+  function verifyHeadings(directory) {
+    for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+      const filePath = path.join(directory, entry.name);
+      if (entry.isDirectory()) {
+        if (entry.name !== "_gatsby") verifyHeadings(filePath);
+      } else if (entry.name.endsWith(".html")) {
+        const html = fs.readFileSync(filePath, "utf8");
+        const headingCount = (html.match(/<h1\b[^>]*>/gi) || []).length;
+        if (headingCount !== 1) {
+          failures.push(`${path.relative(publicDirectory, filePath)} has ${headingCount} H1 headings; expected one`);
+        }
+        for (const match of html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)) {
+          const schema = JSON.parse(match[1]);
+          if (schema["@type"] === "Service" && "inLanguage" in schema) {
+            failures.push(`${path.relative(publicDirectory, filePath)} uses unsupported inLanguage on Service`);
+          }
+        }
+        for (const match of html.matchAll(/<iframe\b[^>]*src="https:\/\/www\.architecture-weekly\.com\/embed"[^>]*>/gi)) {
+          expectContains(path.relative(publicDirectory, filePath), match[0], 'title="Subscribe to Architecture Weekly"');
+          expectContains(path.relative(publicDirectory, filePath), match[0], 'loading="lazy"');
+        }
+      }
+    }
+  }
+  if (fs.existsSync(publicDirectory)) verifyHeadings(publicDirectory);
+
   for (const html of [consultingEn, consultingPl]) {
     expectContains("consulting language alternates", html, 'hrefLang="x-default"');
     expectContains("consulting language alternates", html, 'hrefLang="en"');

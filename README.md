@@ -88,6 +88,10 @@ This blog is licensed under [License Creative Commons BY-SA 4.0](https://creativ
 
 Use Node 24 and Yarn 1. Run `yarn smoke` and `yarn lint:modern` for fast syntax, GraphQL and correctness checks. Then run `ALGOLIA_SKIP_INDEXING=true yarn build` and `yarn test`. For browser checks, serve the generated site on port 9000 and run `yarn test:visual`; install Playwright Chromium first if needed.
 
+The SEO checks require exactly one H1 in every generated page, including Polish placeholders, search and 404 pages. Gatsby's internal HTML fragments are excluded. Missing or duplicate main headings fail `yarn test:seo` and the CI gate before deployment. Browser checks also cover training-page hydration and language navigation.
+
+For repeatable mobile Lighthouse audits, run `yarn audit:performance --base-url https://event-driven.io --label baseline`. It uses Lighthouse 13.5.0, the lockfile's Playwright Chromium, three fresh browser sessions per page, and saves JSON reports under the ignored `report/performance/` directory. Browser profiles are temporary and cleaned up. See [the audit procedure and proposals](docs/pagespeed-review.md) for installation, comparable local/production runs, limitations and the proposed Giscus migration. This command audits the site; it does not change the UI, deploy or migrate comments.
+
 `lint:modern` checks the native Gatsby hooks, modern scripts, localization, layout, menu, SEO, video, search and category/recommendation modules. Its explicit paths are in `package.json`. Add files to this baseline as they are modernized. The separate `.eslintrc.modern.json` supports ESM, JSX and TypeScript, checks React hooks, and treats warnings as failures without requiring a project-wide formatting rewrite. It does not type-check TypeScript. The existing `yarn lint` command still exposes the legacy full-project backlog.
 
 CI runs the scoped lint gate before building. Browser search checks use in-memory public test settings and intercepted Algolia responses for both languages; they never contact or modify a production index. Live Algolia validation remains a separate release check.

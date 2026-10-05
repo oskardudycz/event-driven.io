@@ -11,7 +11,7 @@ author: oskar dudycz
 
 Right now, in almost all parts of the world, there are similar laws like the [California Consumer Privacy Act](https://oag.ca.gov/privacy/ccpa); [Canada has their own](https://www.priv.gc.ca/en/privacy-topics/privacy-laws-in-canada/the-personal-information-protection-and-electronic-documents-act-pipeda/), even [China has it](https://personalinformationprotectionlaw.com/).
 
-# Why do we need all those regulations?
+## Why do we need all those regulations?
 
 Of course, bloody hackers, right? They are making everything hard. They do everything to destroy our software, steal users' data and break our [favourite logging tooling](https://en.wikipedia.org/wiki/Log4Shell). That, of course, happens, but they're not the biggest reason. 
 
