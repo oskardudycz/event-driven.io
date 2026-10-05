@@ -1,0 +1,20 @@
+sequenceDiagram
+    participant A as Client A
+    participant B as Client B
+    participant P as PgBouncer (session mode)
+    participant S1 as Backend 1234
+    participant S2 as Backend 5678
+
+    A->>P: connect
+    P-->>A: Backend 1234 is assigned to A until A disconnects
+    A->>P: query
+    P->>S1: query
+    A->>P: query
+    P->>S1: query
+    B->>P: connect
+    P-->>B: Backend 5678 is assigned to B until B disconnects
+    B->>P: query
+    P->>S2: query
+    A->>P: disconnect
+    P->>S1: DISCARD ALL (server_reset_query)
+    Note over S1: Back in the pool, clean session

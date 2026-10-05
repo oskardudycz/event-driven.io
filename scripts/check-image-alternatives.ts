@@ -9,7 +9,7 @@ const paths = inputs.length
       .filter(
         (file) => file.startsWith(`content${sep}`) && file.endsWith('.md'),
       )
-  : globSync('content/**/*.md');
+  : globSync('content/**/*.md', { exclude: ['**/node_modules/**'] });
 let errors = 0;
 for (const file of paths) {
   for (const issue of imageIssues(readFileSync(file, 'utf8'))) {

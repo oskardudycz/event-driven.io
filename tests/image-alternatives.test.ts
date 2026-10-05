@@ -1,8 +1,9 @@
 import { temporaryDirectory } from './helpers/temporary-directory.ts';
 import { lintTsxFixtures } from './helpers/lint-tsx-fixtures.ts';
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import { test } from 'node:test';
-import { readFileSync, readdirSync } from 'node:fs';
+import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { readdir, readFile, rm } from 'node:fs/promises';
 import * as cheerio from 'cheerio';
@@ -27,6 +28,29 @@ void test('Markdown images require descriptions, with explicit decorative except
   assert.equal(imageIssues('<img src="x.png">')[0]?.url, 'x.png');
   assert.equal(imageIssues('![\n](x.png)').length, 1);
 });
+void test('the image check reports content Markdown but skips installed dependencies of article code', (t) => {
+  const root = temporaryDirectory(t, 'image-check-');
+  const post = join(root, 'content/posts/2026-01-01--post');
+  const dependency = join(post, 'code/node_modules/pkg');
+  mkdirSync(dependency, { recursive: true });
+  writeFileSync(join(post, 'index.md'), '![](diagram.png)\n');
+  writeFileSync(join(dependency, 'README.md'), '![](badge.png)\n');
+
+  const result = spawnSync(
+    process.execPath,
+    [join(import.meta.dirname, '../scripts/check-image-alternatives.ts')],
+    { cwd: root, encoding: 'utf8' },
+  );
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /2026-01-01--post\/index\.md:1: .*diagram\.png/);
+  assert.doesNotMatch(result.stderr, /node_modules/);
+  assert.match(
+    result.stdout,
+    /Checked image alternatives in 1 Markdown files; 1 errors\./,
+  );
+});
+
 void test('import alternatives preserve descriptions and require intentional overrides for missing/decorative images', () => {
   assert.deepEqual(importedAlternative('A pipeline', undefined, 'source.png'), {
     alt: 'A pipeline',

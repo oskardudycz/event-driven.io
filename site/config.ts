@@ -1,4 +1,9 @@
 import type { GatsbyConfig } from 'gatsby';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
+import { loadEnvFile } from 'node:process';
+import config from '../content/meta/config.ts';
+import postcssConfig from '../postcss.config.mjs';
 import type { ArticleEdge } from '../src/types/content.ts';
 type FeedQuery = {
   query: {
@@ -6,11 +11,6 @@ type FeedQuery = {
     allMarkdownRemark: { edges: ArticleEdge[] };
   };
 };
-import { existsSync } from 'node:fs';
-import { loadEnvFile } from 'node:process';
-import path from 'node:path';
-import config from '../content/meta/config.ts';
-import postcssConfig from '../postcss.config.mjs';
 if (existsSync('.env')) loadEnvFile();
 
 export default {
@@ -99,6 +99,7 @@ export default {
       options: {
         path: `${path.resolve(import.meta.dirname, '..')}/content/posts/`,
         name: 'posts',
+        ignore: ['**/code/**'],
       },
     },
     {

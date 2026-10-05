@@ -1,0 +1,32 @@
+| mode | workers | attempts per worker | work (ms) | run | lock acquisitions | overlaps | failed unlocks |
+|---|---|---|---|---|---|---|---|
+| session | 10 | 50 | 5 | 1 | 41 | 0 | 0 |
+| session | 10 | 50 | 5 | 2 | 39 | 0 | 0 |
+| session | 10 | 50 | 5 | 3 | 35 | 0 | 0 |
+| session | 10 | 50 | 5 | 4 | 32 | 0 | 0 |
+| session | 10 | 50 | 5 | 5 | 37 | 0 | 0 |
+| session | 10 | 50 | 5 | 6 | 36 | 0 | 0 |
+| session | 10 | 50 | 5 | 7 | 34 | 0 | 0 |
+| session | 10 | 50 | 5 | 8 | 34 | 0 | 0 |
+| session | 10 | 50 | 5 | 9 | 34 | 0 | 0 |
+| session | 10 | 50 | 5 | 10 | 35 | 0 | 0 |
+| transaction | 10 | 50 | 5 | 1 | 94 | 82 | 69 |
+| transaction | 10 | 50 | 5 | 2 | 102 | 95 | 83 |
+| transaction | 10 | 50 | 5 | 3 | 75 | 63 | 60 |
+| transaction | 10 | 50 | 5 | 4 | 89 | 79 | 67 |
+| transaction | 10 | 50 | 5 | 5 | 96 | 86 | 70 |
+| transaction | 10 | 50 | 5 | 6 | 74 | 66 | 57 |
+| transaction | 10 | 50 | 5 | 7 | 103 | 95 | 87 |
+| transaction | 10 | 50 | 5 | 8 | 111 | 103 | 79 |
+| transaction | 10 | 50 | 5 | 9 | 84 | 74 | 63 |
+| transaction | 10 | 50 | 5 | 10 | 92 | 86 | 70 |
+| transaction | 3 | 20 | 200 | 1 | 3 | 2 | 2 |
+| transaction | 3 | 20 | 200 | 2 | 6 | 4 | 3 |
+| transaction | 3 | 20 | 200 | 3 | 39 | 35 | 4 |
+| transaction | 3 | 20 | 200 | 4 | 22 | 14 | 1 |
+| transaction | 3 | 20 | 200 | 5 | 3 | 2 | 1 |
+| transaction | 3 | 20 | 200 | 6 | 40 | 30 | 2 |
+| transaction | 3 | 20 | 200 | 7 | 47 | 38 | 1 |
+| transaction | 3 | 20 | 200 | 8 | 3 | 2 | 1 |
+| transaction | 3 | 20 | 200 | 9 | 23 | 15 | 2 |
+| transaction | 3 | 20 | 200 | 10 | 3 | 2 | 1 |

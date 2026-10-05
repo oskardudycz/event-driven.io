@@ -1,0 +1,3 @@
+"app_user" "SCRAM-SHA-256$4096:3Uxbu7s7ffjMUkgKIplVdA==$w1L10d7w6sMAyoQGstWSfvFMZi3yQq/JRLMHv5XfuUA=:qITCgJ5vvGse8XAWqzz7qG92UzSowYotKDrYz/LsyZk="
+"processor" "SCRAM-SHA-256$4096:eACToR9Vb4lVbN4gvISpiA==$sjKX+baO023vCkuCZH6KD2zsAcFe++pGu6aL6U/VA4c=:xsYvhR5xqChJ6L8GYnKtfZXmYs8FLoR4Thx27fn9uOU="
+"pgbouncer_admin" "SCRAM-SHA-256$4096:4viCavgSrbbi2x+5H5QNTQ==$1mKJId68JXka77Xld0ZRe2Hg7DHIXzpmHv0sM0uPcfA=:QllwsV98hnFKr77U/vrp9bijybjSy0SHsBrPMNSct5M="

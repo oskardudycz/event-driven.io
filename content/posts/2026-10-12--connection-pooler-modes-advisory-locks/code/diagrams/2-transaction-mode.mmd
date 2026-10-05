@@ -1,0 +1,17 @@
+sequenceDiagram
+    participant A as Client A
+    participant B as Client B
+    participant P as PgBouncer (transaction mode)
+    participant S1 as Backend 1234
+
+    A->>P: BEGIN
+    P->>S1: A owns Backend 1234 for this transaction
+    A->>P: UPDATE ...
+    P->>S1: UPDATE ...
+    A->>P: COMMIT
+    P->>S1: COMMIT
+    Note over P,S1: Backend 1234 goes back to the pool
+    B->>P: SELECT ... (a transaction on its own)
+    P->>S1: B owns Backend 1234 for this statement
+    A->>P: SELECT ... (a transaction on its own)
+    P->>S1: A gets Backend 1234 again, or any other free backend
