@@ -4,6 +4,8 @@ category: Software Architecture
 cover: 2025-08-04-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true
+related:
+  - open-source-a-relict-a-charity-or
 ---
 
 Welcome to the new week!

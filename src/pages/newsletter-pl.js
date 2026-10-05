@@ -37,7 +37,10 @@ IndexPage.propTypes = {
 export default IndexPage;
 
 export const query = graphql`
-  query NewsletterPlQuery($langKey: String!) {
+  query NewsletterPlQuery($langKey: String!, $language: String!) {
+    locales: allLocale(filter: { language: { in: [$language, "en"] } }) {
+      ...TranslationResources
+    }
     posts: allMarkdownRemark(
       filter: {
         fileAbsolutePath: { regex: "//newsletter-pl/[0-9]+.*--/" }

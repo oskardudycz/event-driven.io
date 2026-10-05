@@ -53,7 +53,10 @@ ContactPage.propTypes = {
 export default ContactPage;
 
 export const query = graphql`
-  query ContactQuery {
+  query ContactQuery($language: String!) {
+    locales: allLocale(filter: { language: { in: [$language, "en"] } }) {
+      ...TranslationResources
+    }
     site {
       siteMetadata {
         facebook {

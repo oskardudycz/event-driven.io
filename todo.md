@@ -408,3 +408,9 @@ Repeat against this deployment with `VISUAL_BASE_URL=https://6ac38f11d8f02a012d4
 - [x] Extend hostile-input regressions for encoded/mixed-case executable schemes, unsafe mappings, Markdown breakout and HTML attribute delimiters. Parse generated Markdown with the same remark major used by Gatsby, declared directly as a development dependency; the lockfile retains existing resolved versions.
 - [ ] Record final frozen-install, lint and full-suite results. No article reimport, production markup change or deployment is required for this importer-only correction.
 - [ ] Confirm hosted CodeQL alert closure after the next push/scan; no scan result is inferred from local tests.
+
+## Latest article and multilingual provider migration — 2026-10-05
+
+Import the requested “Open Source, a relict, a charity or still the thing?” article into both language routes with local images, source provenance, canonical English fallback and original-slug redirect. Review the exact build-contract delta for the new article before updating its baseline.
+
+Next implement the reviewed gatsby-plugin-react-i18next provider and localized navigation stage with its compatible translation-library peers. Source translation JSON through Gatsby and query it on every page. Preserve the site's explicit Markdown/category canonical policy and server-side redirects; configure the plugin to recognize existing language-prefixed routes without generating a second set. Replace the global mutable translation singleton and obsolete provider, keeping the editorial page context for availability. Validate exact routes/redirects/sitemap/feed, full tests and bilingual browser navigation/screenshots. Record local results separately from hosted CI/deployment; do not infer CodeQL closure from local checks.

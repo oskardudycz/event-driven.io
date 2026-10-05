@@ -4,6 +4,8 @@ category: Software Architecture
 cover: 2024-08-28-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true
+related:
+  - open-source-a-relict-a-charity-or
 ---
 
 

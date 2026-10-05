@@ -20,6 +20,30 @@ module.exports = {
         component: require.resolve(`./src/layouts/`),
       },
     },
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: { name: 'locale', path: `${__dirname}/src/i18n/locales/` },
+    },
+    {
+      resolve: 'gatsby-plugin-react-i18next',
+      options: {
+        languages: ['en', 'pl'],
+        defaultLanguage: 'en',
+        generateDefaultLanguagePage: true,
+        redirect: false,
+        siteUrl: config.siteUrl,
+        i18nextOptions: { interpolation: { escapeValue: false }, initImmediate: false },
+        // Existing server redirects and editorial routes remain authoritative.
+        // Recognize prefixed routes; leave unprefixed pages to the site hook.
+        pages: [
+          {
+            matchPath: '/:lang(en|pl)?/:path*',
+            getLanguageFromPath: true,
+            excludeLanguages: ['en', 'pl'],
+          },
+        ],
+      },
+    },
     `gatsby-transformer-json`,
     {
       resolve: `gatsby-source-filesystem`,

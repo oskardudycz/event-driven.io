@@ -868,3 +868,46 @@ test('approved text colors maintain contrast on actual white surfaces and intera
     await page.close();
   }
 }, 60_000);
+
+test('separate English and Polish pages keep their locale while following reciprocal article links', async () => {
+  const pages = await Promise.all([browser.newPage(), browser.newPage()]);
+  const slug = 'open-source-a-relict-a-charity-or';
+  try {
+    await Promise.all(
+      pages.map((page, index) =>
+        page.goto(new URL(`/${index === 0 ? 'en' : 'pl'}/${slug}/`, baseUrl).href, {
+          waitUntil: 'domcontentloaded',
+        }),
+      ),
+    );
+    for (const [index, page] of pages.entries()) {
+      const language = index === 0 ? 'en' : 'pl';
+      const other = language === 'en' ? 'pl' : 'en';
+      const switcher = page.getByRole('link', { name: `Change language to ${other}` });
+      await switcher.waitFor({ state: 'visible' });
+      expect(await page.locator('html').getAttribute('lang')).toBe(language);
+      expect(await page.locator('.related h2').innerText()).toBe(
+        language === 'en' ? 'Related articles' : 'Powiązane artykuły',
+      );
+      expect(await page.locator('link[rel=canonical]').getAttribute('href')).toBe(
+        `https://event-driven.io/en/${slug}/`,
+      );
+      expect(await switcher.getAttribute('href')).toBe(`/${other}/${slug}/`);
+      await page.locator('.related a[href="/en/why-open-source-isnt-always-fair/"]').click();
+      await page.waitForURL('**/en/why-open-source-isnt-always-fair/');
+      const returnLink = page.locator(`.related a[href="/en/${slug}/"]`);
+      await returnLink.waitFor({ state: 'visible' });
+      await returnLink.click();
+      await page.waitForURL(`**/en/${slug}/`);
+      expect(await page.locator('html').getAttribute('lang')).toBe('en');
+      expect(await page.locator('h1').count()).toBe(1);
+      await page.getByRole('link', { name: 'Change language to pl' }).click();
+      await page.waitForURL(`**/pl/${slug}/`);
+      await expect.poll(() => page.locator('.related h2').innerText()).toBe('Powiązane artykuły');
+      expect(await page.locator('html').getAttribute('lang')).toBe('pl');
+      expect(await page.locator('footer').count()).toBe(1);
+    }
+  } finally {
+    await Promise.all(pages.map((page) => page.close()));
+  }
+}, 60_000);

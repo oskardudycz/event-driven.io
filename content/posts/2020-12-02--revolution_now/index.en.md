@@ -3,6 +3,8 @@ title: Revolution now!
 category: "Event Sourcing"
 cover: 2020-12-02-cover.png
 author: oskar dudycz
+related:
+  - open-source-a-relict-a-charity-or
 ---
 
 ![cover](2020-12-02-cover.png)

@@ -45,7 +45,10 @@ TalksPage.propTypes = {
 export default TalksPage;
 
 export const query = graphql`
-  query TalksQuery {
+  query TalksQuery($language: String!) {
+    locales: allLocale(filter: { language: { in: [$language, "en"] } }) {
+      ...TranslationResources
+    }
     site {
       siteMetadata {
         facebook {

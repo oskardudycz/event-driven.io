@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as GatsbyLink } from 'gatsby';
+import { Link } from 'gatsby-plugin-react-i18next';
 import { usePageContext } from '../../i18n/page-context';
 
 const LanguagePicker = () => {
@@ -12,27 +12,21 @@ const LanguagePicker = () => {
   } = usePageContext();
   const pagePath = slug || originalPath || '/';
   const languagesToSwitch = availableLanguages.filter((language) => language !== lang);
-  // const selectedLanguage = localStorage.getItem("last-selected-lang", lang);
-
-  // if(selectedLanguage && selectedLanguage != lang) {
-  //   return (
-  //     <Redirect to={`/${selectedLanguage}${slug}`} />
-  //   );
-  // }
 
   return (
     <React.Fragment>
       <div className="language-selector-container">
         {languagesToSwitch.map((supportedLang) => (
-          <GatsbyLink
+          <Link
             aria-label={`Change language to ${supportedLang}`}
             className="langSelector"
             onClick={() => localStorage.setItem('last-selected-lang', supportedLang)}
             key={supportedLang}
-            to={`/${supportedLang}${pagePath}`}
+            to={pagePath}
+            language={supportedLang}
           >
             {supportedLang === 'en' ? '🇬🇧' : '🇵🇱'}
-          </GatsbyLink>
+          </Link>
         ))}
       </div>
 

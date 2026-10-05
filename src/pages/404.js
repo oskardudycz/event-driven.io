@@ -1,3 +1,4 @@
+import { graphql } from 'gatsby';
 import React from 'react';
 import { withPrefix } from 'gatsby';
 
@@ -20,3 +21,11 @@ export const Head = ({ pageContext }) => (
     <link rel="stylesheet" href={withPrefix('/fonts/open-sans/index.css')} />
   </React.Fragment>
 );
+
+export const query = graphql`
+  query ($language: String!) {
+    locales: allLocale(filter: { language: { in: [$language, "en"] } }) {
+      ...TranslationResources
+    }
+  }
+`;
