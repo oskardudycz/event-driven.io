@@ -1,0 +1,14 @@
+/* Generated from theme.yaml by yarn generate-theme-css. */
+:root {
+  --color-surface: #ffffff;
+  --color-text: #3e3e3c;
+  --color-text-muted: #706e6b;
+  --space-xxs: 2px;
+  --space-xs: 5px;
+  --space-sm: 10px;
+  --space-md: 20px;
+  --space-lg: 40px;
+  --font-size-small: 0.8em;
+  --font-size-summary: 1.35em;
+  --line-height-summary: 1.4;
+}

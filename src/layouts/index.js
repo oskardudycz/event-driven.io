@@ -7,6 +7,7 @@ import { getScreenWidth, timeoutThrottlerHandler } from '../utils/helpers';
 import Footer from '../components/Footer/';
 import Header from '../components/Header';
 import themeObjectFromYaml from '../theme/theme.yaml';
+import '../theme/tokens.css';
 
 export const ThemeContext = React.createContext(null);
 export const ScreenWidthContext = React.createContext(0);
@@ -92,7 +93,7 @@ class Layout extends React.Component {
             <React.Fragment>
               <Header path={this.props.location.pathname} pages={pages} theme={this.state.theme} />
               <main>{children}</main>
-              <Footer html={footnoteHTML} theme={this.state.theme} />
+              <Footer html={footnoteHTML} />
 
               {/* --- STYLES --- */}
               <style jsx>{`

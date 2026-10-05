@@ -19,7 +19,7 @@
     "smoke": "node ./scripts/smoke-migration.js",
     "verify:build-contract": "node ./scripts/verify-build-contract.js",
     "update:build-contract": "node ./scripts/update-build-contract.js",
-    "prebuild": "node ./scripts/generate-llms-txt.js",
+    "prebuild": "yarn generate-theme-css && node ./scripts/generate-llms-txt.js",
     "import-newsletter": "node ./import/import-newsletter.js",
     "import-architecture-weekly": "node ./import/import-architecture-weekly.js",
     "import-and-build": "yarn import-newsletter && yarn import-architecture-weekly && yarn build",
@@ -59,7 +59,10 @@
     "test:search": "node --test --test-isolation=none tests/search.test.mjs",
     "measure:search": "node scripts/measure-search.mjs",
     "test:search:dev": "node scripts/verify-search-development.mjs",
-    "test:localization": "node --test --test-isolation=none tests/localization.test.mjs"
+    "test:localization": "node --test --test-isolation=none tests/localization.test.mjs",
+    "generate-theme-css": "node scripts/generate-theme-css.mts",
+    "predevelop": "yarn generate-theme-css",
+    "predevhost": "yarn generate-theme-css"
   },
   "dependencies": {
     "@ant-design/compatible": "^1.0.8",

@@ -22,7 +22,7 @@ export default [
     ],
   },
   {
-    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
+    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx,mts}'],
     languageOptions: {
       parser: babelParser,
       parserOptions: {
@@ -46,6 +46,6 @@ export default [
       'react-hooks/exhaustive-deps': 'error',
     },
   },
-  { files: ['**/*.{ts,tsx}'], languageOptions: { parser: tsParser } },
-  { ...prettier, files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'] },
+  { files: ['**/*.{ts,tsx,mts}'], languageOptions: { parser: tsParser } },
+  { ...prettier, files: ['**/*.{js,jsx,mjs,cjs,ts,tsx,mts}'] },
 ];
