@@ -22,6 +22,7 @@ for (const file of [
   'src/i18n/settings.mjs',
   'src/i18n/translation-query.js',
   'src/theme/theme.yaml',
+  'scripts/generate-theme-css.mts',
   'scripts/build-search-index.mjs',
   'src/utils/category-posts.mjs',
   'content/meta/config.js',

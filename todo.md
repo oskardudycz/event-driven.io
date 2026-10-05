@@ -4,6 +4,20 @@ Last updated: 2026-10-05
 
 This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an item only when its implementation and proportionate verification are complete. Add a short note under blocked or partial items instead of presenting them as finished.
 
+## Current CSS stage — 2026-10-05
+
+- [x] Expose existing YAML theme values as semantic CSS variables; keep one source of values. Native TypeScript generator produces plain CSS usable by Gatsby and Astro.
+- [x] Migrate article summaries and the site footer to CSS Modules, preserving existing selectors. Configure the installed PostCSS plugin for Node 24-compatible SHA-256 class hashes. The first batch passes visual checks; the final default-import adjustment awaits its regression rerun.
+- [x] Verify the first batch: production build, full tests and all 27 browser checks pass; stylesheet regression also covers both languages without JavaScript.
+- [x] Verify the final default CSS Module import adjustment: production build and full lint/format pass.
+- [ ] Rerun `yarn test` and all 27 browser checks against the final default-import build before starting the next component batch. Serve with `yarn serve --host 127.0.0.1 --port 9000`, then run `yarn test:visual` in another terminal.
+- [ ] Verify hosted CI, CodeQL alert 5 closure and deployment; local checks do not establish those results.
+- [x] Finish localization regressions and distinguish local acceptance from pending CI/deployment.
+
+Modern defaults for new work: ESM/TypeScript, semantic variables, scoped CSS/logical properties, accessible focus/contrast and reduced-motion handling when adding animation, minimal client JavaScript and measured verification. Keep CSS/data/routing boundaries portable to Astro.
+
+Next batches after the pending local gate: Related and NextPrev, then shared reading cards, followed by article typography/navigation. Tailwind integration, dark-mode palette/behavior and layout redesign require their own concrete review. This first batch changes styling implementation only.
+
 ## Current status
 
 - [x] Technical SEO/content-discovery baseline is deployed and publicly verified; later category parity changes pass locally.
@@ -85,7 +99,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 
 ## Historical verification checkpoints
 
-- [x] Parse `src/i18n/i18n.json`, `data/category-guides.json`, and `data/videos.json` successfully.
+- [x] Parse the English/Polish resources in `src/i18n/locales/`, `data/category-guides.json`, and `data/videos.json` successfully.
 - [x] Pass `git diff --check`.
 - [x] Run `yarn generate-llms` successfully on Node 16.
 - [x] Gatsby creates 562 pages and completes all page GraphQL queries.
@@ -282,15 +296,16 @@ Implementation order: local search first, then localization simplification. Rese
 
 #### 2. Simplify multilingual routing and providers
 
-- [ ] Integrate gatsby-plugin-react-i18next with compatible i18next/react-i18next upgrades; start with static routes, provider, localized links and language picker.
-- [ ] Preserve prefixed English/Polish URLs and original-slug/import redirects; prevent overlapping locale route generators.
-- [ ] Preserve actual translation availability and placeholder navigation separately from canonical/hreflang/sitemap/feed rules.
-- [ ] Verify shared category membership, independent editorial reading orders and canonical-language fallback links.
-- [ ] Verify Gatsby Head metadata, fonts, SSR/hydration and client navigation in both languages against the existing browser tests.
-- [ ] Remove superseded custom hooks/providers only after their replacements pass; retain explicit article-specific canonical policy where needed.
-- [ ] Pass frozen install, smoke/lint, production build, the exact output contract and browser checks; record local, CI and deployment results separately.
+- [x] Integrate gatsby-plugin-react-i18next with compatible i18next/react-i18next upgrades; start with static routes, provider, localized links and language picker.
+- [x] Preserve prefixed English/Polish URLs and original-slug/import redirects; prevent overlapping locale route generators.
+- [x] Preserve actual translation availability and placeholder navigation separately from canonical/hreflang/sitemap/feed rules.
+- [x] Verify shared category membership, independent editorial reading orders and canonical-language fallback links.
+- [x] Verify Gatsby Head metadata, fonts, SSR/hydration and client navigation in both languages against the existing browser tests.
+- [x] Remove superseded custom hooks/providers only after their replacements pass; retain explicit article-specific canonical policy where needed.
+- [x] Pass frozen install, smoke/lint, production build, the exact output contract and all 27 browser checks.
+- [ ] Verify the localization stage on hosted CI/deployment separately.
 
-Deferred: CSS/Tailwind/theme variables, dark mode, Slices, npm migration and layout redesign. MiniSearch is implemented and verified locally; localization migration remains unimplemented. See the latest deployment verification for hosted search status.
+Deferred: CSS/Tailwind/theme variables, dark mode, Slices, npm migration and layout redesign. MiniSearch is implemented and verified locally; the localization provider/navigation migration is implemented, with final acceptance tracked below. The owner has now authorized the small portable CSS foundation stage at the top of this document. See the latest deployment verification for hosted search status.
 
 ### Site-wide H1 validation — 2026-10-05
 
@@ -406,14 +421,32 @@ Repeat against this deployment with `VISUAL_BASE_URL=https://6ac38f11d8f02a012d4
 - [x] Remove mapped-link assignments to Cheerio href attributes. Rewrite links through Turndown's link rule and keep stored values out of HTML attributes.
 - [x] Validate parsed http/https/mailto/tel protocols; reject ambiguous mapped paths and control characters. Encode Markdown destination delimiters and escape link titles while preserving relative routes, fragments, query values and local asset links.
 - [x] Extend hostile-input regressions for encoded/mixed-case executable schemes, unsafe mappings, Markdown breakout and HTML attribute delimiters. Parse generated Markdown with the same remark major used by Gatsby, declared directly as a development dependency; the lockfile retains existing resolved versions.
-- [ ] Record final frozen-install, lint and full-suite results. No article reimport, production markup change or deployment is required for this importer-only correction.
+- [x] Record final frozen-install, lint and full-suite results: frozen install passes (16.32s), full lint/format passes, and the full suite passes (24.61s), including all 21 importer regressions. Hosted alert closure remains separate.
 - [ ] Confirm hosted CodeQL alert closure after the next push/scan; no scan result is inferred from local tests.
 
 ## Latest article and multilingual provider migration — 2026-10-05
 
 Import the requested “Open Source, a relic, a charity or still the thing?” article into both language routes with local images, source provenance, canonical English fallback and original-slug redirect. Review the exact build-contract delta for the new article before updating its baseline.
 
-Next implement the reviewed gatsby-plugin-react-i18next provider and localized navigation stage with its compatible translation-library peers. Source translation JSON through Gatsby and query it on every page. Preserve the site's explicit Markdown/category canonical policy and server-side redirects; configure the plugin to recognize existing language-prefixed routes without generating a second set. Replace the global mutable translation singleton and obsolete provider, keeping the editorial page context for availability. Validate exact routes/redirects/sitemap/feed, full tests and bilingual browser navigation/screenshots. Record local results separately from hosted CI/deployment; do not infer CodeQL closure from local checks.
+The reviewed gatsby-plugin-react-i18next provider and localized navigation stage is implemented with its compatible translation-library peers; final acceptance is recorded below. Source translation JSON through Gatsby and query it on every page. Preserve the site's explicit Markdown/category canonical policy and server-side redirects; configure the plugin to recognize existing language-prefixed routes without generating a second set. Replace the global mutable translation singleton and obsolete provider, keeping the editorial page context for availability. Validate exact routes/redirects/sitemap/feed, full tests and bilingual browser navigation/screenshots. Record local results separately from hosted CI/deployment; do not infer CodeQL closure from local checks.
+
+### Article/localization acceptance and portable CSS foundation — 2026-10-05
+
+The latest Open Source article is imported into both language routes with a local cover, source date/provenance and original-slug redirect. Its six cited blog articles link back through curated related cards; its own three related cards use canonical language fallbacks. The query now supplies langKey so Polish related cards link to canonical English articles where appropriate. The exact reviewed contract adds only two routes, one redirect, one sitemap URL and one feed entry: 696 routes, 223 redirects and 400 sitemap URLs, with no existing entry removed.
+
+The localization provider/navigation stage is accepted locally. Every built language page has matching editorial/plugin locale and queried translation resources. Independent EN/PL browser sessions and reciprocal navigation preserve translated labels, canonical metadata and language switching. Server redirects and explicit canonical/placeholder policy remain; duplicate locale routes and automatic browser-language redirects are disabled.
+
+Portable CSS foundation: theme.yaml is the single value source; a native TypeScript generator produces tokens.css before build/development, and summaries/site footers use CSS Modules. The installed Gatsby PostCSS plugin uses SHA-256 class hashes for Node 24 compatibility and default CSS Module imports matching Astro/Vite. No layout, font, color or interaction redesign is introduced. ESLint/lint-staged now cover .mts files. README documents theme regeneration, native styles and later Astro reuse. Two styled-jsx consumers are retired; remaining integrations stay active.
+
+First-batch local acceptance, before the final default-import adjustment: frozen install passed (16.32s), complete lint/format and smoke passed (77 source files / 18 GraphQL queries), production build passed (150.57s), full suite passed (24.61s), and all 27 browser checks passed (56.00s command time). The CSS-specific check also passes in both languages with JavaScript enabled/disabled (3.65s), covering exact default values, the 1024px footer breakpoint and live variable overrides. The new localization test scopes the site footer separately from the existing article footer. The archive screenshot alone is updated after reviewing the newly imported first card; all other baselines and the 3% tolerance are preserved. Existing cold category-query warnings remain.
+
+The final standard default-import build subsequently succeeded; its log reports 2582.87s elapsed across the interrupted session, which is not a comparable build-performance measurement. Final lint/format passed (16.29s). Full-suite and browser reruns after that adjustment remain pending; no final browser pass is inferred from the earlier checks.
+
+- [ ] Rerun `yarn test` and `yarn test:visual` against the final build before accepting the next CSS batch.
+- [x] Warm-cache modification/deletion/restoration verification passed (134.56s): all three builds succeeded, language indexes reflect modified/deleted content, stale pages/assets are removed, and article sources plus llms.txt are restored exactly.
+- [ ] Verify hosted CI, CodeQL alert 5 closure and deployment for these changes; no push/deployment was performed.
+
+Next CSS batch: migrate the small Related and NextPrev components to scoped native styles, then shared reading cards. Verify each batch before moving to article typography and navigation. Keep theme values and style definitions independent of Gatsby data/routing so Astro can reuse them. Tailwind integration, dark-mode palette/behavior and visual redesign remain later reviewed stages.
 
 ## Active CI browser repair — 2026-10-05
 
@@ -422,6 +455,6 @@ Next implement the reviewed gatsby-plugin-react-i18next provider and localized n
 - [x] Run production build, full tests, all browser checks, smoke and lint on the reverted checkout. Production build passed in 152.46s, full tests in 24.94s and all 26 browser checks in 52.70s. Smoke checked 77 source files/18 queries; lint/format passed. Existing category slow-query warnings remain.
 - [ ] Confirm the next hosted CI run succeeds; deployment remains on the owner's previous version meanwhile.
 
-Previous CSS-stage acceptance does not apply to this reverted checkout. Resume that stage separately after the browser gate passes.
+The repair results above cover the pre-CSS checkout. The rebase restores the CSS foundation alongside these fixes; combined-build and 27-browser-check acceptance remain pending.
 
 - [x] Add an archive-only snapshot update command with an explicit expected-slug guard and document review/rerun steps in README and the fixture guide. Verify a wrong-slug attempt fails while preserving the PNG hash; the reviewed correct-slug update and subsequent complete browser comparison pass.

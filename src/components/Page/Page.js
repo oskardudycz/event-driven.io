@@ -18,7 +18,7 @@ const Page = (props) => {
     <React.Fragment>
       <header>
         <Headline title={title} theme={theme} />
-        <Summary theme={theme}>{summary}</Summary>
+        <Summary>{summary}</Summary>
       </header>
       <Bodytext html={html} theme={theme} />
     </React.Fragment>

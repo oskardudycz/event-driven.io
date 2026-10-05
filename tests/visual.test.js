@@ -882,6 +882,67 @@ test('approved text colors maintain contrast on actual white surfaces and intera
   }
 }, 60_000);
 
+test('CSS Module summaries and site footers preserve styles and respond to theme variables', async () => {
+  for (const [language, javaScriptEnabled] of [
+    ['en', true],
+    ['pl', true],
+    ['en', false],
+    ['pl', false],
+  ]) {
+    const page = await browser.newPage({
+      javaScriptEnabled,
+      viewport: { width: 1023, height: 900 },
+    });
+    try {
+      await page.goto(new URL(`/${language}/introduction_to_event_sourcing/`, baseUrl).href, {
+        waitUntil: 'domcontentloaded',
+      });
+      const summary = page.locator('.standfirst');
+      const footer = page.locator('footer.footer');
+      if (language === 'en') await summary.waitFor();
+      else expect(await summary.count()).toBe(0);
+      const values = (element) => {
+        const style = getComputedStyle(element);
+        return {
+          color: style.color,
+          background: style.backgroundColor,
+          size: style.fontSize,
+          lineHeight: style.lineHeight,
+          bottom: style.marginBottom,
+          padding: style.paddingBottom,
+        };
+      };
+      if (language === 'en')
+        expect(await summary.evaluate(values)).toMatchObject({
+          color: 'rgb(62, 62, 60)',
+          size: '21.6px',
+          lineHeight: '30.24px',
+          bottom: '40px',
+        });
+      expect(await footer.evaluate(values)).toMatchObject({
+        background: 'rgb(255, 255, 255)',
+        padding: '120px',
+      });
+      expect(await footer.locator('li').first().evaluate(values)).toMatchObject({
+        color: 'rgb(112, 110, 107)',
+        size: '12.8px',
+      });
+      await page.setViewportSize({ width: 1024, height: 900 });
+      await expect.poll(() => footer.evaluate(values)).toMatchObject({ padding: '24px' });
+      await page.evaluate(() => {
+        document.documentElement.style.setProperty('--color-text', '#123456');
+        document.documentElement.style.setProperty('--color-surface', '#234567');
+      });
+      if (language === 'en')
+        expect(await summary.evaluate(values)).toMatchObject({ color: 'rgb(18, 52, 86)' });
+      expect(await footer.evaluate(values)).toMatchObject({ background: 'rgb(35, 69, 103)' });
+      expect(await footer.count()).toBe(1);
+    } finally {
+      await page.close();
+    }
+  }
+}, 60_000);
+
 test('separate English and Polish pages keep their locale while following reciprocal article links', async () => {
   const pages = await Promise.all([browser.newPage(), browser.newPage()]);
   const slug = 'open-source-a-relict-a-charity-or';

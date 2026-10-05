@@ -115,6 +115,20 @@ Generated output, static assets, imported article content and test fixtures are 
 
 An article can optionally include a quoted frontmatter timestamp such as `publishedAt: '2026-10-05T12:34:56+02:00'` when that time is known from the source. The timezone is required. Gatsby uses it for BlogPosting `datePublished` and Open Graph `article:published_time`; invalid timestamps fail validation. The article's displayed date, route and ordering still use its existing filename date. Import scripts retain source timestamps when available. Historical date-only values stay date-only; no midnight publication times are invented, so legacy rich-result warnings may remain.
 
+## Translation resources and related links
+
+Edit UI translations in `src/i18n/locales/en/translation.json` and `src/i18n/locales/pl/translation.json`. Gatsby queries these through the `TranslationResources` fragment; new page queries must include `locales: allLocale(filter: {language: {in: [$language, "en"]}}) { ...TranslationResources }` and declare `$language: String!`. The localization plugin provides per-page translations and language-aware links. Explicit editorial context still controls translation availability and canonical fallback; existing `/en/` and `/pl/` routes and original-slug redirects are preserved.
+
+An article's `related` list contains published article slugs. Cards prefer a genuine version in the current language, then the canonical English or another available language. Missing slugs fail the build. The latest Open Source article has reciprocal links to its cited blog articles, with fallback cards linking to their canonical language rather than Polish placeholders.
+
+## Portable styling
+
+The styling migration uses native CSS custom properties and CSS Modules that can also be used in Astro. `src/theme/theme.yaml` remains the source of theme values. `yarn generate-theme-css` writes the plain `src/theme/tokens.css` stylesheet; do not edit that generated file. Build and development commands regenerate it automatically. After editing YAML during a running development session, run `yarn generate-theme-css` again to refresh the CSS variables.
+
+Use semantic variables in new scoped `.module.css` files. Article summaries and the site footer provide small examples. Keep styling separate from Gatsby queries and routing; Astro can reuse the stylesheet and CSS Modules, with React components through its React integration or equivalent Astro markup. Existing styled-jsx consumers are migrated incrementally, with screenshots and browser checks after each batch. Tailwind's global reset, dark-mode colors/behavior and layout redesign are later review stages.
+
+CSS Modules use default imports, matching Astro/Vite's convention. [Astro supports these styles and React components](https://docs.astro.build/en/guides/styling/). Gatsby's supported PostCSS plugin configures CSS Module names with SHA-256, avoiding the old CSS loader's MD4 dependency on Node 24. The generated class names match browser and server builds. `yarn test:visual` verifies summary/footer values, the desktop breakpoint and live CSS-variable overrides, alongside the existing screenshot checks.
+
 ## Local search
 
 Search cards use shared green/neutral theme tokens and Gatsby-generated local cover thumbnails. Canonical fallback results keep the canonical article’s cover; entries without artwork remain text-only. Run `yarn test:search` for index/rendering checks and `yarn test:visual` for bilingual cover, color, keyboard and responsive-card regressions.
