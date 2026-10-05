@@ -14,14 +14,14 @@ const List = (props) => {
             node: {
               excerpt,
               frontmatter: { title, cover, useDefaultLangCanonical },
-              fields: { slug, prefix },
+              fields: { slug, prefix, langKey },
             },
           } = edge;
           const image = cover && cover.childImageSharp && cover.childImageSharp.resize;
 
           return (
             <li key={slug}>
-              <Link to={slug} language={useDefaultLangCanonical ? "en" : undefined} className={showImages ? "readingCard" : ""}>
+              <Link to={slug} language={useDefaultLangCanonical ? "en" : langKey} className={showImages ? "readingCard" : ""}>
                 {showImages && image && (
                   <img
                     className="readingCardImage"

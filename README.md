@@ -63,9 +63,9 @@ Edit `data/category-guides.json`. Each entry is identified by `language` (`en` o
 }
 ```
 
-Use the article URL slug without `/en/`, `/pl/`, surrounding slashes or the date prefix. Each article must belong to that category through its `category` or `categories` frontmatter and have a file for the guide's language. Listed articles appear first with reading-order numbers; the remaining articles follow by publication date. An empty array shows the chronological list alone. Missing or out-of-category slugs are currently ignored, so check the rendered page after editing.
+Use the article URL slug without `/en/`, `/pl/`, surrounding slashes or the date prefix. Each article must belong to that category through a canonical translation's `category` or `categories` frontmatter. The card uses the guide's language when translated, otherwise a canonical available language. Listed articles appear first with reading-order numbers; the remaining articles follow by publication date. An empty array shows the chronological list alone. Missing or out-of-category slugs are currently ignored, so check the rendered page after editing.
 
-English and Polish guides are independent. Polish category pages also show existing English placeholder articles; their cards link to the canonical English page until `useDefaultLangCanonical` is removed after translation. Adding a guide alone does not create a category route: at least one canonical article in that language must belong to the category.
+English and Polish guide orders are independent. Event Sourcing currently uses the same eight-step sequence in both. Existing localized category pages share the same unique article set, even when a placeholder file is missing. Cards prefer a real translation and otherwise link to the canonical English article (or the original language for a Polish-only article). Placeholder copies do not define category membership. Adding a guide alone does not create a category route: at least one canonical article in that language must belong to the category.
 
 Run `yarn build && yarn test`, then inspect `/en/category/event-sourcing/` or its Polish counterpart. Reading order does not change article dates or URLs. Article-footer recommendations are separate: set an article's `related` frontmatter array to control those links.
 

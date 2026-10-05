@@ -410,3 +410,33 @@ for (const language of ["en", "pl"]) {
     } finally { await page.close(); }
   }, 60_000);
 }
+
+test("Event Sourcing keeps shared membership and reading order when switching to Polish", async () => {
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  try {
+    await page.goto(new URL("/en/category/event-sourcing/", baseUrl).href);
+    const slugs = await page.locator("a.readingCard").evaluateAll(cards =>
+      cards.map(card => new URL(card.href).pathname.split("/")[2]).sort()
+    );
+    const readingOrder = await page.locator("ol.ordered a.readingCard").evaluateAll(cards =>
+      cards.map(card => new URL(card.href).pathname.split("/")[2])
+    );
+    await page.getByRole("link", { name: "Change language to pl" }).click();
+    await page.waitForURL("**/pl/category/event-sourcing/");
+    await page.waitForFunction(() => document.documentElement.lang === "pl");
+    await page.getByRole("heading", { name: "Polecana kolejność czytania", exact: true }).waitFor();
+    expect(await page.locator("a.readingCard").evaluateAll(cards =>
+      cards.map(card => new URL(card.href).pathname.split("/")[2]).sort()
+    )).toEqual(slugs);
+    expect(await page.locator("ol.ordered a.readingCard").evaluateAll(cards =>
+      cards.map(card => new URL(card.href).pathname.split("/")[2])
+    )).toEqual(readingOrder);
+    expect(readingOrder).toHaveLength(8);
+    const fallback = page.locator('ol.ordered a.readingCard[href^="/en/"]').first();
+    const target = await fallback.getAttribute("href");
+    await fallback.click();
+    await page.waitForURL(`**${target}`);
+    await page.waitForFunction(() => document.documentElement.lang === "en");
+    expect(await page.locator("h1").count()).toBe(1);
+  } finally { await page.close(); }
+}, 60_000);

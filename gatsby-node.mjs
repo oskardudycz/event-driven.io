@@ -9,10 +9,7 @@ import categoryGuides from "./data/category-guides.json" with { type: "json" };
 const { BundleAnalyzerPlugin } = analyzer;
 const { createFilePath } = filesystem;
 
-const categoriesForNode = (node) =>
-  Array.from(
-    new Set([node.frontmatter.category, ...(node.frontmatter.categories || [])].filter(Boolean))
-  );
+import { categoriesForPost as categoriesForNode, categoriesForLanguage } from "./src/utils/category-posts.mjs";
 
 export const onCreateNode = ({ node, getNode, actions }) => {
   const { createNodeField } = actions;
@@ -146,23 +143,8 @@ export const createPages = ({ graphql, actions }) => {
         };
 
         supportedLanguages.forEach((supportedLangKey) => {
-          // Create category list
-          const categorySet = new Set();
-          items
-            .filter(
-              (edge) =>
-                edge.node.fields.langKey === supportedLangKey &&
-                edge.node.fields.source === "posts" &&
-                !edge.node.frontmatter.useDefaultLangCanonical
-            )
-            .forEach((edge) => {
-              categoriesForNode(edge.node).forEach((category) => categorySet.add(category));
-            });
-
-          // Create category pages
-          const categoryList = Array.from(categorySet);
-
-          categoryList.forEach((category) => {
+          const categoryList = categoriesForLanguage(items.map(({ node }) => node), supportedLangKey);
+          categoryList.forEach(([category, categoryPosts]) => {
             const categorySlug = _.kebabCase(category);
             const availableLanguages = supportedLanguages.filter((langKey) =>
               items.some(
@@ -174,14 +156,6 @@ export const createPages = ({ graphql, actions }) => {
                     (itemCategory) => _.kebabCase(itemCategory) === categorySlug
                   )
               )
-            );
-            const categoryPosts = items.filter(
-              (item) =>
-                item.node.fields.source === "posts" &&
-                item.node.fields.langKey === supportedLangKey &&
-                categoriesForNode(item.node).some(
-                  (itemCategory) => _.kebabCase(itemCategory) === categorySlug
-                )
             );
             const guide = categoryGuides.find(
               (item) => item.language === supportedLangKey && item.slug === categorySlug
@@ -196,7 +170,7 @@ export const createPages = ({ graphql, actions }) => {
                 langKey: supportedLangKey,
                 originalPath: `/category/${categorySlug}/`,
                 availableLanguages,
-                categoryPostIds: categoryPosts.map(({ node }) => node.id),
+                categoryPostIds: categoryPosts.map((node) => node.id),
                 categoryDescription: guide ? guide.description : undefined,
                 recommendedSlugs: guide ? guide.recommended : [],
               },

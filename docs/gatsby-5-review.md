@@ -65,3 +65,12 @@ The site's native Gatsby hooks already own Markdown language fields and localize
 A separate correctness lint configuration supports native ESM/import attributes, JSX and TypeScript syntax. The explicit baseline currently covers 25 modern files, catches undefined variables and incorrect hook usage, and runs in CI before the build. It does not replace the legacy formatting rules or TypeScript type checking. Installed parser/hooks packages are now declared directly at their existing versions.
 
 Frozen installation, smoke, scoped lint, actionlint, production build and the full output/content test suite pass locally. This configuration-changing build took 149.95 seconds, including 51.260 seconds for all 695 queries; it is not comparable to the previous fully warm 54.39-second build. Slow-query warnings remain. Search browser checks intercept Algolia requests with public dummy settings during client navigation, without external index access. Browser results and remote release checks are recorded in todo.md.
+
+
+## Category parity and production follow-up — 2026-10-05
+
+Category indexes and detail pages now share canonical article membership and translation selection. Both Event Sourcing locales list 89 unique articles with eight ordered recommendations; cards prefer a real local translation and otherwise link to the canonical original. A missing placeholder file no longer affects discovery. This preserves existing category routes and language-specific descriptions. See `docs/gatsby-search-and-localization-review.md` for current plugin and local-search options.
+
+The latest build passed in 175.21 seconds; full tests passed in 14.62 seconds and all 15 browser checks in 31.63 seconds. Four unit regressions cover missing placeholders, stale metadata, differing translation category metadata and unique counts/route preservation. Smoke covers 71 files/17 queries, scoped lint covers 28 modern files, and actionlint passes. Exact route/redirect/sitemap/feed contracts and reviewed screenshot tolerances are unchanged.
+
+The owner's deployment since 99519a3c is verified independently: branch CI 37236735203 and main CI 37237889809 succeeded, and representative live pages/assets, metadata, Calendly links, imported highlighting, sitemap, WebFinger and the original-slug redirect pass public checks. The live Polish category still had 88 articles/no recommended order when checked; the later category fix has separate deployment status. Algolia replacement and multilingual plugin adoption are researched proposals, not changes made here.

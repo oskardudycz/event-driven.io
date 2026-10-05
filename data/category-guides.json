@@ -55,7 +55,16 @@
     "language": "pl",
     "slug": "event-sourcing",
     "description": "Artykuły o podstawach i praktycznym zastosowaniu Event Sourcingu, modelowaniu zdarzeń, projekcjach, testowaniu oraz utrzymaniu systemów na produkcji.",
-    "recommended": []
+    "recommended": [
+      "introduction_to_event_sourcing",
+      "whats_the_difference_between_event_and_command",
+      "how_to_get_the_current_entity_state_in_event_sourcing",
+      "how_to_validate_business_logic",
+      "projections_and_read_models_in_event_driven_architecture",
+      "testing_event_sourcing",
+      "simple_events_versioning_patterns",
+      "when_not_to_use_event_sourcing"
+    ]
   },
   {
     "language": "pl",

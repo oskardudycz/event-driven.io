@@ -149,7 +149,7 @@ export const query = graphql`
       edges {
         node {
           excerpt(pruneLength: 170)
-          fields { slug prefix }
+          fields { slug prefix langKey }
           frontmatter {
             title
             useDefaultLangCanonical

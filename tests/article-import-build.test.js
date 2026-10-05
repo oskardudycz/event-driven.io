@@ -59,7 +59,12 @@ test('category template queries preserve curated reading order, excerpts and loc
     const $ = cheerio.load(fs.readFileSync(path.join(publicRoot, guide.language, 'category', guide.slug, 'index.html'), 'utf8'));
     const cards = $('ol.ordered .readingCard');
     assert.deepEqual(cards.map((_, card) => $(card).attr('href')).get(),
-      guide.recommended.map(slug => `/${guide.language}/${slug}/`), `${guide.language}/${guide.slug}: reading order`);
+      guide.recommended.map(slug => {
+        const edge = JSON.parse(fs.readFileSync(path.join(publicRoot, 'page-data', guide.language, 'category', guide.slug, 'page-data.json'), 'utf8'))
+          .result.data.posts.edges.find(({ node }) => node.fields.slug === `/${slug}/`);
+        assert(edge, `Missing recommended article ${guide.language}/${slug}`);
+        return `/${edge.node.fields.langKey}/${slug}/`;
+      }), `${guide.language}/${guide.slug}: reading order`);
     cards.each((_, card) => {
       assert($(card).find('h3').text().trim(), 'Missing recommendation title');
       assert($(card).find('.excerpt').text().trim(), 'Missing recommendation excerpt');
@@ -81,23 +86,40 @@ test('article navigation includes existing placeholder languages without adverti
   }
 });
 
-test('Polish Event Sourcing lists placeholders with canonical links and one section separator', () => {
+test('Event Sourcing category languages share all articles and curated reading order', () => {
   const yaml = require('js-yaml');
   const expected = new Map();
   for (const directory of fs.readdirSync(path.join(__dirname, '../content/posts'))) {
-    const file = path.join(__dirname, '../content/posts', directory, 'index.pl.md');
-    if (!fs.existsSync(file)) continue;
-    const metadata = yaml.load(fs.readFileSync(file, 'utf8').split('---')[1]);
-    if (![metadata.category, ...(metadata.categories || [])].includes('Event Sourcing')) continue;
-    const slug = directory.split('--')[1];
-    expected.set(`/${metadata.useDefaultLangCanonical ? 'en' : 'pl'}/${slug}/`, metadata.title);
+    const versions = [];
+    for (const language of ['en', 'pl']) {
+      const file = path.join(__dirname, '../content/posts', directory, `index.${language}.md`);
+      if (!fs.existsSync(file)) continue;
+      const metadata = yaml.load(fs.readFileSync(file, 'utf8').split('---')[1]);
+      if (!metadata.useDefaultLangCanonical) versions.push({ language, metadata });
+    }
+    if (!versions.some(({ metadata }) => [metadata.category, ...(metadata.categories || [])].includes('Event Sourcing'))) continue;
+    expected.set(directory.split('--')[1], versions);
   }
-  const $ = cheerio.load(fs.readFileSync(path.join(publicRoot, 'pl/category/event-sourcing/index.html'), 'utf8'));
-  const cards = $('a.readingCard');
-  assert(expected.size > 6);
-  assert.equal(cards.length, expected.size);
-  cards.each((_, card) => assert(expected.has($(card).attr('href')), `Unexpected card target: ${$(card).attr('href')}`));
-  assert.equal($('.moreArticles').length, 0, 'Unneeded second separator without recommended reading');
+  const guide = require('../data/category-guides.json').find(item => item.language === 'en' && item.slug === 'event-sourcing');
+  for (const language of ['en', 'pl']) {
+    const $ = cheerio.load(fs.readFileSync(path.join(publicRoot, language, 'category/event-sourcing/index.html'), 'utf8'));
+    const cards = $('a.readingCard');
+    assert.equal(cards.length, expected.size, `${language}: missing category articles`);
+    assert.equal(new Set(cards.map((_, card) => $(card).attr('href').split('/')[2]).get()).size, expected.size);
+    cards.each((_, card) => {
+      const href = $(card).attr('href');
+      const slug = href.split('/')[2];
+      const versions = expected.get(slug);
+      assert(versions, `Unexpected article ${href}`);
+      const target = versions.find(version => version.language === language) || versions.find(version => version.language === 'en') || versions[0];
+      assert.equal(href, `/${target.language}/${slug}/`, `Incorrect fallback for ${language}/${slug}`);
+      assert(fs.existsSync(path.join(publicRoot, href, 'index.html')), `Broken category link ${href}`);
+    });
+    assert.deepEqual($('ol.ordered a.readingCard').map((_, card) => $(card).attr('href').split('/')[2]).get(), guide.recommended);
+    assert.equal($('.moreArticles').length, 1, 'Expected one separator between recommended and remaining articles');
+    const index = cheerio.load(fs.readFileSync(path.join(publicRoot, language, 'category/index.html'), 'utf8'));
+    assert(index(`a[href="/${language}/category/event-sourcing/"] strong`).text().includes(String(expected.size)), 'Index count differs from category detail');
+  }
 });
 
 test('Kurrent TypeScript examples render with Prism syntax tokens in both languages', () => {

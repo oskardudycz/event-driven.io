@@ -1,19 +1,19 @@
 # SEO, content, and platform progress
 
-Last updated: 2026-10-04
+Last updated: 2026-10-05
 
 This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an item only when its implementation and proportionate verification are complete. Add a short note under blocked or partial items instead of presenting them as finished.
 
 ## Current status
 
-- [x] Technical SEO and content-discovery implementation is prepared locally.
-- [x] Bilingual consulting pages and Calendly conversion paths are prepared locally.
-- [x] YouTube playlist gallery and broken embed fix are prepared locally.
+- [x] Technical SEO/content-discovery baseline is deployed and publicly verified; later category parity changes pass locally.
+- [x] Bilingual consulting pages and Calendly links are verified on production.
+- [x] YouTube gallery/embed baseline is deployed; local browser/build regressions pass.
 - [x] Gatsby and Node upgrade sequence is documented and revised around the primary Node 24 target.
 - [x] Complete a full Node 16/Yarn production build through static HTML generation.
 - [x] Recover from the `categories: null` deployment failure recorded in [GitHub Actions run 35613946351](https://github.com/oskardudycz/event-driven.io/actions/runs/35613946351/job/106379761098); the null-safe fix is now deployed.
 - [x] Production review exposed category-page, talks-page, homepage, and article-archive clarity issues; refinements are implemented locally and pass a production build.
-- [ ] Approve the updated layouts in local `gatsby develop`, then commit and deploy them.
+- [x] Deploy the Gatsby 5 presentation/runtime baseline: owner confirms changes since 99519a3c are live; main run 37237889809 succeeded. Later category fixes have separate verification below.
 - [ ] Finish validating the deployed site.
 
 ## Completed locally
@@ -107,16 +107,16 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 ### P0 — finish and validate this release
 
 - [x] Redeploy the `categories: null` normalization fix successfully.
-- [ ] Keep the non-delivering contact form hidden and verify the English and Polish contact pages offer the Calendly call after deployment.
+- [x] Keep the non-delivering contact form hidden and verify both production contact pages offer the Calendly call (2026-10-05 public checks).
 - [x] Confirm static HTML generation is slow rather than hung locally; the complete production build finished successfully.
 - [ ] Visually approve `/en/`, `/pl/`, `/en/articles/`, `/pl/articles/`, `/en/category/event-sourcing/`, and `/en/talks/` locally at desktop and mobile widths.
-- [ ] Commit and deploy the category, talks, homepage, and archive presentation refinements found during production review.
-- [ ] Deploy a preview and smoke-test `/en/consulting/`, `/pl/consulting/`, `/en/category/event-sourcing/`, `/en/talks/`, the contact-page Calendly CTA, and language switching.
+- [x] Commit and deploy the original category, talks, homepage, and archive presentation refinements; baseline since 99519a3c is live. The later category parity fix still needs deployment verification.
+- [x] Smoke-test the deployed baseline consulting/category/talks/contact pages and language switching; 2026-10-05 HTTP and browser checks pass. Later category fixes require their own deployment check.
 - [ ] Complete the release smoke test after the pending deployment.
   - The currently deployed release returns HTTP 200 for both consulting pages, the Event Sourcing category, talks, `llms.txt`, and the robots-declared sitemap at `/sitemap/sitemap-index.xml`.
   - The contact-page Calendly CTA, interactive language switching, the pending `/articles/` routes, and the newly indexed Algolia results still need post-deployment checks. The broken form remains hidden.
 - [x] Validate live canonical, alternate-language, robots, structured-data, sitemap, and `llms.txt` output on the currently deployed release.
-  - The child sitemap contains 328 URLs, includes representative public pages, and excludes account, callback, search, and 404 routes.
+  - Historical deployment checkpoint: the child sitemap had 328 URLs. The 2026-10-05 deployed baseline has 399; current evidence is recorded below.
   - Representative pages expose canonical URLs, appropriate language alternates, descriptions, social metadata, and BlogPosting, Service, or CollectionPage structured data.
 - [ ] Confirm that Algolia indexing produces one canonical hit per document and displays multiple categories correctly.
 - [ ] Submit the sitemap in Google Search Console and Bing Webmaster Tools.
@@ -129,7 +129,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [ ] Replace `content/pages/szkolenie-event-sourcing/index.en.md` with an accurate English offer.
   - Current input is needed for the format, next dates or evergreen availability, price, and registration CTA; the Polish source still contains February/March 2025 dates and an old Google Form.
 - [x] Add hand-written descriptions and visible summaries to ten cornerstone English articles covering the subjects listed in `plan.md`.
-- [ ] Curate Polish reading paths after enough Polish articles are available.
+- [ ] Curate additional Polish reading paths; Event Sourcing now shares the eight-step sequence with canonical-language fallbacks.
 - [ ] Add permitted consulting case studies, outcomes, and testimonials.
 - [ ] Start translations of commercially important English-only articles.
 - [ ] Apply the documented canonical/excerpt workflow to future Substack reposts.
@@ -158,14 +158,14 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Remove the optional category-card reading-minute estimate from the global page-creation query; on Gatsby 5 it invokes full Markdown rendering and stalls creation, while the 562 pages now create in about 35 seconds.
 - [x] Convert the ten legacy GraphQL sort queries to Gatsby 5 syntax and set `trailingSlash: "always"` during Step 3; the Node 24 build will verify them.
 - [x] Align `.nvmrc`, GitHub Actions, and `package.json` engines on Node 24, refresh `yarn.lock`, and pass a frozen Yarn install.
-- [ ] Step 4: deploy a Node 24 preview and verify routes, SEO files, Netlify behavior, Algolia, images, videos, and language switching before production.
+- [ ] Step 4 follow-up: finish external service and production checks after the Node 24 deployment. CI/build/browser and representative public routes/SEO/redirects pass for the deployed baseline; live Algolia, full CDN behavior and later fixes remain separate checks.
   - The preview revealed duplicated browser markup and blurred article images after hydration. Gatsby's browser-only `SessionCheck` root wrapper differed from SSR; the browser now reuses the SSR wrapper. The disabled sign-in integration, both-language routes, webpack workaround, CI inputs, and package have been removed.
   - [x] Establish the first Playwright/Vitest archive test red on the broken preview (two H1 elements versus one in production; real cover never becomes usable) and green on the corrected local build.
   - [x] Add a second category-index test and commit reviewed 1440×900 screenshots for both routes. The category reference came from production; the archive reference was updated from the corrected local build after making its hidden H1 visible. Normal tests use those local snapshots and do not request production. The preview fails both tests, while the corrected local build passes both.
   - [x] Add a client-side navigation check. It fails on the old preview (two H1s) and passes locally with one H1, one footer, and scroll position 0.
   - [x] Move the archive heading below the 80px desktop header without changing the homepage article-list spacing; confirm the H1 top-position assertion was red before the layout change and green afterward.
   - [x] Run a clean-exit Gatsby 5 build outside the restricted sandbox, `yarn smoke`, `yarn test`, and `yarn test:visual` locally. The restricted-sandbox build's earlier non-zero exit was solely Gatsby's EROFS write to `~/.config/gatsby/`, after all 562 pages had generated.
-  - [ ] Confirm all twelve current browser checks pass on GitHub Actions' Chromium/Linux runner and review its screenshot artifacts before deploying the fix.
+  - [x] Confirm the twelve pre-redesign browser checks pass on GitHub Actions for 99519a3c; its Chromium comparison step succeeded. The latest fifteen checks require a separate CI run.
   - [x] Rebuild and confirm the six retired English/Polish sign-in, callback, and billing routes and their nine redirects are absent; update the committed route contract only for these intended removals. The Node 24/Gatsby 5 build produced 556 routes, 80 redirects, and the unchanged 330 sitemap URLs; `yarn test` passes.
   - [x] Verify English and Polish homepage snapshots against the corrected local build. All six Playwright/Vitest tests pass locally, including the archive, category, and article-footer comparisons.
   - [x] Capture the production article-footer state for `/en/vertical-slices-and-dependencies/`, add a regression test, and fix the author-note query to select the dedicated `parts` content. The new test failed on the preview and all six visual tests passed on the corrected local build; a fresh preview still needs review.
@@ -176,7 +176,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Verify static WebFinger is copied to public; the smoke/build checks cover the source and generated output.
 - [x] Add and run `yarn smoke` for configuration, WebFinger, source syntax, and GraphQL parsing; keep the full build contract as the release gate.
 - [ ] After the runtime and package-manager changes, start incremental TypeScript adoption with shared types and a small source module.
-- [ ] Add an ESLint baseline for changed JavaScript/TypeScript files and expand it as the existing lint backlog is addressed.
+- [x] Add a separate correctness lint baseline for modern JavaScript/TypeScript files and enforce it in CI; expansion and the full-project legacy backlog remain separate work.
 - [ ] After the migration, diagnose contact form email delivery and discuss a reliable alternative before restoring a form.
 - [ ] Keep React 19, Gatsby Slices, deferred static generation and full lint cleanup deferred. Vitest, image/Head migration, StaticQuery replacement and explicit schema typing are complete; see current verification below.
 - [ ] Stop for a decision before replacing `gatsby-plugin-styled-jsx-postcss`, `gatsby-remark-embed-video`, or another integration where the replacement would change visible CSS/content behavior.
@@ -214,7 +214,8 @@ Current baseline: Gatsby 5.16.1 / React 18.3.1 / Node 24 / Yarn 1. Historical bu
 - [x] Cache Yarn downloads and compatible Gatsby outputs in CI; save validated builds only.
 - [x] Measure cold/warm builds and verify modified/deleted content against warm caches.
 - [x] Run frozen installation, smoke, full production tests and browser checks.
-- [ ] Verify CI/deployment and live Algolia independently; local checks do not complete these tasks.
+- [x] Verify CI and representative production behavior for the deployed baseline since 99519a3c.
+- [ ] Verify later commits and live Algolia independently; local checks do not complete these tasks.
 
 Deferred: Tailwind/theme variables, dark mode, Slices, npm migration, layout redesign. Preserve current appearance and existing output contracts; no deployment/index mutation in this pass.
 
@@ -225,7 +226,7 @@ Deferred: Tailwind/theme variables, dark mode, Slices, npm migration, layout red
 - [x] Verify imported code languages/highlighting, importer regression tests, and inbound/outbound relative cross-links across all blog content.
 - [x] Verify updated social navigation and README category reading-order documentation.
 
-### Current verification results
+### Pre-redesign pass verification — 2026-10-04
 
 - Frozen Yarn installation passed with registry access; the local Sharp binary was rebuilt after dependency relinking. Smoke checks cover 70 source files and 17 GraphQL queries.
 - Final production build passed in 54.39 seconds. Full `yarn test` passed in 7.38 seconds, including 14 importer tests and six generated-content/navigation checks. All 12 browser checks passed in 32.44 seconds; existing screenshot baselines and tolerances were retained.
@@ -238,10 +239,40 @@ Deferred: Tailwind/theme variables, dark mode, Slices, npm migration, layout red
 - No cache-test publication, temporary source marker or fixture entry remains in content or llms.txt. The reusable cache check now uses only an existing non-indexed placeholder and restores sources/index in finally.
 
 
-### Next pre-redesign pass — 2026-10-04
+### Legacy routing and lint pass — 2026-10-04 (completed locally)
 
-- [ ] Audit and remove overlapping gatsby-plugin-i18n only after exact output and browser verification.
-- [ ] Remove unused direct reach-router and InstantSearch umbrella dependencies; preserve active search/comments APIs.
-- [ ] Add a clean, scoped correctness lint baseline for modern ESM/JSX modules and future TypeScript files; enforce it in CI without suppressing the full-project backlog.
-- [ ] Verify frozen install, smoke/lint, production build, full tests and English/Polish browser checks; record results here.
+- [x] Audit and remove overlapping gatsby-plugin-i18n only after exact output and browser verification.
+- [x] Remove unused direct reach-router and InstantSearch umbrella dependencies; preserve active search/comments APIs.
+- [x] Add a clean, scoped correctness lint baseline for modern ESM/JSX modules and future TypeScript files; enforce it in CI without suppressing the full-project backlog.
+- [x] Verify frozen install, smoke/lint, production build, full tests and English/Polish browser checks; record results here.
 - [ ] Confirm the new gates on GitHub Actions independently of local results.
+
+
+### Category parity and follow-up reviews
+
+- [x] Share article selection between category indexes/details, with equal unique-slug membership and canonical-language fallback links.
+- [x] Add the eight recommended Event Sourcing steps to the Polish guide and validate cards, counts, order and links.
+- [x] Research current Gatsby localization options and VitePress-style local search; document trade-offs and the next safe migration step.
+
+
+### Latest verification and release state — 2026-10-05
+
+- [x] Local category parity build passed in 175.21 seconds; route creation 0.743 seconds and all-query phase 42.078 seconds. Slow archive/category query warnings remain; no speedup is claimed from these configuration-changing builds.
+- [x] Full yarn test passed in 14.62 seconds, including four category-selection regression tests. Exact contract remains 694 routes, 222 redirects, 399 sitemap URLs and unchanged feed entries.
+- [x] All 15 browser checks passed in 31.63 seconds, including mocked English/Polish search, category language switching, shared reading order and canonical-English fallback navigation. Existing screenshot baselines and tolerances were unchanged.
+- [x] Smoke (71 source files / 17 GraphQL queries), scoped lint (28 files / zero warnings), actionlint and git diff --check passed. Lint probes confirmed undefined variables and conditional hooks fail the gate. Frozen installation passed for the dependency cleanup; category changes add no dependencies.
+- [x] Category detail/index selection shares one helper. English and Polish Event Sourcing each list the same 89 unique articles and eight reading steps, preferring actual translations and falling back to canonical available languages. Missing placeholder files no longer hide articles. Category routes and native-language editorial descriptions are preserved. The prior 88-card Polish checkpoint above is superseded.
+- [x] The legacy routing/lint cleanup is in 0163b29; category source changes are in b5fa19f. Latest browser regression and documentation edits are recorded alongside this validation; no deployment was performed by the agent.
+- [x] Verify the owner's deployed baseline since 99519a3c. Its branch CI run [37236735203](https://github.com/oskardudycz/event-driven.io/actions/runs/37236735203) passed Node 24 setup, frozen install, smoke, build, full tests, Chromium comparisons and cache restore/save. Main Build and Deploy run [37237889809](https://github.com/oskardudycz/event-driven.io/actions/runs/37237889809), commit 4707b17, also succeeded. This does not verify later commits.
+- [x] Public production probes: 16 sampled pages/assets return HTTP 200; English/Polish homepage/archive/category/consulting/contact metadata are correct, both contact pages expose Calendly, the Kurrent article has 16 TypeScript blocks, sitemap has 399 URLs, llms.txt has no temporary cache publication, WebFinger uses hachyderm.io, and the original Substack slug redirects with HTTP 301 to its English route.
+- [x] Production browser smoke: English archive → Polish archive → canonical English article navigation retains one H1/site footer, correct language/title and canonical metadata. Third-party requests were blocked for this read-only check; external widgets/search were not exercised.
+- [ ] Verify CI and deployment for the later routing/lint/category changes and all 15 current browser checks. Production still showed English Event Sourcing 89/eight steps versus Polish 88/no steps during the recorded probe.
+- [ ] Keep live Algolia behavior/indexing, CodeQL execution, Search Console/Bing submission and Core Web Vitals as independent external follow-ups.
+
+### Next implementation candidates
+
+Research is in [docs/gatsby-search-and-localization-review.md](docs/gatsby-search-and-localization-review.md), with primary-source links and published peer ranges.
+
+- [ ] Prototype MiniSearch local indexes and measure compressed payload, initialization/mobile responsiveness and English/Polish quality before replacing Algolia. Preserve the search layout, relative links and canonical article deduplication; load search assets only when needed.
+- [ ] Prototype gatsby-plugin-react-i18next 3.0.1 on static routes/provider/links with compatible i18next/react-i18next upgrades. Preserve prefixed English routes, import redirects, placeholder navigation versus canonical metadata and the exact output contract. The published official theme still targets Gatsby 4/React 17/Helmet.
+- [ ] Keep CSS/Tailwind/dark mode/Slices and npm migration deferred; neither search nor localization integrations were replaced in this pass.

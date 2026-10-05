@@ -23,6 +23,7 @@ for (const file of [
   "src/i18n/i18n.json",
   "src/theme/theme.yaml",
   "src/utils/algolia.js",
+  "src/utils/category-posts.mjs",
   "content/meta/config.js",
 ])
   include(file);

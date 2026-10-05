@@ -9,7 +9,7 @@
   "scripts": {
     "generate-llms": "node ./scripts/generate-llms-txt.js",
     "verify-seo": "node ./scripts/verify-seo-build.js",
-    "test": "yarn test:seo && yarn test:build-contract && yarn test:substack && yarn test:video && yarn test:redirects && yarn test:archive && yarn test:import-build",
+    "test": "yarn test:seo && yarn test:build-contract && yarn test:substack && yarn test:video && yarn test:redirects && yarn test:archive && yarn test:import-build && yarn test:categories",
     "test:seo": "node ./tests/seo-build.test.js",
     "test:build-contract": "node ./tests/build-contract.test.js",
     "test:visual": "vitest run tests/visual.test.js",
@@ -41,7 +41,8 @@
     "test:archive": "node ./tests/architecture-weekly-manifest.test.js",
     "test:import-build": "node ./tests/article-import-build.test.js",
     "test:cache": "node ./scripts/verify-gatsby-cache.mjs",
-    "lint:modern": "eslint --no-eslintrc --config .eslintrc.modern.json --max-warnings 0 gatsby-node.mjs \"scripts/*.mjs\" \"src/i18n/*.{js,mjs,ts,tsx}\" src/layouts/index.js \"src/components/Menu/*.{js,ts,tsx}\" \"src/components/Seo/*.{js,ts,tsx}\" \"src/components/Video/*.{js,ts,tsx}\" \"src/components/VideoGallery/*.{js,ts,tsx}\" \"src/components/Search/*.{js,ts,tsx}\" src/components/Post/Related.js src/templates/CategoryTemplate.js import/code-languages.mjs"
+    "lint:modern": "eslint --no-eslintrc --config .eslintrc.modern.json --max-warnings 0 gatsby-node.mjs \"scripts/*.mjs\" \"src/i18n/*.{js,mjs,ts,tsx}\" src/layouts/index.js \"src/components/Menu/*.{js,ts,tsx}\" \"src/components/Seo/*.{js,ts,tsx}\" \"src/components/Video/*.{js,ts,tsx}\" \"src/components/VideoGallery/*.{js,ts,tsx}\" \"src/components/Search/*.{js,ts,tsx}\" src/components/Post/Related.js src/templates/CategoryTemplate.js import/code-languages.mjs src/utils/category-posts.mjs src/pages/category.js src/components/List/List.js",
+    "test:categories": "node ./tests/category-posts.test.mjs"
   },
   "dependencies": {
     "@ant-design/compatible": "^1.0.8",

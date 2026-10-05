@@ -11,9 +11,7 @@ import Headline from "../components/Article/Headline";
 import { Link } from "../components/Link";
 import { createHead } from "../components/Seo";
 import categoryGuides from "../../data/category-guides.json";
-
-const categoriesFor = (frontmatter) =>
-  Array.from(new Set([frontmatter.category, ...(frontmatter.categories || [])].filter(Boolean)));
+import { categoriesForLanguage } from "../utils/category-posts.mjs";
 
 const CategoryPage = (props) => {
   const { t } = useTranslation();
@@ -21,26 +19,12 @@ const CategoryPage = (props) => {
   const {
     data: {
       posts: { edges: posts },
-      site: {
-        siteMetadata: { facebook },
-      },
     },
   } = props;
 
-  const categories = new Map();
-  posts.forEach((edge) => {
-    categoriesFor(edge.node.frontmatter).forEach((category) => {
-      const current = categories.get(category) || [];
-      current.push(edge);
-      categories.set(category, current);
-    });
-  });
-
   const guides = categoryGuides.filter((guide) => guide.language === lang);
   const guideFor = (category) => guides.find((guide) => guide.slug === kebabCase(category));
-  const categoryList = Array.from(categories.entries()).filter(([, entries]) =>
-    entries.some(({ node }) => !node.frontmatter.useDefaultLangCanonical)
-  ).sort(([left], [right]) => {
+  const categoryList = categoriesForLanguage(posts.map(({ node }) => node), lang).sort(([left], [right]) => {
     const leftGuide = guideFor(left);
     const rightGuide = guideFor(right);
     if (leftGuide && !rightGuide) return -1;
@@ -134,28 +118,22 @@ export default CategoryPage;
 
 //eslint-disable-next-line no-undef
 export const query = graphql`
-  query PostsQuery($langKey: String!) {
+  query PostsQuery {
     posts: allMarkdownRemark(
       filter: {
         fileAbsolutePath: { regex: "//posts/[0-9]+.*--/" }
-        fields: { langKey: { eq: $langKey } }
+        fields: { source: { eq: "posts" } }
       }
       sort: { fields: { prefix: DESC } }
     ) {
       edges {
         node {
+          fields { slug langKey source }
           frontmatter {
             category
             categories
             useDefaultLangCanonical
           }
-        }
-      }
-    }
-    site {
-      siteMetadata {
-        facebook {
-          appId
         }
       }
     }
