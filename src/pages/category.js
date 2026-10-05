@@ -1,17 +1,17 @@
-import { FaTag } from "react-icons/fa/";
-import PropTypes from "prop-types";
-import React from "react";
-import { graphql } from "gatsby";
-import kebabCase from "lodash/kebabCase";
-import { useTranslation } from "react-i18next";
-import { ThemeContext } from "../layouts";
-import { usePageContext } from "../i18n/page-context";
-import Article from "../components/Article/";
-import Headline from "../components/Article/Headline";
-import { Link } from "../components/Link";
-import { createHead } from "../components/Seo";
-import categoryGuides from "../../data/category-guides.json";
-import { categoriesForLanguage } from "../utils/category-posts.mjs";
+import { FaTag } from 'react-icons/fa/';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { graphql } from 'gatsby';
+import kebabCase from 'lodash/kebabCase';
+import { useTranslation } from 'react-i18next';
+import { ThemeContext } from '../layouts';
+import { usePageContext } from '../i18n/page-context';
+import Article from '../components/Article/';
+import Headline from '../components/Article/Headline';
+import { Link } from '../components/Link';
+import { createHead } from '../components/Seo';
+import categoryGuides from '../../data/category-guides.json';
+import { categoriesForLanguage } from '../utils/category-posts.mjs';
 
 const CategoryPage = (props) => {
   const { t } = useTranslation();
@@ -24,7 +24,10 @@ const CategoryPage = (props) => {
 
   const guides = categoryGuides.filter((guide) => guide.language === lang);
   const guideFor = (category) => guides.find((guide) => guide.slug === kebabCase(category));
-  const categoryList = categoriesForLanguage(posts.map(({ node }) => node), lang).sort(([left], [right]) => {
+  const categoryList = categoriesForLanguage(
+    posts.map(({ node }) => node),
+    lang,
+  ).sort(([left], [right]) => {
     const leftGuide = guideFor(left);
     const rightGuide = guideFor(right);
     if (leftGuide && !rightGuide) return -1;
@@ -38,8 +41,8 @@ const CategoryPage = (props) => {
         {(theme) => (
           <Article theme={theme}>
             <header>
-              <Headline title={t("categories.title")} theme={theme} />
-              <p className="intro">{t("categories.intro")}</p>
+              <Headline title={t('categories.title')} theme={theme} />
+              <p className="intro">{t('categories.intro')}</p>
             </header>
             <div className="categoryGrid">
               {categoryList.map(([category, categoryPosts]) => {
@@ -53,10 +56,10 @@ const CategoryPage = (props) => {
                       <p>
                         {guide
                           ? guide.description
-                          : t("categories.defaultDescription", { category })}
+                          : t('categories.defaultDescription', { category })}
                       </p>
                       <strong>
-                        {t("categories.articleCount", { count: categoryPosts.length })} →
+                        {t('categories.articleCount', { count: categoryPosts.length })} →
                       </strong>
                     </Link>
                   </section>
@@ -116,7 +119,6 @@ CategoryPage.propTypes = {
 
 export default CategoryPage;
 
-//eslint-disable-next-line no-undef
 export const query = graphql`
   query PostsQuery {
     posts: allMarkdownRemark(
@@ -128,7 +130,11 @@ export const query = graphql`
     ) {
       edges {
         node {
-          fields { slug langKey source }
+          fields {
+            slug
+            langKey
+            source
+          }
           frontmatter {
             category
             categories
@@ -140,5 +146,8 @@ export const query = graphql`
   }
 `;
 
-
-export const Head = createHead(({ t }) => ({ title: t("categories.seoTitleAll"), description: t("categories.seoDescription"), schemaType: "CollectionPage" }));
+export const Head = createHead(({ t }) => ({
+  title: t('categories.seoTitleAll'),
+  description: t('categories.seoDescription'),
+  schemaType: 'CollectionPage',
+}));

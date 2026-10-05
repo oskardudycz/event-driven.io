@@ -1,14 +1,14 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Link } from "../Link";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Link } from '../Link';
 
 const List = (props) => {
   const { edges, theme, ordered = false, showImages = false } = props;
-  const ListElement = ordered ? "ol" : "ul";
+  const ListElement = ordered ? 'ol' : 'ul';
 
   return (
     <React.Fragment>
-      <ListElement className={showImages ? `withImages${ordered ? " ordered" : ""}` : ""}>
+      <ListElement className={showImages ? `withImages${ordered ? ' ordered' : ''}` : ''}>
         {edges.map((edge) => {
           const {
             node: {
@@ -21,7 +21,11 @@ const List = (props) => {
 
           return (
             <li key={slug}>
-              <Link to={slug} language={useDefaultLangCanonical ? "en" : langKey} className={showImages ? "readingCard" : ""}>
+              <Link
+                to={slug}
+                language={useDefaultLangCanonical ? 'en' : langKey}
+                className={showImages ? 'readingCard' : ''}
+              >
                 {showImages && image && (
                   <img
                     className="readingCardImage"
@@ -102,8 +106,10 @@ const List = (props) => {
           height: 100%;
           overflow: hidden;
           text-decoration: none;
-          transition: border-color ${theme.time.duration.default},
-            box-shadow ${theme.time.duration.default}, transform ${theme.time.duration.default};
+          transition:
+            border-color ${theme.time.duration.default},
+            box-shadow ${theme.time.duration.default},
+            transform ${theme.time.duration.default};
         }
         :global(.readingCard:hover),
         :global(.readingCard:focus-visible) {

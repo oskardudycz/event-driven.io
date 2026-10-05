@@ -9,7 +9,7 @@ export const wrapRootElement = ({ element }, pluginOptions) => {
   const { i18nextConfig, defaultLanguage } = merge({}, DEFAULT_OPTIONS, pluginOptions);
   if (!i18nextConfig.resources) {
     throw new Error(
-      'You must specify where to load translations from through the `resources` field of `i18nextConfig`'
+      'You must specify where to load translations from through the `resources` field of `i18nextConfig`',
     );
   }
   i18nextConfig.fallbackLng = defaultLanguage;
@@ -53,7 +53,7 @@ export const wrapPageElement = ({ element, props }, pluginOptions) => {
   // We know that this props will exist here because of @3nvi/gatsby-plugin-intl. Again, the
   // fallback has to do with the handling of non-localized pages (i.e. the original ones),
   // which exist only if `deleteOriginalPages` is `false`
-  i18next.changeLanguage(props.pageContext.lang || "ch");
+  i18next.changeLanguage(props.pageContext.lang || 'ch');
 
   return (
     <React.Fragment>

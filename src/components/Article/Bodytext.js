@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const Bodytext = props => {
+const Bodytext = (props) => {
   const { html, theme } = props;
 
   return (
@@ -48,7 +48,7 @@ const Bodytext = props => {
           }
           :global(a) {
             font-weight: ${theme.font.weight.bold};
-            color: ${theme.color.brand.primary};
+            color: ${theme.text.color.brand};
             text-decoration: underline;
           }
           :global(a.gatsby-resp-image-link) {
@@ -70,7 +70,7 @@ const Bodytext = props => {
             font-style: italic;
             border-left: 7px solid orange;
             margin: 1.5em 10px;
-            padding: 1em 10px .1em 10px;
+            padding: 1em 10px 0.1em 10px;
           }
         }
 
@@ -89,7 +89,7 @@ const Bodytext = props => {
 
 Bodytext.propTypes = {
   html: PropTypes.string.isRequired,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
 };
 
 export default Bodytext;

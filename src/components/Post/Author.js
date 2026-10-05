@@ -1,10 +1,10 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import config from "../../../content/meta/config";
-import { withPrefix } from "gatsby";
+import config from '../../../content/meta/config';
+import { withPrefix } from 'gatsby';
 
-const avatar = withPrefix("/images/avatar.webp");
+const avatar = withPrefix('/images/avatar.webp');
 
 const Author = (props) => {
   const { note, theme } = props;
@@ -49,7 +49,7 @@ const Author = (props) => {
           flex-direction: column;
         }
         .note :global(a) {
-          color: ${theme.color.brand.primary};
+          color: ${theme.text.color.brand};
           font-weight: bold;
           text-decoration: underline;
         }

@@ -1,5 +1,5 @@
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
 function verifySeoBuild(publicDirectory) {
   const failures = [];
@@ -9,10 +9,10 @@ function verifySeoBuild(publicDirectory) {
 
     if (!fs.existsSync(filePath)) {
       failures.push(`Missing generated file: public/${relativePath}`);
-      return "";
+      return '';
     }
 
-    return fs.readFileSync(filePath, "utf8");
+    return fs.readFileSync(filePath, 'utf8');
   }
 
   function expectContains(label, content, expected) {
@@ -36,28 +36,28 @@ function verifySeoBuild(publicDirectory) {
   }
 
   const consultingEn = verifyPage(
-    "en/consulting/index.html",
-    "https://event-driven.io/en/consulting/",
-    "Service"
+    'en/consulting/index.html',
+    'https://event-driven.io/en/consulting/',
+    'Service',
   );
   const consultingPl = verifyPage(
-    "pl/consulting/index.html",
-    "https://event-driven.io/pl/consulting/",
-    "Service"
+    'pl/consulting/index.html',
+    'https://event-driven.io/pl/consulting/',
+    'Service',
   );
   verifyPage(
-    "en/category/event-sourcing/index.html",
-    "https://event-driven.io/en/category/event-sourcing/",
-    "CollectionPage"
+    'en/category/event-sourcing/index.html',
+    'https://event-driven.io/en/category/event-sourcing/',
+    'CollectionPage',
   );
   verifyPage(
-    "en/introduction_to_event_sourcing/index.html",
-    "https://event-driven.io/en/introduction_to_event_sourcing/",
-    "BlogPosting"
+    'en/introduction_to_event_sourcing/index.html',
+    'https://event-driven.io/en/introduction_to_event_sourcing/',
+    'BlogPosting',
   );
-  verifyPage("en/articles/index.html", "https://event-driven.io/en/articles/", "CollectionPage");
-  verifyPage("pl/articles/index.html", "https://event-driven.io/pl/articles/", "CollectionPage");
-  verifyPage("en/talks/index.html", "https://event-driven.io/en/talks/", "CollectionPage");
+  verifyPage('en/articles/index.html', 'https://event-driven.io/en/articles/', 'CollectionPage');
+  verifyPage('pl/articles/index.html', 'https://event-driven.io/pl/articles/', 'CollectionPage');
+  verifyPage('en/talks/index.html', 'https://event-driven.io/en/talks/', 'CollectionPage');
 
   // Validate every rendered page, including translated placeholders and noindex routes.
   // Gatsby's internal HTML fragments are not standalone pages.
@@ -65,21 +65,33 @@ function verifySeoBuild(publicDirectory) {
     for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
       const filePath = path.join(directory, entry.name);
       if (entry.isDirectory()) {
-        if (entry.name !== "_gatsby") verifyHeadings(filePath);
-      } else if (entry.name.endsWith(".html")) {
-        const html = fs.readFileSync(filePath, "utf8");
+        if (entry.name !== '_gatsby') verifyHeadings(filePath);
+      } else if (entry.name.endsWith('.html')) {
+        const html = fs.readFileSync(filePath, 'utf8');
         const headingCount = (html.match(/<h1\b[^>]*>/gi) || []).length;
         if (headingCount !== 1) {
-          failures.push(`${path.relative(publicDirectory, filePath)} has ${headingCount} H1 headings; expected one`);
+          failures.push(
+            `${path.relative(publicDirectory, filePath)} has ${headingCount} H1 headings; expected one`,
+          );
         }
-        for (const match of html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)) {
+        for (const match of html.matchAll(
+          /<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi,
+        )) {
           const schema = JSON.parse(match[1]);
-          if (schema["@type"] === "Service" && "inLanguage" in schema) {
-            failures.push(`${path.relative(publicDirectory, filePath)} uses unsupported inLanguage on Service`);
+          if (schema['@type'] === 'Service' && 'inLanguage' in schema) {
+            failures.push(
+              `${path.relative(publicDirectory, filePath)} uses unsupported inLanguage on Service`,
+            );
           }
         }
-        for (const match of html.matchAll(/<iframe\b[^>]*src="https:\/\/www\.architecture-weekly\.com\/embed"[^>]*>/gi)) {
-          expectContains(path.relative(publicDirectory, filePath), match[0], 'title="Subscribe to Architecture Weekly"');
+        for (const match of html.matchAll(
+          /<iframe\b[^>]*src="https:\/\/www\.architecture-weekly\.com\/embed"[^>]*>/gi,
+        )) {
+          expectContains(
+            path.relative(publicDirectory, filePath),
+            match[0],
+            'title="Subscribe to Architecture Weekly"',
+          );
           expectContains(path.relative(publicDirectory, filePath), match[0], 'loading="lazy"');
         }
       }
@@ -88,57 +100,54 @@ function verifySeoBuild(publicDirectory) {
   if (fs.existsSync(publicDirectory)) verifyHeadings(publicDirectory);
 
   for (const html of [consultingEn, consultingPl]) {
-    expectContains("consulting language alternates", html, 'hrefLang="x-default"');
-    expectContains("consulting language alternates", html, 'hrefLang="en"');
-    expectContains("consulting language alternates", html, 'hrefLang="pl"');
+    expectContains('consulting language alternates', html, 'hrefLang="x-default"');
+    expectContains('consulting language alternates', html, 'hrefLang="en"');
+    expectContains('consulting language alternates', html, 'hrefLang="pl"');
   }
 
   for (const retiredPage of [
-    "en/account/index.html",
-    "pl/account/index.html",
-    "en/account/billing/index.html",
-    "pl/account/billing/index.html",
-    "en/callback/index.html",
-    "pl/callback/index.html",
+    'en/account/index.html',
+    'pl/account/index.html',
+    'en/account/billing/index.html',
+    'pl/account/billing/index.html',
+    'en/callback/index.html',
+    'pl/callback/index.html',
   ]) {
     if (fs.existsSync(path.join(publicDirectory, retiredPage))) {
       failures.push(`Retired sign-in page still generated: public/${retiredPage}`);
     }
   }
 
-  const robots = read("robots.txt");
-  expectContains("robots.txt", robots, "User-agent: *");
-  expectContains("robots.txt", robots, "Allow: /");
+  const robots = read('robots.txt');
+  expectContains('robots.txt', robots, 'User-agent: *');
+  expectContains('robots.txt', robots, 'Allow: /');
   expectContains(
-    "robots.txt",
+    'robots.txt',
     robots,
-    "Sitemap: https://event-driven.io/sitemap/sitemap-index.xml"
+    'Sitemap: https://event-driven.io/sitemap/sitemap-index.xml',
   );
 
-  const sitemapIndex = read("sitemap/sitemap-index.xml");
+  const sitemapIndex = read('sitemap/sitemap-index.xml');
   expectContains(
-    "sitemap index",
+    'sitemap index',
     sitemapIndex,
-    "<loc>https://event-driven.io/sitemap/sitemap-0.xml</loc>"
+    '<loc>https://event-driven.io/sitemap/sitemap-0.xml</loc>',
   );
 
-  const sitemap = read("sitemap/sitemap-0.xml");
+  const sitemap = read('sitemap/sitemap-0.xml');
   const sitemapUrls = Array.from(sitemap.matchAll(/<loc>([^<]+)<\/loc>/g), (match) => match[1]);
   // A page and a post currently claim the same anti-patterns route. Keep this exception explicit
   // until the editorial owner of that URL is chosen; every other sitemap canonical must self-match.
   const knownCanonicalExceptions = new Map([
-    [
-      "https://event-driven.io/pl/anti-patterns/",
-      "https://event-driven.io/en/anti-patterns/",
-    ],
+    ['https://event-driven.io/pl/anti-patterns/', 'https://event-driven.io/en/anti-patterns/'],
   ]);
   if (new Set(sitemapUrls).size !== sitemapUrls.length) {
-    failures.push("sitemap contains duplicate URLs");
+    failures.push('sitemap contains duplicate URLs');
   }
 
   for (const sitemapUrl of sitemapUrls) {
     const pathname = new URL(sitemapUrl).pathname;
-    const relativePath = pathname.endsWith("/")
+    const relativePath = pathname.endsWith('/')
       ? `${pathname.slice(1)}index.html`
       : pathname.slice(1);
     const html = read(relativePath);
@@ -147,41 +156,41 @@ function verifySeoBuild(publicDirectory) {
   }
 
   for (const publicRoute of [
-    "/en/consulting/",
-    "/pl/consulting/",
-    "/en/articles/",
-    "/pl/articles/",
-    "/en/category/event-sourcing/",
-    "/en/introduction_to_event_sourcing/",
-    "/en/talks/",
+    '/en/consulting/',
+    '/pl/consulting/',
+    '/en/articles/',
+    '/pl/articles/',
+    '/en/category/event-sourcing/',
+    '/en/introduction_to_event_sourcing/',
+    '/en/talks/',
   ]) {
-    expectContains("sitemap", sitemap, `<loc>https://event-driven.io${publicRoute}</loc>`);
+    expectContains('sitemap', sitemap, `<loc>https://event-driven.io${publicRoute}</loc>`);
   }
 
   for (const excludedRoute of [
-    "/en/account/",
-    "/pl/account/",
-    "/en/account/billing/",
-    "/pl/account/billing/",
-    "/en/callback/",
-    "/pl/callback/",
-    "/en/search/",
-    "/404/",
+    '/en/account/',
+    '/pl/account/',
+    '/en/account/billing/',
+    '/pl/account/billing/',
+    '/en/callback/',
+    '/pl/callback/',
+    '/en/search/',
+    '/404/',
   ]) {
-    expectExcludes("sitemap", sitemap, `<loc>https://event-driven.io${excludedRoute}</loc>`);
+    expectExcludes('sitemap', sitemap, `<loc>https://event-driven.io${excludedRoute}</loc>`);
   }
 
-  const llms = read("llms.txt");
-  expectContains("llms.txt", llms, "https://event-driven.io/en/consulting/");
-  expectContains("llms.txt", llms, "https://event-driven.io/pl/consulting/");
-  expectContains("llms.txt", llms, "https://event-driven.io/en/introduction_to_event_sourcing/");
-  expectContains("llms.txt", llms, "https://event-driven.io/sitemap/sitemap-index.xml");
+  const llms = read('llms.txt');
+  expectContains('llms.txt', llms, 'https://event-driven.io/en/consulting/');
+  expectContains('llms.txt', llms, 'https://event-driven.io/pl/consulting/');
+  expectContains('llms.txt', llms, 'https://event-driven.io/en/introduction_to_event_sourcing/');
+  expectContains('llms.txt', llms, 'https://event-driven.io/sitemap/sitemap-index.xml');
 
-  const headers = read("_headers");
-  expectContains("_headers", headers, "X-Frame-Options: DENY");
-  expectContains("_headers", headers, "X-Content-Type-Options: nosniff");
-  expectContains("_headers", headers, "/llms.txt");
-  expectContains("_headers", headers, "Content-Type: text/plain; charset=UTF-8");
+  const headers = read('_headers');
+  expectContains('_headers', headers, 'X-Frame-Options: DENY');
+  expectContains('_headers', headers, 'X-Content-Type-Options: nosniff');
+  expectContains('_headers', headers, '/llms.txt');
+  expectContains('_headers', headers, 'Content-Type: text/plain; charset=UTF-8');
 
   return failures;
 }

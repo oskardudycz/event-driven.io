@@ -1,32 +1,49 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Link } from "gatsby";
-import { Highlight, Snippet } from "react-instantsearch-dom";
-import { usePageContext } from "../../i18n/page-context";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'gatsby';
+import { highlightParts, snippet } from '../../search/snippets.mjs';
+
+const Highlight = ({ text, terms }) =>
+  highlightParts(text, terms).map((part, index) =>
+    part.highlighted ? (
+      <mark key={index} className="ais-Highlight-highlighted">
+        {part.text}
+      </mark>
+    ) : (
+      <React.Fragment key={index}>{part.text}</React.Fragment>
+    ),
+  );
+Highlight.propTypes = { text: PropTypes.string.isRequired, terms: PropTypes.array.isRequired };
+import { usePageContext } from '../../i18n/page-context';
 
 const Hit = (props) => {
   const { hit } = props;
-  const { lang = "en" } = usePageContext();
+  const { lang = 'en' } = usePageContext();
   const sourceLabels =
-    lang === "pl"
-      ? { posts: "Artykuł", pages: "Strona", "newsletter-pl": "Newsletter" }
-      : { posts: "Article", pages: "Page", "newsletter-pl": "Newsletter" };
+    lang === 'pl'
+      ? { posts: 'Artykuł', pages: 'Strona', 'newsletter-pl': 'Newsletter' }
+      : { posts: 'Article', pages: 'Page', 'newsletter-pl': 'Newsletter' };
   const categories = Array.isArray(hit.category)
     ? hit.category
     : hit.category
-    ? [hit.category]
-    : [];
-  const details = [sourceLabels[hit.source] || hit.source, ...categories, hit.date].filter(Boolean);
+      ? [hit.category]
+      : [];
+  const details = [
+    sourceLabels[hit.source] || hit.source,
+    ...categories,
+    hit.date,
+    ...(hit.langKey !== lang ? [lang === 'pl' ? 'Po angielsku' : 'In Polish'] : []),
+  ].filter(Boolean);
 
   return (
     <article className="search-hit">
       <Link to={hit.path}>
         <h2>
-          <Highlight attribute="title" hit={hit} />
+          <Highlight text={hit.title} terms={hit.terms} />
         </h2>
-        {details.length > 0 && <p className="search-hit-meta">{details.join(" · ")}</p>}
+        {details.length > 0 && <p className="search-hit-meta">{details.join(' · ')}</p>}
         <p className="search-hit-snippet">
-          <Snippet attribute="content" hit={hit} />
+          <Highlight text={snippet(hit.content, hit.terms)} terms={hit.terms} />
         </p>
       </Link>
 

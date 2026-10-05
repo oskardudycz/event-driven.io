@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { useTranslation } from "react-i18next";
-import Video from "../Video";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
+import Video from '../Video';
 
 const VideoGallery = ({ videos, theme }) => {
   const { t } = useTranslation();
@@ -16,7 +16,7 @@ const VideoGallery = ({ videos, theme }) => {
               <Video
                 videoSrcURL={video.VideoId}
                 videoTitle={video.Title}
-                playLabel={t("talks.play", { title: video.Title })}
+                playLabel={t('talks.play', { title: video.Title })}
               />
               <div className="videoDetails">
                 <h3>

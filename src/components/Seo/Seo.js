@@ -1,30 +1,33 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { withPrefix } from "gatsby";
-import i18next from "i18next";
-import { DEFAULT_OPTIONS } from "../../i18n/constants";
-import config from "../../../content/meta/config";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { withPrefix } from 'gatsby';
+import i18next from 'i18next';
+import { DEFAULT_OPTIONS } from '../../i18n/constants';
+import { publicationDate } from '../../utils/publication-date.mjs';
+import config from '../../../content/meta/config';
 
 const normalizePath = (path) => {
-  const pathWithoutSlashes = (path || "").replace(/^\/+|\/+$/g, "");
-  return pathWithoutSlashes ? `/${pathWithoutSlashes}/` : "/";
+  const pathWithoutSlashes = (path || '').replace(/^\/+|\/+$/g, '');
+  return pathWithoutSlashes ? `/${pathWithoutSlashes}/` : '/';
 };
 
 const absoluteUrl = (host, path) =>
-  path && path.startsWith("http") ? path : `${host}${path || ""}`;
+  path && path.startsWith('http') ? path : `${host}${path || ''}`;
 
 // Head renders outside wrapPageElement. Use its explicit page context and a
 // fixed-language translator so parallel SSR and navigation cannot mix locales.
 const headI18n = i18next.createInstance();
 headI18n.init({ ...DEFAULT_OPTIONS.i18nextConfig, initImmediate: false });
 
-export const createHead = (options = {}) => function Head({ data = {}, pageContext = {} }) {
-  const context = { ...DEFAULT_OPTIONS, ...pageContext };
-  context.lang = pageContext.lang || DEFAULT_OPTIONS.defaultLanguage;
-  const t = headI18n.getFixedT(context.lang);
-  const seoProps = typeof options === "function" ? options({ data, pageContext: context, t }) : options;
-  return <Seo facebook={data.site?.siteMetadata?.facebook} {...seoProps} pageContext={context} />;
-};
+export const createHead = (options = {}) =>
+  function Head({ data = {}, pageContext = {} }) {
+    const context = { ...DEFAULT_OPTIONS, ...pageContext };
+    context.lang = pageContext.lang || DEFAULT_OPTIONS.defaultLanguage;
+    const t = headI18n.getFixedT(context.lang);
+    const seoProps =
+      typeof options === 'function' ? options({ data, pageContext: context, t }) : options;
+    return <Seo facebook={data.site?.siteMetadata?.facebook} {...seoProps} pageContext={context} />;
+  };
 
 const Seo = (props) => {
   const t = headI18n.getFixedT(props.pageContext.lang);
@@ -34,7 +37,7 @@ const Seo = (props) => {
     supportedLanguages = [],
     availableLanguages,
     canonicalLanguages,
-    defaultLanguage = "en",
+    defaultLanguage = 'en',
   } = props.pageContext;
 
   const {
@@ -49,10 +52,11 @@ const Seo = (props) => {
   } = props;
   const frontmatter = (data || {}).frontmatter || {};
   const fields = (data || {}).fields || {};
+  const published = publicationDate(frontmatter.publishedAt, fields.prefix);
   const postTitle = frontmatter.title;
   const postDescription = frontmatter.description;
   const postCover = frontmatter.cover || {};
-  const postSlug = fields.slug || "";
+  const postSlug = fields.slug || '';
 
   const pageTitle = suppliedTitle || postTitle;
   const title = pageTitle ? `${pageTitle} - ${config.shortSiteTitle}` : config.siteTitle;
@@ -60,11 +64,11 @@ const Seo = (props) => {
     suppliedDescription ||
     postDescription ||
     (data || {}).excerpt ||
-    t("seo.siteDescription", { defaultValue: config.siteDescription });
-  const host = config.siteUrl.replace(/\/$/, "");
+    t('seo.siteDescription', { defaultValue: config.siteDescription });
+  const host = config.siteUrl.replace(/\/$/, '');
   const imagePath = ((postCover.childImageSharp || {}).resize || {}).src || config.siteImage;
   const image = absoluteUrl(host, imagePath);
-  const pagePath = normalizePath(originalPath || postSlug || "/");
+  const pagePath = normalizePath(originalPath || postSlug || '/');
   const canonicalLanguage = useDefaultLangCanonical ? defaultLanguage : lang || defaultLanguage;
   const canonicalUrl = `${host}/${canonicalLanguage}${pagePath}`;
   const requestedLanguages = canonicalLanguages || availableLanguages || supportedLanguages;
@@ -74,12 +78,12 @@ const Seo = (props) => {
   const defaultAlternateLanguage = languages.includes(defaultLanguage)
     ? defaultLanguage
     : languages[0] || canonicalLanguage;
-  const isArticle = schemaType === "BlogPosting" || fields.source === "posts";
+  const isArticle = schemaType === 'BlogPosting' || fields.source === 'posts';
   const isService =
-    fields.source === "pages" && /training|szkolenie|workshop|consult/i.test(pagePath);
-  const isProfile = fields.source === "pages" && pagePath === "/about/";
+    fields.source === 'pages' && /training|szkolenie|workshop|consult/i.test(pagePath);
+  const isProfile = fields.source === 'pages' && pagePath === '/about/';
   const person = {
-    "@type": "Person",
+    '@type': 'Person',
     name: config.authorName,
     url: `${host}/${canonicalLanguage}/about/`,
     sameAs: Object.values(config.socialLinks || {})
@@ -89,34 +93,36 @@ const Seo = (props) => {
   const resolvedSchemaType =
     schemaType ||
     (isArticle
-      ? "BlogPosting"
+      ? 'BlogPosting'
       : isService
-      ? "Service"
-      : isProfile
-      ? "ProfilePage"
-      : pagePath === "/"
-      ? "WebSite"
-      : "WebPage");
+        ? 'Service'
+        : isProfile
+          ? 'ProfilePage'
+          : pagePath === '/'
+            ? 'WebSite'
+            : 'WebPage');
   const structuredData = {
-    "@context": "https://schema.org",
-    "@type": resolvedSchemaType,
+    '@context': 'https://schema.org',
+    '@type': resolvedSchemaType,
     name: pageTitle || config.siteTitle,
     ...(isArticle ? { headline: pageTitle || config.siteTitle } : {}),
     description,
     url: canonicalUrl,
-    ...(resolvedSchemaType !== "Service" ? { inLanguage: canonicalLanguage } : {}),
+    ...(resolvedSchemaType !== 'Service' ? { inLanguage: canonicalLanguage } : {}),
     ...(image ? { image } : {}),
     ...(isArticle && fields.prefix
       ? {
-          datePublished: fields.prefix,
+          datePublished: published,
           mainEntityOfPage: {
-            "@type": "WebPage",
-            "@id": canonicalUrl,
+            '@type': 'WebPage',
+            '@id': canonicalUrl,
           },
           ...([frontmatter.category, ...(frontmatter.categories || [])].filter(Boolean).length
             ? {
                 articleSection: Array.from(
-                  new Set([frontmatter.category, ...(frontmatter.categories || [])].filter(Boolean))
+                  new Set(
+                    [frontmatter.category, ...(frontmatter.categories || [])].filter(Boolean),
+                  ),
                 ),
               }
             : {}),
@@ -124,15 +130,15 @@ const Seo = (props) => {
           publisher: person,
         }
       : {}),
-    ...(resolvedSchemaType === "Service"
+    ...(resolvedSchemaType === 'Service'
       ? {
-          serviceType: pageTitle || "Software architecture consulting and training",
+          serviceType: pageTitle || 'Software architecture consulting and training',
           provider: person,
-          areaServed: "Worldwide",
+          areaServed: 'Worldwide',
         }
       : {}),
-    ...(resolvedSchemaType === "ProfilePage" ? { mainEntity: person } : {}),
-    ...(resolvedSchemaType === "WebSite"
+    ...(resolvedSchemaType === 'ProfilePage' ? { mainEntity: person } : {}),
+    ...(resolvedSchemaType === 'WebSite'
       ? {
           author: person,
         }
@@ -140,44 +146,46 @@ const Seo = (props) => {
   };
 
   const metaTags = [
-    { name: "description", content: description },
-    ...(noIndex ? [{ name: "robots", content: "noindex, nofollow" }] : []),
-    { property: "og:title", content: title },
-    { property: "og:image", content: image },
-    { property: "og:image:alt", content: pageTitle || config.siteTitle },
-    { property: "og:type", content: isArticle ? "article" : "website" },
-    { property: "og:description", content: description },
-    { property: "og:locale", content: canonicalLanguage === "pl" ? "pl_PL" : "en_US" },
-    { property: "og:url", content: canonicalUrl },
+    { name: 'description', content: description },
+    ...(noIndex ? [{ name: 'robots', content: 'noindex, nofollow' }] : []),
+    { property: 'og:title', content: title },
+    { property: 'og:image', content: image },
+    { property: 'og:image:alt', content: pageTitle || config.siteTitle },
+    { property: 'og:type', content: isArticle ? 'article' : 'website' },
+    { property: 'og:description', content: description },
+    { property: 'og:locale', content: canonicalLanguage === 'pl' ? 'pl_PL' : 'en_US' },
+    { property: 'og:url', content: canonicalUrl },
     ...(isArticle && fields.prefix
-      ? [{ property: "article:published_time", content: fields.prefix }]
+      ? [{ property: 'article:published_time', content: published }]
       : []),
     ...(isArticle && frontmatter.category
-      ? [{ property: "article:section", content: frontmatter.category }]
+      ? [{ property: 'article:section', content: frontmatter.category }]
       : []),
-    ...(facebook.appId ? [{ property: "fb:app_id", content: facebook.appId }] : []),
-    { name: "twitter:card", content: "summary_large_image" },
-    ...(config.authorTwitterAccount ? [
-      { name: "twitter:site", content: config.authorTwitterAccount },
-      { name: "twitter:creator", content: config.authorTwitterAccount },
-    ] : []),
-    { name: "twitter:title", content: title },
-    { name: "twitter:description", content: description },
-    { name: "twitter:image", content: image },
-    { name: "twitter:image:alt", content: pageTitle || config.siteTitle },
+    ...(facebook.appId ? [{ property: 'fb:app_id', content: facebook.appId }] : []),
+    { name: 'twitter:card', content: 'summary_large_image' },
+    ...(config.authorTwitterAccount
+      ? [
+          { name: 'twitter:site', content: config.authorTwitterAccount },
+          { name: 'twitter:creator', content: config.authorTwitterAccount },
+        ]
+      : []),
+    { name: 'twitter:title', content: title },
+    { name: 'twitter:description', content: description },
+    { name: 'twitter:image', content: image },
+    { name: 'twitter:image:alt', content: pageTitle || config.siteTitle },
   ].concat(meta || []);
 
   const linkTags = [
-    { rel: "canonical", href: canonicalUrl },
+    { rel: 'canonical', href: canonicalUrl },
     ...(languages.length > 1
       ? [
           {
-            rel: "alternate",
-            hrefLang: "x-default",
+            rel: 'alternate',
+            hrefLang: 'x-default',
             href: `${host}/${defaultAlternateLanguage}${pagePath}`,
           },
           ...languages.map((language) => ({
-            rel: "alternate",
+            rel: 'alternate',
             hrefLang: language,
             href: `${host}/${language}${pagePath}`,
           })),
@@ -190,12 +198,32 @@ const Seo = (props) => {
       <html lang={lang} />
       <title id="page-title">{title}</title>
       {[400, 600].map((weight) => (
-        <link key={weight} id={`font-preload-${weight}`} rel="preload" as="font" type="font/woff2" crossOrigin="anonymous" href={withPrefix(`/fonts/open-sans/files/open-sans-latin-${weight}.woff2`)} />
+        <link
+          key={weight}
+          id={`font-preload-${weight}`}
+          rel="preload"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+          href={withPrefix(`/fonts/open-sans/files/open-sans-latin-${weight}.woff2`)}
+        />
       ))}
-      <link rel="stylesheet" href={withPrefix("/fonts/open-sans/index.css")} id="site-fonts" />
-      {metaTags.map((tag) => <meta key={tag.name || tag.property} {...tag} id={`meta-${tag.name || tag.property}`} />)}
-      {linkTags.map((tag) => <link key={tag.hrefLang || tag.rel} {...tag} id={`link-${tag.hrefLang || tag.rel}`} />)}
-      {!noIndex && <script type="application/ld+json" id="page-schema" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }} />}
+      <link rel="stylesheet" href={withPrefix('/fonts/open-sans/index.css')} id="site-fonts" />
+      {metaTags.map((tag) => (
+        <meta key={tag.name || tag.property} {...tag} id={`meta-${tag.name || tag.property}`} />
+      ))}
+      {linkTags.map((tag) => (
+        <link key={tag.hrefLang || tag.rel} {...tag} id={`link-${tag.hrefLang || tag.rel}`} />
+      ))}
+      {!noIndex && (
+        <script
+          type="application/ld+json"
+          id="page-schema"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData).replace(/</g, '\\u003c'),
+          }}
+        />
+      )}
     </React.Fragment>
   );
 };

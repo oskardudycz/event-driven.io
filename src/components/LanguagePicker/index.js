@@ -1,6 +1,6 @@
-import React from "react";
-import { Link as GatsbyLink } from "gatsby";
-import { usePageContext } from "../../i18n/page-context";
+import React from 'react';
+import { Link as GatsbyLink } from 'gatsby';
+import { usePageContext } from '../../i18n/page-context';
 
 const LanguagePicker = () => {
   const {
@@ -10,7 +10,7 @@ const LanguagePicker = () => {
     availableLanguages = supportedLanguages,
     lang,
   } = usePageContext();
-  const pagePath = slug || originalPath || "/";
+  const pagePath = slug || originalPath || '/';
   const languagesToSwitch = availableLanguages.filter((language) => language !== lang);
   // const selectedLanguage = localStorage.getItem("last-selected-lang", lang);
 
@@ -27,11 +27,11 @@ const LanguagePicker = () => {
           <GatsbyLink
             aria-label={`Change language to ${supportedLang}`}
             className="langSelector"
-            onClick={() => localStorage.setItem("last-selected-lang", supportedLang)}
+            onClick={() => localStorage.setItem('last-selected-lang', supportedLang)}
             key={supportedLang}
             to={`/${supportedLang}${pagePath}`}
           >
-            {supportedLang === "en" ? "🇬🇧" : "🇵🇱"}
+            {supportedLang === 'en' ? '🇬🇧' : '🇵🇱'}
           </GatsbyLink>
         ))}
       </div>

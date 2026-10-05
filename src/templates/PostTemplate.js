@@ -1,12 +1,12 @@
-import PropTypes from "prop-types";
-import React from "react";
-import { graphql } from "gatsby";
-require("prismjs/themes/prism-okaidia.css");
+import PropTypes from 'prop-types';
+import React from 'react';
+import { graphql } from 'gatsby';
+require('prismjs/themes/prism-okaidia.css');
 
-import { createHead } from "../components/Seo";
-import Article from "../components/Article";
-import Post from "../components/Post";
-import { ThemeContext } from "../layouts";
+import { createHead } from '../components/Seo';
+import Article from '../components/Article';
+import Post from '../components/Post';
+import { ThemeContext } from '../layouts';
 
 const PostTemplate = (props) => {
   const {
@@ -31,7 +31,9 @@ const PostTemplate = (props) => {
               next={next}
               prev={prev}
               authornote={authorNote}
-              related={relatedIds.map((id) => relatedPosts.edges.find(({ node }) => node.id === id)).filter(Boolean)}
+              related={relatedIds
+                .map((id) => relatedPosts.edges.find(({ node }) => node.id === id))
+                .filter(Boolean)}
               facebook={facebook}
               theme={theme}
             />
@@ -49,7 +51,6 @@ PostTemplate.propTypes = {
 
 export default PostTemplate;
 
-//eslint-disable-next-line no-undef
 export const postQuery = graphql`
   query PostBySlug($slug: String!, $langKey: String!, $relatedIds: [String!]!) {
     relatedPosts: allMarkdownRemark(filter: { id: { in: $relatedIds } }) {
@@ -57,12 +58,17 @@ export const postQuery = graphql`
         node {
           id
           excerpt(pruneLength: 170)
-          fields { slug prefix }
+          fields {
+            slug
+            prefix
+          }
           frontmatter {
             title
             cover {
               childImageSharp {
-                resize(width: 420, height: 240, quality: 78, cropFocus: CENTER, toFormat: WEBP) { src }
+                resize(width: 420, height: 240, quality: 78, cropFocus: CENTER, toFormat: WEBP) {
+                  src
+                }
               }
             }
           }
@@ -86,6 +92,7 @@ export const postQuery = graphql`
         author
         category
         categories
+        publishedAt
         disqusId
         useDefaultLangCanonical
         cover {
@@ -114,5 +121,8 @@ export const postQuery = graphql`
   }
 `;
 
-
-export const Head = createHead(({ data }) => ({ data: data.post, useDefaultLangCanonical: data.post.frontmatter.useDefaultLangCanonical, schemaType: "BlogPosting" }));
+export const Head = createHead(({ data }) => ({
+  data: data.post,
+  useDefaultLangCanonical: data.post.frontmatter.useDefaultLangCanonical,
+  schemaType: 'BlogPosting',
+}));

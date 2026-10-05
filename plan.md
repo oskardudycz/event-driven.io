@@ -48,7 +48,7 @@ This document records the improvements made to event-driven.io and the remaining
 - The homepage uses one concise “Latest articles” section heading, while a quiet “Read latest articles” label beside the original down-arrow control names its destination without competing with the service calls to action.
 - The complete article archive stays intentionally simple: one heading followed by the chronological article list, without a count badge, explanatory filler, or stacked layout spacing.
 - Ten English cornerstone articles now have hand-written search descriptions and visible summaries covering Event Sourcing fundamentals, projections, validation, testing, versioning, suitability, messaging guarantees, distributed processes, idempotency, and ordering.
-- Algolia records use stable canonical records, include multiple categories, and search results show content type, categories, and date.
+- Local MiniSearch indexes use canonical records with translation preference/fallback links; search results show content type, categories, date and safe highlighted snippets.
 
 ### Talks and video
 
@@ -134,7 +134,7 @@ Reposting is not automatically harmful, but publishing identical full articles i
 - Review image alternative text in article bodies. Decorative images should have empty alt text; diagrams and screenshots should explain the useful information.
 - Add Breadcrumb structured data to categories, articles, training, and consulting pages.
 - Add FAQ structured data only where the visible FAQ and its answers meet Google's current eligibility rules; do not create FAQ markup only for rankings.
-- Review Algolia analytics and tune searchable attributes/ranking based on real queries after the new index has collected data.
+- Review local search quality with curated bilingual queries and tune title/category boosts and prefix/fuzzy matching when evidence supports a change.
 
 ### P3 — larger engineering work
 
@@ -149,11 +149,11 @@ The primary goal is to move the build and deployment runtime to Node 24 LTS. The
 
 Research snapshot (2026-09-22):
 
-| Checkpoint | Node | Gatsby | React | Purpose |
-| --- | --- | --- | --- | --- |
-| Known-good baseline | 16.20.2 | 3.12.0 | 17.0.2 | Current rollback point |
-| Compatibility checkpoint | 16.20.2 | 4.25.9 | 17.0.2 | Isolate Gatsby data-layer/plugin changes |
-| Supported target | latest 24.x LTS | 5.16.1 | 18.3.1 | Deployable result |
+| Checkpoint               | Node            | Gatsby | React  | Purpose                                  |
+| ------------------------ | --------------- | ------ | ------ | ---------------------------------------- |
+| Known-good baseline      | 16.20.2         | 3.12.0 | 17.0.2 | Current rollback point                   |
+| Compatibility checkpoint | 16.20.2         | 4.25.9 | 17.0.2 | Isolate Gatsby data-layer/plugin changes |
+| Supported target         | latest 24.x LTS | 5.16.1 | 18.3.1 | Deployable result                        |
 
 Node 24 is the verified runtime. React 19, a new package manager, Gatsby Slices, deferred static generation, and unrelated lint cleanup are separate work and are not required to reach Node 24.
 
@@ -266,12 +266,11 @@ yarn smoke
 yarn test
 ```
 
-The local skip flag prevents a build from changing the production search index. CI's main-branch build still uses its Algolia credentials and must verify indexing separately; preview builds must not write to the production index. After deployment, repeat technical checks against live URLs because CDN, redirects, headers, forms, and bot protection cannot be fully validated from Gatsby's generated files.
-
+Search indexes are now local Gatsby build outputs. CI and previews do not require Algolia credentials or write to an external index. After deployment, repeat technical checks against live URLs because CDN, redirects, headers, forms, and bot protection cannot be fully validated from Gatsby's generated files.
 
 ## Gatsby 5 modernization before CSS redesign — 2026-10-04
 
-The build review in `docs/gatsby-5-review.md` is incorporated here. Verified locally: Gatsby Head replaces React Helmet; cards use gatsby-plugin-image; route creation queries only routing metadata; Prism aliases and Browserslist are updated; YouTube uses the maintained embed plugin with a timestamp/referrer adapter. All 96 requested articles have English and Polish files. The current verified output is 694 routes, 222 redirects, 399 sitemap URLs, and fifteen browser checks. Historical counts above describe earlier checkpoints, not the current release. CI/deployment and live Algolia verification remain separate pending checks.
+The build review in `docs/gatsby-5-review.md` is incorporated here. Verified locally: Gatsby Head replaces React Helmet; cards use gatsby-plugin-image; route creation queries only routing metadata; Prism aliases and Browserslist are updated; YouTube uses the maintained embed plugin with a timestamp/referrer adapter. All 96 requested articles have English and Polish files. The current verified output is 694 routes, 222 redirects, 399 sitemap URLs, and 25 browser checks as of the MiniSearch replacement. Historical counts above describe earlier checkpoints, not the current release. CI/deployment and live Algolia verification remain separate pending checks.
 
 Completed local implementation sequence: replace layout StaticQuery with useStaticQuery; clean up listeners, timers and font callbacks; convert Node hooks to native ESM (.mjs) and remove runtime Babel registration; remove proven-unused dependencies and declare direct imports; define nullable frontmatter/routing GraphQL types; cache Yarn and compatible Gatsby outputs in CI; measure cold/warm queries and validate modified/deleted content with warm caches. Preserve appearance, URLs, feeds, metadata and screenshot tolerances. Record verification in todo.md.
 
@@ -283,13 +282,11 @@ Navigation includes existing Polish placeholder pages; SEO alternates remain lim
 
 Imported code fences must retain source syntax metadata, infer clear language patterns when absent, and preserve code bytes/spacing. Kurrent examples use TypeScript rather than plain text. Rewrite known article links across the blog; normalize EventStore/Kurrent blog domain aliases and archived URLs, while retaining unmigrated source references.
 
-
 ### Pre-redesign pass result — 2026-10-04
 
 All listed local modernization tasks are complete: useStaticQuery/lifecycle cleanup, native ESM Node hooks, dependency audit, explicit types, compatible CI caching and action updates. Local frozen install, production build, full tests and 12 browser checks pass. Existing output contracts and screenshot tolerances are preserved. Warm-build verification covers modified/deleted/restored content without publishing a test fixture. Cold/warm builds measured 124.73/28.16 seconds locally; final content build passed in 54.39 seconds. CI execution and deployment are still separate release checks.
 
 The requested article-navigation/category fixes, social profile changes, README reading-order guidance and imported highlighting/cross-links are also verified. JavaScript/js snippet language tags use TypeScript throughout the blog and in future imports; snippet code is unchanged. Polish Event Sourcing shows its six translations plus 82 canonical-English placeholders. See todo.md for current verification evidence and pending external checks.
-
 
 ### Next pre-redesign pass — legacy routing and lint guardrails
 
@@ -297,13 +294,11 @@ Audit the overlapping gatsby-plugin-i18n hooks against the site's native localiz
 
 Establish a separate correctness-focused ESLint baseline for the modern modules, using native ESM/JSX parsing and React hook checks. Include a TypeScript parser for incremental adoption, without converting the whole project or enforcing legacy formatting. Run the baseline in CI; retain the existing full-project lint command and its documented backlog. Expand the explicit baseline as files are modernized. CSS, Tailwind, dark mode, Slices, search API upgrades and deployment remain separate work.
 
-
 ### Category language parity and localization review
 
 Category membership is shared across article translations: each existing localized category must expose the same unique article slugs, preferring an actual translation and linking untranslated material to a canonical available language. Category indexes and detail pages must use the same selection logic. Populate the Polish Event Sourcing guide with the existing eight-step reading path. Keep localized descriptions and allow independent editorial guide orders. Preserve established category routes; do not invent placeholder articles solely for listing parity.
 
 Review current Gatsby localization integrations against the site's canonical-English placeholders, original-slug redirects, shared category membership and Head metadata. Record migration options before replacing the provider/hooks. Review VitePress-style local search as a possible replacement for Algolia; keep the running search unchanged until the replacement is implemented and validated.
-
 
 ### Search and localization review — 2026-10-05
 
@@ -311,11 +306,9 @@ See `docs/gatsby-search-and-localization-review.md` for the current package comp
 
 Production baseline: the owner reports deployment since 99519a3c. Its GitHub Build and Deploy run succeeded, and 2026-10-05 public checks confirm representative English/Polish metadata, contact CTAs, imported TypeScript highlighting, sitemap and original-slug redirect behavior. Later commits/local category changes have separate verification status in todo.md.
 
-
 ### Category parity result — 2026-10-05
 
 Shared category selection and the Polish Event Sourcing guide are verified: both languages have 89 unique articles and eight ordered steps, with actual translations preferred and missing translations linked to a canonical available language. The production build, full tests, four category-selection regressions and all 15 browser checks pass; route/redirect/sitemap/feed contracts and existing screenshot tolerances remain unchanged. This simplifies one source of custom localization logic without replacing the provider or route generation. Production checks still showed the pre-fix Polish category; later commits require their own deployment/CI check.
-
 
 ## Next planned Gatsby 5 improvements — 2026-10-05
 
@@ -362,3 +355,17 @@ CI navigation regression follow-up: browser readiness uses DOM plus explicit fon
 Existing Open Sans 1.10 files cover basic Latin only, forcing Polish letters into a system fallback. Add matching Latin Extended subsets for every existing weight/style, with explicit Unicode ranges and consistent self-hosted sources. Preserve font design, sizing and Latin assets. Verify actual rendered glyph fonts through Chromium's platform-font inspection, not just computed font-family; retain existing screenshot tolerances.
 
 Polish coverage result: matching extended subsets are installed and all 19 browser checks (including actual glyph-font inspection), the full tests with 15 performance regressions, build, smoke and scoped lint pass. Existing screenshots/tolerances and output contracts remain. CI/deployment verification is pending.
+
+## Approved PageSpeed follow-up and developer tooling — 2026-10-05
+
+Implement approved choices 1A (automatic newsletter viewport loading, reserved space and subscription fallback), 3A (scoped accessible text colors) and 5A (optional real publication timestamps; preserve historical dates). Choices 2 and 4 remain pending. Adapt Pongo's flat ESLint, Prettier and VS Code conventions for Gatsby/React; add lint-staged and a pre-commit hook. Exclude generated output and imported article text from bulk formatting. Verify lint/format, installation, smoke, full production tests and browser behavior; record local results separately from pending CI/deployment.
+
+Approved follow-up completed locally: choices 1A, 3A and 5A are implemented and verified; comments (2) and the home label (4) remain review decisions. The newsletter fallback fits its existing legend spacing. Current validation is 694 routes, 222 redirects, 399 sitemap URLs, 18 performance/metadata regressions and 24 browser checks; all existing contracts/screenshots pass. CI now checks the complete maintained ESLint/Prettier scope rather than a separate modernized-file list. Gatsby styling/runtime behavior remains; the Node 24-compatible deasync patch is pinned until the styling integration is replaced. Exact timings and CI/deployment follow-ups are in todo.md.
+
+## MiniSearch implementation — 2026-10-05
+
+Proceed with the approved next search stage. Build per-language local indexes from current canonical Markdown nodes, preferring real translations and linking fallback articles to their canonical language. Measure payload and initialization before adoption. Lazy-load MiniSearch and indexes only when a search is entered; keep the existing result layout, safe snippets, metadata and pagination. Add real bilingual browser searches, failure/retry checks and warm-build modification/deletion verification. Remove Algolia integration/dependencies/CI/cache inputs after the replacement passes. No external account/index deletion or localization-provider migration is included.
+
+MiniSearch replacement is now implemented. The prototype passed a production build, full suite and 25 browser checks before removing the old integration. Algolia build/browser packages, configuration, workflow credentials and cache-key indexing mode are removed; no account/index was deleted. Genuine translations and canonical fallbacks produce 336 unique documents per language, with lazy engine/index downloads and safe snippets. The first-use gzip index cost is about 1.7MB per language. Final post-removal verification and warm-cache results are recorded in todo.md. Localization remains the next separate stage; the original Algolia analytics/indexing tasks are superseded rather than claimed externally verified.
+
+MiniSearch final local acceptance is complete: all five search regressions, full tests, 25 browser checks, frozen install, lint/format, smoke, actionlint and real warm-build modification/deletion/restoration pass. Development indexes also refresh on modification/deletion using Gatsby's supported createPages lifecycle, with a repeatable development check. Routes, redirects, sitemap/feed entries, source content and existing screenshot tolerances remain unchanged. The measured first-use cost is about 1.7MB gzip per language; a standalone 4× CPU-throttled Chromium benchmark measured approximately 0.43–0.44s asynchronous initialization, at most about 22ms per tested query and 16.5MiB retained index memory (medians, excluding network). Engine/index downloads occur only after a query is entered. Keep real-device/network and production verification separate from these local measurements. Localization is the next implementation stage; hosted-search analytics/indexing tasks are retired.

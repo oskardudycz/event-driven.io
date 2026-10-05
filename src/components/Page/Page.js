@@ -1,9 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import Headline from "../Article/Headline";
-import Bodytext from "../Article/Bodytext";
-import Summary from "../Article/Summary";
+import Headline from '../Article/Headline';
+import Bodytext from '../Article/Bodytext';
+import Summary from '../Article/Summary';
 
 const Page = (props) => {
   const {

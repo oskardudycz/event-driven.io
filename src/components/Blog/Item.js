@@ -1,11 +1,11 @@
-import { FaArrowRight } from "react-icons/fa/";
-import { FaCalendar } from "react-icons/fa/";
-import { FaTag } from "react-icons/fa/";
-import { FaUser } from "react-icons/fa/";
-import { GatsbyImage, getImage } from "gatsby-plugin-image";
-import { Link } from "../Link";
-import PropTypes from "prop-types";
-import React from "react";
+import { FaArrowRight } from 'react-icons/fa/';
+import { FaCalendar } from 'react-icons/fa/';
+import { FaTag } from 'react-icons/fa/';
+import { FaUser } from 'react-icons/fa/';
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
+import { Link } from '../Link';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const Item = (props) => {
   const {
@@ -13,14 +13,7 @@ const Item = (props) => {
     post: {
       excerpt,
       fields: { slug, prefix },
-      frontmatter: {
-        title,
-        category,
-        categories = [],
-        author,
-        useDefaultLangCanonical,
-        cover,
-      },
+      frontmatter: { title, category, categories = [], author, useDefaultLangCanonical, cover },
     },
   } = props;
   const additionalCategories = Array.isArray(categories) ? categories : [];
@@ -30,7 +23,7 @@ const Item = (props) => {
       <li>
         <Link
           to={slug}
-          language={useDefaultLangCanonical ? "en" : undefined}
+          language={useDefaultLangCanonical ? 'en' : undefined}
           key={slug}
           className="link"
         >
@@ -56,7 +49,7 @@ const Item = (props) => {
                 <span key={categoryName}>
                   <FaTag size={18} /> {categoryName}
                 </span>
-              )
+              ),
             )}
           </p>
           <p>{excerpt}</p>
@@ -90,7 +83,7 @@ const Item = (props) => {
 
           &::after {
             border-top: 1px solid ${theme.line.color};
-            content: "";
+            content: '';
             height: 0;
             position: absolute;
             bottom: ${`calc(${theme.space.default} * -1.5)`};
@@ -102,7 +95,7 @@ const Item = (props) => {
 
           &:first-child {
             &::before {
-              content: "";
+              content: '';
               height: 0;
               position: absolute;
               top: ${`calc(${theme.space.default} * -1.2)`};

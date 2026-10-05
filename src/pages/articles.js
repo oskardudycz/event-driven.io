@@ -1,26 +1,23 @@
-import PropTypes from "prop-types";
-import React from "react";
-import { graphql } from "gatsby";
-import { useTranslation } from "react-i18next";
-import { ThemeContext } from "../layouts";
-import Blog from "../components/Blog";
-import { createHead } from "../components/Seo";
+import PropTypes from 'prop-types';
+import React from 'react';
+import { graphql } from 'gatsby';
+import { useTranslation } from 'react-i18next';
+import { ThemeContext } from '../layouts';
+import Blog from '../components/Blog';
+import { createHead } from '../components/Seo';
 
 const ArticlesPage = (props) => {
   const { t } = useTranslation();
   const {
     data: {
       posts: { edges: posts },
-      site: {
-        siteMetadata: { facebook },
-      },
     },
   } = props;
 
   return (
     <React.Fragment>
       <ThemeContext.Consumer>
-        {(theme) => <Blog posts={posts} theme={theme} compactTop heading={t("blog.allTitle")} />}
+        {(theme) => <Blog posts={posts} theme={theme} compactTop heading={t('blog.allTitle')} />}
       </ThemeContext.Consumer>
     </React.Fragment>
   );
@@ -32,7 +29,6 @@ ArticlesPage.propTypes = {
 
 export default ArticlesPage;
 
-// eslint-disable-next-line no-undef
 export const query = graphql`
   query ArticlesQuery($langKey: String!) {
     posts: allMarkdownRemark(
@@ -81,5 +77,8 @@ export const query = graphql`
   }
 `;
 
-
-export const Head = createHead(({ t }) => ({ title: t("blog.allTitle"), description: t("blog.allIntro"), schemaType: "CollectionPage" }));
+export const Head = createHead(({ t }) => ({
+  title: t('blog.allTitle'),
+  description: t('blog.allIntro'),
+  schemaType: 'CollectionPage',
+}));

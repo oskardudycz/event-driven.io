@@ -1,74 +1,14 @@
-require("dotenv").config();
-const config = require("./content/meta/config");
-const transformer = require("./src/utils/algolia");
-const hasAlgoliaCredentials = Boolean(
-  process.env.ALGOLIA_APP_ID && process.env.ALGOLIA_ADMIN_API_KEY && process.env.ALGOLIA_INDEX_NAME
-);
-const isNonMainGitHubBuild =
-  process.env.GITHUB_ACTIONS === "true" && process.env.GITHUB_REF !== "refs/heads/main";
-const shouldIndexAlgolia =
-  hasAlgoliaCredentials && !isNonMainGitHubBuild && process.env.ALGOLIA_SKIP_INDEXING !== "true";
-
-const query = `{
-  allMarkdownRemark( filter: { fields: { slug: { ne: null } } }) {
-    edges {
-      node {
-        excerpt(pruneLength: 240)
-        fields {
-          slug
-          langKey
-          source
-          prefix
-        }
-        internal {
-          content
-        }
-        frontmatter {
-          title
-          category
-          categories
-          useDefaultLangCanonical
-        }
-      }
-    }
-  }
-}`;
-
-const queries = [
-  {
-    query,
-    transformer: ({ data }) => {
-      return data.allMarkdownRemark.edges.reduce(transformer, []);
-    },
-    settings: {
-      searchableAttributes: ["title", "category", "content"],
-      attributesForFaceting: ["filterOnly(langKey)", "filterOnly(source)", "searchable(category)"],
-      attributeForDistinct: "path",
-      distinct: true,
-      attributesToHighlight: ["title", "category"],
-      attributesToSnippet: ["content:32"],
-      snippetEllipsisText: "…",
-      customRanking: ["desc(publishedAt)"],
-    },
-  },
-];
-
+require('dotenv').config();
+const config = require('./content/meta/config');
 module.exports = {
-  trailingSlash: "always",
+  trailingSlash: 'always',
   siteMetadata: {
     title: config.siteTitle,
     description: config.siteDescription,
     siteUrl: config.siteUrl,
     pathPrefix: config.pathPrefix,
-    algolia: {
-      appId: process.env.ALGOLIA_APP_ID ? process.env.ALGOLIA_APP_ID : "",
-      searchOnlyApiKey: process.env.ALGOLIA_SEARCH_ONLY_API_KEY
-        ? process.env.ALGOLIA_SEARCH_ONLY_API_KEY
-        : "",
-      indexName: process.env.ALGOLIA_INDEX_NAME ? process.env.ALGOLIA_INDEX_NAME : "",
-    },
     facebook: {
-      appId: process.env.FB_APP_ID ? process.env.FB_APP_ID : "",
+      appId: process.env.FB_APP_ID ? process.env.FB_APP_ID : '',
     },
   },
   plugins: [
@@ -80,18 +20,6 @@ module.exports = {
         component: require.resolve(`./src/layouts/`),
       },
     },
-    ...(shouldIndexAlgolia
-      ? [{
-          resolve: `gatsby-plugin-algolia`,
-          options: {
-            appId: process.env.ALGOLIA_APP_ID,
-            apiKey: process.env.ALGOLIA_ADMIN_API_KEY,
-            indexName: process.env.ALGOLIA_INDEX_NAME,
-            queries,
-            chunkSize: 10000,
-          },
-        }]
-      : []),
     `gatsby-transformer-json`,
     {
       resolve: `gatsby-source-filesystem`,
@@ -111,21 +39,21 @@ module.exports = {
       resolve: `gatsby-source-filesystem`,
       options: {
         path: `${__dirname}/content/posts/`,
-        name: "posts",
+        name: 'posts',
       },
     },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
         path: `${__dirname}/content/newsletter-pl/`,
-        name: "newsletter-pl",
+        name: 'newsletter-pl',
       },
     },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
         path: `${__dirname}/content/pages/`,
-        name: "pages",
+        name: 'pages',
       },
     },
     {
@@ -140,18 +68,20 @@ module.exports = {
       options: {
         plugins: [
           {
-            resolve: require.resolve("./plugins/gatsby-remark-video"),
+            resolve: require.resolve('./plugins/gatsby-remark-video'),
             options: {
               width: 800,
               ratio: 1.77,
               height: 400,
               related: false,
               noIframeBorder: true,
-              loadingStrategy: "lazy",
-              urlOverrides: [{
-                id: "youtube",
-                embedURL: (id) => `https://www.youtube-nocookie.com/embed/${id}`,
-              }],
+              loadingStrategy: 'lazy',
+              urlOverrides: [
+                {
+                  id: 'youtube',
+                  embedURL: (id) => `https://www.youtube-nocookie.com/embed/${id}`,
+                },
+              ],
             },
           },
           `gatsby-plugin-sharp`,
@@ -160,13 +90,13 @@ module.exports = {
             options: {
               maxWidth: 800,
               withWebp: { quality: 80 },
-              backgroundColor: "transparent",
-              wrapperStyle: "height: auto",
+              backgroundColor: 'transparent',
+              wrapperStyle: 'height: auto',
               quality: 80,
             },
           },
           {
-            resolve: require.resolve("./plugins/gatsby-remark-image-priority"),
+            resolve: require.resolve('./plugins/gatsby-remark-image-priority'),
           },
           {
             resolve: `gatsby-remark-responsive-iframe`,
@@ -177,31 +107,31 @@ module.exports = {
           `gatsby-remark-autolink-headers`,
           {
             resolve: `gatsby-remark-prismjs`,
-            options: { aliases: { sh: "bash", env: "bash" } },
+            options: { aliases: { sh: 'bash', env: 'bash' } },
           },
           `gatsby-remark-copy-linked-files`,
           `gatsby-remark-smartypants`,
           {
-            resolve: "gatsby-remark-emojis",
+            resolve: 'gatsby-remark-emojis',
             options: {
               // Deactivate the plugin globally (default: true)
               active: true,
               // Add a custom css class
-              class: "emoji-icon",
+              class: 'emoji-icon',
               // Select the size (available size: 16, 24, 32, 64)
               size: 64,
               // Add custom styles
               styles: {
-                display: "inline",
-                margin: "0",
-                "margin-top": "1px",
-                position: "relative",
-                top: "5px",
-                width: "25px",
+                display: 'inline',
+                margin: '0',
+                'margin-top': '1px',
+                position: 'relative',
+                top: '5px',
+                width: '25px',
               },
             },
           },
-          "@weknow/gatsby-remark-twitter",
+          '@weknow/gatsby-remark-twitter',
         ],
       },
     },
@@ -220,39 +150,39 @@ module.exports = {
         display: config.manifestDisplay,
         icons: [
           {
-            src: "/icons/favicon-48x48.png",
-            sizes: "48x48",
-            type: "image/png",
+            src: '/icons/favicon-48x48.png',
+            sizes: '48x48',
+            type: 'image/png',
           },
           {
-            src: "/icons/favicon-96x96.png",
-            sizes: "96x96",
-            type: "image/png",
+            src: '/icons/favicon-96x96.png',
+            sizes: '96x96',
+            type: 'image/png',
           },
           {
-            src: "/icons/favicon-144x144.png",
-            sizes: "144x144",
-            type: "image/png",
+            src: '/icons/favicon-144x144.png',
+            sizes: '144x144',
+            type: 'image/png',
           },
           {
-            src: "/icons/favicon-192x192.png",
-            sizes: "192x192",
-            type: "image/png",
+            src: '/icons/favicon-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
           },
           {
-            src: "/icons/favicon-256x256.png",
-            sizes: "256x256",
-            type: "image/png",
+            src: '/icons/favicon-256x256.png',
+            sizes: '256x256',
+            type: 'image/png',
           },
           {
-            src: "/icons/favicon-384x384.png",
-            sizes: "384x384",
-            type: "image/png",
+            src: '/icons/favicon-384x384.png',
+            sizes: '384x384',
+            type: 'image/png',
           },
           {
-            src: "/icons/favicon-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
+            src: '/icons/favicon-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
           },
         ],
       },
@@ -260,7 +190,7 @@ module.exports = {
     //`gatsby-plugin-offline`,
     `gatsby-plugin-remove-serviceworker`,
     {
-      resolve: "gatsby-plugin-google-tagmanager",
+      resolve: 'gatsby-plugin-google-tagmanager',
       options: {
         id: process.env.GOOGLE_TAG_ID,
 
@@ -273,7 +203,7 @@ module.exports = {
         // should be an object or a function that is executed in the browser
         //
         // Defaults to null
-        defaultDataLayer: { platform: "gatsby" },
+        defaultDataLayer: { platform: 'gatsby' },
 
         // // Specify optional GTM environment details.
         // gtmAuth: "YOUR_GOOGLE_TAGMANAGER_ENVIRONMENT_AUTH_STRING",
@@ -311,7 +241,7 @@ module.exports = {
                   description: edge.node.excerpt,
                   url: `${site.siteMetadata.siteUrl}/${edge.node.fields.langKey}${edge.node.fields.slug}`,
                   guid: `${site.siteMetadata.siteUrl}/${edge.node.fields.langKey}${edge.node.fields.slug}`,
-                  custom_elements: [{ "content:encoded": edge.node.html }],
+                  custom_elements: [{ 'content:encoded': edge.node.html }],
                 });
               });
             },
@@ -339,7 +269,7 @@ module.exports = {
                 }
               }
             `,
-            output: "/rss.xml",
+            output: '/rss.xml',
           },
 
           {
@@ -350,7 +280,7 @@ module.exports = {
                   description: edge.node.excerpt,
                   url: `${site.siteMetadata.siteUrl}/${edge.node.fields.langKey}${edge.node.fields.slug}`,
                   guid: `${site.siteMetadata.siteUrl}/${edge.node.fields.langKey}${edge.node.fields.slug}`,
-                  custom_elements: [{ "content:encoded": edge.node.html }],
+                  custom_elements: [{ 'content:encoded': edge.node.html }],
                 });
               });
             },
@@ -378,7 +308,7 @@ module.exports = {
                 }
               }
             `,
-            output: "/newsletter-pl-rss.xml",
+            output: '/newsletter-pl-rss.xml',
           },
         ],
       },
@@ -404,7 +334,7 @@ module.exports = {
         `,
         resolvePages: ({ allSitePage }) =>
           allSitePage.nodes.filter(
-            (page) => !(page.pageContext && page.pageContext.excludeFromSitemap)
+            (page) => !(page.pageContext && page.pageContext.excludeFromSitemap),
           ),
         excludes: [
           `/en/404/`,
@@ -417,7 +347,7 @@ module.exports = {
       },
     },
     {
-      resolve: "gatsby-plugin-react-svg",
+      resolve: 'gatsby-plugin-react-svg',
       options: {
         include: /svg-icons/,
       },
@@ -427,10 +357,10 @@ module.exports = {
       options: {
         headers: {
           // YouTube requires a Referer; Netlify's default same-origin suppresses it.
-          "/*": ["Referrer-Policy: strict-origin-when-cross-origin"],
-          "/llms.txt": [
-            "Content-Type: text/plain; charset=UTF-8",
-            "Cache-Control: public, max-age=3600",
+          '/*': ['Referrer-Policy: strict-origin-when-cross-origin'],
+          '/llms.txt': [
+            'Content-Type: text/plain; charset=UTF-8',
+            'Cache-Control: public, max-age=3600',
           ],
         },
       },

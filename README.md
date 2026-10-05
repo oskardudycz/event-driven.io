@@ -77,23 +77,50 @@ See [the build review](docs/gatsby-5-review.md) for the image and query migratio
 
 This blog is licensed under [License Creative Commons BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 
-
 ## Included configuration
 
 1. Tracking with Google Analytics through Google Tag manager:
+
 - [Setting up the Google Analytics 4 Property with Google Tag Manager](https://www.youtube.com/watch?v=-J4feudVguc)
 - [Gatsby Google Tag Manager Config](https://www.gatsbyjs.com/plugins/gatsby-plugin-google-tagmanager/)
 
-## Gatsby validation and scoped lint
+## Gatsby validation and lint
 
-Use Node 24 and Yarn 1. Run `yarn smoke` and `yarn lint:modern` for fast syntax, GraphQL and correctness checks. Then run `ALGOLIA_SKIP_INDEXING=true yarn build` and `yarn test`. For browser checks, serve the generated site on port 9000 and run `yarn test:visual`; matching Playwright and Chromium packages are installed as development dependencies by Yarn. If the browser cache is missing, run `yarn browsers:install`; on Linux CI use `yarn browsers:install:ci` to install OS libraries too.
+Use Node 24 and Yarn 1. Run `yarn smoke` and `yarn lint` for fast syntax, GraphQL and correctness checks. Then run `yarn build` and `yarn test`. For browser checks, serve the generated site on port 9000 and run `yarn test:visual`; matching Playwright and Chromium packages are installed as development dependencies by Yarn. If the browser cache is missing, run `yarn browsers:install`; on Linux CI use `yarn browsers:install:ci` to install OS libraries too.
 
 The SEO checks require exactly one H1 in every generated page, including Polish placeholders, search and 404 pages. Gatsby's internal HTML fragments are excluded. Missing or duplicate main headings fail `yarn test:seo` and the CI gate before deployment. Browser checks also cover training-page hydration and language navigation.
 
 For repeatable mobile Lighthouse audits, run `yarn audit:performance --base-url https://event-driven.io --label baseline`. It uses Lighthouse 13.5.0, the lockfile's Playwright Chromium, three fresh browser sessions per page, and saves JSON reports under the ignored `report/performance/` directory. Browser profiles are temporary and cleaned up. See [the audit procedure and proposals](docs/pagespeed-review.md) for installation, comparable local/production runs, limitations and the proposed Giscus migration. This command audits the site; it does not change the UI, deploy or migrate comments.
 
-`lint:modern` checks the native Gatsby hooks, modern scripts, localization, layout, menu, SEO, video, search and category/recommendation modules. Its explicit paths are in `package.json`. Add files to this baseline as they are modernized. The separate `.eslintrc.modern.json` supports ESM, JSX and TypeScript, checks React hooks, and treats warnings as failures without requiring a project-wide formatting rewrite. It does not type-check TypeScript. The existing `yarn lint` command still exposes the legacy full-project backlog.
+`lint:modern` remains a compatibility alias for the full ESLint gate. `eslint.config.mjs` supports ESM, JSX and TypeScript syntax and checks React hooks. It does not type-check TypeScript. `yarn lint` additionally checks Prettier; the previous legacy lint/format backlog has been corrected.
 
-CI runs the scoped lint gate before building. Browser search checks use in-memory public test settings and intercepted Algolia responses for both languages; they never contact or modify a production index. Live Algolia validation remains a separate release check.
+CI runs the full lint/format gate before building. Browser search checks run real local MiniSearch queries in both languages. Builds generate local indexes and never contact a hosted search service. Production search behavior remains a separate deployment check.
 
-Safe performance regressions run with `yarn test:performance` (also included in `yarn test`) after building. They check English/Polish cover priority, lazy loading and WebP fallback throughout generated Markdown, local font preloads, portrait dimensions and batched menu measurements. `yarn test:visual` additionally verifies responsive image slots at DPR 1/2 and automatic offscreen-newsletter loading, alongside the existing layout/navigation screenshots. Decisions needing your review and their reasons are listed in [the PageSpeed review](docs/pagespeed-review.md#for-your-review--decisions-intentionally-not-applied).
+Safe performance regressions run with `yarn test:performance` (also included in `yarn test`) after building. They check English/Polish cover priority, lazy loading and WebP fallback throughout generated Markdown, local font preloads, portrait dimensions and batched menu measurements. `yarn test:visual` additionally verifies responsive image slots at DPR 1/2 and automatic offscreen-newsletter loading, alongside the existing layout/navigation screenshots. Decisions needing your review and their reasons are listed in [the PageSpeed review](docs/pagespeed-review.md#decision-record--only-choices-2-and-4-await-review).
+
+## Formatting, linting and editor setup
+
+Run `yarn --frozen-lockfile` on Node 24. Installation runs `prepare` to configure the Husky pre-commit hook. Every commit runs `yarn lint-staged`: staged code receives ESLint fixes (including Prettier), and staged configuration/documentation receives Prettier formatting. Partially staged changes use lint-staged's normal backup/hiding behavior. No build or browser suite runs in the hook; CI runs the full checks.
+
+- `yarn lint`: check ESLint and Prettier across maintained source, scripts, tests and documentation.
+- `yarn fix`: apply ESLint fixes, then Prettier formatting.
+- `yarn lint:eslint` / `yarn lint:prettier`: run either check separately.
+- `yarn lint-staged`: run the same checks used by the pre-commit hook against staged files.
+
+The native ESM `eslint.config.mjs` is the single lint configuration. The existing styling plugins use a pinned `deasync` 0.1.31 patch for Node 24 native-binary compatibility. Like Pongo, this repo uses single quotes, two-space indentation, flat ESLint configuration and Prettier integration. ESLint 9 is used for compatibility with the React plugin's supported peer versions; Pongo's TypeScript-only rules and database-specific restrictions do not apply to Gatsby. VS Code's committed settings and extension recommendations enable Prettier formatting and ESLint fixes on save. Automatic import organization is omitted because this site has side-effect imports and loader imports whose order must be preserved.
+
+Generated output, static assets, imported article content and test fixtures are excluded from bulk formatting. This protects article code examples and stored build contracts. Fixing lint does not modify the article text.
+
+### Actual publication timestamps
+
+An article can optionally include a quoted frontmatter timestamp such as `publishedAt: '2026-10-05T12:34:56+02:00'` when that time is known from the source. The timezone is required. Gatsby uses it for BlogPosting `datePublished` and Open Graph `article:published_time`; invalid timestamps fail validation. The article's displayed date, route and ordering still use its existing filename date. Import scripts retain source timestamps when available. Historical date-only values stay date-only; no midnight publication times are invented, so legacy rich-result warnings may remain.
+
+## Local search
+
+MiniSearch replaces Algolia. `yarn develop` generates the indexes at startup and refreshes them after Markdown changes. Reload the search page to consume a regenerated index. Every Gatsby production build recreates English and Polish indexes under `public/search-index/`, using content-hashed filenames and a refreshed manifest. Readers download only their selected index and the engine after entering a search query. Search prefers genuine translations and labels canonical-language fallback links, returns one hit per article, retains categories/dates and pagination, and supports Polish diacritics, prefixes, typos and code identifiers. Result text is escaped before highlighting.
+
+Run `yarn test:search` after building for index, locale, stale-content and safe-rendering regressions. Run `yarn test:visual` against `yarn serve -H 127.0.0.1 -p 9000` for real browser searches and failure/retry checks. `yarn measure:search` measures initialization, query time and retained heap over three Chromium runs per locale with 4× CPU throttling; these are lab measurements, not real-device guarantees. `yarn test:cache` additionally modifies/deletes/restores an existing article across warm builds and verifies search data follows those changes. Do not run that integration check alongside content edits.
+
+To repeat development refresh checks, start `yarn develop -H 127.0.0.1 -p 8001` and run `yarn test:search:dev` in another terminal. It temporarily modifies/deletes/restores an existing article; keep content edits paused during that check. Set `DEV_SEARCH_BASE_URL` if using another address.
+
+No Algolia credentials are needed for installation, CI or deployment. The old account/index is not deleted by this change; any account cleanup is a separate owner action. Localization-provider migration remains a separate next step.

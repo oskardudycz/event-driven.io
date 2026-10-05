@@ -1,24 +1,24 @@
-import React from "react";
-import PropTypes from "prop-types";
-import "prismjs/themes/prism-okaidia.css";
+import React from 'react';
+import PropTypes from 'prop-types';
+import 'prismjs/themes/prism-okaidia.css';
 
-import asyncComponent from "../AsyncComponent";
-import Headline from "../Article/Headline";
-import Bodytext from "../Article/Bodytext";
-import Meta from "./Meta";
-import Author from "./Author";
-import Substack from "./Substack";
-import NextPrev from "./NextPrev";
-import Summary from "../Article/Summary";
-import Related from "./Related";
-import { DiscussionEmbed } from "disqus-react";
+import asyncComponent from '../AsyncComponent';
+import Headline from '../Article/Headline';
+import Bodytext from '../Article/Bodytext';
+import Meta from './Meta';
+import Author from './Author';
+import Substack from './Substack';
+import NextPrev from './NextPrev';
+import Summary from '../Article/Summary';
+import Related from './Related';
+import { DiscussionEmbed } from 'disqus-react';
 
 const Share = asyncComponent(() =>
-  import("./Share")
+  import('./Share')
     .then((module) => {
       return module.default;
     })
-    .catch((error) => {})
+    .catch(() => {}),
 );
 
 const Post = (props) => {

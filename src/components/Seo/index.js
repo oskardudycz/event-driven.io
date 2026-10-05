@@ -1,1 +1,1 @@
-export { default, createHead } from "./Seo";
+export { default, createHead } from './Seo';
