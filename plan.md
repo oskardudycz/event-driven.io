@@ -110,8 +110,8 @@ Reposting is not automatically harmful, but publishing identical full articles i
 
 ### P0 — validate the deployed result
 
-- Review the latest homepage, complete archive, category, and talks layouts locally with `gatsby develop` at desktop and mobile widths.
-- Commit and deploy the approved presentation refinements, then inspect representative English and Polish pages, category paths, consulting pages, the talks gallery, `robots.txt`, `llms.txt`, and the sitemap index.
+- Keep reviewing intentional layout changes at desktop/mobile widths; the existing production screenshot tolerances and 15 browser checks are passing locally.
+- The baseline presentation/runtime changes are deployed since 99519a3c and representative production pages/assets pass public checks. Deploy and verify the later category parity and routing/lint changes separately.
 - Submit the sitemap index in Google Search Console and Bing Webmaster Tools; request indexing for the consulting pages and a few cornerstone articles.
 - Use URL Inspection to compare the declared and Google-selected canonical URLs.
 - Test Article and Service structured data with Google's Rich Results Test and Schema.org Validator.
@@ -271,7 +271,7 @@ The local skip flag prevents a build from changing the production search index. 
 
 ## Gatsby 5 modernization before CSS redesign — 2026-10-04
 
-The build review in `docs/gatsby-5-review.md` is incorporated here. Verified locally: Gatsby Head replaces React Helmet; cards use gatsby-plugin-image; route creation queries only routing metadata; Prism aliases and Browserslist are updated; YouTube uses the maintained embed plugin with a timestamp/referrer adapter. All 96 requested articles have English and Polish files. The current verified output is 694 routes, 222 redirects, 399 sitemap URLs, and twelve browser checks. Historical counts above describe earlier checkpoints, not the current release. CI/deployment and live Algolia verification remain separate pending checks.
+The build review in `docs/gatsby-5-review.md` is incorporated here. Verified locally: Gatsby Head replaces React Helmet; cards use gatsby-plugin-image; route creation queries only routing metadata; Prism aliases and Browserslist are updated; YouTube uses the maintained embed plugin with a timestamp/referrer adapter. All 96 requested articles have English and Polish files. The current verified output is 694 routes, 222 redirects, 399 sitemap URLs, and fifteen browser checks. Historical counts above describe earlier checkpoints, not the current release. CI/deployment and live Algolia verification remain separate pending checks.
 
 Completed local implementation sequence: replace layout StaticQuery with useStaticQuery; clean up listeners, timers and font callbacks; convert Node hooks to native ESM (.mjs) and remove runtime Babel registration; remove proven-unused dependencies and declare direct imports; define nullable frontmatter/routing GraphQL types; cache Yarn and compatible Gatsby outputs in CI; measure cold/warm queries and validate modified/deleted content with warm caches. Preserve appearance, URLs, feeds, metadata and screenshot tolerances. Record verification in todo.md.
 
@@ -296,3 +296,22 @@ The requested article-navigation/category fixes, social profile changes, README 
 Audit the overlapping gatsby-plugin-i18n hooks against the site's native localization hooks. Remove the plugin only if the exact route/redirect/feed/sitemap contract and English/Polish browser checks pass. Preserve the active react-i18next provider, search UI, and comments. Remove unused direct routing and InstantSearch umbrella dependencies after checking source/configuration/scripts; retain directly used react-instantsearch-dom and Algolia APIs.
 
 Establish a separate correctness-focused ESLint baseline for the modern modules, using native ESM/JSX parsing and React hook checks. Include a TypeScript parser for incremental adoption, without converting the whole project or enforcing legacy formatting. Run the baseline in CI; retain the existing full-project lint command and its documented backlog. Expand the explicit baseline as files are modernized. CSS, Tailwind, dark mode, Slices, search API upgrades and deployment remain separate work.
+
+
+### Category language parity and localization review
+
+Category membership is shared across article translations: each existing localized category must expose the same unique article slugs, preferring an actual translation and linking untranslated material to a canonical available language. Category indexes and detail pages must use the same selection logic. Populate the Polish Event Sourcing guide with the existing eight-step reading path. Keep localized descriptions and allow independent editorial guide orders. Preserve established category routes; do not invent placeholder articles solely for listing parity.
+
+Review current Gatsby localization integrations against the site's canonical-English placeholders, original-slug redirects, shared category membership and Head metadata. Record migration options before replacing the provider/hooks. Review VitePress-style local search as a possible replacement for Algolia; keep the running search unchanged until the replacement is implemented and validated.
+
+
+### Search and localization review — 2026-10-05
+
+See `docs/gatsby-search-and-localization-review.md` for the current package comparison and migration acceptance criteria. Recommend a lazy-loaded MiniSearch prototype (the engine used by VitePress local search) as the next search change; measure index size/mobile responsiveness and validate locale fallback before replacing Algolia. Recommend gatsby-plugin-react-i18next 3.0.1 as the localization migration candidate; its Gatsby 5/React 18 peer ranges fit, but i18next/react-i18next need compatible upgrades. Prototype static routes/provider/links first and retain explicit canonical/placeholder policy. Published gatsby-theme-i18n 3.0.0 still targets Gatsby 4/React 17/Helmet and is not the preferred option. No plugin/engine replacement is included in the category fix.
+
+Production baseline: the owner reports deployment since 99519a3c. Its GitHub Build and Deploy run succeeded, and 2026-10-05 public checks confirm representative English/Polish metadata, contact CTAs, imported TypeScript highlighting, sitemap and original-slug redirect behavior. Later commits/local category changes have separate verification status in todo.md.
+
+
+### Category parity result — 2026-10-05
+
+Shared category selection and the Polish Event Sourcing guide are verified: both languages have 89 unique articles and eight ordered steps, with actual translations preferred and missing translations linked to a canonical available language. The production build, full tests, four category-selection regressions and all 15 browser checks pass; route/redirect/sitemap/feed contracts and existing screenshot tolerances remain unchanged. This simplifies one source of custom localization logic without replacing the provider or route generation. Production checks still showed the pre-fix Polish category; later commits require their own deployment/CI check.
