@@ -5,6 +5,7 @@ const cheerio = require('cheerio');
 const TurndownService = require('turndown');
 const { gfm } = require('turndown-plugin-gfm');
 const yaml = require('js-yaml');
+const escapeHtml = require('escape-html');
 const {
   isSubscriptionPromotion,
   youtubeMarkdown,
@@ -144,14 +145,50 @@ async function request(url) {
   return response;
 }
 
+// Scan each prefix once; nested regex repetitions can backtrack exponentially.
+function hasSvgRoot(text) {
+  let cursor = 0;
+  const skipWhitespace = () => {
+    while (cursor < text.length && /\s/.test(text[cursor])) cursor++;
+  };
+  skipWhitespace();
+  if (text.startsWith('<?xml', cursor)) {
+    const end = text.indexOf('?>', cursor + 5);
+    if (end === -1) return false;
+    cursor = end + 2;
+    skipWhitespace();
+  }
+  while (text.startsWith('<!--', cursor)) {
+    const end = text.indexOf('-->', cursor + 4);
+    if (end === -1) return false;
+    cursor = end + 3;
+    skipWhitespace();
+  }
+  return /^<svg[\s>]/i.test(text.slice(cursor, cursor + 5));
+}
+
+// Retain nested emphasis, but never copy source attributes or arbitrary HTML.
+function safeEmphasis(node) {
+  const tags = {
+    EM: ['<em>', '</em>'],
+    I: ['<i>', '</i>'],
+    STRONG: ['<strong>', '</strong>'],
+    B: ['<b>', '</b>'],
+    CODE: ['<code>', '</code>'],
+    SPAN: ['<span>', '</span>'],
+  };
+  const tag = tags[node.nodeName];
+  if (!tag) return escapeHtml(node.textContent || '');
+  return tag[0] + Array.from(node.childNodes, safeEmphasis).join('') + tag[1];
+}
+
 function imageExtension(bytes) {
   if (bytes.subarray(0, 3).equals(Buffer.from([0xff, 0xd8, 0xff]))) return '.jpg';
   if (bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))) return '.png';
   if (/^GIF8[79]a/.test(bytes.subarray(0, 6).toString())) return '.gif';
   if (bytes.subarray(0, 4).toString() === 'RIFF' && bytes.subarray(8, 12).toString() === 'WEBP')
     return '.webp';
-  if (/^\s*(?:<\?xml[^>]*>\s*)?(?:<!--[\s\S]*?-->\s*)*<svg[\s>]/i.test(bytes.toString('utf8')))
-    return '.svg';
+  if (hasSvgRoot(bytes.toString('utf8'))) return '.svg';
   throw new Error(
     'Unsupported image format or non-image download (expected JPEG, PNG, GIF, WebP or SVG)',
   );
@@ -278,21 +315,33 @@ async function convertPost(
     const element = $(node);
     element.replaceWith(element.contents());
   });
-  body.find('a[href]').each((_, node) => {
-    const element = $(node),
-      href = element.attr('href');
-    if (!href.startsWith('#') && ![...assets.values()].includes(href)) {
-      const resolved = new URL(href, location.base).href;
-      const original = resolved.replace(/^https:\/\/web\.archive\.org\/web\/\d+(?:[a-z]+_)?\//, '');
-      element.attr('href', relativeArticleLink(original, location.base, links));
-    }
-  });
   const converter = new TurndownService({
     headingStyle: 'atx',
     codeBlockStyle: 'fenced',
     bulletListMarker: '-',
   });
   converter.use(gfm);
+  const { markdownLinkDestination, markdownLinkTitle } = await import('./markdown-links.mjs');
+  converter.addRule('articleLinks', {
+    filter: (node) => node.nodeName === 'A' && node.hasAttribute('href'),
+    replacement: (content, node) => {
+      const href = node.getAttribute('href');
+      let destination = href;
+      const localAsset = [...assets.values()].includes(href);
+      if (!href.startsWith('#') && !localAsset) {
+        const resolved = new URL(href, location.base).href;
+        const original = resolved.replace(
+          /^https:\/\/web\.archive\.org\/web\/\d+(?:[a-z]+_)?\//,
+          '',
+        );
+        destination = relativeArticleLink(original, location.base, links);
+      }
+      // Generate Markdown directly; stored mappings never become HTML attributes.
+      const safeDestination = markdownLinkDestination(destination, location.base);
+      const target = localAsset ? href : safeDestination;
+      return `[${content}](${target}${markdownLinkTitle(node.getAttribute('title'))})`;
+    },
+  });
   const { codeLanguage } = await import('./code-languages.mjs');
   converter.addRule('sourceCodeLanguage', {
     filter: 'pre',
@@ -319,7 +368,7 @@ async function convertPost(
       ['EM', 'I', 'STRONG', 'B'].includes(node.nodeName) &&
       /[^\p{L}\p{N}\s]$/u.test(node.textContent) &&
       /^[\p{L}\p{N}]/u.test(node.nextSibling?.textContent || ''),
-    replacement: (_, node) => node.outerHTML,
+    replacement: (_, node) => safeEmphasis(node),
   });
   converter.addRule('caption', {
     filter: 'figcaption',
@@ -501,6 +550,7 @@ module.exports = {
   normalizeUrl,
   sourceLocation,
   originalImageUrl,
+  imageExtension,
   extractPost,
   convertPost,
   importPost,

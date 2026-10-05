@@ -56,7 +56,6 @@ export const onCreateNode = ({ node, getNode, actions }) => {
 };
 
 export const createPages = ({ graphql, actions, getNodesByType, reporter }) => {
-  scheduleDevelopmentSearch({ getNodesByType, reporter });
   const { createPage, createRedirect } = actions;
 
   return new Promise((resolve, reject) => {
@@ -79,6 +78,29 @@ export const createPages = ({ graphql, actions, getNodesByType, reporter }) => {
     resolve(
       graphql(`
         {
+          searchCovers: allMarkdownRemark(
+            filter: {
+              fields: { source: { in: ["posts", "pages", "newsletter-pl"] }, slug: { ne: null } }
+              frontmatter: { useDefaultLangCanonical: { ne: true } }
+            }
+          ) {
+            nodes {
+              id
+              frontmatter {
+                cover {
+                  childImageSharp {
+                    gatsbyImageData(
+                      width: 240
+                      breakpoints: [240, 480]
+                      layout: CONSTRAINED
+                      formats: [AUTO, WEBP]
+                      placeholder: DOMINANT_COLOR
+                    )
+                  }
+                }
+              }
+            }
+          }
           allMarkdownRemark(
             filter: { fields: { slug: { ne: null } } }
             sort: { fields: { prefix: DESC } }
@@ -109,9 +131,16 @@ export const createPages = ({ graphql, actions, getNodesByType, reporter }) => {
       `).then((result) => {
         if (result.errors) {
           console.log(result.errors);
-          reject(result.errors);
+          return reject(result.errors);
         }
 
+        searchCovers = new Map(
+          result.data.searchCovers.nodes.map((node) => [
+            node.id,
+            node.frontmatter?.cover?.childImageSharp?.gatsbyImageData || null,
+          ]),
+        );
+        scheduleDevelopmentSearch({ getNodesByType, reporter });
         const items = result.data.allMarkdownRemark.edges;
         const availableLanguagesFor = (node) =>
           items
@@ -632,9 +661,16 @@ export const createSchemaCustomization = ({ actions }) => {
   `);
 };
 
+let searchCovers = new Map();
+
 export const onPostBuild = async ({ getNodesByType, reporter }) => {
   const { writeSearchIndexes } = await import('./scripts/build-search-index.mjs');
-  const metrics = await writeSearchIndexes(getNodesByType('MarkdownRemark'), 'public');
+  const metrics = await writeSearchIndexes(
+    getNodesByType('MarkdownRemark'),
+    'public',
+    undefined,
+    searchCovers,
+  );
   reporter.info(`Local search indexes: ${JSON.stringify(metrics)}`);
 };
 
@@ -649,7 +685,12 @@ function scheduleDevelopmentSearch({ getNodesByType, reporter }) {
     developmentSearchWork = developmentSearchWork
       .then(async () => {
         const { writeSearchIndexes } = await import('./scripts/build-search-index.mjs');
-        await writeSearchIndexes(getNodesByType('MarkdownRemark'), 'public');
+        await writeSearchIndexes(
+          getNodesByType('MarkdownRemark'),
+          'public',
+          undefined,
+          searchCovers,
+        );
       })
       .catch((error) => reporter.error('Could not refresh local search indexes', error));
   }, 500);
@@ -657,6 +698,6 @@ function scheduleDevelopmentSearch({ getNodesByType, reporter }) {
 export const onPostBootstrap = async ({ getNodesByType }) => {
   if (process.env.NODE_ENV !== 'development') return;
   const { writeSearchIndexes } = await import('./scripts/build-search-index.mjs');
-  await writeSearchIndexes(getNodesByType('MarkdownRemark'), 'public');
+  await writeSearchIndexes(getNodesByType('MarkdownRemark'), 'public', undefined, searchCovers);
   developmentSearchReady = true;
 };

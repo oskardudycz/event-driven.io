@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import yaml from 'js-yaml';
 import { readFileSync, mkdtempSync, rmSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import MiniSearch from 'minisearch';
-import { searchDocuments } from '../src/search/documents.mjs';
+import { searchDocuments, searchableText } from '../src/search/documents.mjs';
 import { indexOptions } from '../src/search/options.mjs';
 import { loadIndex, searchIndex } from '../src/search/runtime.mjs';
 import { highlightParts, snippet } from '../src/search/snippets.mjs';
@@ -22,6 +23,10 @@ test('canonical locale selection, Polish diacritics, identifiers, prefix/fuzzy m
     node('two', 'en', 'Architecture', 'Vertical slices'),
     node('two', 'pl', 'Placeholder', 'bogusplaceholder', true),
   ];
+  assert.equal(
+    searchableText('![cover](cover.png) Main **text** and [link](https://example.com)'),
+    'Main text and link',
+  );
   const docs = searchDocuments(nodes, 'pl');
   assert.deepEqual(
     docs.map((doc) => doc.path),
@@ -81,7 +86,40 @@ for (const lang of ['en', 'pl']) {
     const results = searchIndex(index, 'event sourcing');
     assert.ok(results.length > 10);
     assert.equal(new Set(results.map((result) => result.id)).size, results.length);
-    assert.ok(results.some((result) => result.path === '/en/introduction_to_event_sourcing/'));
+    const introduction = results.find(
+      (result) => result.path === '/en/introduction_to_event_sourcing/',
+    );
+    assert.ok(introduction?.cover, 'canonical fallback keeps its real cover');
+    assert.equal(introduction.cover.width, 240);
+    const documents = index.search(MiniSearch.wildcard);
+    const assets = new Set();
+    for (const document of documents) {
+      if (document.source === 'posts')
+        assert.ok(document.cover, `${document.path} is missing its cover`);
+      if (!document.cover) continue;
+      for (const image of [document.cover.images.fallback, ...document.cover.images.sources]) {
+        for (const variant of image.srcSet.split(', ')) assets.add(variant.split(' ')[0]);
+      }
+    }
+    for (const url of assets) {
+      assert.match(url, /^\/static\//);
+      assert.ok(
+        readFileSync(join('public', decodeURIComponent(url))).length,
+        `Missing cover asset ${url}`,
+      );
+    }
+
+    assert.ok(introduction.cover.images.sources.some((source) => source.type === 'image/webp'));
+    for (const image of [
+      introduction.cover.images.fallback,
+      ...introduction.cover.images.sources,
+    ]) {
+      for (const variant of image.srcSet.split(', ')) {
+        const url = variant.split(' ')[0];
+        assert.match(url, /^\/static\//);
+        assert.ok(readFileSync(join('public', decodeURI(url))).length);
+      }
+    }
     for (const result of results) {
       assert.match(result.path, /^\/(en|pl)\//);
       assert.ok(readFileSync(join('public', result.path, 'index.html')).length);
@@ -101,9 +139,14 @@ test('result rendering escapes source text while highlighting code matches', asy
   compiled.require = (id) =>
     id === 'gatsby'
       ? { Link: ({ to, children }) => React.createElement('a', { href: to }, children) }
-      : id === '../../i18n/page-context'
-        ? { usePageContext: () => ({ lang: 'en' }) }
-        : require(id);
+      : id === 'gatsby-plugin-image'
+        ? {
+            GatsbyImage: ({ image, alt }) =>
+              React.createElement('img', { src: image.images.fallback.src, alt }),
+          }
+        : id === '../../i18n/page-context'
+          ? { usePageContext: () => ({ lang: 'en' }) }
+          : require(id);
   const { transformSync } = require('@babel/core');
   compiled._compile(
     transformSync(readFileSync('src/components/Search/Hit.js', 'utf8'), {
@@ -119,6 +162,7 @@ test('result rendering escapes source text while highlighting code matches', asy
   );
   const html = renderToStaticMarkup(
     React.createElement(compiled.exports.default, {
+      theme: yaml.load(readFileSync('src/theme/theme.yaml', 'utf8')),
       hit: {
         title: '<img src=x onerror=alert(1)>',
         content: '<script>attack</script> appendToStream',
@@ -133,4 +177,25 @@ test('result rendering escapes source text while highlighting code matches', asy
   assert.ok(!html.includes('<script>'));
   assert.match(html, /&lt;img/);
   assert.match(html, /<mark[^>]*>appendToStream<\/mark>/);
+});
+
+test('canonical cover data follows the selected genuine translation and stays optional', async () => {
+  const english = { ...node('one', 'en', 'English', 'content'), id: 'english' };
+  const polish = { ...node('one', 'pl', 'Polski', 'tekst'), id: 'polish' };
+  const fallback = { ...node('two', 'en', 'Fallback', 'content'), id: 'fallback' };
+  const cover = { width: 240, height: 120, images: { fallback: { src: '/static/cover.webp' } } };
+  const covers = new Map([
+    ['english', cover],
+    ['fallback', cover],
+  ]);
+  const docs = searchDocuments([english, polish, fallback], 'pl', 'en', covers);
+  assert.equal(
+    docs[0].cover,
+    null,
+    'do not copy English artwork into a genuine Polish version without a cover',
+  );
+  assert.deepEqual(docs[1].cover, cover);
+  const index = new MiniSearch(indexOptions);
+  index.addAll(docs);
+  assert.deepEqual((await loadIndex(JSON.stringify(index))).search('fallback')[0].cover, cover);
 });

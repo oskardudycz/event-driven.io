@@ -3,7 +3,7 @@ export const normalizeTerm = (term) =>
 export const tokenize = (text) => text.split(/[^\p{L}\p{N}_]+/u).filter(Boolean);
 export const indexOptions = {
   fields: ['title', 'category', 'content'],
-  storeFields: ['title', 'path', 'langKey', 'source', 'category', 'date', 'content'],
+  storeFields: ['title', 'path', 'langKey', 'source', 'category', 'date', 'content', 'cover'],
   processTerm: normalizeTerm,
   tokenize,
   searchOptions: {

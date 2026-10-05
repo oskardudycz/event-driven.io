@@ -6,7 +6,8 @@ export function searchableText(raw) {
       /<\/?(?:p|div|span|em|strong|a|img|br|figure|figcaption|details|summary|h[1-6])\b[^>]*>/gi,
       ' ',
     )
-    .replace(/!?\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
     .replace(/```[^\n]*\n?/g, '')
     .replace(/[*`~]/g, '')
     .replace(/^#{1,6}\s+/gm, '')
@@ -16,7 +17,7 @@ export function searchableText(raw) {
     .replace(/\s+/g, ' ')
     .trim();
 }
-export function searchDocuments(nodes, language, defaultLanguage = 'en') {
+export function searchDocuments(nodes, language, defaultLanguage = 'en', covers = new Map()) {
   const groups = new Map();
   for (const node of nodes) {
     const { fields, frontmatter } = node;
@@ -48,6 +49,7 @@ export function searchDocuments(nodes, language, defaultLanguage = 'en') {
       return {
         id,
         title: frontmatter.title,
+        cover: covers.get(node.id) || null,
         path: `/${fields.langKey}${fields.slug}`,
         langKey: fields.langKey,
         source: fields.source,

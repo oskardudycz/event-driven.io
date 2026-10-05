@@ -228,6 +228,11 @@ test('article footer shows the author bio and links to further reading', async (
     expect(response?.status()).toBe(200);
     const author = page.locator('.author');
     await author.waitFor({ state: 'visible' });
+    await page.waitForFunction(
+      () =>
+        getComputedStyle(document.body).fontFamily.includes('Open Sans') &&
+        getComputedStyle(document.querySelector('.related h2')).fontWeight === '600',
+    );
     await page.evaluate(() => document.fonts.ready);
     const bio = await author.locator('.note').innerText();
     expect(bio).toContain('Oskar Dudycz is an independent software architect');
@@ -297,6 +302,11 @@ test('curated article links fit on a narrow screen', async () => {
       waitUntil: 'domcontentloaded',
     });
     await page.locator('.related a').first().waitFor({ state: 'visible' });
+    await page.waitForFunction(
+      () =>
+        getComputedStyle(document.body).fontFamily.includes('Open Sans') &&
+        getComputedStyle(document.querySelector('.related h2')).fontWeight === '600',
+    );
     const width = await page.evaluate(() => document.documentElement.scrollWidth);
     expect(width).toBeLessThanOrEqual(390);
     expect(await page.locator('.related a').count()).toBe(2);
@@ -490,6 +500,9 @@ for (const language of ['en', 'pl']) {
       });
       const input = page.getByPlaceholder(language === 'pl' ? 'Szukaj' : 'Search', { exact: true });
       await input.waitFor();
+      await page.waitForFunction(() =>
+        getComputedStyle(document.body).fontFamily.includes('Open Sans'),
+      );
       expect(await page.locator('h1').count()).toBe(1);
       expect(indexRequests).toHaveLength(0);
       expect(engineRequests).toHaveLength(0);
@@ -503,6 +516,50 @@ for (const language of ['en', 'pl']) {
       await result.waitFor();
       expect(await result.locator('h2').innerText()).toContain('Introduction to Event Sourcing');
       expect(await result.locator('mark').count()).toBeGreaterThan(0);
+      const cover = result.locator('.search-hit-cover img[data-main-image]');
+      await cover.waitFor({ state: 'visible' });
+      await expect
+        .poll(() => cover.evaluate((image) => image.complete && image.naturalWidth > 0))
+        .toBe(true);
+      expect(await cover.getAttribute('alt')).toBe('');
+      expect(await cover.getAttribute('sizes')).toBe('(max-width: 599px) 88px, 180px');
+      const colors = await result
+        .locator('mark')
+        .first()
+        .evaluate((mark) => ({
+          color: getComputedStyle(mark).color,
+          background: getComputedStyle(mark).backgroundColor,
+        }));
+      expect(colors.color).toBe('rgb(85, 112, 28)');
+      expect(colors.background).toBe('rgba(112, 148, 37, 0.094)');
+      await result.locator('a').hover();
+      expect(
+        await result.locator('h2').evaluate((heading) => getComputedStyle(heading).color),
+      ).toBe('rgb(85, 112, 28)');
+      expect(
+        await result
+          .locator('.search-hit-cover')
+          .evaluate((element) => Math.round(element.getBoundingClientRect().width)),
+      ).toBe(88);
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+      ).toBe(true);
+      if (language === 'en')
+        await compareScreenshot(result, 'search-card-en-mobile', { animations: 'disabled' });
+      await result.locator('a').focus();
+      expect(
+        await result.locator('a').evaluate((link) => getComputedStyle(link).outlineStyle),
+      ).toBe('solid');
+      await page.setViewportSize({ width: 1440, height: 1000 });
+      expect(
+        await result
+          .locator('.search-hit-cover')
+          .evaluate((element) => Math.round(element.getBoundingClientRect().width)),
+      ).toBe(180);
+      if (language === 'en')
+        await compareScreenshot(result, 'search-card-en-desktop', { animations: 'disabled' });
+      await page.setViewportSize({ width: 390, height: 844 });
+
       expect(await result.locator('.search-hit-meta').innerText()).toContain('2022-03-16');
       if (language === 'pl')
         expect(await result.locator('.search-hit-meta').innerText()).toContain('PO ANGIELSKU');

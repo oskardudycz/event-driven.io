@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-require('core-js/fn/array/from');
+import 'core-js/fn/array/from';
 
 import {
   FaBookOpen,
@@ -116,7 +116,7 @@ class Menu extends React.Component {
     e.preventDefault();
 
     if (this.props.screenWidth < 1024) {
-      this.renderedItems.map((item) => {
+      this.renderedItems.forEach((item) => {
         const oldClass = this.state.open ? 'showItem' : 'hideItem';
         const newClass = this.state.open ? 'hideItem' : 'showItem';
 
@@ -134,7 +134,7 @@ class Menu extends React.Component {
     if (this.state.open) {
       this.setState({ open: false });
       if (this.props.screenWidth < 1024) {
-        this.renderedItems.map((item) => {
+        this.renderedItems.forEach((item) => {
           if (item.classList.contains('showItem')) {
             item.classList.add('hideItem');
             item.classList.remove('item');

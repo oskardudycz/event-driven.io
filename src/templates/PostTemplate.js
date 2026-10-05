@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { graphql } from 'gatsby';
-require('prismjs/themes/prism-okaidia.css');
+import 'prismjs/themes/prism-okaidia.css';
 
 import { createHead } from '../components/Seo';
 import Article from '../components/Article';
