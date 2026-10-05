@@ -1,20 +1,17 @@
-import PropTypes from "prop-types";
-import React from "react";
-import { graphql } from "gatsby";
-import { ThemeContext } from "../layouts";
-import Article from "../components/Article";
-import Headline from "../components/Article/Headline";
-import { createHead } from "../components/Seo";
-import VideoGallery from "../components/VideoGallery";
-import { useTranslation } from "react-i18next";
+import PropTypes from 'prop-types';
+import React from 'react';
+import { graphql } from 'gatsby';
+import { ThemeContext } from '../layouts';
+import Article from '../components/Article';
+import Headline from '../components/Article/Headline';
+import { createHead } from '../components/Seo';
+import VideoGallery from '../components/VideoGallery';
+import { useTranslation } from 'react-i18next';
 
 const TalksPage = (props) => {
   const { t } = useTranslation();
   const {
     data: {
-      site: {
-        siteMetadata: { facebook },
-      },
       allVideosJson: { edges: videoNodes },
     },
   } = props;
@@ -27,11 +24,11 @@ const TalksPage = (props) => {
         {(theme) => (
           <Article theme={theme}>
             <header>
-              <Headline title={t("talks.title")} theme={theme} />
+              <Headline title={t('talks.title')} theme={theme} />
             </header>
             <section>
-              <h2>{t("talks.videosTitle")}</h2>
-              <p>{t("talks.videosIntro")}</p>
+              <h2>{t('talks.videosTitle')}</h2>
+              <p>{t('talks.videosIntro')}</p>
               <VideoGallery theme={theme} videos={videos} />
             </section>
           </Article>
@@ -47,7 +44,6 @@ TalksPage.propTypes = {
 
 export default TalksPage;
 
-// eslint-disable-next-line no-undef
 export const query = graphql`
   query TalksQuery {
     site {
@@ -72,5 +68,8 @@ export const query = graphql`
   }
 `;
 
-
-export const Head = createHead(({ t }) => ({ title: t("talks.title"), description: t("talks.videosIntro"), schemaType: "CollectionPage" }));
+export const Head = createHead(({ t }) => ({
+  title: t('talks.title'),
+  description: t('talks.videosIntro'),
+  schemaType: 'CollectionPage',
+}));

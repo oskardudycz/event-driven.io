@@ -1,80 +1,26 @@
-import PropTypes from "prop-types";
-import React from "react";
-import { graphql } from "gatsby";
-require("core-js/fn/array/find");
+import React from 'react';
+import Article from '../components/Article';
+import Search from '../components/Search';
+import { ThemeContext } from '../layouts';
+import { createHead } from '../components/Seo';
+import Headline from '../components/Article/Headline';
+import { usePageContext } from '../i18n/page-context';
 
-import Article from "../components/Article";
-import Search from "../components/Search";
-import { ThemeContext } from "../layouts";
-import { createHead } from "../components/Seo";
-import Headline from "../components/Article/Headline";
-import { usePageContext } from "../i18n/page-context";
-
-import AlgoliaIcon from "!svg-react-loader!../images/svg-icons/search-by-algolia.svg?name=AlgoliaLogo";
-
-const SearchPage = props => {
-  const { lang = "en" } = usePageContext();
-  const {
-    data: {
-      site: {
-        siteMetadata: { algolia, facebook }
-      }
-    }
-  } = props;
-
+const SearchPage = () => {
+  const { lang = 'en' } = usePageContext();
   return (
-    <React.Fragment>
-      <ThemeContext.Consumer>
-        {theme => (
-          <Article theme={theme}>
-            <Headline title={lang === "pl" ? "Szukaj" : "Search"} theme={theme} />
-            <div className="icon">
-              <AlgoliaIcon />
-            </div>
-
-            <Search algolia={algolia} theme={theme} />
-          </Article>
-        )}
-      </ThemeContext.Consumer>
-
-      {/* --- STYLES --- */}
-      <style jsx>{`
-        .icon {
-          display: flex;
-          justify-content: flex-end;
-          margin-bottom: 20px;
-        }
-        .icon :global(svg) {
-          height: 30px;
-        }
-      `}</style>
-    </React.Fragment>
+    <ThemeContext.Consumer>
+      {(theme) => (
+        <Article theme={theme}>
+          <Headline title={lang === 'pl' ? 'Szukaj' : 'Search'} theme={theme} />
+          <Search />
+        </Article>
+      )}
+    </ThemeContext.Consumer>
   );
 };
-
-SearchPage.propTypes = {
-  data: PropTypes.object.isRequired
-};
-
 export default SearchPage;
-
-//eslint-disable-next-line no-undef
-export const query = graphql`
-  query SearchQuery {
-    site {
-      siteMetadata {
-        algolia {
-          appId
-          searchOnlyApiKey
-          indexName
-        }
-        facebook {
-          appId
-        }
-      }
-    }
-  }
-`;
-
-
-export const Head = createHead({ title: "Search", noIndex: true });
+export const Head = createHead(({ pageContext }) => ({
+  title: pageContext.lang === 'pl' ? 'Szukaj' : 'Search',
+  noIndex: true,
+}));

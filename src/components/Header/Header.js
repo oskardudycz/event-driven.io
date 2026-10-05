@@ -1,26 +1,26 @@
-import { Link } from "../Link";
-import PropTypes from "prop-types";
-import React, { useState } from "react";
-import VisibilitySensor from "react-visibility-sensor";
+import { Link } from '../Link';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import VisibilitySensor from 'react-visibility-sensor';
 
-import { ScreenWidthContext, FontLoadedContext } from "../../layouts";
-import config from "../../../content/meta/config";
-import Menu from "../Menu";
+import { ScreenWidthContext, FontLoadedContext } from '../../layouts';
+import config from '../../../content/meta/config';
+import Menu from '../Menu';
 
-import { withPrefix } from "gatsby";
+import { withPrefix } from 'gatsby';
 
-import { usePageContext } from "../../i18n";
-import { useTranslation } from 'react-i18next'
+import { usePageContext } from '../../i18n';
+import { useTranslation } from 'react-i18next';
 
-const avatar = withPrefix("/images/avatar.webp");
+const avatar = withPrefix('/images/avatar.webp');
 
-const Header = ({ pages, path, theme, }) => {
+const Header = ({ pages, path, theme }) => {
   const { t } = useTranslation();
   const [fixed, setFixed] = useState(false);
   const { lang } = usePageContext();
-  const filteredPages = pages.filter(p => p.node.fields.langKey === lang);
+  const filteredPages = pages.filter((p) => p.node.fields.langKey === lang);
 
-  const visibilitySensorChange = val => {
+  const visibilitySensorChange = (val) => {
     if (val) {
       setFixed(false);
     } else {
@@ -29,11 +29,13 @@ const Header = ({ pages, path, theme, }) => {
   };
 
   const getHeaderSize = () => {
-    const fixedText = fixed ? "fixed" : "";
+    const fixedText = fixed ? 'fixed' : '';
 
     const homePages = [`/${lang}`]; //, `/${lang}/newsletter-pl`];
 
-    const homepage = homePages.some(page => path === `${page}/` || path === `${page}`) ? "homepage" : "";
+    const homepage = homePages.some((page) => path === `${page}/` || path === `${page}`)
+      ? 'homepage'
+      : '';
 
     return `${fixedText} ${homepage}`;
   };
@@ -46,14 +48,14 @@ const Header = ({ pages, path, theme, }) => {
             <img src={avatar} alt={config.siteTitle} width="180" height="180" />
           </div>
           <div className="type">
-            <span className="siteTitle">{t("header.title") || config.headerTitle}</span>
-            <h2>{t("header.subTitle") || config.headerSubTitle}</h2>
+            <span className="siteTitle">{t('header.title') || config.headerTitle}</span>
+            <h2>{t('header.subTitle') || config.headerSubTitle}</h2>
           </div>
         </Link>
         <FontLoadedContext.Consumer>
-          {loaded => (
+          {(loaded) => (
             <ScreenWidthContext.Consumer>
-              {width => (
+              {(width) => (
                 <Menu
                   path={path}
                   fixed={fixed}
@@ -73,97 +75,138 @@ const Header = ({ pages, path, theme, }) => {
 
       {/* --- STYLES --- */}
       <style jsx>{`
-          .header {
+        .header {
+          align-items: center;
+          justify-content: center;
+          background-color: ${theme.color.neutral.white};
+          display: flex;
+          height: ${theme.header.height.default};
+          position: relative;
+          top: 0;
+          width: 100%;
+          align-items: center;
+
+          :global(a.logoType) {
             align-items: center;
-            justify-content: center;
-            background-color: ${theme.color.neutral.white};
             display: flex;
-            height: ${theme.header.height.default};
-            position: relative;
-            top: 0;
-            width: 100%;
-            align-items: center;
+            flex-direction: 'column';
+            color: ${theme.text.color.primary};
 
-            :global(a.logoType) {
-              align-items: center;
-              display: flex;
-              flex-direction: "column";
-              color: ${theme.text.color.primary};
-
-              .logo {
-                flex-shrink: 0;
-              }
+            .logo {
+              flex-shrink: 0;
             }
+          }
+
+          &.homepage {
+            position: absolute;
+            background-color: transparent;
+            height: ${theme.header.height.homepage};
+          }
+        }
+
+        .siteTitle {
+          display: block;
+          font-size: ${theme.font.size.m};
+          font-weight: ${theme.font.weight.standard};
+          margin: ${theme.space.stack.xs};
+        }
+
+        h2 {
+          font-weight: ${theme.font.weight.standard};
+          font-size: ${theme.font.size.xxs};
+          letter-spacing: 0;
+          margin: 0;
+        }
+
+        .logo {
+          border-radius: 65% 75%;
+          border: 1px solid #eee;
+          display: inline-block;
+          height: 44px;
+          margin: ${theme.space.inline.default};
+          overflow: hidden;
+          width: 44px;
+          transition: all 0.5s;
+
+          .homepage & {
+            height: 60px;
+            width: 60px;
+          }
+
+          img {
+            width: 100%;
+            height: auto;
+          }
+        }
+
+        .sensor {
+          display: block;
+          position: absolute;
+          bottom: 0;
+          z-index: 1;
+          left: 0;
+          right: 0;
+          height: 1px;
+          top: ${path === `/${lang}/` ? theme.header.height.homepage : theme.header.height.default};
+        }
+
+        @from-width tablet {
+          .header {
+            padding: ${theme.space.inset.l};
 
             &.homepage {
-              position: absolute;
-              background-color: transparent;
               height: ${theme.header.height.homepage};
             }
           }
+        }
 
-          .siteTitle {
-            display: block;
-            font-size: ${theme.font.size.m};
-            font-weight: ${theme.font.weight.standard};
-            margin: ${theme.space.stack.xs};
-          }
-
-          h2 {
-            font-weight: ${theme.font.weight.standard};
-            font-size: ${theme.font.size.xxs};
-            letter-spacing: 0;
-            margin: 0;
-          }
-
-          .logo {
-            border-radius: 65% 75%;
-            border: 1px solid #eee;
-            display: inline-block;
-            height: 44px;
-            margin: ${theme.space.inline.default};
-            overflow: hidden;
-            width: 44px;
-            transition: all 0.5s;
-
-            .homepage & {
-              height: 60px;
-              width: 60px;
+        @below desktop {
+          .header.homepage {
+            .logo {
+              border: none;
             }
 
-            img {
-              width: 100%;
-              height: auto;
+            :global(a.logoType),
+            .siteTitle {
+              color: ${theme.color.neutral.white};
+            }
+            h2 {
+              color: ${theme.color.neutral.gray.d};
             }
           }
+        }
 
-          .sensor {
-            display: block;
+        @from-width desktop {
+          .header {
+            align-items: center;
+            background-color: ${theme.color.neutral.white};
+            display: flex;
             position: absolute;
-            bottom: 0;
-            z-index: 1;
-            left: 0;
-            right: 0;
-            height: 1px;
-            top: ${path === `/${lang}/` ? theme.header.height.homepage : theme.header.height.default};
-          }
+            top: 0;
+            width: 100%;
+            justify-content: space-between;
+            transition: padding 0.5s;
 
-          @from-width tablet {
-            .header {
-              padding: ${theme.space.inset.l};
+            &.fixed {
+              height: ${theme.header.height.fixed};
+              background-color: ${theme.color.neutral.white};
+              left: 0;
+              padding: 0 ${theme.space.m};
+              position: fixed;
+              top: 0;
+              width: 100%;
+              z-index: 1;
 
-              &.homepage {
-                height: ${theme.header.height.homepage};
+              .siteTitle {
+                margin: ${theme.space.stack.xxs};
+              }
+
+              h2 {
+                display: none;
               }
             }
-          }
 
-          @below desktop {
-            .header.homepage {
-              .logo {
-                border: none;
-              }
-
+            &.homepage:not(.fixed) {
               :global(a.logoType),
               .siteTitle {
                 color: ${theme.color.neutral.white};
@@ -174,90 +217,49 @@ const Header = ({ pages, path, theme, }) => {
             }
           }
 
-          @from-width desktop {
-            .header {
-              align-items: center;
-              background-color: ${theme.color.neutral.white};
-              display: flex;
-              position: absolute;
-              top: 0;
-              width: 100%;
-              justify-content: space-between;
-              transition: padding 0.5s;
+          .header :global(a.logoType) {
+            text-align: left;
+            flex-direction: row;
+            flex-shrink: 0;
+            width: auto;
+          }
 
-              &.fixed {
-                height: ${theme.header.height.fixed};
-                background-color: ${theme.color.neutral.white};
-                left: 0;
-                padding: 0 ${theme.space.m};
-                position: fixed;
-                top: 0;
-                width: 100%;
-                z-index: 1;
+          .logo {
+            margin: ${theme.space.inline.default};
 
-                .siteTitle {
-                  margin: ${theme.space.stack.xxs};
-                }
-
-                h2 {
-                  display: none;
-                }
-              }
-
-              &.homepage:not(.fixed) {
-                :global(a.logoType),
-                .siteTitle {
-                  color: ${theme.color.neutral.white};
-                }
-                h2 {
-                  color: ${theme.color.neutral.gray.d};
-                }
-              }
+            .fixed & {
+              height: 36px;
+              width: 36px;
             }
 
-            .header :global(a.logoType) {
-              text-align: left;
-              flex-direction: row;
-              flex-shrink: 0;
-              width: auto;
-            }
-
-            .logo {
-              margin: ${theme.space.inline.default};
-
-              .fixed & {
-                height: 36px;
-                width: 36px;
-              }
-
-              .header.homepage:not(.fixed) & {
-                border: none;
-              }
-            }
-
-            h2 {
-              animation-duration: ${theme.time.duration.default};
-              animation-name: h2Entry;
-            }
-
-            @keyframes h2Entry {
-              from {
-                opacity: 0;
-              }
-              to {
-                opacity: 1;
-              }
+            .header.homepage:not(.fixed) & {
+              border: none;
             }
           }
-        `}</style>
+
+          h2 {
+            animation-duration: ${theme.time.duration.default};
+            animation-name: h2Entry;
+          }
+
+          @keyframes h2Entry {
+            from {
+              opacity: 0;
+            }
+            to {
+              opacity: 1;
+            }
+          }
+        }
+      `}</style>
     </React.Fragment>
   );
-}
+};
 
 Header.propTypes = {
   pages: PropTypes.array.isRequired,
   path: PropTypes.string.isRequired,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
 };
 
 export default Header;

@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const Footer = props => {
+const Footer = (props) => {
   const { html, theme } = props;
 
   return (
@@ -22,19 +22,19 @@ const Footer = props => {
             padding: 0;
 
             :global(li) {
-              color: ${theme.color.neutral.gray.g};
+              color: ${theme.color.neutral.gray.h};
               font-size: ${theme.font.size.xxs};
               padding: ${theme.space.xxs} ${theme.space.s};
               position: relative;
               display: inline-block;
 
               &::after {
-                content: "•";
+                content: '•';
                 position: absolute;
                 right: ${`calc(${theme.space.xs} * -1)`};
               }
               &:last-child::after {
-                content: "";
+                content: '';
               }
             }
           }
@@ -52,7 +52,7 @@ const Footer = props => {
 
 Footer.propTypes = {
   html: PropTypes.string,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
 };
 
 export default Footer;

@@ -1,25 +1,22 @@
-import PropTypes from "prop-types";
-import React from "react";
-import { graphql } from "gatsby";
-import { ThemeContext } from "../layouts";
-import Blog from "../components/Blog";
-import { createHead } from "../components/Seo";
+import PropTypes from 'prop-types';
+import React from 'react';
+import { graphql } from 'gatsby';
+import { ThemeContext } from '../layouts';
+import Blog from '../components/Blog';
+import { createHead } from '../components/Seo';
 
 class IndexPage extends React.Component {
   render() {
     const {
       data: {
         posts: { edges: posts = [] },
-        site: {
-          siteMetadata: { facebook }
-        }
-      }
+      },
     } = this.props;
 
     return (
       <React.Fragment>
         <ThemeContext.Consumer>
-          {theme => <Blog posts={posts} theme={theme} heading="Newsletter" />}
+          {(theme) => <Blog posts={posts} theme={theme} heading="Newsletter" />}
         </ThemeContext.Consumer>
 
         <style jsx>{`
@@ -34,16 +31,18 @@ class IndexPage extends React.Component {
 }
 
 IndexPage.propTypes = {
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
 };
 
 export default IndexPage;
 
-//eslint-disable-next-line no-undef
 export const query = graphql`
   query NewsletterPlQuery($langKey: String!) {
     posts: allMarkdownRemark(
-      filter: { fileAbsolutePath: { regex: "//newsletter-pl/[0-9]+.*--/" }, fields: { langKey: { eq: $langKey } } }
+      filter: {
+        fileAbsolutePath: { regex: "//newsletter-pl/[0-9]+.*--/" }
+        fields: { langKey: { eq: $langKey } }
+      }
       sort: { fields: { prefix: DESC } }
     ) {
       edges {
@@ -83,5 +82,8 @@ export const query = graphql`
   }
 `;
 
-
-export const Head = createHead({ title: "Newsletter", description: "Articles from Oskar Dudycz's software architecture newsletter.", schemaType: "CollectionPage" });
+export const Head = createHead({
+  title: 'Newsletter',
+  description: "Articles from Oskar Dudycz's software architecture newsletter.",
+  schemaType: 'CollectionPage',
+});

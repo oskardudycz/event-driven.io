@@ -1,33 +1,33 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { useTranslation } from "react-i18next";
-import { Link } from "../Link";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
+import { Link } from '../Link';
 
-import { FaArrowRight } from "react-icons/fa/";
-import { FaArrowLeft } from "react-icons/fa/";
+import { FaArrowRight } from 'react-icons/fa/';
+import { FaArrowLeft } from 'react-icons/fa/';
 
-const NextPrev = props => {
+const NextPrev = (props) => {
   const { t } = useTranslation();
   const {
     theme,
     next: {
       fields: { prefix: nextPrefix, slug: nextSlug } = {},
-      frontmatter: { title: nextTitle } = {}
+      frontmatter: { title: nextTitle } = {},
     } = {},
     prev: {
       fields: { prefix: prevPrefix, slug: prevSlug } = {},
-      frontmatter: { title: prevTitle } = {}
-    } = {}
+      frontmatter: { title: prevTitle } = {},
+    } = {},
   } = props;
 
   return (
     <React.Fragment>
-      <nav className="links" aria-label={t("articleNavigation.title")}>
+      <nav className="links" aria-label={t('articleNavigation.title')}>
         {nextSlug && (
           <Link to={nextSlug}>
             <FaArrowRight />
             <span className="linkContent">
-              <span className="direction">{t("articleNavigation.later")}</span>
+              <span className="direction">{t('articleNavigation.later')}</span>
               <span className="title">{nextTitle}</span>
               <time>{nextPrefix}</time>
             </span>
@@ -37,7 +37,7 @@ const NextPrev = props => {
           <Link to={prevSlug}>
             <FaArrowLeft />
             <span className="linkContent">
-              <span className="direction">{t("articleNavigation.earlier")}</span>
+              <span className="direction">{t('articleNavigation.earlier')}</span>
               <span className="title">{prevTitle}</span>
               <time>{prevPrefix}</time>
             </span>
@@ -124,7 +124,7 @@ const NextPrev = props => {
 NextPrev.propTypes = {
   next: PropTypes.object,
   prev: PropTypes.object,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
 };
 
 export default NextPrev;

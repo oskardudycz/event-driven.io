@@ -1,6 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-require("core-js/fn/array/from");
+import React from 'react';
+import PropTypes from 'prop-types';
+require('core-js/fn/array/from');
 
 import {
   FaBookOpen,
@@ -13,17 +13,17 @@ import {
   FaYoutube,
   FaUserGraduate,
   FaHandshake,
-} from "react-icons/fa/";
-import { FaSearch } from "react-icons/fa/";
-import { FaEnvelope } from "react-icons/fa/";
-import { FaTag } from "react-icons/fa/";
-import LanguagePicker from "../LanguagePicker";
+} from 'react-icons/fa/';
+import { FaSearch } from 'react-icons/fa/';
+import { FaEnvelope } from 'react-icons/fa/';
+import { FaTag } from 'react-icons/fa/';
+import LanguagePicker from '../LanguagePicker';
 
-import Item from "./Item";
-import BlueskyIcon from "./BlueskyIcon";
-import Expand from "./Expand";
-import { getOverflowedItems } from "./overflow.mjs";
-import config from "../../../content/meta/config";
+import Item from './Item';
+import BlueskyIcon from './BlueskyIcon';
+import Expand from './Expand';
+import { getOverflowedItems } from './overflow.mjs';
+import config from '../../../content/meta/config';
 
 class Menu extends React.Component {
   constructor(props) {
@@ -36,21 +36,21 @@ class Menu extends React.Component {
         ? page.node.frontmatter.menuTitle
         : page.node.frontmatter.title,
       icon:
-        page.node.frontmatter.icon === "FaUserGraduate"
+        page.node.frontmatter.icon === 'FaUserGraduate'
           ? FaUserGraduate
-          : page.node.frontmatter.icon === "FaHandshake"
-          ? FaHandshake
-          : undefined,
+          : page.node.frontmatter.icon === 'FaHandshake'
+            ? FaHandshake
+            : undefined,
     }));
 
     this.items = [
-      { to: "/", label: "Start", icon: FaHome },
-      { to: "/articles/", label: "menu.articles", icon: FaBookOpen },
-      { to: "/category/", label: "menu.categories", icon: FaTag },
+      { to: '/', label: 'Start', icon: FaHome },
+      { to: '/articles/', label: 'menu.articles', icon: FaBookOpen },
+      { to: '/category/', label: 'menu.categories', icon: FaTag },
       ...pages,
-      { to: "/contact/", label: "menu.contact", icon: FaEnvelope },
-      { to: "/talks/", label: "menu.talks", icon: FaMicrophone },
-      { to: "/search/", icon: FaSearch },
+      { to: '/contact/', label: 'menu.contact', icon: FaEnvelope },
+      { to: '/talks/', label: 'menu.talks', icon: FaMicrophone },
+      { to: '/search/', icon: FaSearch },
 
       { to: config.socialLinks.linkedin.url, icon: FaLinkedin },
       { to: config.socialLinks.github.url, icon: FaGithub },
@@ -105,7 +105,9 @@ class Menu extends React.Component {
 
     this.setState({
       hiddenItems: getOverflowedItems(
-        this.itemList.current, this.renderedItems, PADDING_AND_SPACE_FOR_MORELINK
+        this.itemList.current,
+        this.renderedItems,
+        PADDING_AND_SPACE_FOR_MORELINK,
       ),
     });
   };
@@ -115,8 +117,8 @@ class Menu extends React.Component {
 
     if (this.props.screenWidth < 1024) {
       this.renderedItems.map((item) => {
-        const oldClass = this.state.open ? "showItem" : "hideItem";
-        const newClass = this.state.open ? "hideItem" : "showItem";
+        const oldClass = this.state.open ? 'showItem' : 'hideItem';
+        const newClass = this.state.open ? 'hideItem' : 'showItem';
 
         if (item.classList.contains(oldClass)) {
           item.classList.add(newClass);
@@ -129,14 +131,13 @@ class Menu extends React.Component {
   };
 
   closeMenu = () => {
-
     if (this.state.open) {
       this.setState({ open: false });
       if (this.props.screenWidth < 1024) {
         this.renderedItems.map((item) => {
-          if (item.classList.contains("showItem")) {
-            item.classList.add("hideItem");
-            item.classList.remove("item");
+          if (item.classList.contains('showItem')) {
+            item.classList.add('hideItem');
+            item.classList.remove('item');
           }
         });
       }
@@ -149,7 +150,7 @@ class Menu extends React.Component {
 
     return (
       <React.Fragment>
-        <nav className={`menu ${open ? "open" : ""}`} rel="js-menu">
+        <nav className={`menu ${open ? 'open' : ''}`} rel="js-menu">
           <ul className="itemList" ref={this.itemList}>
             {this.items.map((item, i) => (
               <Item item={item} key={item.label ?? i} icon={item.icon} theme={theme} />
@@ -176,7 +177,7 @@ class Menu extends React.Component {
             display: flex;
             flex-grow: 1;
             left: 0;
-            max-height: ${open ? "1000px" : "50px"};
+            max-height: ${open ? '1000px' : '50px'};
             padding: 0 ${theme.space.inset.s};
             position: fixed;
             width: 100%;
@@ -199,7 +200,7 @@ class Menu extends React.Component {
             .menu {
               &::after {
                 position: absolute;
-                content: "";
+                content: '';
                 left: ${theme.space.m};
                 right: ${theme.space.m};
                 top: 0;
@@ -249,7 +250,7 @@ class Menu extends React.Component {
               border-top-right-radius: 0;
 
               &:after {
-                content: "";
+                content: '';
                 background: ${theme.background.color.primary};
                 z-index: 10;
                 top: -10px;

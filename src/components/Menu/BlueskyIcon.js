@@ -1,5 +1,5 @@
-import React from "react";
-import { IconBase } from "react-icons";
+import React from 'react';
+import { IconBase } from 'react-icons';
 
 // Bluesky brand glyph from Simple Icons (CC0).
 export default function BlueskyIcon(props) {

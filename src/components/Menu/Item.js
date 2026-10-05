@@ -1,18 +1,18 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Link } from "../Link";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Link } from '../Link';
 import { useTranslation } from 'react-i18next';
 
-const Item = props => {
+const Item = (props) => {
   const { theme, item: { label, to, icon: Icon } = {}, onClick } = props;
   const { t } = useTranslation();
 
   return (
     <React.Fragment>
-      <li className={"hiddenItem" in props ? "hiddenItem" : "item"} key={label}>
+      <li className={'hiddenItem' in props ? 'hiddenItem' : 'item'} key={label}>
         <Link
           to={to}
-          className={"hiddenItem" in props ? "inHiddenItem" : ""}
+          className={'hiddenItem' in props ? 'inHiddenItem' : ''}
           onClick={onClick}
           data-slug={to}
         >
@@ -58,7 +58,6 @@ const Item = props => {
               color: ${theme.color.neutral.white};
             }
 
-            
             :global(a:hover) {
               color: black;
               background: color(white alpha(-60%));
@@ -84,7 +83,7 @@ const Item = props => {
 
             :global(.homepage):not(.fixed) &:hover :global(svg) {
               fill: ${theme.color.brand.primaryDark};
-              
+
               opacity: 1;
 
               :global(.hero) & :global(svg) {
@@ -104,7 +103,7 @@ const Item = props => {
             & :global(a.inHiddenItem) {
               color: ${theme.text.color.primary};
               &:hover {
-                color: ${theme.color.brand.primary};
+                color: ${theme.text.color.brand};
               }
             }
           }
@@ -119,7 +118,7 @@ Item.propTypes = {
   hidden: PropTypes.bool,
   onClick: PropTypes.func,
   icon: PropTypes.func,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
 };
 
 export default Item;

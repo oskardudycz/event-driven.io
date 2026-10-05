@@ -1,11 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Link } from "../Link";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Link } from '../Link';
 
-import { FaCalendar } from "react-icons/fa/";
-import { FaUser } from "react-icons/fa/";
-import { FaTag } from "react-icons/fa/";
-import kebabCase from "lodash/kebabCase";
+import { FaCalendar } from 'react-icons/fa/';
+import { FaUser } from 'react-icons/fa/';
+import { FaTag } from 'react-icons/fa/';
+import kebabCase from 'lodash/kebabCase';
 
 const Meta = (props) => {
   const { prefix, author: authorName, category, categories = [], theme } = props;

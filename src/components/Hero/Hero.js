@@ -1,10 +1,10 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { FaArrowDown } from "react-icons/fa/";
+import { FaArrowDown } from 'react-icons/fa/';
 
-import { Trans, useTranslation } from "react-i18next";
-import { Link } from "../Link";
+import { Trans, useTranslation } from 'react-i18next';
+import { Link } from '../Link';
 
 const Hero = (props) => {
   const { scrollToContent, backgrounds, theme } = props;
@@ -25,9 +25,9 @@ const Hero = (props) => {
           </Trans>
         </h2>
         <h3>
-          {t("hero.introExperience")}
+          {t('hero.introExperience')}
           <br />
-          {t("hero.introTraining")}
+          {t('hero.introTraining')}
           <br />
           <Trans
             i18nKey="hero.introEmmett"
@@ -42,14 +42,14 @@ const Hero = (props) => {
             }}
           />
           <br />
-          {t("hero.introBlog")}
+          {t('hero.introBlog')}
         </h3>
-        <nav className="services" aria-label={t("hero.servicesLabel")}>
-          <Link to="/training/">{t("hero.trainingCta")}</Link>
-          <Link to="/consulting/">{t("hero.consultingCta")}</Link>
+        <nav className="services" aria-label={t('hero.servicesLabel')}>
+          <Link to="/training/">{t('hero.trainingCta')}</Link>
+          <Link to="/consulting/">{t('hero.consultingCta')}</Link>
         </nav>
-        <button onClick={scrollToContent} aria-label={t("hero.articlesCta")}>
-          <span className="articlesLabel">{t("hero.articlesCta")}</span>
+        <button onClick={scrollToContent} aria-label={t('hero.articlesCta')}>
+          <span className="articlesLabel">{t('hero.articlesCta')}</span>
           <span className="arrowCircle">
             <FaArrowDown />
           </span>
@@ -82,20 +82,20 @@ const Hero = (props) => {
           color: ${theme.hero.h1.color};
           line-height: ${theme.hero.h1.lineHeight};
           line-height: 1.2;
-          text-remove-gap: both 0 "Open Sans";
+          text-remove-gap: both 0 'Open Sans';
 
           :global(strong) {
             position: relative;
 
             &::after,
             &::before {
-              content: "›";
+              content: '›';
               color: ${theme.text.color.attention};
               margin: 0 ${theme.space.xs} 0 0;
               text-shadow: 0 0 ${theme.space.s} ${theme.color.neutral.gray.k};
             }
             &::after {
-              content: "‹";
+              content: '‹';
               margin: 0 0 0 ${theme.space.xs};
             }
           }
@@ -113,20 +113,20 @@ const Hero = (props) => {
           margin-bottom: ${theme.space.m};
           color: ${theme.hero.h2.color};
           line-height: ${theme.hero.h2.lineHeight};
-          text-remove-gap: both 0 "Open Sans";
+          text-remove-gap: both 0 'Open Sans';
 
           :global(strong) {
             position: relative;
 
             &::after,
             &::before {
-              content: "›";
+              content: '›';
               color: ${theme.text.color.attention};
               margin: 0 ${theme.space.xs} 0 0;
               text-shadow: 0 0 ${theme.space.s} ${theme.color.neutral.gray.k};
             }
             &::after {
-              content: "‹";
+              content: '‹';
               margin: 0 0 0 ${theme.space.xs};
             }
           }
@@ -141,20 +141,20 @@ const Hero = (props) => {
           color: ${theme.hero.h3.color};
           line-height: ${theme.hero.h3.lineHeight};
           line-height: 1.8;
-          text-remove-gap: both 0 "Open Sans";
+          text-remove-gap: both 0 'Open Sans';
 
           :global(strong) {
             position: relative;
 
             &::after,
             &::before {
-              content: "›";
+              content: '›';
               color: ${theme.text.color.attention};
               margin: 0 ${theme.space.xs} 0 0;
               text-shadow: 0 0 ${theme.space.s} ${theme.color.neutral.gray.k};
             }
             &::after {
-              content: "‹";
+              content: '‹';
               margin: 0 0 0 ${theme.space.xs};
             }
           }

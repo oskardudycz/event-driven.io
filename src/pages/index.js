@@ -1,17 +1,17 @@
-import PropTypes from "prop-types";
-import React from "react";
-import { graphql } from "gatsby";
-import { ThemeContext } from "../layouts";
-import Blog from "../components/Blog";
-import Hero from "../components/Hero";
-import { createHead } from "../components/Seo";
-import { withTranslation } from "react-i18next";
+import PropTypes from 'prop-types';
+import React from 'react';
+import { graphql } from 'gatsby';
+import { ThemeContext } from '../layouts';
+import Blog from '../components/Blog';
+import Hero from '../components/Hero';
+import { createHead } from '../components/Seo';
+import { withTranslation } from 'react-i18next';
 
 class IndexPage extends React.Component {
   separator = React.createRef();
 
-  scrollToContent = (e) => {
-    this.separator.current.scrollIntoView({ block: "start", behavior: "smooth" });
+  scrollToContent = () => {
+    this.separator.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
   };
 
   render() {
@@ -27,9 +27,6 @@ class IndexPage extends React.Component {
         },
         bgMobile: {
           resize: { src: mobile },
-        },
-        site: {
-          siteMetadata: { facebook },
         },
       },
     } = this.props;
@@ -52,7 +49,7 @@ class IndexPage extends React.Component {
           {(theme) => (
             <section className="latestArticles" id="latest-articles" ref={this.separator}>
               <header className="sectionHeader">
-                <h2>{t("blog.latestTitle")}</h2>
+                <h2>{t('blog.latestTitle')}</h2>
               </header>
               <Blog posts={posts} theme={theme} browseAllPath="/articles/" compactTop />
               <style jsx>{`
@@ -94,7 +91,6 @@ IndexPage.propTypes = {
 
 export default withTranslation()(IndexPage);
 
-//eslint-disable-next-line no-undef
 export const query = graphql`
   query IndexQuery($langKey: String!) {
     posts: allMarkdownRemark(
@@ -160,6 +156,5 @@ export const query = graphql`
 `;
 
 //hero-background
-
 
 export const Head = createHead();

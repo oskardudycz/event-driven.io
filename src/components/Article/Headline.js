@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const Headline = props => {
+const Headline = (props) => {
   const { title, children, theme } = props;
 
   return (
@@ -58,7 +58,7 @@ const Headline = props => {
 Headline.propTypes = {
   title: PropTypes.string,
   children: PropTypes.node,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
 };
 
 export default Headline;

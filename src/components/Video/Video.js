@@ -1,21 +1,21 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 const youtubeIdFrom = (value) => {
-  if (!value) return "";
+  if (!value) return '';
   if (/^[\w-]{11}$/.test(value)) return value;
 
   try {
     const url = new URL(value);
-    if (url.hostname.includes("youtu.be")) return url.pathname.split("/").filter(Boolean)[0] || "";
-    if (url.pathname.startsWith("/embed/")) return url.pathname.split("/")[2] || "";
-    return url.searchParams.get("v") || "";
-  } catch (error) {
-    return "";
+    if (url.hostname.includes('youtu.be')) return url.pathname.split('/').filter(Boolean)[0] || '';
+    if (url.pathname.startsWith('/embed/')) return url.pathname.split('/')[2] || '';
+    return url.searchParams.get('v') || '';
+  } catch {
+    return '';
   }
 };
 
-const Video = ({ videoSrcURL, videoTitle, playLabel = "Play video" }) => {
+const Video = ({ videoSrcURL, videoTitle, playLabel = 'Play video' }) => {
   const [playing, setPlaying] = useState(false);
   const embedId = youtubeIdFrom(videoSrcURL);
 

@@ -1,9 +1,9 @@
-import PropTypes from "prop-types";
-import React from "react";
+import PropTypes from 'prop-types';
+import React from 'react';
 
-import Item from "./Item";
-import { Link } from "../Link";
-import { useTranslation } from "react-i18next";
+import Item from './Item';
+import { Link } from '../Link';
+import { useTranslation } from 'react-i18next';
 
 const Blog = (props) => {
   const { posts, theme, browseAllPath, compactTop, heading } = props;
@@ -11,7 +11,7 @@ const Blog = (props) => {
 
   return (
     <React.Fragment>
-      <div className={`main${compactTop ? " compactTop" : ""}${heading ? " withHeading" : ""}`}>
+      <div className={`main${compactTop ? ' compactTop' : ''}${heading ? ' withHeading' : ''}`}>
         {heading && <h1 className="heading">{heading}</h1>}
         <ul>
           {posts.map((post) => {
@@ -26,7 +26,7 @@ const Blog = (props) => {
         </ul>
         {browseAllPath && (
           <div className="summary">
-            <Link to={browseAllPath}>{t("blog.browseAll")} →</Link>
+            <Link to={browseAllPath}>{t('blog.browseAll')} →</Link>
           </div>
         )}
       </div>
@@ -56,7 +56,7 @@ const Blog = (props) => {
         .summary :global(a) {
           border: 2px solid ${theme.color.brand.primary};
           border-radius: ${theme.size.radius.small};
-          color: ${theme.color.brand.primary};
+          color: ${theme.text.color.brand};
           display: inline-block;
           font-weight: ${theme.font.weight.bold};
           padding: ${theme.space.s} ${theme.space.m};

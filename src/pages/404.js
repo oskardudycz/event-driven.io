@@ -1,5 +1,5 @@
-import React from "react";
-import { withPrefix } from "gatsby";
+import React from 'react';
+import { withPrefix } from 'gatsby';
 
 const NotFoundPage = () => (
   <React.Fragment>
@@ -12,12 +12,11 @@ const NotFoundPage = () => (
 
 export default NotFoundPage;
 
-
 export const Head = ({ pageContext }) => (
   <React.Fragment>
-    <html lang={pageContext.lang || "en"} />
+    <html lang={pageContext.lang || 'en'} />
     <title>Not found - Event-Driven.io</title>
     <meta name="robots" content="noindex, nofollow" />
-    <link rel="stylesheet" href={withPrefix("/fonts/open-sans/index.css")} />
+    <link rel="stylesheet" href={withPrefix('/fonts/open-sans/index.css')} />
   </React.Fragment>
 );

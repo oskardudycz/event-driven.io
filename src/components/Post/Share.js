@@ -1,5 +1,5 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
   FacebookShareButton,
   LinkedinShareButton,
@@ -7,25 +7,25 @@ import {
   FacebookShareCount,
   FacebookIcon,
   TwitterIcon,
-  LinkedinIcon
-} from "react-share";
+  LinkedinIcon,
+} from 'react-share';
 
-import config from "../../../content/meta/config";
+import config from '../../../content/meta/config';
 
-const PostShare = props => {
+const PostShare = (props) => {
   const {
     post: {
       fields: { slug, langKey },
       frontmatter: { title },
-      excerpt
+      excerpt,
     },
-    theme
+    theme,
   } = props;
 
-  const url = config.siteUrl + config.pathPrefix + "/" + langKey + slug;
+  const url = config.siteUrl + config.pathPrefix + '/' + langKey + slug;
 
   const iconSize = 36;
-  const filter = count => (count > 0 ? count : "");
+  const filter = (count) => (count > 0 ? count : '');
 
   return (
     <React.Fragment>
@@ -36,7 +36,7 @@ const PostShare = props => {
             url={url}
             title={title}
             additionalProps={{
-              "aria-label": "Twitter share"
+              'aria-label': 'Twitter share',
             }}
           >
             <TwitterIcon round size={iconSize} />
@@ -45,12 +45,12 @@ const PostShare = props => {
             url={url}
             quote={`${title} - ${excerpt}`}
             additionalProps={{
-              "aria-label": "Facebook share"
+              'aria-label': 'Facebook share',
             }}
           >
             <FacebookIcon round size={iconSize} />
             <FacebookShareCount url={url}>
-              {count => <div className="share-count">{filter(count)}</div>}
+              {(count) => <div className="share-count">{filter(count)}</div>}
             </FacebookShareCount>
           </FacebookShareButton>
           <LinkedinShareButton
@@ -58,7 +58,7 @@ const PostShare = props => {
             title={title}
             description={excerpt}
             additionalProps={{
-              "aria-label": "LinkedIn share"
+              'aria-label': 'LinkedIn share',
             }}
           >
             <LinkedinIcon round size={iconSize} />
@@ -106,7 +106,7 @@ const PostShare = props => {
 
 PostShare.propTypes = {
   post: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
 };
 
 export default PostShare;

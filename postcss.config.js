@@ -5,20 +5,20 @@ const postcssTextRemoveGap = require(`postcss-text-remove-gap`);
 module.exports = () => ({
   plugins: [
     postcssPresetEnv({
-      stage: 0
+      stage: 0,
     }),
     postcssEasyMediaQuery({
       breakpoints: {
         tablet: 600,
-        desktop: 1024
-      }
+        desktop: 1024,
+      },
     }),
     postcssTextRemoveGap({
-      defaultFontFamily: "Open Sans",
-      defaultLineHeight: "0"
+      defaultFontFamily: 'Open Sans',
+      defaultLineHeight: '0',
     }),
-    require(`postcss-nested`)
-  ]
+    require(`postcss-nested`),
+  ],
 });
 
 // "postcss-nested": {},

@@ -1,8 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { ThemeContext } from "../../layouts";
-import { useTranslation } from "react-i18next";
+import { ThemeContext } from '../../layouts';
+import { useTranslation } from 'react-i18next';
 
 const Talks = (props) => {
   const { talks } = props;
@@ -18,7 +18,7 @@ const Talks = (props) => {
                 return (
                   <li key={`${talk.Date}-${talk.Title}`}>
                     <p className="date-container">
-                      <span className="date">📅 {talk.Date}</span> -{" "}
+                      <span className="date">📅 {talk.Date}</span> -{' '}
                       <span className="where">
                         {talk.Link ? (
                           <a href={talk.Link} target="_blank" rel="noopener noreferrer">
@@ -30,19 +30,19 @@ const Talks = (props) => {
                       </span>
                     </p>
                     <p className="title-container">
-                      <label className="title-label">{t("talks.titleLabel")}:</label>{" "}
+                      <label className="title-label">{t('talks.titleLabel')}:</label>{' '}
                       <span className="title">{talk.Title}</span>
                     </p>
                     {talk.Description && (
                       <p className="description-container">
-                        <label className="description-label">{t("talks.descriptionLabel")}:</label>{" "}
+                        <label className="description-label">{t('talks.descriptionLabel')}:</label>{' '}
                         <span className="description">{talk.Description}</span>
                       </p>
                     )}
-                    {talk.Video && !talk.HideVideo && talk.Video.includes("youtube") && (
+                    {talk.Video && !talk.HideVideo && talk.Video.includes('youtube') && (
                       <p>
                         <a href={talk.Video} target="_blank" rel="noopener noreferrer">
-                          {t("talks.watch")} →
+                          {t('talks.watch')} →
                         </a>
                       </p>
                     )}
@@ -70,7 +70,7 @@ const Talks = (props) => {
 
                 &::after {
                   border-top: 1px solid ${theme.line.color};
-                  content: "";
+                  content: '';
                   height: 0;
                   position: absolute;
                   bottom: ${`calc(${theme.space.default} * -1.5)`};
@@ -82,7 +82,7 @@ const Talks = (props) => {
 
                 &:first-child {
                   &::before {
-                    content: "";
+                    content: '';
                     height: 0;
                     position: absolute;
                     top: ${`calc(${theme.space.default} * -1.2)`};

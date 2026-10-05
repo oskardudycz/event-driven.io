@@ -20,13 +20,13 @@ The schema-definition message and node counts are normal informational output. T
 
 ## Further improvements
 
-| Priority | Improvement | Reason and validation |
-| --- | --- | --- |
-| Implemented; CI verification pending | Cache Gatsby `.cache` and generated `public` between compatible CI builds | The workflow now restores compatible Gatsby caches and saves them after successful build and test gates. Image processing dominates cold builds. Key caches by OS, Node and lockfile/configuration; compare warm build timings and verify the existing output contract. Avoid unconditional `gatsby clean`. |
-| Medium | Use Gatsby Slices for the shared header and footer | Updating shared content currently affects every page. Prototype on the layout first and measure rebuild time; verify the existing hydration, scrolling and visual tests. |
-| Medium | Audit legacy React dependencies and unused Gatsby plugins | `react-addons-perf`, the unused InstantSearch umbrella package and the direct Reach Router declaration were removed. The overlapping internationalization plugin was removed after the exact build contract passed. Keep the active react-i18next provider, InstantSearch DOM and comments integrations; their remaining React peer warnings require separate API/behavior review. |
-| Implemented | Native ESM Gatsby Node hooks | Original ES6 hooks are preserved in gatsby-node.mjs; runtime Babel registration is removed. |
-| Implemented | Explicit GraphQL types for stable frontmatter | This can improve schema stability. Schema generation currently takes less than a second, so it is not the current performance bottleneck. |
+| Priority                             | Improvement                                                               | Reason and validation                                                                                                                                                                                                                                                                                                                                                              |
+| ------------------------------------ | ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Implemented; CI verification pending | Cache Gatsby `.cache` and generated `public` between compatible CI builds | The workflow now restores compatible Gatsby caches and saves them after successful build and test gates. Image processing dominates cold builds. Key caches by OS, Node and lockfile/configuration; compare warm build timings and verify the existing output contract. Avoid unconditional `gatsby clean`.                                                                        |
+| Medium                               | Use Gatsby Slices for the shared header and footer                        | Updating shared content currently affects every page. Prototype on the layout first and measure rebuild time; verify the existing hydration, scrolling and visual tests.                                                                                                                                                                                                           |
+| Medium                               | Audit legacy React dependencies and unused Gatsby plugins                 | `react-addons-perf`, the unused InstantSearch umbrella package and the direct Reach Router declaration were removed. The overlapping internationalization plugin was removed after the exact build contract passed. Keep the active react-i18next provider, InstantSearch DOM and comments integrations; their remaining React peer warnings require separate API/behavior review. |
+| Implemented                          | Native ESM Gatsby Node hooks                                              | Original ES6 hooks are preserved in gatsby-node.mjs; runtime Babel registration is removed.                                                                                                                                                                                                                                                                                        |
+| Implemented                          | Explicit GraphQL types for stable frontmatter                             | This can improve schema stability. Schema generation currently takes less than a second, so it is not the current performance bottleneck.                                                                                                                                                                                                                                          |
 
 ## Verification
 
@@ -39,7 +39,6 @@ Run `GATSBY_CPU_COUNT=4 yarn build`, then `yarn test`. Start `yarn serve --host 
 - [Gatsby image API](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/)
 - [Gatsby Head API](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-head/)
 
-
 ## Pre-redesign modernization pass
 
 Layout StaticQuery is replaced by useStaticQuery with its class behavior preserved. Resize listeners/timers are cleaned up and font callbacks are guarded after unmount. Stable nullable frontmatter and routing fields have explicit GraphQL types. Proven unused performance/spinner/offline/external-link and obsolete loader/Babel dependencies were removed; directly imported libraries are declared at their existing versions. Search, comments and styled-jsx APIs remain intact.
@@ -48,15 +47,13 @@ Build and CodeQL workflow actions now follow current upstream majors (checkout/s
 
 Polish category pages include existing untranslated placeholders with English canonical links. Article navigation includes existing placeholder-language routes, independently of SEO alternates, which still list only genuine translations. Category pages without recommended reading use one divider. Social navigation is LinkedIn, GitHub, Mastodon, Bluesky, YouTube and RSS; README documents per-language category reading order.
 
-`yarn test:cache` is an opt-in integration check using an existing article and its non-indexed Polish placeholder. It modifies/deletes/restores content across warm builds, restores sources and llms.txt in finally, and always disables Algolia indexing. It creates no test publication. Run it only against a local production build with no concurrent source edits.
-
+`yarn test:cache` is an opt-in integration check using an existing article and its non-indexed Polish placeholder. It modifies an existing canonical article, deletes its placeholder and then the canonical file, and restores both across warm builds. It checks generated search indexes as well as HTML/page data, restores sources and llms.txt in finally, and makes no external indexing calls. It creates no test publication. Run it only against a local production build with no concurrent source edits.
 
 Final validation: frozen installation, smoke checks, full yarn test, twelve browser checks and actionlint pass. Output remains 694 routes / 222 redirects / 399 sitemap URLs. Final production build: 54.39 seconds. Compatible cold/warm builds: 124.73 / 28.16 seconds, with page-query phases 45.960 / 0.200 seconds. The revised cache integration check passed in 80.53 seconds.
 
 Remaining cold-query work includes MarkdownRemark.excerpt (which invokes the transformed Markdown AST pipeline) and Sharp cover data. Source inspection identifies these as expensive dependencies of the archive/category queries; these measurements are phase timings, not isolated per-resolver timings. The attempted OpenTracing run did not emit resolver spans, so no resolver-level speedup is claimed. Retain needed excerpts/media, preserve caches and profile further before changing their semantics.
 
 Imported code blocks now have explicit syntax labels; JavaScript/js snippets use TypeScript as requested. The Kurrent article's sixteen formerly plain-text examples render Prism keyword tokens and syntax colors. Known source links are relative across article bodies and inbound blog references; unmigrated sources remain external. No temporary cache fixture remains in llms.txt or source content.
-
 
 ## Legacy routing and lint continuation — 2026-10-04
 
@@ -65,7 +62,6 @@ The site's native Gatsby hooks already own Markdown language fields and localize
 A separate correctness lint configuration supports native ESM/import attributes, JSX and TypeScript syntax. The explicit baseline currently covers 25 modern files, catches undefined variables and incorrect hook usage, and runs in CI before the build. It does not replace the legacy formatting rules or TypeScript type checking. Installed parser/hooks packages are now declared directly at their existing versions.
 
 Frozen installation, smoke, scoped lint, actionlint, production build and the full output/content test suite pass locally. This configuration-changing build took 149.95 seconds, including 51.260 seconds for all 695 queries; it is not comparable to the previous fully warm 54.39-second build. Slow-query warnings remain. Search browser checks intercept Algolia requests with public dummy settings during client navigation, without external index access. Browser results and remote release checks are recorded in todo.md.
-
 
 ## Category parity and production follow-up — 2026-10-05
 

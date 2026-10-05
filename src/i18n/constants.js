@@ -1,5 +1,5 @@
-import translations from "./i18n.json";
-import { DEFAULT_OPTIONS_BASE } from "./settings.mjs";
+import translations from './i18n.json';
+import { DEFAULT_OPTIONS_BASE } from './settings.mjs';
 
 export const DEFAULT_OPTIONS = {
   ...DEFAULT_OPTIONS_BASE,

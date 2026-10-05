@@ -118,7 +118,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Validate live canonical, alternate-language, robots, structured-data, sitemap, and `llms.txt` output on the currently deployed release.
   - Historical deployment checkpoint: the child sitemap had 328 URLs. The 2026-10-05 deployed baseline has 399; current evidence is recorded below.
   - Representative pages expose canonical URLs, appropriate language alternates, descriptions, social metadata, and BlogPosting, Service, or CollectionPage structured data.
-- [ ] Confirm that Algolia indexing produces one canonical hit per document and displays multiple categories correctly.
+- Superseded by local MiniSearch: canonical deduplication/categories are now tested against local indexes; no live Algolia verification is needed for the replacement.
 - [ ] Submit the sitemap in Google Search Console and Bing Webmaster Tools.
 - [ ] Request indexing for both consulting pages and selected cornerstone articles.
 - [x] Check public CDN/WAF behavior for Googlebot, Bingbot, GPTBot, OAI-SearchBot, and ClaudeBot; each received HTTP 200 for the English consulting page.
@@ -141,7 +141,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [ ] Audit article-body image alt text.
 - [ ] Add Breadcrumb structured data.
 - [ ] Add FAQ structured data only to eligible visible FAQs.
-- [ ] Tune Algolia ranking using production query analytics.
+- Superseded by MiniSearch: ranking uses title/category boosts and local query regression checks; hosted Algolia analytics are no longer part of the application.
 
 ### P3 — completed migration checkpoints and remaining follow-ups
 
@@ -158,7 +158,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Remove the optional category-card reading-minute estimate from the global page-creation query; on Gatsby 5 it invokes full Markdown rendering and stalls creation, while the 562 pages now create in about 35 seconds.
 - [x] Convert the ten legacy GraphQL sort queries to Gatsby 5 syntax and set `trailingSlash: "always"` during Step 3; the Node 24 build will verify them.
 - [x] Align `.nvmrc`, GitHub Actions, and `package.json` engines on Node 24, refresh `yarn.lock`, and pass a frozen Yarn install.
-- [ ] Step 4 follow-up: finish external service and production checks after the Node 24 deployment. CI/build/browser and representative public routes/SEO/redirects pass for the deployed baseline; live Algolia, full CDN behavior and later fixes remain separate checks.
+- [ ] Step 4 follow-up: finish external service and production checks after the Node 24 deployment. CI/build/browser and representative public routes/SEO/redirects pass for the deployed baseline; deployed local search, full CDN behavior and later fixes remain separate checks.
   - The preview revealed duplicated browser markup and blurred article images after hydration. Gatsby's browser-only `SessionCheck` root wrapper differed from SSR; the browser now reuses the SSR wrapper. The disabled sign-in integration, both-language routes, webpack workaround, CI inputs, and package have been removed.
   - [x] Establish the first Playwright/Vitest archive test red on the broken preview (two H1 elements versus one in production; real cover never becomes usable) and green on the corrected local build.
   - [x] Add a second category-index test and commit reviewed 1440×900 screenshots for both routes. The category reference came from production; the archive reference was updated from the corrected local build after making its hidden H1 visible. Normal tests use those local snapshots and do not request production. The preview fails both tests, while the corrected local build passes both.
@@ -198,7 +198,6 @@ When implementation continues, update this file in the same change:
 3. Add newly discovered strategic work to `plan.md`; add its next executable step here.
 4. Keep Node/runtime changes aligned across `.nvmrc`, GitHub Actions, `package.json`, and `yarn.lock`.
 
-
 ## Current Gatsby 5 modernization — 2026-10-04
 
 Current baseline: Gatsby 5.16.1 / React 18.3.1 / Node 24 / Yarn 1. Historical build counts above are retained as checkpoint evidence.
@@ -215,7 +214,7 @@ Current baseline: Gatsby 5.16.1 / React 18.3.1 / Node 24 / Yarn 1. Historical bu
 - [x] Measure cold/warm builds and verify modified/deleted content against warm caches.
 - [x] Run frozen installation, smoke, full production tests and browser checks.
 - [x] Verify CI and representative production behavior for the deployed baseline since 99519a3c.
-- [ ] Verify later commits and live Algolia independently; local checks do not complete these tasks.
+- [ ] Verify later commits and deployed local search independently; local checks do not complete these tasks. The old live Algolia follow-up is superseded.
 
 Deferred: Tailwind/theme variables, dark mode, Slices, npm migration, layout redesign. Preserve current appearance and existing output contracts; no deployment/index mutation in this pass.
 
@@ -232,12 +231,11 @@ Deferred: Tailwind/theme variables, dark mode, Slices, npm migration, layout red
 - Final production build passed in 54.39 seconds. Full `yarn test` passed in 7.38 seconds, including 14 importer tests and six generated-content/navigation checks. All 12 browser checks passed in 32.44 seconds; existing screenshot baselines and tolerances were retained.
 - Exact output contract remains 694 routes, 222 redirects and 399 sitemap URLs. All 96 requested articles retain 192 language files.
 - Compatible cold/warm builds measured 124.73/28.16 seconds; page queries measured 45.960/0.200 seconds. The revised cache integration check passed in 80.53 seconds and verified modified text, deleted HTML/page data, and restored content. These are local measurements, not CI guarantees.
-- Workflow YAML and actionlint validation passed. GitHub execution, live Algolia indexing and deployment remain pending.
+- Workflow YAML and actionlint validation passed. GitHub execution and deployment remain pending. The former live Algolia indexing follow-up is superseded by local search.
 - Polish Event Sourcing lists 88 articles (six translations plus 82 English placeholders). Language-switch navigation includes existing placeholders, while SEO alternates still exclude duplicate translations. No duplicate category separator remains.
 - Requested imported English files have 439 explicitly labelled code blocks; all JavaScript/js fence labels throughout content were changed to TypeScript. The Kurrent article renders all 16 TypeScript examples with Prism tokens and visible syntax colors. Code bodies were preserved.
 - Eight additional known source links in requested articles and 36 inbound links elsewhere were rewritten to relative canonical blog URLs. Older/unmigrated references remain external, as previously requested.
 - No cache-test publication, temporary source marker or fixture entry remains in content or llms.txt. The reusable cache check now uses only an existing non-indexed placeholder and restores sources/index in finally.
-
 
 ### Legacy routing and lint pass — 2026-10-04 (completed locally)
 
@@ -247,13 +245,11 @@ Deferred: Tailwind/theme variables, dark mode, Slices, npm migration, layout red
 - [x] Verify frozen install, smoke/lint, production build, full tests and English/Polish browser checks; record results here.
 - [ ] Confirm the new gates on GitHub Actions independently of local results.
 
-
 ### Category parity and follow-up reviews
 
 - [x] Share article selection between category indexes/details, with equal unique-slug membership and canonical-language fallback links.
 - [x] Add the eight recommended Event Sourcing steps to the Polish guide and validate cards, counts, order and links.
 - [x] Research current Gatsby localization options and VitePress-style local search; document trade-offs and the next safe migration step.
-
 
 ### Latest verification and release state — 2026-10-05
 
@@ -267,7 +263,7 @@ Deferred: Tailwind/theme variables, dark mode, Slices, npm migration, layout red
 - [x] Public production probes: 16 sampled pages/assets return HTTP 200; English/Polish homepage/archive/category/consulting/contact metadata are correct, both contact pages expose Calendly, the Kurrent article has 16 TypeScript blocks, sitemap has 399 URLs, llms.txt has no temporary cache publication, WebFinger uses hachyderm.io, and the original Substack slug redirects with HTTP 301 to its English route.
 - [x] Production browser smoke: English archive → Polish archive → canonical English article navigation retains one H1/site footer, correct language/title and canonical metadata. Third-party requests were blocked for this read-only check; external widgets/search were not exercised.
 - [ ] Verify CI and deployment for the later routing/lint/category changes and all 15 current browser checks. Production still showed English Event Sourcing 89/eight steps versus Polish 88/no steps during the recorded probe.
-- [ ] Keep live Algolia behavior/indexing, CodeQL execution, Search Console/Bing submission and Core Web Vitals as independent external follow-ups.
+- [ ] Keep deployed search, CodeQL execution, Search Console/Bing submission and Core Web Vitals as independent external follow-ups. Algolia indexing is superseded by local build output.
 
 ### Next planned improvements — before CSS redesign
 
@@ -275,13 +271,14 @@ Implementation order: local search first, then localization simplification. Rese
 
 #### 1. Replace Algolia with MiniSearch
 
-- [ ] Generate per-language indexes from canonical content with translation preference, fallback links and article deduplication.
-- [ ] Measure compressed payload, initialization time and mobile responsiveness; lazy-load the engine/index only when search is used.
-- [ ] Replace the search integration while preserving the existing layout, localized labels, categories/dates, pagination, keyboard access and safe highlighted snippets.
-- [ ] Verify English/Polish queries, diacritics, code identifiers, fuzzy/prefix matches and loading/empty/error states.
-- [ ] Test modified/deleted-content index updates and browser search without Algolia credentials or requests.
-- [ ] Remove Algolia/InstantSearch dependencies, indexing hooks, configuration/workflow references and obsolete cache-key inputs after the replacement passes.
-- [ ] Pass frozen install, smoke/lint, production build, full tests and browser checks; verify CI and deployment separately. Keep route/SEO/feed contracts unchanged.
+- [x] Generate per-language indexes from canonical content with translation preference, fallback links and article deduplication.
+- [x] Measure compressed payload, initialization time and mobile responsiveness; lazy-load the engine/index only when search is used.
+- [x] Replace the search integration while preserving the existing layout, localized labels, categories/dates, pagination, keyboard access and safe highlighted snippets.
+- [x] Verify English/Polish queries, diacritics, code identifiers, fuzzy/prefix matches and loading/empty/error states.
+- [x] Test modified/deleted-content index updates and browser search without Algolia credentials or requests.
+- [x] Remove Algolia/InstantSearch dependencies, indexing hooks, configuration/workflow references and obsolete cache-key inputs after the replacement passes.
+- [x] Pass frozen install, smoke/lint, production build, full tests and browser checks; preserve route/SEO/feed contracts.
+- [ ] Verify MiniSearch on CI and after deployment; check searches on a real mobile device/connection.
 
 #### 2. Simplify multilingual routing and providers
 
@@ -316,9 +313,10 @@ Additional research: [production audit review](docs/pagespeed-review.md). Apply 
 - [x] Remove two accidentally generated Lighthouse profile folders; subsequent runner verification writes only designated reports and temporary profiles.
 - [x] Validate the small local fixes: omit Service.inLanguage; title/native-lazy subscription iframe; intrinsic dimensions on the existing portrait, preserving visible sizing. Build passed in 129.28s, full tests in 11.36s, all 16 browser checks in 29.52s, smoke, scoped lint and git diff --check passed. Screenshot baselines/tolerances and exact route/redirect/sitemap/feed contracts are unchanged. Final SEO assertions also passed after tightening iframe/schema checks.
 - [ ] Verify these small fixes and the audit tooling on CI; confirm Service/iframe output on production after the owner's deployment. No production change was performed here.
-- [ ] Agree on a publication timestamp policy before resolving date-only validator warnings; source dates do not record an exact time.
-- [ ] Discuss Giscus versus automatically viewport-loaded Disqus and the subscription embed's large application payload. No extra click controls.
-- [ ] Review scoped accessible link/footer colors and any further font-fallback metric changes. Image delivery, same-portrait resolution, selected font preloads and batched menu measurements are now authorized separately below.
+- [x] Publication policy approved as 5A: support actual timezone timestamps; preserve legacy date-only values and their remaining validator warnings.
+- [ ] Discuss Giscus versus automatically viewport-loaded Disqus. Newsletter viewport loading is approved/applied as 1A; no extra click controls.
+- [x] Apply approved 3A scoped accessible link/footer colors; decorative branding is preserved.
+- [ ] Review any further font-fallback metric changes separately.
 - [ ] Review CSP/COOP/Trusted Types and third-party analytics changes separately; retain current integration behavior until approved.
 - [ ] Establish repeated before/after baselines and agreed payload budgets before adding any Lighthouse CI threshold. Live provider scores are not deterministic release gates.
 
@@ -346,3 +344,31 @@ Additional research: [production audit review](docs/pagespeed-review.md). Apply 
 - [x] Add matching Latin Extended WOFF2/WOFF subsets for normal/italic weights 300/400/600/700/800 and Unicode ranges. Remove installed-font overrides to keep subsets consistent; retain the font design and unchanged Latin assets. Record source/version/license.
 - [x] Verify actual glyphs ĄĆĘŁŃÓŚŹŻ/ąćęłńóśźż use web Open Sans for all ten weight/style combinations. Build passed (21.06s), full tests passed (19.73s; 15 performance regressions), all 19 browser checks passed (48.73s). Smoke/lint/diff checks and original screenshots/tolerances pass; routes/redirects/sitemap/feed contracts unchanged.
 - [ ] Verify next CI/deployment and Polish typography on production. No deployment was performed here.
+
+## Approved PageSpeed choices and tooling — 2026-10-05
+
+- [x] 1A: automatic newsletter loading near viewport, reserved space, fallback link, observer cleanup and browser regressions.
+- [x] 3A: scoped green text/footer colors; check contrast and interaction states without changing decorative branding.
+- [x] 5A: nullable real timezone publication timestamps for metadata; preserve date-only legacy values and add validation/tests.
+- [x] Adapt Pongo ESLint flat config, Prettier and VS Code; install lint-staged and wire pre-commit/CI checks.
+- [x] Run frozen installation, lint/format, smoke, build, full tests and browser checks.
+- [ ] Next CI/deployment verification (after local completion).
+
+Local verification: frozen install passed with Husky configured; full lint/format and smoke pass (73 source files, 17 GraphQL queries). Final production build passed in 26.39s. Full tests pass, including 18 performance/metadata regressions and the isolated lint-staged regression. All 24 browser checks pass (49.32s command time); existing screenshots/tolerances and exact route/redirect/sitemap/feed contracts are preserved. The subscription fallback occupies the legend's existing blank line, retaining the existing footer-spacing assertion. No article content, static assets or stored test fixtures were bulk-formatted.
+
+Tooling uses ESLint 9.39.5 (the React plugin supports ESLint through 9), Prettier 3.8.3 and native ESM configuration; CI now runs full lint/format checks. Obsolete lint dependencies/configurations were removed. Installation exposed deasync 0.1.22's missing Node 24 binary; the existing styling integrations now resolve its compatible 0.1.31 patch, with the TypeScript parser peer declared directly. Gatsby warned about three slow category queries during cache rebuilding; the final warm build emitted no Gatsby warnings. No new full-page Lighthouse score improvement is claimed. CI/deployment, comments choice 2 and home-label choice 4 remain pending.
+
+### MiniSearch implementation — completed locally — 2026-10-05
+
+- [x] Build and measure local language indexes; preserve canonical translation/fallback policy and deduplicated results.
+- [x] Integrate lazy search with existing layout, safe highlights, keyboard/pagination and localized states.
+- [x] Verify real browser searches, failures/retry and content updates; remove superseded Algolia wiring after validation.
+- [x] Record final local verification separately from pending CI/deployment; localization remains the next separate stage.
+
+Final MiniSearch verification: frozen installation, full lint/format, smoke (76 source files / 15 GraphQL queries) and actionlint pass. Production build after removing Algolia passed (141.93s); the production baseline after development verification passed (144.46s). Full tests passed in 35.27s, including five search regressions and 18 performance/metadata regressions. All 25 browser checks passed in 61.57s command time; screenshots/tolerances and exact 694-route / 222-redirect / 399-sitemap / feed contracts are unchanged.
+
+`yarn test:cache` passed in 139.76s across modification, canonical deletion and restoration builds. Both language indexes track current content, stale entries/assets are removed, and article sources plus llms.txt are restored exactly. Development checks also passed startup/modification/deletion/restoration; `yarn test:search:dev` repeats that check against a running local dev server. Gatsby's supported `createPages` lifecycle refreshes development data; production uses `onPostBuild`.
+
+Each locale has 336 unique documents. EN: 5,776,878 raw bytes / 1,737,205 gzip bytes; PL: 5,798,520 / 1,742,890. Standalone Chromium, three runs per locale at 4× CPU throttling: median initialization 426.6ms EN / 444.3ms PL; median maximum tested-query time 22.4ms / 22.3ms; retained index heap approximately 16.34MiB / 16.55MiB. These measurements exclude network transfer and do not guarantee real-phone latency. The first-use search payload remains about 1.7MB gzip and is requested only after entering a query; empty search/other pages do not load the index or engine.
+
+Algolia/InstantSearch dependencies, build/browser integration, public settings, CI secrets references, badge and obsolete cache-key inputs are removed. External account/index deletion was not performed. Cache compatibility now includes the search builder/options. Existing legacy styling/Gatsby/Yarn peer/deprecation warnings and cold category-query warnings remain; they are not search failures. CI/deployed behavior is pending. Next implementation stage: localization simplification, separately from CSS redesign and comment-provider decisions.

@@ -1,14 +1,14 @@
-import { afterAll, beforeAll, expect, test } from "vitest";
-import { chromium } from "playwright";
-import pixelmatch from "pixelmatch";
-import { PNG } from "pngjs";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { join } from "node:path";
+import { afterAll, beforeAll, expect, test } from 'vitest';
+import { chromium } from 'playwright';
+import pixelmatch from 'pixelmatch';
+import { PNG } from 'pngjs';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
-const baseUrl = process.env.VISUAL_BASE_URL || "http://127.0.0.1:9000";
-const updateSnapshots = process.env.UPDATE_VISUAL_SNAPSHOTS === "1";
-const artifacts = join(process.cwd(), "visual-artifacts");
-const snapshots = join(process.cwd(), "tests", "fixtures", "visual");
+const baseUrl = process.env.VISUAL_BASE_URL || 'http://127.0.0.1:9000';
+const updateSnapshots = process.env.UPDATE_VISUAL_SNAPSHOTS === '1';
+const artifacts = join(process.cwd(), 'visual-artifacts');
+const snapshots = join(process.cwd(), 'tests', 'fixtures', 'visual');
 let browser;
 
 beforeAll(async () => {
@@ -20,43 +20,58 @@ afterAll(async () => {
   await browser?.close();
 });
 
-test("distant newsletter defers its request and loads automatically on scroll", async () => {
+test('Introduction newsletter defers its request and loads automatically on scroll', async () => {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
   const requests = [];
   let pendingRequestStarted = false;
   let releasePendingRequest;
   let pendingRequestFinished;
-  const pendingRequest = new Promise(resolve => { releasePendingRequest = resolve; });
+  const pendingRequest = new Promise((resolve) => {
+    releasePendingRequest = resolve;
+  });
   try {
     // Keep a request open to reproduce the CI failure: readiness must not
     // depend on analytics/comments or any other network activity stopping.
-    await page.route("**/__visual_pending_request__", async route => {
+    await page.route('**/__visual_pending_request__', async (route) => {
       pendingRequestStarted = true;
-      pendingRequestFinished = pendingRequest.then(() => route.fulfill({ body: "ready" }));
+      pendingRequestFinished = pendingRequest.then(() => route.fulfill({ body: 'ready' }));
       await pendingRequestFinished;
     });
     await page.addInitScript(() => {
       if (window !== window.top) return;
-      document.addEventListener("DOMContentLoaded", () => {
-        fetch("/__visual_pending_request__").catch(() => {});
-      }, { once: true });
+      document.addEventListener(
+        'DOMContentLoaded',
+        () => {
+          fetch('/__visual_pending_request__').catch(() => {});
+        },
+        { once: true },
+      );
     });
-    await page.route("https://www.architecture-weekly.com/embed", async route => {
+    await page.route('https://www.architecture-weekly.com/embed', async (route) => {
       requests.push(route.request().url());
-      await route.fulfill({ contentType: "text/html", body: "<!doctype html><html><body>Newsletter form</body></html>" });
+      await route.fulfill({
+        contentType: 'text/html',
+        body: '<!doctype html><html><body>Newsletter form</body></html>',
+      });
     });
-    await page.goto(new URL("/en/gdpr_for_busy_developers/", baseUrl).href, { waitUntil: "domcontentloaded" });
+    await page.goto(new URL('/en/introduction_to_event_sourcing/', baseUrl).href, {
+      waitUntil: 'domcontentloaded',
+    });
     await page.evaluate(() => document.fonts.ready);
-    await page.waitForFunction(() => getComputedStyle(document.body).fontFamily.includes("Open Sans"));
+    await page.waitForFunction(() =>
+      getComputedStyle(document.body).fontFamily.includes('Open Sans'),
+    );
     await expect.poll(() => pendingRequestStarted).toBe(true);
     const iframe = page.locator('#substack iframe');
-    await iframe.waitFor({ state: "attached" });
-    expect(await iframe.getAttribute("loading")).toBe("lazy");
-    expect(await iframe.getAttribute("title")).toBe("Subscribe to Architecture Weekly");
+    await iframe.waitFor({ state: 'attached' });
+    expect(await iframe.getAttribute('loading')).toBe('lazy');
+    expect(await iframe.getAttribute('title')).toBe('Subscribe to Architecture Weekly');
     expect(requests).toHaveLength(0);
     await iframe.scrollIntoViewIfNeeded();
     await expect.poll(() => requests.length).toBe(1);
-    await expect.poll(() => page.frameLocator('#substack iframe').locator("body").innerText()).toBe("Newsletter form");
+    await expect
+      .poll(() => page.frameLocator('#substack iframe').locator('body').innerText())
+      .toBe('Newsletter form');
   } finally {
     releasePendingRequest();
     await pendingRequestFinished;
@@ -64,19 +79,21 @@ test("distant newsletter defers its request and loads automatically on scroll", 
   }
 }, 60_000);
 
-test("training pages retain one main heading after hydration and language navigation", async () => {
+test('training pages retain one main heading after hydration and language navigation', async () => {
   const page = await browser.newPage();
   try {
-    await page.goto(new URL("/pl/training/", baseUrl).href, { waitUntil: "domcontentloaded" });
-    await page.waitForFunction(() => getComputedStyle(document.body).fontFamily.includes("Open Sans"));
-    expect(await page.locator("h1").count()).toBe(1);
-    expect(await page.locator("h1").innerText()).toBe("Szkolenie");
+    await page.goto(new URL('/pl/training/', baseUrl).href, { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() =>
+      getComputedStyle(document.body).fontFamily.includes('Open Sans'),
+    );
+    expect(await page.locator('h1').count()).toBe(1);
+    expect(await page.locator('h1').innerText()).toBe('Szkolenie');
     await page.locator('a[href="/en/training/"]').first().click();
-    await page.waitForURL("**/en/training/");
-    await expect.poll(() => page.locator("h1").allTextContents()).toEqual(["Training"]);
-    await page.reload({ waitUntil: "domcontentloaded" });
-    expect(await page.locator("h1").count()).toBe(1);
-    expect(await page.locator("h1").innerText()).toBe("Training");
+    await page.waitForURL('**/en/training/');
+    await expect.poll(() => page.locator('h1').allTextContents()).toEqual(['Training']);
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    expect(await page.locator('h1').count()).toBe(1);
+    expect(await page.locator('h1').innerText()).toBe('Training');
   } finally {
     await page.close();
   }
@@ -97,8 +114,12 @@ async function compareScreenshot(page, name, options = {}) {
   expect([current.width, current.height]).toEqual([expected.width, expected.height]);
   const difference = new PNG({ width: current.width, height: current.height });
   const differentPixels = pixelmatch(
-    expected.data, current.data, difference.data, current.width, current.height,
-    { threshold: 0.2 }
+    expected.data,
+    current.data,
+    difference.data,
+    current.width,
+    current.height,
+    { threshold: 0.2 },
   );
   const differenceRatio = differentPixels / (current.width * current.height);
   if (differenceRatio > 0.03) {
@@ -110,37 +131,40 @@ async function compareScreenshot(page, name, options = {}) {
 async function inspectArchive() {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   try {
-    const response = await page.goto(new URL("/en/articles/", baseUrl).href, {
-      waitUntil: "domcontentloaded",
+    const response = await page.goto(new URL('/en/articles/', baseUrl).href, {
+      waitUntil: 'domcontentloaded',
     });
     expect(response?.status()).toBe(200);
-    const firstCover = page.locator(".gatsby-image-wrapper img[data-main-image]").first();
+    const firstCover = page.locator('.gatsby-image-wrapper img[data-main-image]').first();
     await firstCover.waitFor();
     await page.waitForFunction(
       (image) => image.complete && image.naturalWidth >= 200,
       await firstCover.elementHandle(),
-      { timeout: 15_000 }
+      { timeout: 15_000 },
     );
     await page.waitForFunction(
-      (image) => getComputedStyle(image).opacity === "1",
+      (image) => getComputedStyle(image).opacity === '1',
       await firstCover.elementHandle(),
-      { timeout: 5_000 }
+      { timeout: 5_000 },
     );
     await page.evaluate(() => document.fonts.ready);
-    await compareScreenshot(page, "articles-desktop");
+    await compareScreenshot(page, 'articles-desktop');
     return {
-      headings: await page.locator("h1").count(),
-      headingTop: await page.locator("h1").first().evaluate((heading) => heading.getBoundingClientRect().top),
-      footers: await page.locator("footer").count(),
+      headings: await page.locator('h1').count(),
+      headingTop: await page
+        .locator('h1')
+        .first()
+        .evaluate((heading) => heading.getBoundingClientRect().top),
+      footers: await page.locator('footer').count(),
       firstCoverWidth: await firstCover.evaluate((image) => image.naturalWidth),
     };
   } finally {
-    await page.screenshot({ path: join(artifacts, "articles-desktop.png") }).catch(() => {});
+    await page.screenshot({ path: join(artifacts, 'articles-desktop.png') }).catch(() => {});
     await page.close();
   }
 }
 
-test("article archive hydrates once and displays its real cover image", async () => {
+test('article archive hydrates once and displays its real cover image', async () => {
   const current = await inspectArchive();
   expect(current.headings).toBe(1);
   expect(current.headingTop).toBeGreaterThanOrEqual(80);
@@ -151,27 +175,27 @@ test("article archive hydrates once and displays its real cover image", async ()
 async function inspectCategories() {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   try {
-    const response = await page.goto(new URL("/en/category/", baseUrl).href, {
-      waitUntil: "domcontentloaded",
+    const response = await page.goto(new URL('/en/category/', baseUrl).href, {
+      waitUntil: 'domcontentloaded',
     });
     expect(response?.status()).toBe(200);
-    await page.locator(".categoryGrid section").first().waitFor({ state: "visible" });
+    await page.locator('.categoryGrid section').first().waitFor({ state: 'visible' });
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(1000);
-    await compareScreenshot(page, "category-desktop");
+    await compareScreenshot(page, 'category-desktop');
     return {
-      headings: await page.locator("h1").count(),
-      footers: await page.locator("footer").count(),
-      cards: await page.locator(".categoryGrid section").count(),
+      headings: await page.locator('h1').count(),
+      footers: await page.locator('footer').count(),
+      cards: await page.locator('.categoryGrid section').count(),
       scrollY: await page.evaluate(() => window.scrollY),
     };
   } finally {
-    await page.screenshot({ path: join(artifacts, "category-desktop.png") }).catch(() => {});
+    await page.screenshot({ path: join(artifacts, 'category-desktop.png') }).catch(() => {});
     await page.close();
   }
 }
 
-test("category index hydrates once and starts at the top", async () => {
+test('category index hydrates once and starts at the top', async () => {
   const current = await inspectCategories();
   expect(current.headings).toBe(1);
   expect(current.footers).toBe(1);
@@ -179,345 +203,415 @@ test("category index hydrates once and starts at the top", async () => {
   expect(current.scrollY).toBeLessThan(5);
 }, 60_000);
 
-test("client-side archive navigation keeps a single page at the top", async () => {
+test('client-side archive navigation keeps a single page at the top', async () => {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   try {
-    await page.goto(new URL("/en/", baseUrl).href, { waitUntil: "domcontentloaded" });
+    await page.goto(new URL('/en/', baseUrl).href, { waitUntil: 'domcontentloaded' });
     await page.locator('a[href="/en/articles/"]').first().click();
-    await page.waitForURL("**/en/articles/");
-    await page.locator(".gatsby-image-wrapper img[data-main-image]").first().waitFor();
+    await page.waitForURL('**/en/articles/');
+    await page.locator('.gatsby-image-wrapper img[data-main-image]').first().waitFor();
     expect(await page.evaluate(() => window.scrollY)).toBeLessThan(5);
-    expect(await page.locator("h1").count()).toBe(1);
-    expect(await page.locator("footer").count()).toBe(1);
+    expect(await page.locator('h1').count()).toBe(1);
+    expect(await page.locator('footer').count()).toBe(1);
   } finally {
     await page.close();
   }
 }, 30_000);
 
-test("article footer shows the author bio and links to further reading", async () => {
+test('article footer shows the author bio and links to further reading', async () => {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   try {
     const response = await page.goto(
-      new URL("/en/vertical-slices-and-dependencies/", baseUrl).href,
-      { waitUntil: "domcontentloaded" }
+      new URL('/en/vertical-slices-and-dependencies/', baseUrl).href,
+      { waitUntil: 'domcontentloaded' },
     );
     expect(response?.status()).toBe(200);
-    const author = page.locator(".author");
-    await author.waitFor({ state: "visible" });
+    const author = page.locator('.author');
+    await author.waitFor({ state: 'visible' });
     await page.evaluate(() => document.fonts.ready);
-    const bio = await author.locator(".note").innerText();
-    expect(bio).toContain("Oskar Dudycz is an independent software architect");
-    expect(bio).not.toContain("Through my window");
+    const bio = await author.locator('.note').innerText();
+    expect(bio).toContain('Oskar Dudycz is an independent software architect');
+    expect(bio).not.toContain('Through my window');
     expect(bio.length).toBeLessThan(500);
-    const furtherReading = page.locator(".author + .links");
-    expect(await page.locator("article footer > .substack + .related").count()).toBe(1);
+    const furtherReading = page.locator('.author + .links');
+    expect(await page.locator('article footer > .substack + .related').count()).toBe(1);
     const spacing = await page.evaluate(() => {
-      const iframe = document.querySelector(".substack iframe");
-      const related = document.querySelector(".related");
+      const iframe = document.querySelector('.substack iframe');
+      const related = document.querySelector('.related');
       return {
         gap: related.getBoundingClientRect().top - iframe.getBoundingClientRect().bottom,
         border: getComputedStyle(related).borderTopWidth,
       };
     });
-    expect(spacing.border).toBe("0px");
+    expect(spacing.border).toBe('0px');
     expect(spacing.gap).toBeGreaterThanOrEqual(0);
     expect(spacing.gap).toBeLessThanOrEqual(30);
-    expect(await page.locator(".related a").evaluateAll((links) => links.map((link) => link.getAttribute("href"))))
-      .toEqual([
-        "/en/how_to_slice_the_codebase_effectively/",
-        "/en/vertical_slices_in_practice/",
-      ]);
-    const firstCover = page.locator(".related img").first();
-    expect(await firstCover.getAttribute("alt")).toBe("");
-    await page.locator(".related").scrollIntoViewIfNeeded();
-    await page.waitForFunction((image) => image.complete && image.naturalWidth >= 200,
-      await firstCover.elementHandle());
+    expect(
+      await page
+        .locator('.related a')
+        .evaluateAll((links) => links.map((link) => link.getAttribute('href'))),
+    ).toEqual(['/en/how_to_slice_the_codebase_effectively/', '/en/vertical_slices_in_practice/']);
+    const firstCover = page.locator('.related img').first();
+    expect(await firstCover.getAttribute('alt')).toBe('');
+    await page.locator('.related').scrollIntoViewIfNeeded();
+    await page.waitForFunction(
+      (image) => image.complete && image.naturalWidth >= 200,
+      await firstCover.elementHandle(),
+    );
     await page.evaluate(() => {
-      const top = document.querySelector(".related").getBoundingClientRect().top + window.scrollY;
+      const top = document.querySelector('.related').getBoundingClientRect().top + window.scrollY;
       window.scrollTo(0, top - 100);
     });
-    await compareScreenshot(page, "article-related-desktop", { animations: "disabled" });
-    expect(await furtherReading.locator("a").count()).toBeGreaterThan(0);
-    expect(await furtherReading.locator("a").first().getAttribute("href")).toMatch(/^\/en\//);
-    expect(await furtherReading.getAttribute("aria-label")).toBe("Articles by publication date");
-    expect(await furtherReading.innerText()).toContain("Earlier article");
-    const relatedLink = page.locator(".related a").first();
+    await compareScreenshot(page, 'article-related-desktop', { animations: 'disabled' });
+    expect(await furtherReading.locator('a').count()).toBeGreaterThan(0);
+    expect(await furtherReading.locator('a').first().getAttribute('href')).toMatch(/^\/en\//);
+    expect(await furtherReading.getAttribute('aria-label')).toBe('Articles by publication date');
+    expect(await furtherReading.innerText()).toContain('Earlier article');
+    const relatedLink = page.locator('.related a').first();
     await relatedLink.focus();
-    expect(await relatedLink.evaluate((link) => getComputedStyle(link).outlineStyle)).toBe("solid");
-    await compareScreenshot(author, "article-footer-desktop", { animations: "disabled" });
+    expect(await relatedLink.evaluate((link) => getComputedStyle(link).outlineStyle)).toBe('solid');
+    await compareScreenshot(author, 'article-footer-desktop', { animations: 'disabled' });
   } finally {
     await page.close();
   }
 }, 60_000);
 
-test("articles without curated recommendations do not show a related block", async () => {
+test('articles without curated recommendations do not show a related block', async () => {
   const page = await browser.newPage();
   try {
     const response = await page.goto(
-      new URL("/en/checkpointing_message_processing/", baseUrl).href,
-      { waitUntil: "domcontentloaded" }
+      new URL('/en/checkpointing_message_processing/', baseUrl).href,
+      { waitUntil: 'domcontentloaded' },
     );
     expect(response?.status()).toBe(200);
-    expect(await page.locator(".related").count()).toBe(0);
+    expect(await page.locator('.related').count()).toBe(0);
   } finally {
     await page.close();
   }
 }, 30_000);
 
-test("curated article links fit on a narrow screen", async () => {
+test('curated article links fit on a narrow screen', async () => {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
   try {
-    await page.goto(new URL("/en/vertical-slices-and-dependencies/", baseUrl).href, {
-      waitUntil: "domcontentloaded",
+    await page.goto(new URL('/en/vertical-slices-and-dependencies/', baseUrl).href, {
+      waitUntil: 'domcontentloaded',
     });
-    await page.locator(".related a").first().waitFor({ state: "visible" });
+    await page.locator('.related a').first().waitFor({ state: 'visible' });
     const width = await page.evaluate(() => document.documentElement.scrollWidth);
     expect(width).toBeLessThanOrEqual(390);
-    expect(await page.locator(".related a").count()).toBe(2);
-    await page.locator(".related img").last().scrollIntoViewIfNeeded();
-    await page.locator(".related img").first().scrollIntoViewIfNeeded();
+    expect(await page.locator('.related a').count()).toBe(2);
+    await page.locator('.related img').last().scrollIntoViewIfNeeded();
+    await page.locator('.related img').first().scrollIntoViewIfNeeded();
     await page.evaluate(async () => {
       await document.fonts.ready;
-      await Promise.all(Array.from(document.querySelectorAll(".related img"), (image) => image.decode()));
+      await Promise.all(
+        Array.from(document.querySelectorAll('.related img'), (image) => image.decode()),
+      );
     });
     await page.evaluate(() => {
-      const top = document.querySelector(".related").getBoundingClientRect().top + window.scrollY;
+      const top = document.querySelector('.related').getBoundingClientRect().top + window.scrollY;
       window.scrollTo(0, top - 80);
     });
-    await compareScreenshot(page, "article-related-mobile", { animations: "disabled" });
+    await compareScreenshot(page, 'article-related-mobile', { animations: 'disabled' });
   } finally {
     await page.close();
   }
 }, 30_000);
 
-for (const language of ["en", "pl"]) {
+for (const language of ['en', 'pl']) {
   test(`${language} homepage renders one complete hero`, async () => {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
     try {
       const response = await page.goto(new URL(`/${language}/`, baseUrl).href, {
-        waitUntil: "domcontentloaded",
+        waitUntil: 'domcontentloaded',
       });
       expect(response?.status()).toBe(200);
-      await page.locator(".hero h1").waitFor({ state: "visible" });
+      await page.locator('.hero h1').waitFor({ state: 'visible' });
       await page.evaluate(async () => {
         await document.fonts.ready;
-        const background = getComputedStyle(document.querySelector(".hero")).backgroundImage;
+        const background = getComputedStyle(document.querySelector('.hero')).backgroundImage;
         const url = background.match(/^url\(["']?(.*?)["']?\)$/)?.[1];
-        if (!url) throw new Error("Homepage hero background is missing");
+        if (!url) throw new Error('Homepage hero background is missing');
         const image = new Image();
         image.src = url;
         await image.decode();
       });
       await page.waitForTimeout(1000);
-      await compareScreenshot(page, `home-${language}-desktop`, { animations: "disabled" });
-      expect(await page.locator(".hero h1").count()).toBe(1);
-      expect(await page.locator("footer").count()).toBe(1);
+      await compareScreenshot(page, `home-${language}-desktop`, { animations: 'disabled' });
+      expect(await page.locator('.hero h1').count()).toBe(1);
+      expect(await page.locator('footer').count()).toBe(1);
       expect(await page.evaluate(() => window.scrollY)).toBeLessThan(5);
     } finally {
-      await page.screenshot({
-        path: join(artifacts, `home-${language}-desktop.png`),
-        animations: "disabled",
-      }).catch(() => {});
+      await page
+        .screenshot({
+          path: join(artifacts, `home-${language}-desktop.png`),
+          animations: 'disabled',
+        })
+        .catch(() => {});
       await page.close();
     }
   }, 60_000);
 }
 
-test("Gatsby Head replaces metadata during navigation and keeps language-specific titles", async () => {
+test('Gatsby Head replaces metadata during navigation and keeps language-specific titles', async () => {
   const page = await browser.newPage();
   try {
-    for (const [language, title] of [["en", "All articles"], ["pl", "Wszystkie artykuły"]]) {
-      await page.goto(new URL(`/${language}/articles/`, baseUrl).href, { waitUntil: "domcontentloaded" });
+    for (const [language, title] of [
+      ['en', 'All articles'],
+      ['pl', 'Wszystkie artykuły'],
+    ]) {
+      await page.goto(new URL(`/${language}/articles/`, baseUrl).href, {
+        waitUntil: 'domcontentloaded',
+      });
       await page.waitForFunction((expected) => document.title.startsWith(expected), title);
       expect(await page.locator('head link[rel="canonical"]').count()).toBe(1);
-      expect(await page.locator('head link[rel="canonical"]').getAttribute("href"))
-        .toBe(`https://event-driven.io/${language}/articles/`);
-      expect(await page.locator("html").getAttribute("lang")).toBe(language);
-      expect(await page.locator("h1").innerText()).toBe(title);
+      expect(await page.locator('head link[rel="canonical"]').getAttribute('href')).toBe(
+        `https://event-driven.io/${language}/articles/`,
+      );
+      expect(await page.locator('html').getAttribute('lang')).toBe(language);
+      expect(await page.locator('h1').innerText()).toBe(title);
       expect(await page.locator('head script[type="application/ld+json"]').count()).toBe(1);
     }
-    await page.goto(new URL("/en/articles/", baseUrl).href, { waitUntil: "domcontentloaded" });
-    const link = page.locator(".main li a.link").first();
-    const articlePath = await link.getAttribute("href");
+    await page.goto(new URL('/en/articles/', baseUrl).href, { waitUntil: 'domcontentloaded' });
+    const link = page.locator('.main li a.link').first();
+    const articlePath = await link.getAttribute('href');
     await link.click();
     await page.waitForURL(`**${articlePath}`);
     await page.waitForFunction(() => {
       const script = document.querySelector('head script[type="application/ld+json"]');
-      return script && JSON.parse(script.textContent)["@type"] === "BlogPosting";
+      return script && JSON.parse(script.textContent)['@type'] === 'BlogPosting';
     });
     expect(await page.locator('head link[rel="canonical"]').count()).toBe(1);
-    expect(await page.locator('head link[rel="canonical"]').getAttribute("href"))
-      .toBe(`https://event-driven.io${articlePath}`);
+    expect(await page.locator('head link[rel="canonical"]').getAttribute('href')).toBe(
+      `https://event-driven.io${articlePath}`,
+    );
     expect(await page.locator('head meta[name="description"]').count()).toBe(1);
     expect(await page.locator('head link[href="/fonts/open-sans/index.css"]').count()).toBe(1);
-    expect(await page.title()).not.toContain("All articles");
-  } finally { await page.close(); }
-}, 60_000);
-
-test("layout keeps fonts, sticky header and mobile navigation after resizing", async () => {
-  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-  try {
-    await page.goto(new URL("/en/articles/", baseUrl).href);
-    await page.evaluate(() => document.fonts.ready);
-    await page.waitForFunction(() => getComputedStyle(document.body).fontFamily.includes("Open Sans"));
-    await page.evaluate(() => window.scrollTo(0, 600));
-    await page.waitForFunction(() => document.querySelector("header").classList.contains("fixed"));
-    await page.setViewportSize({ width: 390, height: 844 });
-    const expand = page.getByRole("button", { name: "expand" });
-    await expand.waitFor({ state: "visible" });
-    await expand.click();
-    expect(await page.locator("nav.menu").evaluate((menu) => menu.classList.contains("open"))).toBe(true);
-    await page.locator('nav.menu a[data-slug="/contact/"]').click();
-    await page.waitForURL("**/en/contact/");
-    await page.waitForFunction(() => !document.querySelector("nav.menu").classList.contains("open"));
-    expect(await page.locator("h1").count()).toBe(1);
-    expect(await page.locator("footer").count()).toBe(1);
+    expect(await page.title()).not.toContain('All articles');
   } finally {
     await page.close();
   }
 }, 60_000);
 
-test("article language switch stays visible before and after scrolling", async () => {
+test('layout keeps fonts, sticky header and mobile navigation after resizing', async () => {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   try {
-    const slug = "fractal-architecture-cognitive-load";
-    await page.goto(new URL(`/en/${slug}/`, baseUrl).href);
-    const polish = page.getByRole("link", { name: "Change language to pl" });
-    await polish.waitFor({ state: "visible" });
+    await page.goto(new URL('/en/articles/', baseUrl).href);
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForFunction(() =>
+      getComputedStyle(document.body).fontFamily.includes('Open Sans'),
+    );
     await page.evaluate(() => window.scrollTo(0, 600));
-    await page.waitForFunction(() => document.querySelector("header").classList.contains("fixed"));
+    await page.waitForFunction(() => document.querySelector('header').classList.contains('fixed'));
+    await page.setViewportSize({ width: 390, height: 844 });
+    const expand = page.getByRole('button', { name: 'expand' });
+    await expand.waitFor({ state: 'visible' });
+    await expand.click();
+    expect(await page.locator('nav.menu').evaluate((menu) => menu.classList.contains('open'))).toBe(
+      true,
+    );
+    await page.locator('nav.menu a[data-slug="/contact/"]').click();
+    await page.waitForURL('**/en/contact/');
+    await page.waitForFunction(
+      () => !document.querySelector('nav.menu').classList.contains('open'),
+    );
+    expect(await page.locator('h1').count()).toBe(1);
+    expect(await page.locator('footer').count()).toBe(1);
+  } finally {
+    await page.close();
+  }
+}, 60_000);
+
+test('article language switch stays visible before and after scrolling', async () => {
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  try {
+    const slug = 'fractal-architecture-cognitive-load';
+    await page.goto(new URL(`/en/${slug}/`, baseUrl).href);
+    const polish = page.getByRole('link', { name: 'Change language to pl' });
+    await polish.waitFor({ state: 'visible' });
+    await page.evaluate(() => window.scrollTo(0, 600));
+    await page.waitForFunction(() => document.querySelector('header').classList.contains('fixed'));
     expect(await polish.isVisible()).toBe(true);
     await polish.click();
     await page.waitForURL(`**/pl/${slug}/`);
-    await page.waitForFunction(() => document.documentElement.lang === "pl");
-    const english = page.getByRole("link", { name: "Change language to en" });
-    await english.waitFor({ state: "visible" });
+    await page.waitForFunction(() => document.documentElement.lang === 'pl');
+    const english = page.getByRole('link', { name: 'Change language to en' });
+    await english.waitFor({ state: 'visible' });
     await page.setViewportSize({ width: 390, height: 844 });
-    await english.waitFor({ state: "visible" });
+    await english.waitFor({ state: 'visible' });
     await english.click();
     await page.waitForURL(`**/en/${slug}/`);
-    expect(await page.locator("h1").count()).toBe(1);
-  } finally { await page.close(); }
+    expect(await page.locator('h1').count()).toBe(1);
+  } finally {
+    await page.close();
+  }
 }, 60_000);
 
-test("imported TypeScript examples display syntax colors", async () => {
+test('imported TypeScript examples display syntax colors', async () => {
   const page = await browser.newPage();
   try {
-    await page.goto(new URL('/en/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention/', baseUrl).href);
+    await page.goto(
+      new URL(
+        '/en/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention/',
+        baseUrl,
+      ).href,
+    );
     const keyword = page.locator('pre.language-typescript .token.keyword').first();
     await keyword.waitFor({ state: 'visible' });
-    const colors = await keyword.evaluate(token => ({ keyword: getComputedStyle(token).color, code: getComputedStyle(token.closest('code')).color }));
+    const colors = await keyword.evaluate((token) => ({
+      keyword: getComputedStyle(token).color,
+      code: getComputedStyle(token.closest('code')).color,
+    }));
     expect(colors.keyword).not.toBe(colors.code);
-  } finally { await page.close(); }
+  } finally {
+    await page.close();
+  }
 }, 60_000);
 
-for (const language of ["en", "pl"]) {
-  test(`${language} search renders results through the retained DOM integration`, async () => {
-    const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
-    const searches = [];
-    const title = language === "pl" ? "Wprowadzenie do Event Sourcing" : "Event Sourcing introduction";
+for (const language of ['en', 'pl']) {
+  test(`${language} searches real local content with fallback links, pagination and no hosted requests`, async () => {
+    const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+    const indexRequests = [];
+    const engineRequests = [];
+    const hosted = [];
+    page.on('request', (request) => {
+      if (request.url().includes('/local-search-engine-')) engineRequests.push(request.url());
+      if (request.url().includes('/search-index/')) indexRequests.push(request.url());
+      if (/algolia(?:net)?\.(net|com)/.test(request.url())) hosted.push(request.url());
+    });
     try {
-      // Supply public test settings only to client navigation; no production
-      // credentials or index writes are needed to exercise the search UI.
-      await page.route(`**/page-data/${language}/search/page-data.json`, async route => {
-        const response = await route.fetch();
-        const data = await response.json();
-        data.result.data.site.siteMetadata.algolia = {
-          appId: "G5LOCALTEST",
-          searchOnlyApiKey: "local-search-test",
-          indexName: "local-search-test",
-        };
-        await route.fulfill({ response, json: data });
+      await page.goto(new URL(`/${language}/articles/`, baseUrl).href, {
+        waitUntil: 'domcontentloaded',
       });
-      await page.route(/https:\/\/[^/]*\.algolia(?:\.net|net\.com)\//, async route => {
-        // Algolia sends JSON with a form content type to avoid a preflight.
-        const body = JSON.parse(route.request().postData());
-        const results = body.requests.map(request => {
-          const params = new URLSearchParams(request.params);
-          searches.push({ query: params.get("query"), filters: params.get("filters") });
-          const hits = params.get("query") ? [{
-            objectID: "local-search-result",
-            title,
-            path: `/${language}/introduction_to_event_sourcing/`,
-            source: "posts",
-            category: ["Event Sourcing", "CQRS"],
-            date: "2026-10-04",
-            content: "Events preserve business history.",
-            _highlightResult: { title: { value: title, matchLevel: "none" } },
-            _snippetResult: { content: { value: "Events preserve business history.", matchLevel: "none" } },
-          }] : [];
-          return { hits, nbHits: hits.length, page: 0, nbPages: hits.length, hitsPerPage: 10,
-            processingTimeMS: 1, exhaustiveNbHits: true, query: params.get("query") || "" };
-        });
-        await route.fulfill({ json: { results } });
+      expect(indexRequests).toHaveLength(0);
+      expect(engineRequests).toHaveLength(0);
+      await page.goto(new URL(`/${language}/search/`, baseUrl).href, {
+        waitUntil: 'domcontentloaded',
       });
-      await page.goto(new URL(`/${language}/articles/`, baseUrl).href);
-      await page.locator(`nav a[href="/${language}/search/"]`).first().click();
-      await page.waitForURL(`**/${language}/search/`);
-      const input = page.getByPlaceholder(language === "pl" ? "Szukaj" : "Search", { exact: true });
-      await input.waitFor({ state: "visible" });
-      expect(await page.locator("h1").count()).toBe(1);
-      expect(await page.locator("h1").innerText()).toBe(language === "pl" ? "Szukaj" : "Search");
-      expect(await page.locator(".search-message").innerText())
-        .toBe(language === "pl" ? "Wpisz wyszukiwaną frazę." : "Start typing to search.");
-      await input.fill("events");
-      const result = page.locator(".search-hit");
-      await result.waitFor({ state: "visible" });
-      expect(await result.locator("h2").innerText()).toBe(title);
-      expect(await result.locator("a").getAttribute("href"))
-        .toBe(`/${language}/introduction_to_event_sourcing/`);
-      expect(await result.locator(".search-hit-meta").innerText())
-        .toBe(`${language === "pl" ? "Artykuł" : "Article"} · Event Sourcing · CQRS · 2026-10-04`.toUpperCase());
-      expect(await result.locator(".search-hit-snippet").innerText()).toBe("Events preserve business history.");
-      expect(searches.some(search => search.query === "events" && search.filters === `langKey:${language}`))
-        .toBe(true);
-    } finally { await page.close(); }
+      const input = page.getByPlaceholder(language === 'pl' ? 'Szukaj' : 'Search', { exact: true });
+      await input.waitFor();
+      expect(await page.locator('h1').count()).toBe(1);
+      expect(indexRequests).toHaveLength(0);
+      expect(engineRequests).toHaveLength(0);
+      expect(await page.locator('.search-message').innerText()).toBe(
+        language === 'pl' ? 'Wpisz wyszukiwaną frazę.' : 'Start typing to search.',
+      );
+      await input.fill('introduction event sourcing');
+      const result = page
+        .locator('.search-hit')
+        .filter({ has: page.locator('a[href="/en/introduction_to_event_sourcing/"]') });
+      await result.waitFor();
+      expect(await result.locator('h2').innerText()).toContain('Introduction to Event Sourcing');
+      expect(await result.locator('mark').count()).toBeGreaterThan(0);
+      expect(await result.locator('.search-hit-meta').innerText()).toContain('2022-03-16');
+      if (language === 'pl')
+        expect(await result.locator('.search-hit-meta').innerText()).toContain('PO ANGIELSKU');
+      expect(indexRequests).toHaveLength(2);
+      expect(engineRequests).toHaveLength(1);
+      expect(indexRequests[1]).toMatch(new RegExp(`/search-index/${language}\\.[a-f0-9]+\\.json`));
+      await input.fill('event sourcing');
+      await expect.poll(() => page.locator('.search-hit').count()).toBe(10);
+      const first = await page.locator('.search-hit a').first().getAttribute('href');
+      await page
+        .getByRole('button', { name: language === 'pl' ? 'Następna' : 'Next', exact: true })
+        .click();
+      expect(await page.locator('.search-hit a').first().getAttribute('href')).not.toBe(first);
+      await input.fill('zzzznotarealwordxyz');
+      await expect
+        .poll(() => page.locator('.search-message').innerText())
+        .toBe(
+          language === 'pl' ? 'Nie znaleziono pasujących wyników.' : 'No matching results found.',
+        );
+      await input.fill('appendToStream');
+      await expect.poll(() => page.locator('.search-hit').count()).toBeGreaterThan(0);
+      await page.getByRole('button', { name: language === 'pl' ? 'Wyczyść' : 'Clear' }).click();
+      expect(await input.inputValue()).toBe('');
+      expect(hosted).toHaveLength(0);
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+      ).toBe(true);
+    } finally {
+      await page.close();
+    }
   }, 60_000);
 }
 
-test("Event Sourcing keeps shared membership and reading order when switching to Polish", async () => {
-  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+test('local search reports load failures and retries successfully', async () => {
+  const page = await browser.newPage();
+  let requests = 0;
   try {
-    await page.goto(new URL("/en/category/event-sourcing/", baseUrl).href);
-    const slugs = await page.locator("a.readingCard").evaluateAll(cards =>
-      cards.map(card => new URL(card.href).pathname.split("/")[2]).sort()
+    await page.route('**/search-index/manifest.json', async (route) => {
+      requests++;
+      if (requests === 1) await route.fulfill({ status: 503, body: 'Unavailable' });
+      else await route.continue();
+    });
+    await page.goto(new URL('/en/search/', baseUrl).href, { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() =>
+      getComputedStyle(document.body).fontFamily.includes('Open Sans'),
     );
-    const readingOrder = await page.locator("ol.ordered a.readingCard").evaluateAll(cards =>
-      cards.map(card => new URL(card.href).pathname.split("/")[2])
-    );
-    await page.getByRole("link", { name: "Change language to pl" }).click();
-    await page.waitForURL("**/pl/category/event-sourcing/");
-    await page.waitForFunction(() => document.documentElement.lang === "pl");
-    await page.getByRole("heading", { name: "Polecana kolejność czytania", exact: true }).waitFor();
-    expect(await page.locator("a.readingCard").evaluateAll(cards =>
-      cards.map(card => new URL(card.href).pathname.split("/")[2]).sort()
-    )).toEqual(slugs);
-    expect(await page.locator("ol.ordered a.readingCard").evaluateAll(cards =>
-      cards.map(card => new URL(card.href).pathname.split("/")[2])
-    )).toEqual(readingOrder);
-    expect(readingOrder).toHaveLength(8);
-    const fallback = page.locator('ol.ordered a.readingCard[href^="/en/"]').first();
-    const target = await fallback.getAttribute("href");
-    await fallback.click();
-    await page.waitForURL(`**${target}`);
-    await page.waitForFunction(() => document.documentElement.lang === "en");
-    expect(await page.locator("h1").count()).toBe(1);
-  } finally { await page.close(); }
+    await page.getByPlaceholder('Search', { exact: true }).fill('event sourcing');
+    await page.getByRole('button', { name: 'Try again', exact: true }).waitFor();
+    await page.getByRole('button', { name: 'Try again', exact: true }).click();
+    await page.locator('.search-hit').first().waitFor();
+    expect(requests).toBe(2);
+  } finally {
+    await page.close();
+  }
 }, 60_000);
 
-test("responsive covers match actual card widths across breakpoints and device pixel ratios", async () => {
+test('Event Sourcing keeps shared membership and reading order when switching to Polish', async () => {
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  try {
+    await page.goto(new URL('/en/category/event-sourcing/', baseUrl).href);
+    const slugs = await page
+      .locator('a.readingCard')
+      .evaluateAll((cards) =>
+        cards.map((card) => new URL(card.href).pathname.split('/')[2]).sort(),
+      );
+    const readingOrder = await page
+      .locator('ol.ordered a.readingCard')
+      .evaluateAll((cards) => cards.map((card) => new URL(card.href).pathname.split('/')[2]));
+    await page.getByRole('link', { name: 'Change language to pl' }).click();
+    await page.waitForURL('**/pl/category/event-sourcing/');
+    await page.waitForFunction(() => document.documentElement.lang === 'pl');
+    await page.getByRole('heading', { name: 'Polecana kolejność czytania', exact: true }).waitFor();
+    expect(
+      await page
+        .locator('a.readingCard')
+        .evaluateAll((cards) =>
+          cards.map((card) => new URL(card.href).pathname.split('/')[2]).sort(),
+        ),
+    ).toEqual(slugs);
+    expect(
+      await page
+        .locator('ol.ordered a.readingCard')
+        .evaluateAll((cards) => cards.map((card) => new URL(card.href).pathname.split('/')[2])),
+    ).toEqual(readingOrder);
+    expect(readingOrder).toHaveLength(8);
+    const fallback = page.locator('ol.ordered a.readingCard[href^="/en/"]').first();
+    const target = await fallback.getAttribute('href');
+    await fallback.click();
+    await page.waitForURL(`**${target}`);
+    await page.waitForFunction(() => document.documentElement.lang === 'en');
+    expect(await page.locator('h1').count()).toBe(1);
+  } finally {
+    await page.close();
+  }
+}, 60_000);
+
+test('responsive covers match actual card widths across breakpoints and device pixel ratios', async () => {
   for (const deviceScaleFactor of [1, 2]) {
     const page = await browser.newPage({ deviceScaleFactor });
     try {
       for (const width of [390, 600, 768, 1024, 1440]) {
         await page.setViewportSize({ width, height: 900 });
-        await page.goto(new URL("/en/articles/", baseUrl).href);
-        const image = page.locator("img[data-main-image]").first();
-        await expect.poll(() => image.evaluate(e => e.complete && e.naturalWidth > 0)).toBe(true);
-        const result = await image.evaluate(e => {
-          const picture = e.closest("picture");
-          const sizes = picture.querySelector("source").sizes || e.sizes;
-          const slots = sizes.split(",").map(s => s.trim());
+        await page.goto(new URL('/en/articles/', baseUrl).href);
+        const image = page.locator('img[data-main-image]').first();
+        await expect.poll(() => image.evaluate((e) => e.complete && e.naturalWidth > 0)).toBe(true);
+        const result = await image.evaluate((e) => {
+          const picture = e.closest('picture');
+          const sizes = picture.querySelector('source').sizes || e.sizes;
+          const slots = sizes.split(',').map((s) => s.trim());
           let slot;
           for (const candidate of slots) {
             const conditional = candidate.match(/^(\([^)]*\)) (.+)$/);
@@ -526,7 +620,7 @@ test("responsive covers match actual card widths across breakpoints and device p
               break;
             }
           }
-          const probe = document.createElement("div");
+          const probe = document.createElement('div');
           probe.style.cssText = `position:absolute;width:${slot};height:0`;
           document.body.append(probe);
           const declared = probe.getBoundingClientRect().width;
@@ -534,7 +628,7 @@ test("responsive covers match actual card widths across breakpoints and device p
           return { declared, actual: e.getBoundingClientRect().width, src: e.currentSrc };
         });
         expect(Math.abs(result.declared - result.actual)).toBeLessThanOrEqual(2);
-        expect(result.src).toContain(".webp");
+        expect(result.src).toContain('.webp');
       }
     } finally {
       await page.close();
@@ -542,18 +636,20 @@ test("responsive covers match actual card widths across breakpoints and device p
   }
 }, 60_000);
 
-test("Polish diacritics use the web Open Sans face across weights and italics", async () => {
+test('Polish diacritics use the web Open Sans face across weights and italics', async () => {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
   try {
-    await page.goto(new URL("/pl/training/", baseUrl).href, { waitUntil: "domcontentloaded" });
-    await page.waitForFunction(() => getComputedStyle(document.body).fontFamily.includes("Open Sans"));
+    await page.goto(new URL('/pl/training/', baseUrl).href, { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() =>
+      getComputedStyle(document.body).fontFamily.includes('Open Sans'),
+    );
     await page.evaluate(async () => {
       for (const weight of [300, 400, 600, 700, 800]) {
-        for (const style of ["normal", "italic"]) {
-          const probe = document.createElement("span");
+        for (const style of ['normal', 'italic']) {
+          const probe = document.createElement('span');
           probe.id = `polish-font-${weight}-${style}`;
           probe.style.cssText = `display:block;font: ${style} ${weight} 24px "Open Sans", sans-serif`;
-          probe.textContent = "ĄĆĘŁŃÓŚŹŻ ąćęłńóśźż";
+          probe.textContent = 'ĄĆĘŁŃÓŚŹŻ ąćęłńóśźż';
           document.body.append(probe);
           await document.fonts.load(`${style} ${weight} 24px "Open Sans"`, probe.textContent);
         }
@@ -561,20 +657,156 @@ test("Polish diacritics use the web Open Sans face across weights and italics", 
       await document.fonts.ready;
     });
     const session = await page.context().newCDPSession(page);
-    await session.send("DOM.enable");
-    await session.send("CSS.enable");
-    const { root } = await session.send("DOM.getDocument");
+    await session.send('DOM.enable');
+    await session.send('CSS.enable');
+    const { root } = await session.send('DOM.getDocument');
     for (const weight of [300, 400, 600, 700, 800]) {
-      for (const style of ["normal", "italic"]) {
-        const { nodeId } = await session.send("DOM.querySelector", { nodeId: root.nodeId, selector: `#polish-font-${weight}-${style}` });
-        const { fonts } = await session.send("CSS.getPlatformFontsForNode", { nodeId });
+      for (const style of ['normal', 'italic']) {
+        const { nodeId } = await session.send('DOM.querySelector', {
+          nodeId: root.nodeId,
+          selector: `#polish-font-${weight}-${style}`,
+        });
+        const { fonts } = await session.send('CSS.getPlatformFontsForNode', { nodeId });
         expect(fonts.length, `${weight} ${style}`).toBeGreaterThan(0);
         for (const font of fonts) {
-          expect(font.familyName, `${weight} ${style}: ${font.glyphCount} glyphs`).toMatch(/^Open Sans/);
+          expect(font.familyName, `${weight} ${style}: ${font.glyphCount} glyphs`).toMatch(
+            /^Open Sans/,
+          );
           expect(font.isCustomFont, `${weight} ${style}: ${font.familyName}`).toBe(true);
         }
       }
     }
+  } finally {
+    await page.close();
+  }
+}, 60_000);
+
+for (const lang of ['en', 'pl']) {
+  test(`${lang} desktop newsletter waits for viewport and keeps its reserved height`, async () => {
+    const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+    const requests = [];
+    try {
+      await page.route('https://www.architecture-weekly.com/embed', async (route) => {
+        requests.push(route.request().url());
+        await route.fulfill({ contentType: 'text/html', body: '<p>Newsletter form</p>' });
+      });
+      await page.goto(new URL(`/${lang}/introduction_to_event_sourcing/`, baseUrl).href, {
+        waitUntil: 'domcontentloaded',
+      });
+      await page.waitForFunction(() =>
+        getComputedStyle(document.body).fontFamily.includes('Open Sans'),
+      );
+      const iframe = page.locator('#substack iframe');
+      expect(await iframe.getAttribute('src')).toBeNull();
+      expect(requests).toHaveLength(0);
+      const before = await iframe.boundingBox();
+      expect(before.height).toBe(320);
+      await page.locator('#substack').scrollIntoViewIfNeeded();
+      await expect.poll(() => requests.length).toBe(1);
+      expect((await iframe.boundingBox()).height).toBe(before.height);
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await iframe.scrollIntoViewIfNeeded();
+      expect(requests).toHaveLength(1);
+    } finally {
+      await page.close();
+    }
+  }, 60_000);
+}
+
+test('newsletter fallback works without JavaScript and unsupported observers load automatically', async () => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  try {
+    await page.goto(new URL('/en/introduction_to_event_sourcing/', baseUrl).href, {
+      waitUntil: 'domcontentloaded',
+    });
+    expect(await page.locator('#substack .subscription-fallback').getAttribute('href')).toBe(
+      'https://www.architecture-weekly.com/subscribe',
+    );
+    expect(await page.locator('#substack iframe').getAttribute('src')).toBeNull();
+  } finally {
+    await context.close();
+  }
+  const supportedFallback = await browser.newPage();
+  try {
+    await supportedFallback.addInitScript(() => {
+      delete window.IntersectionObserver;
+    });
+    await supportedFallback.route('https://www.architecture-weekly.com/embed', (route) =>
+      route.fulfill({ body: 'Newsletter' }),
+    );
+    await supportedFallback.goto(new URL('/en/introduction_to_event_sourcing/', baseUrl).href, {
+      waitUntil: 'domcontentloaded',
+    });
+    await expect
+      .poll(() => supportedFallback.locator('#substack iframe').getAttribute('src'))
+      .toBe('https://www.architecture-weekly.com/embed');
+  } finally {
+    await supportedFallback.close();
+  }
+}, 60_000);
+
+test('newsletter disconnects its viewport observer when navigating away', async () => {
+  const page = await browser.newPage();
+  try {
+    await page.addInitScript(() => {
+      const NativeObserver = window.IntersectionObserver;
+      window.newsletterObservers = [];
+      window.IntersectionObserver = class extends NativeObserver {
+        constructor(callback, options) {
+          super(callback, options);
+          if (options?.rootMargin === '200px 0px') window.newsletterObservers.push(this);
+        }
+        disconnect() {
+          this.disconnected = true;
+          super.disconnect();
+        }
+      };
+    });
+    await page.goto(new URL('/en/introduction_to_event_sourcing/', baseUrl).href, {
+      waitUntil: 'domcontentloaded',
+    });
+    await page.waitForFunction(() => window.newsletterObservers.length === 1);
+    await page.locator('header a[href="/en/articles/"]').first().click();
+    await page.waitForURL('**/en/articles/');
+    await page.waitForFunction(() =>
+      window.newsletterObservers.every((observer) => observer.disconnected),
+    );
+  } finally {
+    await page.close();
+  }
+}, 60_000);
+
+test('approved text colors maintain contrast on actual white surfaces and interaction states', async () => {
+  const page = await browser.newPage();
+  try {
+    await page.goto(new URL('/en/introduction_to_event_sourcing/', baseUrl).href, {
+      waitUntil: 'domcontentloaded',
+    });
+    const link = page.locator('.bodytext p a').first();
+    await link.scrollIntoViewIfNeeded();
+    const colors = async (locator) =>
+      locator.evaluate((node) => {
+        let background = node;
+        while (background && getComputedStyle(background).backgroundColor === 'rgba(0, 0, 0, 0)')
+          background = background.parentElement;
+        return {
+          color: getComputedStyle(node).color,
+          background: background
+            ? getComputedStyle(background).backgroundColor
+            : 'rgb(255, 255, 255)',
+        };
+      });
+    const expected = { color: 'rgb(85, 112, 28)', background: 'rgb(255, 255, 255)' };
+    expect(await colors(link)).toEqual(expected);
+    await link.hover();
+    expect(await colors(link)).toEqual(expected);
+    await link.focus();
+    expect(await colors(link)).toEqual(expected);
+    expect(await colors(page.locator('footer li').first())).toEqual({
+      color: 'rgb(112, 110, 107)',
+      background: 'rgb(255, 255, 255)',
+    });
   } finally {
     await page.close();
   }

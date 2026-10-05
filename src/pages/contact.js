@@ -1,21 +1,14 @@
-import PropTypes from "prop-types";
-import React from "react";
-import { graphql } from "gatsby";
-import { ThemeContext } from "../layouts";
-import Article from "../components/Article";
-import Headline from "../components/Article/Headline";
-import { createHead } from "../components/Seo";
-import { useTranslation } from "react-i18next";
+import PropTypes from 'prop-types';
+import React from 'react';
+import { graphql } from 'gatsby';
+import { ThemeContext } from '../layouts';
+import Article from '../components/Article';
+import Headline from '../components/Article/Headline';
+import { createHead } from '../components/Seo';
+import { useTranslation } from 'react-i18next';
 
-const ContactPage = (props) => {
+const ContactPage = () => {
   const { t } = useTranslation();
-  const {
-    data: {
-      site: {
-        siteMetadata: { facebook },
-      },
-    },
-  } = props;
 
   return (
     <React.Fragment>
@@ -23,16 +16,16 @@ const ContactPage = (props) => {
         {(theme) => (
           <Article theme={theme}>
             <header>
-              <Headline title={t("contact.title")} theme={theme} />
+              <Headline title={t('contact.title')} theme={theme} />
             </header>
             <p>
-              {t("contact.intro")}{" "}
+              {t('contact.intro')}{' '}
               <a
                 href="https://calendly.com/oskar-dudycz/consulting"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {t("contact.bookCall")}
+                {t('contact.bookCall')}
               </a>
             </p>
             <style jsx>{`
@@ -59,7 +52,6 @@ ContactPage.propTypes = {
 
 export default ContactPage;
 
-//eslint-disable-next-line no-undef
 export const query = graphql`
   query ContactQuery {
     site {
@@ -72,5 +64,8 @@ export const query = graphql`
   }
 `;
 
-
-export const Head = createHead(({ t }) => ({ title: t("contact.seoTitle"), description: t("contact.description"), schemaType: "ContactPage" }));
+export const Head = createHead(({ t }) => ({
+  title: t('contact.seoTitle'),
+  description: t('contact.description'),
+  schemaType: 'ContactPage',
+}));
