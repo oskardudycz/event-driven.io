@@ -990,3 +990,98 @@ test('separate English and Polish pages keep their locale while following recipr
     await Promise.all(pages.map((page) => page.close()));
   }
 }, 60_000);
+
+test('reading CSS Modules preserve bilingual server styles, responsive cards and navigation', async () => {
+  for (const language of ['en', 'pl']) {
+    for (const javaScriptEnabled of [true, false]) {
+      const page = await browser.newPage({
+        javaScriptEnabled,
+        viewport: { width: 599, height: 900 },
+      });
+      try {
+        await page.goto(new URL(`/${language}/open-source-a-relict-a-charity-or/`, baseUrl).href, {
+          waitUntil: 'domcontentloaded',
+        });
+        const related = page.locator('.related');
+        const navigation = page.locator('article footer nav.links');
+        const grid = related.locator('.withImages');
+        const style = (element) => {
+          const css = getComputedStyle(element);
+          return {
+            marginTop: css.marginTop,
+            marginBottom: css.marginBottom,
+            paddingBottom: css.paddingBottom,
+            direction: css.flexDirection,
+            border: css.borderBottomColor,
+            columns: css.gridTemplateColumns.split(' ').length,
+            color: css.color,
+          };
+        };
+        expect(await related.evaluate(style)).toMatchObject({
+          marginTop: '20px',
+          marginBottom: '40px',
+        });
+        expect(await navigation.evaluate(style)).toMatchObject({
+          direction: 'column',
+          paddingBottom: '40px',
+          border: 'rgb(236, 235, 234)',
+        });
+        expect(await navigation.locator('a').count()).toBeGreaterThan(0);
+        expect(
+          await navigation
+            .locator('svg')
+            .first()
+            .evaluate((element) => getComputedStyle(element).fill),
+        ).toBe('rgb(255, 165, 0)');
+        expect(await grid.evaluate(style)).toMatchObject({ columns: 1 });
+        await page.setViewportSize({ width: 600, height: 900 });
+        await expect.poll(() => grid.evaluate(style)).toMatchObject({ columns: 2 });
+        await page.setViewportSize({ width: 1024, height: 900 });
+        await expect
+          .poll(() => navigation.evaluate(style))
+          .toMatchObject({ direction: 'row-reverse' });
+        const card = related.locator('a.readingCard').first();
+        await card.focus();
+        expect(await card.evaluate((element) => getComputedStyle(element).outlineStyle)).toBe(
+          'solid',
+        );
+        await page.evaluate(() =>
+          document.documentElement.style.setProperty('--color-border', '#123456'),
+        );
+        expect(await navigation.evaluate(style)).toMatchObject({ border: 'rgb(18, 52, 86)' });
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await card.hover();
+        expect(await card.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe(
+          '0s',
+        );
+        expect(await card.evaluate((element) => getComputedStyle(element).transform)).toBe('none');
+        await navigation.locator('a').first().hover();
+        expect(
+          await navigation
+            .locator('svg')
+            .first()
+            .evaluate((element) => getComputedStyle(element).transform),
+        ).toBe('none');
+        await page.goto(new URL(`/${language}/category/event-sourcing/`, baseUrl).href, {
+          waitUntil: 'domcontentloaded',
+        });
+        const ordered = page.locator('ol.ordered');
+        expect(await ordered.count()).toBe(1);
+        expect(
+          await ordered
+            .locator('li')
+            .first()
+            .evaluate((element) => getComputedStyle(element).counterIncrement),
+        ).toContain('reading-order');
+        expect(
+          await ordered
+            .locator('li')
+            .first()
+            .evaluate((element) => getComputedStyle(element, '::before').backgroundColor),
+        ).toBe('rgb(112, 148, 37)');
+      } finally {
+        await page.close();
+      }
+    }
+  }
+}, 60_000);

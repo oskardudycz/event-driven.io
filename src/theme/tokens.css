@@ -11,4 +11,22 @@
   --font-size-small: 0.8em;
   --font-size-summary: 1.35em;
   --line-height-summary: 1.4;
+  --color-date: #969492;
+  --color-border: #ecebea;
+  --color-attention: orange;
+  --color-brand: #709425;
+  --color-text-inverse: #ffffff;
+  --space-default: 20px;
+  --space-stack-md: 0 0 20px 0;
+  --space-stack-lg: 0 0 40px 0;
+  --space-inline-md: 0 20px 0 0;
+  --space-inline-sm: 0 10px 0 0;
+  --font-size-heading: 1.7em;
+  --font-size-body-large: 1.1em;
+  --font-size-caption: 0.95em;
+  --line-height-heading: 1.2;
+  --line-height-card: 1.3;
+  --font-weight-bold: 600;
+  --radius-card: 10px;
+  --duration-default: 0.5s;
 }
