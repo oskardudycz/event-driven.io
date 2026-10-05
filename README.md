@@ -312,6 +312,22 @@ npm run test:video
 
 Future article imports perform the same normalization automatically.
 
+## Mermaid diagrams
+
+Gatsby doesn't render Mermaid. Articles embed diagrams as PNG files, named `YYYY-MM-DD-mermaidN.png` and placed next to `index.en.md`:
+
+```md
+![mermaid1](./2026-10-12-mermaid1.png)
+```
+
+Keep the Mermaid sources in the article folder, as `.mmd` files whose names start with the diagram number, for example `1-session-mode.mmd`. They can live in any subfolder; the Gatsby `posts` source ignores `code/` folders, so `code/diagrams/` is a good place. Then render them all:
+
+```sh
+yarn render-diagrams content/posts/2026-10-12--connection-pooler-modes-advisory-locks
+```
+
+The script finds every `.mmd` file in the folder (skipping `node_modules`), uses the folder's date prefix and the file's number to name the output, and renders it with [Mermaid CLI](https://github.com/mermaid-js/mermaid-cli) through `npx`, at 3x scale on a white background. The CLI version is pinned in [render-mermaid.js](scripts/render-mermaid.js), and the theme and fonts are in [mermaid-config.json](scripts/mermaid-config.json). The first run downloads Mermaid CLI and its headless Chromium, so it takes a while. Rerun the command after changing a diagram, and commit both the `.mmd` source and the PNG. `npm run test:render-mermaid` checks the file discovery and naming.
+
 ### Category reading order
 
 Edit `data/category-guides.json`:

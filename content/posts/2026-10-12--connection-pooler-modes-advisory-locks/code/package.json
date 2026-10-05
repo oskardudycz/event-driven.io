@@ -1,0 +1,44 @@
+{
+  "name": "connection-pooler-modes-advisory-locks",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Companion code for the article on connection pooler modes, explained with PostgreSQL advisory locks",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "lint": "run-s lint:eslint lint:prettier",
+    "lint:eslint": "eslint .",
+    "lint:prettier": "prettier --check \"**/*.{ts,json,md,yml}\"",
+    "fix": "eslint . --fix && prettier --write \"**/*.{ts,json,md,yml}\"",
+    "test": "run-s test:unit test:int test:e2e",
+    "test:unit": "vitest run --project unit",
+    "test:int": "vitest run --project int",
+    "test:e2e": "vitest run --project e2e",
+    "bench": "bash bench/run-bench.sh",
+    "race": "tsx bench/race.ts"
+  },
+  "dependencies": {
+    "@event-driven-io/dumbo": "0.13.0-beta.56",
+    "ansis": "^4.4.0",
+    "pg": "^8.20.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^25.6.0",
+    "@types/pg": "^8.20.0",
+    "eslint": "^10.2.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "globals": "^17.5.0",
+    "npm-run-all2": "^8.0.4",
+    "prettier": "^3.8.3",
+    "testcontainers": "^12.2.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.59.0",
+    "vitest": "^4.1.5"
+  }
+}

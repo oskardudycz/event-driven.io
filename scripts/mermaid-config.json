@@ -1,0 +1,12 @@
+{
+  "theme": "default",
+  "themeVariables": {
+    "fontFamily": "DejaVu Sans, Liberation Sans, Arial, sans-serif"
+  },
+  "sequence": {
+    "noteFontFamily": "DejaVu Sans, Liberation Sans, Arial, sans-serif",
+    "actorFontFamily": "DejaVu Sans, Liberation Sans, Arial, sans-serif",
+    "messageFontFamily": "DejaVu Sans, Liberation Sans, Arial, sans-serif",
+    "wrap": true
+  }
+}

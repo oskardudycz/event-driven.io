@@ -1,0 +1,15 @@
+sequenceDiagram
+    participant A as Instance A
+    participant B as Instance B
+    participant P as PgBouncer (transaction mode)
+    participant S1 as Backend 1234
+
+    A->>P: SELECT pg_try_advisory_lock(42)
+    P->>S1: SELECT pg_try_advisory_lock(42)
+    S1-->>A: true (Backend 1234 holds lock 42)
+    Note over P,S1: Backend 1234 goes back to the pool, still holding lock 42
+    B->>P: SELECT pg_try_advisory_lock(42)
+    P->>S1: SELECT pg_try_advisory_lock(42)
+    Note over S1: Same session asks again, re-entrancy
+    S1-->>B: true
+    Note over A,B: Both instances are the leader

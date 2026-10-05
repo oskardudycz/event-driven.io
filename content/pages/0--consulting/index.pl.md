@@ -77,7 +77,7 @@ Konsulting można połączyć z praktyczną nauką, kiedy zespół potrzebuje za
 
 ## Dlaczego warto pracować ze mną?
 
-Od ponad 18 lat tworzę oprogramowanie bliskie biznesowi jako programista, lider techniczny i architekt. Rozwijam otwartoźródłowy toolkit [Emmett](https://event-driven-io.github.io/emmett/) i publikuję praktyczne materiały o Event Sourcingu, CQRS-ie, modelowaniu oraz architekturze opartej na zdarzeniach.
+Od ponad 18 lat tworzę oprogramowanie bliskie biznesowi jako programista, lider techniczny i architekt. Tworzę narzędzia Open Source takie jak [Emmett](https://event-driven-io.github.io/emmett/) i publikuję praktyczne materiały o Event Sourcingu, CQRS-ie, modelowaniu oraz architekturze opartej na zdarzeniach.
 
 Podchodzę do architektury pragmatycznie. Event Sourcing, komunikacja asynchroniczna i systemy rozproszone są narzędziami, a nie celami. Tak samo chętnie zakwestionuję niepotrzebnie złożoną architekturę, jak pomogę wdrożyć tę, która ma uzasadnienie.
 

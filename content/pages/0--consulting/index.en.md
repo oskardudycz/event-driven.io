@@ -77,7 +77,7 @@ Consulting can be combined with hands-on learning when the team needs both a dec
 
 ## Why work with me?
 
-I have spent more than 18 years building software close to the business as a developer, technical leader, and architect. I maintain the [Emmett](https://event-driven-io.github.io/emmett/) open-source toolkit and publish practical material about Event Sourcing, CQRS, modelling, and event-driven architecture.
+I have spent more than 18 years building software close to the business as a developer, technical leader, and architect. I build Open Source tools such as [Emmett](https://event-driven-io.github.io/emmett/) and publish practical material about Event Sourcing, CQRS, modelling, and event-driven architecture.
 
 My approach is deliberately pragmatic. Event Sourcing, messaging, and distributed systems are tools—not goals. I will challenge an unnecessary architecture as readily as I will help implement a useful one.
 

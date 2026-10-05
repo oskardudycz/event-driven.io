@@ -1,0 +1,22 @@
+sequenceDiagram
+    participant A as Instance A (leader)
+    participant B as Instance B (standby)
+    participant C as Client C
+    participant P as PgBouncer (transaction mode)
+    participant S1 as Backend 1234
+    participant S2 as Backend 5678
+
+    A->>P: SELECT pg_try_advisory_lock(42)
+    P->>S1: SELECT pg_try_advisory_lock(42)
+    S1-->>A: true
+    Note over A: Process killed, client connection drops
+    Note over P,S1: Backend 1234 stays in the pool, still holding lock 42
+    loop every few seconds
+        B->>P: SELECT pg_try_advisory_lock(42)
+        P->>S2: SELECT pg_try_advisory_lock(42)
+        S2-->>B: false
+    end
+    C->>P: SELECT pg_try_advisory_lock(42)
+    P->>S1: SELECT pg_try_advisory_lock(42)
+    S1-->>C: true
+    Note over P,S1: Released only when PgBouncer closes Backend 1234

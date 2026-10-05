@@ -1,0 +1,17 @@
+sequenceDiagram
+    participant A as Instance A
+    participant B as Instance B
+    participant P as PgBouncer (transaction mode)
+    participant S1 as Backend 1234
+    participant S2 as Backend 5678
+
+    A->>P: SELECT pg_try_advisory_lock(42)
+    P->>S1: SELECT pg_try_advisory_lock(42)
+    S1-->>A: true (Backend 1234 holds lock 42)
+    B->>P: BEGIN
+    P->>S1: B owns Backend 1234 until COMMIT
+    A->>P: SELECT pg_advisory_unlock(42)
+    P->>S2: SELECT pg_advisory_unlock(42)
+    S2-->>A: false, WARNING: you don't own a lock
+    B->>P: COMMIT
+    Note over S1: Lock 42 is still held by Backend 1234
