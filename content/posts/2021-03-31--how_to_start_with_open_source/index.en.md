@@ -3,6 +3,8 @@ title: How to get started with Open Source?
 category: "Open Source"
 cover: 2020-03-31-cover.png
 author: oskar dudycz
+related:
+  - open-source-a-relict-a-charity-or
 ---
 
 ![cover](2020-03-31-cover.png)

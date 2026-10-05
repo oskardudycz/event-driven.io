@@ -52,7 +52,10 @@ PostTemplate.propTypes = {
 export default PostTemplate;
 
 export const postQuery = graphql`
-  query PostBySlug($slug: String!, $langKey: String!, $relatedIds: [String!]!) {
+  query PostBySlug($slug: String!, $langKey: String!, $relatedIds: [String!]!, $language: String!) {
+    locales: allLocale(filter: { language: { in: [$language, "en"] } }) {
+      ...TranslationResources
+    }
     relatedPosts: allMarkdownRemark(filter: { id: { in: $relatedIds } }) {
       edges {
         node {
@@ -61,6 +64,7 @@ export const postQuery = graphql`
           fields {
             slug
             prefix
+            langKey
           }
           frontmatter {
             title

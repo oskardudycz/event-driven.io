@@ -20,7 +20,7 @@ for (const file of [
   'postcss.config.js',
   'src/i18n/constants.js',
   'src/i18n/settings.mjs',
-  'src/i18n/i18n.json',
+  'src/i18n/translation-query.js',
   'src/theme/theme.yaml',
   'scripts/build-search-index.mjs',
   'src/utils/category-posts.mjs',
@@ -38,6 +38,7 @@ function includeDirectory(directory) {
 }
 includeDirectory('plugins');
 includeDirectory('src/search');
+includeDirectory('src/i18n/locales');
 for (const key of ['FB_APP_ID', 'GATSBY_DISQUS_NAME', 'GOOGLE_TAG_ID'])
   hash.update(`${key}:${process.env[key] || ''}`);
 const compatibility = hash.digest('hex');

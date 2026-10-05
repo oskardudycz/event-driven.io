@@ -11,12 +11,13 @@ const {
 const sources = [
   ...require('../import/architecture-weekly-audit.json').posts,
   ...require('../import/eventstore-posts.json'),
+  { url: 'https://www.architecture-weekly.com/p/open-source-a-relict-a-charity-or' },
 ];
 const publicRoot = path.resolve(__dirname, '../public');
 
 // Verify the built pages, not only the Markdown: plugin configuration and
 // Gatsby's HTML cache must preserve the migrated links and recording players.
-test('all 192 requested language pages build with local article links and working video markup', () => {
+test('all requested language pages build with local article links and working video markup', () => {
   const links = buildArticleLinks();
   for (const source of sources) {
     const slug =
@@ -272,4 +273,38 @@ test('known migrated source URLs are relative throughout blog content and social
       'https://event-driven.io/rss.xml',
     ],
   );
+});
+
+test('the latest Open Source article has reciprocal canonical cross-links in both languages', () => {
+  const slug = 'open-source-a-relict-a-charity-or';
+  const related = [
+    'how_to_start_with_open_source',
+    'why-open-source-isnt-always-fair',
+    'a_few_notes_on_running_open_source_project',
+    'webinar-21-michael-drogalis-building',
+    'i_am_no_longer_marten_maintainer',
+    'revolution_now',
+  ];
+  for (const language of ['en', 'pl']) {
+    const $ = cheerio.load(
+      fs.readFileSync(path.join(publicRoot, language, slug, 'index.html'), 'utf8'),
+    );
+    for (const target of related) {
+      assert.equal(
+        $(`.bodytext a[href="/en/${target}/"]`).length,
+        1,
+        `${language}: outgoing ${target}`,
+      );
+      const file = path.join(publicRoot, language, target, 'index.html');
+      if (!fs.existsSync(file)) continue;
+      const old = cheerio.load(fs.readFileSync(file, 'utf8'));
+      assert.equal(
+        old(`.related a[href="/en/${slug}/"]`).length,
+        1,
+        `${language}: incoming ${target}`,
+      );
+    }
+    assert.equal($('.related .readingCard').length, 3);
+    assert.equal($('link[rel=canonical]').attr('href'), `https://event-driven.io/en/${slug}/`);
+  }
 });

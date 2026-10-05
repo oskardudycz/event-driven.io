@@ -163,14 +163,19 @@ export const createPages = ({ graphql, actions, getNodesByType, reporter }) => {
         const relatedFor = (node) => {
           const requested = node.frontmatter.related || [];
           return requested.map((slug) => {
-            const match = items.find(
+            const candidates = items.filter(
               (item) =>
                 item.node.id !== node.id &&
                 item.node.fields.slug === `/${slug}/` &&
                 item.node.fields.source === node.fields.source &&
-                item.node.fields.langKey === node.fields.langKey &&
                 !item.node.frontmatter.useDefaultLangCanonical,
             );
+            const match =
+              candidates.find((item) => item.node.fields.langKey === node.fields.langKey) ||
+              candidates.find(
+                (item) => item.node.fields.langKey === DEFAULT_OPTIONS.defaultLanguage,
+              ) ||
+              candidates[0];
             if (!match) {
               throw new Error(
                 `Invalid related article "${slug}" for ${node.fields.langKey}${node.fields.slug}`,
@@ -349,6 +354,9 @@ export const onCreatePage = async (
       ...pluginOptions,
     };
 
+  // The plugin decorates prefixed pages; never localize them a second time.
+  if (/^\/(en|pl)(?:\/|$)/.test(page.path)) return;
+
   const isEnvDevelopment = process.env.NODE_ENV === 'development';
   const originalPath = page.path;
   const is404 = originalPath.includes(notFoundPage);
@@ -402,6 +410,16 @@ export const onCreatePage = async (
           lang,
           langKey: lang,
           availableLanguages: supportedLanguages,
+          language: lang,
+          i18n: {
+            language: lang,
+            languages: supportedLanguages,
+            defaultLanguage,
+            generateDefaultLanguagePage: true,
+            routed: true,
+            originalPath,
+            path: localizedPath,
+          },
         },
       });
     }),

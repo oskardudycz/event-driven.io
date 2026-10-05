@@ -1,0 +1,88 @@
+{
+  "header": {
+    "title": "Oskar Dudycz",
+    "subTitle": "Pragmatycznie o programowaniu"
+  },
+  "seo": {
+    "siteDescription": "Praktyczne artykuły, szkolenia i konsultacje o Event Sourcingu, architekturze sterowanej zdarzeniami, CQRS i architekturze oprogramowania."
+  },
+  "menu": {
+    "articles": "Artykuły",
+    "categories": "Kategorie",
+    "consulting": "Konsulting",
+    "contact": "Kontakt",
+    "talks": "Wystąpienia",
+    "training": "Szkolenia",
+    "about": "O mnie"
+  },
+  "hero": {
+    "h1": "Szukasz praktycznej wiedzy <1 /> o <3>architekturze oprogramowania?</3>",
+    "h2": "Zapoznaj się z moimi treściami - <1>od artykułów po wideo</1>",
+    "introExperience": "Nazywam się Oskar Dudycz. Od ponad 18 lat tworzę systemy informatyczne bliskie biznesowi.",
+    "introTraining": "Prowadzę warsztaty i szkolenia o Event Sourcingu, CQRS-ie oraz architekturze opartej na zdarzeniach.",
+    "introEmmett": "Rozwijam <emmett>Emmett</emmett>, bibliotekę open source ułatwiającą wdrażanie Event Sourcingu.",
+    "introBlog": "Na blogu pokazuję, jak pragmatycznie budować dobrze zaprojektowane, modularne aplikacje.",
+    "servicesLabel": "Usługi profesjonalne",
+    "trainingCta": "Zobacz szkolenia",
+    "consultingCta": "Porozmawiajmy o konsultingu",
+    "articlesCta": "Przeczytaj najnowsze artykuły"
+  },
+  "blog": {
+    "browseAll": "Zobacz wszystkie artykuły",
+    "latestTitle": "Najnowsze artykuły",
+    "allTitle": "Wszystkie artykuły",
+    "allIntro": "Przejrzyj pełne archiwum — od najnowszego artykułu aż po najstarsze wpisy."
+  },
+  "categories": {
+    "title": "Polecana kolejność czytania według tematów",
+    "intro": "Wybierz temat, aby przejść polecaną ścieżkę nauki albo zobaczyć wszystkie powiązane artykuły.",
+    "topic": "Temat",
+    "recommended": "Polecana kolejność czytania",
+    "recommendedDescription": "Czytaj w tej kolejności, aby przejść od podstaw do praktycznych kompromisów i problemów produkcyjnych.",
+    "moreArticles": "Więcej artykułów",
+    "articles": "Artykuły",
+    "articleCount_0": "{{count}} artykuł",
+    "articleCount_1": "{{count}} artykuły",
+    "articleCount_2": "{{count}} artykułów",
+    "defaultDescription": "Praktyczne artykuły na temat {{category}}.",
+    "seoTitle": "{{category}} — artykuły i ścieżka nauki",
+    "seoTitleAll": "Tematy i ścieżki nauki architektury oprogramowania",
+    "seoDescription": "Polecane ścieżki czytania i praktyczne artykuły o Event Sourcingu, CQRS-ie, architekturze opartej na zdarzeniach i projektowaniu oprogramowania."
+  },
+  "talks": {
+    "title": "Wystąpienia i nagrania",
+    "videosTitle": "Wybrane nagrania",
+    "videosIntro": "Wystąpienia konferencyjne, webinary i praktyczne sesje o Event Sourcingu, CQRS-ie, architekturze opartej na zdarzeniach i projektowaniu oprogramowania.",
+    "watch": "Obejrzyj nagranie",
+    "play": "Odtwórz {{title}}",
+    "titleLabel": "Tytuł",
+    "descriptionLabel": "Opis"
+  },
+  "related": {
+    "title": "Powiązane artykuły"
+  },
+  "articleNavigation": {
+    "title": "Artykuły według daty publikacji",
+    "later": "Nowszy artykuł",
+    "earlier": "Starszy artykuł"
+  },
+  "404": {
+    "title": "Nie znaleziono",
+    "description": "Właśnie trafiłeś na URL, który nie istnieje... smuteczek."
+  },
+  "contact": {
+    "title": "Kontakt",
+    "seoTitle": "Skontaktuj się z Oskarem Dudyczem",
+    "description": "Skontaktuj się z Oskarem Dudyczem w sprawie szkoleń z Event Sourcingu, konsultingu architektonicznego i wystąpień.",
+    "intro": "W sprawie konsultingu, przeglądu architektury lub szkolenia",
+    "bookCall": "umów bezpłatną rozmowę wstępną.",
+    "form": {
+      "name": "Imię i nazwisko",
+      "email": "E-mail",
+      "message": "Wiadomość",
+      "emailError": "Podaj poprawny adres e-mail.",
+      "messageError": "Wpisz wiadomość.",
+      "submit": "Wyślij wiadomość"
+    }
+  }
+}

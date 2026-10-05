@@ -1,3 +1,4 @@
+import { graphql } from 'gatsby';
 import React from 'react';
 import Article from '../components/Article';
 import Search from '../components/Search';
@@ -24,3 +25,11 @@ export const Head = createHead(({ pageContext }) => ({
   title: pageContext.lang === 'pl' ? 'Szukaj' : 'Search',
   noIndex: true,
 }));
+
+export const query = graphql`
+  query ($language: String!) {
+    locales: allLocale(filter: { language: { in: [$language, "en"] } }) {
+      ...TranslationResources
+    }
+  }
+`;

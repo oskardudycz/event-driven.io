@@ -4,6 +4,8 @@ category: "Event Sourcing"
 cover: 2024-04-29-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true
+related:
+  - open-source-a-relict-a-charity-or
 ---
 
 ![cover](2024-04-29-cover.png)

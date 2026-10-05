@@ -120,7 +120,10 @@ CategoryPage.propTypes = {
 export default CategoryPage;
 
 export const query = graphql`
-  query PostsQuery {
+  query PostsQuery($language: String!) {
+    locales: allLocale(filter: { language: { in: [$language, "en"] } }) {
+      ...TranslationResources
+    }
     posts: allMarkdownRemark(
       filter: {
         fileAbsolutePath: { regex: "//posts/[0-9]+.*--/" }

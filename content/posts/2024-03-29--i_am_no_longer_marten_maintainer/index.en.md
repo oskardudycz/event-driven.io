@@ -3,6 +3,8 @@ title: I'm no longer Marten maintainer
 category: "Event Sourcing"
 cover: 2024-04-29-cover.png
 author: oskar dudycz
+related:
+  - open-source-a-relict-a-charity-or
 ---
 
 ![cover](2024-04-29-cover.png)

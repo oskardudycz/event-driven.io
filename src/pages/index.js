@@ -92,7 +92,10 @@ IndexPage.propTypes = {
 export default withTranslation()(IndexPage);
 
 export const query = graphql`
-  query IndexQuery($langKey: String!) {
+  query IndexQuery($langKey: String!, $language: String!) {
+    locales: allLocale(filter: { language: { in: [$language, "en"] } }) {
+      ...TranslationResources
+    }
     posts: allMarkdownRemark(
       limit: 12
       filter: {

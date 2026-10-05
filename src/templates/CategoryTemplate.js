@@ -138,7 +138,10 @@ CategoryTemplate.propTypes = {
 export default CategoryTemplate;
 
 export const query = graphql`
-  query CategoryPosts($categoryPostIds: [String!]!) {
+  query CategoryPosts($categoryPostIds: [String!]!, $language: String!) {
+    locales: allLocale(filter: { language: { in: [$language, "en"] } }) {
+      ...TranslationResources
+    }
     posts: allMarkdownRemark(
       filter: { id: { in: $categoryPostIds } }
       sort: { fields: { prefix: DESC } }

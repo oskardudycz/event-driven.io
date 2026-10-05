@@ -9,7 +9,7 @@
   "scripts": {
     "generate-llms": "node ./scripts/generate-llms-txt.js",
     "verify-seo": "node ./scripts/verify-seo-build.js",
-    "test": "yarn test:seo && yarn test:build-contract && yarn test:substack && yarn test:video && yarn test:redirects && yarn test:archive && yarn test:import-build && yarn test:categories && yarn test:performance && yarn test:tooling && yarn test:search",
+    "test": "yarn test:seo && yarn test:build-contract && yarn test:substack && yarn test:video && yarn test:redirects && yarn test:archive && yarn test:import-build && yarn test:categories && yarn test:performance && yarn test:tooling && yarn test:search && yarn test:localization",
     "test:seo": "node ./tests/seo-build.test.js",
     "test:build-contract": "node ./tests/build-contract.test.js",
     "test:visual": "vitest run tests/visual.test.js",
@@ -57,7 +57,8 @@
     "test:tooling": "node --test --test-isolation=none tests/tooling.test.mjs",
     "test:search": "node --test --test-isolation=none tests/search.test.mjs",
     "measure:search": "node scripts/measure-search.mjs",
-    "test:search:dev": "node scripts/verify-search-development.mjs"
+    "test:search:dev": "node scripts/verify-search-development.mjs",
+    "test:localization": "node --test --test-isolation=none tests/localization.test.mjs"
   },
   "dependencies": {
     "@ant-design/compatible": "^1.0.8",
@@ -77,6 +78,7 @@
     "gatsby-plugin-manifest": "^5.16.0",
     "gatsby-plugin-netlify": "^5.1.1",
     "gatsby-plugin-postcss": "^6.16.0",
+    "gatsby-plugin-react-i18next": "3.0.1",
     "gatsby-plugin-react-svg": "^3.3.0",
     "gatsby-plugin-remove-serviceworker": "^1.0.0",
     "gatsby-plugin-robots-txt": "^1.8.0",
@@ -96,10 +98,9 @@
     "gatsby-transformer-json": "^5.16.0",
     "gatsby-transformer-remark": "^6.16.0",
     "gatsby-transformer-sharp": "^5.16.0",
-    "i18next": "^20.4.0",
+    "i18next": "^22.0.6",
     "js-yaml": "^4.1.0",
     "lodash": "4.17.21",
-    "lodash.merge": "4.6.2",
     "minisearch": "7.2.0",
     "normalize.css": "^8.0.0",
     "prismjs": "^1.27.0",
@@ -107,7 +108,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-facebook": "^8.1.4",
-    "react-i18next": "^11.11.4",
+    "react-i18next": "^12.0.0",
     "react-icons": "^4.2.0",
     "react-obfuscate": "^3.6.8",
     "react-share": "^5.3.0",

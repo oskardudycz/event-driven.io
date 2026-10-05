@@ -1,2 +1,2 @@
-// The browser and server must render the same tree for React 18 hydration.
-export { wrapRootElement, wrapPageElement } from './gatsby-ssr';
+// The browser and server render the same provider tree for React 18 hydration.
+export { wrapPageElement } from './gatsby-ssr';

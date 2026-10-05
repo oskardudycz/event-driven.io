@@ -30,7 +30,10 @@ ArticlesPage.propTypes = {
 export default ArticlesPage;
 
 export const query = graphql`
-  query ArticlesQuery($langKey: String!) {
+  query ArticlesQuery($langKey: String!, $language: String!) {
+    locales: allLocale(filter: { language: { in: [$language, "en"] } }) {
+      ...TranslationResources
+    }
     posts: allMarkdownRemark(
       filter: {
         fileAbsolutePath: { regex: "//posts/[0-9]+.*--/" }

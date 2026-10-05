@@ -31,7 +31,10 @@ PageTemplate.propTypes = {
 export default PageTemplate;
 
 export const pageQuery = graphql`
-  query PageByPath($slug: String!, $langKey: String!) {
+  query PageByPath($slug: String!, $langKey: String!, $language: String!) {
+    locales: allLocale(filter: { language: { in: [$language, "en"] } }) {
+      ...TranslationResources
+    }
     page: markdownRemark(fields: { slug: { eq: $slug }, langKey: { eq: $langKey } }) {
       id
       html
