@@ -86,7 +86,7 @@ This blog is licensed under [License Creative Commons BY-SA 4.0](https://creativ
 
 ## Gatsby validation and scoped lint
 
-Use Node 24 and Yarn 1. Run `yarn smoke` and `yarn lint:modern` for fast syntax, GraphQL and correctness checks. Then run `ALGOLIA_SKIP_INDEXING=true yarn build` and `yarn test`. For browser checks, serve the generated site on port 9000 and run `yarn test:visual`; install Playwright Chromium first if needed.
+Use Node 24 and Yarn 1. Run `yarn smoke` and `yarn lint:modern` for fast syntax, GraphQL and correctness checks. Then run `ALGOLIA_SKIP_INDEXING=true yarn build` and `yarn test`. For browser checks, serve the generated site on port 9000 and run `yarn test:visual`; matching Playwright and Chromium packages are installed as development dependencies by Yarn. If the browser cache is missing, run `yarn browsers:install`; on Linux CI use `yarn browsers:install:ci` to install OS libraries too.
 
 The SEO checks require exactly one H1 in every generated page, including Polish placeholders, search and 404 pages. Gatsby's internal HTML fragments are excluded. Missing or duplicate main headings fail `yarn test:seo` and the CI gate before deployment. Browser checks also cover training-page hydration and language navigation.
 
@@ -95,3 +95,5 @@ For repeatable mobile Lighthouse audits, run `yarn audit:performance --base-url 
 `lint:modern` checks the native Gatsby hooks, modern scripts, localization, layout, menu, SEO, video, search and category/recommendation modules. Its explicit paths are in `package.json`. Add files to this baseline as they are modernized. The separate `.eslintrc.modern.json` supports ESM, JSX and TypeScript, checks React hooks, and treats warnings as failures without requiring a project-wide formatting rewrite. It does not type-check TypeScript. The existing `yarn lint` command still exposes the legacy full-project backlog.
 
 CI runs the scoped lint gate before building. Browser search checks use in-memory public test settings and intercepted Algolia responses for both languages; they never contact or modify a production index. Live Algolia validation remains a separate release check.
+
+Safe performance regressions run with `yarn test:performance` (also included in `yarn test`) after building. They check English/Polish cover priority, lazy loading and WebP fallback throughout generated Markdown, local font preloads, portrait dimensions and batched menu measurements. `yarn test:visual` additionally verifies responsive image slots at DPR 1/2 and automatic offscreen-newsletter loading, alongside the existing layout/navigation screenshots. Decisions needing your review and their reasons are listed in [the PageSpeed review](docs/pagespeed-review.md#for-your-review--decisions-intentionally-not-applied).

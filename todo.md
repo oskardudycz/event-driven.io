@@ -297,7 +297,7 @@ Deferred: CSS/Tailwind/theme variables, dark mode, Slices, npm migration and lay
 
 ### Site-wide H1 validation — 2026-10-05
 
-Additional research: [production audit review](docs/pagespeed-review.md). Apply only obvious fixes preserving appearance/behavior; review other candidates before implementation. Date/time policy, Giscus, colors/fonts, broader image configuration, navigation wording and security-header enforcement remain proposals.
+Additional research: [production audit review](docs/pagespeed-review.md). Apply only obvious fixes preserving appearance/behavior; review other candidates before implementation. Date/time policy, Giscus, colors/font-fallback metrics, navigation wording and security-header enforcement remain proposals. Safe image delivery and font preloads were subsequently authorized below.
 
 - [x] Remove the rejected subscription/comment click-to-load controls and restore automatic rendering. Revert the experimental brand color, font behavior, navigation wording, image configuration, replacement avatar and guessed publication timestamps. After the owner's clarification, retain only the small Service/iframe/dimension fixes listed below.
 
@@ -318,6 +318,24 @@ Additional research: [production audit review](docs/pagespeed-review.md). Apply 
 - [ ] Verify these small fixes and the audit tooling on CI; confirm Service/iframe output on production after the owner's deployment. No production change was performed here.
 - [ ] Agree on a publication timestamp policy before resolving date-only validator warnings; source dates do not record an exact time.
 - [ ] Discuss Giscus versus automatically viewport-loaded Disqus and the subscription embed's large application payload. No extra click controls.
-- [ ] Review scoped accessible link/footer colors, high-resolution portrait, responsive cover variants, above-fold image priority and font/layout measurements.
+- [ ] Review scoped accessible link/footer colors and any further font-fallback metric changes. Image delivery, same-portrait resolution, selected font preloads and batched menu measurements are now authorized separately below.
 - [ ] Review CSP/COOP/Trusted Types and third-party analytics changes separately; retain current integration behavior until approved.
 - [ ] Establish repeated before/after baselines and agreed payload budgets before adding any Lighthouse CI threshold. Live provider scores are not deterministic release gates.
+
+### Authorized safe PageSpeed changes — completed locally
+
+- [x] Implement responsive card sizes/breakpoints, Markdown WebP with original-format fallback, selective EN/PL Introduction cover priority, cacheable higher-resolution same portrait, existing 400/600 font preloads and batched menu measurement. CSS/layout and automatic comments/subscription remain.
+- [x] Add 14 performance regressions to `yarn test`/CI: generated images and fallbacks throughout the site, priority exclusions, fonts/portrait dimensions, menu read/write grouping and cover visual detail/byte savings. The 800px Introduction cover is 38,034 bytes as WebP versus 191,674 bytes as PNG; no whole-page Lighthouse improvement is claimed.
+- [x] Verify native newsletter request deferral and automatic loading on scroll on the longer GDPR article. Introduction remains within Chromium's native preload distance at desktop/mobile; document stricter automatic viewport loading as a review-only option.
+- [x] Verify pinned project Playwright/Chromium 1.63.0, frozen installation (0.68s), recovery scripts and CI browser setup.
+- [x] Final smoke (72 source files/17 queries), scoped lint, diff checks, production build (28.84s), full tests (18.11s) and all 18 browser checks (44.06s command time) pass. Five image breakpoints at DPR 1/2 pass; screenshots/tolerances and route/redirect/sitemap/feed contracts are unchanged.
+- [x] Update performance review with completed fixes, regression coverage and a dedicated review-only table explaining each decision. README documents repeatable checks; plan records authorized scope.
+- [ ] Verify CI and the owner's next deployment, then rerun external validators and repeated production audits. Cold WebP generation is expensive; intermediate cold-query warnings remain possible. Do not compare different cache states as a build speedup.
+- [ ] Review the remaining provider/viewport-loading, contrast/wording, timestamp, fallback-font, analytics, security and Lighthouse budget decisions in docs/pagespeed-review.md. No invasive changes are included.
+
+### CI browser navigation timeout follow-up — 2026-10-05
+
+- [x] Remove remaining networkidle navigation/reload waits from the newsletter and training browser checks. Wait for DOM content and explicit font/hydration/iframe conditions instead; third-party activity must not gate site readiness.
+- [x] Keep the real distant-article lazy-loading check and mocked newsletter form. Add a deliberately pending same-origin request throughout navigation and scroll to reproduce the reported CI failure condition without external-service timing.
+- [x] Final browser validation: all 18 checks passed (40.51s command time), including the deliberately pending-request regression; diff checks passed. No production implementation or screenshot tolerance changes were needed.
+- [ ] Verify the next CI run separately; local success does not establish CI success.

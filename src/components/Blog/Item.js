@@ -35,7 +35,11 @@ const Item = (props) => {
           className="link"
         >
           <div className="gatsby-image-outer-wrapper">
-            <GatsbyImage image={getImage(cover)} alt={title} />
+            <GatsbyImage
+              image={getImage(cover)}
+              alt={title}
+              sizes="(min-width: 1025px) 846px, (min-width: 1024px) 646px, (min-width: 690px) 606px, (min-width: 600px) calc(100vw - 84px), calc(100vw - 64px)"
+            />
           </div>
           <h2>
             {title} <FaArrowRight className="arrow" />

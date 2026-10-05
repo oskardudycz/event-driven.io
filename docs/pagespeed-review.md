@@ -1,6 +1,6 @@
 # PageSpeed and schema review — 2026-10-05
 
-This is a research review and decision record. The owner authorizes obvious improvements that preserve appearance and behavior. Changes to interactions, branding, comment providers, publication-time assumptions or restrictive security policies need review first. Click-to-load subscription/comment buttons were rejected and removed. The experimental global colors, font behavior, image configuration, navigation wording and replacement avatar were also reverted.
+This is a research review, implementation record and decision list. On 2026-10-05 the owner authorized all safe, non-invasive improvements below. The owner authorizes obvious improvements that preserve appearance and behavior. Changes to interactions, branding, comment providers, publication-time assumptions or restrictive security policies need review first. Click-to-load subscription/comment buttons were rejected and removed. Earlier experimental changes were reverted; the separately authorized image-delivery, same-portrait and font-preload improvements are now being validated without CSS or interaction changes.
 
 ## What the reports actually show
 
@@ -17,14 +17,14 @@ The article audit attributed approximately 1.63MiB to substackcdn.com, 0.41MiB t
 | `Service.inLanguage` invalid | `inLanguage` is emitted on every root schema object; Service is not a CreativeWork. Omit it from Service while retaining HTML language and valid language metadata elsewhere. | Small fix applied locally; generated-output test added. |
 | Date/time warning | `datePublished` and Open Graph publication time use the filename's date-only prefix. Schema.org accepts Date or DateTime; Google's Article validator recommends a full timestamp and timezone. Sources do not record the original time. | Proposal: support an optional real `publishedAt` value. For legacy dates, decide whether to keep date-only warnings or explicitly adopt a documented midnight convention. Do not fabricate an exact historical time silently. No date conversion applied. |
 | Missing iframe title | The subscription iframe has no accessible title. | Title and React `frameBorder` spelling corrected locally. |
-| Eager subscription iframe | The offscreen newsletter starts its own large application and fonts. | Native `loading="lazy"` applied locally; it still appears automatically. Browser proximity thresholds vary, so verify actual requests. Replacing it with a lightweight form/link is a product choice, not an automatic optimization. |
+| Eager subscription iframe | The offscreen newsletter starts its own large application and fonts. | Native `loading="lazy"` applied locally; it still appears automatically. The request test passes on the longer GDPR article, with no initial request and automatic loading on scroll. Introduction is inside Chromium’s preload distance on desktop and mobile, so its iframe still loads early. This is a limited quick win, not a fix for that article’s Substack payload. Replacing it with a lightweight form/link is a product choice, not an automatic optimization. |
 | Eager Disqus, third-party cookies and advertising | Current article footer immediately mounts DiscussionEmbed, loading Disqus and ad networks. | Discuss Giscus replacement below. Alternative: automatically load Disqus as its section approaches the viewport, without a button, and reserve space. Not implemented. |
-| Image dimensions | Header/author avatar has CSS dimensions but no intrinsic width/height. | Added real 60×60 attributes and `height: auto`, retaining the current image and displayed size. |
-| Low-resolution avatar | Source is only 60×60, shown up to 60 CSS pixels on high-DPI screens. | Higher-resolution version of the same portrait is available from the public GitHub profile. Proposed responsive StaticImage/asset replacement; not applied. |
-| Article cover format and LCP discovery | Introduction cover is an approximately 187KiB PNG, marked lazy, and is the LCP element. | Enable WebP in gatsby-remark-images; use eager/high-priority loading for the known above-fold image only. Keep later images lazy and verify screenshots/diagram legibility. Not applied. |
-| Oversized homepage covers | FULL_WIDTH image data declares `sizes="100vw"` although cards sit in a narrower container. | Match image sizes/breakpoints to actual card widths; compare downloaded variants at mobile/desktop DPR. Use Gatsby Image, not a manual image rewrite. Not applied. |
-| Font stylesheet / layout shifts | Article shifts correlate with font loading; layout changes font family and weights again after FontFaceObserver resolves. | Prototype selected font preloads and metric-compatible fallback fonts. Keep the final appearance and test menu measurements. Font `size-adjust` is preferable to hiding text until a font loads. No lifecycle/font behavior changes applied. |
-| Forced layout | Menu repeatedly changes classes and measures item widths; Lighthouse reports React/app layout work. | Batch writes, then reads, then final writes in overflow calculation; prove navigation still works at all breakpoints. Profile before claiming improvement. Not applied. |
+| Image dimensions | Header/author avatar has CSS dimensions but no intrinsic width/height. | Intrinsic dimensions and `height: auto` preserve displayed sizing. The authorized higher-resolution same-portrait asset now declares its actual 180×180 dimensions. |
+| Low-resolution avatar | Source is only 60×60, shown up to 60 CSS pixels on high-DPI screens. | The same [public GitHub portrait](https://github.com/oskardudycz.png?size=180) is now a cacheable local 180×180 WebP with intrinsic dimensions; existing 44/48/60px CSS display sizes remain. Browser screenshots and dimension tests verify it. |
+| Article cover format and LCP discovery | Introduction cover is an approximately 187KiB PNG, marked lazy, and is the LCP element. | WebP enabled at quality 80 with original-format fallback. A native ESM Remark plugin prioritizes only the measured Introduction cover in EN/PL; later images stay lazy. Generated-output tests enforce both formats and exactly one priority image. |
+| Oversized homepage covers | FULL_WIDTH image data declares `sizes="100vw"` although cards sit in a narrower container. | Gatsby Image sizes now match measured card widths, with additional responsive breakpoints. Browser tests compare declared/actual slots at 390/600/768/1024/1440px at DPR 1 and 2 and require WebP delivery. |
+| Font stylesheet / layout shifts | Article shifts correlate with font loading; layout changes font family and weights again after FontFaceObserver resolves. | Preload the existing Latin 400/600 WOFF2 fonts, with crossorigin. Tests verify two valid local font resources. Existing family/weight transitions and font-display remain. Metric-compatible fallback/size-adjust changes are deferred because font metrics can change wrapping/menu layout. |
+| Forced layout | Menu repeatedly changes classes and measures item widths; Lighthouse reports React/app layout work. | Menu now restores all classes, reads all widths, then applies overflow classes and updates state once. Existing sticky/mobile-menu/navigation browser regressions remain mandatory. This removes interleaved writes/reads; no quantified Lighthouse speedup is claimed. |
 | Contrast | Green links (#709425 on white) measure about 3.52:1; small footer text about 3.02:1. | Darker text/link colors can meet 4.5:1. Choose scoped accessible text colors rather than globally changing branding. Color changes require review; reverted prototype. |
 | Non-descriptive link | Lighthouse flags the menu's “Start” link. | Consider localized “Home” / “Strona główna”, or an explicit descriptive accessible name with current visible wording retained. Discuss wording/layout; not applied. |
 | Cache lifetimes | Reproduced article cache warnings mostly concern Disqus/Substack resources. First-party homepage caching did not fail the audit. | We cannot change vendor headers. Reduce when vendor resources load; inspect our hashed assets separately. Never give mutable page-data/HTML immutable caching merely to improve a score. |
@@ -33,9 +33,27 @@ The article audit attributed approximately 1.63MiB to substackcdn.com, 0.41MiB t
 | Deprecated APIs, console/Issues warnings | Vendor/browser-dependent findings vary between runs. Local reproduction did not reproduce the supplied deprecation count. It did report requests for /404/. | Inspect source locations and normal browser network traces before changing application code. Expected diagnostic 404 requests are not evidence of a broken article link by themselves. |
 | CSP, HSTS, COOP, Trusted Types | These are security recommendations, not automatic proof of poor performance. Production already serves one-year HSTS. | Review CSP hashes/allowlists against Gatsby bootstrap, inline styles, article HTML, analytics and embeds. COOP can affect OAuth popups; enforcing Trusted Types can break current HTML sinks. Propose/test a report-only policy first; no blind enforcement or HSTS preload/subdomain expansion. |
 
-These are implementation candidates, not claims that every audit is fixed. Third-party cookie/cache behavior remains controlled by providers once their embeds load.
+The generated 800px Introduction cover is 38,034 bytes as WebP versus 191,674 bytes as PNG (about 80% smaller for this asset). Its dimensions and pixel comparison pass the existing 3% screenshot tolerance. This is an asset comparison, not a measured whole-page LCP/score improvement.
+
+Implemented items have regression coverage; pending decisions are listed explicitly below. This is not a claim that every audit is fixed. Third-party cookie/cache behavior remains controlled by providers once their embeds load.
 
 Primary implementation references: [Gatsby performance](https://www.gatsbyjs.com/docs/how-to/performance/improving-site-performance/), [Gatsby Image](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/), [Gatsby Script](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-script/), [native iframe lazy loading](https://web.dev/articles/iframe-lazy-loading), [font layout-shift mitigation](https://web.dev/articles/optimize-cls), [Google Article timestamps](https://developers.google.com/search/docs/appearance/structured-data/article), [Schema.org datePublished](https://schema.org/datePublished), [Service](https://schema.org/Service), [Netlify headers](https://docs.netlify.com/manage/routing/headers/), and [CSP](https://developer.chrome.com/docs/privacy-security/csp).
+
+## For your review — decisions intentionally not applied
+
+| Decision | Why your review is needed | What to decide |
+| --- | --- | --- |
+| Disqus → Giscus, or automatic viewport loading | Changes login/moderation/history or when comments initialize. Vendor cookies/ads cannot be fixed by Gatsby configuration. | Choose provider and bilingual thread/history policy; see migration discussion below. |
+| Replace the Substack application with a lightweight form | Native lazy loading reduces initial work, but the vendor payload remains when reached. A replacement changes the subscription flow and may need backend integration. | Keep the lazy automatic embed, approve stricter automatic viewport loading (no extra click), or approve a lightweight form prototype. |
+| Link/footer contrast | Passing contrast needs different visible colors and therefore a branding choice. | Approve scoped accessible colors before the CSS redesign. |
+| “Start” navigation label | Changing visible wording is a content choice; an accessible name can retain the visible label. | Choose EN/PL wording or approve descriptive accessible names. |
+| Article publication timestamps | Historical sources record dates, not exact publication times. Guessing midnight silently invents precision. | Keep date-only warnings, or approve documented legacy convention plus optional real publishedAt metadata. |
+| Font fallback metrics | Preloads are implemented; changing font fallback metrics may alter wrapping before fonts load. | Approve a separately measured size-adjust prototype if shifts persist. |
+| Analytics scheduling/removal | Changes measurement timing and can lose events; unused vendor code is not controlled by Gatsby. | Agree acceptable measurement trade-offs before modifying GTM. |
+| CSP/COOP/Trusted Types/HSTS expansion | Enforcement can break Gatsby bootstrap, inline styles, embeds and authentication popups. Existing one-year HSTS remains. | Review a report-only policy and compatibility evidence before enforcement. |
+| Lighthouse CI thresholds | Live external services and network conditions make individual scores variable. | Agree repeated-baseline payload/metric budgets; retain deterministic checks meanwhile. |
+
+No approval is needed to run the local regression tests. CI and production verification are still separate, pending steps: deploy through the normal workflow, rerun Rich Results/Schema.org and repeated production audits, and request a Bing recrawl if its stale heading warning remains.
 
 ## Disqus versus Giscus — discussion before migration
 
@@ -62,11 +80,13 @@ No Giscus installation, repository mutation, comment export/import or provider s
 
 The repository now has `yarn audit:performance`. It pins Lighthouse 13.5.0, uses the lockfile's Playwright Chromium, audits pages sequentially with fresh browser profiles, and saves JSON plus a summary. Browser profiles are temporary and cleaned up, avoiding chrome-launcher's WSL profile folders in the repo. The default reports directory `report/performance/` is ignored by Git.
 
-Install Chromium once:
+Playwright and the matching official `@playwright/browser-chromium` package are pinned project development dependencies (1.63.0). Yarn installs Chromium automatically. If its browser cache is missing, recover it with:
 
 ```sh
-yarn playwright install chromium
+yarn browsers:install
 ```
+
+On Linux CI use `yarn browsers:install:ci` to install browser OS dependencies too; the workflow uses this command.
 
 Take a production baseline before changes:
 
@@ -96,7 +116,7 @@ yarn audit:performance --base-url http://127.0.0.1:9000 --label local-before
 
 Repeat with `--label local-after` after a candidate change. Keep the lockfile, browser, Lighthouse version, build environment and machine fixed. Run audits sequentially without builds or other heavy tasks in parallel. Fresh profiles provide cold browser caches; CDN caches and vendor responses are not controlled. Do not compare a credential-free local build to production with analytics/Disqus enabled and call that a performance improvement.
 
-Compare **median** LCP, blocking time, CLS and transfer bytes across three runs, plus concrete failed audit IDs and affected URLs/elements. Summary includes browser/Lighthouse versions. Reports retain request origins and details, so distinguish first-party regressions from vendor changes. Scores are diagnostics, not a deterministic CI gate. Native iframe lazy loading should be tested at initial load and on scroll, with the form remaining accessible without a click.
+Compare **median** LCP, blocking time, CLS and transfer bytes across three runs, plus concrete failed audit IDs and affected URLs/elements. Summary includes browser/Lighthouse versions. Reports retain request origins and details, so distinguish first-party regressions from vendor changes. Scores are diagnostics, not a deterministic CI gate. The browser test checks native iframe lazy loading initially and on scroll on the longer GDPR article, with the form available without a click. Chromium can preload nearer embeds; Introduction loaded its embed initially at both desktop and mobile sizes. Do not claim that its vendor payload is deferred by this attribute.
 
 Keep deterministic `yarn smoke`, `yarn lint:modern`, `yarn test` and `yarn test:visual` gates. The existing CI gate now checks headings across all 694 generated standalone pages; the small Service/iframe fixes have output checks. Continue external Rich Results/Schema.org validation after deployment. PageSpeed field data covers a rolling period and cannot immediately prove a new deployment's effect; the supplied reports do not provide INP.
 
@@ -104,4 +124,18 @@ A useful later CI extension is a saved Lighthouse artifact on a controlled runne
 
 ## Local verification
 
-The small fixes passed the production build (129.28s), full tests (11.36s), all 16 browser checks (29.52s), smoke, scoped lint and diff checks. Existing screenshots/tolerances and exact routes/redirects/sitemap/feed contracts were preserved. The audit runner's help, scoped lint and a one-run production smoke succeeded with Lighthouse 13.5.0 and Chromium 153.0.8010.12. It produced reports under /tmp and left no Lighthouse profile folders in the repository. CI and deployed validation remain separate; no production deployment was performed.
+Current authorized changes: frozen Yarn installation passed (0.68s); smoke passed with 72 source files and 17 GraphQL queries; scoped lint and diff checks passed; final production build passed (28.84s); full tests passed (18.11s), including all 14 new performance regressions; all 18 browser checks passed (44.06s command time). Existing screenshots and tolerances were retained. Exact routes, redirects, sitemap URLs and feeds remain unchanged; the existing SEO gate still checks all 694 standalone pages.
+
+`yarn test:performance`, included in `yarn test` and therefore CI, checks EN/PL cover priority, WebP with original fallback, lazy loading across generated Markdown images, real local font preloads, portrait dimensions, image-priority exclusions, grouped menu DOM reads/writes and cover visual detail/byte savings. `yarn test:visual` verifies image slot widths/WebP delivery at five breakpoints and DPR 1/2, plus distant-newsletter request deferral and automatic loading on scroll. Existing hydration, font, sticky menu, language switching, metadata and screenshots remain regression gates. The CI browser installation now uses `yarn browsers:install:ci`.
+
+The first WebP-generation build took substantially longer and encountered a workspace-only permission error while saving Gatsby's user configuration after generating pages. The permitted retry passed (144.77s); final warm validation passed in 28.84s. Intermediate cold-query warnings over 15s still occurred; the final warm build had no Gatsby warnings. These timings are different cache states, not a controlled speedup claim. Yarn still reports its existing url.parse deprecation on installation. No lockfile/package-manager/runtime migration is included.
+
+The audit runner's earlier help, scoped lint and one-run production smoke passed with Lighthouse 13.5.0 and Chromium 153.0.8010.12, leaving reports in /tmp and no profile folders in the repository. No new full-page before/after Lighthouse improvement is claimed for this implementation. The measured asset saving is separate from vendor payload and native-lazy proximity limits described above.
+
+CI execution and deployed Rich Results/Schema.org/PageSpeed verification remain pending. No production deployment, provider migration, external indexing request or account mutation was performed.
+
+### CI navigation timeout follow-up
+
+The reported older CI test timed out waiting for networkidle on Introduction. The current distant-article version retained that unreliable wait, so both newsletter and training checks now use DOM readiness plus explicit font/hydration/iframe conditions. A mocked request deliberately remains open through navigation and newsletter scroll, proving the check does not need network inactivity. The test still verifies zero initial newsletter requests on the distant article and automatic loading on scroll; no production behavior or screenshot tolerance is changed. See [Playwright's readiness guidance](https://playwright.dev/docs/api/class-page#page-goto-option-wait-until).
+
+Final local validation: all 18 browser checks passed in 40.51s command time, with existing screenshots/tolerances retained; diff checks passed. The next CI run remains pending.

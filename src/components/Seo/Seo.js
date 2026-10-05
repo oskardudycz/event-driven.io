@@ -189,6 +189,9 @@ const Seo = (props) => {
     <React.Fragment>
       <html lang={lang} />
       <title id="page-title">{title}</title>
+      {[400, 600].map((weight) => (
+        <link key={weight} id={`font-preload-${weight}`} rel="preload" as="font" type="font/woff2" crossOrigin="anonymous" href={withPrefix(`/fonts/open-sans/files/open-sans-latin-${weight}.woff2`)} />
+      ))}
       <link rel="stylesheet" href={withPrefix("/fonts/open-sans/index.css")} id="site-fonts" />
       {metaTags.map((tag) => <meta key={tag.name || tag.property} {...tag} id={`meta-${tag.name || tag.property}`} />)}
       {linkTags.map((tag) => <link key={tag.hrefLang || tag.rel} {...tag} id={`link-${tag.hrefLang || tag.rel}`} />)}

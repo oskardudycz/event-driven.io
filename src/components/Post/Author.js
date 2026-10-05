@@ -2,7 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import config from "../../../content/meta/config";
-import avatar from "../../images/jpg/avatar.jpg";
+import { withPrefix } from "gatsby";
+
+const avatar = withPrefix("/images/avatar.webp");
 
 const Author = (props) => {
   const { note, theme } = props;
@@ -11,7 +13,7 @@ const Author = (props) => {
     <React.Fragment>
       <div className="author">
         <div className="avatar">
-          <img src={avatar} alt={config.siteTitle} width="60" height="60" />
+          <img src={avatar} alt={config.siteTitle} width="180" height="180" />
         </div>
         <div className="note" dangerouslySetInnerHTML={{ __html: note }} />
       </div>
