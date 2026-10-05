@@ -290,7 +290,7 @@ Implementation order: local search first, then localization simplification. Rese
 - [ ] Remove superseded custom hooks/providers only after their replacements pass; retain explicit article-specific canonical policy where needed.
 - [ ] Pass frozen install, smoke/lint, production build, the exact output contract and browser checks; record local, CI and deployment results separately.
 
-Deferred: CSS/Tailwind/theme variables, dark mode, Slices, npm migration and layout redesign. Neither search nor localization migration is implemented yet.
+Deferred: CSS/Tailwind/theme variables, dark mode, Slices, npm migration and layout redesign. MiniSearch is implemented and verified locally; localization migration remains unimplemented. See the latest deployment verification for hosted search status.
 
 ### Site-wide H1 validation — 2026-10-05
 
@@ -372,3 +372,39 @@ Final MiniSearch verification: frozen installation, full lint/format, smoke (76 
 Each locale has 336 unique documents. EN: 5,776,878 raw bytes / 1,737,205 gzip bytes; PL: 5,798,520 / 1,742,890. Standalone Chromium, three runs per locale at 4× CPU throttling: median initialization 426.6ms EN / 444.3ms PL; median maximum tested-query time 22.4ms / 22.3ms; retained index heap approximately 16.34MiB / 16.55MiB. These measurements exclude network transfer and do not guarantee real-phone latency. The first-use search payload remains about 1.7MB gzip and is requested only after entering a query; empty search/other pages do not load the index or engine.
 
 Algolia/InstantSearch dependencies, build/browser integration, public settings, CI secrets references, badge and obsolete cache-key inputs are removed. External account/index deletion was not performed. Cache compatibility now includes the search builder/options. Existing legacy styling/Gatsby/Yarn peer/deprecation warnings and cold category-query warnings remain; they are not search failures. CI/deployed behavior is pending. Next implementation stage: localization simplification, separately from CSS redesign and comment-provider decisions.
+
+### CodeQL and search presentation follow-up — 2026-10-05
+
+- [x] Fix all three reported CodeQL findings and add regressions for executable source/mapped links, malicious emphasis, pathological comment prefixes and Markdown title escaping.
+- [x] Add optimized canonical cover images and theme-aligned responsive search cards, highlights and pagination.
+- [x] Check installation, lint, smoke, production build, full tests and bilingual mobile/desktop browser behavior; record outcomes.
+- [ ] Verify the next hosted CodeQL/CI run and deployment separately. Local regressions do not establish hosted alert closure.
+
+Local acceptance: frozen installation, complete lint/format and smoke checks pass. All 19 importer tests (including the four new security regressions), six search tests and the full suite pass (17.89s). Every article cover and generated thumbnail file is checked. All 25 browser tests pass (51.54s command time), including real EN/PL searches, loaded covers, green highlights/hover/focus, responsive dimensions and the two new search-card screenshots. Existing unrelated baselines/tolerances and 694 routes, 222 redirects, 399 sitemap URLs and feed contracts are unchanged.
+
+Development checks pass modification/deletion/restoration (22.98s), and the development bundle rebuilds without errors after the ESM import-order fixes. Three warm production builds pass the same checks, including canonical deletion and exact source/llms restoration (123.77s total); the restored createPages stage took 1.109s, with no slow-query warning. Article source files are restored exactly. llms.txt changes only escape the existing TypeScript generic titles; no verification publications were added.
+
+A full clean production build passed in 732.22s with two workers. Profiling identified Sharp's native image processing: the cold build regenerated 3,365 image jobs, including existing blog images. A preliminary retry exited without a diagnostic, and another was interrupted during image processing; subsequent cold and warm builds completed successfully. Cold createPages/category-query warnings remain, along with the Babel large-bundle note. The two known home-link accessibility warnings are still owner decision 4; no label/branding change was made. Repeated warmed cover queries measured DOMINANT_COLOR at 1,232/759/1,017ms versus NONE at 1,009/766/771ms; the difference was small/inconsistent, so image placeholder settings were retained.
+
+Current indexes contain 336 documents and 331 covers per language (all 328 articles have covers). EN: 5,967,073 bytes / 1,772,809 gzip; PL: 5,988,605 bytes / 1,778,254 gzip. Cover metadata adds roughly 35KB gzip after removing image alt text from snippets. Image files load separately and lazily. Earlier initialization/heap measurements describe the text-only baseline; no new whole-page performance or real-device claim is made.
+
+Hosted CodeQL alert closure, CI and deployment remain pending. No alerts were dismissed/suppressed, and no commit, push or deployment was performed. Localization remains the next separate implementation stage; further cold image-encoding optimization needs its own measured pixel/size comparison.
+
+### Owner-supplied deployment verification — 2026-10-05
+
+- [x] Check the supplied immutable deployment: https://6ac38f11d8f02a012d48ea89--event-driven-io.netlify.app. Both language search manifests, sitemap index and representative pages return 200; canonical/sitemap URLs use event-driven.io. Homepage, Polish training and Introduction article have one H1; Service schema omits inLanguage. The immutable URL returns X-Robots-Tag: noindex.
+- [x] Verify hosted build/test CI for 2feb984: https://github.com/oskardudycz/event-driven.io/actions/runs/37304083266 succeeded. CodeQL analysis job https://github.com/oskardudycz/event-driven.io/actions/runs/37304083344 succeeded; original alerts 2/3/4 are marked fixed.
+- [x] Implement a correction for new CodeQL alert 5: canonical links are now rewritten directly during Markdown conversion, with parsed protocol checks and destination/title escaping. Stored mappings are no longer assigned to HTML href attributes. See the verification below.
+- [ ] Confirm alert 5 closes in the next hosted CodeQL scan. The previously deployed security check failed despite the successful analysis job; no alert was suppressed or dismissed.
+- [ ] Confirm/promote the desired deployment on event-driven.io and verify its assets. At this check, the main domain returned 404 for /search-index/manifest.json while the supplied deployment returned 200. Main-domain indexing, external validators and real-mobile checks remain pending.
+- [x] Complete the deployed browser rerun after stabilizing font readiness: all 25 checks pass (75.25s command time). The first run passed 23/25; two related-article screenshots captured fallback fonts before layout font state updated. The tests now wait for Open Sans and the existing 600 heading weight; original baselines and 3% tolerance remain unchanged. Test-file lint/format checks pass.
+
+Repeat against this deployment with `VISUAL_BASE_URL=https://6ac38f11d8f02a012d48ea89--event-driven-io.netlify.app yarn test:visual`. Browser checks cover bilingual search/covers, Polish glyph rendering, language navigation, categories, newsletter loading and existing screenshot contracts. They do not replace external rich-result validators, Lighthouse measurements or real-device checks.
+
+### CodeQL alert 5 — importer Markdown boundary — 2026-10-05
+
+- [x] Remove mapped-link assignments to Cheerio href attributes. Rewrite links through Turndown's link rule and keep stored values out of HTML attributes.
+- [x] Validate parsed http/https/mailto/tel protocols; reject ambiguous mapped paths and control characters. Encode Markdown destination delimiters and escape link titles while preserving relative routes, fragments, query values and local asset links.
+- [x] Extend hostile-input regressions for encoded/mixed-case executable schemes, unsafe mappings, Markdown breakout and HTML attribute delimiters. Parse generated Markdown with the same remark major used by Gatsby, declared directly as a development dependency; the lockfile retains existing resolved versions.
+- [ ] Record final frozen-install, lint and full-suite results. No article reimport, production markup change or deployment is required for this importer-only correction.
+- [ ] Confirm hosted CodeQL alert closure after the next push/scan; no scan result is inferred from local tests.

@@ -117,6 +117,8 @@ An article can optionally include a quoted frontmatter timestamp such as `publis
 
 ## Local search
 
+Search cards use shared green/neutral theme tokens and Gatsby-generated local cover thumbnails. Canonical fallback results keep the canonical article’s cover; entries without artwork remain text-only. Run `yarn test:search` for index/rendering checks and `yarn test:visual` for bilingual cover, color, keyboard and responsive-card regressions.
+
 MiniSearch replaces Algolia. `yarn develop` generates the indexes at startup and refreshes them after Markdown changes. Reload the search page to consume a regenerated index. Every Gatsby production build recreates English and Polish indexes under `public/search-index/`, using content-hashed filenames and a refreshed manifest. Readers download only their selected index and the engine after entering a search query. Search prefers genuine translations and labels canonical-language fallback links, returns one hit per article, retains categories/dates and pagination, and supports Polish diacritics, prefixes, typos and code identifiers. Result text is escaped before highlighting.
 
 Run `yarn test:search` after building for index, locale, stale-content and safe-rendering regressions. Run `yarn test:visual` against `yarn serve -H 127.0.0.1 -p 9000` for real browser searches and failure/retry checks. `yarn measure:search` measures initialization, query time and retained heap over three Chromium runs per locale with 4× CPU throttling; these are lab measurements, not real-device guarantees. `yarn test:cache` additionally modifies/deletes/restores an existing article across warm builds and verifies search data follows those changes. Do not run that integration check alongside content edits.

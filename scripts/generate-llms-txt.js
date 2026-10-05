@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
+const { markdownLabel } = require('./markdown-label.mjs');
 
 const projectRoot = path.resolve(__dirname, '..');
 const contentRoot = path.join(projectRoot, 'content');
@@ -86,7 +87,7 @@ const readEntries = (source, type) => {
 };
 
 const formatEntry = (entry) => {
-  const safeTitle = String(entry.title).replace(/\]/g, '\\]');
+  const safeTitle = markdownLabel(entry.title);
   return `- [${safeTitle}](${entry.url})${entry.description ? `: ${entry.description}` : ''}`;
 };
 

@@ -1,9 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { withPrefix } from 'gatsby';
 import Hit from './Hit';
+import PropTypes from 'prop-types';
+import { FaSearch } from 'react-icons/fa';
 import { usePageContext } from '../../i18n/page-context';
 
-const Search = () => {
+const Search = ({ theme }) => {
   const { lang = 'en' } = usePageContext();
   const [query, setQuery] = useState('');
   const [debounced, setDebounced] = useState('');
@@ -11,6 +13,7 @@ const Search = () => {
   const [status, setStatus] = useState('idle');
   const [retry, setRetry] = useState(0);
   const [page, setPage] = useState(0);
+  const resultsList = useRef(null);
   const copy =
     lang === 'pl'
       ? {
@@ -91,6 +94,10 @@ const Search = () => {
     setQuery(value);
     setPage(0);
   };
+  const goToPage = (page) => {
+    setPage(page);
+    resultsList.current?.scrollIntoView({ block: 'start' });
+  };
   return (
     <React.Fragment>
       <div className="search">
@@ -100,6 +107,7 @@ const Search = () => {
             role="search"
             onSubmit={(event) => event.preventDefault()}
           >
+            <FaSearch className="search-input-icon" aria-hidden="true" />
             <input
               className="ais-SearchBox-input"
               type="search"
@@ -110,6 +118,7 @@ const Search = () => {
               onChange={(event) => updateQuery(event.target.value)}
             />
             <button
+              hidden={!query}
               className="ais-SearchBox-reset"
               type="button"
               aria-label={copy.clear}
@@ -139,10 +148,10 @@ const Search = () => {
         </div>
         {requested && loaded?.lang === lang && results.length > 0 && (
           <>
-            <ul className="ais-Hits-list">
+            <ul className="ais-Hits-list" ref={resultsList}>
               {results.slice(currentPage * 10, currentPage * 10 + 10).map((hit) => (
                 <li className="ais-Hits-item" key={hit.id}>
-                  <Hit hit={hit} />
+                  <Hit hit={hit} theme={theme} />
                 </li>
               ))}
             </ul>
@@ -153,7 +162,7 @@ const Search = () => {
                     <button
                       type="button"
                       disabled={currentPage === 0}
-                      onClick={() => setPage(currentPage - 1)}
+                      onClick={() => goToPage(currentPage - 1)}
                     >
                       {copy.previous}
                     </button>
@@ -169,7 +178,7 @@ const Search = () => {
                           type="button"
                           aria-label={`${copy.navigation}: ${index + 1}`}
                           aria-current={index === currentPage ? 'page' : undefined}
-                          onClick={() => setPage(index)}
+                          onClick={() => goToPage(index)}
                         >
                           {index + 1}
                         </button>
@@ -179,7 +188,7 @@ const Search = () => {
                     <button
                       type="button"
                       disabled={currentPage === pages - 1}
-                      onClick={() => setPage(currentPage + 1)}
+                      onClick={() => goToPage(currentPage + 1)}
                     >
                       {copy.next}
                     </button>
@@ -192,76 +201,109 @@ const Search = () => {
       </div>
       {/* --- STYLES --- */}
       <style jsx global>{`
-        .ais-Pagination-list button {
-          background: none;
-          border: none;
-          cursor: pointer;
-        }
-        .ais-Pagination-list button:disabled {
-          opacity: 0.5;
-          cursor: default;
-        }
-        .ais-SearchBox {
-          width: 100%;
-        }
-        .ais-SearchBox-form {
-          position: relative;
-          border-bottom: 1px solid #aaa;
+        .search .ais-SearchBox-form {
           display: flex;
-          justify-content: space-between;
+          align-items: center;
+          gap: ${theme.space.s};
+          padding: ${theme.space.s} ${theme.space.m};
+          border: 1px solid ${theme.color.neutral.gray.f};
+          border-radius: ${theme.size.radius.default};
+          background: ${theme.background.color.primary};
         }
-        .ais-SearchBox-input {
+        .search .ais-SearchBox-form:focus-within {
+          border-color: ${theme.text.color.brand};
+          outline: 2px solid ${theme.text.color.brand};
+          outline-offset: 2px;
+        }
+        .search .search-input-icon {
+          color: ${theme.text.color.brand};
+          flex-shrink: 0;
+        }
+        .search .ais-SearchBox-input {
           min-width: 0;
           width: 100%;
           border: none;
-          padding: 0.2em;
-          font-size: 1.4em;
-          flex-grow: 1;
+          outline: none;
+          padding: ${theme.space.xs} 0;
+          font-family: inherit;
+          color: ${theme.text.color.primary};
+          background: transparent;
+          font-size: 1.1em;
+          flex: 1;
         }
-        .ais-SearchBox-submit,
-        .ais-SearchBox-reset {
-          background: none;
+        .search .ais-SearchBox-input::placeholder {
+          color: ${theme.color.neutral.gray.h};
+        }
+        .search .ais-SearchBox-reset {
           border: none;
-          fill: #666;
-          flex-grow: 0;
+          border-radius: ${theme.size.radius.small};
+          background: none;
+          color: ${theme.text.color.brand};
+          font-size: 1.4em;
+          min-width: 44px;
+          min-height: 44px;
+          cursor: pointer;
         }
-        .ais-Stats {
-          margin: 0.5em 0 2em 0.3em;
+        .search .ais-Stats,
+        .search .search-message {
+          margin: ${theme.space.m} 0;
           font-size: 0.9em;
-          color: #999;
+          color: ${theme.color.neutral.gray.h};
           display: block;
         }
-        .search-message {
-          margin: 1.5em 0 0.5em;
-          color: #777;
-        }
-        .ais-Hits-list {
+        .search .ais-Hits-list {
+          scroll-margin-top: 100px;
           list-style: none;
           padding: 0;
+          margin: 0;
         }
-        .ais-Pagination-list {
+        .search .ais-Pagination-list {
           display: flex;
+          flex-wrap: wrap;
+          gap: ${theme.space.xs};
           list-style: none;
           justify-content: center;
-          padding: 0;
+          padding: ${theme.space.m} 0;
+          margin: 0;
         }
-        .ais-Pagination-list button {
-          color: #666;
-          font-size: 1.2em;
-          display: block;
-          padding: 0.5em 0.5em 2em;
+        .search .ais-Pagination-list button,
+        .search-message button {
+          font: inherit;
+          border: 1px solid ${theme.line.color};
+          border-radius: ${theme.size.radius.small};
+          background: ${theme.background.color.primary};
+          color: ${theme.text.color.brand};
+          min-width: 44px;
+          min-height: 44px;
+          padding: ${theme.space.xs} ${theme.space.s};
+          cursor: pointer;
         }
-        .ais-Pagination-list button:hover {
-          color: red;
+        .search .ais-Pagination-list button:hover:not(:disabled),
+        .search .ais-SearchBox-reset:hover,
+        .search-message button:hover {
+          background: ${theme.color.brand.primary}18;
+          border-color: ${theme.color.brand.primary};
         }
-        .ais-Pagination-item.ais-Pagination-item--firstPage a,
-        .ais-Pagination-item.ais-Pagination-item--previousPage a,
-        .ais-Pagination-item.ais-Pagination-item--nextPage a {
-          padding: 0.4em 0.5em 0.6em;
+        .search .ais-Pagination-list button[aria-current='page'] {
+          background: ${theme.text.color.brand};
+          border-color: ${theme.text.color.brand};
+          color: ${theme.text.color.primaryInverse};
+          font-weight: ${theme.font.weight.bold};
+        }
+        .search .ais-Pagination-list button:disabled {
+          color: ${theme.color.neutral.gray.h};
+          background: ${theme.background.color.alt};
+          cursor: default;
+        }
+        .search button:focus-visible {
+          outline: 2px solid ${theme.text.color.brand};
+          outline-offset: 2px;
         }
       `}</style>
     </React.Fragment>
   );
 };
+
+Search.propTypes = { theme: PropTypes.object.isRequired };
 
 export default Search;

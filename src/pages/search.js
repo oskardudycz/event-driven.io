@@ -13,7 +13,7 @@ const SearchPage = () => {
       {(theme) => (
         <Article theme={theme}>
           <Headline title={lang === 'pl' ? 'Szukaj' : 'Search'} theme={theme} />
-          <Search />
+          <Search theme={theme} />
         </Article>
       )}
     </ThemeContext.Consumer>

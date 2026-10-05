@@ -110,7 +110,7 @@ Reposting is not automatically harmful, but publishing identical full articles i
 
 ### P0 — validate the deployed result
 
-- Keep reviewing intentional layout changes at desktop/mobile widths; the existing production screenshot tolerances and 15 browser checks are passing locally.
+- Keep reviewing intentional layout changes at desktop/mobile widths; the existing screenshot tolerances and 25 browser checks are passing locally. See the latest deployment verification below for hosted results.
 - The baseline presentation/runtime changes are deployed since 99519a3c and representative production pages/assets pass public checks. Deploy and verify the later category parity and routing/lint changes separately.
 - Submit the sitemap index in Google Search Console and Bing Webmaster Tools; request indexing for the consulting pages and a few cornerstone articles.
 - Use URL Inspection to compare the declared and Google-selected canonical URLs.
@@ -328,6 +328,14 @@ Preserve `/en/` and `/pl/` URLs, import/original-slug redirects, actual translat
 
 Both stages use the package comparison and acceptance criteria in `docs/gatsby-search-and-localization-review.md`. Tailwind, theme variables, dark mode, Slices, npm migration and layout redesign remain later stages.
 
+### Deployment verification — 2026-10-05
+
+The owner supplied https://6ac38f11d8f02a012d48ea89--event-driven-io.netlify.app. Its language search manifests and representative HTML are available: one H1 on the homepage, Polish training and Introduction article; Service schema omits the invalid inLanguage property; canonical and sitemap URLs point to event-driven.io. The immutable Netlify URL returns X-Robots-Tag: noindex, so indexing validation belongs on the main domain.
+
+Build/test CI for 2feb984 passed. The CodeQL analysis job completed successfully and alerts 2/3/4 are fixed, but the separate security check fails on new alert 5 at import/import-substack.js:329. Review that finding before claiming security acceptance. The main domain currently returns 404 for /search-index/manifest.json, unlike the supplied deployment; promotion/main-domain asset verification remains pending.
+
+The deployed browser rerun passes all 25 checks (75.25s command time). The first run passed 23/25: two related-article screenshots captured fallback fonts before the asynchronous layout font state updated. Their tests now wait for Open Sans and the existing heading weight, without changing screenshot baselines or tolerances. See todo.md for the repeatable command.
+
 ### Main-heading regression guard — 2026-10-05
 
 Require exactly one H1 in every generated standalone HTML page, including translated placeholders, utility routes and 404 pages. Exclude Gatsby's internal HTML fragments. Enforce this through the existing SEO test and CI gate; keep representative hydration/navigation browser checks as a separate guard. The site-wide audit found and corrected duplicate article-body H1s in both GDPR language files and missing headings on the search/newsletter routes. Live training HTML and hydrated pages already have one H1; Bing's indexed report requires a fresh crawl before its warning can be reassessed.
@@ -369,3 +377,15 @@ Proceed with the approved next search stage. Build per-language local indexes fr
 MiniSearch replacement is now implemented. The prototype passed a production build, full suite and 25 browser checks before removing the old integration. Algolia build/browser packages, configuration, workflow credentials and cache-key indexing mode are removed; no account/index was deleted. Genuine translations and canonical fallbacks produce 336 unique documents per language, with lazy engine/index downloads and safe snippets. The first-use gzip index cost is about 1.7MB per language. Final post-removal verification and warm-cache results are recorded in todo.md. Localization remains the next separate stage; the original Algolia analytics/indexing tasks are superseded rather than claimed externally verified.
 
 MiniSearch final local acceptance is complete: all five search regressions, full tests, 25 browser checks, frozen install, lint/format, smoke, actionlint and real warm-build modification/deletion/restoration pass. Development indexes also refresh on modification/deletion using Gatsby's supported createPages lifecycle, with a repeatable development check. Routes, redirects, sitemap/feed entries, source content and existing screenshot tolerances remain unchanged. The measured first-use cost is about 1.7MB gzip per language; a standalone 4× CPU-throttled Chromium benchmark measured approximately 0.43–0.44s asynchronous initialization, at most about 22ms per tested query and 16.5MiB retained index memory (medians, excluding network). Engine/index downloads occur only after a query is entered. Keep real-device/network and production verification separate from these local measurements. Localization is the next implementation stage; hosted-search analytics/indexing tasks are retired.
+
+## CodeQL corrections and search presentation — 2026-10-05
+
+Follow-up alert 5 flags assigning a stored link mapping to a Cheerio href attribute. Move canonical link rewriting to Turndown's link conversion boundary instead of mutating HTML. Validate parsed URL protocols, reject ambiguous mapped paths/control characters, and encode Markdown destination delimiters. Preserve relative blog routes, query/fragment values, external links, link titles and local assets. Test unsafe source/mapped URLs and Markdown breakout attempts; hosted alert closure still requires the next scan.
+
+Fix the three alerts from PR #50's CodeQL check without suppressions: replace the ambiguous SVG prefix regex with a forward scan; validate actual imported/mapped link destinations before assigning href, and additionally rebuild partial-word emphasis from allowed tags and encoded text; escape Markdown label backslashes and punctuation together. Add hostile-input regressions and distinguish local checks from the next hosted CodeQL run.
+
+The owner also requested a complete search presentation improvement: reuse the site's accessible green/neutral theme, add optimized local article covers through Gatsby's image pipeline, improve responsive result cards and pagination/focus states, and verify real bilingual mobile/desktop searches. Keep lazy search loading, canonical fallback policy and safe snippets intact. This authorizes search presentation changes, not the deferred whole-site redesign.
+
+Development validation also exposed Gatsby's internal legacy import-order checks. Correct the source with ESM side-effect imports (preserving stylesheet/polyfill order), move the theme import before declarations and replace unused side-effect map calls with forEach. Retain the project's flat ESLint configuration and active integrations. The home-label accessibility warnings remain the previously pending owner decision.
+
+CodeQL/search presentation follow-up is complete locally: all three reported patterns are corrected with regressions, and search has optimized canonical covers, theme-aligned highlights, responsive cards and pagination/focus states. Frozen install, lint, smoke, full tests, all 25 browser checks and development/warm-build updates pass. Routing/SEO/feed contracts remain. The cold build passed but exposed expensive native Sharp work (3,365 jobs); warm restoration completes without the new slow-query warning. No placeholder/encoding policy change was justified by the warmed-query comparison. Hosted CodeQL/CI/deployment confirmation remains pending, with exact results in todo.md. Localization and the prior review-only decisions remain separate.

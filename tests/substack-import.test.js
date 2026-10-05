@@ -1,5 +1,6 @@
 const assert = require('node:assert/strict');
 const { test } = require('node:test');
+const { execFileSync } = require('node:child_process');
 const fs = require('node:fs/promises');
 const os = require('node:os');
 const path = require('node:path');
@@ -10,6 +11,7 @@ const {
   normalizeUrl,
   sourceLocation,
   originalImageUrl,
+  imageExtension,
 } = require('../import/import-substack');
 
 const source = 'https://example.substack.com/p/example';
@@ -68,7 +70,7 @@ test('imports full article and local assets in both languages, preserving embeds
     assert.deepEqual(fetched, [source, image]); // cover and body reuse one download
     assert.deepEqual(await fs.readFile(path.join(directory, '2026-09-07-cover.png')), png);
     assert.match(enBody, /\*\*world\*\*/);
-    assert.match(enBody, /<em>That can be fine if you'<\/em>re learning\./);
+    assert.match(enBody, /<em>That can be fine if you&#39;<\/em>re learning\./);
     assert.match(enBody, /\[read more\]\(https:\/\/example.substack.com\/p\/another\)/);
     assert.match(enBody, /!\[Example image\]\(2026-09-07-cover.png\)/);
     assert.doesNotMatch(enBody, /^\[$/m);
@@ -416,4 +418,155 @@ test('imports actual publication timestamps without guessing date-only publicati
     extractPost(html.replace('2026-09-07T11:49:46Z', '2026-09-07'), source).publishedAt,
     undefined,
   );
+});
+
+test('SVG detection handles declarations and comments without regex backtracking', () => {
+  for (const svg of ['<svg></svg>', ' \n<?xml version="1.0"?>\n<!-- one --><!-- two --><svg />'])
+    assert.equal(imageExtension(Buffer.from(svg)), '.svg');
+  for (const invalid of ['<!-- missing end', '<?xml missing end', '<svgscript>'])
+    assert.throws(() => imageExtension(Buffer.from(invalid)), /Unsupported image/);
+  // A regressed synchronous regex cannot be interrupted by a node:test timeout.
+  // Bound the hostile case in a child so CI fails instead of hanging.
+  execFileSync(
+    process.execPath,
+    [
+      '-e',
+      `
+    const assert = require('node:assert/strict');
+    const { imageExtension } = require('./import/import-substack');
+    assert.throws(() => imageExtension(Buffer.from('<!--' + '--><!--'.repeat(30000) + 'x')), /Unsupported image/);
+  `,
+    ],
+    { cwd: path.resolve(__dirname, '..'), timeout: 5000 },
+  );
+});
+
+test('partial-word emphasis preserves formatting while stripping executable HTML', async () => {
+  const output = await fs.mkdtemp(path.join(os.tmpdir(), 'substack-emphasis-'));
+  try {
+    const malicious = html.replace(
+      '<p>Cheers!</p>',
+      `<p><em onclick="attack()"><strong onmouseover="attack()">That</strong> &lt;img src=x onerror=attack()&gt; &amp; you'</em>re safe.</p>`,
+    );
+    const directory = await importPost(
+      { url: source },
+      { output, html: malicious, download: async () => new Response(png) },
+    );
+    const markdown = await fs.readFile(path.join(directory, 'index.en.md'), 'utf8');
+    assert.match(
+      markdown,
+      /<em><strong>That<\/strong> &lt;img src=x onerror=attack\(\)&gt; &amp; you&#39;<\/em>re safe\./,
+    );
+    assert.doesNotMatch(markdown, /onclick=|onmouseover=|<img src=x/);
+  } finally {
+    await fs.rm(output, { recursive: true, force: true });
+  }
+});
+
+test('llms Markdown labels escape backslashes and metacharacters together', () => {
+  const { markdownLabel } = require('../scripts/markdown-label.mjs');
+  assert.equal(markdownLabel('ordinary title'), 'ordinary title');
+  for (const character of ['\\', '[', ']', '*', '_', '`', '<', '>'])
+    assert.equal(markdownLabel(character.repeat(2)), ('\\' + character).repeat(2));
+  assert.equal(markdownLabel('\\] [link]'), '\\'.repeat(3) + '] \\[link\\]');
+});
+
+test('article links reject executable schemes from source HTML and stored mappings', async () => {
+  const output = await fs.mkdtemp(path.join(os.tmpdir(), 'substack-link-security-'));
+  try {
+    for (const href of [
+      'javascript:alert(1)',
+      'data:text/html,<script>alert(1)</script>',
+      'vbscript:attack()',
+      'java&#x09;script:attack()',
+      'JaVaScRiPt:attack()',
+    ]) {
+      await assert.rejects(
+        importPost(
+          { url: source },
+          {
+            output,
+            html: html.replace('/p/another', href),
+            download: async () => new Response(png),
+          },
+        ),
+        /Unsupported article link/,
+      );
+      assert.deepEqual(await fs.readdir(output), []);
+    }
+    for (const target of [
+      'javascript:attack()',
+      'data:text/html,<script>attack()</script>',
+      'vbscript:attack()',
+      '/\\evil.example/attack',
+      '//evil.example/attack',
+      '/en/safe/\u0000attack',
+    ]) {
+      await assert.rejects(
+        importPost(
+          { url: source },
+          {
+            output,
+            html,
+            links: new Map([['example.substack.com/p/another', target]]),
+            download: async () => new Response(png),
+          },
+        ),
+        /Unsupported article link/,
+      );
+      assert.deepEqual(await fs.readdir(output), []);
+    }
+  } finally {
+    await fs.rm(output, { recursive: true, force: true });
+  }
+});
+
+test('mapped links cannot break out of Markdown and retain queries, fragments and titles', async () => {
+  const output = await fs.mkdtemp(path.join(os.tmpdir(), 'substack-markdown-links-'));
+  try {
+    const target = '/en/article/)[attack](javascript:alert(1))?filter=a&b=c#details';
+    const page = `<meta property="og:title" content="Links"><meta property="article:published_time" content="2025-01-01">
+      <div class="body markup"><p><a href="/p/another" title="A &quot;quoted&quot; title">Read more</a></p>
+      <p><a href="#details">Section</a> <a href="mailto:hello@example.com">Email</a> <a href="tel:+48123456789">Phone</a></p></div>`;
+    const directory = await importPost(
+      { url: source },
+      { output, html: page, links: new Map([['example.substack.com/p/another', target]]) },
+    );
+    const markdown = await fs.readFile(path.join(directory, 'index.en.md'), 'utf8');
+    const body = markdown.replace(/^---\n[\s\S]*?\n---\n/, '');
+    const tree = require('remark')().parse(body);
+    const nodes = [];
+    const visit = (node) => {
+      nodes.push(node);
+      node.children?.forEach(visit);
+    };
+    visit(tree);
+    const links = nodes.filter((node) => node.type === 'link');
+    assert.equal(links.length, 4);
+    assert.equal(decodeURI(links[0].url), target);
+    assert.equal(links[0].title, 'A "quoted" title');
+    assert.deepEqual(
+      links.slice(1).map((node) => node.url),
+      ['#details', 'mailto:hello@example.com', 'tel:+48123456789'],
+    );
+    assert.equal(nodes.filter((node) => node.type === 'html').length, 0);
+    assert.doesNotMatch(markdown, /\]\(javascript:/);
+  } finally {
+    await fs.rm(output, { recursive: true, force: true });
+  }
+});
+
+test('link encoding keeps HTML attribute delimiters inside one Markdown destination', async () => {
+  const { markdownLinkDestination, markdownLinkTitle } =
+    await import('../import/markdown-links.mjs');
+  const destination = '/en/article/"><img src=x onerror=attack()>?value=a&other=b#part';
+  const title = 'A "quoted" <img onerror=attack()> title';
+  const markdown = `[Read](${markdownLinkDestination(destination, source)}${markdownLinkTitle(title)})`;
+  const nodes = require('remark')().parse(markdown).children[0].children;
+  assert.equal(nodes.length, 1);
+  assert.equal(nodes[0].type, 'link');
+  assert.equal(decodeURI(nodes[0].url), destination);
+  assert.equal(nodes[0].title, title);
+  assert.doesNotMatch(markdown, /<img/);
+  assert.equal(markdownLinkDestination('#', source), '#');
 });

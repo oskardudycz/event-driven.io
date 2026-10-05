@@ -2,7 +2,7 @@
 
 ## MiniSearch implementation status — 2026-10-05
 
-The approved local-search replacement is implemented. Gatsby generates one English and one Polish index from current Markdown nodes; real translations take precedence, placeholders are excluded, and untranslated articles link to the canonical language with a visible language label. The engine and index are requested only after typing. Results retain the existing card/metadata/pagination styling and escape text before highlighting; loading, empty, error/retry and keyboard controls are localized. Content-hashed files plus a revalidated manifest replace stale indexes on each build.
+The approved local-search replacement is implemented. Gatsby generates one English and one Polish index from current Markdown nodes; real translations take precedence, placeholders are excluded, and untranslated articles link to the canonical language with a visible language label. The engine and index are requested only after typing. Results now use the site’s green/neutral theme, optimized local covers, responsive cards and accessible pagination, and escape text before highlighting; loading, empty, error/retry and keyboard controls are localized. Content-hashed files plus a revalidated manifest replace stale indexes on each build.
 
 The prototype passed the production build, full tests, five search regressions (including rendered XSS checks) and all 25 browser checks before Algolia removal. Algolia/InstantSearch packages, public configuration, build indexing, credentials in CI, branding and cache-key indexing partitions have now been removed. The external account/index remains untouched. Final post-removal verification passes: full tests, all 25 browser checks, frozen install, lint/format, smoke, actionlint and warm-cache modification/deletion/restoration. Exact route/redirect/sitemap/feed contracts and screenshots are unchanged. CI/deployment remain separate checks. The localization-provider migration below is still a later stage.
 
@@ -24,7 +24,7 @@ Gatsby provides the data/build APIs and documents search integrations; it does n
 
 Sources: [MiniSearch documentation](https://github.com/lucaong/minisearch), [published MiniSearch manifest](https://registry.npmjs.org/minisearch/7.2.0), [published local-search plugin manifest](https://registry.npmjs.org/gatsby-plugin-local-search/2.0.1).
 
-The current site already has canonical article paths, categories, publication dates, language information and searchable Markdown content in its Gatsby graph. No external crawler or search server is required to generate local search data. The current Algolia transformer excludes placeholder translations and emits 4500-character chunks; local search should deduplicate article hits and preserve useful code text, headings and contextual snippets.
+The current site already has canonical article paths, categories, publication dates, language information and searchable Markdown content in its Gatsby graph. No external crawler or search server is required to generate local search data. The previous Algolia transformer excludes placeholder translations and emits 4500-character chunks; local search should deduplicate article hits and preserve useful code text, headings and contextual snippets.
 
 Next implementation sequence:
 
@@ -60,7 +60,7 @@ Recommended next step: prototype gatsby-plugin-react-i18next on static routes an
 
 The superseded gatsby-plugin-i18n 1.0.1 is not this candidate. It was removed in commit 0163b29 because its old hooks overlap with the site's own logic; that removal passed the local route/metadata/browser checks.
 
-## Final local search measurements and verification
+## Initial text-only search measurements and verification
 
 | Locale  | Unique documents | Raw bytes | Gzip bytes | Median initialization at 4× CPU | Median maximum tested-query time | Retained index heap |
 | ------- | ---------------: | --------: | ---------: | ------------------------------: | -------------------------------: | ------------------: |
@@ -72,3 +72,19 @@ Three fresh standalone Chromium runs per language. Initialization excludes netwo
 Final production build passed after Algolia removal; full tests (35.27s), 25 browser checks (61.57s), frozen install, lint/format, smoke and actionlint pass. The warm-cache check (139.76s) verifies modified content, canonical deletion, fallback behavior, stale asset cleanup and exact source/llms restoration. Development checks verify the same source refresh lifecycle; `yarn test:search:dev` is available alongside `yarn test:search`, `yarn test:cache` and `yarn measure:search`. Browser checks prove no engine/index download before typing, real EN/PL searches, code identifiers, pagination, empty states, failure/retry and no hosted requests. Rendering checks verify malicious source text is escaped while matched terms remain highlighted.
 
 Development regeneration uses Gatsby's documented [createPages](https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/#createPages) and [onPostBootstrap](https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/#onPostBootstrap); production generation uses [onPostBuild](https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/#onPostBuild). Reload a development search page to consume regenerated data. CI execution and production/mobile checks remain pending. No external search account/index was deleted and no localization-provider migration was included.
+
+## Search presentation follow-up — 2026-10-05
+
+The owner requested a fuller presentation after reviewing the first implementation. Search cards now use shared theme tokens rather than red hover states or yellow highlights. Article covers use Gatsby's [dynamic image pipeline](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/), with local 240/480px variants, WebP sources, lazy loading and reserved space. Thumbnail containment preserves diagrams. Canonical selection also selects the associated cover; pages without artwork use a text-only card. Covers are decorative within the article link, so screen readers receive the title once. Metadata, contextual snippets, translation labels, keyboard focus and wrapping mobile pagination remain available.
+
+Real browser tests check loaded cover files, responsive thumbnail dimensions, theme colors, hover/focus and overflow for both languages. Dedicated desktop/mobile card screenshots protect this requested design; existing unrelated baselines and tolerances remain unchanged. Local validation passes: the full suite, six search tests, all 25 browser checks, frozen install/lint/smoke, and development/warm-build modification/deletion/restoration. Exact results are recorded in todo.md; CI and deployment remain separate.
+
+## CodeQL corrections — 2026-10-05
+
+PR #50 reported three findings. SVG detection now scans declarations/comments forwards, removing the ambiguous nested regex that allowed [exponential backtracking](https://codeql.github.com/codeql-query-help/javascript/js-redos/). Imported links validate the actual destination, including values from stored link mappings, before assigning href; executable schemes fail the staged import without leaving an article behind. This addresses the reported [stored XSS](https://codeql.github.com/codeql-query-help/javascript/js-stored-xss/) path. Preserved partial-word emphasis additionally uses allowed tags and escape-html encoded text, retaining nested formatting without source attributes. llms.txt titles escape backslashes and Markdown/HTML punctuation together, correcting [incomplete escaping](https://codeql.github.com/codeql-query-help/javascript/js-incomplete-sanitization/); regenerated TypeScript generic titles now retain their literal angle brackets.
+
+Regression checks cover executable source/mapped URLs, hostile emphasis, repeated comment prefixes in a time-bounded child process and adjacent backslashes/brackets. `yarn test:substack` runs these alongside the existing import tests; the full CI test command already includes them. No alerts were suppressed or dismissed. Closure of hosted CodeQL alerts requires a new scan of these changes.
+
+Current cover-enabled payloads are 5,967,073 bytes / 1,772,809 gzip for English and 5,988,605 / 1,778,254 for Polish, each with 336 documents and 331 covers. All 328 article covers and their generated files pass validation. The earlier table is the text-only baseline; its initialization/heap figures were not remeasured for this presentation change.
+
+Cold profiling showed native Sharp processing, not a proven render failure: a clean two-worker build completed 3,365 image jobs in 732.22s. Subsequent three-build modification/deletion/restoration checks passed in 123.77s; restored createPages took 1.109s without the cold slow-query warning. A six-query warmed comparison of color versus neutral placeholders was small/inconsistent, so the image policy remains unchanged. Broader cold PNG encoding work needs a separate pixel/size comparison. Development import-order errors were corrected with ESM stylesheet/polyfill imports and a hoisted theme import; the bundle rebuilt successfully. The two existing home-label warnings remain the pending owner choice.

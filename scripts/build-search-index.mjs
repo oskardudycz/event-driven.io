@@ -6,13 +6,18 @@ import { gzipSync, brotliCompressSync, constants } from 'node:zlib';
 import { searchDocuments } from '../src/search/documents.mjs';
 import { indexOptions } from '../src/search/options.mjs';
 
-export async function writeSearchIndexes(nodes, publicDirectory, languages = ['en', 'pl']) {
+export async function writeSearchIndexes(
+  nodes,
+  publicDirectory,
+  languages = ['en', 'pl'],
+  covers = new Map(),
+) {
   const directory = join(publicDirectory, 'search-index');
   await mkdir(directory, { recursive: true });
   const manifest = {};
   const metrics = {};
   for (const language of languages) {
-    const documents = searchDocuments(nodes, language);
+    const documents = searchDocuments(nodes, language, 'en', covers);
     const index = new MiniSearch(indexOptions);
     index.addAll(documents);
     const json = JSON.stringify(index);

@@ -73,7 +73,8 @@ test('imported bare paths redirect permanently to English before the catch-all',
       actions,
       graphql: async (query) => {
         assert.match(query, /redirectFrom/);
-        return { data: { allMarkdownRemark: { edges: nodes } } };
+        // Cover resolution is verified by the generated search-index tests.
+        return { data: { allMarkdownRemark: { edges: nodes }, searchCovers: { nodes: [] } } };
       },
     });
     assert.equal(redirects.length, expected.length);
