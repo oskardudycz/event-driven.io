@@ -147,7 +147,20 @@ async function inspectArchive() {
       await firstCover.elementHandle(),
       { timeout: 5_000 },
     );
+    await page.waitForFunction(() =>
+      getComputedStyle(document.body).fontFamily.includes('Open Sans'),
+    );
     await page.evaluate(() => document.fonts.ready);
+    if (updateSnapshots) {
+      // Require an explicit content expectation before replacing this moving baseline.
+      expect(
+        process.env.ARCHIVE_SNAPSHOT_SLUG,
+        'Set ARCHIVE_SNAPSHOT_SLUG to the reviewed newest article slug',
+      ).toBeTruthy();
+      expect(await page.locator('.main li a.link').first().getAttribute('href')).toBe(
+        `/en/${process.env.ARCHIVE_SNAPSHOT_SLUG}/`,
+      );
+    }
     await compareScreenshot(page, 'articles-desktop');
     return {
       headings: await page.locator('h1').count(),
@@ -899,13 +912,18 @@ test('separate English and Polish pages keep their locale while following recipr
       await returnLink.waitFor({ state: 'visible' });
       await returnLink.click();
       await page.waitForURL(`**/en/${slug}/`);
-      expect(await page.locator('html').getAttribute('lang')).toBe('en');
+      // The URL changes before Gatsby Head commits the next page's attributes.
+      await expect.poll(() => page.locator('html').getAttribute('lang')).toBe('en');
+      await expect.poll(() => page.locator('.related h2').innerText()).toBe('Related articles');
+      await expect
+        .poll(() => page.locator('link[rel=canonical]').getAttribute('href'))
+        .toBe(`https://event-driven.io/en/${slug}/`);
       expect(await page.locator('h1').count()).toBe(1);
       await page.getByRole('link', { name: 'Change language to pl' }).click();
       await page.waitForURL(`**/pl/${slug}/`);
       await expect.poll(() => page.locator('.related h2').innerText()).toBe('Powiązane artykuły');
-      expect(await page.locator('html').getAttribute('lang')).toBe('pl');
-      expect(await page.locator('footer').count()).toBe(1);
+      await expect.poll(() => page.locator('html').getAttribute('lang')).toBe('pl');
+      expect(await page.locator('footer.footer').count()).toBe(1);
     }
   } finally {
     await Promise.all(pages.map((page) => page.close()));

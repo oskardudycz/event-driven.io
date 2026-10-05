@@ -15,6 +15,7 @@
     "test:visual": "vitest run tests/visual.test.js",
     "audit:performance": "node ./scripts/audit-performance.mjs",
     "test:visual:update": "UPDATE_VISUAL_SNAPSHOTS=1 vitest run tests/visual.test.js",
+    "test:visual:update:archive": "UPDATE_VISUAL_SNAPSHOTS=1 vitest run tests/visual.test.js -t 'article archive hydrates once'",
     "smoke": "node ./scripts/smoke-migration.js",
     "verify:build-contract": "node ./scripts/verify-build-contract.js",
     "update:build-contract": "node ./scripts/update-build-contract.js",

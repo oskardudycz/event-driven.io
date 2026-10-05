@@ -411,6 +411,17 @@ Repeat against this deployment with `VISUAL_BASE_URL=https://6ac38f11d8f02a012d4
 
 ## Latest article and multilingual provider migration — 2026-10-05
 
-Import the requested “Open Source, a relict, a charity or still the thing?” article into both language routes with local images, source provenance, canonical English fallback and original-slug redirect. Review the exact build-contract delta for the new article before updating its baseline.
+Import the requested “Open Source, a relic, a charity or still the thing?” article into both language routes with local images, source provenance, canonical English fallback and original-slug redirect. Review the exact build-contract delta for the new article before updating its baseline.
 
 Next implement the reviewed gatsby-plugin-react-i18next provider and localized navigation stage with its compatible translation-library peers. Source translation JSON through Gatsby and query it on every page. Preserve the site's explicit Markdown/category canonical policy and server-side redirects; configure the plugin to recognize existing language-prefixed routes without generating a second set. Replace the global mutable translation singleton and obsolete provider, keeping the editorial page context for availability. Validate exact routes/redirects/sitemap/feed, full tests and bilingual browser navigation/screenshots. Record local results separately from hosted CI/deployment; do not infer CodeQL closure from local checks.
+
+## Active CI browser repair — 2026-10-05
+
+- [x] Review archive screenshot difference after importing the Open Source article; update only an intentional content baseline, retaining the 3% threshold.
+- [x] Synchronize reciprocal navigation assertions with Gatsby Head updates and count the site footer explicitly.
+- [x] Run production build, full tests, all browser checks, smoke and lint on the reverted checkout. Production build passed in 152.46s, full tests in 24.94s and all 26 browser checks in 52.70s. Smoke checked 77 source files/18 queries; lint/format passed. Existing category slow-query warnings remain.
+- [ ] Confirm the next hosted CI run succeeds; deployment remains on the owner's previous version meanwhile.
+
+Previous CSS-stage acceptance does not apply to this reverted checkout. Resume that stage separately after the browser gate passes.
+
+- [x] Add an archive-only snapshot update command with an explicit expected-slug guard and document review/rerun steps in README and the fixture guide. Verify a wrong-slug attempt fails while preserving the PNG hash; the reviewed correct-slug update and subsequent complete browser comparison pass.
