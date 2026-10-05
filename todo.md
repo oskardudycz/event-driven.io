@@ -339,3 +339,10 @@ Additional research: [production audit review](docs/pagespeed-review.md). Apply 
 - [x] Keep the real distant-article lazy-loading check and mocked newsletter form. Add a deliberately pending same-origin request throughout navigation and scroll to reproduce the reported CI failure condition without external-service timing.
 - [x] Final browser validation: all 18 checks passed (40.51s command time), including the deliberately pending-request regression; diff checks passed. No production implementation or screenshot tolerance changes were needed.
 - [ ] Verify the next CI run separately; local success does not establish CI success.
+
+### Polish glyph rendering — completed locally
+
+- [x] Reproduce system-font fallback with a failing actual-glyph browser test. Confirm matching Fontsource 4.0.0 Latin files are byte-identical to the bundled legacy Open Sans files.
+- [x] Add matching Latin Extended WOFF2/WOFF subsets for normal/italic weights 300/400/600/700/800 and Unicode ranges. Remove installed-font overrides to keep subsets consistent; retain the font design and unchanged Latin assets. Record source/version/license.
+- [x] Verify actual glyphs ĄĆĘŁŃÓŚŹŻ/ąćęłńóśźż use web Open Sans for all ten weight/style combinations. Build passed (21.06s), full tests passed (19.73s; 15 performance regressions), all 19 browser checks passed (48.73s). Smoke/lint/diff checks and original screenshots/tolerances pass; routes/redirects/sitemap/feed contracts unchanged.
+- [ ] Verify next CI/deployment and Polish typography on production. No deployment was performed here.

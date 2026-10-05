@@ -541,3 +541,41 @@ test("responsive covers match actual card widths across breakpoints and device p
     }
   }
 }, 60_000);
+
+test("Polish diacritics use the web Open Sans face across weights and italics", async () => {
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  try {
+    await page.goto(new URL("/pl/training/", baseUrl).href, { waitUntil: "domcontentloaded" });
+    await page.waitForFunction(() => getComputedStyle(document.body).fontFamily.includes("Open Sans"));
+    await page.evaluate(async () => {
+      for (const weight of [300, 400, 600, 700, 800]) {
+        for (const style of ["normal", "italic"]) {
+          const probe = document.createElement("span");
+          probe.id = `polish-font-${weight}-${style}`;
+          probe.style.cssText = `display:block;font: ${style} ${weight} 24px "Open Sans", sans-serif`;
+          probe.textContent = "ĄĆĘŁŃÓŚŹŻ ąćęłńóśźż";
+          document.body.append(probe);
+          await document.fonts.load(`${style} ${weight} 24px "Open Sans"`, probe.textContent);
+        }
+      }
+      await document.fonts.ready;
+    });
+    const session = await page.context().newCDPSession(page);
+    await session.send("DOM.enable");
+    await session.send("CSS.enable");
+    const { root } = await session.send("DOM.getDocument");
+    for (const weight of [300, 400, 600, 700, 800]) {
+      for (const style of ["normal", "italic"]) {
+        const { nodeId } = await session.send("DOM.querySelector", { nodeId: root.nodeId, selector: `#polish-font-${weight}-${style}` });
+        const { fonts } = await session.send("CSS.getPlatformFontsForNode", { nodeId });
+        expect(fonts.length, `${weight} ${style}`).toBeGreaterThan(0);
+        for (const font of fonts) {
+          expect(font.familyName, `${weight} ${style}: ${font.glyphCount} glyphs`).toMatch(/^Open Sans/);
+          expect(font.isCustomFont, `${weight} ${style}: ${font.familyName}`).toBe(true);
+        }
+      }
+    }
+  } finally {
+    await page.close();
+  }
+}, 60_000);
