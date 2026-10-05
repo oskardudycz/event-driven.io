@@ -126,3 +126,14 @@ Run `yarn test:search` after building for index, locale, stale-content and safe-
 To repeat development refresh checks, start `yarn develop -H 127.0.0.1 -p 8001` and run `yarn test:search:dev` in another terminal. It temporarily modifies/deletes/restores an existing article; keep content edits paused during that check. Set `DEV_SEARCH_BASE_URL` if using another address.
 
 No Algolia credentials are needed for installation, CI or deployment. The old account/index is not deleted by this change; any account cleanup is a separate owner action. Localization-provider migration remains a separate next step.
+
+### Updating the archive screenshot after publishing an article
+
+A new first article intentionally changes the archive cover, title and excerpt. After a production build, serve it with `yarn serve -H 127.0.0.1 -p 9000`, run `yarn test:visual`, and inspect `visual-artifacts/articles-desktop.png` and `articles-desktop-diff.png`. Check that only the intended content changed and the header, spacing and cover dimensions remain correct. Then run:
+
+```sh
+ARCHIVE_SNAPSHOT_SLUG=open-source-a-relict-a-charity-or yarn test:visual:update:archive
+yarn test:visual
+```
+
+Replace the slug with the reviewed newest article. The update command verifies that exact first-card link and replaces only `tests/fixtures/visual/articles-desktop.png`. Review and commit the PNG diff with the article. Imports and CI never update baselines automatically; the 3% comparison tolerance stays unchanged.

@@ -392,6 +392,14 @@ CodeQL/search presentation follow-up is complete locally: all three reported pat
 
 ## Latest article and multilingual provider migration — 2026-10-05
 
-Import the requested “Open Source, a relict, a charity or still the thing?” article into both language routes with local images, source provenance, canonical English fallback and original-slug redirect. Review the exact build-contract delta for the new article before updating its baseline.
+Import the requested “Open Source, a relic, a charity or still the thing?” article into both language routes with local images, source provenance, canonical English fallback and original-slug redirect. Review the exact build-contract delta for the new article before updating its baseline.
 
 Next implement the reviewed gatsby-plugin-react-i18next provider and localized navigation stage with its compatible translation-library peers. Source translation JSON through Gatsby and query it on every page. Preserve the site's explicit Markdown/category canonical policy and server-side redirects; configure the plugin to recognize existing language-prefixed routes without generating a second set. Replace the global mutable translation singleton and obsolete provider, keeping the editorial page context for availability. Validate exact routes/redirects/sitemap/feed, full tests and bilingual browser navigation/screenshots. Record local results separately from hosted CI/deployment; do not infer CodeQL closure from local checks.
+
+## CI browser regression repair — 2026-10-05
+
+The owner reverted to commit 4a7e4ee after CI reported an archive screenshot mismatch and a missing html language attribute during reciprocal navigation. Pause CSS work while repairing this checkout. Review the archive baseline against the intentionally imported Open Source article; retain the 3% tolerance. Wait for Gatsby Head to commit language metadata after client navigation, and distinguish the site footer from the article footer. Validate the production build, complete suite and browser checks before recording acceptance; hosted CI/deployment remain separate.
+
+Future imports use an explicit archive-only snapshot command guarded by the expected newest article slug. Review the image/diff before regeneration and rerun the complete browser suite afterward; never enable automatic baseline updates in imports or CI.
+
+CI repair local acceptance: production build, full suite, all 26 browser checks, lint/format and smoke pass. Only the archive PNG was refreshed; other baselines and the 3% tolerance remain unchanged. The wrong-slug update guard was tested and preserves the existing PNG. Hosted CI and deployment confirmation remain pending.
