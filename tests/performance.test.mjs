@@ -120,3 +120,22 @@ test("Introduction WebP preserves the PNG cover's dimensions and visual detail w
   const differences = pixelmatch(original.data, optimized.data, null, width, height, { threshold: 0.2 });
   assert.ok(differences / (width * height) <= 0.03, "cover detail must remain within existing screenshot tolerance");
 });
+
+test("font CSS includes basic and extended Latin files for every weight/style", () => {
+  const css = readFileSync("public/fonts/open-sans/index.css", "utf8");
+  const faces = [...css.matchAll(/@font-face\s*\{([^}]+)\}/g)].map(match => match[1]);
+  assert.equal(faces.length, 20);
+  for (const weight of [300, 400, 600, 700, 800]) {
+    for (const style of ["normal", "italic"]) {
+      const matching = faces.filter(face => face.includes(`font-weight: ${weight};`) && face.includes(`font-style: ${style};`));
+      assert.equal(matching.length, 2);
+      assert.ok(matching.some(face => /open-sans-latin-ext-/.test(face)));
+      assert.ok(matching.every(face => /unicode-range:/.test(face) && !/local\(/.test(face)));
+      for (const face of matching) {
+        for (const [, file] of face.matchAll(/url\('\.\/(.*?)'\)/g)) {
+          assert.ok(existsSync(join("public/fonts/open-sans", file)), file);
+        }
+      }
+    }
+  }
+});

@@ -356,3 +356,9 @@ Implement responsive card sizes, WebP Markdown images with original-format fallb
 Local result: final build, full tests including 14 performance regressions, all 18 browser checks, frozen install, smoke and scoped lint pass. The measured 800px Introduction WebP saves about 80% versus PNG with the existing visual tolerance. Native iframe lazy loading defers distant embeds but does not defer Introduction's nearer embed in Chromium; stricter automatic viewport loading remains a review-only decision. Keep CI/deployed checks and any whole-page performance claims separate from these local results.
 
 CI navigation regression follow-up: browser readiness uses DOM plus explicit font/hydration/iframe checks, never networkidle. The newsletter regression deliberately holds a request open to ensure analytics/comment network activity cannot reintroduce the reported navigation timeout. Preserve the native-lazy proximity caveat and real distant-article test.
+
+### Polish font coverage correction — 2026-10-05
+
+Existing Open Sans 1.10 files cover basic Latin only, forcing Polish letters into a system fallback. Add matching Latin Extended subsets for every existing weight/style, with explicit Unicode ranges and consistent self-hosted sources. Preserve font design, sizing and Latin assets. Verify actual rendered glyph fonts through Chromium's platform-font inspection, not just computed font-family; retain existing screenshot tolerances.
+
+Polish coverage result: matching extended subsets are installed and all 19 browser checks (including actual glyph-font inspection), the full tests with 15 performance regressions, build, smoke and scoped lint pass. Existing screenshots/tolerances and output contracts remain. CI/deployment verification is pending.
