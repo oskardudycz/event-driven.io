@@ -31,7 +31,7 @@ const NextPrev = (props) => {
                 {t('articleNavigation.later')}
               </span>
               <span className={`title ${styles.title}`}>{nextTitle}</span>
-              <time>{nextPrefix}</time>
+              <time className={styles.date}>{nextPrefix}</time>
             </span>
           </Link>
         )}
@@ -43,7 +43,7 @@ const NextPrev = (props) => {
                 {t('articleNavigation.earlier')}
               </span>
               <span className={`title ${styles.title}`}>{prevTitle}</span>
-              <time>{prevPrefix}</time>
+              <time className={styles.date}>{prevPrefix}</time>
             </span>
           </Link>
         )}

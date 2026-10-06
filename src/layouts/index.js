@@ -70,12 +70,10 @@ class Layout extends React.Component {
 
     font.load(null, 10000).then(
       () => {
-        console.log(`${name} is available`);
         if (this.mounted) this.setState({ [`${name}loaded`]: true });
       },
-      () => {
-        console.log(`${name} is not available`);
-      },
+      // Keep the existing fallback fonts when loading fails.
+      () => {},
     );
   };
 

@@ -151,3 +151,24 @@ yarn test:visual
 ```
 
 Replace the slug with the reviewed newest article. The update command verifies that exact first-card link and replaces only `tests/fixtures/visual/articles-desktop.png`. Review and commit the PNG diff with the article. Imports and CI never update baselines automatically; the 3% comparison tolerance stays unchanged.
+
+### Reproducing browser console issues
+
+Install the optional matching Firefox binary with `yarn browsers:install:firefox`, then run:
+
+```sh
+yarn audit:console --browser firefox --url https://event-driven.io/en/open-source-a-relict-a-charity-or/ --output report/browser-console/production-firefox.json
+```
+
+Use `--browser chromium` for comparison or a local production-server URL to check unpublished fixes. The audit uses a fresh profile without extensions, keeps third-party requests enabled, scrolls to comments and captures console messages, exceptions, failed requests, frame URLs and local-file references for 15 seconds. It uses DOM readiness instead of `networkidle`; `--seconds` accepts 1–60. Reports stay in ignored `report/`. They may contain vendor identifiers in request URLs; review before sharing.
+
+This diagnostic does not treat all third-party warnings as CI failures or suppress them. Firefox privacy messages often describe protections working correctly. Check the source URL/stack before assigning an issue to the application. For a `file:///` warning, also reproduce manually in a fresh Firefox profile and inspect its console stack/network initiator; automated runs cannot reproduce every extension or privacy setting.
+
+To isolate vendor cost without changing the site, compare the normal Introduction audit with a **diagnostic** blocked-Disqus run:
+
+```sh
+yarn audit:performance --base-url https://event-driven.io --page /en/introduction_to_event_sourcing/ --runs 3 --label normal
+yarn audit:performance --base-url https://event-driven.io --page /en/introduction_to_event_sourcing/ --runs 3 --label diagnostic-no-disqus --block-pattern '*disqus*'
+```
+
+The repeated optional `--block-pattern` flag applies only to that audit browser and is recorded in `summary.json`. Quote wildcard patterns. Blocked runs omit comments/vendor functionality, so their scores are diagnostic bounds, never production acceptance scores. Run audits sequentially on an idle machine after builds/tests finish; compare medians with the same Lighthouse/browser versions and throttling settings.

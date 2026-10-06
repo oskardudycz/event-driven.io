@@ -1085,3 +1085,40 @@ test('reading CSS Modules preserve bilingual server styles, responsive cards and
     }
   }
 }, 60_000);
+
+test('layout loads fonts silently and navigation dates have readable contrast', async () => {
+  const page = await browser.newPage();
+  const messages = [];
+  page.on('console', (message) => messages.push(message.text()));
+  try {
+    await page.goto(`${baseUrl}/en/open-source-a-relict-a-charity-or/`, {
+      waitUntil: 'domcontentloaded',
+    });
+    await expect
+      .poll(() => page.locator('h1').evaluate((element) => getComputedStyle(element).fontWeight))
+      .toBe('600');
+    await expect
+      .poll(() => page.locator('body').evaluate((element) => getComputedStyle(element).fontFamily))
+      .toContain('Open Sans');
+    expect(
+      messages.filter((message) => /font(?:400|600) is (?:not )?available/.test(message)),
+    ).toEqual([]);
+    const dates = await page.locator('nav.links time').all();
+    expect(dates.length).toBeGreaterThan(0);
+    for (const date of dates) {
+      const contrast = await date.evaluate((element) => {
+        const channels = getComputedStyle(element).color.match(/\d+/g).slice(0, 3).map(Number);
+        const linear = channels.map((channel) => {
+          const value = channel / 255;
+          return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+        });
+        const luminance = linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722;
+        // Current article/navigation surface is white.
+        return 1.05 / (luminance + 0.05);
+      });
+      expect(contrast).toBeGreaterThanOrEqual(4.5);
+    }
+  } finally {
+    await page.close();
+  }
+});

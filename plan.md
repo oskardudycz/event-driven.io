@@ -425,3 +425,13 @@ Future imports use an explicit archive-only snapshot command guarded by the expe
 CI repair local acceptance: production build, full suite, all 26 browser checks, lint/format and smoke pass. Only the archive PNG was refreshed; other baselines and the 3% tolerance remain unchanged. The wrong-slug update guard was tested and preserves the existing PNG. Hosted CI and deployment confirmation remain pending.
 
 Rebase integration: the CSS foundation is restored on top of the verified CI repair. Preserve its 27th CSS regression alongside the repaired language readiness checks and guarded archive update. Earlier 26-test acceptance covers the pre-CSS checkout; rerun checks for the combined result before claiming CSS acceptance.
+
+## Firefox diagnostics and corrected PageSpeed follow-up — 2026-10-06
+
+Trace production browser messages with a clean Firefox profile and preserve privacy restrictions. Remove only application debug chatter; add repeatable diagnostics and local-file reference coverage. Research and measure the new PageSpeed report against the owner-corrected Introduction article, distinguishing field data from cold mobile lab data and first-party from vendor costs. Update docs/pagespeed-review.md with evidence before further performance changes. Comments/provider and interaction choices remain pending.
+
+Scope correction for the next CSS stage: incremental means categories of work. Complete the remaining CSS Modules conversion as one appearance-preserving stage, isolating only concrete technical difficulties; then remove obsolete styling integrations and run full acceptance. The earlier component-by-component stopping points above are superseded. Tailwind, dark mode and redesign remain later separate categories.
+
+Controlled PageSpeed attribution now prioritizes reviewing the comments stage: three normal production runs score median 62 versus 91 with Disqus blocked only in the audit browser; transferred traffic falls about 1.45MB and best practices 54→100. This authorizes neither a provider switch nor paid subscription. Research records supported Disqus settings, their limitations and Giscus migration preparation. The complete CSS category should investigate font switching/fallback metrics, the font stylesheet request and CSS-only warm-cache invalidation with traces and regressions. Keep final typography and screenshots as acceptance constraints.
+
+Firefox follow-up acceptance: production build, complete tests/lint, all 29 browser checks and fresh Firefox preview verification pass locally. No screenshots or production settings changed. Investigate the preview server's missing root 404 fallback separately. Hosted CI/deployment and owner comments/home-label decisions remain pending.
