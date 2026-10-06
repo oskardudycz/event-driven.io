@@ -1,7 +1,8 @@
+import styles from './contact.module.css';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { graphql } from 'gatsby';
-import { ThemeContext } from '../layouts';
+
 import Article from '../components/Article';
 import Headline from '../components/Article/Headline';
 import { createHead } from '../components/Seo';
@@ -12,36 +13,22 @@ const ContactPage = () => {
 
   return (
     <React.Fragment>
-      <ThemeContext.Consumer>
-        {(theme) => (
-          <Article theme={theme}>
-            <header>
-              <Headline title={t('contact.title')} theme={theme} />
-            </header>
-            <p>
-              {t('contact.intro')}{' '}
-              <a
-                href="https://calendly.com/oskar-dudycz/consulting"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {t('contact.bookCall')}
-              </a>
-            </p>
-            <style jsx>{`
-              p {
-                font-size: ${theme.font.size.s};
-                line-height: ${theme.font.lineHeight.l};
-              }
-              a {
-                color: ${theme.color.brand.primary};
-                font-weight: ${theme.font.weight.bold};
-                text-decoration: underline;
-              }
-            `}</style>
-          </Article>
-        )}
-      </ThemeContext.Consumer>
+      <Article>
+        <header>
+          <Headline title={t('contact.title')} />
+        </header>
+        <p className={styles.elementP}>
+          {t('contact.intro')}{' '}
+          <a
+            href="https://calendly.com/oskar-dudycz/consulting"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.elementA}
+          >
+            {t('contact.bookCall')}
+          </a>
+        </p>
+      </Article>
     </React.Fragment>
   );
 };

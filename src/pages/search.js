@@ -2,7 +2,7 @@ import { graphql } from 'gatsby';
 import React from 'react';
 import Article from '../components/Article';
 import Search from '../components/Search';
-import { ThemeContext } from '../layouts';
+
 import { createHead } from '../components/Seo';
 import Headline from '../components/Article/Headline';
 import { usePageContext } from '../i18n/page-context';
@@ -10,14 +10,10 @@ import { usePageContext } from '../i18n/page-context';
 const SearchPage = () => {
   const { lang = 'en' } = usePageContext();
   return (
-    <ThemeContext.Consumer>
-      {(theme) => (
-        <Article theme={theme}>
-          <Headline title={lang === 'pl' ? 'Szukaj' : 'Search'} theme={theme} />
-          <Search theme={theme} />
-        </Article>
-      )}
-    </ThemeContext.Consumer>
+    <Article>
+      <Headline title={lang === 'pl' ? 'Szukaj' : 'Search'} />
+      <Search />
+    </Article>
   );
 };
 export default SearchPage;

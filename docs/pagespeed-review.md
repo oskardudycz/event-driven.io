@@ -1,6 +1,6 @@
 # PageSpeed and schema review — updated 2026-10-06
 
-The sections below separate completed work from choices awaiting your decision. Completed changes passed local validation. **The next CI run and production deployment have not been verified here.** User approved **1A, 3A and 5A** on 2026-10-05. Choices **2 and 4** remain open.
+The sections below separate completed work from choices awaiting your decision. Completed changes passed local validation. **The next CI run and production deployment have not been verified here.** User approved **1A, 3A and 5A** on 2026-10-05. Comments decision **2 is deferred: keep Disqus for now**. Home-label choice **4** remains open.
 
 The 2026-10-06 [Firefox findings](#firefox-and-new-production-audit--2026-10-06), [supported Disqus remedies](#supported-disqus-remedies--research-not-applied) and [controlled production comparison](#controlled-production-attribution--2026-10-06) are below. New local fixes remove font debug chatter and improve navigation-date contrast. Disqus settings/provider changes remain recommendations for review.
 
@@ -11,7 +11,17 @@ The 2026-10-06 [Firefox findings](#firefox-and-new-production-audit--2026-10-06)
 - **5A applied:** optional quoted `publishedAt` timestamps with a real timezone are supported in frontmatter, imports and article metadata. Invalid values are rejected. Existing date-only article dates and visible dates are preserved; their rich-result warning can remain.
 - **Developer tooling applied:** Pongo-style native ESM flat ESLint config, Prettier 3, single quotes, VS Code save fixes, lint-staged and Husky pre-commit integration. CI checks the full lint/format scope. Bulk formatting excludes article content, static assets and fixtures.
 
-**Local verification passed:** frozen install, full lint/format, smoke, production build, full tests (including 18 performance/metadata regressions and the lint-staged regression), and all 24 browser checks. CI and deployment remain separate pending checks.
+**Historical verification for 1A/3A/5A passed:** frozen install, full lint/format, smoke, production build, full tests (including 18 performance/metadata regressions and the lint-staged regression), and all 24 browser checks. CI and deployment remain separate pending checks.
+
+## Complete CSS stage — applied and verified locally, 2026-10-06
+
+All remaining styled-jsx styles are replaced with native CSS Modules and portable YAML-generated variables. Retired styling packages/processors are removed. Global CSS preserves existing reset/font fallback rules and final typography; dynamic image/menu/sensor values use CSS properties. Named hero translation components preserve formatting-independent English/Polish markup. Existing layout, interaction, routes and screenshot fixtures remain.
+
+The CSS-only warm-build check reproduced obsolete inline CSS. Content-aware SHA-256 class exports and tracked stylesheet dependencies resolve it without clearing data/image caches. `yarn test:cache:css` verifies baseline/edit/restoration across every generated page and actual browser styles with/without JavaScript; it passes in 138.61s. Content modification/deletion/restoration also passes (128.72s). Final full suite, all 30 browser checks, lint/format and smoke pass. Ten extraction-order warnings remain between scoped CSS Modules and are recorded in todo.md; they were not hidden. CI/deployment remain unverified here.
+
+**Still to investigate:** first-party font request/switching/fallback metrics and CLS, plus the root 404 fallback. This CSS implementation change does not establish a new PageSpeed score. Repeat normal production audits after deployment, separately from the earlier audit-only blocked-Disqus comparison.
+
+**For your review:** only the existing home-label decision 4 is currently open. Disqus remains selected for now; Giscus/custom guest comments, Tailwind, dark mode and layout redesign are deferred separate decisions. No comment loading/provider or analytics change is introduced by this stage.
 
 ## Earlier applied fixes and validation (before this follow-up)
 
@@ -32,9 +42,9 @@ The 2026-10-06 [Firefox findings](#firefox-and-new-production-audit--2026-10-06)
 
 **Previous local result:** production build passed after the Polish font fix; full tests include 15 performance regressions; all 19 browser checks passed. Routes, redirects, sitemap URLs, feeds and screenshot baselines remain unchanged. Detailed timings and remaining build warnings are in [Local verification](#local-verification).
 
-## Decision record — only choices 2 and 4 await review
+## Decision record — comments deferred; home label awaits review
 
-There are **two remaining choices** to make: comments (2) and the home label (4). You can reply with option codes, for example `2A, 4A`, and add any constraints. Choices 1A, 3A and 5A are now implemented; other options are not applied. Choosing a prototype authorizes that prototype only; a provider switch or external account/comment writes would still need a concrete migration review.
+The owner chose to **keep Disqus for now** and focus on first-party improvements. Comments alternatives below are deferred; home-label choice 4 is still open. Choices 1A, 3A and 5A are implemented. A future comments prototype/provider switch or external comment import needs its own concrete review.
 
 ### 1. Newsletter loading — 1A approved and implemented
 
@@ -42,11 +52,12 @@ See the implementation and test status at the top. Subscription still loads auto
 
 ### 2. Should we start the Giscus migration?
 
-**Recommendation: 2A**, matching your interest in Giscus. Prepare a local/preview prototype and an offline migration plan first. Keep Disqus on production until the result is reviewed.
+**Current decision: keep Disqus and its loading behavior unchanged.** Retain Giscus and a custom guest-comment system as future alternatives; no prototype or migration is started.
 
 - **2A — Prototype Giscus and plan history migration.** Readers would need GitHub login/authorization to comment after a future switch. Recommend shared EN/PL threads per article and preserving history through a reviewed offline mapping/dry run; repository/category and actual import details come in that review.
 - **2B — Keep Disqus and add automatic viewport loading.** Retains current accounts/history; delays early requests without a button. Disqus advertising/cookies remain when it loads.
-- **2C — Leave comments unchanged for now.** Existing early Disqus/vendor requests remain.
+- **2C — Leave comments unchanged for now (current focus).** Existing early Disqus/vendor requests remain.
+- **2D — Custom guest-comment system (deferred alternative).** No reader login; name/comment, simple replies, shared EN/PL article keys, private moderation and import/export. A portable TypeScript client could use Workers/D1 and server-validated Turnstile with rate limits and duplicate/link controls. Free-tier fit and operational responsibilities need verification; bot protection does not replace content moderation.
 
 **Why your decision is needed:** a future provider switch changes reader login, moderation and historical-comment handling. A prototype is not authorization to publish imported comments or install an app into your GitHub account.
 
@@ -282,3 +293,9 @@ Three normal mobile runs followed by three audit-only blocked-Disqus runs used L
 Blocking Disqus removes its descendants too, so this measures the embed plus its ad/tracking chain, not just `embed.js`. About 1.45MB less traffic and the best-practices difference support prioritizing the comments decision. It does not prove a Giscus deployment will score 91: that replacement has its own assets, and the diagnostic removes comments entirely.
 
 The remaining layout shift in a blocked sample and the render-blocking local font stylesheet warrant a separate first-party investigation. The layout currently changes body font/heading weight after FontFaceObserver resolves; assess its contribution with traces and CSS font/fallback metrics during the complete CSS stage, preserving the final typography. Lighthouse's shift attribution to the article body/author image alone is not sufficient to assign the entire shift to that image. No font behavior or layout change was made in this pass.
+
+### Owner follow-up and current scope — 2026-10-06
+
+The owner reports optional affiliate linking is disabled. Its effect has not yet been re-measured; iframe affiliate requests can remain as explained above. The earlier controlled audit is evidence from before this reported change, not its measured result.
+
+Keep Disqus for now. Record the custom guest-comment service as alternative 2D to Giscus, and proceed with complete CSS Modules conversion, CSS-only warm-cache correctness, measured first-party font/CLS improvements and the 404 fallback investigation. Preserve comments/login/loading behavior. No provider change, automatic viewport deferral of comments, paid subscription or analytics reconfiguration is applied by this decision.

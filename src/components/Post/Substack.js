@@ -1,3 +1,4 @@
+import styles from './Substack.module.css';
 import React, { useEffect, useRef, useState } from 'react';
 
 const Substack = () => {
@@ -22,8 +23,8 @@ const Substack = () => {
   }, []);
   return (
     <React.Fragment>
-      <div id="substack" className="substack" ref={section}>
-        <div className="substack-legend">
+      <div id="substack" className={`substack ${styles['substack']}`} ref={section}>
+        <div className={`substack-legend ${styles['substack-legend']}`}>
           <b>👋 If you found this article helpful</b> and want to get notification about the next
           one, <b>subscribe to Architecture Weekly.</b>
           <br />
@@ -31,7 +32,10 @@ const Substack = () => {
           <b>✉️ Join over 11500 subscribers</b>, get the best resources to boost your skills, and
           stay updated with Software Architecture trends!
           <br />
-          <a className="subscription-fallback" href="https://www.architecture-weekly.com/subscribe">
+          <a
+            className={`subscription-fallback ${styles['subscription-fallback']}`}
+            href="https://www.architecture-weekly.com/subscribe"
+          >
             Subscribe to Architecture Weekly
           </a>
           <br />
@@ -44,23 +48,9 @@ const Substack = () => {
           loading="lazy"
           frameBorder="0"
           scrolling="no"
+          className={styles.elementIframe}
         ></iframe>
       </div>
-      {/* --- STYLES --- */}
-      <style jsx>{`
-        .substack .substack-legend {
-          width: 100%;
-          border-top: 1px solid #ecebea;
-          padding-top: 10px;
-        }
-        .subscription-fallback {
-          font-size: 0.8em;
-        }
-        .substack iframe {
-          border: 1px solid #eee;
-          background: white;
-        }
-      `}</style>
     </React.Fragment>
   );
 };

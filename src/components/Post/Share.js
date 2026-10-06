@@ -1,3 +1,4 @@
+import styles from './Share.module.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -19,7 +20,6 @@ const PostShare = (props) => {
       frontmatter: { title },
       excerpt,
     },
-    theme,
   } = props;
 
   const url = config.siteUrl + config.pathPrefix + '/' + langKey + slug;
@@ -29,9 +29,9 @@ const PostShare = (props) => {
 
   return (
     <React.Fragment>
-      <div className="share">
-        <span className="label">SHARE</span>
-        <div className="links">
+      <div className={`share ${styles['share']}`}>
+        <span className={`label ${styles['label']}`}>SHARE</span>
+        <div className={`links ${styles['links']}`}>
           <TwitterShareButton
             url={url}
             title={title}
@@ -50,7 +50,7 @@ const PostShare = (props) => {
           >
             <FacebookIcon round size={iconSize} />
             <FacebookShareCount url={url}>
-              {(count) => <div className="share-count">{filter(count)}</div>}
+              {(count) => <div className={'share-count'}>{filter(count)}</div>}
             </FacebookShareCount>
           </FacebookShareButton>
           <LinkedinShareButton
@@ -65,48 +65,12 @@ const PostShare = (props) => {
           </LinkedinShareButton>
         </div>
       </div>
-
-      {/* --- STYLES --- */}
-      <style jsx>{`
-        .share {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        .links {
-          display: flex;
-          flex-direction: row;
-
-          :global(.SocialMediaShareButton) {
-            margin: 0 0.8em;
-            cursor: pointer;
-          }
-        }
-
-        .label {
-          font-size: 1.2em;
-          margin: 0 1em 1em;
-        }
-
-        @from-width tablet {
-          .share {
-            flex-direction: row;
-            margin: ${theme.space.inset.l};
-          }
-          .label {
-            margin: ${theme.space.inline.m};
-          }
-        }
-      `}</style>
     </React.Fragment>
   );
 };
 
 PostShare.propTypes = {
   post: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
 };
 
 export default PostShare;

@@ -1,0 +1,44 @@
+:global(.video).video {
+  background: #111;
+  overflow: hidden;
+  padding-top: 56.25%;
+  position: relative;
+}
+:global(.video).video iframe.elementIframe,
+:global(.video).video button.elementButton,
+:global(.video).video img.elementImg {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+:global(.video).video button.elementButton {
+  background: #111;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+}
+:global(.video).video img.elementImg {
+  object-fit: cover;
+}
+:global(.video).video span.elementSpan {
+  align-items: center;
+  background: rgba(0, 0, 0, 0.75);
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  font-size: 1.8rem;
+  height: 4rem;
+  justify-content: center;
+  left: 50%;
+  padding-left: 0.2rem;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 4rem;
+}
+:global(.video).video button.elementButton:hover span.elementSpan,
+:global(.video).video button.elementButton:focus span.elementSpan {
+  background: #d00;
+}

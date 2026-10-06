@@ -350,6 +350,12 @@ for (const language of ['en', 'pl']) {
       });
       expect(response?.status()).toBe(200);
       await page.locator('.hero h1').waitFor({ state: 'visible' });
+      expect(await page.locator('.hero h1 > u').textContent()).toBe(
+        language === 'pl' ? 'architekturze oprogramowania?' : 'software architecture?',
+      );
+      expect(await page.locator('.hero h2 > span.yellow').textContent()).toBe(
+        language === 'pl' ? 'od artykułów po wideo' : 'from articles to videos',
+      );
       await page.evaluate(async () => {
         await document.fonts.ready;
         const background = getComputedStyle(document.querySelector('.hero')).backgroundImage;
@@ -676,8 +682,14 @@ test('responsive covers match actual card widths across breakpoints and device p
       for (const width of [390, 600, 768, 1024, 1440]) {
         await page.setViewportSize({ width, height: 900 });
         await page.goto(new URL('/en/articles/', baseUrl).href);
+        await page.waitForFunction(() => document.documentElement.dataset.font400 === 'loaded');
         const image = page.locator('img[data-main-image]').first();
-        await expect.poll(() => image.evaluate((e) => e.complete && e.naturalWidth > 0)).toBe(true);
+        // Wait for the hydrated, visible lazy image rather than relying on
+        // load timing while the CI runner is also checking the built output.
+        await image.scrollIntoViewIfNeeded();
+        await expect
+          .poll(() => image.evaluate((e) => e.complete && e.naturalWidth > 0), { timeout: 10_000 })
+          .toBe(true);
         const result = await image.evaluate((e) => {
           const picture = e.closest('picture');
           const sizes = picture.querySelector('source').sizes || e.sizes;
@@ -1122,3 +1134,61 @@ test('layout loads fonts silently and navigation dates have readable contrast', 
     await page.close();
   }
 });
+
+test('native article and hero styles work before hydration and across breakpoints', async () => {
+  for (const language of ['en', 'pl']) {
+    for (const javaScriptEnabled of [false, true]) {
+      const context = await browser.newContext({
+        javaScriptEnabled,
+        viewport: { width: 390, height: 844 },
+      });
+      const page = await context.newPage();
+      try {
+        await page.goto(new URL(`/${language}/introduction_to_event_sourcing/`, baseUrl).href, {
+          waitUntil: 'domcontentloaded',
+        });
+        if (javaScriptEnabled) {
+          await expect
+            .poll(() => page.locator('body').evaluate((el) => getComputedStyle(el).fontFamily))
+            .toContain('Open Sans');
+        } else {
+          expect(
+            await page.locator('body').evaluate((el) => getComputedStyle(el).fontFamily),
+          ).toContain('Arial');
+        }
+        const article = page.locator('main > article');
+        const dimensions = () =>
+          article.evaluate((el) => {
+            const css = getComputedStyle(el);
+            return { top: css.paddingTop, left: css.paddingLeft, maxWidth: css.maxWidth };
+          });
+        expect(await dimensions()).toMatchObject({ top: '20px', left: '20px' });
+        const paragraph = page.locator('.bodytext > p').first();
+        expect(await paragraph.evaluate((el) => getComputedStyle(el).fontSize)).toBe('17.6px');
+        await page.setViewportSize({ width: 600, height: 900 });
+        await expect
+          .poll(dimensions)
+          .toMatchObject({ top: '20px', left: '40px', maxWidth: '650px' });
+        await page.setViewportSize({ width: 1024, height: 900 });
+        await expect
+          .poll(dimensions)
+          .toMatchObject({ top: '130px', left: '0px', maxWidth: '850px' });
+        await page.goto(new URL(`/${language}/`, baseUrl).href, { waitUntil: 'domcontentloaded' });
+        const hero = page.locator('.hero');
+        const backgrounds = new Set();
+        for (const width of [390, 600, 1024]) {
+          await page.setViewportSize({ width, height: 900 });
+          const image = await hero.evaluate((el) => getComputedStyle(el).backgroundImage);
+          expect(image).toMatch(/^url\(/);
+          backgrounds.add(image);
+        }
+        expect(backgrounds.size).toBe(3);
+        expect(await hero.locator('h1').count()).toBe(1);
+        expect(await hero.locator('h1 > u').count()).toBe(1);
+        expect(await hero.locator('h2 > span.yellow').count()).toBe(1);
+      } finally {
+        await context.close();
+      }
+    }
+  }
+}, 60_000);

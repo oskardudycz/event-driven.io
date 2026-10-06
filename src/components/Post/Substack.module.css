@@ -1,0 +1,12 @@
+:global(.substack).substack :global(.substack-legend).substack-legend {
+  width: 100%;
+  border-top: 1px solid #ecebea;
+  padding-top: 10px;
+}
+:global(.subscription-fallback).subscription-fallback {
+  font-size: 0.8em;
+}
+:global(.substack).substack iframe.elementIframe {
+  border: 1px solid #eee;
+  background: white;
+}

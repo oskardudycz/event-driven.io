@@ -1,0 +1,105 @@
+.search .ais-SearchBox-form {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-neutral-gray-f);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+}
+.search .ais-SearchBox-form:focus-within {
+  border-color: var(--text-color-brand);
+  outline: 2px solid var(--text-color-brand);
+  outline-offset: 2px;
+}
+.search .search-input-icon {
+  color: var(--text-color-brand);
+  flex-shrink: 0;
+}
+.search .ais-SearchBox-input {
+  min-width: 0;
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: var(--space-xs) 0;
+  font-family: inherit;
+  color: var(--color-text);
+  background: transparent;
+  font-size: 1.1em;
+  flex: 1;
+}
+.search .ais-SearchBox-input::placeholder {
+  color: var(--color-text-muted);
+}
+.search .ais-SearchBox-reset {
+  border: none;
+  border-radius: var(--size-radius-small);
+  background: none;
+  color: var(--text-color-brand);
+  font-size: 1.4em;
+  min-width: 44px;
+  min-height: 44px;
+  cursor: pointer;
+}
+.search .ais-Stats,
+.search .search-message {
+  margin: var(--space-md) 0;
+  font-size: 0.9em;
+  color: var(--color-text-muted);
+  display: block;
+}
+.search .ais-Hits-list {
+  scroll-margin-top: 100px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.search .ais-Pagination-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  list-style: none;
+  justify-content: center;
+  padding: var(--space-md) 0;
+  margin: 0;
+}
+.search .ais-Pagination-list button,
+.search-message button {
+  font: inherit;
+  border: 1px solid var(--color-border);
+  border-radius: var(--size-radius-small);
+  background: var(--color-surface);
+  color: var(--text-color-brand);
+  min-width: 44px;
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-sm);
+  cursor: pointer;
+}
+.search .ais-Pagination-list button:hover:not(:disabled),
+.search .ais-SearchBox-reset:hover,
+.search-message button:hover {
+  background: var(--color-brand-tint);
+  border-color: var(--color-brand);
+}
+.search .ais-Pagination-list button[aria-current='page'] {
+  background: var(--text-color-brand);
+  border-color: var(--text-color-brand);
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-bold);
+}
+.search .ais-Pagination-list button:disabled {
+  color: var(--color-text-muted);
+  background: var(--background-color-alt);
+  cursor: default;
+}
+.search button:focus-visible {
+  outline: 2px solid var(--text-color-brand);
+  outline-offset: 2px;
+}
+
+.search .ais-Hits-item {
+  padding: 0;
+  margin: 0 0 var(--space-md);
+  display: block;
+  width: 100%;
+}

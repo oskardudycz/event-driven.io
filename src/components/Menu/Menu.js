@@ -1,3 +1,4 @@
+import styles from './Menu.module.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 import 'core-js/fn/array/from';
@@ -74,7 +75,6 @@ class Menu extends React.Component {
     screenWidth: PropTypes.number.isRequired,
     fontLoaded: PropTypes.bool.isRequired,
     pages: PropTypes.array.isRequired,
-    theme: PropTypes.object.isRequired,
   };
 
   componentDidMount() {
@@ -145,142 +145,31 @@ class Menu extends React.Component {
   };
 
   render() {
-    const { screenWidth, theme } = this.props;
+    const { screenWidth } = this.props;
     const { open } = this.state;
 
     return (
       <React.Fragment>
-        <nav className={`menu ${open ? 'open' : ''}`} rel="js-menu">
-          <ul className="itemList" ref={this.itemList}>
+        <nav
+          className={`menu ${styles['menu']} ${open ? `open ${styles['open']}` : ''}`}
+          rel="js-menu"
+        >
+          <ul className={`itemList ${styles['itemList']}`} ref={this.itemList}>
             {this.items.map((item, i) => (
-              <Item item={item} key={item.label ?? i} icon={item.icon} theme={theme} />
+              <Item item={item} key={item.label ?? i} icon={item.icon} />
             ))}
           </ul>
-          {this.state.hiddenItems.length > 0 && <Expand onClick={this.toggleMenu} theme={theme} />}
+          {this.state.hiddenItems.length > 0 && <Expand onClick={this.toggleMenu} />}
           {open && screenWidth >= 1024 && (
-            <ul className="hiddenItemList">
+            <ul className={`hiddenItemList ${styles['hiddenItemList']}`}>
               {this.state.hiddenItems.map((item) => (
-                <Item item={item} key={item.label} hiddenItem theme={theme} />
+                <Item item={item} key={item.label} hiddenItem />
               ))}
             </ul>
           )}
 
           <LanguagePicker />
         </nav>
-
-        {/* --- STYLES --- */}
-        <style jsx>{`
-          .menu {
-            align-items: center;
-            background: ${theme.color.neutral.white};
-            bottom: 0;
-            display: flex;
-            flex-grow: 1;
-            left: 0;
-            max-height: ${open ? '1000px' : '50px'};
-            padding: 0 ${theme.space.inset.s};
-            position: fixed;
-            width: 100%;
-            z-index: 1;
-            transition: all ${theme.time.duration.default};
-          }
-
-          .itemList {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            position: relative;
-            width: 100%;
-          }
-
-          @below desktop {
-            .menu {
-              &::after {
-                position: absolute;
-                content: '';
-                left: ${theme.space.m};
-                right: ${theme.space.m};
-                top: 0;
-                height: 1px;
-                background: ${theme.color.brand.primary};
-              }
-
-              &.open {
-                padding: ${theme.space.inset.m};
-              }
-
-              :global(.homepage):not(.fixed) & {
-                bottom: -100px;
-              }
-            }
-          }
-
-          @from-width desktop {
-            .menu {
-              border-top: none;
-              background: transparent;
-              display: flex;
-              position: relative;
-              justify-content: flex-end;
-              padding-left: 50px;
-              transition: none;
-            }
-
-            .itemList {
-              justify-content: flex-end;
-              padding: 0;
-            }
-
-            .hiddenItemList {
-              list-style: none;
-              margin: 0;
-              position: absolute;
-              background: ${theme.background.color.primary};
-              border: 1px solid ${theme.line.color};
-              top: 48px;
-              right: ${theme.space.s};
-              display: flex;
-              flex-direction: column;
-              justify-content: flex-start;
-              padding: ${theme.space.m};
-              border-radius: ${theme.size.radius.small};
-              border-top-right-radius: 0;
-
-              &:after {
-                content: '';
-                background: ${theme.background.color.primary};
-                z-index: 10;
-                top: -10px;
-                right: -1px;
-                width: 44px;
-                height: 10px;
-                position: absolute;
-                border-left: 1px solid ${theme.line.color};
-                border-right: 1px solid ${theme.line.color};
-              }
-
-              :global(.homepage):not(.fixed) & {
-                border: 1px solid transparent;
-                background: color(white alpha(-10%));
-                top: 50px;
-
-                &:after {
-                  top: -11px;
-                  border-left: 1px solid transparent;
-                  border-right: 1px solid transparent;
-                  background: color(white alpha(-10%));
-                }
-              }
-
-              :global(.fixed) & {
-                top: 44px;
-              }
-            }
-          }
-        `}</style>
       </React.Fragment>
     );
   }

@@ -1,0 +1,22 @@
+:global(.latestArticles).latestArticles {
+  scroll-margin-top: var(--header-height-default);
+}
+:global(.sectionHeader).sectionHeader {
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-inset-default) 0;
+}
+:global(.sectionHeader).sectionHeader h2.elementH2 {
+  font-size: var(--font-size-xxl);
+}
+@media screen and (min-width: 600px) {
+  :global(.sectionHeader).sectionHeader {
+    max-width: var(--text-max-width-tablet);
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+@media screen and (min-width: 1024px) {
+  :global(.sectionHeader).sectionHeader {
+    max-width: var(--text-max-width-desktop);
+  }
+}

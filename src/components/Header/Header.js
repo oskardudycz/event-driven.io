@@ -1,9 +1,10 @@
+import styles from './Header.module.css';
 import { Link } from '../Link';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import VisibilitySensor from 'react-visibility-sensor';
 
-import { ScreenWidthContext, FontLoadedContext } from '../../layouts';
+import { ScreenWidthContext, FontLoadedContext } from '../../layouts/contexts';
 import config from '../../../content/meta/config';
 import Menu from '../Menu';
 
@@ -14,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 
 const avatar = withPrefix('/images/avatar.webp');
 
-const Header = ({ pages, path, theme }) => {
+const Header = ({ pages, path }) => {
   const { t } = useTranslation();
   const [fixed, setFixed] = useState(false);
   const { lang } = usePageContext();
@@ -29,12 +30,12 @@ const Header = ({ pages, path, theme }) => {
   };
 
   const getHeaderSize = () => {
-    const fixedText = fixed ? 'fixed' : '';
+    const fixedText = fixed ? `fixed ${styles.fixed}` : '';
 
     const homePages = [`/${lang}`]; //, `/${lang}/newsletter-pl`];
 
     const homepage = homePages.some((page) => path === `${page}/` || path === `${page}`)
-      ? 'homepage'
+      ? `homepage ${styles.homepage}`
       : '';
 
     return `${fixedText} ${homepage}`;
@@ -42,14 +43,22 @@ const Header = ({ pages, path, theme }) => {
 
   return (
     <React.Fragment>
-      <header className={`header ${getHeaderSize()}`}>
-        <Link to="/" className="logoType">
-          <div className="logo">
-            <img src={avatar} alt={config.siteTitle} width="180" height="180" />
+      <header className={`header ${styles['header']} ${getHeaderSize()}`}>
+        <Link to="/" className={'logoType'}>
+          <div className={`logo ${styles['logo']}`}>
+            <img
+              src={avatar}
+              alt={config.siteTitle}
+              width="180"
+              height="180"
+              className={styles.elementImg}
+            />
           </div>
-          <div className="type">
-            <span className="siteTitle">{t('header.title') || config.headerTitle}</span>
-            <h2>{t('header.subTitle') || config.headerSubTitle}</h2>
+          <div className={'type'}>
+            <span className={`siteTitle ${styles['siteTitle']}`}>
+              {t('header.title') || config.headerTitle}
+            </span>
+            <h2 className={styles.elementH2}>{t('header.subTitle') || config.headerSubTitle}</h2>
           </div>
         </Link>
         <FontLoadedContext.Consumer>
@@ -62,7 +71,6 @@ const Header = ({ pages, path, theme }) => {
                   screenWidth={width}
                   fontLoaded={loaded}
                   pages={filteredPages}
-                  theme={theme}
                 />
               )}
             </ScreenWidthContext.Consumer>
@@ -70,188 +78,16 @@ const Header = ({ pages, path, theme }) => {
         </FontLoadedContext.Consumer>
       </header>
       <VisibilitySensor onChange={visibilitySensorChange}>
-        <div className="sensor" />
+        <div
+          style={{
+            '--sensor-top':
+              path === `/${lang}/`
+                ? 'var(--header-height-homepage)'
+                : 'var(--header-height-default)',
+          }}
+          className={`sensor ${styles['sensor']}`}
+        />
       </VisibilitySensor>
-
-      {/* --- STYLES --- */}
-      <style jsx>{`
-        .header {
-          align-items: center;
-          justify-content: center;
-          background-color: ${theme.color.neutral.white};
-          display: flex;
-          height: ${theme.header.height.default};
-          position: relative;
-          top: 0;
-          width: 100%;
-          align-items: center;
-
-          :global(a.logoType) {
-            align-items: center;
-            display: flex;
-            flex-direction: 'column';
-            color: ${theme.text.color.primary};
-
-            .logo {
-              flex-shrink: 0;
-            }
-          }
-
-          &.homepage {
-            position: absolute;
-            background-color: transparent;
-            height: ${theme.header.height.homepage};
-          }
-        }
-
-        .siteTitle {
-          display: block;
-          font-size: ${theme.font.size.m};
-          font-weight: ${theme.font.weight.standard};
-          margin: ${theme.space.stack.xs};
-        }
-
-        h2 {
-          font-weight: ${theme.font.weight.standard};
-          font-size: ${theme.font.size.xxs};
-          letter-spacing: 0;
-          margin: 0;
-        }
-
-        .logo {
-          border-radius: 65% 75%;
-          border: 1px solid #eee;
-          display: inline-block;
-          height: 44px;
-          margin: ${theme.space.inline.default};
-          overflow: hidden;
-          width: 44px;
-          transition: all 0.5s;
-
-          .homepage & {
-            height: 60px;
-            width: 60px;
-          }
-
-          img {
-            width: 100%;
-            height: auto;
-          }
-        }
-
-        .sensor {
-          display: block;
-          position: absolute;
-          bottom: 0;
-          z-index: 1;
-          left: 0;
-          right: 0;
-          height: 1px;
-          top: ${path === `/${lang}/` ? theme.header.height.homepage : theme.header.height.default};
-        }
-
-        @from-width tablet {
-          .header {
-            padding: ${theme.space.inset.l};
-
-            &.homepage {
-              height: ${theme.header.height.homepage};
-            }
-          }
-        }
-
-        @below desktop {
-          .header.homepage {
-            .logo {
-              border: none;
-            }
-
-            :global(a.logoType),
-            .siteTitle {
-              color: ${theme.color.neutral.white};
-            }
-            h2 {
-              color: ${theme.color.neutral.gray.d};
-            }
-          }
-        }
-
-        @from-width desktop {
-          .header {
-            align-items: center;
-            background-color: ${theme.color.neutral.white};
-            display: flex;
-            position: absolute;
-            top: 0;
-            width: 100%;
-            justify-content: space-between;
-            transition: padding 0.5s;
-
-            &.fixed {
-              height: ${theme.header.height.fixed};
-              background-color: ${theme.color.neutral.white};
-              left: 0;
-              padding: 0 ${theme.space.m};
-              position: fixed;
-              top: 0;
-              width: 100%;
-              z-index: 1;
-
-              .siteTitle {
-                margin: ${theme.space.stack.xxs};
-              }
-
-              h2 {
-                display: none;
-              }
-            }
-
-            &.homepage:not(.fixed) {
-              :global(a.logoType),
-              .siteTitle {
-                color: ${theme.color.neutral.white};
-              }
-              h2 {
-                color: ${theme.color.neutral.gray.d};
-              }
-            }
-          }
-
-          .header :global(a.logoType) {
-            text-align: left;
-            flex-direction: row;
-            flex-shrink: 0;
-            width: auto;
-          }
-
-          .logo {
-            margin: ${theme.space.inline.default};
-
-            .fixed & {
-              height: 36px;
-              width: 36px;
-            }
-
-            .header.homepage:not(.fixed) & {
-              border: none;
-            }
-          }
-
-          h2 {
-            animation-duration: ${theme.time.duration.default};
-            animation-name: h2Entry;
-          }
-
-          @keyframes h2Entry {
-            from {
-              opacity: 0;
-            }
-            to {
-              opacity: 1;
-            }
-          }
-        }
-      `}</style>
     </React.Fragment>
   );
 };
@@ -259,7 +95,6 @@ const Header = ({ pages, path, theme }) => {
 Header.propTypes = {
   pages: PropTypes.array.isRequired,
   path: PropTypes.string.isRequired,
-  theme: PropTypes.object.isRequired,
 };
 
 export default Header;

@@ -1,3 +1,4 @@
+import styles from './Meta.module.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '../Link';
@@ -8,51 +9,24 @@ import { FaTag } from 'react-icons/fa/';
 import kebabCase from 'lodash/kebabCase';
 
 const Meta = (props) => {
-  const { prefix, author: authorName, category, categories = [], theme } = props;
+  const { prefix, author: authorName, category, categories = [] } = props;
   const additionalCategories = Array.isArray(categories) ? categories : [];
   const allCategories = Array.from(new Set([category, ...additionalCategories].filter(Boolean)));
 
   return (
-    <p className="meta">
-      <span>
+    <p className={`meta ${styles['meta']}`}>
+      <span className={styles.elementSpan}>
         <FaCalendar size={18} /> {prefix}
       </span>
-      <span>
+      <span className={styles.elementSpan}>
         <FaUser size={18} /> {authorName}
       </span>
       {allCategories.map((categoryName) => (
-        <span key={categoryName}>
+        <span key={categoryName} className={styles.elementSpan}>
           <FaTag size={18} />
           <Link to={`/category/${kebabCase(categoryName)}/`}>{categoryName}</Link>
         </span>
       ))}
-
-      {/* --- STYLES --- */}
-      <style jsx>{`
-        .meta {
-          display: flex;
-          flex-flow: row wrap;
-          font-size: 0.8em;
-          margin: ${theme.space.m} 0;
-          background: transparent;
-
-          :global(svg) {
-            fill: ${theme.icon.color};
-            margin: ${theme.space.inline.xs};
-          }
-          span {
-            align-items: center;
-            display: flex;
-            text-transform: uppercase;
-            margin: ${theme.space.xs} ${theme.space.s} ${theme.space.xs} 0;
-          }
-        }
-        @from-width tablet {
-          .meta {
-            margin: ${`calc(${theme.space.m} * 1.5) 0 ${theme.space.m}`};
-          }
-        }
-      `}</style>
     </p>
   );
 };
@@ -62,7 +36,6 @@ Meta.propTypes = {
   author: PropTypes.string.isRequired,
   category: PropTypes.string,
   categories: PropTypes.arrayOf(PropTypes.string),
-  theme: PropTypes.object.isRequired,
 };
 
 export default Meta;
