@@ -13,6 +13,8 @@
     "test:seo": "node ./tests/seo-build.test.js",
     "test:build-contract": "node ./tests/build-contract.test.js",
     "test:visual": "vitest run tests/visual.test.js",
+    "audit:console": "node scripts/audit-console.mts",
+    "browsers:install:firefox": "playwright install firefox",
     "audit:performance": "node ./scripts/audit-performance.mjs",
     "test:visual:update": "UPDATE_VISUAL_SNAPSHOTS=1 vitest run tests/visual.test.js",
     "test:visual:update:archive": "UPDATE_VISUAL_SNAPSHOTS=1 vitest run tests/visual.test.js -t 'article archive hydrates once'",

@@ -471,3 +471,20 @@ Related, NextPrev and List retire three more styled-jsx consumers. Native scoped
 Both component batches pass separately: Related/navigation build and all 28 browser checks, then the List build, complete suite and all 28 browser checks. No screenshot or build-contract fixture was updated; the existing 3% visual tolerance remains. Final warm build has no Gatsby warning lines; existing dependency/deprecation notices remain. The baseline image-generation cost is not a CSS performance improvement. Hosted CI/CodeQL and deployment are still pending.
 
 Next: Article/Headline/Bodytext typography, then Meta/Author, in another appearance-preserving batch. Keep Tailwind, dark mode, npm migration and visual redesign deferred.
+
+## Firefox / PageSpeed follow-up — 2026-10-06
+
+- [x] Reproduce vendor warnings in a clean Firefox 155 profile on the Open Source article. HTTP 200, English metadata and Disqus frame observed; no local-file references or reproduced file:/// error. Taboola/Criteo exceptions and blocked tracking requests remain vendor findings.
+- [x] Trace the GA expiry warning: Google gtag writes duplicate expires attributes; no cookie values captured. Preserve analytics configuration.
+- [x] Remove font debug chatter; add optional Firefox installation, a TypeScript console audit and README instructions. Add font browser and all-generated-HTML local-file regressions.
+- [x] Complete final local acceptance: component/class production build passes (38.88s), full production suite rerun passes (27.07s), all 29 browser checks pass (51.82s command time), full lint/format rerun passes (7.61s), smoke passes (77 files/18 queries). No snapshots or tolerances changed. The first new HTML scan was corrected to exclude directories ending in .html; the first contrast run correctly caught stale inline CSS and passed after the explicit date-class rebuild.
+- [x] Measure three normal and three audit-only blocked-Disqus mobile runs sequentially after build/browser work. Median score 62→91, LCP 4.34→3.04s, TBT 625→166ms, traffic 2,029,679→576,001 bytes, best practices 54→100. Detailed attribution, variability and diagnostic limitations are in docs/pagespeed-review.md; no production behavior changed.
+- [ ] Resolve the unreplicated file:/// initiator if it recurs in a clean manual Firefox profile.
+- [ ] Owner review: comments options 2A/2B/2C and home-label option 4 remain pending; no provider or interaction change applied.
+- [ ] Confirm hosted CI and deployed font-log cleanup separately.
+
+Next CSS stage now covers all remaining CSS Modules consumers in one category, rather than stopping after each component group. Earlier “next typography batch” wording is superseded; full conversion/removal/acceptance is pending.
+
+Disqus research now includes exact dashboard steps for optional affiliate linking and ad controls, paid-plan limitations, source-specific support evidence, and an offline Giscus history plan. These are documented recommendations, not applied external actions. First exploratory Lighthouse timings overlapped the build and are excluded from comparative acceptance. The existing cover priority/discovery checks pass; vendor scripts dominate the estimated unused JS. Earlier/Later date contrast is corrected using the accessible muted gray and an explicit CSS Module class. A CSS-only warm rebuild retained old inline styles; the component/class rebuild produces the current style. General CSS-only warm-cache invalidation needs a regression in the complete CSS stage rather than being claimed solved here.
+
+Fresh Firefox preview verification on port 9001 returned HTTP 200, lang=en and a Disqus comments frame; a five-second observation had no first-party request failures, exceptions, font debug logs or local-file references. The earlier local diagnostic lost its shared preview connection and is not acceptance evidence. The temporary fresh preview was stopped. Its unmatched-request fallback logged a missing public/404.html; investigate a proper localized 404/fallback separately, without claiming vendor exceptions are globally fixed.

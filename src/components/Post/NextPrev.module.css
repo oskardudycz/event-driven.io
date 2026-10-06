@@ -35,8 +35,8 @@
   font-size: 0.8em;
   margin-bottom: var(--space-xs);
 }
-.links time {
-  color: var(--color-date);
+.date {
+  color: var(--color-text-muted);
   display: block;
   font-weight: 400;
   font-size: 0.8em;

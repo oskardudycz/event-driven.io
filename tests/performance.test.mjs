@@ -268,3 +268,19 @@ test('article Head emits the actual timestamp in both schema and Open Graph', as
   assert.equal(JSON.parse(legacy('#page-schema').text()).datePublished, '2022-03-16');
   assert.throws(() => render('2026-10-05T12:34:56'), /publishedAt/);
 });
+
+test('generated pages never reference local filesystem URLs in resource/link attributes', () => {
+  const pages = readdirSync('public', { recursive: true, withFileTypes: true })
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.html'))
+    .map((entry) => join(entry.parentPath, entry.name));
+  assert.ok(pages.length > 0, 'build the production site first');
+  for (const file of pages) {
+    const $ = cheerio.load(readFileSync(file, 'utf8'));
+    $('[href],[src],[data]').each((_, element) => {
+      for (const attribute of ['href', 'src', 'data']) {
+        const value = $(element).attr(attribute);
+        assert.ok(!value || !/^\s*file:/i.test(value), `${file}: ${attribute}=${value}`);
+      }
+    });
+  }
+});

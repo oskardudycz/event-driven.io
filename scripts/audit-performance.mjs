@@ -12,10 +12,16 @@ function option(name, fallback) {
 }
 if (args.includes('--help')) {
   console.log(
-    'Usage: yarn audit:performance --base-url URL [--runs 3] [--page /en/] [--label baseline] [--output report/performance] [--lighthouse-bin /path/to/lighthouse/cli/index.js]',
+    'Usage: yarn audit:performance --base-url URL [--runs 3] [--page /en/] [--label baseline] [--output report/performance] [--lighthouse-bin /path/to/lighthouse/cli/index.js] [--block-pattern *disqus*]',
   );
   process.exit(0);
 }
+const blockedPatterns = args.flatMap((argument, index) => {
+  if (argument !== '--block-pattern') return [];
+  if (!args[index + 1] || args[index + 1].startsWith('--'))
+    throw new Error('Missing value for --block-pattern');
+  return [args[index + 1]];
+});
 const base = new URL(option('--base-url', 'http://127.0.0.1:9000'));
 const runs = Number(option('--runs', '3'));
 if (!Number.isInteger(runs) || runs < 1 || runs > 10)
@@ -81,6 +87,7 @@ try {
           '--output=json',
           `--output-path=${file}`,
           '--quiet',
+          ...blockedPatterns.map((pattern) => `--blocked-url-patterns=${pattern}`),
         ];
         const binary = option('--lighthouse-bin');
         if (binary) await run(process.execPath, [path.resolve(binary), ...auditArguments]);
@@ -124,7 +131,7 @@ try {
         });
         await fs.writeFile(
           path.join(output, 'summary.json'),
-          JSON.stringify({ baseUrl: base.href, runs, results }, null, 2),
+          JSON.stringify({ baseUrl: base.href, runs, blockedPatterns, results }, null, 2),
         );
         console.log(`Saved ${page}, run ${attempt}: ${file}`);
       } finally {
