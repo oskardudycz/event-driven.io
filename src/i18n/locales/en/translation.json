@@ -16,8 +16,8 @@
     "about": "About"
   },
   "hero": {
-    "h1": "Are you looking for practical knowledge <1 /> about <3>software architecture?</3>",
-    "h2": "Check out my content - <1>from articles to videos</1>",
+    "h1": "Are you looking for practical knowledge <linebreak /> about <architecture>software architecture?</architecture>",
+    "h2": "Check out my content - <formats>from articles to videos</formats>",
     "introExperience": "My name is Oskar Dudycz. For more than 18 years, I've built software close to the business.",
     "introTraining": "I run workshops and training about Event Sourcing, CQRS, and event-driven architecture.",
     "introEmmett": "I maintain <emmett>Emmett</emmett>, an open-source library for implementing Event Sourcing.",

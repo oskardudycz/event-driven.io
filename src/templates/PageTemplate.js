@@ -4,7 +4,6 @@ import { graphql } from 'gatsby';
 import { createHead } from '../components/Seo';
 import Article from '../components/Article';
 import Page from '../components/Page';
-import { ThemeContext } from '../layouts';
 
 const PageTemplate = (props) => {
   const {
@@ -13,13 +12,9 @@ const PageTemplate = (props) => {
 
   return (
     <React.Fragment>
-      <ThemeContext.Consumer>
-        {(theme) => (
-          <Article theme={theme}>
-            <Page page={page} theme={theme} />
-          </Article>
-        )}
-      </ThemeContext.Consumer>
+      <Article>
+        <Page page={page} />
+      </Article>
     </React.Fragment>
   );
 };

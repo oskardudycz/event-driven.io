@@ -20,7 +20,7 @@ function visitFiles(directory) {
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
     const file = path.join(directory, entry.name);
     if (entry.isDirectory()) visitFiles(file);
-    else if (/\.m?js$/.test(entry.name)) files.push(path.relative(root, file));
+    else if (/\.(?:m?[jt]s|[jt]sx)$/.test(entry.name)) files.push(path.relative(root, file));
   }
 }
 visitFiles(path.join(root, 'src'));
@@ -69,7 +69,10 @@ for (const file of files) {
   const ast = babel.parseSync(source, {
     babelrc: false,
     configFile: false,
-    parserOpts: { sourceType: 'unambiguous', plugins: ['jsx'] },
+    parserOpts: {
+      sourceType: 'unambiguous',
+      plugins: /\.(?:mts|tsx?)$/.test(file) ? ['jsx', 'typescript'] : ['jsx'],
+    },
   });
   walk(ast, file);
 }

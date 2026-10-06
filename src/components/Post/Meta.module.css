@@ -1,0 +1,23 @@
+:global(.meta).meta {
+  display: flex;
+  flex-flow: row wrap;
+  font-size: 0.8em;
+  margin: var(--space-md) 0;
+  background: transparent;
+
+  :global(svg) {
+    fill: var(--icon-color);
+    margin: var(--space-inline-xs);
+  }
+  span.elementSpan {
+    align-items: center;
+    display: flex;
+    text-transform: uppercase;
+    margin: var(--space-xs) var(--space-sm) var(--space-xs) 0;
+  }
+}
+@media screen and (min-width: 600px) {
+  :global(.meta).meta {
+    margin: calc(var(--space-md) * 1.5) 0 var(--space-md);
+  }
+}

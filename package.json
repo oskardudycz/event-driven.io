@@ -9,7 +9,7 @@
   "scripts": {
     "generate-llms": "node ./scripts/generate-llms-txt.js",
     "verify-seo": "node ./scripts/verify-seo-build.js",
-    "test": "yarn test:seo && yarn test:build-contract && yarn test:substack && yarn test:video && yarn test:redirects && yarn test:archive && yarn test:import-build && yarn test:categories && yarn test:performance && yarn test:tooling && yarn test:search && yarn test:localization",
+    "test": "yarn test:seo && yarn test:build-contract && yarn test:substack && yarn test:video && yarn test:redirects && yarn test:archive && yarn test:import-build && yarn test:categories && yarn test:performance && yarn test:tooling && yarn test:search && yarn test:localization && yarn test:css",
     "test:seo": "node ./tests/seo-build.test.js",
     "test:build-contract": "node ./tests/build-contract.test.js",
     "test:visual": "vitest run tests/visual.test.js",
@@ -64,7 +64,9 @@
     "test:localization": "node --test --test-isolation=none tests/localization.test.mjs",
     "generate-theme-css": "node scripts/generate-theme-css.mts",
     "predevelop": "yarn generate-theme-css",
-    "predevhost": "yarn generate-theme-css"
+    "predevhost": "yarn generate-theme-css",
+    "test:css": "node --test --test-isolation=none tests/css-build.test.mts",
+    "test:cache:css": "node scripts/verify-gatsby-css-cache.mts"
   },
   "dependencies": {
     "@ant-design/compatible": "^1.0.8",
@@ -90,8 +92,6 @@
     "gatsby-plugin-robots-txt": "^1.8.0",
     "gatsby-plugin-sharp": "^5.16.0",
     "gatsby-plugin-sitemap": "^6.16.0",
-    "gatsby-plugin-styled-jsx": "^6.16.0",
-    "gatsby-plugin-styled-jsx-postcss": "^2.0.2",
     "gatsby-remark-autolink-headers": "^6.16.0",
     "gatsby-remark-copy-linked-files": "^6.16.0",
     "gatsby-remark-embed-video": "3.2.1",
@@ -120,9 +120,6 @@
     "react-share": "^5.3.0",
     "react-visibility-sensor": "^5.1.1",
     "shelljs": "^0.8.5",
-    "styled-jsx": "^4.0.0",
-    "styled-jsx-plugin-postcss": "^4.0.1",
-    "styled-jsx-plugin-stylelint": "^0.1.0",
     "tinycolor2": "^1.4.1",
     "unist-util-visit": "2.0.3",
     "yaml-loader": "^0.6.0"
@@ -135,7 +132,6 @@
     "@babel/preset-env": "^7.29.7",
     "@babel/preset-react": "^7.29.7",
     "@eslint/js": "9.39.5",
-    "@mapbox/stylelint-processor-arbitrary-tags": "^0.4.0",
     "@playwright/browser-chromium": "1.63.0",
     "@typescript-eslint/parser": "8.59.0",
     "babel-plugin-import": "^1.8.0",
@@ -165,7 +161,6 @@
     "postcss-nested": "^5.0.6",
     "postcss-preset-env": "6.7.0",
     "postcss-sorting": "^6.0.0",
-    "postcss-text-remove-gap": "^1.1.1",
     "postcss-utilities": "^0.8.0",
     "precss": "^4.0.0",
     "prettier": "3.8.3",
@@ -183,8 +178,5 @@
     "vite": "^7",
     "vitest": "^5.0.1",
     "webpack-bundle-analyzer": "^4.4.2"
-  },
-  "resolutions": {
-    "deasync": "0.1.31"
   }
 }

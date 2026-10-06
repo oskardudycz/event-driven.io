@@ -1,27 +1,21 @@
 # SEO, content, and platform progress
 
-Last updated: 2026-10-05
+Last updated: 2026-10-06
 
 This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an item only when its implementation and proportionate verification are complete. Add a short note under blocked or partial items instead of presenting them as finished.
 
-## Current CSS stage — 2026-10-05
+## Current CSS stage — 2026-10-06
 
-- [x] Expose existing YAML theme values as semantic CSS variables; keep one source of values. Native TypeScript generator produces plain CSS usable by Gatsby and Astro.
-- [x] Migrate article summaries and the site footer to CSS Modules, preserving existing selectors. Configure the installed PostCSS plugin for Node 24-compatible SHA-256 class hashes. The rebased final default-import build passes its regression rerun.
-- [x] Verify the first batch: production build, full tests and all 27 browser checks pass; stylesheet regression also covers both languages without JavaScript.
-- [x] Verify the final default CSS Module import adjustment: production build and full lint/format pass.
-- [x] Rerun `yarn test` and all 27 browser checks against the final default-import build before accepting the next component batch. Serve with `yarn serve --host 127.0.0.1 --port 9000`, then run `yarn test:visual` in another terminal.
-- [ ] Verify hosted CI, CodeQL alert 5 closure and deployment; local checks do not establish those results.
-- [x] Finish localization regressions and distinguish local acceptance from pending CI/deployment.
+- [x] Complete all remaining component/page/layout styles as one CSS Modules category. There are 32 native CSS Modules and no styled-jsx consumers; global reset/font fallback is plain CSS. Existing YAML values, runtime CSS variables, public state hooks and responsive thresholds remain.
+- [x] Remove retired styling integrations/processors and obsolete deasync resolution; frozen installation passes.
+- [x] Resolve stale CSS-only warm output with content-aware class exports and tracked Webpack dependencies. `yarn test:cache:css` passes baseline/edit/restoration in 138.61s, checking every generated page and browser computed styles with/without JavaScript.
+- [x] Rerun content modification/deletion/restoration: `yarn test:cache` passes in 128.72s; article sources and llms.txt restore exactly.
+- [x] Document portable styles and repeatable CSS regression commands in README; add responsive article/hero and CSS asset integrity checks.
+- [x] Complete final acceptance against restored output: production build, full suite (56.43s), all 30 browser checks (56.41s command time), lint/format and smoke (78 files / 18 queries) pass. Screenshot fixtures and the 3% tolerance are unchanged.
+- [ ] Verify hosted CI, CodeQL alert 5 closure and deployment separately; local checks do not establish those results.
+- [ ] Next: profile first-party font loading/CLS, investigate the root 404 fallback and rerun comparable normal production audits after deployment.
 
-- [x] Validate the rebased baseline: production build (536.06s, dominated by 3,373 image jobs), full suite (44.81s) and all 27 existing browser checks (52.81s). The first browser attempt overlapped build output writes and is not an acceptance result. Local build retry used a 4 GB heap and four workers; no CI/runtime configuration change.
-- [x] Migrate Related and NextPrev to CSS Modules: production build (44.86s) and all 28 browser checks (52.61s command time) pass, including unchanged screenshots and EN/PL styles with JavaScript disabled.
-- [x] Migrate shared List reading cards to CSS Modules; remove obsolete theme props from Related/Post and CategoryTemplate callers. Keep public selectors and reading-order counters.
-- [x] Verify final lint/format (17.12s), smoke (77 files / 18 queries), production build (49.13s), full suite (31.30s) and all 28 browser checks (63.68s command time), including EN/PL with JavaScript enabled/disabled, 600px/1024px breakpoints, keyboard focus, reduced motion, theme-variable overrides and unchanged screenshots. Routes, redirects, sitemap and feed contracts pass.
-
-Modern defaults for new work: ESM/TypeScript, semantic variables, scoped CSS/logical properties, accessible focus/contrast and reduced-motion handling when adding animation, minimal client JavaScript and measured verification. Keep CSS/data/routing boundaries portable to Astro.
-
-Related, NextPrev and shared List reading cards are migrated and accepted locally. Five components now use CSS Modules; 29 styled-jsx source files remain. Next: article typography/metadata, archive/category styles, shared navigation, then remaining integrations and shells (see plan.md). Tailwind integration, dark-mode palette/behavior and layout redesign require their own concrete review. This first batch changes styling implementation only.
+Keep Disqus and its loading behavior. Giscus/custom guest comments, Tailwind, dark mode, package-manager migration and visual redesign remain deferred. Earlier component-batch results below are historical; the full conversion supersedes their remaining-consumer counts and next-batch instructions.
 
 ## Current status
 
@@ -190,8 +184,8 @@ Related, NextPrev and shared List reading cards are migrated and accepted locall
   - [x] Capture the production article-footer state for `/en/vertical-slices-and-dependencies/`, add a regression test, and fix the author-note query to select the dedicated `parts` content. The new test failed on the preview and all six visual tests passed on the corrected local build; a fresh preview still needs review.
 - [x] Verify `static/.well-known/webfinger`, the self-hosted font stylesheet/files, and the Calendly CTA on both generated contact pages.
 - [ ] After Gatsby 5/Node 24 is green, migrate Yarn 1 to npm in a separate change and verify `npm ci`, build, and tests.
-  - A plain `npm install --package-lock-only` failed on the unused GraphQL ESLint plugin, then on `gatsby-plugin-styled-jsx`'s `styled-jsx@^3` peer requirement. The unused lint plugin was removed. Do not add `--legacy-peer-deps`; decide how to handle the styled-jsx integration before switching lockfiles.
-  - The site owner is open to a gradual styling migration, with a possible later Astro move. First establish browser screenshots/smoke checks, then migrate styled-jsx components incrementally to portable CSS Modules and CSS variables while preserving appearance. Remove the plugin only after all remaining consumers are migrated (29 source files at the current CSS stage); retry npm afterward without overrides. The selected future direction is Tailwind plus CSS variables; the CSS Modules foundation and small batches are now authorized; Tailwind integration and layout redesign remain deferred.
+  - The earlier npm probe failed on GraphQL lint/styled-jsx peer requirements. Both retired integrations are now removed; this specific blocker is obsolete. npm installation has not been retried, and Yarn remains the approved working path. Do not introduce peer overrides.
+  - The complete portable CSS Modules category now passes existing screenshots and behavior checks. Keep npm migration separate and deferred, alongside Tailwind integration, dark mode and layout redesign; Astro portability remains the styling direction.
 - [x] Verify static WebFinger is copied to public; the smoke/build checks cover the source and generated output.
 - [x] Add and run `yarn smoke` for configuration, WebFinger, source syntax, and GraphQL parsing; keep the full build contract as the release gate.
 - [ ] After the runtime and package-manager changes, start incremental TypeScript adoption with shared types and a small source module.
@@ -470,7 +464,7 @@ Related, NextPrev and List retire three more styled-jsx consumers. Native scoped
 
 Both component batches pass separately: Related/navigation build and all 28 browser checks, then the List build, complete suite and all 28 browser checks. No screenshot or build-contract fixture was updated; the existing 3% visual tolerance remains. Final warm build has no Gatsby warning lines; existing dependency/deprecation notices remain. The baseline image-generation cost is not a CSS performance improvement. Hosted CI/CodeQL and deployment are still pending.
 
-Next: Article/Headline/Bodytext typography, then Meta/Author, in another appearance-preserving batch. Keep Tailwind, dark mode, npm migration and visual redesign deferred.
+Next: complete the remaining CSS Modules conversion as one category of work; the earlier component-by-component stopping points are superseded. Keep Tailwind, dark mode, npm migration and visual redesign deferred.
 
 ## Firefox / PageSpeed follow-up — 2026-10-06
 
@@ -480,11 +474,36 @@ Next: Article/Headline/Bodytext typography, then Meta/Author, in another appeara
 - [x] Complete final local acceptance: component/class production build passes (38.88s), full production suite rerun passes (27.07s), all 29 browser checks pass (51.82s command time), full lint/format rerun passes (7.61s), smoke passes (77 files/18 queries). No snapshots or tolerances changed. The first new HTML scan was corrected to exclude directories ending in .html; the first contrast run correctly caught stale inline CSS and passed after the explicit date-class rebuild.
 - [x] Measure three normal and three audit-only blocked-Disqus mobile runs sequentially after build/browser work. Median score 62→91, LCP 4.34→3.04s, TBT 625→166ms, traffic 2,029,679→576,001 bytes, best practices 54→100. Detailed attribution, variability and diagnostic limitations are in docs/pagespeed-review.md; no production behavior changed.
 - [ ] Resolve the unreplicated file:/// initiator if it recurs in a clean manual Firefox profile.
-- [ ] Owner review: comments options 2A/2B/2C and home-label option 4 remain pending; no provider or interaction change applied.
+- [ ] Deferred comments review: Giscus or a custom guest-comment system; keep Disqus and current loading behavior for now. Home-label option 4 remains a separate open decision.
 - [ ] Confirm hosted CI and deployed font-log cleanup separately.
 
-Next CSS stage now covers all remaining CSS Modules consumers in one category, rather than stopping after each component group. Earlier “next typography batch” wording is superseded; full conversion/removal/acceptance is pending.
+The complete CSS Modules category is now accepted locally. Earlier typography/component-batch stopping points are superseded; see current acceptance below.
 
-Disqus research now includes exact dashboard steps for optional affiliate linking and ad controls, paid-plan limitations, source-specific support evidence, and an offline Giscus history plan. These are documented recommendations, not applied external actions. First exploratory Lighthouse timings overlapped the build and are excluded from comparative acceptance. The existing cover priority/discovery checks pass; vendor scripts dominate the estimated unused JS. Earlier/Later date contrast is corrected using the accessible muted gray and an explicit CSS Module class. A CSS-only warm rebuild retained old inline styles; the component/class rebuild produces the current style. General CSS-only warm-cache invalidation needs a regression in the complete CSS stage rather than being claimed solved here.
+Disqus research now includes exact dashboard steps for optional affiliate linking and ad controls, paid-plan limitations, source-specific support evidence, and an offline Giscus history plan. These are documented recommendations, not applied external actions. First exploratory Lighthouse timings overlapped the build and are excluded from comparative acceptance. The existing cover priority/discovery checks pass; vendor scripts dominate the estimated unused JS. Earlier/Later date contrast is corrected using the accessible muted gray and an explicit CSS Module class. A CSS-only warm rebuild retained old inline styles; the component/class rebuild produces the current style. That historical limitation is resolved by the complete CSS stage and its passing CSS-only warm-cache regression below.
 
 Fresh Firefox preview verification on port 9001 returned HTTP 200, lang=en and a Disqus comments frame; a five-second observation had no first-party request failures, exceptions, font debug logs or local-file references. The earlier local diagnostic lost its shared preview connection and is not acceptance evidence. The temporary fresh preview was stopped. Its unmatched-request fallback logged a missing public/404.html; investigate a proper localized 404/fallback separately, without claiming vendor exceptions are globally fixed.
+
+## Current focus without replacing Disqus — 2026-10-06
+
+- [x] Record the owner's decision to keep Disqus for now and retain the custom guest-comment system as an alternative to Giscus in plan.md. No custom backend/provider implementation is approved or started.
+- [x] Record owner-reported disabling of optional affiliate linking. Do not claim that it removes iframe affiliate/tracking requests or that the dashboard setting has been independently verified.
+- [x] Complete the remaining CSS Modules migration as one category, remove retired integrations and verify full build/test/browser contracts; see current acceptance below.
+- [x] Add CSS-only warm-build change/restoration verification covering every generated page plus server/hydrated computed styles; the stale inline-output fix passes.
+- [ ] Profile and improve first-party font request/switching/fallback behavior without changing final typography or Polish glyph coverage. Record measured LCP/CLS changes and preserve screenshot tolerances.
+- [ ] Investigate the missing root 404 fallback and add an appropriate generated-output/browser regression.
+- [ ] Re-run comparable normal production audits after deployment and the owner's affiliate setting change; distinguish vendor costs, application fixes and diagnostic blocked runs.
+
+Deferred alternatives: Giscus with GitHub login, or an independent guest-comment service with moderation, Disqus import/export, portable TypeScript client, and a possible Workers/D1/Turnstile backend. The latter must verify free-tier suitability and backend/backup/abuse responsibilities before selection. Provider replacement, delayed comments, subscriptions and analytics changes are outside the current stage.
+
+## Complete CSS category — final local acceptance, 2026-10-06
+
+- [x] Replace all 29 remaining styled-jsx consumers together: 27 new CSS Modules and removal of two dead style blocks. There are now 32 native CSS Modules and no styled-jsx source consumers. Preserve public state hooks, responsive thresholds, font fallback/switching and dynamic image/menu/sensor values.
+- [x] Remove retired Gatsby/styled-jsx packages, arbitrary-tag processors, text-gap processor and obsolete deasync resolution. Frozen installation passed after dependency removal. Plain text-gap pseudo-elements preserve the previous numeric offsets.
+- [x] Add generated-HTML CSS integrity checks and responsive article/hero browser coverage. Keep existing screenshot fixtures and the 3% tolerance. Named hero translation components and explicit dashed CSS exports fix migration defects found by browser checks.
+- [x] Reproduce the CSS-only warm-cache defect: unchanged HTML references an obsolete extracted CSS asset after a declaration-only edit. Restore the source stylesheet.
+- [x] Content-aware class exports resolve the defect across all generated pages and server/hydrated computed styles. CSS warm-cache check passes (138.61s); content modification/deletion/restoration passes (128.72s). Final full suite, all 30 browser checks, lint and smoke pass.
+- [ ] Confirm hosted CI, CodeQL and deployment separately; no deployment or provider change was performed.
+
+Earlier full-suite acceptance and the 683.34s cold image-generation build precede the final cache fix. The subsequent 105.49s build uses populated image caches; neither number establishes a CSS performance improvement. Final CSS baseline/change/restoration builds pass in 29.75s / 39.20s / 37.76s with populated caches. Ten mini-css-extract ordering warnings remain between scoped modules; they were not suppressed. Cold category-query and existing dependency/deprecation notices remain possible. These are not performance results. The next stage remains first-party font/CLS profiling, then the root 404 fallback and comparable production audits after deployment.
+
+Browser acceptance note: an initial responsive-image wait timed out while the full suite ran concurrently. The isolated check passed; its setup now explicitly waits for font/hydration readiness, scrolls the lazy image into view and waits for a decoded nonempty image before measuring. The final complete 30-check run passes. Width assertions, WebP requirements, screenshot fixtures and visual tolerance are unchanged. Automated CSS cache checks disable Gatsby telemetry/feedback prompts; local Chromium/child-process sandbox restrictions required running the existing test commands outside the tool sandbox, not changing application behavior. Temporary logs are outside the repository.

@@ -1,0 +1,32 @@
+:global(.videoGrid).videoGrid {
+  display: grid;
+  gap: var(--space-lg);
+  list-style: none;
+  margin: var(--space-lg) 0;
+  padding: 0;
+}
+:global(.videoGrid).videoGrid li.elementLi {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+:global(.videoDetails).videoDetails {
+  padding: var(--space-md);
+}
+:global(.videoDetails).videoDetails h3.elementH3 {
+  font-size: var(--font-size-summary);
+  line-height: var(--line-height-card);
+  margin: 0 0 var(--space-sm);
+}
+:global(.videoDetails).videoDetails h3.elementH3 a.elementA {
+  color: var(--color-text);
+}
+:global(.videoDetails).videoDetails p.elementP {
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-summary);
+}
+@media screen and (min-width: 600px) {
+  :global(.videoGrid).videoGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

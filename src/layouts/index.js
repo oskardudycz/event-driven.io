@@ -1,3 +1,4 @@
+import styles from './Layout.module.css';
 import FontFaceObserver from 'fontfaceobserver';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -7,11 +8,9 @@ import { getScreenWidth, timeoutThrottlerHandler } from '../utils/helpers';
 import Footer from '../components/Footer/';
 import Header from '../components/Header';
 import themeObjectFromYaml from '../theme/theme.yaml';
-import '../theme/tokens.css';
 
-export const ThemeContext = React.createContext(null);
-export const ScreenWidthContext = React.createContext(0);
-export const FontLoadedContext = React.createContext(false);
+import { ThemeContext, ScreenWidthContext, FontLoadedContext } from './contexts';
+export { ThemeContext, ScreenWidthContext, FontLoadedContext } from './contexts';
 
 class Layout extends React.Component {
   constructor() {
@@ -45,6 +44,8 @@ class Layout extends React.Component {
     window.removeEventListener('resize', this.resizeThrottler, false);
     Object.values(this.timeouts).forEach(clearTimeout);
     this.timeouts = {};
+    delete document.documentElement.dataset.font400;
+    delete document.documentElement.dataset.font600;
   }
 
   resizeThrottler = () => {
@@ -70,7 +71,10 @@ class Layout extends React.Component {
 
     font.load(null, 10000).then(
       () => {
-        if (this.mounted) this.setState({ [`${name}loaded`]: true });
+        if (this.mounted) {
+          document.documentElement.dataset[name] = 'loaded';
+          this.setState({ [`${name}loaded`]: true });
+        }
       },
       // Keep the existing fallback fonts when loading fails.
       () => {},
@@ -89,62 +93,9 @@ class Layout extends React.Component {
         <FontLoadedContext.Provider value={this.state.font400loaded}>
           <ScreenWidthContext.Provider value={this.state.screenWidth}>
             <React.Fragment>
-              <Header path={this.props.location.pathname} pages={pages} theme={this.state.theme} />
-              <main>{children}</main>
+              <Header path={this.props.location.pathname} pages={pages} />
+              <main className={styles.main}>{children}</main>
               <Footer html={footnoteHTML} />
-
-              {/* --- STYLES --- */}
-              <style jsx>{`
-                main {
-                  min-height: 80vh;
-                }
-              `}</style>
-              <style jsx global>{`
-                html {
-                  box-sizing: border-box;
-                }
-                *,
-                *:after,
-                *:before {
-                  box-sizing: inherit;
-                  margin: 0;
-                  padding: 0;
-                }
-                body {
-                  font-family: ${this.state.font400loaded
-                    ? "'Open Sans', sans-serif;"
-                    : 'Arial, sans-serif;'};
-                }
-                h1,
-                h2,
-                h3 {
-                  font-weight: ${this.state.font600loaded ? 600 : 400};
-                  line-height: 1.1;
-                  letter-spacing: -0.03em;
-                  margin: 0;
-                }
-                h1 {
-                  letter-spacing: -0.04em;
-                }
-                p {
-                  margin: 0;
-                }
-                strong {
-                  font-weight: ${this.state.font600loaded ? 600 : 400};
-                }
-                a {
-                  text-decoration: none;
-                  color: #666;
-                }
-                main {
-                  width: auto;
-                  display: block;
-                }
-                hr {
-                  border: 1px solid lightgray;
-                  margin-bottom: 20px;
-                }
-              `}</style>
             </React.Fragment>
           </ScreenWidthContext.Provider>
         </FontLoadedContext.Provider>

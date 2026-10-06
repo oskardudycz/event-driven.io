@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { graphql } from 'gatsby';
 import { useTranslation } from 'react-i18next';
-import { ThemeContext } from '../layouts';
+
 import Blog from '../components/Blog';
 import { createHead } from '../components/Seo';
 
@@ -16,9 +16,7 @@ const ArticlesPage = (props) => {
 
   return (
     <React.Fragment>
-      <ThemeContext.Consumer>
-        {(theme) => <Blog posts={posts} theme={theme} compactTop heading={t('blog.allTitle')} />}
-      </ThemeContext.Consumer>
+      <Blog posts={posts} compactTop heading={t('blog.allTitle')} />
     </React.Fragment>
   );
 };

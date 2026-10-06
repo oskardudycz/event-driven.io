@@ -1,0 +1,114 @@
+:global(.menu).menu {
+  align-items: center;
+  background: var(--color-neutral-white);
+  bottom: 0;
+  display: flex;
+  flex-grow: 1;
+  left: 0;
+  max-height: var(--menu-max-height, 50px);
+  padding: 0 var(--space-inset-s);
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+  transition: all var(--duration-default);
+}
+
+:global(.itemList).itemList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  width: 100%;
+}
+
+@media screen and (max-width: 1023px) {
+  :global(.menu).menu {
+    &::after {
+      position: absolute;
+      content: '';
+      left: var(--space-md);
+      right: var(--space-md);
+      top: 0;
+      height: 1px;
+      background: var(--color-brand);
+    }
+
+    &:global(.open).open {
+      padding: var(--space-inset-m);
+    }
+
+    :global(.homepage):not(:global(.fixed)) & {
+      bottom: -100px;
+    }
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  :global(.menu).menu {
+    border-top: none;
+    background: transparent;
+    display: flex;
+    position: relative;
+    justify-content: flex-end;
+    padding-left: 50px;
+    transition: none;
+  }
+
+  :global(.itemList).itemList {
+    justify-content: flex-end;
+    padding: 0;
+  }
+
+  :global(.hiddenItemList).hiddenItemList {
+    list-style: none;
+    margin: 0;
+    position: absolute;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    top: 48px;
+    right: var(--space-sm);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: var(--space-md);
+    border-radius: var(--size-radius-small);
+    border-top-right-radius: 0;
+
+    &:after {
+      content: '';
+      background: var(--color-surface);
+      z-index: 10;
+      top: -10px;
+      right: -1px;
+      width: 44px;
+      height: 10px;
+      position: absolute;
+      border-left: 1px solid var(--color-border);
+      border-right: 1px solid var(--color-border);
+    }
+
+    :global(.homepage):not(:global(.fixed)) & {
+      border: 1px solid transparent;
+      background: rgba(255, 255, 255, 0.9);
+      top: 50px;
+
+      &:after {
+        top: -11px;
+        border-left: 1px solid transparent;
+        border-right: 1px solid transparent;
+        background: rgba(255, 255, 255, 0.9);
+      }
+    }
+
+    :global(.fixed) & {
+      top: 44px;
+    }
+  }
+}
+
+:global(.menu).menu:global(.open).open {
+  --menu-max-height: 1000px;
+}

@@ -6,7 +6,6 @@ import 'prismjs/themes/prism-okaidia.css';
 import { createHead } from '../components/Seo';
 import Article from '../components/Article';
 import Post from '../components/Post';
-import { ThemeContext } from '../layouts';
 
 const PostTemplate = (props) => {
   const {
@@ -23,23 +22,18 @@ const PostTemplate = (props) => {
 
   return (
     <React.Fragment>
-      <ThemeContext.Consumer>
-        {(theme) => (
-          <Article theme={theme}>
-            <Post
-              post={post}
-              next={next}
-              prev={prev}
-              authornote={authorNote}
-              related={relatedIds
-                .map((id) => relatedPosts.edges.find(({ node }) => node.id === id))
-                .filter(Boolean)}
-              facebook={facebook}
-              theme={theme}
-            />
-          </Article>
-        )}
-      </ThemeContext.Consumer>
+      <Article>
+        <Post
+          post={post}
+          next={next}
+          prev={prev}
+          authornote={authorNote}
+          related={relatedIds
+            .map((id) => relatedPosts.edges.find(({ node }) => node.id === id))
+            .filter(Boolean)}
+          facebook={facebook}
+        />
+      </Article>
     </React.Fragment>
   );
 };

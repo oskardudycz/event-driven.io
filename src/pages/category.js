@@ -1,10 +1,11 @@
+import styles from './category.module.css';
 import { FaTag } from 'react-icons/fa/';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { graphql } from 'gatsby';
 import kebabCase from 'lodash/kebabCase';
 import { useTranslation } from 'react-i18next';
-import { ThemeContext } from '../layouts';
+
 import { usePageContext } from '../i18n/page-context';
 import Article from '../components/Article/';
 import Headline from '../components/Article/Headline';
@@ -37,78 +38,34 @@ const CategoryPage = (props) => {
 
   return (
     <React.Fragment>
-      <ThemeContext.Consumer>
-        {(theme) => (
-          <Article theme={theme}>
-            <header>
-              <Headline title={t('categories.title')} theme={theme} />
-              <p className="intro">{t('categories.intro')}</p>
-            </header>
-            <div className="categoryGrid">
-              {categoryList.map(([category, categoryPosts]) => {
-                const guide = guideFor(category);
-                return (
-                  <section key={category}>
-                    <Link to={`/category/${kebabCase(category)}/`}>
-                      <h2>
-                        <FaTag /> {category}
-                      </h2>
-                      <p>
-                        {guide
-                          ? guide.description
-                          : t('categories.defaultDescription', { category })}
-                      </p>
-                      <strong>
-                        {t('categories.articleCount', { count: categoryPosts.length })} →
-                      </strong>
-                    </Link>
-                  </section>
-                );
-              })}
-            </div>
-            <style jsx>{`
-              .intro {
-                font-size: ${theme.font.size.s};
-                line-height: ${theme.font.lineHeight.xl};
-                margin-bottom: ${theme.space.l};
-              }
-              .categoryGrid {
-                display: grid;
-                gap: ${theme.space.m};
-              }
-              section {
-                border: 1px solid ${theme.line.color};
-                border-radius: ${theme.size.radius.default};
-              }
-              section :global(a) {
-                color: ${theme.text.color.primary};
-                display: block;
-                height: 100%;
-                padding: ${theme.space.m};
-              }
-              h2 {
-                margin: 0 0 ${theme.space.s};
-              }
-              h2 :global(svg) {
-                height: 0.8em;
-                fill: ${theme.color.brand.primary};
-              }
-              section p {
-                line-height: ${theme.font.lineHeight.l};
-                margin-bottom: ${theme.space.m};
-              }
-              section strong {
-                color: ${theme.color.brand.primary};
-              }
-              @from-width tablet {
-                .categoryGrid {
-                  grid-template-columns: repeat(2, minmax(0, 1fr));
-                }
-              }
-            `}</style>
-          </Article>
-        )}
-      </ThemeContext.Consumer>
+      <Article>
+        <header>
+          <Headline title={t('categories.title')} />
+          <p className={`intro ${styles['intro']}` + ' ' + styles.elementP}>
+            {t('categories.intro')}
+          </p>
+        </header>
+        <div className={`categoryGrid ${styles['categoryGrid']}`}>
+          {categoryList.map(([category, categoryPosts]) => {
+            const guide = guideFor(category);
+            return (
+              <section key={category} className={styles.elementSection}>
+                <Link to={`/category/${kebabCase(category)}/`}>
+                  <h2 className={styles.elementH2}>
+                    <FaTag /> {category}
+                  </h2>
+                  <p className={styles.elementP}>
+                    {guide ? guide.description : t('categories.defaultDescription', { category })}
+                  </p>
+                  <strong className={styles.elementStrong}>
+                    {t('categories.articleCount', { count: categoryPosts.length })} →
+                  </strong>
+                </Link>
+              </section>
+            );
+          })}
+        </div>
+      </Article>
     </React.Fragment>
   );
 };

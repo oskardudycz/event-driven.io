@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { graphql } from 'gatsby';
-import { ThemeContext } from '../layouts';
+
 import Article from '../components/Article';
 import Headline from '../components/Article/Headline';
 import { createHead } from '../components/Seo';
@@ -20,20 +20,16 @@ const TalksPage = (props) => {
 
   return (
     <React.Fragment>
-      <ThemeContext.Consumer>
-        {(theme) => (
-          <Article theme={theme}>
-            <header>
-              <Headline title={t('talks.title')} theme={theme} />
-            </header>
-            <section>
-              <h2>{t('talks.videosTitle')}</h2>
-              <p>{t('talks.videosIntro')}</p>
-              <VideoGallery theme={theme} videos={videos} />
-            </section>
-          </Article>
-        )}
-      </ThemeContext.Consumer>
+      <Article>
+        <header>
+          <Headline title={t('talks.title')} />
+        </header>
+        <section>
+          <h2>{t('talks.videosTitle')}</h2>
+          <p>{t('talks.videosIntro')}</p>
+          <VideoGallery videos={videos} />
+        </section>
+      </Article>
     </React.Fragment>
   );
 };

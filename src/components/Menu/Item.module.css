@@ -1,0 +1,86 @@
+:global(.item).item,
+:global(.showItem).item {
+  background: transparent;
+  transition: all var(--duration-default);
+  display: flex;
+  align-items: center;
+
+  :global(a) {
+    padding: var(--space-inset-s);
+    display: flex;
+    align-items: center;
+  }
+
+  :global(svg) {
+    margin: 0 var(--space-inset-xs) 0 0;
+    opacity: 0.3;
+  }
+}
+
+:global(.itemList .hideItem) {
+  display: none;
+}
+
+@media screen and (min-width: 1024px) {
+  :global(.item).item {
+    :global(a) {
+      color: var(--color-text);
+      padding: var(--space-inset-s);
+      transition: all var(--duration-default);
+      border-radius: var(--size-radius-small);
+    }
+
+    :global(.homepage):not(:global(.fixed)) & :global(a) {
+      color: var(--color-neutral-white);
+    }
+
+    :global(a:hover) {
+      color: black;
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    :global(.homepage):not(:global(.fixed)) & :global(a:hover) {
+      color: var(--color-brand-primary-dark);
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    :global(svg) {
+      transition: all var(--duration-default);
+    }
+
+    &:hover :global(svg) {
+      fill: black;
+      opacity: 1;
+
+      :global(.hero) & :global(svg) {
+        fill: green;
+      }
+    }
+
+    :global(.homepage):not(:global(.fixed)) &:hover :global(svg) {
+      fill: var(--color-brand-primary-dark);
+
+      opacity: 1;
+
+      :global(.hero) & :global(svg) {
+        fill: green;
+      }
+    }
+  }
+
+  :global(.showItem).item {
+    display: none;
+  }
+
+  :global(.hiddenItem).hiddenItem {
+    text-align: left;
+    padding: var(--space-xs);
+
+    & :global(a.inHiddenItem) {
+      color: var(--color-text);
+      &:hover {
+        color: var(--text-color-brand);
+      }
+    }
+  }
+}

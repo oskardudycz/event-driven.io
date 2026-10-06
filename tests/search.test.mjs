@@ -137,16 +137,18 @@ test('result rendering escapes source text while highlighting code matches', asy
   const compiled = new Module(filename);
   compiled.filename = filename;
   compiled.require = (id) =>
-    id === 'gatsby'
-      ? { Link: ({ to, children }) => React.createElement('a', { href: to }, children) }
-      : id === 'gatsby-plugin-image'
-        ? {
-            GatsbyImage: ({ image, alt }) =>
-              React.createElement('img', { src: image.images.fallback.src, alt }),
-          }
-        : id === '../../i18n/page-context'
-          ? { usePageContext: () => ({ lang: 'en' }) }
-          : require(id);
+    id.endsWith('.module.css')
+      ? new Proxy({}, { get: (_, key) => (key === '__esModule' ? false : String(key)) })
+      : id === 'gatsby'
+        ? { Link: ({ to, children }) => React.createElement('a', { href: to }, children) }
+        : id === 'gatsby-plugin-image'
+          ? {
+              GatsbyImage: ({ image, alt }) =>
+                React.createElement('img', { src: image.images.fallback.src, alt }),
+            }
+          : id === '../../i18n/page-context'
+            ? { usePageContext: () => ({ lang: 'en' }) }
+            : require(id);
   const { transformSync } = require('@babel/core');
   compiled._compile(
     transformSync(readFileSync('src/components/Search/Hit.js', 'utf8'), {
@@ -156,7 +158,6 @@ test('result rendering escapes source text while highlighting code matches', asy
         ['@babel/preset-env', { targets: { node: 'current' }, modules: 'commonjs' }],
         '@babel/preset-react',
       ],
-      plugins: ['styled-jsx/babel'],
     }).code,
     filename,
   );

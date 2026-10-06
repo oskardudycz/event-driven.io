@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { graphql } from 'gatsby';
-import { ThemeContext } from '../layouts';
+
 import Blog from '../components/Blog';
 import { createHead } from '../components/Seo';
 
@@ -15,16 +15,7 @@ class IndexPage extends React.Component {
 
     return (
       <React.Fragment>
-        <ThemeContext.Consumer>
-          {(theme) => <Blog posts={posts} theme={theme} heading="Newsletter" />}
-        </ThemeContext.Consumer>
-
-        <style jsx>{`
-          hr {
-            margin: 0;
-            border: 0;
-          }
-        `}</style>
+        <Blog posts={posts} heading="Newsletter" />
       </React.Fragment>
     );
   }

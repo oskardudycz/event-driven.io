@@ -33,7 +33,6 @@ const Post = (props) => {
     related,
     next: nextPost,
     prev: prevPost,
-    theme,
   } = props;
 
   const disqusConfig = {
@@ -44,35 +43,19 @@ const Post = (props) => {
   return (
     <React.Fragment>
       <header>
-        <Headline title={title} theme={theme} />
+        <Headline title={title} />
         <Summary>{summary}</Summary>
-        <Meta
-          prefix={prefix}
-          author={author}
-          category={category}
-          categories={categories}
-          theme={theme}
-        />
+        <Meta prefix={prefix} author={author} category={category} categories={categories} />
       </header>
-      <Bodytext html={html} theme={theme} />
+      <Bodytext html={html} />
       <footer>
         <Substack />
         <Related posts={related} />
-        <Share post={post} theme={theme} />
-        <Author note={authornote} theme={theme} />
+        <Share post={post} />
+        <Author note={authornote} />
         <NextPrev next={nextPost} prev={prevPost} />
         <DiscussionEmbed {...disqusConfig} />
       </footer>
-
-      {/* --- STYLES --- */}
-      <style jsx>{`
-        blockquote {
-          font-style: italic;
-          border-left: 7px solid orange;
-          margin: 1.5em 10px;
-          padding: 1em 10px 0.1em 10px;
-        }
-      `}</style>
     </React.Fragment>
   );
 };
@@ -84,7 +67,6 @@ Post.propTypes = {
   facebook: PropTypes.object.isRequired,
   next: PropTypes.object,
   prev: PropTypes.object,
-  theme: PropTypes.object.isRequired,
 };
 
 export default Post;

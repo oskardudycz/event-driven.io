@@ -1,3 +1,5 @@
+import './src/theme/tokens.css';
+import './src/theme/global.css';
 import React from 'react';
 import { DEFAULT_OPTIONS_BASE } from './src/i18n/settings.mjs';
 import { PageContext } from './src/i18n/page-context';
