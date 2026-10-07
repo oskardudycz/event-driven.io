@@ -45,8 +45,8 @@ You can check [recommendations on my Linked.in profile](https://www.linkedin.com
 You can also watch [the newer DDD Europe recording](/en/new-recording-on-event-modelling/).
 
 Watch also my other talks:
-- `youtube: [The Light and The Dark Side of the Event-Driven Design](https://www.youtube.com/watch?v=0pYmuk0-N_4)`
-- `youtube: [Let&#39;s build the worst Event Sourcing system!](https://www.youtube.com/watch?v=20zvAJAhqS0)`
+- [The Light and The Dark Side of the Event-Driven Design](https://www.youtube.com/watch?v=0pYmuk0-N_4)
+- [Let's build the worst Event Sourcing system!](https://www.youtube.com/watch?v=20zvAJAhqS0)
 
 Cheers!
 

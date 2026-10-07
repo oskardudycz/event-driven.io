@@ -8,7 +8,7 @@ useDefaultLangCanonical : true
 
 ![cover](2022-02-30-cover.png)
 
-`youtube: [War, war never changes…](https://www.youtube.com/watch?v=C2Pt-LnQ2po)`
+[War, war never changes…](https://www.youtube.com/watch?v=C2Pt-LnQ2po)
 
 W IT żyjemy w bańce. W porównaniu z innymi zawodami mamy niezwykle komfortowe warunki pracy. Nauczyliśmy się narzekać na drobiazgi. [Prowadzimy spory o to, który framework jest lepszy lub gorszy.](https://github.com/dotnet/csharplang/discussions/5735) Prowadzimy nawet gorące dyskusje wokół nowej składni języka. To gigantyczna bańka. Bańki mają jednak tendencję do pękania.
 

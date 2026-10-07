@@ -11,7 +11,7 @@ useDefaultLangCanonical : true
 **Coding is an underestimated part of the design.** When we think about the design, we immediately fall to whiteboard diagrams, sticky notes, or endless discussions. That's fine and one way of doing things, but we should do more - prototyping and working with code during the design phase. I mentioned last time that we [don't need to fall into Test-Driven Development or Behaviour-Driven Design immediately](/pl/behaviour_driven_design_is_not_about_tests/). I showed before my approach to [composing business logic](/pl/how_to_effectively_compose_your_business_logic/); today, I'd like to expand on that.
 
 **We'll use the following pieces in our recipe:**
-- `youtube: [Type-Driven Design](https://www.youtube.com/watch?v=Up7LcbGZFuo)`
+- [Type-Driven Design](https://www.youtube.com/watch?v=Up7LcbGZFuo)
 - [Decider pattern](https://thinkbeforecoding.com/post/2021/12/17/functional-event-sourcing-decider)
 - Event Sourcing
 - and code that with C# and [Marten](https://martendb.io/).

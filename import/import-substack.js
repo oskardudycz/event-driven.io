@@ -14,7 +14,7 @@ const {
 } = require('./article-content');
 
 const { publicationDate } = require('../src/utils/publication-date.mjs');
-const { normalizeYouTubeEmbeds } = require('./youtube-markdown.mts');
+const { normalizeYouTubeEmbeds, youtubeVideoUrl } = require('./youtube-markdown.mts');
 
 const postsDirectory = path.resolve(__dirname, '../content/posts');
 
@@ -309,7 +309,8 @@ async function convertPost(
     // Gatsby provides image zoom itself. Unwrap Substack's block-level image
     // links so they don't become invalid multiline Markdown links.
     const anchor = element.closest('a.image-link');
-    if (anchor.length) anchor.replaceWith(anchor.contents());
+    if (anchor.length && !youtubeVideoUrl(anchor.attr('href') || ''))
+      anchor.replaceWith(anchor.contents());
   }
   body.find('picture source').remove();
   body.find('picture, .image2-inset').each((_, node) => {

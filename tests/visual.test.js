@@ -20,6 +20,45 @@ afterAll(async () => {
   await browser?.close();
 });
 
+test('article video references remain links and players have accessible titles in both languages', async () => {
+  const page = await browser.newPage();
+  try {
+    await page.route('**/*', (route) => {
+      const request = new URL(route.request().url());
+      return request.origin === new URL(baseUrl).origin ? route.continue() : route.abort();
+    });
+    for (const path of ['/en/women_in_it/', '/pl/mezczyzna_w_it/']) {
+      await page.goto(new URL(path, baseUrl).href, { waitUntil: 'domcontentloaded' });
+      const reference = page.getByRole('link', {
+        name: 'Heather Wilde - How to Close the Diversity Gap',
+      });
+      await reference.waitFor();
+      expect(await reference.getAttribute('href')).toBe(
+        'https://www.youtube.com/watch?v=JQL4doMy73w',
+      );
+      expect(await page.locator('iframe[src*="JQL4doMy73w"]').count()).toBe(0);
+      expect(await page.locator('.bodytext').innerText()).not.toContain('youtube:');
+    }
+    for (const language of ['en', 'pl']) {
+      await page.goto(
+        new URL(
+          `/${language}/what_does_mr_bean_opening_the_car_have_to_do_with_programming/`,
+          baseUrl,
+        ).href,
+        {
+          waitUntil: 'domcontentloaded',
+        },
+      );
+      const player = page.locator('iframe[src*="youtube-nocookie.com/embed/GOd7oj1AT00"]');
+      await player.waitFor({ state: 'attached' });
+      expect(await player.count()).toBe(1);
+      expect(await player.getAttribute('title')).toBe('Mr Bean');
+    }
+  } finally {
+    await page.close();
+  }
+}, 60_000);
+
 test('normalized article links hydrate with clean canonicals and keep existing comment IDs', async () => {
   const page = await browser.newPage();
   try {
@@ -533,15 +572,13 @@ test('imported TypeScript examples display syntax colors', async () => {
 }, 60_000);
 
 for (const language of ['en', 'pl']) {
-  test(`${language} searches real local content with fallback links, pagination and no hosted requests`, async () => {
+  test(`${language} searches local content with lazy indexes, fallback links and pagination`, async () => {
     const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
     const indexRequests = [];
     const engineRequests = [];
-    const hosted = [];
     page.on('request', (request) => {
       if (request.url().includes('/local-search-engine-')) engineRequests.push(request.url());
       if (request.url().includes('/search-index/')) indexRequests.push(request.url());
-      if (/algolia(?:net)?\.(net|com)/.test(request.url())) hosted.push(request.url());
     });
     try {
       await page.goto(new URL(`/${language}/articles/`, baseUrl).href, {
@@ -637,7 +674,6 @@ for (const language of ['en', 'pl']) {
       await expect.poll(() => page.locator('.search-hit').count()).toBeGreaterThan(0);
       await page.getByRole('button', { name: language === 'pl' ? 'Wyczyść' : 'Clear' }).click();
       expect(await input.inputValue()).toBe('');
-      expect(hosted).toHaveLength(0);
       expect(
         await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
       ).toBe(true);

@@ -58,8 +58,7 @@ VISUAL_BASE_URL=https://your-preview.netlify.app yarn test:visual
 | `yarn test:indexing`                                      | Canonical destinations, reciprocal language alternates, fallback markers and Netlify routing |
 | `yarn test:404`                                           | Root/localized error HTML, recovery links and native 404 rules                               |
 | `yarn test:substack`                                      | Import conversion, assets, code languages and link safety                                    |
-| `yarn test:archive`                                       | Architecture Weekly manifest coverage, cutoff, recording mappings and aliases                |
-| `yarn test:import-build`                                  | Generated pages for imported articles                                                        |
+| `yarn test:articles`                                      | All published articles: metadata, video markup, language links and related cards             |
 | `yarn test:video`                                         | YouTube conversion, player parameters and referrer headers                                   |
 | `yarn test:redirects`                                     | Imported article aliases and generated redirects                                             |
 | `yarn test:categories`                                    | Category membership, locale parity and reading order                                         |
@@ -135,7 +134,6 @@ Existing posts are never overwritten. A failed batch retains earlier successful 
 ```bash
 yarn normalize:youtube
 yarn test:substack
-yarn test:archive
 env -u DEBUG yarn build
 yarn test
 ```
@@ -165,7 +163,7 @@ Use `publishedAt: '2026-10-05T12:34:56+02:00'` when the source publication time 
 `youtube: [Video title](https://www.youtube.com/watch?v=sQbkUl7-z_U&start=30)`
 ```
 
-Standalone video links and linked thumbnails use this format. Inline references within prose stay as links. Players use the configured Gatsby video plugin; no handwritten iframe is needed. Preserve the `strict-origin-when-cross-origin` referrer policy in Gatsby/Netlify configuration to avoid YouTube error 153.
+Use this format for a player. The importer and normalization command automatically convert only standalone images linked to YouTube videos. Text links stay links, including standalone links, reading lists, bare URLs and inline references. Existing explicit players and mapped webinar recordings retain their embeds. Players use the configured Gatsby video plugin; no handwritten iframe is needed. Preserve the `strict-origin-when-cross-origin` referrer policy in Gatsby/Netlify configuration to avoid YouTube error 153.
 
 Check or convert existing Markdown:
 

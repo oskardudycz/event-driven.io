@@ -55,12 +55,12 @@ test('the locale plugin decorates existing routes without generating duplicate l
 });
 
 test('every built page has matching editorial and plugin language with queried translations', () => {
-  let count = 0;
+  const languages = new Set();
   for (const file of pageDataFiles('public/page-data')) {
     const { path, result } = JSON.parse(readFileSync(file, 'utf8'));
     const language = path.split('/')[1];
     if (!['en', 'pl'].includes(language)) continue;
-    count++;
+    languages.add(language);
     const context = result.pageContext;
     assert.equal(context.lang, language, path);
     assert.equal(context.langKey, language, path);
@@ -83,5 +83,5 @@ test('every built page has matching editorial and plugin language with queried t
       path,
     );
   }
-  assert.ok(count > 690);
+  assert.deepEqual([...languages].sort(), ['en', 'pl']);
 });

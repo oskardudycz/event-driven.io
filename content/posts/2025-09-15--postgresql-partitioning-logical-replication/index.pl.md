@@ -412,7 +412,7 @@ From the issues that are special for PostgreSQL:
 
     -   [Internals of PostgreSQL VACUUM Processing](https://www.interdb.jp/pg/pgsql06.html)
 
-    -   `youtube: [Robert Haas: Understanding and Fixing Autovacuum](https://www.youtube.com/watch?v=7a1otYLZxy4)`
+    -   [Robert Haas: Understanding and Fixing Autovacuum](https://www.youtube.com/watch?v=7a1otYLZxy4)
 
 * * *
 

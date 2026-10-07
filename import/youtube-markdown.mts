@@ -42,26 +42,27 @@ function embed(url: string, title: string): string {
   return `\`youtube: [${safeTitle}](${url})\``;
 }
 
-// Use Markdown syntax/positions rather than replacing URLs inside code, prose
-// or existing embed directives. Standalone linked thumbnails count as videos.
+// Only standalone linked images become players. Text links, including reading
+// lists and bare URLs, preserve their original Markdown and punctuation.
 export function normalizeYouTubeEmbeds(markdown: string): string {
   const tree = remark().parse(markdown) as MarkdownNode;
   const edits: { start: number; end: number; text: string }[] = [];
   function walk(node: MarkdownNode) {
     if (node.type === 'paragraph' && node.position) {
       let children = (node.children || []).filter(
-        (child) => child.type !== 'text' || !/^[\s.,;]*$/.test(child.value || ''),
+        (child) => child.type !== 'text' || !/^\s*$/.test(child.value || ''),
       );
       while (children.length === 1 && ['strong', 'emphasis'].includes(children[0].type))
         children = children[0].children || [];
       if (children.length === 1) {
         const child = children[0];
-        const url = youtubeVideoUrl(child.url || (child.type === 'text' ? child.value || '' : ''));
-        if (url) {
+        const image = child.children?.[0];
+        const url = child.type === 'link' ? youtubeVideoUrl(child.url || '') : undefined;
+        if (url && child.children?.length === 1 && image?.type === 'image') {
           edits.push({
             start: node.position.start.offset,
             end: node.position.end.offset,
-            text: embed(url, child.type === 'text' ? '' : label(child)),
+            text: embed(url, label(image)),
           });
           return;
         }

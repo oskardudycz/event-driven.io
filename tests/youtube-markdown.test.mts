@@ -1,22 +1,30 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { readFileSync, readdirSync } from 'node:fs';
-import { join } from 'node:path';
 import { normalizeYouTubeEmbeds, youtubeVideoUrl } from '../import/youtube-markdown.mts';
 
-test('standalone links and thumbnails become video directives without rewriting prose or code', () => {
+test('only linked thumbnails become players; text links keep their exact Markdown', () => {
   const prose = 'A reference to [a song](https://youtu.be/0pYmuk0-N_4) inside a sentence.';
   const code = '```typescript\nconst url = "https://youtu.be/0pYmuk0-N_4";\n```';
   const existing = '`youtube: https://www.youtube.com/watch?v=20zvAJAhqS0`';
-  const source = `${prose}\n\n[My talk](https://youtu.be/0pYmuk0-N_4?t=1m30s)\n\n[![Thumbnail](cover.png)](https://youtube.com/watch?v=20zvAJAhqS0)\n\n${code}\n\n${existing}\n`;
+  const textLinks = [
+    '[My talk](https://youtu.be/0pYmuk0-N_4?t=1m30s)',
+    '- [Heather Wilde - How to Close the Diversity Gap](https://www.youtube.com/watch?v=JQL4doMy73w)',
+    '1. [A talk](https://youtu.be/0pYmuk0-N_4),',
+    '- References:\n  - [Nested talk](https://youtu.be/0pYmuk0-N_4)',
+    '**[Bold link](https://youtu.be/0pYmuk0-N_4)**',
+    'https://www.youtube.com/watch?v=20zvAJAhqS0',
+    '<https://www.youtube.com/watch?v=20zvAJAhqS0>',
+    "[Somebody's Gotta Do It](https://www.youtube.com/watch?v=M0SjU95U3-k).",
+  ];
+  const source = `${prose}\n\n${textLinks.join('\n\n')}\n\n[![Thumbnail](cover.png)](https://youtube.com/watch?v=20zvAJAhqS0&start=30)\n\n${code}\n\n${existing}\n`;
   const result = normalizeYouTubeEmbeds(source);
   assert.ok(result.includes(prose));
   assert.ok(result.includes(code));
   assert.ok(result.includes(existing));
+  for (const link of textLinks) assert.ok(result.includes(link), link);
   assert.ok(
-    result.includes('`youtube: [My talk](https://www.youtube.com/watch?t=1m30s&v=0pYmuk0-N_4)`'),
+    result.includes('`youtube: [Thumbnail](https://www.youtube.com/watch?v=20zvAJAhqS0&start=30)`'),
   );
-  assert.ok(result.includes('`youtube: [Thumbnail](https://www.youtube.com/watch?v=20zvAJAhqS0)`'));
   assert.equal(normalizeYouTubeEmbeds(result), result);
 });
 
@@ -42,20 +50,7 @@ test('video URLs retain timestamps and playlists, reject non-video and lookalike
   ])
     assert.equal(youtubeVideoUrl(url), undefined);
   assert.match(
-    normalizeYouTubeEmbeds('["<unsafe>"](https://youtu.be/0pYmuk0-N_4)'),
+    normalizeYouTubeEmbeds('[!["<unsafe>"](cover.png)](https://youtu.be/0pYmuk0-N_4)'),
     /&quot;&lt;unsafe&gt;&quot;/,
   );
-});
-
-test('all published Markdown uses embeds for standalone YouTube video links', () => {
-  function files(directory: string): string[] {
-    return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
-      const file = join(directory, entry.name);
-      return entry.isDirectory() ? files(file) : file.endsWith('.md') ? [file] : [];
-    });
-  }
-  for (const file of files('content')) {
-    const source = readFileSync(file, 'utf8');
-    assert.equal(normalizeYouTubeEmbeds(source), source, file);
-  }
 });

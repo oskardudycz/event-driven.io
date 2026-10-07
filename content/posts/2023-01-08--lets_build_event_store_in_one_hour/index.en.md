@@ -39,7 +39,7 @@ Check more on those considerations in the:
 - [Greg Young - Building an Event Storage](https://cqrs.wordpress.com/documents/building-event-storage/)
 - [Yves Lorphelin - Requirements for the storage of events](https://www.eventstore.com/blog/requirements-for-the-storage-of-events),
 - [Anton Stöckl - Essential features of an Event Store for Event Sourcing](https://medium.com/itnext/essential-features-of-an-event-store-for-event-sourcing-13e61ca4d066)
-- `youtube: [Greg Young - How an EventStore actually works](https://www.youtube.com/watch?v=YUjO1wM0PZM)`
+- [Greg Young - How an EventStore actually works](https://www.youtube.com/watch?v=YUjO1wM0PZM)
 - [Adam Warski - Implementing event sourcing using a relational database](https://softwaremill.com/implementing-event-sourcing-using-a-relational-database/)
 
 **I also have something special for you, a self-paced kit on building event store on top of Relational Database using Postgres as an example.** It starts with the tables set up and goes through appending events, aggregations, handling business logic, time travelling, projections, and snapshots. 
