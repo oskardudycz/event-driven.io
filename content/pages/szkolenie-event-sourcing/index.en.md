@@ -1,184 +1,190 @@
 ---
-title: Zrozum Event Sourcing w praktyce - otwarte szkolenie
+title: Understand Event Sourcing in practice - public workshop
 ---
 
-**Event Sourcing jest bardzo kuszącym wzorcem. Pozwala śledzić wszystkie fakty biznesowe. Nie tracimy żadnej informacji biznesowej.** Dzięki temu zyskujemy obserwowalność naszego przepływu biznesowego. Jesteśmy w idealnej pozycji, aby zebrać informacje na temat obecnego zachowania systemu i odpowiedzieć na pytania i wyzwania jutra.
+**Event Sourcing is an appealing pattern. It lets us track every business fact without losing business information.** This gives us visibility into our business processes. We can learn how the system behaves today and use that knowledge to answer tomorrow's questions and challenges.
 
-**Jednak Event Sourcing stawia również nowe wyzwania przed zespołami programistycznymi. Pojawiają się pytania typu:**
-- Jak zapewnić gwarancje trwałości danych? 
-- Jak modelować zdarzenia?
-- Jak implementować logikę biznesową?
-- Który event store wybrać?
-- Jaka jest właściwa wielkość i szczegółowość zdarzeń? 
-- Czy używać "snapshoty"?
-- Jak tworzyć modele odczytu?
+**However, Event Sourcing also brings new challenges for development teams:**
 
-Wszystkie te wyzwania nie są trudne same w sobie, ale ich nagromadzenie może przytłoczyć.
+- How can we guarantee data durability?
+- How should we model events?
+- How should we implement business logic?
+- Which event store should we choose?
+- How large and detailed should events be?
+- Should we use snapshots?
+- How should we build read models?
 
-Event Sourcing wymaga nowego zestawu praktyk i uzyskania pewności siebie w projektowaniu, budowaniu i utrzymaniu trwałych systemów.
+Each challenge is manageable on its own, but facing them all at once can feel overwhelming.
 
-**Ten praktyczny warsztat ma na celu zbudowanie tej pewności, stopniowo wprowadzając uczestników do Event Sourcing poprzez działania praktyczne.**
+Event Sourcing requires a new set of practices and confidence in designing, building and maintaining durable systems.
+
+**This practical workshop builds that confidence by introducing Event Sourcing step by step through hands-on exercises.**
 
 ![](./workshop.jpg)
 
-## Czego się nauczysz?
+## What will you learn?
 
-**Po warsztatach poznasz odpowiedzi na powyższe pytania, plus dowiesz się:**
-- kiedy i jak używać Event Sourcing i CQRS oraz jakie korzyści to przynosi,
-- jak odzwierciedlić logikę biznesową w kodzie za pomocą zdarzeń,
-- jak modelować i implementować procesy biznesowe,
-- różnice w stosunku do klasycznego podejścia,
-- poznasz różne narzędzia, takie jak Emmett, Marten i EventStoreDB oraz różnice między nimi,
-- jak wdrożyć Event Sourcing w swoim systemie,
-- wyzwania związane z Event Sourcing i zalecane rozwiązania,
-- Event Sourcing w połączeniu z CQRS, Vertical Slices i innymi wzorcami.
+**After the workshop, you will know the answers to the questions above, as well as:**
 
-**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/YxfhZ9wUQetX9iue8)**
+- when and how to use Event Sourcing and CQRS, and the benefits they bring,
+- how to express business logic in code using events,
+- how to model and implement business processes,
+- how this differs from the traditional approach,
+- how tools such as Emmett, Marten and EventStoreDB work, and how they differ,
+- how to introduce Event Sourcing into your system,
+- common Event Sourcing challenges and recommended solutions,
+- how to combine Event Sourcing with CQRS, Vertical Slices and other patterns.
 
-## O mnie
+**[Sign up](https://forms.gle/YxfhZ9wUQetX9iue8)**
 
-**Jestem niezależnym architektem i konsultantem specjalizującym się w tworzeniu systemów ściśle dostosowanych do potrzeb biznesowych.** Tworzę je od ponad 17 lat. Jestem pasjonatem projektowania solidnych systemów, narzędzi i struktur. Skupiam się na ułatwianiu ludziom życia za pomocą technologii.
+## About me
 
-**Jestem zwolennikiem Event Sourcing, CQRS i Event-Driven Architecture. Uważam, że ​​podejścia te zapewniają solidne podstawy do budowania skalowalnych i łatwych w utrzymaniu rozwiązań. Sprawdziłem to naocznie w swoich projektach.**
+**I am an independent architect and consultant specializing in systems that closely fit business needs.** I have been building them for over 17 years. I enjoy designing reliable systems, tools and frameworks, with a focus on making people's lives easier through technology.
 
-Oprócz doradztwa jestem aktywnym twórcą Open Source. Brałem udział w tworzeniu popularnych narzędzi Event Sourcing, takich jak [Emmett](https://event-driven-io.github.io/emmett/), [Marten](https://martendb.io/) i [EventStoreDB](https://developers.eventstore.com/). Regularnie dzielę się spostrzeżeniami, praktycznymi przykładami i osobistymi doświadczeniami na tym blogu, w newsletterze [Architecture Weekly](https://www.architecture-weekly.com/) i na [GitHub](https://github.com/oskardudycz/).
+**I advocate Event Sourcing, CQRS and Event-Driven Architecture. I believe these approaches provide a solid foundation for scalable, maintainable solutions, and I have seen that in my own projects.**
 
-## Czy to szkolenie jest dla Ciebie?
+Alongside consulting, I actively contribute to open source. I have helped build popular Event Sourcing tools, including [Emmett](https://event-driven-io.github.io/emmett/), [Marten](https://martendb.io/) and [EventStoreDB](https://developers.eventstore.com/). I regularly share insights, practical examples and personal experiences on this blog, in [Architecture Weekly](https://www.architecture-weekly.com/) and on [GitHub](https://github.com/oskardudycz/).
 
-Czy przeszło Ci kiedyś przez myśl:
+## Is this workshop for you?
 
-> „Byłoby znacznie łatwiej, gdybyśmy mieli przeszłe dane. Łatwiej by było zrozumieć ten dziwny przypadek
+Have you ever thought:
 
-Czy integrujesz już swoje systemy ze zdarzeniami i widzisz, że dłuższe ich przechowywanie może pomóc Ci poprawić obserwowalność, budować modele odczytu? 
+> It would be much easier if we had the past data. We could understand this strange case more easily.
 
-Być może zacząłeś modelować za pomocą EventStorming i chcesz zobaczyć, jak odzwierciedlić swój model w kodzie?
+Are you already integrating your systems through events and noticing that keeping them longer could improve observability and help you build read models?
 
-Jeśli którykolwiek z tych punktów dotyczy Ciebie, zrozumienie Event Sourcing może poprawić projekt Twojego systemu i być cennym atutem.
+Perhaps you have started modelling with EventStorming and want to see how to express your model in code?
 
-Jeśli zbudowałeś już aplikacje w C#, Java lub Node.js i chciałbyś wynieść je na wyższy poziom, ten warsztat może być dla Ciebie.
+If any of these apply to you, understanding Event Sourcing can improve your system's design and become a valuable skill.
 
-Powinieneś mieć doświadczenie w budowaniu aplikacji przy użyciu C#, Java lub TypeScript, ale wszystkie tematy związane z Event Sourcing zostaną wprowadzone od początku. Nawet jeśli znasz Event Sourcing, wypolerowanie podstaw powinno pomóc Ci upewnić się, że niczego nie pominąłeś w nauce.
+If you have built applications in C#, Java or Node.js and want to take them further, this workshop could be for you.
 
-## Zasady gry
+You should have experience building applications with C#, Java or TypeScript. All Event Sourcing topics will be introduced from the beginning. Even if you already know Event Sourcing, revisiting the fundamentals can help you check that you have not missed anything.
 
-**Szkolenie będzie skupione na praktyce nie wykładach i teorii.** Dzięki praktycznym ćwiczeniom stopniowo poznasz teorię Event Sourcing poprzez praktykę. Będzie dużo zadań programistycznych, ale też modelarskich i praca w grupach. Ideą ćwiczeń jest wywołanie dyskusji, aby pogłębić zrozumienie tematów. Otrzymasz również sugerowane rozwiązania (zwykle kilka dla tego samego problemu). Zadania możesz wykonać samodzielnie lub grupowo z innymi.
+## How the workshop works
 
-Będziesz również modelować grupowe przepływy pracy biznesowej przy użyciu EventStorming i implementować ich wynik.
+**The workshop focuses on practice rather than lectures and theory.** You will learn the theory of Event Sourcing gradually through practical exercises. There will be coding tasks, modelling exercises and group work. The exercises encourage discussion to deepen your understanding. You will also receive suggested solutions, usually several approaches to the same problem. You can complete the tasks individually or together with others.
 
-Warsztat koncentruje się na praktyce i doświadczeniu praktycznym, aby zapewnić Ci szybki start.
+You will also model business workflows as a group using EventStorming and implement the resulting models.
 
-**Aby dać możliwość spokojnego przyswojenia wiedzy szkolenie będzie prowadzone metodą kohortową.** Oznacza to, że będzie odbywać się 3 tygodnie z rzędu. W każdym tygodniu dwie sesje po 4 godziny. Dzięki temu, pomiędzy tygodniami będziesz mieć czas na przemyślenie, spisanie pytań, dyskusję. **Aby to ułatwić w trakcie warsztatu będziesz mieć dostęp do dedykowanej grupy Discord dla uczestników. Ja będę również na niej starając się na bieżąco odpowiadać na Twoje pytania.**
+The workshop focuses on practical experience to help you get started quickly.
 
-**Szkolenie będzie się odbywało online przez platformę Zoom.**
+**To give you time to absorb the material, the workshop runs as a cohort over three consecutive weeks.** Each week has two four-hour sessions. Between weeks, you will have time to reflect, write down questions and discuss what you have learned. **During the workshop, you will have access to a dedicated Discord group for participants. I will also be there to answer your questions throughout the course.**
 
-Szkolenie nie będzie nagrywane, ale po jego zakończeniu dostaniesz mnóstwo materiałów dodatkowych z pogrupowanymi tematyką materiałami.
+**The workshop takes place online over Zoom.**
 
+The sessions will not be recorded. After the workshop, you will receive additional resources grouped by topic.
 
 ![](./workshop-online.png)
 
 ## Agenda
 
-**Tydzień 1**
+**Week 1**
 
-- Wprowadzenie do Event Sourcing. Podstawowa terminologia (zdarzenie, strumień zdarzeń, polecenie), różnice w stosunku do podejścia klasycznego.
-- Różne sposoby obsługi logiki biznesowej: agregaty, podejście funkcyjne, itd.
-- CQRS i warstwa aplikacji
-- Gwarancje spójności modelu i danych.
-- Dobre i złe praktyki w modelowaniu zdarzeń.
-- Projekcje i najlepsze praktyki w budowaniu modeli odczytu.
+- Introduction to Event Sourcing: basic terminology (event, event stream, command) and differences from the traditional approach.
+- Different ways to handle business logic: aggregates, functional approaches and more.
+- CQRS and the application layer.
+- Model and data consistency guarantees.
+- Good and bad practices in event modelling.
+- Projections and best practices for building read models.
 
-**Tydzień 2**
-- Modelowanie przepływów pracy Event Sourcing: Saga, Choreography, Process Manager, obsługa rozproszonych procesów.
-- Wyzwania w Event Sourcing i EDA: gwarancje dostawy, kolejność przetwarzania zdarzeń, idempotentność itp.
+**Week 2**
 
-**Tydzień 3**
-- Event Sourcing na produkcji, 
-- ewolucja i wersjonowanie zdarzeń,
-- dokumentowanie zdarzeń,
-- zaawansowane techniki modelowania i trzymania strumieni krótko żyjącymi.
+- Modelling Event Sourcing workflows: sagas, choreography, process managers and distributed processes.
+- Challenges in Event Sourcing and EDA: delivery guarantees, event processing order, idempotency and more.
 
-## 📆 Terminy
+**Week 3**
 
-**Sesje będą odbywały się w godzinach 9-13.**
+- Event Sourcing in production.
+- Event evolution and versioning.
+- Documenting events.
+- Advanced modelling techniques and keeping streams short-lived.
 
-Terminy szkoleń to:
+## 📆 Dates
 
-**Tydzień 1:**
-- 24.02.2025
-- 25.02.2025
+**Sessions run from 9:00 to 13:00.**
 
-**Tydzień 2:**
-- 3.03.2025
-- 4.03.2025
+The workshop dates are:
 
-**Tydzień 3:**
-- 10.03.2025
-- 11.03.2025
+**Week 1:**
 
-**Koszt szkolenia 3000 PLN (+ VAT).**
+- 24 February 2025
+- 25 February 2025
 
-## Dlaczego warto wziąć udział w tym szkoleniu?
+**Week 2:**
 
-**Zbudujesz kompletną aplikację używając Event Sourcing.** Będzie to względnie prosta aplikacja, ale gotowa do użycia. Może być szablonem do stosowania Event Sourcing w Twoich systemach. 
+- 3 March 2025
+- 4 March 2025
 
-Zdobędziesz przewagę konkurencyjną nad innymi, wiedząc, jak sprawić, by Twoje systemy były obserwowalne i śledzone. **Na obecnym rynku pracy taka wiedza może być cennym wyróżnikiem.**
+**Week 3:**
 
-Zrozumiesz gdzie używać i gdzie nie używać Event Sourcing. Zyskasz dobre fundamenty do podejmowania decyzji architektonicznych oraz dodatkowe materiały do dalszego poszerzenia wiedzy.
+- 10 March 2025
+- 11 March 2025
 
-**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/YxfhZ9wUQetX9iue8)**
+**Workshop price: PLN 3,000 (+ VAT).**
 
-## Referencje
+## Why take this workshop?
 
-Jeśli powyższe Cię nie przekonało, zerknij na [opinie innych ludzi o moich warsztatach](https://www.linkedin.com/in/oskardudycz/details/recommendations/?detailScreenTabIndex=0):
+**You will build a complete application using Event Sourcing.** It will be a relatively simple application, but ready to use. It can serve as a starting point for applying Event Sourcing in your own systems.
 
-![rekomendacja](../../../src/images/recommendations/r23.png)
+You will learn how to make your systems observable and traceable. **In today's job market, that knowledge can help you stand out.**
 
-![rekomendacja](../../../src/images/recommendations/r02.png)
+You will understand where to use Event Sourcing and where to avoid it. You will gain a solid foundation for architectural decisions and additional resources to continue learning.
 
-![rekomendacja](../../../src/images/recommendations/r20.png)
+**[Sign up](https://forms.gle/YxfhZ9wUQetX9iue8)**
 
-![rekomendacja](../../../src/images/recommendations/r10.png)
+## Recommendations
 
-![rekomendacja](../../../src/images/recommendations/r24.png)
+If you are still unsure, read [other people's recommendations of my workshops](https://www.linkedin.com/in/oskardudycz/details/recommendations/?detailScreenTabIndex=0):
 
-![rekomendacja](../../../src/images/recommendations/r22.png)
+![Workshop recommendation](../../../src/images/recommendations/r23.png)
 
-![rekomendacja](../../../src/images/recommendations/r21.png)
+![Workshop recommendation](../../../src/images/recommendations/r02.png)
 
-![rekomendacja](../../../src/images/recommendations/r19.png)
+![Workshop recommendation](../../../src/images/recommendations/r20.png)
 
-![rekomendacja](../../../src/images/recommendations/r18.png)
+![Workshop recommendation](../../../src/images/recommendations/r10.png)
 
-![rekomendacja](../../../src/images/recommendations/r17.png)
+![Workshop recommendation](../../../src/images/recommendations/r24.png)
 
-![rekomendacja](../../../src/images/recommendations/r16.png)
+![Workshop recommendation](../../../src/images/recommendations/r22.png)
 
-![rekomendacja](../../../src/images/recommendations/r15.png)
+![Workshop recommendation](../../../src/images/recommendations/r21.png)
 
-![rekomendacja](../../../src/images/recommendations/r14.png)
+![Workshop recommendation](../../../src/images/recommendations/r19.png)
 
-![rekomendacja](../../../src/images/recommendations/r13.png)
+![Workshop recommendation](../../../src/images/recommendations/r18.png)
 
-![rekomendacja](../../../src/images/recommendations/r12.png)
+![Workshop recommendation](../../../src/images/recommendations/r17.png)
 
-![rekomendacja](../../../src/images/recommendations/r11.png)
+![Workshop recommendation](../../../src/images/recommendations/r16.png)
 
-![rekomendacja](../../../src/images/recommendations/r09.png)
+![Workshop recommendation](../../../src/images/recommendations/r15.png)
 
-![rekomendacja](../../../src/images/recommendations/r08.png)
+![Workshop recommendation](../../../src/images/recommendations/r14.png)
 
-![rekomendacja](../../../src/images/recommendations/r07.png)
+![Workshop recommendation](../../../src/images/recommendations/r13.png)
 
-![rekomendacja](../../../src/images/recommendations/r06.png)
+![Workshop recommendation](../../../src/images/recommendations/r12.png)
 
-![rekomendacja](../../../src/images/recommendations/r05.png)
+![Workshop recommendation](../../../src/images/recommendations/r11.png)
 
-![rekomendacja](../../../src/images/recommendations/r04.png)
+![Workshop recommendation](../../../src/images/recommendations/r09.png)
 
-![rekomendacja](../../../src/images/recommendations/r03.png)
+![Workshop recommendation](../../../src/images/recommendations/r08.png)
 
-![rekomendacja](../../../src/images/recommendations/r01.png)
+![Workshop recommendation](../../../src/images/recommendations/r07.png)
 
-**To co, przekonałem Cię?**
+![Workshop recommendation](../../../src/images/recommendations/r06.png)
 
-**[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/YxfhZ9wUQetX9iue8)**
+![Workshop recommendation](../../../src/images/recommendations/r05.png)
+
+![Workshop recommendation](../../../src/images/recommendations/r04.png)
+
+![Workshop recommendation](../../../src/images/recommendations/r03.png)
+
+![Workshop recommendation](../../../src/images/recommendations/r01.png)
+
+**Ready to join?**
+
+**[Sign up](https://forms.gle/YxfhZ9wUQetX9iue8)**

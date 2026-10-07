@@ -28,14 +28,18 @@ export const onCreateNode = ({ node, getNode, actions }) => {
     const langKey = langFileNamePart ? langFileNamePart[2] : 'en';
 
     if (source !== 'parts') {
+      const originalSlug = `${separtorIndex ? '/' : ''}${slug.substring(shortSlugStart)}`.replace(
+        `/index.${langKey}/`,
+        '/',
+      );
       createNodeField({
         node,
         name: `slug`,
-        value: `${separtorIndex ? '/' : ''}${slug.substring(shortSlugStart)}`.replace(
-          `/index.${langKey}/`,
-          '/',
-        ),
+        value: originalSlug.toLowerCase(),
       });
+      // Feed GUIDs and comment thread IDs are publication identities, not
+      // canonical URLs. Preserve them when the hosted URL normalizes its case.
+      createNodeField({ node, name: 'originalSlug', value: originalSlug });
     }
     createNodeField({
       node,
@@ -142,6 +146,12 @@ export const createPages = ({ graphql, actions, getNodesByType, reporter }) => {
         );
         scheduleDevelopmentSearch({ getNodesByType, reporter });
         const items = result.data.allMarkdownRemark.edges;
+        const paths = new Set();
+        for (const { node } of items) {
+          const route = `/${node.fields.langKey}${node.fields.slug}`;
+          if (paths.has(route)) throw new Error(`Multiple published documents claim ${route}`);
+          paths.add(route);
+        }
         const availableLanguagesFor = (node) =>
           items
             .filter(
@@ -355,11 +365,11 @@ export const onCreatePage = async (
     };
 
   // The plugin decorates prefixed pages; never localize them a second time.
-  if (/^\/(en|pl)(?:\/|$)/.test(page.path)) return;
+  if (/^\/(en|pl)(?:\/|$)/.test(page.path) || page.context.root404) return;
 
   const isEnvDevelopment = process.env.NODE_ENV === 'development';
   const originalPath = page.path;
-  const is404 = originalPath.includes(notFoundPage);
+  const is404 = originalPath.includes(notFoundPage) || originalPath === '/404.html';
 
   // return early if page is exluded
   if (excludedPages.includes(originalPath)) {
@@ -368,6 +378,33 @@ export const onCreatePage = async (
 
   // Always delete the original page (since we are gonna create localized versions of it) header
   await deletePage(page);
+
+  // Static hosts need Gatsby's default 404.html for unprefixed unknown URLs.
+  // The marker prevents re-localizing the recreated root page.
+  if (is404) {
+    await createPage({
+      ...page,
+      context: {
+        ...page.context,
+        root404: true,
+        excludeFromSitemap: true,
+        originalPath,
+        lang: defaultLanguage,
+        langKey: defaultLanguage,
+        language: defaultLanguage,
+        availableLanguages: supportedLanguages,
+        i18n: {
+          language: defaultLanguage,
+          languages: supportedLanguages,
+          defaultLanguage,
+          generateDefaultLanguagePage: true,
+          routed: false,
+          originalPath,
+          path: originalPath,
+        },
+      },
+    });
+  }
 
   // If the user didn't want to delete the original pages, we re-create them with the proper context
   // (currently the only way to add new context to a page is to delete and re-create it
@@ -391,19 +428,25 @@ export const onCreatePage = async (
       const localizedPath = `/${lang}${page.path}`;
 
       // create a redirect based on the accept-language header
-      createRedirect({
-        fromPath: originalPath,
-        toPath: localizedPath,
-        conditions: { language: lang },
-        isPermanent: false,
-        redirectInBrowser: isEnvDevelopment,
-        statusCode: is404 ? 404 : 301,
-      });
+      if (!is404)
+        createRedirect({
+          fromPath: originalPath,
+          toPath: localizedPath,
+          conditions: { language: lang },
+          isPermanent: false,
+          redirectInBrowser: isEnvDevelopment,
+          statusCode: is404 ? 404 : 301,
+        });
 
       await createPage({
         ...page,
         path: localizedPath,
-        matchPath: page.matchPath ? `/${lang}${page.matchPath}` : undefined,
+        matchPath:
+          is404 && originalPath !== '/404.html'
+            ? `/${lang}/*`
+            : page.matchPath
+              ? `/${lang}${page.matchPath}`
+              : undefined,
         context: {
           ...page.context,
           originalPath,
@@ -428,7 +471,7 @@ export const onCreatePage = async (
   // Create a fallback redirect if the language is not supported or the
   // Accept-Language header is missing for some reason.
   // We only do that if the originalPath is not present anymore (i.e. the original page was deleted)
-  if (deleteOriginalPages) {
+  if (deleteOriginalPages && !is404) {
     createRedirect({
       fromPath: originalPath,
       toPath: `/${defaultLanguage}${page.path}`,
@@ -591,7 +634,7 @@ function createRedirectsToOldPosts(isEnvDevelopment, createRedirect) {
     },
     {
       from: '/2018/04/18/mezczyzna-w-it',
-      to: '/pl/mezczyzna_w_IT',
+      to: '/pl/mezczyzna_w_it',
     },
     {
       from: '/2019/11/30/zrodla-otwartosci',
@@ -624,27 +667,14 @@ function createRedirectsToOldPosts(isEnvDevelopment, createRedirect) {
   });
 }
 
-export const onPreBuild = ({ actions: { createRedirect } }, pluginOptions) => {
+export const onPreBuild = ({ actions: { createRedirect } }) => {
   const isEnvDevelopment = process.env.NODE_ENV === 'development';
-  const { notFoundPage } = { ...DEFAULT_OPTIONS, ...pluginOptions };
-
   // These redirects are global. Register them once instead of once for every page handled by
   // onCreatePage.
   createRedirectsToOldPosts(isEnvDevelopment, createRedirect);
 
-  // we add a generic redirect to the "not found path" for every path that's not present in the app.
-  // This rule needs to be the last one (so that it only kicks in if nothing else matched before),
-  // thus it's added after all the page-related hooks have finished (hence "onPreBuild")
-
-  if (notFoundPage) {
-    createRedirect({
-      fromPath: '/*',
-      toPath: notFoundPage,
-      isPermanent: false,
-      redirectInBrowser: isEnvDevelopment,
-      statusCode: 302,
-    });
-  }
+  // Hosting-specific query redirects and final 404 rewrites live together in
+  // netlify.toml, after Gatsby's editorial aliases. See the routing regressions.
 };
 
 export const createSchemaCustomization = ({ actions }) => {
@@ -672,6 +702,7 @@ export const createSchemaCustomization = ({ actions }) => {
     }
     type MarkdownRemarkFields @dontInfer {
       slug: String
+      originalSlug: String
       prefix: String
       source: String
       langKey: String

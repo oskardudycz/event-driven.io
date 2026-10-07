@@ -59,7 +59,7 @@ See also more in the materials Jarek recommends:
 
 -   [Brendan Gregg - Systems Performance](https://www.brendangregg.com/systems-performance-2nd-edition-book.html)
 
--   [Nitsan Wakart — Profilers are lying hobbitses](https://www.youtube.com/watch?v=7IkHIqPeFjY)
+-   `youtube: [Nitsan Wakart — Profilers are lying hobbitses](https://www.youtube.com/watch?v=7IkHIqPeFjY)`
 
 * * *
 

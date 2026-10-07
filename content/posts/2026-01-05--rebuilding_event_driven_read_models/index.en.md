@@ -5,6 +5,7 @@ cover: 2026-01-05-cover.png
 author: oskar dudycz
 redirectFrom: /rebuilding_event_driven_read_models/
 redirectAliases:
+  - /en/rebuilding_read_models_safely/
   - /rebuilding-event-driven-read-models/
   - /en/rebuilding-event-driven-read-models/
 ---

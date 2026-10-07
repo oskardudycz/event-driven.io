@@ -8,7 +8,7 @@ useDefaultLangCanonical : true
 
 Before reading the article, please watch the video below:
 
-[![Mr Bean](2021-10-20-play.png)](https://www.youtube.com/watch?v=GOd7oj1AT00)
+`youtube: [Mr Bean](https://www.youtube.com/watch?v=GOd7oj1AT00)`
 
 Mr Bean wants to add a new business feature to the project. First, the entity class, then the repository (and registers its generic version in Dependency Injection container), then the application service, request validator, mapping from request classes to entities. He is about to run it, but he reminds himself that it won't work because he forgot to add a new controller. Time goes quickly, the controller is here, he's firing it up and boom! It does not work because he forgot to register something else in the IoC container. Once that is done, only unit tests are left for each of the added classes, some integration tests and finally, endpoint adding a dictionary entity with two fields works.
 

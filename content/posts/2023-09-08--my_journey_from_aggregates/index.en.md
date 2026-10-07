@@ -79,7 +79,7 @@ Let's see how different it will be after the next few years.
 Read also more about my journey in:
 - [How to effectively compose your business logic](/en/how_to_effectively_compose_your_business_logic/)
 - [Slim your aggregates with Event Sourcing!](/en/slim_your_entities_with_event_sourcing/)
-- [Straightforward Event Sourcing with TypeScript and NodeJS](/en/type_script_node_Js_event_sourcing/)
+- [Straightforward Event Sourcing with TypeScript and NodeJS](/en/type_script_node_js_event_sourcing/)
 - [Vertical Slices in practice](/en/vertical_slices_in_practice/)
 - [What onion has to do with Clean Code?](/en/onion_clean_code/)
 - [Explicit validation in C# just got simpler!](/en/explicit_validation_in_csharp_just_got_simpler/)

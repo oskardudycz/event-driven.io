@@ -1,55 +1,185 @@
 # Event-Driven.io
 
-Event-Driven.io - Resources about Event-Driven Architectures, Event Sourcing and pragmatic development
+## Setup
+
+Use Node 24 and Yarn 1.
+
+```bash
+nvm install
+nvm use
+yarn --frozen-lockfile
+yarn browsers:install
+```
+
+On Linux, install Chromium's system libraries with `yarn browsers:install:ci`. Firefox is optional: `yarn browsers:install:firefox`.
+
+Optional local `.env` settings:
+
+```dotenv
+GATSBY_DISQUS_NAME=oskar-dudycz
+GOOGLE_TAG_ID=your-google-tag-manager-id
+```
+
+CI uses the corresponding repository secrets. Search uses local MiniSearch indexes and needs no Algolia credentials.
+
+## Development and production checks
+
+```bash
+yarn develop
+```
+
+For a production check:
+
+```bash
+yarn smoke
+yarn lint
+env -u DEBUG yarn build
+yarn test
+env -u DEBUG yarn serve -H 127.0.0.1 -p 9000
+```
+
+Keep the server running and execute `yarn test:visual` in another terminal. Set `VISUAL_BASE_URL` to test a deployment preview:
+
+```bash
+VISUAL_BASE_URL=https://your-preview.netlify.app yarn test:visual
+```
+
+`build` generates theme tokens, `llms.txt`, feeds, sitemaps and search indexes. Tests that inspect generated output require a completed production build. Do not edit content or run another Gatsby process during a build or cache check. To rebuild from an empty cache, run `yarn clean` before `yarn build`.
+
+## Tests
+
+`yarn test` runs all non-browser suites below. Browser tests run separately.
+
+| Command                                                   | Checks                                                                                       |
+| --------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `yarn smoke`                                              | Source syntax, configuration and GraphQL queries                                             |
+| `yarn test:seo` / `yarn verify-seo`                       | Generated headings, metadata, schema, sitemap and security headers                           |
+| `yarn test:build-contract` / `yarn verify:build-contract` | Exact routes, redirects, sitemap URLs and feed identities                                    |
+| `yarn test:indexing`                                      | Canonical destinations, reciprocal language alternates, fallback markers and Netlify routing |
+| `yarn test:404`                                           | Root/localized error HTML, recovery links and native 404 rules                               |
+| `yarn test:substack`                                      | Import conversion, assets, code languages and link safety                                    |
+| `yarn test:archive`                                       | Architecture Weekly manifest coverage, cutoff, recording mappings and aliases                |
+| `yarn test:import-build`                                  | Generated pages for imported articles                                                        |
+| `yarn test:video`                                         | YouTube conversion, player parameters and referrer headers                                   |
+| `yarn test:redirects`                                     | Imported article aliases and generated redirects                                             |
+| `yarn test:categories`                                    | Category membership, locale parity and reading order                                         |
+| `yarn test:performance`                                   | Image priority/lazy loading, local fonts, newsletter and menu regressions                    |
+| `yarn test:search`                                        | Local search data, fallback languages and safe result rendering                              |
+| `yarn test:localization`                                  | Translation resources, routing and canonical-language policy                                 |
+| `yarn test:css`                                           | Generated CSS assets and stale inline styles                                                 |
+| `yarn test:tooling`                                       | Lint, formatting and editor configuration                                                    |
+| `yarn test:visual`                                        | Browser hydration, navigation, search, mobile layouts and screenshots                        |
+
+Cache checks temporarily modify/delete/restore existing source files and rebuild. Stop development/preview servers and pause content edits first:
+
+```bash
+env -u DEBUG yarn test:cache
+env -u DEBUG yarn test:cache:css
+yarn test
+```
+
+Run browser checks against the restored build afterward. Cache logs are saved in temporary directories printed by each command.
+
+To check search refresh in development, start `yarn develop -H 127.0.0.1 -p 8001`, then run `yarn test:search:dev` in another terminal. This check also temporarily modifies and restores an article. Set `DEV_SEARCH_BASE_URL` to use another address. Reload the search page after its index changes.
+
+## Formatting and editor setup
+
+```bash
+yarn lint
+yarn fix
+```
+
+Individual commands: `lint:eslint`, `lint:prettier`, `fix:eslint`, `fix:prettier`. `lint:modern` aliases the ESLint check. ESLint parses TypeScript but does not type-check it.
+
+Installation configures Husky. The pre-commit hook runs `yarn lint-staged` against staged files. VS Code settings and extension recommendations are in `.vscode/`. Generated output, imported content and fixtures are excluded from bulk formatting.
 
 ## Importing articles
 
-Install dependencies with Yarn, then import one or more public post URLs:
+Import a URL, a batch manifest or a saved HTML page:
 
-```sh
-npm run import-substack -- https://www.architecture-weekly.com/p/post-slug
-npm run import-substack -- https://www.architecture-weekly.com/p/post-slug --category "Event Sourcing"
-npm run import-substack -- --manifest import/substack-posts.json
-npm run import-articles -- --manifest import/eventstore-posts.json
-npm run import-articles -- https://kurrentdb.kurrent.io/blog/post-slug/ --category "Event Sourcing"
-npm run test:substack
+```bash
+yarn import-articles https://www.architecture-weekly.com/p/post-slug --category 'Software Architecture'
+yarn import-articles https://kurrentdb.kurrent.io/blog/post-slug/ --category 'Event Sourcing'
+yarn import-articles --manifest import/substack-posts.json
+yarn import-articles --manifest import/eventstore-posts.json
+yarn import-articles https://www.architecture-weekly.com/p/post-slug --html saved-page.html
 ```
 
-The manifest is an array of `{ "url": "...", "category": "...", "slug": "optional-custom-slug" }` entries. The default category is `Software Architecture`. Dates come from the original publication metadata, and the URL slug determines the blog URL. Imports create `content/posts/YYYY-MM-DD--slug/index.en.md` and `index.pl.md` with identical article text. Polish copies use `useDefaultLangCanonical: true` until translated.
+`import-substack` is an alias for the same importer. It supports Substack, Kurrent/EventStore and dated Wayback captures. Images require network access even with `--html`.
 
-The English article also gets `redirectFrom: /slug/` in its frontmatter. Gatsby uses this to generate an unconditional permanent (301) redirect from `/slug/` to `/en/slug/`, before the catch-all rule. Custom slugs also receive `redirectAliases` for the original source slug at `/source-slug/` and `/en/source-slug/`, pointing to the chosen English URL. No separate redirect file or manual step is needed after importing; redirects take effect when the site is built and deployed. Run `npm run test:redirects` to verify Gatsby's redirect registration and Netlify output.
+Manifest format:
 
-The Architecture Weekly migration manifest is in [architecture-weekly-missing.json](import/architecture-weekly-missing.json). It records 63 previously missing posts, including webinars, from the newest archive post through **#189, Mastering Database Connection Pooling (2024-08-05), inclusive**. All 63 were imported on 2026-10-04. The [audit](import/architecture-weekly-audit.json) accounts for all 93 archive posts in that range: 63 imported in this batch and 30 already present. Existing posts keep their current canonical blog slugs and have redirects for their original Substack slugs. The manifest is retained as a migration record; running it again refuses to overwrite these articles. Verify the migration with:
-
-```sh
-npm run test:archive
+```json
+[
+  {
+    "url": "https://www.architecture-weekly.com/p/source-slug",
+    "category": "Event Sourcing",
+    "slug": "optional-custom-slug",
+    "codeLanguage": "typescript",
+    "youtubeVideo": "sQbkUl7-z_U",
+    "recordingEmbeds": {
+      "https://publication.substack.com/p/recording-slug": "sQbkUl7-z_U"
+    }
+  }
+]
 ```
 
-The audit records the archive IDs, publication dates, existing directories, match evidence, and video mappings. The supplied YouTube playlist contains two of the recordings in this date range; six more were found on the same channel, and two articles already embed their recording. All ten recording posts have `youtubeVideo` IDs in the manifest. `test:archive` checks the reviewed snapshot, manifest coverage, cutoff, recording mappings and existing redirects. The audit's existing/missing statuses reflect the repository when the manifest was prepared; the check also accepts subsequent imports with matching source metadata. If a batch fails, use a separate retry manifest containing only its remaining entries.
+Only `url` is required. The default category is `Software Architecture`. `slug` overrides the source slug. `codeLanguage` overrides plain-text code labels. `youtubeVideo` adds a recording when absent; `recordingEmbeds` replaces mapped recording cards/thumbnails. Video IDs must contain 11 characters.
 
-For future webinar imports, add `"youtubeVideo": "VIDEO_ID"` to the manifest entry. The importer inserts a YouTube player at the start of the article when that video is absent, including when Substack's native player sits outside the article body. To replace a linked recording card or thumbnail within the text, add `"recordingEmbeds": { "https://publication.substack.com/p/recording-slug": "VIDEO_ID" }`. Mapped cards are replaced before downloading their thumbnails; other article images and contextual embeds remain. IDs must be 11-character YouTube video IDs. Both languages get the same embeds, and source metadata records the mappings.
+Imports create `content/posts/YYYY-MM-DD--slug/index.en.md` and `index.pl.md`, download images into that directory and record provenance in `article-source.txt` or `substack-source.txt`. Both files initially have the same body; the Polish file uses `useDefaultLangCanonical: true`. Remove that flag after translating it.
 
-`import-articles` supports Substack, Kurrent/EventStore blog pages and dated Wayback capture URLs. `import-substack` remains a compatible alias. Archived articles use the original publication date and URL slug, fetch the raw capture without the Wayback toolbar, and download assets from the same capture date. Article links are restored to their original URLs. Kurrent's actual article hero is used as the cover instead of the site's default social logo. SVG diagrams stay as local SVG files; SVG covers also get a PNG thumbnail generated with Sharp. Code languages are preserved from both conventional classes and Kurrent's syntax-highlighted HTML.
+The importer adds `redirectFrom: /source-slug/` and, for custom slugs, `redirectAliases`. Gatsby generates permanent redirects to the English article. Links to available blog versions become relative URLs; references without a blog version retain their source URL. Code labels use TypeScript for JavaScript/TypeScript examples and preserve other languages.
 
-The importer extracts the article body, excluding Substack navigation, subscription controls, obsolete paid/trial prompts and comments. It preserves headings, emphasis, lists, quotes, code, tables, links and image captions. Images and the social cover are downloaded into the article directory, deduplicated and referenced locally. Original Substack images are preferred; if a legacy original is unavailable, its publicly available Substack CDN copy is downloaded instead. YouTube players become the Gatsby plugin's Markdown embed syntax; other video/audio players and iframes are retained, with media streams hosted by the provider. Social blockquotes retain their text and links, but provider scripts are omitted, so review these embeds after import. Review unfamiliar interactive embeds manually as well.
+Existing posts are never overwritten. A failed batch retains earlier successful imports; retry with a manifest containing only unfinished entries. Review images, captions, code labels, source links and interactive embeds, then run:
 
-Links to available blog articles are rewritten to relative `/en/slug/` URLs, including links to posts later in the same import batch. The importer resolves original source URLs from source metadata, redirect aliases and [verified title/slug aliases](import/architecture-weekly-link-aliases.json). Blog links retain their query parameters and fragments while newsletter tracking parameters are removed. Older posts without a blog version, webinar index pages and source comment threads keep their source links. The [link report](import/architecture-weekly-link-report.json) lists those remaining external references.
+```bash
+yarn normalize:youtube
+yarn test:substack
+yarn test:archive
+env -u DEBUG yarn build
+yarn test
+```
 
-For a saved full page, use `npm run import-articles -- POST_URL --html saved-page.html`; images still need network access. Incomplete metadata, detected paywalls and failed/unsupported image downloads fail the import. An empty legacy paywall marker is accepted only when Substack marks the post public and its full source body matches the rendered content. Existing article slugs are never overwritten. Each article is staged before being added; if a batch fails, earlier successful imports remain. Remove successful entries from the manifest before retrying the rest. `article-source.txt` (or `substack-source.txt` for Substack; JSON formatted) records the source URL and downloaded asset URLs for review.
+The Architecture Weekly migration records are [the manifest](import/architecture-weekly-missing.json), [the archive audit](import/architecture-weekly-audit.json) and [the remaining source-link report](import/architecture-weekly-link-report.json). The reviewed archive cutoff is #189, August 5, 2024. Re-running the completed manifest refuses to overwrite its posts.
 
-Conversion uses [Turndown](https://github.com/mixmark-io/turndown) and [its GFM plugin](https://github.com/mixmark-io/turndown-plugin-gfm), with Cheerio for Substack extraction and asset rewriting. [Substack2Markdown](https://github.com/timf34/Substack2Markdown) also supports post exports and image downloads, but is a separate Python workflow. [rehype-remark](https://github.com/rehypejs/rehype-remark) is an alternative HTML-to-Markdown pipeline; Turndown's custom rules fit the existing CommonJS import scripts and raw Gatsby embeds.
+Legacy repository imports replace their local destination directories:
 
-## YouTube embeds
+```bash
+yarn import-newsletter
+yarn import-architecture-weekly
+```
 
-Markdown articles use the syntax `` `youtube: [Video title](https://www.youtube.com/watch?v=VIDEO_ID&start=30)` ``. Gatsby recommends [gatsby-remark-embed-video](https://www.gatsbyjs.com/docs/how-to/images-and-media/working-with-video/), now updated to 3.2.1 to fix bare video IDs. The local [integration](plugins/gatsby-remark-video/index.js) delegates rendering to that plugin, preserves URL parameters its ID extraction otherwise drops, and configures lazy loading, privacy-enhanced YouTube URLs, player permissions and the referrer policy. Imported article Markdown contains no handwritten YouTube iframe markup.
+`import-newsletter` replaces `content/newsletter-pl/`; `NEWSLETTER_REPO_URL` can override its repository. `import-architecture-weekly` currently refreshes its repository checkout and the placeholder directory. `import-and-build` runs both commands and a build; it is not the Substack URL importer.
 
-YouTube embeds require a cross-origin referrer. The Netlify plugin configuration overrides its default `same-origin` referrer policy with `strict-origin-when-cross-origin`; removing this override can cause YouTube player configuration error 153. The click-to-play component and imported YouTube iframes also set this policy explicitly. Run `npm run test:video` to check the generated Netlify headers. See [YouTube's client identity requirements](https://developers.google.com/youtube/terms/required-minimum-functionality#api-client-identity-and-credentials).
+## Article configuration
 
-Code blocks preserve source language labels; the importer recognizes clear TypeScript, SQL, C#, JSON, shell, XML and INI examples when labels are absent. JavaScript (`javascript`/`js`) labels and unlabelled TS/JS-style examples use `typescript`, as the blog uses TypeScript. Explicit labels for other languages are retained. Plain output and directory trees remain `text`. Set `"codeLanguage": "typescript"` on a manifest entry when the source marks all examples as plain text. Known EventStore/Kurrent domain aliases also resolve to relative blog URLs.
+Content lives in `content/posts/` and `content/pages/`. UI translations live in `src/i18n/locales/en/translation.json` and `src/i18n/locales/pl/translation.json`. Edit site metadata and social links in `content/meta/config.js`.
 
-## Category reading order
+An article's `related` frontmatter array contains article slugs without locale/date prefixes. Missing references fail the build. The card uses a genuine translation when available, otherwise the canonical original.
 
-Edit `data/category-guides.json`. Each entry is identified by `language` (`en` or `pl`) and the category's URL `slug`. Its `description` appears on the category pages. The `recommended` array controls the numbered reading sequence, in exactly the order listed:
+Use `publishedAt: '2026-10-05T12:34:56+02:00'` when the source publication time is known. The timezone is required. Filename dates still control display and ordering. Do not invent times for historical date-only posts.
+
+### YouTube videos
+
+```markdown
+`youtube: [Video title](https://www.youtube.com/watch?v=sQbkUl7-z_U&start=30)`
+```
+
+Standalone video links and linked thumbnails use this format. Inline references within prose stay as links. Players use the configured Gatsby video plugin; no handwritten iframe is needed. Preserve the `strict-origin-when-cross-origin` referrer policy in Gatsby/Netlify configuration to avoid YouTube error 153.
+
+Check or convert existing Markdown:
+
+```bash
+yarn normalize:youtube
+yarn normalize:youtube --write
+yarn test:video
+```
+
+Future article imports perform the same normalization automatically.
+
+### Category reading order
+
+Edit `data/category-guides.json`:
 
 ```json
 {
@@ -63,112 +193,84 @@ Edit `data/category-guides.json`. Each entry is identified by `language` (`en` o
 }
 ```
 
-Use the article URL slug without `/en/`, `/pl/`, surrounding slashes or the date prefix. Each article must belong to that category through a canonical translation's `category` or `categories` frontmatter. The card uses the guide's language when translated, otherwise a canonical available language. Listed articles appear first with reading-order numbers; the remaining articles follow by publication date. An empty array shows the chronological list alone. Missing or out-of-category slugs are currently ignored, so check the rendered page after editing.
+`recommended` controls the numbered order. Use article slugs without dates, locale prefixes or surrounding slashes. Each article must belong to the category through `category` or `categories` on its canonical version. Remaining articles follow by date; an empty array uses chronological order only. English and Polish guides are independent. Missing/out-of-category recommendations are ignored, so inspect the resulting category page after editing.
 
-English and Polish guide orders are independent. Event Sourcing currently uses the same eight-step sequence in both. Existing localized category pages share the same unique article set, even when a placeholder file is missing. Cards prefer a real translation and otherwise link to the canonical English article (or the original language for a Polish-only article). Placeholder copies do not define category membership. Adding a guide alone does not create a category route: at least one canonical article in that language must belong to the category.
+A guide does not create a category route by itself; at least one canonical article in that language must belong to the category. Run `yarn build`, `yarn test:categories` and inspect `/en/category/event-sourcing/` and `/pl/category/event-sourcing/`.
 
-Run `yarn build && yarn test`, then inspect `/en/category/event-sourcing/` or its Polish counterpart. Reading order does not change article dates or URLs. Article-footer recommendations are separate: set an article's `related` frontmatter array to control those links.
+### Styles
 
-## Gatsby 5 build checks
+Edit component-owned `.module.css` files, `src/theme/global.css` for the shared reset, and `src/theme/theme.yaml` for tokens. `yarn generate-theme-css` regenerates `src/theme/tokens.css`; do not edit generated tokens directly. Production/development startup runs the generator. After changing YAML during a development session, run it again.
 
-See [the build review](docs/gatsby-5-review.md) for the image and query migrations, warning fixes and further improvements. `yarn test` includes `test:import-build`, which checks the generated HTML for all requested imports. Run the production build before these tests.
+After styling changes, run `yarn build`, `yarn test:css`, `yarn test:visual` and `yarn test:cache:css`.
 
-## License
+## Updating fixtures
 
-This blog is licensed under [License Creative Commons BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+For intentional route/feed changes, run `yarn verify:build-contract`, inspect the exact differences, then use `yarn update:build-contract`. Review `tests/fixtures/build-contract.json` and rerun `yarn test:build-contract`. Do not update the fixture to accept unexplained missing routes.
 
-## Included configuration
+After publishing a new first article, inspect `visual-artifacts/articles-desktop.png` and `articles-desktop-diff.png`. If only the intended archive content changed:
 
-1. Tracking with Google Analytics through Google Tag manager:
-
-- [Setting up the Google Analytics 4 Property with Google Tag Manager](https://www.youtube.com/watch?v=-J4feudVguc)
-- [Gatsby Google Tag Manager Config](https://www.gatsbyjs.com/plugins/gatsby-plugin-google-tagmanager/)
-
-## Gatsby validation and lint
-
-Use Node 24 and Yarn 1. Run `yarn smoke` and `yarn lint` for fast syntax, GraphQL and correctness checks. Then run `yarn build` and `yarn test`. For browser checks, serve the generated site on port 9000 and run `yarn test:visual`; matching Playwright and Chromium packages are installed as development dependencies by Yarn. If the browser cache is missing, run `yarn browsers:install`; on Linux CI use `yarn browsers:install:ci` to install OS libraries too.
-
-The SEO checks require exactly one H1 in every generated page, including Polish placeholders, search and 404 pages. Gatsby's internal HTML fragments are excluded. Missing or duplicate main headings fail `yarn test:seo` and the CI gate before deployment. Browser checks also cover training-page hydration and language navigation.
-
-For repeatable mobile Lighthouse audits, run `yarn audit:performance --base-url https://event-driven.io --label baseline`. It uses Lighthouse 13.5.0, the lockfile's Playwright Chromium, three fresh browser sessions per page, and saves JSON reports under the ignored `report/performance/` directory. Browser profiles are temporary and cleaned up. See [the audit procedure and proposals](docs/pagespeed-review.md) for installation, comparable local/production runs, limitations and the proposed Giscus migration. This command audits the site; it does not change the UI, deploy or migrate comments.
-
-`lint:modern` remains a compatibility alias for the full ESLint gate. `eslint.config.mjs` supports ESM, JSX and TypeScript syntax and checks React hooks. It does not type-check TypeScript. `yarn lint` additionally checks Prettier; the previous legacy lint/format backlog has been corrected.
-
-CI runs the full lint/format gate before building. Browser search checks run real local MiniSearch queries in both languages. Builds generate local indexes and never contact a hosted search service. Production search behavior remains a separate deployment check.
-
-Safe performance regressions run with `yarn test:performance` (also included in `yarn test`) after building. They check English/Polish cover priority, lazy loading and WebP fallback throughout generated Markdown, local font preloads, portrait dimensions and batched menu measurements. `yarn test:visual` additionally verifies responsive image slots at DPR 1/2 and automatic offscreen-newsletter loading, alongside the existing layout/navigation screenshots. Decisions needing your review and their reasons are listed in [the PageSpeed review](docs/pagespeed-review.md#decision-record--only-choices-2-and-4-await-review).
-
-## Formatting, linting and editor setup
-
-Run `yarn --frozen-lockfile` on Node 24. Installation runs `prepare` to configure the Husky pre-commit hook. Every commit runs `yarn lint-staged`: staged code receives ESLint fixes (including Prettier), and staged configuration/documentation receives Prettier formatting. Partially staged changes use lint-staged's normal backup/hiding behavior. No build or browser suite runs in the hook; CI runs the full checks.
-
-- `yarn lint`: check ESLint and Prettier across maintained source, scripts, tests and documentation.
-- `yarn fix`: apply ESLint fixes, then Prettier formatting.
-- `yarn lint:eslint` / `yarn lint:prettier`: run either check separately.
-- `yarn lint-staged`: run the same checks used by the pre-commit hook against staged files.
-
-The native ESM `eslint.config.mjs` is the single lint configuration. Like Pongo, this repo uses single quotes, two-space indentation, flat ESLint configuration and Prettier integration. ESLint 9 is used for compatibility with the React plugin's supported peer versions; Pongo's TypeScript-only rules and database-specific restrictions do not apply to Gatsby. VS Code's committed settings and extension recommendations enable Prettier formatting and ESLint fixes on save. Automatic import organization is omitted because this site has side-effect imports and loader imports whose order must be preserved.
-
-Generated output, static assets, imported article content and test fixtures are excluded from bulk formatting. This protects article code examples and stored build contracts. Fixing lint does not modify the article text.
-
-### Actual publication timestamps
-
-An article can optionally include a quoted frontmatter timestamp such as `publishedAt: '2026-10-05T12:34:56+02:00'` when that time is known from the source. The timezone is required. Gatsby uses it for BlogPosting `datePublished` and Open Graph `article:published_time`; invalid timestamps fail validation. The article's displayed date, route and ordering still use its existing filename date. Import scripts retain source timestamps when available. Historical date-only values stay date-only; no midnight publication times are invented, so legacy rich-result warnings may remain.
-
-## Translation resources and related links
-
-Edit UI translations in `src/i18n/locales/en/translation.json` and `src/i18n/locales/pl/translation.json`. Gatsby queries these through the `TranslationResources` fragment; new page queries must include `locales: allLocale(filter: {language: {in: [$language, "en"]}}) { ...TranslationResources }` and declare `$language: String!`. The localization plugin provides per-page translations and language-aware links. Explicit editorial context still controls translation availability and canonical fallback; existing `/en/` and `/pl/` routes and original-slug redirects are preserved.
-
-An article's `related` list contains published article slugs. Cards prefer a genuine version in the current language, then the canonical English or another available language. Missing slugs fail the build. The latest Open Source article has reciprocal links to its cited blog articles, with fallback cards linking to their canonical language rather than Polish placeholders.
-
-## Portable styling
-
-The styling migration uses native CSS custom properties and CSS Modules that can also be used in Astro. `src/theme/theme.yaml` remains the source of theme values. `yarn generate-theme-css` writes the plain `src/theme/tokens.css` stylesheet; do not edit that generated file. Build and development commands regenerate it automatically. After editing YAML during a running development session, run `yarn generate-theme-css` again to refresh the CSS variables.
-
-All component and page styles use scoped `.module.css` files. The site reset and font fallback rules live in `src/theme/global.css`. Keep styling separate from Gatsby queries and routing; Astro can reuse the stylesheets and CSS Modules, with React components through its React integration or equivalent Astro markup. Use theme variables for colors, spacing and typography; dynamic image URLs and menu state use ordinary CSS custom properties. Public classes remain alongside module classes for navigation state, existing links and browser checks; selectors preserve their component roots and public state relationships. Use `:global(...)` only for external widgets, Markdown HTML and those public hooks. Tailwind's global reset, dark-mode colors/behavior and layout redesign are later review stages.
-
-CSS Modules use default imports, matching Astro/Vite's convention. [Astro supports these styles and React components](https://docs.astro.build/en/guides/styling/). Gatsby's supported PostCSS plugin configures CSS Module names with SHA-256, avoiding the old CSS loader's MD4 dependency on Node 24. The generated class names match browser and server builds and include stylesheet contents, so CSS-only changes invalidate cached HTML that shares the extracted CSS. `yarn test:visual` verifies summary/footer values, reading-card and navigation styles in English and Polish with JavaScript enabled/disabled, the 600px/1024px breakpoints, keyboard focus, reduced-motion preferences and live CSS-variable overrides, alongside the existing screenshot checks. A styling implementation change must pass the current snapshots without updating them. `yarn test:css` checks every generated page against the current webpack CSS assets and detects obsolete inline styles, including on warm builds. Run `yarn test:cache:css` after changes to styling/build configuration: it performs baseline, CSS-only modification and restored builds, preserving the source stylesheet in a `finally` block and checking date colors with JavaScript enabled and disabled. Logs go to a temporary directory printed by the command. Run it with no development server or concurrent build, then run `yarn test` and `yarn test:visual` against the restored output. The separate `yarn test:cache` check verifies article modification/deletion/restoration.
-
-## Local search
-
-Search cards use shared green/neutral theme tokens and Gatsby-generated local cover thumbnails. Canonical fallback results keep the canonical article’s cover; entries without artwork remain text-only. Run `yarn test:search` for index/rendering checks and `yarn test:visual` for bilingual cover, color, keyboard and responsive-card regressions.
-
-MiniSearch replaces Algolia. `yarn develop` generates the indexes at startup and refreshes them after Markdown changes. Reload the search page to consume a regenerated index. Every Gatsby production build recreates English and Polish indexes under `public/search-index/`, using content-hashed filenames and a refreshed manifest. Readers download only their selected index and the engine after entering a search query. Search prefers genuine translations and labels canonical-language fallback links, returns one hit per article, retains categories/dates and pagination, and supports Polish diacritics, prefixes, typos and code identifiers. Result text is escaped before highlighting.
-
-Run `yarn test:search` after building for index, locale, stale-content and safe-rendering regressions. Run `yarn test:visual` against `yarn serve -H 127.0.0.1 -p 9000` for real browser searches and failure/retry checks. `yarn measure:search` measures initialization, query time and retained heap over three Chromium runs per locale with 4× CPU throttling; these are lab measurements, not real-device guarantees. `yarn test:cache` additionally modifies/deletes/restores an existing article across warm builds and verifies search data follows those changes. Do not run that integration check alongside content edits.
-
-To repeat development refresh checks, start `yarn develop -H 127.0.0.1 -p 8001` and run `yarn test:search:dev` in another terminal. It temporarily modifies/deletes/restores an existing article; keep content edits paused during that check. Set `DEV_SEARCH_BASE_URL` if using another address.
-
-No Algolia credentials are needed for installation, CI or deployment. The old account/index is not deleted by this change; any account cleanup is a separate owner action. Localization-provider migration remains a separate next step.
-
-### Updating the archive screenshot after publishing an article
-
-A new first article intentionally changes the archive cover, title and excerpt. After a production build, serve it with `yarn serve -H 127.0.0.1 -p 9000`, run `yarn test:visual`, and inspect `visual-artifacts/articles-desktop.png` and `articles-desktop-diff.png`. Check that only the intended content changed and the header, spacing and cover dimensions remain correct. Then run:
-
-```sh
-ARCHIVE_SNAPSHOT_SLUG=open-source-a-relict-a-charity-or yarn test:visual:update:archive
+```bash
+ARCHIVE_SNAPSHOT_SLUG=reviewed-newest-article-slug yarn test:visual:update:archive
 yarn test:visual
 ```
 
-Replace the slug with the reviewed newest article. The update command verifies that exact first-card link and replaces only `tests/fixtures/visual/articles-desktop.png`. Review and commit the PNG diff with the article. Imports and CI never update baselines automatically; the 3% comparison tolerance stays unchanged.
+The command verifies the first card's exact slug and updates only the archive screenshot. Review the PNG diff before committing. `test:visual:update` updates all visual baselines and should be reserved for a reviewed design change. The comparison tolerance remains 3%.
 
-### Reproducing browser console issues
+## Audits
 
-Install the optional matching Firefox binary with `yarn browsers:install:firefox`, then run:
+Run performance audits sequentially on an idle machine after builds/tests finish. Output belongs in ignored `report/`, not published content.
 
-```sh
-yarn audit:console --browser firefox --url https://event-driven.io/en/open-source-a-relict-a-charity-or/ --output report/browser-console/production-firefox.json
+```bash
+yarn audit:performance --base-url http://127.0.0.1:9000 --runs 3 --label local
+yarn audit:performance --base-url https://event-driven.io --page /en/introduction_to_event_sourcing/ --runs 3 --label production
+yarn audit:console --browser firefox --url https://event-driven.io/en/introduction_to_event_sourcing/ --output report/browser-console/firefox.json
+yarn audit:fonts --base-url http://127.0.0.1:9000 --runs 3 --output report/fonts/current
+yarn measure:search
 ```
 
-Use `--browser chromium` for comparison or a local production-server URL to check unpublished fixes. The audit uses a fresh profile without extensions, keeps third-party requests enabled, scrolls to comments and captures console messages, exceptions, failed requests, frame URLs and local-file references for 15 seconds. It uses DOM readiness instead of `networkidle`; `--seconds` accepts 1–60. Reports stay in ignored `report/`. They may contain vendor identifiers in request URLs; review before sharing.
+The performance command downloads pinned Lighthouse 13.5.0 on its first run. Use the same versions/throttling and compare medians. The console audit uses a fresh profile, scrolls to comments and observes for 15 seconds (`--seconds` accepts 1–60). It retains vendor requests. Font profiling blocks vendors to isolate font timing; `--without-polish-preload` provides a same-build comparison.
 
-This diagnostic does not treat all third-party warnings as CI failures or suppress them. Firefox privacy messages often describe protections working correctly. Check the source URL/stack before assigning an issue to the application. For a `file:///` warning, also reproduce manually in a fresh Firefox profile and inspect its console stack/network initiator; automated runs cannot reproduce every extension or privacy setting.
+For a diagnostic comparison that blocks Disqus only in the audit browser:
 
-To isolate vendor cost without changing the site, compare the normal Introduction audit with a **diagnostic** blocked-Disqus run:
-
-```sh
-yarn audit:performance --base-url https://event-driven.io --page /en/introduction_to_event_sourcing/ --runs 3 --label normal
+```bash
 yarn audit:performance --base-url https://event-driven.io --page /en/introduction_to_event_sourcing/ --runs 3 --label diagnostic-no-disqus --block-pattern '*disqus*'
 ```
 
-The repeated optional `--block-pattern` flag applies only to that audit browser and is recorded in `summary.json`. Quote wildcard patterns. Blocked runs omit comments/vendor functionality, so their scores are diagnostic bounds, never production acceptance scores. Run audits sequentially on an idle machine after builds/tests finish; compare medians with the same Lighthouse/browser versions and throttling settings.
+Blocked-vendor results are diagnostic and do not represent the normal page.
+
+### Indexing and error pages
+
+```bash
+yarn generate-llms
+yarn test:indexing
+yarn test:404
+yarn audit:indexing --base-url https://event-driven.io --output report/indexing/production.json
+```
+
+Use a Netlify preview origin to audit an unpublished deployment. Optional `--urls-file /path/to/urls.json` accepts a JSON array of Search Console example URLs. The audit checks robots, sitemaps, HTTP statuses, canonicals, headings, reciprocal alternates and direct localized 404 responses. It does not submit URLs to Google.
+
+Netlify serves unknown `/en/*` and `/pl/*` addresses with localized recovery pages and HTTP 404, preserving the requested URL. Gatsby's local server can return 200 for its localized client fallback; check actual HTTP error/query routing on Netlify. Editorial redirects precede the final error rules.
+
+In Search Console:
+
+1. Open **Indeksowanie → Strony**, select an issue and export its **Przykłady** URLs. Overview exports contain counts only.
+2. Paste a complete URL into the inspection bar at the top.
+3. Expand **Indeksowanie stron / Page indexing** in the indexed result. Copy **Strona kanoniczna wybrana przez Google / Google-selected canonical**, the user-declared canonical and **Ostatnie indeksowanie / Last crawl**. The live test does not show Google's canonical choice.
+4. After deploying a repair, run **Sprawdź opublikowany URL / Test live URL** on its destination. Request indexing for maintained canonical pages when needed. Use **Sprawdź poprawkę / Validate fix** for repaired failures; normal redirects and proper canonical alternatives remain excluded.
+
+Investigation records: [indexing](docs/google-indexing-review.md), [PageSpeed](docs/pagespeed-review.md), [Gatsby/CSS](docs/gatsby-css-review.md). Current work is tracked in [plan.md](plan.md) and [todo.md](todo.md).
+
+## Deployment
+
+CI configuration is in `.github/workflows/ci.yml`; CodeQL is in `.github/workflows/codeql-analysis.yml`. CI runs installation, smoke, lint, build, full tests and browser comparisons before saving build caches and deploying.
+
+For manual deployment, configure `NETLIFY_AUTH_TOKEN` and `NETLIFY_SITE_ID`, finish the checks above, then run:
+
+```bash
+yarn deploy       # preview
+yarn deploy:prod  # production
+```
+
+## License
+
+[Creative Commons BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).

@@ -33,7 +33,7 @@ npm add @event-driven-io/emmett
 
 ## Domain
 
-Let me use a similar Shopping Cart domain I explained in [Straightforward Event Sourcing with TypeScript and NodeJS](/en/type_script_node_Js_event_sourcing/). The business logic looks as follows:
+Let me use a similar Shopping Cart domain I explained in [Straightforward Event Sourcing with TypeScript and NodeJS](/en/type_script_node_js_event_sourcing/). The business logic looks as follows:
 
 ```typescript
 import {

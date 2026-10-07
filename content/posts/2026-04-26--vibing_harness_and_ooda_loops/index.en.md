@@ -5,6 +5,7 @@ cover: 2026-04-26-cover.png
 author: oskar dudycz
 redirectFrom: /vibing_harness_and_ooda_loops/
 redirectAliases:
+  - /2026/04/09/vibing-harness-and-ooda-loop/
   - /vibing-harness-and-ooda-loop/
   - /en/vibing-harness-and-ooda-loop/
 ---

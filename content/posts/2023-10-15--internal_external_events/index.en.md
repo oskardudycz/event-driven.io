@@ -213,8 +213,8 @@ Tools like [EventCatalog](https://www.eventcatalog.dev/) allow us to design and 
 Check also more in:
 - [Events should be as small as possible, right?](/en/events_should_be_as_small_as_possible/),
 - [Mathias Verraes - Explicit Public Events](https://verraes.net/2019/05/patterns-for-decoupling-distsys-explicit-public-events/),
-- [Derek Comartin - Event-Driven Architecture Gotcha! Inside or Outside Events](https://www.youtube.com/watch?v=qf-BSAhbrWw),
-- [Marc Klefter - Powering Event-Driven APIs with Event Sourcing](https://www.youtube.com/watch?v=Pph8TFPOfko),
+- `youtube: [Derek Comartin - Event-Driven Architecture Gotcha! Inside or Outside Events](https://www.youtube.com/watch?v=qf-BSAhbrWw)`
+- `youtube: [Marc Klefter - Powering Event-Driven APIs with Event Sourcing](https://www.youtube.com/watch?v=Pph8TFPOfko)`
 - [Pat Helland - Data on the Outside vs. Data on the Inside](https://queue.acm.org/detail.cfm?id=3415014).
 
 **If you're dealing with such issues, I'm happy to help you through consulting, [training](/en/training) or mentoring. [Contact me](mailto:oskar@event-driven.io) and we'll find a way to unblock you!**

@@ -95,7 +95,7 @@ export type Decide<
 > = (command: C, state: State) => E[];
 ```
 
-We take a command and a state, returning one or more events (read more in [Straightforward Event Sourcing with TypeScript and NodeJS](/en/type_script_node_Js_event_sourcing/)). If we define all events and commands for Guest Stay, we can join those types with union. 
+We take a command and a state, returning one or more events (read more in [Straightforward Event Sourcing with TypeScript and NodeJS](/en/type_script_node_js_event_sourcing/)). If we define all events and commands for Guest Stay, we can join those types with union.
 
 ```typescript
 export type GuestStayAccount =

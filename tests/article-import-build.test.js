@@ -164,7 +164,9 @@ test('Event Sourcing category languages share all articles and curated reading o
       )
     )
       continue;
-    expected.set(directory.split('--')[1], versions);
+    // Hosted document URLs normalize case; original folder names retain
+    // publication/feed/comment identities.
+    expected.set(directory.split('--')[1].toLowerCase(), versions);
   }
   const guide = require('../data/category-guides.json').find(
     (item) => item.language === 'en' && item.slug === 'event-sourcing',

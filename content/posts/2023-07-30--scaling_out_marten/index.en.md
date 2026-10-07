@@ -86,7 +86,7 @@ There’s one more thing here. If you’re afraid of cold starts, and you’d li
 
 ## Scaling async projections
 
-**[Async Daemon](https://martendb.io/events/projections/async-daemon.html#async-projections-daemon) is the Marten subsystem responsible for processing projections asynchronously.** Technically, it's a  background process running as hosted service that processes events and stores results as read models. We recommend using it for more resource-demanding, multiple-stream projections, [storing results in other database types](/en/projecting_from_marten_to_elasticsearch/) or [integration with other systems](/en/integrating_Marten/).
+**[Async Daemon](https://martendb.io/events/projections/async-daemon.html#async-projections-daemon) is the Marten subsystem responsible for processing projections asynchronously.** Technically, it's a  background process running as hosted service that processes events and stores results as read models. We recommend using it for more resource-demanding, multiple-stream projections, [storing results in other database types](/en/projecting_from_marten_to_elasticsearch/) or [integration with other systems](/en/integrating_marten/).
 
 **Technically, it's a sneaky service that polls events in batches for each projection type, runs projections simultaneously, [ensures resiliency and fault tolerance](https://martendb.io/events/projections/async-daemon.html#error-handling), and other optimisation like gap detection you wouldn't want to implement on your own.**
 

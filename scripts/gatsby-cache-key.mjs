@@ -17,6 +17,7 @@ for (const file of [
   'gatsby-node.mjs',
   'gatsby-browser.js',
   'gatsby-ssr.js',
+  'netlify.toml',
   'postcss.config.js',
   'src/i18n/constants.js',
   'src/i18n/settings.mjs',

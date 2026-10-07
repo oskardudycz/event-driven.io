@@ -3,12 +3,12 @@ import { FaTag } from 'react-icons/fa/';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { graphql } from 'gatsby';
-import { createHead } from '../components/Seo';
 
 import Article from '../components/Article';
 import Headline from '../components/Article/Headline';
 import List from '../components/List';
 import { useTranslation } from 'react-i18next';
+import { createHead } from '../components/Seo';
 
 const CategoryTemplate = (props) => {
   const { t } = useTranslation();

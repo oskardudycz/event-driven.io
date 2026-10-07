@@ -14,6 +14,7 @@ const {
 } = require('./article-content');
 
 const { publicationDate } = require('../src/utils/publication-date.mjs');
+const { normalizeYouTubeEmbeds } = require('./youtube-markdown.mts');
 
 const postsDirectory = path.resolve(__dirname, '../content/posts');
 
@@ -421,7 +422,7 @@ async function convertPost(
       /twitter-tweet|instagram-media/.test(node.getAttribute('class') || ''),
     replacement: (_, node) => `\n\n${node.outerHTML}\n\n`,
   });
-  const markdown = converter.turndown(body.html());
+  const markdown = normalizeYouTubeEmbeds(converter.turndown(body.html()));
   if (!markdown.trim()) throw new Error(`Conversion produced an empty article: ${source}`);
   return {
     markdown,

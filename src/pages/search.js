@@ -1,10 +1,10 @@
 import { graphql } from 'gatsby';
 import React from 'react';
 import Article from '../components/Article';
+import Headline from '../components/Article/Headline';
 import Search from '../components/Search';
 
 import { createHead } from '../components/Seo';
-import Headline from '../components/Article/Headline';
 import { usePageContext } from '../i18n/page-context';
 
 const SearchPage = () => {

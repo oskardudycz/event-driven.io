@@ -3,7 +3,6 @@ title: How to build event-driven projections with Entity Framework
 category: "Event Sourcing"
 cover: 2021-09-29-cover.png
 author: oskar dudycz
-useDefaultLangCanonical : true
 ---
 
 ![cover](2021-09-29-cover.png)

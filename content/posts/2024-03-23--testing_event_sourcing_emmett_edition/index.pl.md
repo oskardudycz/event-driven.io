@@ -3,6 +3,7 @@ title: Testing Event Sourcing, Emmett edition
 category: "Event Sourcing"
 cover: 2024-04-23-hexagon.png
 author: oskar dudycz
+useDefaultLangCanonical: true
 ---
 
 ![cover](2024-04-23-hexagon.png)
@@ -33,7 +34,7 @@ npm add @event-driven-io/emmett
 
 ## Domain
 
-Let me use a similar Shopping Cart domain I explained in [Straightforward Event Sourcing with TypeScript and NodeJS](/pl/type_script_node_Js_event_sourcing/). The business logic looks as follows:
+Let me use a similar Shopping Cart domain I explained in [Straightforward Event Sourcing with TypeScript and NodeJS](/pl/type_script_node_js_event_sourcing/). The business logic looks as follows:
 
 ```typescript
 import {

@@ -1,0 +1,33 @@
+.recovery {
+  min-height: 45vh;
+  color: var(--color-text);
+  line-height: var(--line-height-summary);
+}
+.code {
+  color: var(--text-color-brand);
+  font-size: var(--font-size-xxl);
+  margin-bottom: var(--space-sm);
+}
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+.links a {
+  color: var(--text-color-brand);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.links a:focus-visible {
+  outline: 2px solid var(--text-color-brand);
+  outline-offset: 4px;
+}
+.links a.primary {
+  background: var(--text-color-brand);
+  color: var(--color-text-inverse);
+  border-radius: var(--size-radius-small);
+  padding: var(--space-sm) var(--space-md);
+  text-decoration: none;
+}

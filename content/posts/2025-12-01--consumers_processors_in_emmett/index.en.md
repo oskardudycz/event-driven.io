@@ -11,7 +11,7 @@ redirectAliases:
 
 **Did you know that you can build an event store in one hour?** I even did it a few times on the conference stage. Actually, it took me usually around 25 minutes; the rest was mistyping, lame jokes and a bit of explanation. See:
 
-[![](talk.png)](https://www.youtube.com/watch?v=gaoZdtQSOTo)
+`youtube: [Embedded video](https://www.youtube.com/watch?v=gaoZdtQSOTo)`
 
 **Yet, my final thought was: Kids don't do it at home.**
 

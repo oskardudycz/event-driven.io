@@ -3,9 +3,9 @@ import React from 'react';
 import { graphql } from 'gatsby';
 import 'prismjs/themes/prism-okaidia.css';
 
-import { createHead } from '../components/Seo';
 import Article from '../components/Article';
 import Post from '../components/Post';
+import { createHead } from '../components/Seo';
 
 const PostTemplate = (props) => {
   const {
@@ -79,6 +79,7 @@ export const postQuery = graphql`
       excerpt(pruneLength: 170)
       fields {
         slug
+        originalSlug
         prefix
         langKey
         source

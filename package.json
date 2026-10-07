@@ -9,7 +9,7 @@
   "scripts": {
     "generate-llms": "node ./scripts/generate-llms-txt.js",
     "verify-seo": "node ./scripts/verify-seo-build.js",
-    "test": "yarn test:seo && yarn test:build-contract && yarn test:substack && yarn test:video && yarn test:redirects && yarn test:archive && yarn test:import-build && yarn test:categories && yarn test:performance && yarn test:tooling && yarn test:search && yarn test:localization && yarn test:css",
+    "test": "yarn test:seo && yarn test:build-contract && yarn test:substack && yarn test:video && yarn test:redirects && yarn test:archive && yarn test:import-build && yarn test:categories && yarn test:performance && yarn test:tooling && yarn test:search && yarn test:localization && yarn test:css && yarn test:404 && yarn test:indexing",
     "test:seo": "node ./tests/seo-build.test.js",
     "test:build-contract": "node ./tests/build-contract.test.js",
     "test:visual": "vitest run tests/visual.test.js",
@@ -40,7 +40,7 @@
     "import-substack": "node ./import/import-substack.js",
     "import-articles": "node ./import/import-articles.js",
     "test:substack": "node ./tests/substack-import.test.js",
-    "test:video": "node ./tests/video-headers.test.js",
+    "test:video": "node ./tests/video-headers.test.js && node --test --test-isolation=none tests/youtube-markdown.test.mts",
     "test:redirects": "node ./tests/article-redirects.test.js",
     "test:archive": "node ./tests/architecture-weekly-manifest.test.js",
     "test:import-build": "node ./tests/article-import-build.test.js",
@@ -66,7 +66,12 @@
     "predevelop": "yarn generate-theme-css",
     "predevhost": "yarn generate-theme-css",
     "test:css": "node --test --test-isolation=none tests/css-build.test.mts",
-    "test:cache:css": "node scripts/verify-gatsby-css-cache.mts"
+    "test:cache:css": "node scripts/verify-gatsby-css-cache.mts",
+    "test:404": "node --test --test-isolation=none tests/not-found.test.mts",
+    "audit:fonts": "node scripts/profile-fonts.mts",
+    "test:indexing": "node --test --test-isolation=none tests/indexing.test.mts",
+    "audit:indexing": "node scripts/audit-indexing.mts",
+    "normalize:youtube": "node scripts/normalize-youtube.mts"
   },
   "dependencies": {
     "@ant-design/compatible": "^1.0.8",
@@ -177,6 +182,7 @@
     "typescript": "6.0.3",
     "vite": "^7",
     "vitest": "^5.0.1",
-    "webpack-bundle-analyzer": "^4.4.2"
+    "webpack-bundle-analyzer": "^4.4.2",
+    "netlify-redirect-parser": "11.0.2"
   }
 }

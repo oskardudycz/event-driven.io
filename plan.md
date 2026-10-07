@@ -1,5 +1,15 @@
 # SEO, discoverability, and services plan
 
+## Evidence-led indexing fixes — 2026-10-07
+
+The new Search Console investigation, including the full production audit and mixed-case URL correction, is merged in [docs/google-indexing-review.md](docs/google-indexing-review.md) before implementation. Execute canonical source corrections and collision removal first, then confirmed aliases, legacy query routing and 404 validation, followed by build/browser regressions and a repeatable public audit. Delete the obsolete anti-patterns landing files and retain the fully cross-linked article in discovery. Preserve both workshop URLs with a real English translation, and normalize standalone YouTube links through the existing player format. Keep publication identities (RSS GUIDs and Disqus IDs) separate from canonical routing; use Gatsby SSR document resources for fonts instead of SEO coupling. Preserve translated Polish canonicals, layout and comment behavior. The owner does not recall the five unknown missing addresses; keep genuine 404s unless original-content evidence appears; historic Google server failures require deployment/crawl-log revalidation. The broader Gatsby/CSS review remains the source for subsequent grouped architecture work, and a consistent TypeScript/ESM migration remains planned rather than started.
+
+## Research-led CSS follow-up — 2026-10-06
+
+The root AGENTS.md now requires demonstrated root-cause fixes using supported Gatsby/React/CSS mechanisms, component-owned CSS, and actual SSR/hydration/browser validation. The blanket style-order entry and all forced imports are removed. Research and installed Gatsby findings are recorded in [docs/gatsby-css-review.md](docs/gatsby-css-review.md) before further implementation.
+
+Global reset/theme tokens belong to the shared layout, as Gatsby documents. Component CSS Modules remain local. The narrower import ordering still leaves nine extraction warnings; it is not an accepted root-cause resolution. Continue the cascade/dependency investigation in the review before further CSS changes; do not add unrelated imports, replace chunk policy or suppress warnings. Acceptance requires unchanged rendered content/screenshots and warm-cache integrity, not merely silence from the compiler. Preserve new bilingual recovery pages and measured Polish font preload work; record their verification separately from the deployed baseline.
+
 ## Current CSS stage — 2026-10-06
 
 The complete styling category is implemented: all 29 remaining styled-jsx consumers are replaced together, leaving 32 native CSS Modules and no styled-jsx consumers. The obsolete Gatsby/styled-jsx integrations and processors are removed. Plain global CSS retains the existing reset/font fallback rules; theme.yaml remains the single value source through a native TypeScript generator. Preserve current colors, fonts, spacing, breakpoints, public state hooks, routes and behavior. Dynamic image/menu/sensor values use CSS custom properties. Keep default module imports and CSS independent of Gatsby queries/providers for eventual Astro reuse.
@@ -8,7 +18,7 @@ A CSS-only warm-build regression reproduced obsolete inline CSS. Content-aware S
 
 Modern-practice defaults for new work: native ESM and TypeScript; semantic CSS variables; scoped CSS/logical properties; accessible keyboard/focus/contrast; reduced-motion support for animation; minimal client JavaScript; measured validation. The earlier component-by-component sequence is superseded by the completed whole-category implementation.
 
-Next, profile first-party font loading and CLS before selecting a fix; investigate the missing root 404 fallback; then compare normal production audits after deployment. Keep Disqus and its loading behavior. Giscus/custom guest comments remain deferred alternatives. Tailwind, dark mode, package-manager migration and visual redesign remain separate reviewed stages.
+Current authorized follow-up: start with a meaningful bilingual 404 page and restore the default static-host fallback, then resolve stylesheet import-order warnings and profile first-party font loading/CLS before selecting a typography-preserving fix. Verify the owner-supplied deployed preview separately and compare repeated mobile audits. Preserve all existing content routes; explicitly review any added error routes/rewrites in the build contract. Keep Disqus and its loading behavior. Giscus/custom guest comments remain deferred alternatives. Tailwind, dark mode, package-manager migration and visual redesign remain separate reviewed stages.
 
 Gatsby CSS Modules: <https://www.gatsbyjs.com/docs/how-to/styling/css-modules/>; supported loader options: <https://www.gatsbyjs.com/plugins/gatsby-plugin-postcss/>; Astro styling: <https://docs.astro.build/en/guides/styling/>.
 

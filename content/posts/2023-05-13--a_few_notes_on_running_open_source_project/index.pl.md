@@ -86,7 +86,7 @@ Using public groups and channels is important in the beginning to reach people, 
 
 Together with Jeremy, we're quite active also in blogging about Marten (check the [great Jeremy's blog](https://jeremydmiller.com/)). It gives the possibility to share more context to users but also trials new stuff and usages.
 
-My article about [integrating Marten with other tools](/pl/integrating_Marten/) is a decent example of that. I wrote it to explain how to do it using current features, but we noticed that people were referring to it, applying this pattern and linking it to each other.
+My article about [integrating Marten with other tools](/pl/integrating_marten/) is a decent example of that. I wrote it to explain how to do it using current features, but we noticed that people were referring to it, applying this pattern and linking it to each other.
 
 That gave us the certainty that this feature is needed and that the proposed solution matches people's expectations. 
 

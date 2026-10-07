@@ -43,7 +43,7 @@ function sourceKey(input) {
 
 function buildArticleLinks(root = path.resolve(__dirname, '../content/posts'), entries = []) {
   const map = new Map();
-  const add = (url, slug) => map.set(sourceKey(url), `/en/${slug}/`);
+  const add = (url, slug) => map.set(sourceKey(url), `/en/${slug.toLowerCase()}/`);
   for (const directory of fs.readdirSync(root, { withFileTypes: true })) {
     if (!directory.isDirectory()) continue;
     const slug = directory.name.split('--')[1];

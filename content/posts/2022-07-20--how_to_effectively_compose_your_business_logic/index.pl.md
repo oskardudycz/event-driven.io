@@ -470,7 +470,7 @@ Check the full sample in my repo: https://github.com/oskardudycz/EventSourcing.J
 
 And now, here's the deal. I left that as the last point. Last but not least: **All KUDOS go to [Jérémie Chassaing](https://twitter.com/thinkb4coding).** He coined Decider pattern and described it in detail. I encourage you to check his:
 - [article](https://thinkbeforecoding.com/post/2021/12/17/functional-event-sourcing-decider),
-- [talk](https://www.youtube.com/watch?v=whFfzQfdJZg),
+- `youtube: [talk](https://www.youtube.com/watch?v=whFfzQfdJZg)`
 - [detailed example with a walkthrough in F#](https://gist.github.com/thinkbeforecoding/026a1d90ea2f3ea86d151b1229cad932).
 
 That should give you an even better understanding of this pattern than my humble article. I touched on one possible implementation path, but there's more. You can use it not only for Event Sourcing but also for regular business logic processing.
@@ -481,6 +481,6 @@ Cheers!
 
 Oskar
 
-p.s. If you want to see C# version check [Union types in C#](/pl/union_types_in_csharp) or the more succing [TypeScript](/pl/type_script_node_Js_event_sourcing).
+p.s. If you want to see C# version check [Union types in C#](/pl/union_types_in_csharp) or the more succing [TypeScript](/pl/type_script_node_js_event_sourcing).
 
 p.s.2. **Ukraine is still under brutal Russian invasion. A lot of Ukrainian people are hurt, without shelter and need help.** You can help in various ways, for instance, directly helping refugees, spreading awareness, putting pressure on your local government or companies. You can also support Ukraine by donating e.g. to [Red Cross](https://www.icrc.org/en/donate/ukraine), [Ukraine humanitarian organisation](https://savelife.in.ua/en/donate/) or [donate Ambulances for Ukraine](https://www.gofundme.com/f/help-to-save-the-lives-of-civilians-in-a-war-zone).

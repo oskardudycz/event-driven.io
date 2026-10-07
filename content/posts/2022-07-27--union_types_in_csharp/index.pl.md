@@ -534,7 +534,7 @@ type ShoppingCartEvent =
     | ShoppingCartCanceled of {| confirmedAt : System.DateTimeOffset |}
 ```
 
-See also how succint is TypeScript version in my article [Straightforward Event Sourcing with TypeScript and NodeJS](/pl/type_script_node_Js_event_sourcing).
+See also how succint is TypeScript version in my article [Straightforward Event Sourcing with TypeScript and NodeJS](/pl/type_script_node_js_event_sourcing).
 
 Nevertheless, those tactics described in the article can be helpful and may be good enough if we get used to them. They may enhance our business logic definition and trust in our type definition. Yet, we need to remember that they won't guard us. They may also be harder to use with frameworks that don't expect to have such type definition.
 

@@ -1,0 +1,86 @@
+# Google indexing investigation — 2026-10-07
+
+## Evidence and scope
+
+The owner supplied Search Console coverage counts and examples for all six exclusions. The chart is dated October 4 and several example crawls predate the current release by months. Counts alone do not describe today's HTTP behavior. This review compares source, generated HTML and live GET responses before implementation. No deployment, Search Console submission, provider switch, redesign or bulk module migration is authorized by this work.
+
+| Report                               | Count | Assessment and action                                                                                                                                                                                                                   |
+| ------------------------------------ | ----: | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Page with redirect                   |    48 | Expected for HTTPS, non-www, trailing slashes and established article aliases. Check the destination rather than indexing the alias.                                                                                                    |
+| Alternate page with proper canonical |    46 | Expected for tracking parameters and untranslated Polish placeholders. Preserve clean canonicals and genuine translated pages.                                                                                                          |
+| Not found                            |     6 | Repair confirmed article aliases; retain real 404s when there is no proven equivalent. Never redirect arbitrary missing content to the homepage.                                                                                        |
+| Server error                         |     3 | The current probe returned 200 after slash normalization for passive-aggressive events, and 404 for rebuilding_read_models_safely and sagas. A historic 5xx is not reproduced; verify crawl dates and hosting logs.                     |
+| Crawled, currently not indexed       |    23 | Contains XML/RSS discovery resources, tracking variants, placeholders and obsolete category query URLs. Fix category routing. Inclusion of a valid article remains Google's decision.                                                   |
+| Google chose another canonical       |     8 | Five article pairs are untranslated copies without the fallback marker. Polish home, archive and consulting are real localized pages with current self-canonicals; inspect Google's selected URL before changing their language policy. |
+
+Sources: [Google's coverage definitions](https://support.google.com/webmasters/answer/7440203?hl=en), [canonical signals](https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls), [canonical troubleshooting](https://developers.google.com/search/docs/crawling-indexing/canonicalization-troubleshooting), [localized versions](https://developers.google.com/search/docs/specialty/international/localized-versions), [HTTP errors](https://developers.google.com/search/docs/crawling-indexing/http-network-errors).
+
+## Confirmed fixes, in execution order
+
+1. Mark the six English-body Polish copies using the existing `useDefaultLangCanonical` policy: positions in event stores, persistent/catch-up subscriptions, updating past data, Emmett testing, workshops and follow the money. The first five occur in the canonical-disagreement report; the sixth was found by comparing source bodies. Remove the mistakenly set flag from the two English originals (Postgres Outbox ordering and Entity Framework projections) so their canonical pages remain discoverable.
+2. Resolve the anti-patterns route collision explicitly without changing the currently rendered article. Delete its superseded landing-page files, as requested by the owner, and keep the article with its complete series and talk links. Remove the verifier's canonical exception: every sitemap URL must self-canonicalize and every language alternate must resolve reciprocally to a canonical page.
+3. Add exact aliases for `/en/risk_of_ignoring_risks/`, the dated Vibing URL and `/en/rebuilding_read_models_safely/` to the matching existing articles. Document the title-based inference for rebuilding. Use the existing frontmatter/import-compatible redirect API; do not introduce a runtime catch-all router.
+4. Redirect known legacy `?category=...` URLs to the existing category route, falling back to its English version when there is no Polish topic page. Preserve the unfiltered topic overview. Use Netlify's documented query matching and force only these query-specific redirects to bypass the overview's static file. Validate with the installed Netlify routing engine, not a hand-written simulator.
+5. Finish validating the already drafted bilingual 404 output and real HTTP 404 rewrites. Preserve unknown URLs and recovery links. Keep internal error routes out of the sitemap.
+6. Add offline CI regressions for canonical/sitemap/alternate consistency, untranslated copies and alias destinations; provide a repeatable read-only deployed indexing audit. Review intentional contract changes instead of automatically replacing the fixture.
+
+The full production audit subsequently checked 400 sitemap URLs and found five mixed-case canonical paths that Netlify already redirects to lowercase (TypeScript Event Sourcing, snapshots in Marten, integrating Marten, pull-request lessons and the Polish men-in-IT article). Normalize the generated document slugs and all corresponding discovery/internal links to the already-served lowercase paths. Keep source folders and article text; do not add case-insensitive redirects that could loop after Netlify normalization. Verify exact route/feed changes and client navigation. This is based on observed GET 301 Location headers, not a general assumption that URL paths are case-insensitive.
+
+Routing references: [Gatsby createRedirect](https://www.gatsbyjs.com/docs/reference/config-files/actions/#createRedirect), [Gatsby localized 404](https://www.gatsbyjs.com/docs/creating-prefixed-404-pages-for-different-languages/), [Netlify query matching and 404 handling](https://docs.netlify.com/manage/routing/redirects/redirect-options/).
+
+## URLs requiring evidence or an owner decision
+
+The three bare URLs `stream-ids-in-event-driven-architecture`, `benefits-and-drawbacks-of-supporting-multiple-stream-ids-per-event`, and `event-classification`, plus `outbox_pattern_done_right` and `sagas`, have no matching source or recorded alias in this repository's available history. Related articles are not proof of equivalence. The owner does not recall these URLs (2026-10-07). Keep genuine 404 responses; do not invent replacements. No repository/server fix is warranted for these unknown addresses.
+
+For Polish home, archive and consulting, obtain the Google-selected canonical from URL Inspection. Current self-canonicals and reciprocal English/Polish alternates are appropriate; do not canonicalize an actual Polish service page to English just to reduce an exclusion count. Identical article titles in archive cards do not make a localized archive a broken page.
+
+For syndicated articles, inspect whether Google selected Architecture Weekly or another original publication. A canonical is a signal, not a guarantee; an external canonical setting or excerpt strategy is a publishing decision, not an automatic repository fix.
+
+## Related earlier issues
+
+[Gatsby/CSS review](gatsby-css-review.md) remains the architecture review. Component-owned CSS Modules and layout-owned globals follow Gatsby's documented model. The nine extraction warnings and broad CSS cache invalidation need a demonstrated root-cause fix; blanket imports and warning suppression are rejected. Consistent TypeScript/ESM conversion remains planned as coherent categories, not opportunistic renaming during an SEO change.
+
+[PageSpeed review](pagespeed-review.md) records measured first-party improvements and third-party limitations. Preserve current Disqus behavior and the owner's decision to keep it. Firefox third-party cookie/referrer/feature-policy messages are not indexing failures. Existing automated checks cover one H1, Article timestamps, Service schema, Polish glyphs, hydration, newsletter loading and responsive screenshots. Do not claim a new performance score without comparable repeated measurements.
+
+The font-resource placement under SEO is valid Head syntax but poor ownership. Finish that existing draft by moving the unchanged resource component to a neutral document-resource owner and rendering it once through Gatsby's documented onRenderBody/setHeadComponents hook. Remove the bespoke TSX compilation branch this coupling added to the Head test. Verify the actual generated resource tags and EN/PL browser navigation; do not claim a measured font improvement merely from moving the owner. Contact submission error handling, external Gatsby Link usage, custom HTML branding, asynchronous cleanup and retired theme dependencies are recorded in the architecture review; keep implementation grouped and verified rather than mixing them into canonical routing work.
+
+## Validation and follow-up
+
+Implementation and final verification results are tracked here and in todo.md. Local output is separate from production. Once deployed, run the public audit, then use Search Console URL Inspection on repaired destinations and **Validate fix** for the actual 404/5xx categories. Do not validate away normal redirects or canonical alternatives. Request indexing selectively for maintained, unique articles; Google does not guarantee indexing.
+
+## Additional content decisions — 2026-10-07
+
+The owner explicitly requested deletion of the anti-patterns landing page and retention of the article. Both landing-page Markdown files are removed; the article remains at `/en/anti-patterns/`, with its Polish placeholder retaining the English canonical. Its full series list includes all five articles whose titles identify the series, plus the two existing supporting articles. The Kafka Summit recording has an explicit text link; the newer DDD Europe recording article and both other talk links are retained. `llms.txt` lists the canonical article once. No generic draft/publication feature is needed for this removal.
+
+The `llms.txt` audit found no repeated destination URLs after resolving the collision. It found two distinct older articles with copied titles: the March 2016 WROC# article used the September article's title, and TFS part 6 used part 5's title. Titles now identify the existing slugs and content; article bodies, URLs, dates and comment IDs are preserved. The workshop pages were identical Polish text. The owner chose to keep both URLs and translate the English version; that translation preserves the original dates, price, links and testimonial images. It does not announce new workshop dates. The generator now rejects repeated destinations instead of silently emitting them.
+
+The owner approved players for standalone YouTube links and linked thumbnails, while keeping inline references inside sentences. A Markdown AST/position-based normalizer preserves prose, code and existing directives; it converts 32 article files to the existing Gatsby plugin syntax. Future imports run the same conversion. Channel/playlist-only links stay links; valid video URLs retain start times and playlist parameters. The normalizer is an explicit check/write command, not a runtime DOM rewrite or a new player provider. Tests cover conversion, idempotence, URL validation, parameter preservation, escaping and the complete content tree.
+
+README is rewritten as an operational runbook: setup, actual commands, importing, frontmatter, category reading order, styling, test groups, audits, fixture review and manual deployment. Research, implementation history and pending decisions remain in the review documents, plan and todo.
+
+## Per-URL outcomes for failures needing investigation
+
+| Reported URL                                                           | Observed production response before these changes | Repository action                                                                       |
+| ---------------------------------------------------------------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `/en/risk_of_ignoring_risks/`                                          | 404                                               | Exact 301 to `/en/the_risk_of_ignoring_risks/`                                          |
+| `/2026/04/09/vibing-harness-and-ooda-loop/`                            | 404                                               | Exact 301 to `/en/vibing_harness_and_ooda_loops/`                                       |
+| `/stream-ids-in-event-driven-architecture/`                            | 404                                               | Keep genuine 404; no known original/replacement                                         |
+| `/benefits-and-drawbacks-of-supporting-multiple-stream-ids-per-event/` | 404                                               | Keep genuine 404; no known original/replacement                                         |
+| `/event-classification/`                                               | 404                                               | Keep genuine 404; no known original/replacement                                         |
+| `/en/outbox_pattern_done_right/`                                       | 404                                               | Keep genuine 404; no known original/replacement                                         |
+| `/en/rebuilding_read_models_safely/`                                   | 404, not the historical 5xx                       | 301 to `/en/rebuilding_event_driven_read_models/`; matching title/topic is an inference |
+| `/en/passive_aggressive_events`                                        | Slash redirect then 200/self-canonical            | Keep working canonical; historical server failure not reproduced                        |
+| `/sagas/`                                                              | 404, not the historical 5xx                       | Keep genuine 404; no known original/replacement                                         |
+
+The non-www probe above does not establish every historical www/HTTP hop. The deployed audit can accept the exact reported URLs through `--urls-file`, including those variants. For any recurring 5xx, correlate Search Console's last crawl with Netlify deployment/traffic logs; a current 200 cannot explain a historical outage.
+
+The eight Google-canonical disagreements split into three genuine Polish UI/service pages and five articles with duplicate bodies. `/pl/`, `/pl/articles/` and `/pl/consulting/` currently serve distinct Polish content, self-canonicals and reciprocal alternates. They are waiting for Google's selected canonical and crawl date, not an invented English fallback. The other five articles now have properly marked English-body Polish placeholders: Emmett testing, positions in event stores, workshops, subscriptions and updating past data. Their English originals remain canonical/discoverable.
+
+## Exact Search Console follow-up
+
+1. Select the `event-driven.io` property and paste `https://event-driven.io/pl/` into the top URL inspection bar.
+2. Expand **Indeksowanie stron / Page indexing** in the indexed result; no “View crawled page” button is needed.
+3. Copy **Strona kanoniczna wybrana przez Google / Google-selected canonical**, the user-declared canonical and **Last crawl**. Repeat for `/pl/articles/` and `/pl/consulting/`. If a value is unavailable, record that instead.
+4. After deployment, run the public audit and test repaired destinations with **Test live URL**. The live test cannot provide Google's canonical choice. Use **Validate fix** for repaired failures; retained real 404s and expected alternatives will not become indexed articles.
+
+Primary reference: [Google URL Inspection](https://support.google.com/webmasters/answer/9012289?hl=en).

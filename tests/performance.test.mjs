@@ -25,7 +25,9 @@ for (const lang of ['en', 'pl']) {
     test(`${lang}/${page} preloads only existing body/heading fonts and keeps intrinsic portrait dimensions`, () => {
       const $ = html(`${lang}/${page}`);
       const fonts = $('link[rel="preload"][as="font"]');
-      assert.equal(fonts.length, 2);
+      assert.equal(fonts.length, lang === 'pl' ? 4 : 2);
+      const extended = fonts.filter((_, font) => $(font).attr('href').includes('-latin-ext-'));
+      assert.equal(extended.length, lang === 'pl' ? 2 : 0);
       fonts.each((_, font) => {
         assert.equal($(font).attr('crossorigin'), 'anonymous');
         assert.ok(existsSync(join('public', $(font).attr('href'))));

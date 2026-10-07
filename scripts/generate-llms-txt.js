@@ -51,10 +51,9 @@ const summarize = (body, explicitDescription) => {
 };
 
 const slugFromDirectory = (directoryName) =>
-  (directoryName.includes('--')
-    ? directoryName.split('--').slice(1).join('--')
-    : directoryName
-  ).replace(/^\/+|\/+$/g, '');
+  (directoryName.includes('--') ? directoryName.split('--').slice(1).join('--') : directoryName)
+    .replace(/^\/+|\/+$/g, '')
+    .toLowerCase();
 
 const readEntries = (source, type) => {
   const sourceRoot = path.join(contentRoot, source);
@@ -132,6 +131,12 @@ const corePages = [
 ];
 
 const byLanguage = (language) => articles.filter((entry) => entry.language === language);
+
+const destinations = new Set();
+for (const entry of [...corePages, ...pages, ...articles]) {
+  if (destinations.has(entry.url)) throw new Error(`Duplicate llms.txt destination: ${entry.url}`);
+  destinations.add(entry.url);
+}
 
 const output = [
   '# Event-Driven.io by Oskar Dudycz',

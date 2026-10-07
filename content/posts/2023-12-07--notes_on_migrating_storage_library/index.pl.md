@@ -38,7 +38,7 @@ Don't assume that _it won't ever happen_ as those are famous last words.
 
 **And hey, if you're feeling from time to time as a surgeon doing an operation on an open heart, that's fine.**
 
-[Somebody's Gotta Do It](https://www.youtube.com/watch?v=M0SjU95U3-k).
+`youtube: [Somebody&#39;s Gotta Do It](https://www.youtube.com/watch?v=M0SjU95U3-k)`
 
 Cheers!
 

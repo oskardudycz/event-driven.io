@@ -8,7 +8,7 @@ useDefaultLangCanonical : true
 
 ![cover](2022-11-13-cover.jpg)
 
-In my last few articles, I showed the power of [functional composition](/pl/writing_and_testing_business_logic_in_fsharp/). That's a foundation for [effective modelling of your business logic](/pl/type_script_node_Js_event_sourcing/). It allows for having more straightforward and explicit code. We discussed starting from the classical Domain Driven Design and [sliming all the abstractions we could](/pl/slim_your_entities_with_event_sourcing/). I sprinkled that with a bit of Event Sourcing because I like and believe in the usefulness of this pattern. Yet, the same approach can also be applied to the classical state-based approach. Let's say that we have the following code representing the business logic of adding a product item to the shopping cart:
+In my last few articles, I showed the power of [functional composition](/pl/writing_and_testing_business_logic_in_fsharp/). That's a foundation for [effective modelling of your business logic](/pl/type_script_node_js_event_sourcing/). It allows for having more straightforward and explicit code. We discussed starting from the classical Domain Driven Design and [sliming all the abstractions we could](/pl/slim_your_entities_with_event_sourcing/). I sprinkled that with a bit of Event Sourcing because I like and believe in the usefulness of this pattern. Yet, the same approach can also be applied to the classical state-based approach. Let's say that we have the following code representing the business logic of adding a product item to the shopping cart:
 
 ```typescript
 export class AddProductItemToShoppingCartHandler
@@ -123,7 +123,7 @@ Some may say that's too many abstractions, and I could _yessir_ to that. Still, 
 
 MongoDB has a sweet set of atomic operations you can apply to the document. You can update a subset of properties, increment values, and nested arrays without modifying the whole document. This is not so common for [key-value databases](/pl/key-value-stores/). It's fine to keep documents a bit bigger, denormalised and use the same document for write and read models by just querying for a subset of information. We're not getting a big penalty hit if we're doing atomic operations. Having that, loading and updating the whole document each time is overkill.
 
-Let's say that we [applied transformations explained in the aforementioned article](/pl/slim_your_entities_with_event_sourcing/) and ended up with a similar model to the one presented in [Straightforward Event Sourcing with TypeScript and NodeJS](/pl/type_script_node_Js_event_sourcing/).
+Let's say that we [applied transformations explained in the aforementioned article](/pl/slim_your_entities_with_event_sourcing/) and ended up with a similar model to the one presented in [Straightforward Event Sourcing with TypeScript and NodeJS](/pl/type_script_node_js_event_sourcing/).
 
 ```typescript
 type ShoppingCart = {

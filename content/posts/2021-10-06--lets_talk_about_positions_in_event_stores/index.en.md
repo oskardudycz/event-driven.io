@@ -45,7 +45,7 @@ Oskar
 
 p.s. if you liked this article, check also:
 - [What if I told you that Relational Databases are in fact Event Stores?](/en/relational_databases_are_event_stores/),
-- [Integrating Marten with other systems](/en/integrating_Marten/),
+- [Integrating Marten with other systems](/en/integrating_marten/),
 - [Persistent vs catch-up, EventStoreDB subscriptions in action](/en/persistent_vs_catch_up_eventstoredb_subscriptions_in_action/),
 - [Event stores are key-value stores, and why that matters](/en/event_stores_are_key_value_stores),
 - [Let's build event store in one hour!](/en/lets_build_event_store_in_one_hour/).
