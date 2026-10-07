@@ -3,6 +3,7 @@ title: Let's talk about positions in event stores
 category: "Event Sourcing"
 cover: 2021-10-06-cover.png
 author: oskar dudycz
+useDefaultLangCanonical: true
 ---
 
 ![cover](2021-10-06-cover.png)
@@ -45,7 +46,7 @@ Oskar
 
 p.s. if you liked this article, check also:
 - [What if I told you that Relational Databases are in fact Event Stores?](/pl/relational_databases_are_event_stores/),
-- [Integrating Marten with other systems](/pl/integrating_Marten/),
+- [Integrating Marten with other systems](/pl/integrating_marten/),
 - [Persistent vs catch-up, EventStoreDB subscriptions in action](/pl/persistent_vs_catch_up_eventstoredb_subscriptions_in_action/),
 - [Event stores are key-value stores, and why that matters](/pl/event_stores_are_key_value_stores),
 - [Let's build event store in one hour!](/pl/lets_build_event_store_in_one_hour/).

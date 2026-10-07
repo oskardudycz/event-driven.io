@@ -9,7 +9,7 @@ author: oskar dudycz
 
 Today we will deal with event consumption. I'll also explain how I wrote the new version of the [MediatR](https://github.com/jbogard/MediatR) library. Curious? We'll get to that later on.
 
-If you read my article [Integrating Marten with other systems](/en/integrating_Marten/), you should be already familiar with the concept of the subscriptions. If not, it works like the [Outbox Pattern](/en/outbox_inbox_patterns_and_delivery_guarantees_explained/). Stored events are then published asynchronously by a background process. We subscribe to incoming events notifications and consume them. This pattern also applies to other event-based systems, e.g .:
+If you read my article [Integrating Marten with other systems](/en/integrating_marten/), you should be already familiar with the concept of the subscriptions. If not, it works like the [Outbox Pattern](/en/outbox_inbox_patterns_and_delivery_guarantees_explained/). Stored events are then published asynchronously by a background process. We subscribe to incoming events notifications and consume them. This pattern also applies to other event-based systems, e.g .:
 - [EventStoreDB Subscriptions](https://github.com/oskardudycz/EventSourcing.NetCore/blob/main/Core.EventStoreDB/Subscriptions/EventStoreDBSubscriptionToAll.cs),
 - [Kafka Consumers](https://github.com/oskardudycz/EventSourcing.NetCore/blob/main/Core.Kafka/Consumers/KafkaConsumer.cs).
 

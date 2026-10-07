@@ -11,7 +11,7 @@ author: oskar dudycz
 
 **For JSON _Date_ and _BigInt_ are already too advanced.** Both are not defined in the [JSON standard](https://www.rfc-editor.org/rfc/rfc8259). Date will be serialised to string and BigInt? Will fail with error... What to do if we have such fields?
 
-Let's say that we have the following type of definition [representing the Shopping Cart events](/en/type_script_node_Js_event_sourcing/):
+Let's say that we have the following type of definition [representing the Shopping Cart events](/en/type_script_node_js_event_sourcing/):
 
 ```typescript
 type ShoppingCartEvent =

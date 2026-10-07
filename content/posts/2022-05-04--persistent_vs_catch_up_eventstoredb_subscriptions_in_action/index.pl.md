@@ -3,11 +3,12 @@ title: Persistent vs catch-up, EventStoreDB subscriptions in action
 category: "Event Sourcing"
 cover: 2022-05-04-cover.png
 author: oskar dudycz
+useDefaultLangCanonical: true
 ---
 
 ![cover](2022-05-04-cover.png)
 
-Events can be a great facilitator and glue for business workflows. Subscriptions are an essential block of the event-driven system. They notify us about each of the recorded events. We can trigger the following steps and ensure they're always processed based on the recorded events. I wrote already about that [aspect in Marten](/pl/integrating_Marten/), today I'd like to focus on [EventStoreDB](https://developers.eventstore.com).
+Events can be a great facilitator and glue for business workflows. Subscriptions are an essential block of the event-driven system. They notify us about each of the recorded events. We can trigger the following steps and ensure they're always processed based on the recorded events. I wrote already about that [aspect in Marten](/pl/integrating_marten/), today I'd like to focus on [EventStoreDB](https://developers.eventstore.com).
 
 **EventStoreDB has two types of subscriptions:**
 - [Catch-up](https://developers.eventstore.com/clients/grpc/subscriptions.html),

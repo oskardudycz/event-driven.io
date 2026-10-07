@@ -72,7 +72,7 @@ Garść linków od mądrzejszych ludzi
 - [StackOverflow Podcast - Jon Skeet Wants You to Be a Feminist](https://soundcloud.com/stack-exchange/podcast-123-jon-skeet-wants-you-to-be-a-feminist)
 - [Matt Wynne - Feminism](https://mattwynne.net/feminism)
 - [Jasper Spanjaart - 20 ways to hire more women into engineering and combat the gender gap](https://totalent.eu/20-ways-to-hire-more-women-into-engineering-and-combat-the-gender-gap/)
-- [Heather Wilde - How to Close the Diversity Gap](https://www.youtube.com/watch?v=JQL4doMy73w)
+- `youtube: [Heather Wilde - How to Close the Diversity Gap](https://www.youtube.com/watch?v=JQL4doMy73w)`
 - [Gergely Orosz - A Tech Conference Listed Fake Speakers for Years: I Accidentally Noticed](https://blog.pragmaticengineer.com/devternity-fake-speakers/)
 - [Fempire - A list of women tech speakers & organizers](https://github.com/fempire/women-tech-speakers-organizers)
 

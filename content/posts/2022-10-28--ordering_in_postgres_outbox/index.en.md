@@ -3,7 +3,6 @@ title:  How Postgres sequences issues can impact your messaging guarantees
 category: "Architecture"
 cover: 2022-10-28-08.png
 author: oskar dudycz
-useDefaultLangCanonical : true
 ---
 
 **Big picture descriptions and overall explanations are great. They help us to understand the foundations of new ideas and then find the place we need to evaluate more.** Still, we're starting to face reality when we try to go deeper. This may be harsh. It may be a good bullshit filter when we realise the idea is not as simple as pictured. We may just throw, "this can't be done!" or try to find our way through the problems.

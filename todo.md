@@ -1,8 +1,36 @@
 # SEO, content, and platform progress
 
-Last updated: 2026-10-06
+Last updated: 2026-10-07
 
 This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an item only when its implementation and proportionate verification are complete. Add a short note under blocked or partial items instead of presenting them as finished.
+
+## Google indexing follow-up — 2026-10-07
+
+- [x] Read the four coverage CSVs and all six sets of URL examples; research Google/Gatsby/Netlify primary documentation before implementation.
+- [x] Compare generated canonicals/sitemap/alternates and representative live responses; merge findings into docs/google-indexing-review.md and plan.md.
+- [x] Correct six untranslated article flags and two English-original flags; delete the duplicate anti-patterns landing files at the owner’s request, preserving the article, complete series/talk links and one canonical llms.txt entry. Final generated-output checks remain part of acceptance below.
+- [x] Implement three reported aliases and 24 legacy category query rules, plus missing-locale topic redirects. Native Netlify parser/engine checks cover spaces, plus/encoded spaces, slash variants and extra tracking parameters.
+- [x] Implement bilingual recovery HTML and native 404 rewrites; add canonical/sitemap/alternate/collision/identity regressions and a read-only public indexing audit. Hosted response verification remains pending.
+- [x] Translate the English workshop page while preserving both URLs, as requested; correct two copied article titles. Regenerated llms.txt has no repeated URLs or titles.
+- [x] Convert standalone YouTube links/thumbnails in 32 files; keep inline references. Future imports apply the same AST-based normalization; source conversion tests pass.
+- [x] Replace README’s implementation history with commands and manual operating instructions.
+- [x] Move font resource tags from SEO to Gatsby’s SSR document hook and remove the added TSX compilation branch from its test harness.
+- [ ] Run final production build, full tests, browser checks and lint; record intentional contract changes.
+- [ ] After deployment, recheck repaired URLs and validate genuine Search Console failures; obtain Google-selected canonicals and hosting logs where needed.
+
+## CSS research and guardrails — 2026-10-06
+
+- [x] Add root AGENTS.md with explicit root-cause/no-workaround rules and component ownership, portability and validation requirements.
+- [x] Research Gatsby global CSS/CSS Modules, Webpack extraction and React purity; document primary sources and installed Gatsby findings in docs/gatsby-css-review.md.
+- [x] Remove the blanket stylesheet entry, its page imports, speculative metadata-first ordering and its completeness test. They are not an accepted fix.
+- [ ] Validate layout-owned globals and consistent order of existing shared dependencies; inspect warnings without suppressing them and preserve screenshots/cache integrity.
+
+## Active follow-up — 2026-10-06
+
+- [ ] Restore root 404 output and provide bilingual recovery links; verify real unknown URLs and client navigation, including JavaScript disabled.
+- [ ] Resolve CSS import-order warnings without suppressing them; preserve screenshots and cache regression checks.
+- [ ] Profile fonts/CLS and apply only measured improvements preserving typography and Polish glyphs.
+- [ ] Verify supplied preview `6ac5341dce0e2e6c2b8846d6` and run comparable sequential mobile audits; distinguish this deployed baseline from new local changes and hosted CI/CodeQL status.
 
 ## Current CSS stage — 2026-10-06
 

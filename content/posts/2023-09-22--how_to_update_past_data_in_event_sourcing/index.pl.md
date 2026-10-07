@@ -3,6 +3,7 @@ title: Oops I did it again, or how to update past data in Event Sourcing
 category: "Event Sourcing"
 cover: 2023-09-22-cover.png
 author: oskar dudycz
+useDefaultLangCanonical: true
 ---
 
 ![cover](2023-09-22-cover.png)

@@ -53,7 +53,7 @@ export type ShoppingCartEvent =
 
 It tells the story of the shopping cart. The customer opens a shopping cart and then adds some products. Optionally, they can remove some products and eventually confirm or cancel if they realise they are not in the mood to spend money.
 
-I'm using TypeScript union types to reflect that we may record either of those facts (event types) for a shopping cart. Read more in [Straightforward Event Sourcing with TypeScript and NodeJS](/en/type_script_node_Js_event_sourcing/).
+I'm using TypeScript union types to reflect that we may record either of those facts (event types) for a shopping cart. Read more in [Straightforward Event Sourcing with TypeScript and NodeJS](/en/type_script_node_js_event_sourcing/).
 
 Looking at this code, some may say:
 

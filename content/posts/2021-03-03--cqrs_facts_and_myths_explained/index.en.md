@@ -141,7 +141,7 @@ No, you don't. Event Sourcing is quite often conflated with CQRS. Event Sourcing
 - [Martin Fowler - CQRS](https://martinfowler.com/bliki/CQRS.html)
 - [Udi Dahan - Clarified CQRS](https://udidahan.com/2009/12/09/clarified-cqrs)
 - [Jimmy Bogard - Vertical slice architecture](https://jimmybogard.com/vertical-slice-architecture/)
-- [Kent Beck talk about coupling and cohesion](https://www.youtube.com/watch?v=3gib0hKYjB0)
+- `youtube: [Kent Beck talk about coupling and cohesion](https://www.youtube.com/watch?v=3gib0hKYjB0)`
 
 See also my repository, where I've gathered practical samples and other resources about CQRS and Event Sourcing: https://github.com/oskardudycz/EventSourcing.NetCore.
 

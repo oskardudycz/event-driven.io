@@ -277,7 +277,7 @@ module.exports = {
                 return Object.assign({}, edge.node.frontmatter, {
                   description: edge.node.excerpt,
                   url: `${site.siteMetadata.siteUrl}/${edge.node.fields.langKey}${edge.node.fields.slug}`,
-                  guid: `${site.siteMetadata.siteUrl}/${edge.node.fields.langKey}${edge.node.fields.slug}`,
+                  guid: `${site.siteMetadata.siteUrl}/${edge.node.fields.langKey}${edge.node.fields.originalSlug || edge.node.fields.slug}`,
                   custom_elements: [{ 'content:encoded': edge.node.html }],
                 });
               });
@@ -295,6 +295,7 @@ module.exports = {
                       html
                       fields {
                         slug
+                        originalSlug
                         prefix
                         langKey
                       }
@@ -316,7 +317,7 @@ module.exports = {
                 return Object.assign({}, edge.node.frontmatter, {
                   description: edge.node.excerpt,
                   url: `${site.siteMetadata.siteUrl}/${edge.node.fields.langKey}${edge.node.fields.slug}`,
-                  guid: `${site.siteMetadata.siteUrl}/${edge.node.fields.langKey}${edge.node.fields.slug}`,
+                  guid: `${site.siteMetadata.siteUrl}/${edge.node.fields.langKey}${edge.node.fields.originalSlug || edge.node.fields.slug}`,
                   custom_elements: [{ 'content:encoded': edge.node.html }],
                 });
               });
@@ -334,6 +335,7 @@ module.exports = {
                       html
                       fields {
                         slug
+                        originalSlug
                         prefix
                         langKey
                       }
@@ -392,6 +394,8 @@ module.exports = {
     {
       resolve: `gatsby-plugin-netlify`,
       options: {
+        // Explicit localized error rewrites preserve the 404 status.
+        generateMatchPathRewrites: false,
         headers: {
           // YouTube requires a Referer; Netlify's default same-origin suppresses it.
           '/*': ['Referrer-Policy: strict-origin-when-cross-origin'],

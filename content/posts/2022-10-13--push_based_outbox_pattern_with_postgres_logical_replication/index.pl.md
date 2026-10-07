@@ -261,7 +261,7 @@ await foreach (var readEvent in subscription.Subscribe(subscriptionOptions, ct))
 }
 ```
 
-What to do with the event? You can [pipe it to in-memory handler](/pl/how_to_build_simple_event_pipeline/), [forward it to message bus](/pl/integrating_Marten/), in general, do what your imagination and sanity allows you.
+What to do with the event? You can [pipe it to in-memory handler](/pl/how_to_build_simple_event_pipeline/), [forward it to message bus](/pl/integrating_marten/), in general, do what your imagination and sanity allows you.
 
 ## Summary
 

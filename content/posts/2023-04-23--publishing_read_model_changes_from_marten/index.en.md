@@ -10,7 +10,7 @@ author: oskar dudycz
 **Integrations have different names, shades and colours, but only one adjective: _challenging_.** Trying to glue systems together requires matching two visions into one. That's never easy, as different tools have different purposes, and authors cannot predict all the permutations that users can come up with. But no one said that all has to be easy, right? And no one said that we could not try to make it easy.
 
 **We're trying to achieve that in [Marten](https://martendb.io/), making the event-driven world accessible.** I wrote already about that in the past:
-- [Integrating Marten with other systems](/en/integrating_Marten/)
+- [Integrating Marten with other systems](/en/integrating_marten/)
 - [Projecting Marten events to Elasticsearch](/en/projecting_from_marten_to_elasticsearch/).
 
 **Today, I want to tell you the easiest way to forward changes to Marten read models into other services.**

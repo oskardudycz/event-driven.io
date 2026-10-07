@@ -3,6 +3,8 @@ title: The risk of ignoring risks
 category: "Coding Life"
 cover: 2022-04-06-cover.png
 author: oskar dudycz
+redirectAliases:
+  - /en/risk_of_ignoring_risks/
 ---
 
 ![cover](2022-04-06-cover.png)

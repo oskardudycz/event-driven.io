@@ -1,3 +1,200 @@
 [build]
 	publish = "public/"
 	command = "yarn import-and-build"
+
+# Query-specific legacy category aliases precede the final error rewrites.
+# Literal query values let Netlify decode both + and %20 correctly.
+
+[[redirects]]
+from = "/en/category/"
+to = "/en/category/databases/"
+status = 301
+force = true
+query = { category = "Databases" }
+
+[[redirects]]
+from = "/en/category/"
+to = "/en/category/tools/"
+status = 301
+force = true
+query = { category = "Tools" }
+
+[[redirects]]
+from = "/en/category/"
+to = "/en/category/event-sourcing/"
+status = 301
+force = true
+query = { category = "Event Sourcing" }
+
+[[redirects]]
+from = "/en/category/"
+to = "/en/category/open-source/"
+status = 301
+force = true
+query = { category = "Open Source" }
+
+[[redirects]]
+from = "/en/category/"
+to = "/en/category/event-driven-architecture/"
+status = 301
+force = true
+query = { category = "Event-Driven Architecture" }
+
+[[redirects]]
+from = "/en/category/"
+to = "/en/category/postgres/"
+status = 301
+force = true
+query = { category = "Postgres" }
+
+[[redirects]]
+from = "/en/category/"
+to = "/en/category/software-architecture/"
+status = 301
+force = true
+query = { category = "Software Architecture" }
+
+[[redirects]]
+from = "/en/category/"
+to = "/pl/category/community/"
+status = 301
+force = true
+query = { category = "Community" }
+
+[[redirects]]
+from = "/en/category/"
+to = "/en/category/api/"
+status = 301
+force = true
+query = { category = "API" }
+
+[[redirects]]
+from = "/en/category/"
+to = "/en/category/architecture/"
+status = 301
+force = true
+query = { category = "Architecture" }
+
+[[redirects]]
+from = "/en/category/"
+to = "/en/category/postgre-sql/"
+status = 301
+force = true
+query = { category = "PostgreSql" }
+
+[[redirects]]
+from = "/en/category/"
+to = "/en/category/postgre-sql/"
+status = 301
+force = true
+query = { category = "PostgreSQL" }
+
+[[redirects]]
+from = "/pl/category/"
+to = "/en/category/databases/"
+status = 301
+force = true
+query = { category = "Databases" }
+
+[[redirects]]
+from = "/pl/category/"
+to = "/en/category/tools/"
+status = 301
+force = true
+query = { category = "Tools" }
+
+[[redirects]]
+from = "/pl/category/"
+to = "/pl/category/event-sourcing/"
+status = 301
+force = true
+query = { category = "Event Sourcing" }
+
+[[redirects]]
+from = "/pl/category/"
+to = "/pl/category/open-source/"
+status = 301
+force = true
+query = { category = "Open Source" }
+
+[[redirects]]
+from = "/pl/category/"
+to = "/en/category/event-driven-architecture/"
+status = 301
+force = true
+query = { category = "Event-Driven Architecture" }
+
+[[redirects]]
+from = "/pl/category/"
+to = "/en/category/postgres/"
+status = 301
+force = true
+query = { category = "Postgres" }
+
+[[redirects]]
+from = "/pl/category/"
+to = "/en/category/software-architecture/"
+status = 301
+force = true
+query = { category = "Software Architecture" }
+
+[[redirects]]
+from = "/pl/category/"
+to = "/pl/category/community/"
+status = 301
+force = true
+query = { category = "Community" }
+
+[[redirects]]
+from = "/pl/category/"
+to = "/en/category/api/"
+status = 301
+force = true
+query = { category = "API" }
+
+[[redirects]]
+from = "/pl/category/"
+to = "/en/category/architecture/"
+status = 301
+force = true
+query = { category = "Architecture" }
+
+[[redirects]]
+from = "/pl/category/"
+to = "/en/category/postgre-sql/"
+status = 301
+force = true
+query = { category = "PostgreSql" }
+
+[[redirects]]
+from = "/pl/category/"
+to = "/en/category/postgre-sql/"
+status = 301
+force = true
+query = { category = "PostgreSQL" }
+
+[[redirects]]
+from = "/pl/category/cloud/"
+to = "/en/category/cloud/"
+status = 301
+
+# The old Polish topic contained English placeholders only.
+[[redirects]]
+from = "/pl/category/architecture/"
+to = "/en/category/architecture/"
+status = 301
+
+[[redirects]]
+from = "/en/*"
+to = "/en/404/"
+status = 404
+
+[[redirects]]
+from = "/pl/*"
+to = "/pl/404/"
+status = 404
+
+[[redirects]]
+from = "/*"
+to = "/404.html"
+status = 404

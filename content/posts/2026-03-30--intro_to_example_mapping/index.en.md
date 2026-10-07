@@ -146,8 +146,8 @@ What's more, if you look at the Given/When/Then pattern, you may notice that it 
 I'll also expand on it in the next articles. I'm doing the extreme Example Mapping with events, so stay tuned, the more will come.
 
 For now, check also those materials:
-- [Seb Rose - short, practical and actionable intro to Example Mapping](https://www.youtube.com/watch?v=EtoTML8cuko)
-- [Kenny Baas-Schwegler - showing how to use Example Mapping with EventStorming](https://www.youtube.com/watch?v=WvkBKvMnyuc)
+- `youtube: [Seb Rose - short, practical and actionable intro to Example Mapping](https://www.youtube.com/watch?v=EtoTML8cuko)`
+- `youtube: [Kenny Baas-Schwegler - showing how to use Example Mapping with EventStorming](https://www.youtube.com/watch?v=WvkBKvMnyuc)`
 - [An introduction by Matt Wynne himself](https://cucumber.io/blog/bdd/example-mapping-introduction/),
 - [Other quick intro by Gojko Adzic](https://draft.io/example/example-mapping).
 

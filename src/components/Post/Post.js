@@ -26,7 +26,7 @@ const Post = (props) => {
     post,
     post: {
       html,
-      fields: { prefix, slug },
+      fields: { prefix, slug, originalSlug },
       frontmatter: { title, summary, author, category, categories, disqusId },
     },
     authornote,
@@ -37,7 +37,7 @@ const Post = (props) => {
 
   const disqusConfig = {
     shortname: process.env.GATSBY_DISQUS_NAME,
-    config: { identifier: disqusId || slug, title },
+    config: { identifier: disqusId || originalSlug || slug, title },
   };
 
   return (

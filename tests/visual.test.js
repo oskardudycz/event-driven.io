@@ -20,6 +20,41 @@ afterAll(async () => {
   await browser?.close();
 });
 
+test('normalized article links hydrate with clean canonicals and keep existing comment IDs', async () => {
+  const page = await browser.newPage();
+  try {
+    await page.route('**/*', (route) => {
+      const request = new URL(route.request().url());
+      return request.origin === new URL(baseUrl).origin ? route.continue() : route.abort();
+    });
+    await page.goto(new URL('/en/testing_event_sourcing_emmett_edition/', baseUrl).href, {
+      waitUntil: 'domcontentloaded',
+    });
+    await page.waitForFunction(() => document.documentElement.dataset.font400 === 'loaded');
+    const link = page
+      .locator('.bodytext a[href="/en/type_script_node_js_event_sourcing/"]')
+      .first();
+    // Follow a real Markdown link through Gatsby's client-side navigation.
+    await link.click();
+    await page.waitForURL('**/en/type_script_node_js_event_sourcing/');
+    await expect.poll(() => page.locator('html').getAttribute('lang')).toBe('en');
+    await expect
+      .poll(() => page.locator('head link[rel="canonical"]').getAttribute('href'))
+      .toBe('https://event-driven.io/en/type_script_node_js_event_sourcing/');
+    expect(await page.locator('h1').count()).toBe(1);
+    await page.waitForFunction(() => typeof window.disqus_config === 'function');
+    const identifier = await page.evaluate(() => {
+      const config = { page: {}, callbacks: {} };
+      window.disqus_config.call(config);
+      return config.page.identifier;
+    });
+    expect(identifier).toBe('/type_script_node_Js_event_sourcing/');
+    expect(await page.locator('link#site-fonts').count()).toBe(1);
+  } finally {
+    await page.close();
+  }
+}, 60_000);
+
 test('Introduction newsletter defers its request and loads automatically on scroll', async () => {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
   const requests = [];
@@ -820,8 +855,13 @@ test('newsletter fallback works without JavaScript and unsupported observers loa
     await supportedFallback.goto(new URL('/en/introduction_to_event_sourcing/', baseUrl).href, {
       waitUntil: 'domcontentloaded',
     });
+    await supportedFallback.waitForFunction(
+      () => document.documentElement.dataset.font400 === 'loaded',
+    );
     await expect
-      .poll(() => supportedFallback.locator('#substack iframe').getAttribute('src'))
+      .poll(() => supportedFallback.locator('#substack iframe').getAttribute('src'), {
+        timeout: 10_000,
+      })
       .toBe('https://www.architecture-weekly.com/embed');
   } finally {
     await supportedFallback.close();
@@ -1189,6 +1229,76 @@ test('native article and hero styles work before hydration and across breakpoint
       } finally {
         await context.close();
       }
+    }
+  }
+}, 60_000);
+
+test('404 pages offer bilingual recovery with and without JavaScript', async () => {
+  for (const javaScriptEnabled of [false, true]) {
+    for (const language of ['en', 'pl']) {
+      const context = await browser.newContext({
+        javaScriptEnabled,
+        viewport: { width: 390, height: 844 },
+      });
+      const page = await context.newPage();
+      try {
+        await page.goto(new URL(`/${language}/404/`, baseUrl).href, {
+          waitUntil: 'domcontentloaded',
+        });
+        const heading = page.locator('h1');
+        expect(await heading.count()).toBe(1);
+        expect(await heading.innerText()).toContain(language === 'pl' ? 'Ups!' : 'Oops!');
+        expect(await heading.isVisible()).toBe(true);
+        const recovery = page.locator('article nav');
+        expect(await recovery.locator('a').count()).toBe(3);
+        await recovery.locator('a').first().click();
+        await page.waitForURL(`**/${language}/`);
+        await expect
+          .poll(() => page.locator('html').getAttribute('lang'), { timeout: 10_000 })
+          .toBe(language);
+        expect(await page.locator('h1').count()).toBe(1);
+      } finally {
+        await context.close();
+      }
+    }
+  }
+}, 60_000);
+
+test('unknown URLs use the root fallback and localized Gatsby error routes', async () => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const plain = await context.newPage();
+  try {
+    const response = await plain.goto(new URL('/__missing_page__/', baseUrl).href, {
+      waitUntil: 'domcontentloaded',
+    });
+    expect(response.status()).toBe(404);
+    expect(new URL(plain.url()).pathname).toBe('/__missing_page__/');
+    expect(await plain.locator('h1').innerText()).toContain('Oops!');
+  } finally {
+    await context.close();
+  }
+  for (const language of ['en', 'pl']) {
+    const page = await browser.newPage();
+    try {
+      const response = await page.goto(new URL(`/${language}/__missing_page__/`, baseUrl).href, {
+        waitUntil: 'domcontentloaded',
+      });
+      // Gatsby serve serves matchPath fallbacks with 200. Netlify uses the
+      // explicit 404 rewrites verified by test:404; check that deployed contract.
+      const localGatsby = ['127.0.0.1', 'localhost'].includes(new URL(baseUrl).hostname);
+      expect(response.status()).toBe(localGatsby ? 200 : 404);
+      await expect
+        .poll(() => page.locator('h1').innerText(), { timeout: 10_000 })
+        .toContain(language === 'pl' ? 'Ups!' : 'Oops!');
+      await expect
+        .poll(() => page.locator('html').getAttribute('lang'), { timeout: 10_000 })
+        .toBe(language);
+      expect(new URL(page.url()).pathname).toBe(`/${language}/__missing_page__/`);
+      await page.locator('article nav a').nth(2).click();
+      await page.waitForURL(`**/${language}/search/`);
+      expect(await page.locator('h1').count()).toBe(1);
+    } finally {
+      await page.close();
     }
   }
 }, 60_000);

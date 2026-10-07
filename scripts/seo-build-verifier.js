@@ -136,11 +136,6 @@ function verifySeoBuild(publicDirectory) {
 
   const sitemap = read('sitemap/sitemap-0.xml');
   const sitemapUrls = Array.from(sitemap.matchAll(/<loc>([^<]+)<\/loc>/g), (match) => match[1]);
-  // A page and a post currently claim the same anti-patterns route. Keep this exception explicit
-  // until the editorial owner of that URL is chosen; every other sitemap canonical must self-match.
-  const knownCanonicalExceptions = new Map([
-    ['https://event-driven.io/pl/anti-patterns/', 'https://event-driven.io/en/anti-patterns/'],
-  ]);
   if (new Set(sitemapUrls).size !== sitemapUrls.length) {
     failures.push('sitemap contains duplicate URLs');
   }
@@ -151,8 +146,7 @@ function verifySeoBuild(publicDirectory) {
       ? `${pathname.slice(1)}index.html`
       : pathname.slice(1);
     const html = read(relativePath);
-    const expectedCanonical = knownCanonicalExceptions.get(sitemapUrl) || sitemapUrl;
-    expectContains(relativePath, html, `rel="canonical" href="${expectedCanonical}"`);
+    expectContains(relativePath, html, `rel="canonical" href="${sitemapUrl}"`);
   }
 
   for (const publicRoute of [

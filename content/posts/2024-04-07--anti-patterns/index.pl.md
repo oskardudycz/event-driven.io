@@ -10,6 +10,8 @@ useDefaultLangCanonical: true
 
 If you don't, you better check the talk I gave at Kafka Summit 2024. Knowing only best practices is one side of the coin. Knowing what NOT to do can be even more important.
 
+[Watch Event Modeling Anti-patterns at Kafka Summit 2024](https://www.confluent.io/events/kafka-summit-london-2024/event-modeling-anti-patterns/).
+
 [![](2024-04-07-kafka.png)](https://www.confluent.io/events/kafka-summit-london-2024/event-modeling-anti-patterns/)
 
 **The talk also summarised my current article series about anti-patterns in event modelling. Here's the full list:**
@@ -17,7 +19,7 @@ If you don't, you better check the talk I gave at Kafka Summit 2024. Knowing onl
 - [Property Sourcing](/en/property-sourcing/),
 - [I'll just add one more field](/en/i_will_just_add_one_more_field/).
 - [Clickbait event](/en/clickbait_event/),
-- [Passive Aggressive Events](/en/passive_aggressive_events),
+- [Passive Aggressive Events](/en/passive_aggressive_events/),
 - [Should you record multiple events from business logic?](/en/one_or_more_event_that_is_the_question/),
 - [Stream ids, event types prefixes and other event data you might not want to slice off](/en/on_putting_stream_id_in_event_data/).
 
@@ -40,9 +42,11 @@ The thin line is also between bad and good practices. And this thin line is: _co
 
 You can check [recommendations on my Linked.in profile](https://www.linkedin.com/in/oskardudycz/) to see how other people liked working with me.
 
+You can also watch [the newer DDD Europe recording](/en/new-recording-on-event-modelling/).
+
 Watch also my other talks:
-- [The Light and The Dark Side of the Event-Driven Design](https://www.youtube.com/watch?v=0pYmuk0-N_4)
-- [Let's build the worst Event Sourcing system!](https://www.youtube.com/watch?v=20zvAJAhqS0)
+- `youtube: [The Light and The Dark Side of the Event-Driven Design](https://www.youtube.com/watch?v=0pYmuk0-N_4)`
+- `youtube: [Let&#39;s build the worst Event Sourcing system!](https://www.youtube.com/watch?v=20zvAJAhqS0)`
 
 Cheers!
 

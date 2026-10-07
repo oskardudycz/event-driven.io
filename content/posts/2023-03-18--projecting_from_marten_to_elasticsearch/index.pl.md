@@ -14,7 +14,7 @@ In [Marten](https://martendb.io/), we embraced that and [provide various ways of
 
 **Projecting straight into Postgres gives you enough power for most common cases. Yet, sometimes you need to do more.** Nowadays, we can get razor-focused solutions for our scenarios with emerging types of various [key/value databases](/pl/key-value-stores/). Marten also allows you to get benefits and integrate with them.
 
-I explained already [how to integrate Marten with another tooling](/pl/integrating_Marten/). **Today, I'll show you how to build in practice external projection, using Elasticsearch as an example.**
+I explained already [how to integrate Marten with another tooling](/pl/integrating_marten/). **Today, I'll show you how to build in practice external projection, using Elasticsearch as an example.**
 
 Here are our assumptions:
 - even though [Postgres has full-text search capabilities](https://martendb.io/documents/full-text.html), we'd like to use Elasticsearch as it's a database natively built for such needs.

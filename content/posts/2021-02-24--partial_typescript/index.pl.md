@@ -227,7 +227,7 @@ if(!reservationIsValid(result))
 const reservation: Reservation = result;
 ```
 
-I wrote a longer take on ["How to get the current entity state from events?"](/pl/how_to_get_the_current_entity_state_in_event_sourcing/). If you want to see how to use that pattern to build a whole NodeJS WebApi read my other article [Straightforward Event Sourcing with TypeScript and NodeJS](/pl/type_script_node_Js_event_sourcing).
+I wrote a longer take on ["How to get the current entity state from events?"](/pl/how_to_get_the_current_entity_state_in_event_sourcing/). If you want to see how to use that pattern to build a whole NodeJS WebApi read my other article [Straightforward Event Sourcing with TypeScript and NodeJS](/pl/type_script_node_js_event_sourcing).
 
 Cheers!
 

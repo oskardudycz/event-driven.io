@@ -86,7 +86,7 @@ See also a follow up articles on Emmett:
 - [Testing Event Sourcing, Emmett edition]().
 
 Read also more about Node.js and Event Sourcing to get what I want to provide out of the box:
-- [Straightforward Event Sourcing with TypeScript and NodeJS](/en/type_script_node_Js_event_sourcing/)
+- [Straightforward Event Sourcing with TypeScript and NodeJS](/en/type_script_node_js_event_sourcing/)
 - [How TypeScript can help in modelling business workflows](/en/how_to_have_fun_with_typescript_and_workflow/)
 - [How to get the current entity state from events?](/en/how_to_get_the_current_entity_state_in_event_sourcing/)
 - [How to test event-driven projections](/en/testing_event_driven_projections/)

@@ -1,5 +1,5 @@
 ---
-title: Old man yells at cloud, czyli rzecz o komunikacji
+title: Moja nierelacja z WROC#
 category: "Coding life"
 cover: 2016-03-16-cover.jpg
 author: oskar dudycz

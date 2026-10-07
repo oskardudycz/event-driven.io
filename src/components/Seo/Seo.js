@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withPrefix } from 'gatsby';
 import i18next from 'i18next';
 import { DEFAULT_OPTIONS } from '../../i18n/constants';
 import { publicationDate } from '../../utils/publication-date.mjs';
@@ -177,7 +176,7 @@ const Seo = (props) => {
 
   const linkTags = [
     { rel: 'canonical', href: canonicalUrl },
-    ...(languages.length > 1
+    ...(!noIndex && languages.length > 1
       ? [
           {
             rel: 'alternate',
@@ -197,18 +196,6 @@ const Seo = (props) => {
     <React.Fragment>
       <html lang={lang} />
       <title id="page-title">{title}</title>
-      {[400, 600].map((weight) => (
-        <link
-          key={weight}
-          id={`font-preload-${weight}`}
-          rel="preload"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-          href={withPrefix(`/fonts/open-sans/files/open-sans-latin-${weight}.woff2`)}
-        />
-      ))}
-      <link rel="stylesheet" href={withPrefix('/fonts/open-sans/index.css')} id="site-fonts" />
       {metaTags.map((tag) => (
         <meta key={tag.name || tag.property} {...tag} id={`meta-${tag.name || tag.property}`} />
       ))}

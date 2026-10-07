@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
-import { createHead } from '../components/Seo';
 import Article from '../components/Article';
 import Page from '../components/Page';
+import { createHead } from '../components/Seo';
 
 const PageTemplate = (props) => {
   const {

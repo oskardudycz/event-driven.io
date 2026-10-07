@@ -263,7 +263,7 @@ We now know how to instrument our command handling with telemetry information, b
 
 For now, we have all we need to see how the shopping cart confirmation went, but we still don't know how to express that order initialisation was caused by it.
 
-**To do that, we need to propagate context.** In another article, [I explained how to subscribe for notifications about new events](/pl/integrating_Marten/). We can use them to push events forward to the messaging system or call event handlers. 
+**To do that, we need to propagate context.** In another article, [I explained how to subscribe for notifications about new events](/pl/integrating_marten/). We can use them to push events forward to the messaging system or call event handlers.
 
 To get a full telemetry setup, we need to assign the parent context from event metadata. Then we'll know that order initiation is part of the same process as shopping cart confirmation (as an event handler that initiated the order was triggered by the shopping cart confirmed event).
 

@@ -1,3 +1,5 @@
+import '../theme/tokens.css';
+import '../theme/global.css';
 import styles from './Layout.module.css';
 import FontFaceObserver from 'fontfaceobserver';
 import PropTypes from 'prop-types';

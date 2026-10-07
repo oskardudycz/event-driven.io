@@ -87,7 +87,7 @@ Read models may be fine-tuned for the module's needs, and our subscriber's needs
 
 All of that can end up with exponential growth of calls. First, we query for raw data, then additional calls to get dictionaries, then other nested data and too often additional data from other modules.
 
-[Release the Kraken!](https://www.youtube.com/watch?v=38AYeNGjqg0&t=37s).
+`youtube: [Release the Kraken!](https://www.youtube.com/watch?v=38AYeNGjqg0&t=37s)`
 
 ## Our communication is direct and error-prone
 

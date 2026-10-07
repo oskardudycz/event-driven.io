@@ -90,7 +90,10 @@ test('imported bare paths redirect permanently to English before the catch-all',
     const lines = output.split(/\r?\n/).map((line) => line.trim().replace(/\s+/g, ' '));
     for (const redirect of expected) {
       assert.equal(lines.filter((line) => line === redirect).length, 1);
-      assert(lines.indexOf(redirect) < lines.indexOf('/* /404/ 302'));
+      assert(
+        !lines.some((line) => /^\/\* /.test(line)),
+        'Final hosting fallbacks live in netlify.toml',
+      );
     }
     assert(!lines.some((line) => line.startsWith('/existing/ ')));
   } finally {
