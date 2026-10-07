@@ -469,7 +469,7 @@ Check the full sample in my repo: https://github.com/oskardudycz/EventSourcing.J
 
 And now, here's the deal. I left that as the last point. Last but not least: **All KUDOS go to [Jérémie Chassaing](https://twitter.com/thinkb4coding).** He coined Decider pattern and described it in detail. I encourage you to check his:
 - [article](https://thinkbeforecoding.com/post/2021/12/17/functional-event-sourcing-decider),
-- `youtube: [talk](https://www.youtube.com/watch?v=whFfzQfdJZg)`
+- [talk](https://www.youtube.com/watch?v=whFfzQfdJZg),
 - [detailed example with a walkthrough in F#](https://gist.github.com/thinkbeforecoding/026a1d90ea2f3ea86d151b1229cad932).
 
 That should give you an even better understanding of this pattern than my humble article. I touched on one possible implementation path, but there's more. You can use it not only for Event Sourcing but also for regular business logic processing.

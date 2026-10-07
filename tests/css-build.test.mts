@@ -1,44 +1,8 @@
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import cheerio from 'cheerio';
-import { createCssModuleIdent } from '../scripts/css-module-ident.mts';
-
-test('CSS exports invalidate shared HTML for declaration edits and restore deterministically', () => {
-  const root = mkdtempSync(join(tmpdir(), 'css-ident-'));
-  try {
-    const source = join(root, 'src');
-    mkdirSync(source);
-    const module = join(source, 'Layout.module.css');
-    const shared = join(source, 'tokens.css');
-    writeFileSync(module, '.layout { padding: 20px; }');
-    writeFileSync(shared, ':root { --color: black; }');
-    const dependencies = new Set<string>();
-    const identify = createCssModuleIdent(root);
-    const context = {
-      resourcePath: module,
-      addDependency: (file: string) => dependencies.add(file),
-      addContextDependency: (directory: string) => dependencies.add(directory),
-    };
-    const baseline = identify(context, '', 'layout');
-    assert.equal(identify(context, '', 'layout'), baseline);
-    writeFileSync(shared, ':root { --color: white; }');
-    assert.notEqual(identify(context, '', 'layout'), baseline);
-    writeFileSync(shared, ':root { --color: black; }');
-    assert.equal(identify(context, '', 'layout'), baseline);
-    writeFileSync(join(source, 'Other.module.css'), '.card { color: red; }');
-    assert.notEqual(identify(context, '', 'layout'), baseline);
-    rmSync(join(source, 'Other.module.css'));
-    assert.equal(identify(context, '', 'layout'), baseline);
-    assert.ok(dependencies.has(module));
-    assert.ok(dependencies.has(shared));
-    assert.ok(dependencies.has(source));
-  } finally {
-    rmSync(root, { recursive: true, force: true });
-  }
-});
 
 // Old CSS assets may legitimately remain on disk after a warm build. Compare
 // with the current compilation, not just with whichever file the HTML names.
@@ -61,7 +25,6 @@ test('every generated page embeds CSS from the current webpack compilation', () 
       assert.ok($(element).text() === css.get(asset), `${file} embeds stale CSS: ${asset}`);
       checked++;
     });
-    assert.equal($('style[id^="__jsx-"]').length, 0, `${file} still uses styled-jsx`);
   }
   assert.ok(checked > 0, 'Expected generated pages with server-rendered CSS');
 });

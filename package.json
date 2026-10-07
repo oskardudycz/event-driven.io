@@ -9,7 +9,7 @@
   "scripts": {
     "generate-llms": "node ./scripts/generate-llms-txt.js",
     "verify-seo": "node ./scripts/verify-seo-build.js",
-    "test": "yarn test:seo && yarn test:build-contract && yarn test:substack && yarn test:video && yarn test:redirects && yarn test:archive && yarn test:import-build && yarn test:categories && yarn test:performance && yarn test:tooling && yarn test:search && yarn test:localization && yarn test:css && yarn test:404 && yarn test:indexing",
+    "test": "yarn test:seo && yarn test:build-contract && yarn test:substack && yarn test:video && yarn test:redirects && yarn test:articles && yarn test:categories && yarn test:performance && yarn test:tooling && yarn test:search && yarn test:localization && yarn test:css && yarn test:404 && yarn test:indexing",
     "test:seo": "node ./tests/seo-build.test.js",
     "test:build-contract": "node ./tests/build-contract.test.js",
     "test:visual": "vitest run tests/visual.test.js",
@@ -42,8 +42,7 @@
     "test:substack": "node ./tests/substack-import.test.js",
     "test:video": "node ./tests/video-headers.test.js && node --test --test-isolation=none tests/youtube-markdown.test.mts",
     "test:redirects": "node ./tests/article-redirects.test.js",
-    "test:archive": "node ./tests/architecture-weekly-manifest.test.js",
-    "test:import-build": "node ./tests/article-import-build.test.js",
+    "test:articles": "node ./tests/article-build.test.js",
     "test:cache": "node ./scripts/verify-gatsby-cache.mjs",
     "lint:modern": "yarn lint:eslint",
     "test:categories": "node ./tests/category-posts.test.mjs",

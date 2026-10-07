@@ -366,6 +366,33 @@ test('future imports remove paid prompts and use relative URLs for available blo
   }
 });
 
+test('imports YouTube text references as links and linked thumbnails as players in both languages', async () => {
+  const output = await fs.mkdtemp(path.join(os.tmpdir(), 'substack-video-link-scope-'));
+  const textVideo = 'https://www.youtube.com/watch?v=JQL4doMy73w';
+  const imageVideo = 'https://www.youtube.com/watch?v=GOd7oj1AT00&start=30';
+  const page = `<meta property="og:title" content="Video references"><meta property="article:published_time" content="2025-01-01">
+    <div class="body markup"><p><a href="${textVideo}">Heather Wilde - How to Close the Diversity Gap</a></p>
+    <ul><li><a href="${textVideo}">A reference in a list</a>.</li></ul>
+    <p><a class="image-link" href="${imageVideo}"><img src="${image}" alt="Mr Bean"></a></p></div>`;
+  try {
+    const directory = await importPost(
+      { url: source },
+      { output, html: page, download: async () => new Response(png) },
+    );
+    for (const language of ['en', 'pl']) {
+      const markdown = await fs.readFile(path.join(directory, `index.${language}.md`), 'utf8');
+      assert.ok(
+        markdown.includes(`[Heather Wilde - How to Close the Diversity Gap](${textVideo})`),
+      );
+      assert.ok(markdown.includes(`-   [A reference in a list](${textVideo}).`));
+      assert.ok(markdown.includes(`\`youtube: [Mr Bean](${imageVideo})\``));
+      assert.doesNotMatch(markdown, /`youtube: \[Heather Wilde|`youtube: \[A reference/);
+    }
+  } finally {
+    await fs.rm(output, { recursive: true, force: true });
+  }
+});
+
 test('code language inference preserves source languages and recognizes typed examples', async () => {
   const { codeLanguage, labelCodeFences } = await import('../import/code-languages.mjs');
   assert.equal(

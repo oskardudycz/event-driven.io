@@ -7,7 +7,7 @@ author: oskar dudycz
 
 ![cover](2022-02-30-cover.png)
 
-`youtube: [War. War never changes…](https://www.youtube.com/watch?v=C2Pt-LnQ2po)`
+[War. War never changes…](https://www.youtube.com/watch?v=C2Pt-LnQ2po)
 
 In IT, we’re living in a bubble. Compared to others we have good working conditions. We learned to complain about tiny things. [We’re running disputes on which framework is better or worse. We even do heated discussions around new language syntax.](https://github.com/dotnet/csharplang/discussions/5735) It’s a gigantic bubble. Bubbles tend to burst.
 

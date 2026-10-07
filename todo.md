@@ -1,8 +1,16 @@
 # SEO, content, and platform progress
 
-Last updated: 2026-10-07
+Last updated: 2026-10-08
 
 This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an item only when its implementation and proportionate verification are complete. Add a short note under blocked or partial items instead of presenting them as finished.
+
+## CodeQL and regression-test cleanup — 2026-10-08
+
+- [x] Read PR #52's two open alerts (6 and 7), confirm both are test-only URL substring checks and review the primary CodeQL guidance.
+- [x] Assert exact parsed link destinations, with negative examples for URLs embedded in text or lookalike destinations. Both reported URL substring checks are replaced without suppressions.
+- [x] Remove completed-migration assertions and the archive acceptance suite from routine tests. Preserve importer/security, actual rendering, SEO, bilingual navigation and cache regressions; `test:articles` derives article/related-content checks from current generated data. Record this testing rule in AGENTS.md.
+- [x] Local acceptance: production build passes (140.62s), full revised suite passes (68.39s), all 34 browser checks pass (62.61s), lint/format and smoke pass (79 source files / 18 queries). README documents `test:articles`; route/feed/sitemap contracts and screenshots pass without fixture updates. No application/content changes or deployment were made. Nine CSS-order and four slow category-query warnings remain separate follow-up work; CSS/content cache algorithms were not changed or re-profiled here.
+- [ ] Confirm alerts 6 and 7 close on the next hosted CodeQL analysis; local passing tests do not establish closure.
 
 ## Google indexing follow-up — 2026-10-07
 
@@ -12,10 +20,11 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Implement three reported aliases and 24 legacy category query rules, plus missing-locale topic redirects. Native Netlify parser/engine checks cover spaces, plus/encoded spaces, slash variants and extra tracking parameters.
 - [x] Implement bilingual recovery HTML and native 404 rewrites; add canonical/sitemap/alternate/collision/identity regressions and a read-only public indexing audit. Hosted response verification remains pending.
 - [x] Translate the English workshop page while preserving both URLs, as requested; correct two copied article titles. Regenerated llms.txt has no repeated URLs or titles.
-- [x] Convert standalone YouTube links/thumbnails in 32 files; keep inline references. Future imports apply the same AST-based normalization; source conversion tests pass.
+- [x] Correct YouTube conversion scope: restore 36 text links in 28 files exactly from their original Markdown; retain four linked-thumbnail conversions. Future imports convert only linked thumbnails and preserve text links, including reading lists and standalone links.
+- [x] Verify the corrected YouTube scope: all 22 importer tests and six video/header checks pass; the whole content scan finds no unconverted thumbnails; all 36 restored references render as anchors in production HTML. All 34 browser checks pass, including English/Polish text links and thumbnail players. Existing players and mapped webinar recordings remain embedded.
 - [x] Replace README’s implementation history with commands and manual operating instructions.
 - [x] Move font resource tags from SEO to Gatsby’s SSR document hook and remove the added TSX compilation branch from its test harness.
-- [ ] Run final production build, full tests, browser checks and lint; record intentional contract changes.
+- [x] Local acceptance: corrected production build passes (49.74s warm), full tests pass (65.48s), all 34 browser checks pass (70.60s), and lint/format pass. Existing build-contract and screenshot fixtures pass without updates for this correction. Hosted CI and deployment remain separate checks below.
 - [ ] After deployment, recheck repaired URLs and validate genuine Search Console failures; obtain Google-selected canonicals and hosting logs where needed.
 
 ## CSS research and guardrails — 2026-10-06

@@ -230,14 +230,14 @@ You can also watch:
 `youtube: https://www.youtube.com/watch?v=7NGlYgobTyY`
 
 **Other resources you may find useful:**
-- `youtube: [Bram Leenders - Scalable User Privacy: Crypto Shredding at Spotify](https://www.youtube.com/watch?v=l6ueOeoW7XM)`
+- [Bram Leenders - Scalable User Privacy: Crypto Shredding at Spotify](https://www.youtube.com/watch?v=l6ueOeoW7XM)
 - [Michiel Rook - Forget me please? Event sourcing and the GDPR](https://www.michielrook.nl/2017/11/forget-me-please-event-sourcing-gdpr/)
 - [Michiel Rook - Event sourcing and the GDPR: a follow-up](https://www.michielrook.nl/2017/11/event-sourcing-gdpr-follow-up/)
 - [Johan Sydseter - GDPR compliant event sourcing with HashiCorp Vault](https://medium.com/sydseter/gdpr-compliant-event-sourcing-with-hashicorp-vault-f27011cac318)
 - [Mathias Verraes - Eventsourcing Patterns: Crypto-Shredding](https://verraes.net/2019/05/eventsourcing-patterns-throw-away-the-key/)
 - [Diego Martin - Protecting Sensitive Data in Event-Sourced Systems with Crypto Shredding](https://www.eventstore.com/blog/protecting-sensitive-data-in-event-sourced-systems-with-crypto-shredding-1)
 - [Daniel Lebrero - Kafka, GDPR and Event Sourcing](https://danlebrero.com/2018/04/11/kafka-gdpr-event-sourcing/)
-- `youtube: [Stuart Herbert - Event Sourcing and GDPR: When Immutability Meets Reality](https://www.youtube.com/watch?v=FTcBa-2-I2c)`
+- [Stuart Herbert - Event Sourcing and GDPR: When Immutability Meets Reality](https://www.youtube.com/watch?v=FTcBa-2-I2c)
 - [Masih Derkani - GDPR Compliance: Transparent Handing of Personally Identifiable Information in Event-Driven Systems](https://www.confluent.io/resources/kafka-summit-2020/gdpr-compliance-transparent-handing-of-personally-identifiable-information-in-event-driven-systems/)
 - [Harish Kumar - Easy Implementation of GDPR with Aspect Oriented Programming](https://www.infoq.com/articles/gdpr-with-spring-and-aop)
 

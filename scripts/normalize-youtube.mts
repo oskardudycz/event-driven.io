@@ -5,7 +5,7 @@ import { normalizeYouTubeEmbeds } from '../import/youtube-markdown.mts';
 const args = process.argv.slice(2);
 if (args.includes('--help')) {
   console.log(
-    'Usage: yarn normalize:youtube [--write]\nCheck all content Markdown for standalone YouTube links/thumbnails; --write converts them to the existing video embed syntax. Inline prose references and code are preserved.',
+    'Usage: yarn normalize:youtube [--write]\nCheck all content Markdown for standalone images linked to YouTube videos; --write converts those thumbnails to the existing video embed syntax. Text links, bare URLs, prose and code are preserved.',
   );
   process.exit(0);
 }

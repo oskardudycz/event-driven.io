@@ -5,4 +5,5 @@
 - Use native ECMAScript modules and TypeScript for new code. Keep styles portable for a possible Astro migration.
 - Preserve existing layout, typography, routes, content and interactions unless the user authorizes a change. Apply measured, non-invasive improvements; discuss provider switches and redesign decisions first.
 - Reproduce regressions and validate the actual behavior, including SSR, hydration, English/Polish navigation and relevant responsive states. Preserve screenshot tolerances; review intentional fixture changes explicitly.
+- Test current behavior and security boundaries with representative fixtures and generated output. Do not add permanent checks that a completed migration was not reverted, pin historical article bodies/counts, or require a particular implementation when the observable behavior can be tested.
 - Update plan.md and todo.md with current implementation and evidence. Distinguish local verification from hosted CI and deployed results; document unresolved warnings instead of claiming completion.
