@@ -4,11 +4,17 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 const Expand = (props) => {
-  const { onClick } = props;
+  const { onClick, open } = props;
 
   return (
     <React.Fragment>
-      <button className={`more ${styles['more']}`} to="#" onClick={onClick} aria-label="expand">
+      <button
+        className={`more ${styles['more']}`}
+        type="button"
+        onClick={onClick}
+        aria-label="expand"
+        aria-expanded={open}
+      >
         <FaAngleDown size={30} />
       </button>
     </React.Fragment>
@@ -17,6 +23,7 @@ const Expand = (props) => {
 
 Expand.propTypes = {
   onClick: PropTypes.func,
+  open: PropTypes.bool,
 };
 
 export default Expand;

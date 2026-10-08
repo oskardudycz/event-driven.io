@@ -1,21 +1,11 @@
-// Group DOM writes and reads so overflow calculation needs one layout flush.
-export function getOverflowedItems(container, items, reservedWidth) {
-  items.forEach((item) => {
-    item.classList.add('item');
-    item.classList.remove('hideItem');
-  });
-  const maxWidth = container.offsetWidth - reservedWidth;
-  const widths = items.map((item) => item.offsetWidth);
-  const hiddenItems = [];
+// Width measurement stays with the component; this calculation retains model
+// indexes rather than copying translated text or losing icon/link properties.
+export function getOverflowedIndexes(widths, availableWidth) {
+  const hidden = [];
   let cumulativeWidth = 0;
-  items.forEach((item, index) => {
-    cumulativeWidth += widths[index];
-    if (!item.classList.contains('more') && cumulativeWidth > maxWidth) {
-      const link = item.querySelector('a');
-      item.classList.add('hideItem');
-      item.classList.remove('item');
-      hiddenItems.push({ to: link.getAttribute('data-slug'), label: link.text });
-    }
+  widths.forEach((width, index) => {
+    cumulativeWidth += width;
+    if (cumulativeWidth > availableWidth) hidden.push(index);
   });
-  return hiddenItems;
+  return hidden;
 }

@@ -20,6 +20,73 @@ afterAll(async () => {
   await browser?.close();
 });
 
+test('persistent menu keeps current language, page destinations and overflow icons after navigation and resizing', async () => {
+  for (const width of [390, 1280]) {
+    const page = await browser.newPage({ viewport: { width, height: 900 } });
+    try {
+      await page.route('**/*', (route) => {
+        const request = new URL(route.request().url());
+        return request.origin === new URL(baseUrl).origin ? route.continue() : route.abort();
+      });
+      await page.goto(new URL('/en/articles/', baseUrl).href, {
+        waitUntil: 'domcontentloaded',
+      });
+      await page.waitForFunction(() => document.documentElement.dataset.font400 === 'loaded');
+      const menu = page.locator('nav.menu');
+      const expand = menu.getByRole('button', { name: 'expand' });
+      await expand.waitFor();
+      await expand.click();
+      await expect.poll(() => expand.getAttribute('aria-expanded')).toBe('true');
+
+      await menu.getByRole('link', { name: 'Change language to pl' }).click();
+      await page.waitForURL('**/pl/articles/');
+      await expect.poll(() => page.locator('html').getAttribute('lang')).toBe('pl');
+      await expect.poll(() => expand.getAttribute('aria-expanded')).toBe('false');
+      await expand.click();
+
+      const visibleItems =
+        width < 1024 ? menu.locator('.itemList') : menu.locator('.hiddenItemList');
+      const talks = visibleItems.locator('a[data-slug="/talks/"]');
+      await expect.poll(async () => (await talks.innerText()).trim()).toBe('Wystąpienia');
+      expect(await talks.getAttribute('href')).toBe('/pl/talks/');
+      for (const host of ['linkedin.com', 'github.com', 'hachyderm.io', 'bsky.app']) {
+        const social = visibleItems.locator(`a[href*="${host}"]`);
+        expect(await social.isVisible()).toBe(true);
+        expect(await social.locator('svg').count()).toBe(1);
+      }
+
+      await expand.click();
+      await expect.poll(() => expand.getAttribute('aria-expanded')).toBe('false');
+      await page.setViewportSize({ width: width < 1024 ? 1280 : 390, height: 900 });
+      await expect.poll(() => talks.isVisible()).toBe(false);
+      await expand.click();
+      const resizedItems =
+        width < 1024 ? menu.locator('.hiddenItemList') : menu.locator('.itemList');
+      const consulting = menu.locator('.itemList a[href="/pl/consulting/"]');
+      expect(await consulting.getAttribute('href')).toBe('/pl/consulting/');
+      await expect
+        .poll(async () => (await resizedItems.locator('a[data-slug="/talks/"]').innerText()).trim())
+        .toBe('Wystąpienia');
+
+      await menu.getByRole('link', { name: 'Change language to en' }).click();
+      await page.waitForURL('**/en/articles/');
+      await expect.poll(() => page.locator('html').getAttribute('lang')).toBe('en');
+      await expect.poll(() => expand.getAttribute('aria-expanded')).toBe('false');
+      await expand.click();
+      await expect
+        .poll(async () =>
+          (await menu.getByRole('link', { name: 'Talks', exact: true }).innerText()).trim(),
+        )
+        .toBe('Talks');
+      expect(await menu.locator('.itemList a[href="/en/consulting/"]').getAttribute('href')).toBe(
+        '/en/consulting/',
+      );
+    } finally {
+      await page.close();
+    }
+  }
+}, 60_000);
+
 test('article video references remain links and players have accessible titles in both languages', async () => {
   const page = await browser.newPage();
   try {

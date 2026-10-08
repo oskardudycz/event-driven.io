@@ -1,7 +1,6 @@
 import styles from './Menu.module.css';
 import React from 'react';
 import PropTypes from 'prop-types';
-import 'core-js/fn/array/from';
 
 import {
   FaBookOpen,
@@ -23,19 +22,20 @@ import LanguagePicker from '../LanguagePicker';
 import Item from './Item';
 import BlueskyIcon from './BlueskyIcon';
 import Expand from './Expand';
-import { getOverflowedItems } from './overflow.mjs';
+import { getOverflowedIndexes } from './overflow.mjs';
 import config from '../../../content/meta/config';
 
 class Menu extends React.Component {
-  constructor(props) {
-    super(props);
-    this.itemList = React.createRef();
+  itemList = React.createRef();
 
-    const pages = props.pages.map((page) => ({
+  state = { open: false, hiddenIndexes: [], measuring: false };
+
+  // Gatsby preserves the layout during navigation. Read the current localized
+  // page models rather than retaining a copy of the first page's props.
+  get items() {
+    const pages = this.props.pages.map((page) => ({
       to: page.node.fields.slug,
-      label: page.node.frontmatter.menuTitle
-        ? page.node.frontmatter.menuTitle
-        : page.node.frontmatter.title,
+      label: page.node.frontmatter.menuTitle || page.node.frontmatter.title,
       icon:
         page.node.frontmatter.icon === 'FaUserGraduate'
           ? FaUserGraduate
@@ -43,8 +43,7 @@ class Menu extends React.Component {
             ? FaHandshake
             : undefined,
     }));
-
-    this.items = [
+    return [
       { to: '/', label: 'Start', icon: FaHome },
       { to: '/articles/', label: 'menu.articles', icon: FaBookOpen },
       { to: '/category/', label: 'menu.categories', icon: FaTag },
@@ -52,7 +51,6 @@ class Menu extends React.Component {
       { to: '/contact/', label: 'menu.contact', icon: FaEnvelope },
       { to: '/talks/', label: 'menu.talks', icon: FaMicrophone },
       { to: '/search/', icon: FaSearch },
-
       { to: config.socialLinks.linkedin.url, icon: FaLinkedin },
       { to: config.socialLinks.github.url, icon: FaGithub },
       { to: config.socialLinks.mastodon.url, icon: FaMastodon },
@@ -60,14 +58,7 @@ class Menu extends React.Component {
       { to: config.socialLinks.youtube.url, icon: FaYoutube },
       { to: config.socialLinks.rss.url, icon: FaRss },
     ];
-
-    this.renderedItems = []; // will contain references to rendered DOM elements of menu
   }
-
-  state = {
-    open: false,
-    hiddenItems: [],
-  };
 
   static propTypes = {
     path: PropTypes.string.isRequired,
@@ -78,75 +69,47 @@ class Menu extends React.Component {
   };
 
   componentDidMount() {
-    this.renderedItems = this.getRenderedItems();
+    if (this.props.screenWidth > 0) this.measureOverflow();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (
       this.props.path !== prevProps.path ||
       this.props.fixed !== prevProps.fixed ||
       this.props.screenWidth !== prevProps.screenWidth ||
-      this.props.fontLoaded !== prevProps.fontLoaded
+      this.props.fontLoaded !== prevProps.fontLoaded ||
+      this.props.pages !== prevProps.pages
     ) {
-      if (this.props.path !== prevProps.path) {
-        this.closeMenu();
-      }
-      this.hideOverflowedMenuItems();
+      // Reveal items through React for one measurement render. Lifecycle updates
+      // finish before paint; refs only read dimensions, never mutate child DOM.
+      this.setState({
+        hiddenIndexes: [],
+        measuring: true,
+        open: this.props.path !== prevProps.path ? false : this.state.open,
+      });
+    } else if (this.state.measuring && !prevState.measuring) {
+      this.measureOverflow();
     }
   }
 
-  getRenderedItems = () => {
-    const itemList = this.itemList.current;
-    return Array.from(itemList.children);
-  };
-
-  hideOverflowedMenuItems = () => {
-    const PADDING_AND_SPACE_FOR_MORELINK = this.props.screenWidth >= 1024 ? 60 : 0;
-
+  measureOverflow = () => {
+    const list = this.itemList.current;
+    const reservedWidth = this.props.screenWidth >= 1024 ? 60 : 0;
+    const widths = Array.from(list.children, (item) => item.offsetWidth);
     this.setState({
-      hiddenItems: getOverflowedItems(
-        this.itemList.current,
-        this.renderedItems,
-        PADDING_AND_SPACE_FOR_MORELINK,
-      ),
+      hiddenIndexes: getOverflowedIndexes(widths, list.offsetWidth - reservedWidth),
+      measuring: false,
     });
   };
 
-  toggleMenu = (e) => {
-    e.preventDefault();
-
-    if (this.props.screenWidth < 1024) {
-      this.renderedItems.forEach((item) => {
-        const oldClass = this.state.open ? 'showItem' : 'hideItem';
-        const newClass = this.state.open ? 'hideItem' : 'showItem';
-
-        if (item.classList.contains(oldClass)) {
-          item.classList.add(newClass);
-          item.classList.remove(oldClass);
-        }
-      });
-    }
-
+  toggleMenu = () => {
     this.setState((prevState) => ({ open: !prevState.open }));
-  };
-
-  closeMenu = () => {
-    if (this.state.open) {
-      this.setState({ open: false });
-      if (this.props.screenWidth < 1024) {
-        this.renderedItems.forEach((item) => {
-          if (item.classList.contains('showItem')) {
-            item.classList.add('hideItem');
-            item.classList.remove('item');
-          }
-        });
-      }
-    }
   };
 
   render() {
     const { screenWidth } = this.props;
-    const { open } = this.state;
+    const { open, hiddenIndexes } = this.state;
+    const items = this.items;
 
     return (
       <React.Fragment>
@@ -155,15 +118,19 @@ class Menu extends React.Component {
           rel="js-menu"
         >
           <ul className={`itemList ${styles['itemList']}`} ref={this.itemList}>
-            {this.items.map((item, i) => (
-              <Item item={item} key={item.label ?? i} icon={item.icon} />
+            {items.map((item, i) => (
+              <Item
+                item={item}
+                key={item.to || i}
+                overflowHidden={hiddenIndexes.includes(i) && !(open && screenWidth < 1024)}
+              />
             ))}
           </ul>
-          {this.state.hiddenItems.length > 0 && <Expand onClick={this.toggleMenu} />}
+          {hiddenIndexes.length > 0 && <Expand onClick={this.toggleMenu} open={open} />}
           {open && screenWidth >= 1024 && (
             <ul className={`hiddenItemList ${styles['hiddenItemList']}`}>
-              {this.state.hiddenItems.map((item) => (
-                <Item item={item} key={item.label} hiddenItem />
+              {hiddenIndexes.map((index) => (
+                <Item item={items[index]} key={items[index].to} hiddenItem />
               ))}
             </ul>
           )}

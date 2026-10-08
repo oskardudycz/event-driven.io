@@ -2,11 +2,32 @@ import React from 'react';
 import { Link as GatsbyLink } from 'gatsby';
 import { Link as LocalizedLink } from 'gatsby-plugin-react-i18next';
 
-const Link = React.forwardRef(({ to, ...rest }, ref) => {
-  // Explicit language routes and external URLs are already complete.
-  const complete = /^(?:[a-z][a-z0-9+.-]*:|\/\/|\/(?:en|pl)(?:\/|$))/i.test(to);
-  if (complete) return <GatsbyLink {...rest} ref={ref} to={to} />;
-  return <LocalizedLink {...rest} ref={ref} to={to} />;
-});
+const Link = React.forwardRef(
+  (
+    {
+      to,
+      language,
+      activeClassName,
+      activeStyle,
+      partiallyActive,
+      state,
+      replace,
+      getProps,
+      ...rest
+    },
+    ref,
+  ) => {
+    const native = /^(?:[a-z][a-z0-9+.-]*:|\/\/|[?#])/i.test(to);
+    const download = rest.download !== undefined && rest.download !== false;
+    if (native || download) return <a {...rest} ref={ref} href={to} />;
+
+    const routing = { activeClassName, activeStyle, partiallyActive, state, replace, getProps };
+    // Already localized destinations must not receive a second language prefix.
+    if (/^\/(?:en|pl)(?:[/?#]|$)/i.test(to)) {
+      return <GatsbyLink {...rest} {...routing} innerRef={ref} to={to} />;
+    }
+    return <LocalizedLink {...rest} {...routing} ref={ref} language={language} to={to} />;
+  },
+);
 
 export { Link };
