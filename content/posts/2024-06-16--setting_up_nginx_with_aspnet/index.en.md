@@ -5,7 +5,7 @@ cover: 2024-06-16-cover.png
 author: oskar dudycz
 ---
 
-![](2024-06-16-cover.png)
+![A tightrope walker balances Nginx between two ASP.NET applications.](2024-06-16-cover.png)
 
 **_"Just put the load balancer in front of it, and call it a day"._** But is it really that simple? Was it ever "just do XYZ?". I was preparing a new [workshop](/en/training/) recently. I wanted to show how to load balance Marten Async Daemon - essentially, I wanted to expand the general explanation from my [previous article on scaling out Marten](/en/scaling_out_marten/). And of course, the 5-minute task of work appeared to be a bit longer. 
 

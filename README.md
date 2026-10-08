@@ -35,10 +35,10 @@ yarn smoke
 yarn lint
 env -u DEBUG yarn build
 yarn test
-env -u DEBUG yarn serve -H 127.0.0.1 -p 9000
+yarn test:visual
 ```
 
-Keep the server running and execute `yarn test:visual` in another terminal. Set `VISUAL_BASE_URL` to test a deployment preview:
+Playwright starts and stops the local production server automatically; it can also reuse a running local server. Set `VISUAL_BASE_URL` to test a deployment preview:
 
 ```bash
 VISUAL_BASE_URL=https://your-preview.netlify.app yarn test:visual
@@ -68,6 +68,8 @@ VISUAL_BASE_URL=https://your-preview.netlify.app yarn test:visual
 | `yarn test:css`                                           | Generated CSS assets and stale inline styles                                                 |
 | `yarn test:tooling`                                       | Lint, formatting and editor configuration                                                    |
 | `yarn test:components`                                    | Link destinations, native attributes and locale routing                                      |
+| `yarn test:images`                                        | Markdown descriptions, import alternatives and all generated image/link alternatives         |
+| `yarn test:indexnow`                                      | Production URL validation, content diffs, dry runs, submissions and failure-safe state       |
 | `yarn test:visual`                                        | Browser hydration, navigation, search, mobile layouts and screenshots                        |
 
 Cache checks temporarily modify/delete/restore existing source files and rebuild. Stop development/preview servers and pause content edits first. Wait for the checks to finish before staging, committing or deploying, so temporary edits/deletions are not included:
@@ -81,6 +83,22 @@ yarn test
 Run browser checks against the restored build afterward. Cache logs are saved in temporary directories printed by each command.
 
 To check search refresh in development, start `yarn develop -H 127.0.0.1 -p 8001`, then run `yarn test:search:dev` in another terminal. This check also temporarily modifies and restores an article. Set `DEV_SEARCH_BASE_URL` to use another address. Reload the search page after its index changes.
+
+### Browser test commands and helpers
+
+Browser tests live in `tests/browser/*.spec.ts` and run with Playwright Test. React component tests use Vitest. `yarn test:browser-types` checks the browser tests and configuration with TypeScript; it is also part of `yarn test`.
+
+```bash
+yarn test:visual --list
+yarn test:visual search.spec.ts
+yarn test:visual --grep 'persistent menu'
+yarn test:visual --debug --grep 'article language switch'
+yarn exec playwright show-report visual-artifacts/report
+```
+
+Use Playwright's `page` fixture, `test.use` for browser options, and retrying assertions such as `await expect(locator).toHaveText(...)`. Import `test` and `expect` from `./fixtures` in browser specs: it blocks live third-party requests; `page.route` supplies explicit widget mocks when needed. Use `expectFonts` and `expectImageLoaded` from `./readiness` for repeated font/image readiness. Vitest clears component mocks automatically and supports `test.each` for input variants.
+
+Failed browser tests retain screenshots and traces under `visual-artifacts/results/`; the HTML report links to them and CI uploads the whole directory. Open a retained trace with `yarn exec playwright show-trace path/to/trace.zip`. Normal runs never update missing or changed baselines. Each viewport/language/JavaScript variant is reported separately; retries are disabled.
 
 ## Formatting and editor setup
 
@@ -117,6 +135,9 @@ Manifest format:
     "slug": "optional-custom-slug",
     "codeLanguage": "typescript",
     "youtubeVideo": "sQbkUl7-z_U",
+    "imageAlts": {
+      "https://source.example/diagram.png": "Requests enter a FIFO queue before processing."
+    },
     "recordingEmbeds": {
       "https://publication.substack.com/p/recording-slug": "sQbkUl7-z_U"
     }
@@ -124,9 +145,11 @@ Manifest format:
 ]
 ```
 
+The importer retains source alt text. If a body image has no description, add an `imageAlts` override keyed by its source URL (the original image URL reported in the error, or the CDN URL). An explicit empty string marks a decorative image and records its local filename in `decorativeImages` frontmatter. Missing descriptions fail the import and remove its temporary directory; no guessed descriptions are added.
+
 Only `url` is required. The default category is `Software Architecture`. `slug` overrides the source slug. `codeLanguage` overrides plain-text code labels. `youtubeVideo` adds a recording when absent; `recordingEmbeds` replaces mapped recording cards/thumbnails. Video IDs must contain 11 characters.
 
-Imports create `content/posts/YYYY-MM-DD--slug/index.en.md` and `index.pl.md`, download images into that directory and record provenance in `article-source.txt` or `substack-source.txt`. Both files initially have the same body; the Polish file uses `useDefaultLangCanonical: true`. Remove that flag after translating it.
+Imports create `content/posts/YYYY-MM-DD--slug/index.en.md` and `index.pl.md`, download images into that directory and record provenance in `article-source.txt` or `substack-source.txt`. Both files initially have the same body; the Polish file uses `useDefaultLangCanonical: true`. Translate the body and image descriptions, then remove that flag.
 
 The importer adds `redirectFrom: /source-slug/` and, for custom slugs, `redirectAliases`. Gatsby generates permanent redirects to the English article. Links to available blog versions become relative URLs; references without a blog version retain their source URL. Code labels use TypeScript for JavaScript/TypeScript examples and preserve other languages.
 
@@ -149,6 +172,59 @@ yarn import-architecture-weekly
 ```
 
 `import-newsletter` replaces `content/newsletter-pl/`; `NEWSLETTER_REPO_URL` can override its repository. `import-architecture-weekly` currently refreshes its repository checkout and the placeholder directory. `import-and-build` runs both commands and a build; it is not the Substack URL importer.
+
+## Image descriptions
+
+Give informative Markdown images a description of what they convey:
+
+```markdown
+![Messages enter an inbox, are deduplicated, then update the projection.](./inbox.png)
+```
+
+For complex diagrams, explain the flow or data in the surrounding article as well. Describe an image-only link by its action or destination. A card cover next to the same linked title, a video thumbnail in a named play button, or a redundant icon can have empty alt text. For deliberately decorative Markdown images, record the exact image path:
+
+```yaml
+decorativeImages:
+  - ./separator.png
+```
+
+Use `![](./separator.png)` for that image. Raw HTML images require an explicit `alt` attribute; use `alt=""` only when decorative. JSX linting checks native images, `GatsbyImage` and `StaticImage`.
+
+```bash
+yarn check:images
+yarn test:images
+```
+
+The source check runs before production builds and on staged Markdown. The generated-output test checks every HTML page for missing alt attributes and unnamed image-only links. Automated checks cannot judge whether a description is accurate: inspect new diagrams and their text alternatives manually, and check images with a screen reader when reviewing content.
+
+## IndexNow
+
+The production workflow prepares a content manifest, deploys, verifies the public key/manifest and changed pages, then notifies IndexNow. Preview deployments never submit. The first production deployment establishes a baseline without sending the historical archive; later deployments submit added, changed and deleted canonical URLs. Content/metadata/link/image changes affect fingerprints; CSS classes, inline styles and client scripts do not.
+
+The public verification key is configured in `data/indexnow.json`; its matching UTF-8 file is in `static/`. It needs no repository secret or Bing account setup. Deployment must publish both the key and `indexnow-manifest.json` before submission. IndexNow acknowledgement is not a guarantee of indexing; retain the sitemap and Search Console workflow.
+
+For manual deployment:
+
+```bash
+yarn build
+yarn test
+yarn indexnow:prepare
+yarn indexnow --restore
+yarn indexnow --dry-run
+yarn deploy:prod
+yarn indexnow --submit
+```
+
+Run `--restore` **before** deploying: it retains `.indexnow/submitted.json` when present, otherwise downloads the previous production manifest. Preserve that local state between manual releases. CI retains successful acknowledgements in a separate production cache; if it expires, the previous deployed manifest supplies the comparison baseline. If that fallback follows an earlier failed notification, retry those URLs explicitly. Failed verification/API responses never advance acknowledgement state or save a new CI state cache. Notification failure does not roll back an already successful deployment.
+
+To inspect or retry specific recently changed URLs after deployment:
+
+```bash
+yarn indexnow --dry-run --url /en/article-slug/
+yarn indexnow --submit --url /en/article-slug/
+```
+
+Repeat `--url` for multiple pages. One-off notifications do not acknowledge other pending changes. Paths must be canonical production English/Polish URLs with trailing slashes and no tracking query or fragment; previews, foreign hosts and language-fallback duplicates are rejected. A deleted/moved URL must return 404/410 or a redirect. HTTP 200/202 count as received; throttling or errors require a later retry. Local tests mock submissions and never contact the API.
 
 ## Article configuration
 
@@ -206,20 +282,20 @@ After styling changes, run `yarn build`, `yarn test:css`, `yarn test:visual` and
 
 Gatsby 5.16.1 requires the checked-in CSS cache correction in `patches/`. Yarn applies it automatically during installation; after `--ignore-scripts`, run `yarn postinstall` before building. The cache check covers module and global stylesheet edits/restoration. Upgrade/removal instructions are in [the patch notes](docs/gatsby-css-cache-patch.md).
 
-For a focused menu check with the production server running, use `yarn test:visual -t 'persistent menu'`. It checks language switching, localized destinations, overflow icons, opening/closing and mobile/desktop resizing. Run the full browser suite before publishing changes.
+For a focused menu check, use `yarn test:visual --grep 'persistent menu'`. It checks language switching, localized destinations, overflow icons, opening/closing and mobile/desktop resizing. Run the full browser suite before publishing changes.
 
 ## Updating fixtures
 
 For intentional route/feed changes, run `yarn verify:build-contract`, inspect the exact differences, then use `yarn update:build-contract`. Review `tests/fixtures/build-contract.json` and rerun `yarn test:build-contract`. Do not update the fixture to accept unexplained missing routes.
 
-After publishing a new first article, inspect `visual-artifacts/articles-desktop.png` and `articles-desktop-diff.png`. If only the intended archive content changed:
+After publishing a new first article, run `yarn test:visual` and inspect the expected, actual and diff images in the Playwright report. If only the intended archive content changed:
 
 ```bash
 ARCHIVE_SNAPSHOT_SLUG=reviewed-newest-article-slug yarn test:visual:update:archive
 yarn test:visual
 ```
 
-The command verifies the first card's exact slug and updates only the archive screenshot. Review the PNG diff before committing. `test:visual:update` updates all visual baselines and should be reserved for a reviewed design change. The comparison tolerance remains 3%.
+The command verifies the first card's exact slug and updates only the archive screenshot in `tests/fixtures/visual/`. Review the PNG diff before committing. `test:visual:update` updates all visual baselines and should be reserved for a reviewed design change. The comparison tolerance remains 3%.
 
 ## Audits
 

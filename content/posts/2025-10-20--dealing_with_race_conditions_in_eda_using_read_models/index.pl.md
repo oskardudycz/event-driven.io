@@ -12,7 +12,7 @@ useDefaultLangCanonical: true
 
 **Everyone has a plan until they get punched in the mouth.** Design, architecture, and modelling are important, but it's the actual code that reaches production. That's also the place where we see all those nasty issues that we haven't foreseen, like: race conditions, eventual inconsistency, idemNotency, etc.
 
-![](tyson.png)
+![Mike Tyson: “Everyone has a plan till they get punched in the mouth.”](tyson.png)
 
 We realise that our BBC Architecture is just a Box-Box Cylinder on paper; in reality, things get messy. We go from a 2D layout to a 3D or even a 4D view.
 
@@ -40,7 +40,7 @@ Or when network delays shuffle carefully ordered streams.
 
 It's safe to say that you won't get any ordering guarantee between different queues. Since queues represent communication flows between modules, we should not assume strict ordering in cross-module communication.
 
-![](race-condition.png)
+![Payment initiation, processing, risk assessment and notifications race across services before their events reach the payment process.](race-condition.png)
 
 ## Events vs Rumours?
 
@@ -559,7 +559,7 @@ We're returning not only the new state, but also the new event. It can be publis
 
 **Essentially, we're making a chaotic outside world linear based on the order of our observations.** We can't change the outside world, but we can at least know why and where we've made our decisions.
 
-![](linearity.png)
+![Commands and events are sequenced through the payment process so each decision uses the latest known payment state.](linearity.png)
 
 This is actually the same pattern I showed during the webinar on modelling and implementing distributed processes:
 

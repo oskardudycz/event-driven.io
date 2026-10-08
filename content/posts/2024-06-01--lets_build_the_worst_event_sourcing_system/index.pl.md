@@ -6,7 +6,7 @@ author: oskar dudycz
 useDefaultLangCanonical: true
 ---
 
-![](2024-06-01-cover.png)
+![A presenter beneath the caption “Number one in the annual contest.”](2024-06-01-cover.png)
 
 **Everyone likes to talk about best practices.** I went the other way around and gathered all the worst practices on how to build the worst Event Sourcing system. Was it easy?
 

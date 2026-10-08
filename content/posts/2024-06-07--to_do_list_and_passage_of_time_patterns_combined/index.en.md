@@ -5,7 +5,7 @@ cover: 2024-06-07-cover.png
 author: oskar dudycz
 ---
 
-![](2024-06-07-cover.png)
+![Pinky asks Brain what they will do tonight; Brain replies that they will try to take over the world.](2024-06-07-cover.png)
 
 **Managing processes is non-trivial. I have written about it in multiple posts and told you the horror story of the [case that should have never happened](/en/no_it_can_never_happen/).** Business processes are usually the most critical part of the core functionality, so we need to ensure that we can diagnose them correctly. We also need to ensure that they won't be stuck in the middle without being able to resume them. At war, love, and managing processes, all tricks are allowed.
 

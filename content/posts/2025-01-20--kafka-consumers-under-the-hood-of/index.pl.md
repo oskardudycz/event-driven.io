@@ -34,7 +34,7 @@ By the end, you’ll better grasp how Kafka consumers work, what trade-offs are 
 
 Partitions allow Kafka to distribute data across brokers and provide parallelism. Each partition can be processed independently, enabling horizontal scalability.
 
-![](2025-01-20-cover.png)
+![A Kafka topic has several ordered partitions, each divided into log segments.](2025-01-20-cover.png)
 
 * * *
 
@@ -60,7 +60,7 @@ A **consumer** is an application instance that connects to Kafka, reads messages
 
 -   Another group named _analytics_ could independently consume the same topic for analytics purposes.
 
-![](image-2.png)
+![Different consumer groups independently assign the same topic's partitions to their consumers.](image-2.png)
 
 This isolation enables multi-use messaging: different systems can consume the same data independently while maintaining offsets and processing logic.
 
@@ -140,7 +140,7 @@ For example:
 
 This ensures that only consumers aware of the latest group state can participate, preventing stale or conflicting actions.
 
-![](image-3.png)
+![Kafka consumer polling requests messages from the broker and updates processing position as records are handled.](image-3.png)
 
 The pseudo-code showcasing heartbeats handling can look as follows:
 

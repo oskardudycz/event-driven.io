@@ -112,11 +112,11 @@ I chose [Benchmark.js](https://benchmarkjs.com/) as it's the most popular micr
 
 2.  I've set up the test with the event store connected to that database (of course, making that configurable). And doing basic operations like appending and inserting. It looked like this:
 
-![](image-2.png)
+![A benchmark helper opens a configured number of event-store connections and appends events.](image-2.png)
 
 Having that, I could set the benchmark code:
 
-![](image-3.png)
+![A benchmark suite measures appending events through pooled and non-pooled connections.](image-3.png)
 
 As you see, it's a simple scenario; nothing fancy between telling the benchmarking engine what to do multiple times and gathering results. I already thought those delays may be related to pooled vs non-pooled usage, so I included a basic feature toggle (passed as an environment variable).
 
@@ -190,7 +190,7 @@ One of the aids is generating the database schema for you. On the first call, it
 
 To validate that, [I updated the benchmark setup](https://github.com/event-driven-io/emmett/pull/109), doing the first call before the benchmark run:
 
-![](image-4.png)
+![The benchmark optionally creates the database schema before timing event appends.](image-4.png)
 
 Then I reran benchmarks with schema generated upfront and the results look as follows for **non-pooled** connection:
 
@@ -252,7 +252,7 @@ A baseline is something we compare to. A similar scenario, but trimmed with all 
 
 The benchmark [could look as follows](https://github.com/event-driven-io/Pongo/pull/68):
 
-![](image-5.png)
+![A benchmark compares raw PostgreSQL connection handling with Pongo operations.](image-5.png)
 
 After running it, I got the following results for **non-pooled** connection:
 

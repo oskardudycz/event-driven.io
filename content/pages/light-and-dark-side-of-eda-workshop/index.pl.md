@@ -20,7 +20,7 @@ Przez całe szkolenie pracujemy nad jednym rozproszonym procesem biznesowym, od 
 
 Po drodze sprawdzimy też, w czym GenAI pomaga przy modelowaniu i implementacji, a gdzie jego wyniki trzeba dokładnie weryfikować.
 
-![](./workshop.jpg)
+![Uczestnicy omawiają model oprogramowania z prowadzącym przy tablicy.](./workshop.jpg)
 
 **23 i 24 listopada oraz 30 listopada i 1 grudnia 2026 r., online, po angielsku, 3000 PLN + VAT.**
 
@@ -69,7 +69,7 @@ Szkolenie jest dla programistek i programistów, tech leadów oraz architektek i
 
 **[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/uMPEBpKjeP7FtN4k6)**
 
-![](./workshop-online.png)
+![Warsztat EventStormingu online: uczestnicy układają polecenia i zdarzenia na wspólnej tablicy Miro.](./workshop-online.png)
 
 ## Agenda
 

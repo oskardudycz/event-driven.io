@@ -12,7 +12,7 @@ If you don't, you better check the talk I gave at Kafka Summit 2024. Knowing onl
 
 [Watch Event Modeling Anti-patterns at Kafka Summit 2024](https://www.confluent.io/events/kafka-summit-london-2024/event-modeling-anti-patterns/).
 
-[![](2024-04-07-kafka.png)](https://www.confluent.io/events/kafka-summit-london-2024/event-modeling-anti-patterns/)
+[![Internal versus external events: a Kafka Summit talk about how the distinction depends on perspective.](2024-04-07-kafka.png)](https://www.confluent.io/events/kafka-summit-london-2024/event-modeling-anti-patterns/)
 
 **The talk also summarised my current article series about anti-patterns in event modelling. Here's the full list:**
 - [State Obsession](/en/state-obsession/),

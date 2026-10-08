@@ -5,7 +5,7 @@ cover: 2024-10-15-cover.png
 author: oskar dudycz
 ---
 
-![](2024-10-15-cover.png)
+![A Dalmatian holds a sign reading “DELETE FROM CATS.”](2024-10-15-cover.png)
 
 **Have you heard someone say: _"We'll use this tool because it requires a long onboarding and lots of memorisation?"_**
 

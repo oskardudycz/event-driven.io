@@ -48,7 +48,7 @@ and then clarifying that they only made the manufacturing process faster—the c
 
 Anders Hejlsberg's announcement showcased impressive numbers:
 
-![](image-3.png)
+![TypeScript native compiler benchmarks report roughly tenfold speedups across VS Code, Playwright, TypeORM, date-fns, tRPC and RxJS.](image-3.png)
 
 Such remarkable stats deserve a deeper look, as this 10x speedup has multiple contributing factors. It's not simply that _"Go is faster than JavaScript"_.
 

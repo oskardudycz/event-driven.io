@@ -4,6 +4,8 @@ category: Software Architecture
 cover: 2025-01-06-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true
+decorativeImages:
+  - image-2.png
 ---
 
 **All the best in New Year!**
@@ -32,7 +34,7 @@ Whether you call it a “platform team“ or a “core team” the nature of the
 
 Don’t believe me? Check this diagram from [DORA Accelerate State of DevOps report 2024](https://cloud.google.com/devops/state-of-devops):
 
-![](2025-01-06-cover.png)
+![A chart compares organisational performance with platform age, showing growth followed by a dip and later recovery.](2025-01-06-cover.png)
 
 Organization performance change when using an internal developer platform vs the age of the platform. Source: [DORA Accelerate State of DevOps report 2024](https://cloud.google.com/devops/state-of-devops)
 

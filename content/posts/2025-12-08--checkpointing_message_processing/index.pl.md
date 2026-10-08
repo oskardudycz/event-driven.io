@@ -15,7 +15,7 @@ Will it be a post about weird SQL usage? Not necessarily.
 
 **We'll talk today about checkpointing our processing.**
 
-![](2025-12-08-cover.png)
+![A Snake game with the growing snake moving among collectibles, illustrating checkpointed progress.](2025-12-08-cover.png)
 
 I've started my relationship with computers with games. I still have my Amiga 500. In those days, computers didn't always have a hard disk. You've got a bunch of diskettes with different chapters of the game. Not all of them were simple games; many were quite sophisticated, and it took some time to finish them.
 

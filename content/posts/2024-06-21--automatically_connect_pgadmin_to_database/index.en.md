@@ -5,7 +5,7 @@ cover: 2024-06-21-cover.png
 author: oskar dudycz
 ---
 
-![](2024-06-21-cover.png)
+![Docker, PostgreSQL and pgAdmin logos connected together.](2024-06-21-cover.png)
 
 **Developer experience is a phrase repeated in multiple ways. In our industry, we finally realised how important it is to reduce the cognitive load.** As our profession became mainstream, we realised that hacked mode doesn't scale. As with lean manufacturing, we should cut waste. Waste can mean repetitive tasks that distract us from the work we do.
 

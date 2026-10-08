@@ -10,7 +10,7 @@ Welcome to the new week!
 
 Who said that LinkedIn notifications are useless? I did, several times. Yet! Today, I opened my computer for the first time since last Tuesday and just saw a notification that **Architecture Weekly is 5 years old now!**
 
-![](2025-12-29-cover.jpg)
+![Oskar Dudycz holds up five fingers to mark Architecture Weekly's fifth anniversary.](2025-12-29-cover.jpg)
 
 At this point, you probably know that I’m not the anniversary-type-of-guy (my wife _loves_ that part of me…), but well, that’s a nice milestone!
 

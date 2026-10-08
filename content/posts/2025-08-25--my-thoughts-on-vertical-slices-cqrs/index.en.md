@@ -20,7 +20,7 @@ Funnily, many people using the Vertical Slices term don’t even know who coined
 
 He showed the famous image:
 
-![](2025-08-25-cover.png)
+![A vertical slice cuts across UI, application, domain and database layers.](2025-08-25-cover.png)
 
 When you add or change a feature, you're touching many different layers - the UI, the models, the validation, the data access. Instead of spreading these changes across multiple horizontal layers, you could group everything related to that feature. As Jimmy puts it:
 
@@ -156,7 +156,7 @@ If you need to extract this into a microservice, you copy the folder. Everything
 
 Sometimes you need some coordination - maybe all your reservation endpoints share authentication logic, or you want consistent URL patterns. Or maybe you’re a C# or Java developer, and taking away controllers is as hard (or harder) than taking your family away from you:
 
-![](image-2.jpg)
+![A developer hesitates between “take away controllers” and “take away family” buttons.](image-2.jpg)
 
 In this case, you might have:
 

@@ -4,6 +4,8 @@ category: Software Architecture
 cover: 2024-11-04-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true
+decorativeImages:
+  - image-4.png
 ---
 
 Welcome to the next week!
@@ -24,7 +26,7 @@ The classic idea of technical debt suggests that we can take a shortcut now and 
 
 [Lannisters always pay their debts](https://www.youtube.com/watch?v=WPjXPRNQopo), and developers also do, right?
 
-![](2024-11-04-cover.jpg)
+![A Star Wars meme: “We'll add it to tech debt.” “Because we want to pay it later, right?”](2024-11-04-cover.jpg)
 
 Imagine a team pushing hard to deliver a new feature. To meet the deadline, they skip writing unit tests, promising themselves they'll add them later. The feature ships on time, but the tests never get written as months pass. Is it an issue?
 
@@ -136,7 +138,7 @@ This is the real analysis and questions we should ask ourselves, our business, a
 
 That’s what we can hear from the business after providing the outcomes of this analysis instead of blank statements like:
 
-![](image-3.jpg)
+![A speaker asks, “The cost of tech debt is too damn high!”](image-3.jpg)
 
 ## Cost of change
 

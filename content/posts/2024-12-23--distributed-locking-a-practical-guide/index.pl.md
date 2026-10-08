@@ -69,13 +69,13 @@ There are other ways to handle concurrency (like [idempotent actions](/en/idempo
 
 The basic flow would look like:
 
-![](2024-12-23-cover.png)
+![Distributed lock acquisition: create a lock record, check whether another owner holds it, retry or give up, execute the critical operation and release the lock.](2024-12-23-cover.png)
 
 The general lock acquisition workflow
 
 And the acquisition part with TTL handling:
 
-![](image-2.png)
+![A lock with a time-to-live permits another owner to acquire it after the holder crashes or the lease expires.](image-2.png)
 
 ## 3\. Tools for Distributed Locking
 

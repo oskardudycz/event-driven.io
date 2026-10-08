@@ -44,7 +44,7 @@ We usually assume that stuff will happen in a particular order, we just don’t 
 
 **Causal consistency** - Operations must respect cause and effect. You can't comment on a document before it exists. Effects follow causes.
 
-![](2025-07-07-cover.webp)
+![A comic about uncertainty and changing interpretations, illustrating eventual consistency.](2025-07-07-cover.webp)
 
 Source: https://x.com/gregyoung/status/1101642600342265857
 
@@ -351,7 +351,7 @@ We could also trigger a follow-up operation in through such job, notifying the o
 
 The final flow looks as follows:
 
-![](image-2.png)
+![A workflow handles a payment request, timeout, retries and failure handling through explicit state transitions.](image-2.png)
 
 Choosing eventual consistency for file uploads improves user experience. Users attach files and continue working while uploads happen in the background. Perfect consistency would force them to wait.
 

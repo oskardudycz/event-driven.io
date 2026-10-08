@@ -6,7 +6,7 @@ author: oskar dudycz
 useDefaultLangCanonical: true
 ---
 
-![](2024-05-24-cover.png)
+![A pallet of boxes ready to be loaded into a delivery truck, illustrating batching.](2024-05-24-cover.png)
 
 **[AsyncEnumerable](https://learn.microsoft.com/en-us/archive/msdn-magazine/2019/november/csharp-iterating-with-async-enumerables-in-csharp-8) is a sneaky abstraction.** It allows simplified and performant usage for iterating on pull-based and push-based sources. 
 

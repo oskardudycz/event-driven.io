@@ -20,7 +20,7 @@ If you think, “Well, I won’t ever do it myself”, don’t worry—the inten
 
 Let’s start where we ended, so with our database access code:
 
-![](image-2.png)
+![TypeScript product insertion with a pooled PostgreSQL connection released after the query.](image-2.png)
 
 As we discussed in detail in the previous article, a connection pool manages reusable database connections shared among multiple requests. Instead of opening and closing a connection for each request, we borrow a connection from the pool and return it after database operation.
 
@@ -36,7 +36,7 @@ Ready? Let’s compare that with my thoughts!
 
 Let’s start by defining the basic API. It could look like this:
 
-![](image-3.png)
+![Connection pool interfaces define the connection string, maximum connections and asynchronous connect operation.](image-3.png)
 
 **There is not much to explain besides that we want to manage the pool to the database represented by the connection string and limit the number of open connections. Why?**
 
@@ -52,7 +52,7 @@ We could try to:
 
 The naive implementation of a fail-fast strategy could look as such:
 
-![](image-4.png)
+![A connection pool implementation rejects requests when no connection can be allocated.](image-4.png)
 
 **Now, While doing retries in the loop or even immediate failure can be a temporary solution, for obvious reasons, it won’t scale and will result in a subpar experience.**
 
@@ -70,17 +70,17 @@ Queuing brings the following benefits:
 
 Okay, but how do we add queuing to our pooling? Let’s start by defining a simple queue. Essentially, you could think about it as an array of pending items.
 
-![](image-5.png)
+![Queue items contain callbacks to resolve a pending connection or reject it with an error.](image-5.png)
 
 Instead of throwing an error, we will enqueue an “open connection task” to the queue and return Promise. That will make the user wait until the connection is open.
 
-![](image-6.png)
+![A connection pool enqueues pending requests and returns a promise instead of failing immediately.](image-6.png)
 
 In other words, we’re telling the pool user that they can safely wait and when they can stop waiting (thanks to the native Promise handling, in .NET, that’d be _Task_; in Java: _CompletableFuture_).
 
 Now, we’ll need to trigger processing, and we can trigger it immediately once the pool is created. We should also be able to stop processing; we can do it by:
 
-![](image-7.png)
+![The connection pool processes queued requests asynchronously and can stop processing when it is closed.](image-7.png)
 
 Queue processing happens in the _processQueue_ method. It’s an asynchronous method that tries to process the queue until all items are handled. We’re triggering it immediately upon pool creation. It runs until the pool ends, or there are pending items to process.
 
@@ -124,11 +124,11 @@ How to actually implement Backpressure? The most popular options are:
 
 Let’s apply the basic option, so rejecting Excess Requests. We need to extend Connection Pool options to provide max queue size:
 
-![](image-8.png)
+![Connection pool options add maxQueueSize alongside the connection string and maximum connections.](image-8.png)
 
 Then we can use it in the connect method to reject promise immediately:
 
-![](image-9.png)
+![The connect method rejects excess requests when the queue reaches its configured maximum size.](image-9.png)
 
 Of course, we could return some other type with additional information, like when to retry or apply dynamic rate limiting, but you get the idea. If you’d like to learn more about that pattern, please drop me a note, and I’ll consider that in further releases.
 
@@ -138,13 +138,13 @@ The implementation looks okay, but it’s not fully bulletproof. Also, queue man
 
 We’ll define the general QueueBroker, which is responsible for managing the queue and triggering processing, ensuring that only one processing is happening at one time. Let’s start by adjusting our API:
 
-![](image-10.png)
+![Queue types define asynchronous tasks, concurrency limits, queue capacity and acknowledgement callbacks.](image-10.png)
 
 The queue is still built with an array of async tasks. It can manage the number of active tasks and the queue size.
 
 What’s Queue Task? Before explanation, let’s look now on the extracted QueueBroker code:
 
-![](image-11.png)
+![A QueueBroker starts processing when work is enqueued and limits concurrent active tasks.](image-11.png)
 
 Essentially, it’s refactored code we took from the connection pool. The difference is that instead of constantly running the background process, it is triggered once the item is processed. Then, it tries to drain the queue until the end.
 
@@ -152,7 +152,7 @@ The QueueBroker handles concurrency by managing the number of tasks (connections
 
 **The queue task is an async, potentially multi-step process that can start and be completed at some point.** When we open a connection, we start such a task; we don’t know precisely when it will be released. We only know it will be done after we run our SQL query. As we know, various queries take different amounts of time. That’s why we’re giving queue user to ack (from “Accept”) the task processing end:
 
-![](image-12.png)
+![A queued task resolves when its acknowledgement callback confirms processing has finished.](image-12.png)
 
 We’re returning the promise that it will end when the task is handled, so when ack is called.
 
@@ -160,7 +160,7 @@ We’re returning the promise that it will end when the task is handled, so when
 
 The refactored connection pool implementation will look as follows:
 
-![](image-13.png)
+![The refactored connection pool acknowledges queued work when the borrowed connection is released.](image-13.png)
 
 This is the critical line responsible for finishing the queue task:
 

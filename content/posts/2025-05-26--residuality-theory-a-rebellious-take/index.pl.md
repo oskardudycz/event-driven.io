@@ -86,7 +86,7 @@ The result: software that withstands surprises better than traditionally designe
 
 ## Let’s try it by example!
 
-![](image-2.jpg)
+![A barista serves a customer in a coffee shop.](image-2.jpg)
 
 **Imagine a local coffee shop chain building a mobile app where customers can order and pay for coffee in advance and pick it up when ready.**
 
@@ -128,7 +128,7 @@ The pattern becomes obvious. Your beautifully designed components are so tightly
 
 **You can see that clearly when filling in the Incident Matrix:**
 
-![](image-3.png)
+![An incident matrix maps stressors to affected coffee-shop components; internet failure and a rush affect all four components, while payment and ordering share five incidents each.](image-3.png)
 
 States that systems naturally tend toward when under stress
 
@@ -152,7 +152,7 @@ Customers ordering but not picking up? Instead of eating the loss, create a 15-m
 
 **After applying these changes, measure again. The tight coupling is broken.** The updated Incident Matrix could look as follows:
 
-![](image-4.png)
+![The revised incident matrix separates orders, dual payment, menu, digital queue and printer responsibilities, reducing shared failure impact.](image-4.png)
 
 We added some new components:
 
