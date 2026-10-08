@@ -67,6 +67,7 @@ VISUAL_BASE_URL=https://your-preview.netlify.app yarn test:visual
 | `yarn test:localization`                                  | Translation resources, routing and canonical-language policy                                 |
 | `yarn test:css`                                           | Generated CSS assets and stale inline styles                                                 |
 | `yarn test:tooling`                                       | Lint, formatting and editor configuration                                                    |
+| `yarn test:components`                                    | Link destinations, native attributes and locale routing                                      |
 | `yarn test:visual`                                        | Browser hydration, navigation, search, mobile layouts and screenshots                        |
 
 Cache checks temporarily modify/delete/restore existing source files and rebuild. Stop development/preview servers and pause content edits first:
@@ -200,6 +201,8 @@ A guide does not create a category route by itself; at least one canonical artic
 Edit component-owned `.module.css` files, `src/theme/global.css` for the shared reset, and `src/theme/theme.yaml` for tokens. `yarn generate-theme-css` regenerates `src/theme/tokens.css`; do not edit generated tokens directly. Production/development startup runs the generator. After changing YAML during a development session, run it again.
 
 After styling changes, run `yarn build`, `yarn test:css`, `yarn test:visual` and `yarn test:cache:css`.
+
+For a focused menu check with the production server running, use `yarn test:visual -t 'persistent menu'`. It checks language switching, localized destinations, overflow icons, opening/closing and mobile/desktop resizing. Run the full browser suite before publishing changes.
 
 ## Updating fixtures
 

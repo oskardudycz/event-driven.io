@@ -5,14 +5,16 @@ import { Link } from '../Link';
 import { useTranslation } from 'react-i18next';
 
 const Item = (props) => {
-  const { item: { label, to, icon: Icon } = {}, onClick } = props;
+  const { item: { label, to, icon: Icon } = {}, onClick, overflowHidden = false } = props;
   const { t } = useTranslation();
 
   return (
     <React.Fragment>
       <li
         className={
-          'hiddenItem' in props ? `hiddenItem ${styles['hiddenItem']}` : `item ${styles['item']}`
+          'hiddenItem' in props
+            ? `hiddenItem ${styles['hiddenItem']}`
+            : `item ${styles['item']} ${overflowHidden ? styles.overflowHidden : ''}`
         }
         key={label}
       >
@@ -22,7 +24,7 @@ const Item = (props) => {
           onClick={onClick}
           data-slug={to}
         >
-          {Icon && <Icon />} {t(label)}
+          {Icon && <Icon />} {label && t(label)}
         </Link>
       </li>
     </React.Fragment>
@@ -31,7 +33,8 @@ const Item = (props) => {
 
 Item.propTypes = {
   item: PropTypes.object,
-  hidden: PropTypes.bool,
+  hiddenItem: PropTypes.bool,
+  overflowHidden: PropTypes.bool,
   onClick: PropTypes.func,
   icon: PropTypes.func,
 };

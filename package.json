@@ -9,7 +9,7 @@
   "scripts": {
     "generate-llms": "node ./scripts/generate-llms-txt.js",
     "verify-seo": "node ./scripts/verify-seo-build.js",
-    "test": "yarn test:seo && yarn test:build-contract && yarn test:substack && yarn test:video && yarn test:redirects && yarn test:articles && yarn test:categories && yarn test:performance && yarn test:tooling && yarn test:search && yarn test:localization && yarn test:css && yarn test:404 && yarn test:indexing",
+    "test": "yarn test:seo && yarn test:build-contract && yarn test:substack && yarn test:video && yarn test:redirects && yarn test:articles && yarn test:categories && yarn test:performance && yarn test:tooling && yarn test:search && yarn test:localization && yarn test:css && yarn test:404 && yarn test:indexing && yarn test:components",
     "test:seo": "node ./tests/seo-build.test.js",
     "test:build-contract": "node ./tests/build-contract.test.js",
     "test:visual": "vitest run tests/visual.test.js",
@@ -70,7 +70,8 @@
     "audit:fonts": "node scripts/profile-fonts.mts",
     "test:indexing": "node --test --test-isolation=none tests/indexing.test.mts",
     "audit:indexing": "node scripts/audit-indexing.mts",
-    "normalize:youtube": "node scripts/normalize-youtube.mts"
+    "normalize:youtube": "node scripts/normalize-youtube.mts",
+    "test:components": "vitest run tests/link.test.tsx"
   },
   "dependencies": {
     "@ant-design/compatible": "^1.0.8",
@@ -138,6 +139,7 @@
     "@eslint/js": "9.39.5",
     "@playwright/browser-chromium": "1.63.0",
     "@typescript-eslint/parser": "8.59.0",
+    "@vitejs/plugin-react": "5.2.0",
     "babel-plugin-import": "^1.8.0",
     "cheerio": "1.0.0-rc.12",
     "dotenv": "^10.0.0",
@@ -151,6 +153,7 @@
     "husky": "9.1.7",
     "lint-staged": "17.6.0",
     "netlify-cli": "^6.7.1",
+    "netlify-redirect-parser": "11.0.2",
     "pixelmatch": "^7.2.0",
     "playwright": "1.63.0",
     "pngjs": "^7.0.0",
@@ -181,7 +184,6 @@
     "typescript": "6.0.3",
     "vite": "^7",
     "vitest": "^5.0.1",
-    "webpack-bundle-analyzer": "^4.4.2",
-    "netlify-redirect-parser": "11.0.2"
+    "webpack-bundle-analyzer": "^4.4.2"
   }
 }

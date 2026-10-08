@@ -57,38 +57,13 @@ test('image priority ignores unrelated articles, external HTML and later images'
   assert.equal(ast.children[2].value, value);
 });
 
-test('menu measures every item before hiding overflow and preserves exact-fit/more items', async () => {
-  const { getOverflowedItems } = await import('../src/components/Menu/overflow.mjs');
-  for (const reservedWidth of [0, 60]) {
-    const operations = [];
-    const items = [40, 40, 30, 20].map((width, index) => ({
-      get offsetWidth() {
-        operations.push(`read:${index}`);
-        return width;
-      },
-      classList: {
-        add: (name) => operations.push(`write:${index}:${name}`),
-        remove: (name) => operations.push(`write:${index}:${name}`),
-        contains: (name) => name === 'more' && index === 3,
-      },
-      querySelector: () => ({ getAttribute: () => `/item-${index}/`, text: `Item ${index}` }),
-    }));
-    const hidden = getOverflowedItems({ offsetWidth: 80 + reservedWidth }, items, reservedWidth);
-    assert.deepEqual(hidden, [{ to: '/item-2/', label: 'Item 2' }]);
-    const firstRead = operations.findIndex((operation) => operation.startsWith('read:'));
-    assert.deepEqual(operations.slice(firstRead, firstRead + items.length), [
-      'read:0',
-      'read:1',
-      'read:2',
-      'read:3',
-    ]);
-    assert.ok(operations.slice(0, firstRead).every((operation) => operation.startsWith('write:')));
-    assert.ok(
-      operations
-        .slice(firstRead + items.length)
-        .every((operation) => operation.startsWith('write:')),
-    );
-  }
+test('menu overflow keeps exact fits and reserves space for its expand control', async () => {
+  const { getOverflowedIndexes } = await import('../src/components/Menu/overflow.mjs');
+  assert.deepEqual(getOverflowedIndexes([40, 40, 30], 80), [2]);
+  assert.deepEqual(getOverflowedIndexes([40, 40, 30], 110), []);
+  assert.deepEqual(getOverflowedIndexes([40, 40, 30], 110 - 60), [1, 2]);
+  assert.deepEqual(getOverflowedIndexes([40, 40, 30], 0), [0, 1, 2]);
+  assert.deepEqual(getOverflowedIndexes([], 80), []);
 });
 
 test('all other Markdown images retain lazy loading and WebP with a fallback', () => {

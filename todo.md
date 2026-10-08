@@ -4,13 +4,39 @@ Last updated: 2026-10-08
 
 This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an item only when its implementation and proportionate verification are complete. Add a short note under blocked or partial items instead of presenting them as finished.
 
+## Standards research checkpoint — 2026-10-08
+
+- [x] Confirm owner-reported merge/deployment: merged `e627cc1`, successful Build and Deploy/CodeQL runs, alerts 6/7 most recent instances fixed, no open alerts returned. Production contact and search manifest return HTTP 200.
+- [x] Research Gatsby Link guidance and inspect actual contact-page/form usage before editing; correct the review's active-form claim.
+- [x] Complete the requested standards review before resuming the navigation/component-test draft; its implementation and acceptance are recorded below.
+- [ ] Contact form is deferred at the owner’s request; preserve its files/dependencies and the current Calendly-only page. Any future repair needs frontend status/error tests and Netlify form detection/delivery verification.
+- [x] Pre-pause draft checks: frozen install (`--ignore-scripts`), smoke, lint/format, 15 Link component checks and production build (159.30s) pass. Nine CSS-order and four slow category-query warnings remain.
+- [x] Full nonvisual suite passes for the resumed navigation draft; bilingual browser acceptance is recorded with the menu correction below.
+- [x] Merge primary Gatsby/React/CSS Modules/test-tooling research into docs/gatsby-css-review.md and plan.md. Correct unproven import-order claims and the TS/native-ESM loader assumption. No stylesheet-order change was applied.
+- [x] Isolate built-in Gatsby CSS handling and the official PostCSS plugin in a minimal reproduction; inspect emitted cascade/chunk dependencies. Both reproduce stale inline HTML after a CSS-only edit.
+- [x] Resume the demonstrated application correction after the standards review. CSS-only warm-cache baseline/edit/restoration passes (155.96s) across all generated pages and browser computed styles with/without JavaScript; the upstream cache correction remains separate.
+
+## CSS root-cause findings — 2026-10-08
+
+- [x] Compare primary Gatsby CSS Modules/global CSS/layout/browser/SSR/Link/i18n/PostCSS conventions and React state/ref guidance with installed source and actual rendered behavior; merge evidence into the CSS review and plan before implementation.
+- [x] Reproduce extraction warnings in an isolated two-page Gatsby fixture with the layout plugin and with native wrappers; changing the wrapper does not remove the warnings.
+- [x] Compare all computed styles and pseudo-elements with reading-list rules first/last on eight EN/PL mobile/desktop category/article cases: no differences on these exercised surfaces.
+- [x] Reproduce the persistent menu retaining English overflow labels and dropping social icons after Polish navigation; trace copied DOM text/initial constructor models and imperative global visibility classes.
+- [x] Reproduce stale HTML after a CSS-only warm edit with ordinary identifiers: current extracted asset contains the new declaration, both HTML pages retain the old asset/declaration. Trace Gatsby's Slice-path invalidation and unchanged SSR exports.
+- [x] Confirm the cache cause with a fixture-only invalidation control and reproduce it without PostCSS. Do not apply the private Slice override to the project. Published stable Gatsby remains the installed 5.16.1; no stable upgrade or documented production switch fixes this finding.
+- [x] Correct menu state/model/visibility ownership: derive current models, retain overflow indexes and icons, render scoped visibility through React state, and use refs only to measure. The Link/component-test draft also passes full production/browser acceptance.
+- [ ] Obtain and validate a platform correction for CSS-asset HTML invalidation before retiring the broad class-hash safeguard. No unsupported Slice override, private actions, suppression or HTML rewriting is authorized by this finding.
+- [x] Local acceptance: production build (55.40s), full nonvisual suite (67.45s), all 35 browser checks (72.07s command time), smoke (79 files / 18 queries), lint/format and CSS-only modification/restoration (155.96s) pass. Existing screenshots and the 3% tolerance are unchanged. Nine CSS-order warnings and a dependency's punycode deprecation remain; the warm build emits no slow-query warnings. Cold category-query profiling remains separate.
+- [ ] Verify these changes in hosted CI and deployment; current local results do not certify either.
+- [ ] Next separate category: systematic image descriptions/validation after CSS acceptance. No images changed during this investigation; the platform cache correction remains tracked above.
+
 ## CodeQL and regression-test cleanup — 2026-10-08
 
 - [x] Read PR #52's two open alerts (6 and 7), confirm both are test-only URL substring checks and review the primary CodeQL guidance.
 - [x] Assert exact parsed link destinations, with negative examples for URLs embedded in text or lookalike destinations. Both reported URL substring checks are replaced without suppressions.
 - [x] Remove completed-migration assertions and the archive acceptance suite from routine tests. Preserve importer/security, actual rendering, SEO, bilingual navigation and cache regressions; `test:articles` derives article/related-content checks from current generated data. Record this testing rule in AGENTS.md.
 - [x] Local acceptance: production build passes (140.62s), full revised suite passes (68.39s), all 34 browser checks pass (62.61s), lint/format and smoke pass (79 source files / 18 queries). README documents `test:articles`; route/feed/sitemap contracts and screenshots pass without fixture updates. No application/content changes or deployment were made. Nine CSS-order and four slow category-query warnings remain separate follow-up work; CSS/content cache algorithms were not changed or re-profiled here.
-- [ ] Confirm alerts 6 and 7 close on the next hosted CodeQL analysis; local passing tests do not establish closure.
+- [x] Hosted follow-up: alerts 6/7 most recent PR instances now report fixed; the open-alert query returns no entries and the merged release CodeQL run succeeds.
 
 ## Google indexing follow-up — 2026-10-07
 
@@ -36,7 +62,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 
 ## Active follow-up — 2026-10-06
 
-- [ ] Restore root 404 output and provide bilingual recovery links; verify real unknown URLs and client navigation, including JavaScript disabled.
+- [x] Root/localized bilingual 404 output and native Netlify rewrites are implemented and pass local SSR/browser checks. Owner reports deployment; live unknown-URL responses remain a separate audit.
 - [ ] Resolve CSS import-order warnings without suppressing them; preserve screenshots and cache regression checks.
 - [ ] Profile fonts/CLS and apply only measured improvements preserving typography and Polish glyphs.
 - [ ] Verify supplied preview `6ac5341dce0e2e6c2b8846d6` and run comparable sequential mobile audits; distinguish this deployed baseline from new local changes and hosted CI/CodeQL status.
@@ -45,7 +71,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 
 - [x] Complete all remaining component/page/layout styles as one CSS Modules category. There are 32 native CSS Modules and no styled-jsx consumers; global reset/font fallback is plain CSS. Existing YAML values, runtime CSS variables, public state hooks and responsive thresholds remain.
 - [x] Remove retired styling integrations/processors and obsolete deasync resolution; frozen installation passes.
-- [x] Resolve stale CSS-only warm output with content-aware class exports and tracked Webpack dependencies. `yarn test:cache:css` passes baseline/edit/restoration in 138.61s, checking every generated page and browser computed styles with/without JavaScript.
+- [x] Safeguard CSS-only warm output with content-aware class exports and tracked Webpack dependencies. The historical `yarn test:cache:css` run passes baseline/edit/restoration in 138.61s. This is a broad workaround; the 2026-10-08 investigation above identifies the upstream invalidation gap, which remains unresolved.
 - [x] Rerun content modification/deletion/restoration: `yarn test:cache` passes in 128.72s; article sources and llms.txt restore exactly.
 - [x] Document portable styles and repeatable CSS regression commands in README; add responsive article/hero and CSS asset integrity checks.
 - [x] Complete final acceptance against restored output: production build, full suite (56.43s), all 30 browser checks (56.41s command time), lint/format and smoke (78 files / 18 queries) pass. Screenshot fixtures and the 3% tolerance are unchanged.
@@ -84,7 +110,7 @@ Keep Disqus and its loading behavior. Giscus/custom guest comments, Tailwind, da
 - [x] Add the free introductory call link: <https://calendly.com/oskar-dudycz/consulting>.
 - [x] Link consulting from the main menu, homepage hero, author profile, and contact form.
 - [x] Localise contact labels and validation messages.
-- [x] Fix the contact form network-error callback.
+- [ ] Contact form repair is deferred; its old callback did not provide working error feedback. The live contact page only links to Calendly.
 - [x] Support visible frontmatter summaries below page and article titles.
 
 ### Categories, articles, and search
