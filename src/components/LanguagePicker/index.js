@@ -1,4 +1,4 @@
-import styles from './LanguagePicker.module.css';
+import * as styles from './LanguagePicker.module.css';
 import React from 'react';
 import { Link } from 'gatsby-plugin-react-i18next';
 import { usePageContext } from '../../i18n/page-context';
@@ -20,7 +20,7 @@ const LanguagePicker = () => {
         {languagesToSwitch.map((supportedLang) => (
           <Link
             aria-label={`Change language to ${supportedLang}`}
-            className={`langSelector ${styles['langSelector']}`}
+            className={`langSelector ${styles.langSelector}`}
             onClick={() => localStorage.setItem('last-selected-lang', supportedLang)}
             key={supportedLang}
             to={pagePath}

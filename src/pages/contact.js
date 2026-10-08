@@ -1,4 +1,4 @@
-import styles from './contact.module.css';
+import * as styles from './contact.module.css';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { graphql } from 'gatsby';

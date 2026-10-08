@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './NextPrev.module.css';
+import * as styles from './NextPrev.module.css';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { Link } from '../Link';

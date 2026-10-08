@@ -1,4 +1,4 @@
-import styles from './Meta.module.css';
+import * as styles from './Meta.module.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '../Link';
@@ -14,7 +14,7 @@ const Meta = (props) => {
   const allCategories = Array.from(new Set([category, ...additionalCategories].filter(Boolean)));
 
   return (
-    <p className={`meta ${styles['meta']}`}>
+    <p className={`meta ${styles.meta}`}>
       <span className={styles.elementSpan}>
         <FaCalendar size={18} /> {prefix}
       </span>

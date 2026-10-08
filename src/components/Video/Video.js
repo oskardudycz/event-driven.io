@@ -1,4 +1,4 @@
-import styles from './Video.module.css';
+import * as styles from './Video.module.css';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
@@ -23,7 +23,7 @@ const Video = ({ videoSrcURL, videoTitle, playLabel = 'Play video' }) => {
   if (!embedId) return null;
 
   return (
-    <div className={`video ${styles['video']}`}>
+    <div className={`video ${styles.video}`}>
       {playing ? (
         <iframe
           src={`https://www.youtube-nocookie.com/embed/${embedId}?autoplay=1`}

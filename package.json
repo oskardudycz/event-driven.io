@@ -71,7 +71,8 @@
     "test:indexing": "node --test --test-isolation=none tests/indexing.test.mts",
     "audit:indexing": "node scripts/audit-indexing.mts",
     "normalize:youtube": "node scripts/normalize-youtube.mts",
-    "test:components": "vitest run tests/link.test.tsx"
+    "test:components": "vitest run tests/link.test.tsx tests/reading-list.test.tsx",
+    "postinstall": "patch-package --error-on-fail"
   },
   "dependencies": {
     "@ant-design/compatible": "^1.0.8",
@@ -82,7 +83,7 @@
     "core-js": "2.6.12",
     "disqus-react": "^1.1.7",
     "fontfaceobserver": "^2.0.13",
-    "gatsby": "^5.16.1",
+    "gatsby": "5.16.1",
     "gatsby-plugin-catch-links": "^5.16.0",
     "gatsby-plugin-feed": "^5.16.0",
     "gatsby-plugin-google-tagmanager": "^5.16.0",
@@ -154,6 +155,7 @@
     "lint-staged": "17.6.0",
     "netlify-cli": "^6.7.1",
     "netlify-redirect-parser": "11.0.2",
+    "patch-package": "8.0.1",
     "pixelmatch": "^7.2.0",
     "playwright": "1.63.0",
     "pngjs": "^7.0.0",
@@ -169,6 +171,7 @@
     "postcss-preset-env": "6.7.0",
     "postcss-sorting": "^6.0.0",
     "postcss-utilities": "^0.8.0",
+    "postinstall-postinstall": "2.1.0",
     "precss": "^4.0.0",
     "prettier": "3.8.3",
     "remark": "13.0.0",

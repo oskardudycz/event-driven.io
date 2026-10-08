@@ -1,4 +1,4 @@
-import styles from './category.module.css';
+import * as styles from './category.module.css';
 import { FaTag } from 'react-icons/fa/';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -41,11 +41,9 @@ const CategoryPage = (props) => {
       <Article>
         <header>
           <Headline title={t('categories.title')} />
-          <p className={`intro ${styles['intro']}` + ' ' + styles.elementP}>
-            {t('categories.intro')}
-          </p>
+          <p className={`intro ${styles.intro}` + ' ' + styles.elementP}>{t('categories.intro')}</p>
         </header>
-        <div className={`categoryGrid ${styles['categoryGrid']}`}>
+        <div className={`categoryGrid ${styles.categoryGrid}`}>
           {categoryList.map(([category, categoryPosts]) => {
             const guide = guideFor(category);
             return (

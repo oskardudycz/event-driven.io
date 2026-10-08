@@ -1,4 +1,4 @@
-import styles from './Substack.module.css';
+import * as styles from './Substack.module.css';
 import React, { useEffect, useRef, useState } from 'react';
 
 const Substack = () => {
@@ -23,8 +23,8 @@ const Substack = () => {
   }, []);
   return (
     <React.Fragment>
-      <div id="substack" className={`substack ${styles['substack']}`} ref={section}>
-        <div className={`substack-legend ${styles['substack-legend']}`}>
+      <div id="substack" className={`substack ${styles.substack}`} ref={section}>
+        <div className={`substack-legend ${styles.substackLegend}`}>
           <b>👋 If you found this article helpful</b> and want to get notification about the next
           one, <b>subscribe to Architecture Weekly.</b>
           <br />
@@ -33,7 +33,7 @@ const Substack = () => {
           stay updated with Software Architecture trends!
           <br />
           <a
-            className={`subscription-fallback ${styles['subscription-fallback']}`}
+            className={`subscription-fallback ${styles.subscriptionFallback}`}
             href="https://www.architecture-weekly.com/subscribe"
           >
             Subscribe to Architecture Weekly

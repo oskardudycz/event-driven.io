@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './Summary.module.css';
+import * as styles from './Summary.module.css';
 
 const Summary = ({ children }) => {
   if (!children) return null;

@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './Related.module.css';
+import * as styles from './Related.module.css';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import List from '../List';

@@ -8,8 +8,6 @@ import { checkCssBrowser } from './check-css-browser.mts';
 
 // Opt-in integration check: change only a declaration, keeping every CSS Module
 // export and all publication sources unchanged. Always rebuild restored styles.
-const file = 'src/components/Post/NextPrev.module.css';
-const original = readFileSync(file, 'utf8');
 const logs = mkdtempSync(join(tmpdir(), 'gatsby-css-cache-'));
 const page = 'public/en/introduction_to_event_sourcing/index.html';
 function build(label: string) {
@@ -49,17 +47,34 @@ function inlineStyles() {
 build('baseline');
 const baseline = inlineStyles();
 const baselineColor = await checkCssBrowser();
-const probe = '.date { color: rgb(1, 2, 3); }';
-try {
-  writeFileSync(file, `${original}\n${probe}\n`);
-  build('css-only-change');
-  assert.notEqual(inlineStyles(), baseline, 'Warm build ignored a CSS-only edit');
-  assert.match(inlineStyles(), /color:(?:#010203|rgb\(1,\s*2,\s*3\))/);
-  await checkCssBrowser('rgb(1, 2, 3)');
-} finally {
-  writeFileSync(file, original);
-  build('restored');
+for (const change of [
+  {
+    file: 'src/components/Post/NextPrev.module.css',
+    label: 'module',
+    probe: '.date { color: rgb(1, 2, 3); }',
+    color: 'rgb(1, 2, 3)',
+    pattern: /color:(?:#010203|rgb\(1,\s*2,\s*3\))/,
+  },
+  {
+    file: 'src/theme/global.css',
+    label: 'global',
+    probe: 'nav.links time { color: rgb(4, 5, 6) !important; }',
+    color: 'rgb(4, 5, 6)',
+    pattern: /color:(?:#040506|rgb\(4,\s*5,\s*6\))!important/,
+  },
+]) {
+  const original = readFileSync(change.file, 'utf8');
+  try {
+    writeFileSync(change.file, `${original}\n${change.probe}\n`);
+    build(`${change.label}-css-only-change`);
+    assert.notEqual(inlineStyles(), baseline, 'Warm build ignored a CSS-only edit');
+    assert.match(inlineStyles(), change.pattern);
+    await checkCssBrowser(change.color);
+  } finally {
+    writeFileSync(change.file, original);
+    build(`${change.label}-restored`);
+  }
+  assert.equal(inlineStyles(), baseline, 'Warm build did not restore the original CSS');
+  await checkCssBrowser(baselineColor);
 }
-assert.equal(inlineStyles(), baseline, 'Warm build did not restore the original CSS');
-await checkCssBrowser(baselineColor);
-console.log('CSS-only modification and restoration passed across all generated pages.');
+console.log('Module/global CSS modification and restoration passed across all generated pages.');

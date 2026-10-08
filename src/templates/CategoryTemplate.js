@@ -1,4 +1,4 @@
-import styles from './CategoryTemplate.module.css';
+import * as styles from './CategoryTemplate.module.css';
 import { FaTag } from 'react-icons/fa/';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -28,21 +28,21 @@ const CategoryTemplate = (props) => {
   return (
     <React.Fragment>
       <Article>
-        <header className={`categoryHeader ${styles['categoryHeader']}`}>
-          <p className={`eyebrow ${styles['eyebrow']}` + ' ' + styles.elementP}>
+        <header className={`categoryHeader ${styles.categoryHeader}`}>
+          <p className={`eyebrow ${styles.eyebrow}` + ' ' + styles.elementP}>
             <FaTag /> {t('categories.topic')}
           </p>
           <Headline title={category} />
-          <p className={`description ${styles['description']}` + ' ' + styles.elementP}>
+          <p className={`description ${styles.description}` + ' ' + styles.elementP}>
             {categoryDescription || t('categories.defaultDescription', { category })}
           </p>
-          <p className={`meta ${styles['meta']}` + ' ' + styles.elementP}>
+          <p className={`meta ${styles.meta}` + ' ' + styles.elementP}>
             {t('categories.articleCount', { count: totalCount })}
           </p>
         </header>
         {recommended.length > 0 && (
-          <section className={`articleSection ${styles['articleSection']}`}>
-            <div className={`sectionHeader ${styles['sectionHeader']}`}>
+          <section className={`articleSection ${styles.articleSection}`}>
+            <div className={`sectionHeader ${styles.sectionHeader}`}>
               <h2 className={styles.elementH2}>{t('categories.recommended')}</h2>
               <p className={styles.elementP}>{t('categories.recommendedDescription')}</p>
             </div>
@@ -51,9 +51,9 @@ const CategoryTemplate = (props) => {
         )}
         {remaining.length > 0 && (
           <section
-            className={`articleSection ${styles['articleSection']}${recommended.length > 0 ? ` moreArticles ${styles['moreArticles']}` : ''}`}
+            className={`articleSection ${styles.articleSection}${recommended.length > 0 ? ` moreArticles ${styles.moreArticles}` : ''}`}
           >
-            <div className={`sectionHeader ${styles['sectionHeader']}`}>
+            <div className={`sectionHeader ${styles.sectionHeader}`}>
               <h2 className={styles.elementH2}>
                 {recommended.length > 0 ? t('categories.moreArticles') : t('categories.articles')}
               </h2>

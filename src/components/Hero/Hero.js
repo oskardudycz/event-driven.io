@@ -1,4 +1,4 @@
-import styles from './Hero.module.css';
+import * as styles from './Hero.module.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -19,7 +19,7 @@ const Hero = (props) => {
           '--hero-tablet-image': `url(${backgrounds.tablet})`,
           '--hero-desktop-image': `url(${backgrounds.desktop})`,
         }}
-        className={`hero ${styles['hero']}`}
+        className={`hero ${styles.hero}`}
       >
         <h1 className={styles.elementH1}>
           <Trans
@@ -51,7 +51,7 @@ const Hero = (props) => {
                 <a
                   href="https://event-driven-io.github.io/emmett/getting-started.html"
                   target="_parent"
-                  className={`yellow ${styles['yellow']}`}
+                  className={`yellow ${styles.yellow}`}
                 />
               ),
             }}
@@ -59,7 +59,7 @@ const Hero = (props) => {
           <br />
           {t('hero.introBlog')}
         </h3>
-        <nav className={`services ${styles['services']}`} aria-label={t('hero.servicesLabel')}>
+        <nav className={`services ${styles.services}`} aria-label={t('hero.servicesLabel')}>
           <Link to="/training/">{t('hero.trainingCta')}</Link>
           <Link to="/consulting/">{t('hero.consultingCta')}</Link>
         </nav>
@@ -68,10 +68,8 @@ const Hero = (props) => {
           aria-label={t('hero.articlesCta')}
           className={styles.elementButton}
         >
-          <span className={`articlesLabel ${styles['articlesLabel']}`}>
-            {t('hero.articlesCta')}
-          </span>
-          <span className={`arrowCircle ${styles['arrowCircle']}`}>
+          <span className={`articlesLabel ${styles.articlesLabel}`}>{t('hero.articlesCta')}</span>
+          <span className={`arrowCircle ${styles.arrowCircle}`}>
             <FaArrowDown />
           </span>
         </button>
