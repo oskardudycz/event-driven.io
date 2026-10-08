@@ -5,7 +5,7 @@ import Article from '../components/Article';
 import Headline from '../components/Article/Headline';
 import { Link } from '../components/Link';
 import { usePageContext } from '../i18n/page-context';
-import styles from './404.module.css';
+import * as styles from './404.module.css';
 
 const NotFoundPage = () => {
   const { lang = 'en' } = usePageContext();

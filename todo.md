@@ -4,6 +4,20 @@ Last updated: 2026-10-08
 
 This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an item only when its implementation and proportionate verification are complete. Add a short note under blocked or partial items instead of presenting them as finished.
 
+## CSS completion — 2026-10-08
+
+- [x] Research official Gatsby/PostCSS CSS exports, incremental-build invalidation, upstream build source, Webpack asset APIs and versioned dependency-patch tooling before implementation.
+- [x] Verify in the minimal Gatsby fixture that routing before the reading-list stylesheet eliminates extraction-order warnings; no warnings are suppressed.
+- [x] Separate reading-list presentation and CSS ownership from Gatsby data/routing adaptation. Preserve the List API, article ordering and translated/canonical fallback destinations; 17 Link/reading-list component checks pass.
+- [x] Use standard named ES-module CSS exports consistently across the 33 module consumers. Remove the application-wide `getLocalIdent` callback and use the loader's documented SHA-256 identifier template for Node 24.
+- [x] Isolated baseline/declaration-only edit/restoration passes with the version-pinned Gatsby CSS-asset invalidation correction. Retain it through standard patch-package installation, include patches in cache compatibility and document provenance/removal conditions. Frozen installation (9.82s), reverse/reapply, lint and smoke (80 files / 18 queries) pass.
+- [x] Production build (146.76s), full nonvisual suite (65.75s), all 35 browser checks (73.66s) and module/global CSS warm-cache modification/restoration (218.62s) pass. Every generated page uses current CSS; browser styles agree with and without JavaScript. No extraction-order warnings, screenshot updates or tolerance changes. An initial global probe targeted a scoped class as a global selector; it was corrected to the actual navigation time element, and the complete five-build sequence passes. Source styles restore exactly.
+- [x] Complete local acceptance, including content modification/deletion/restoration (141.75s); publication sources and llms.txt restore exactly. No route/feed/sitemap contract or screenshot fixtures changed.
+- [x] Final restored-output acceptance: all 35 browser checks pass again (70.59s), every generated page uses current CSS, the build contract passes (697 routes) and final lint/format passes. Clear three accidental staged content-cache artifacts after verifying their working files match HEAD; no publication changes remain. README now explicitly requires waiting for cache checks before staging/committing/deploying.
+- [ ] Verify the CSS completion changes in hosted CI and deployment. Local acceptance does not establish those results.
+
+The initial build reports four slow category queries and dependency deprecations; restored warm builds have no CSS extraction-order or slow-query warnings. The CSS stage is complete locally. Keep the documented Gatsby dependency patch until a released fix passes the regression checks; that is future dependency maintenance, not an application CSS workaround. Font/CLS profiling and image descriptions are separate next categories.
+
 ## Standards research checkpoint — 2026-10-08
 
 - [x] Confirm owner-reported merge/deployment: merged `e627cc1`, successful Build and Deploy/CodeQL runs, alerts 6/7 most recent instances fixed, no open alerts returned. Production contact and search manifest return HTTP 200.
@@ -25,7 +39,7 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Reproduce stale HTML after a CSS-only warm edit with ordinary identifiers: current extracted asset contains the new declaration, both HTML pages retain the old asset/declaration. Trace Gatsby's Slice-path invalidation and unchanged SSR exports.
 - [x] Confirm the cache cause with a fixture-only invalidation control and reproduce it without PostCSS. Do not apply the private Slice override to the project. Published stable Gatsby remains the installed 5.16.1; no stable upgrade or documented production switch fixes this finding.
 - [x] Correct menu state/model/visibility ownership: derive current models, retain overflow indexes and icons, render scoped visibility through React state, and use refs only to measure. The Link/component-test draft also passes full production/browser acceptance.
-- [ ] Obtain and validate a platform correction for CSS-asset HTML invalidation before retiring the broad class-hash safeguard. No unsupported Slice override, private actions, suppression or HTML rewriting is authorized by this finding.
+- [x] Replace the broad class-hash safeguard with a version-pinned dependency correction at Gatsby's CSS-asset invalidation boundary. Current implementation and final validation are tracked in the CSS completion section above. No private Slice override, Redux actions, warning suppression or HTML rewriting is applied.
 - [x] Local acceptance: production build (55.40s), full nonvisual suite (67.45s), all 35 browser checks (72.07s command time), smoke (79 files / 18 queries), lint/format and CSS-only modification/restoration (155.96s) pass. Existing screenshots and the 3% tolerance are unchanged. Nine CSS-order warnings and a dependency's punycode deprecation remain; the warm build emits no slow-query warnings. Cold category-query profiling remains separate.
 - [ ] Verify these changes in hosted CI and deployment; current local results do not certify either.
 - [ ] Next separate category: systematic image descriptions/validation after CSS acceptance. No images changed during this investigation; the platform cache correction remains tracked above.
@@ -58,16 +72,16 @@ This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an 
 - [x] Add root AGENTS.md with explicit root-cause/no-workaround rules and component ownership, portability and validation requirements.
 - [x] Research Gatsby global CSS/CSS Modules, Webpack extraction and React purity; document primary sources and installed Gatsby findings in docs/gatsby-css-review.md.
 - [x] Remove the blanket stylesheet entry, its page imports, speculative metadata-first ordering and its completeness test. They are not an accepted fix.
-- [ ] Validate layout-owned globals and consistent order of existing shared dependencies; inspect warnings without suppressing them and preserve screenshots/cache integrity.
+- [x] Validate layout-owned globals and component-owned modules through emitted-style audits and final browser/module/global cache checks. Reading-list data/routing and presentation ownership are separated; current extraction warnings are eliminated without suppression.
 
 ## Active follow-up — 2026-10-06
 
 - [x] Root/localized bilingual 404 output and native Netlify rewrites are implemented and pass local SSR/browser checks. Owner reports deployment; live unknown-URL responses remain a separate audit.
-- [ ] Resolve CSS import-order warnings without suppressing them; preserve screenshots and cache regression checks.
+- [x] Resolve CSS extraction-order warnings through the reading-list adapter/view boundary. Production compilation is warning-free for CSS ordering; all 35 browser checks and module/global warm-cache edits/restoration pass with unchanged screenshots/tolerance.
 - [ ] Profile fonts/CLS and apply only measured improvements preserving typography and Polish glyphs.
 - [ ] Verify supplied preview `6ac5341dce0e2e6c2b8846d6` and run comparable sequential mobile audits; distinguish this deployed baseline from new local changes and hosted CI/CodeQL status.
 
-## Current CSS stage — 2026-10-06
+## CSS conversion checkpoint — 2026-10-06
 
 - [x] Complete all remaining component/page/layout styles as one CSS Modules category. There are 32 native CSS Modules and no styled-jsx consumers; global reset/font fallback is plain CSS. Existing YAML values, runtime CSS variables, public state hooks and responsive thresholds remain.
 - [x] Remove retired styling integrations/processors and obsolete deasync resolution; frozen installation passes.

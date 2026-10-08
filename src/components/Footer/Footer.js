@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './Footer.module.css';
+import * as styles from './Footer.module.css';
 
 const Footer = ({ html }) => (
   <footer className={`footer ${styles.footer}`} dangerouslySetInnerHTML={{ __html: html }} />

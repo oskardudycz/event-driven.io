@@ -1,4 +1,4 @@
-import styles from './Menu.module.css';
+import * as styles from './Menu.module.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -113,11 +113,8 @@ class Menu extends React.Component {
 
     return (
       <React.Fragment>
-        <nav
-          className={`menu ${styles['menu']} ${open ? `open ${styles['open']}` : ''}`}
-          rel="js-menu"
-        >
-          <ul className={`itemList ${styles['itemList']}`} ref={this.itemList}>
+        <nav className={`menu ${styles.menu} ${open ? `open ${styles.open}` : ''}`} rel="js-menu">
+          <ul className={`itemList ${styles.itemList}`} ref={this.itemList}>
             {items.map((item, i) => (
               <Item
                 item={item}
@@ -128,7 +125,7 @@ class Menu extends React.Component {
           </ul>
           {hiddenIndexes.length > 0 && <Expand onClick={this.toggleMenu} open={open} />}
           {open && screenWidth >= 1024 && (
-            <ul className={`hiddenItemList ${styles['hiddenItemList']}`}>
+            <ul className={`hiddenItemList ${styles.hiddenItemList}`}>
               {hiddenIndexes.map((index) => (
                 <Item item={items[index]} key={items[index].to} hiddenItem />
               ))}

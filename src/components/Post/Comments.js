@@ -1,4 +1,4 @@
-import styles from './Comments.module.css';
+import * as styles from './Comments.module.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 import FacebookProvider, { Comments as FBComments } from 'react-facebook';
@@ -10,7 +10,7 @@ const Comments = (props) => {
 
   return (
     <React.Fragment>
-      <div id="post-comments" className={`comments ${styles['comments']}`}>
+      <div id="post-comments" className={`comments ${styles.comments}`}>
         <FacebookProvider appId={facebook.appId}>
           <FBComments href={`${config.siteUrl}${slug}`} width="100%" colorscheme="light" />
         </FacebookProvider>

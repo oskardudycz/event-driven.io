@@ -1,4 +1,4 @@
-import styles from './Headline.module.css';
+import * as styles from './Headline.module.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 

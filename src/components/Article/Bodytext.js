@@ -1,4 +1,4 @@
-import styles from './Bodytext.module.css';
+import * as styles from './Bodytext.module.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -7,10 +7,7 @@ const Bodytext = (props) => {
 
   return (
     <React.Fragment>
-      <div
-        className={`bodytext ${styles['bodytext']}`}
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
+      <div className={`bodytext ${styles.bodytext}`} dangerouslySetInnerHTML={{ __html: html }} />
     </React.Fragment>
   );
 };

@@ -1,4 +1,4 @@
-import styles from './Share.module.css';
+import * as styles from './Share.module.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -29,9 +29,9 @@ const PostShare = (props) => {
 
   return (
     <React.Fragment>
-      <div className={`share ${styles['share']}`}>
-        <span className={`label ${styles['label']}`}>SHARE</span>
-        <div className={`links ${styles['links']}`}>
+      <div className={`share ${styles.share}`}>
+        <span className={`label ${styles.label}`}>SHARE</span>
+        <div className={`links ${styles.links}`}>
           <TwitterShareButton
             url={url}
             title={title}

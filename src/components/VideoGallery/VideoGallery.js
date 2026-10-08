@@ -1,4 +1,4 @@
-import styles from './VideoGallery.module.css';
+import * as styles from './VideoGallery.module.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +9,7 @@ const VideoGallery = ({ videos }) => {
 
   return (
     <React.Fragment>
-      <ul className={`videoGrid ${styles['videoGrid']}`}>
+      <ul className={`videoGrid ${styles.videoGrid}`}>
         {videos.map((video) => {
           const url = `https://www.youtube.com/watch?v=${video.VideoId}`;
           return (
@@ -19,7 +19,7 @@ const VideoGallery = ({ videos }) => {
                 videoTitle={video.Title}
                 playLabel={t('talks.play', { title: video.Title })}
               />
-              <div className={`videoDetails ${styles['videoDetails']}`}>
+              <div className={`videoDetails ${styles.videoDetails}`}>
                 <h3 className={styles.elementH3}>
                   <a
                     href={url}

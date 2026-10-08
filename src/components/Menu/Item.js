@@ -1,4 +1,4 @@
-import styles from './Item.module.css';
+import * as styles from './Item.module.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '../Link';
@@ -13,8 +13,8 @@ const Item = (props) => {
       <li
         className={
           'hiddenItem' in props
-            ? `hiddenItem ${styles['hiddenItem']}`
-            : `item ${styles['item']} ${overflowHidden ? styles.overflowHidden : ''}`
+            ? `hiddenItem ${styles.hiddenItem}`
+            : `item ${styles.item} ${overflowHidden ? styles.overflowHidden : ''}`
         }
         key={label}
       >

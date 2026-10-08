@@ -70,7 +70,7 @@ VISUAL_BASE_URL=https://your-preview.netlify.app yarn test:visual
 | `yarn test:components`                                    | Link destinations, native attributes and locale routing                                      |
 | `yarn test:visual`                                        | Browser hydration, navigation, search, mobile layouts and screenshots                        |
 
-Cache checks temporarily modify/delete/restore existing source files and rebuild. Stop development/preview servers and pause content edits first:
+Cache checks temporarily modify/delete/restore existing source files and rebuild. Stop development/preview servers and pause content edits first. Wait for the checks to finish before staging, committing or deploying, so temporary edits/deletions are not included:
 
 ```bash
 env -u DEBUG yarn test:cache
@@ -200,7 +200,11 @@ A guide does not create a category route by itself; at least one canonical artic
 
 Edit component-owned `.module.css` files, `src/theme/global.css` for the shared reset, and `src/theme/theme.yaml` for tokens. `yarn generate-theme-css` regenerates `src/theme/tokens.css`; do not edit generated tokens directly. Production/development startup runs the generator. After changing YAML during a development session, run it again.
 
+Use named CSS exports, for example `import * as styles from './Component.module.css'` and `className={styles.container}`. Dashed local selectors are exported in camel case. Keep Gatsby data/routing adapters separate from reusable presentation components where needed; the reading-list view accepts a link renderer and owns its stylesheet.
+
 After styling changes, run `yarn build`, `yarn test:css`, `yarn test:visual` and `yarn test:cache:css`.
+
+Gatsby 5.16.1 requires the checked-in CSS cache correction in `patches/`. Yarn applies it automatically during installation; after `--ignore-scripts`, run `yarn postinstall` before building. The cache check covers module and global stylesheet edits/restoration. Upgrade/removal instructions are in [the patch notes](docs/gatsby-css-cache-patch.md).
 
 For a focused menu check with the production server running, use `yarn test:visual -t 'persistent menu'`. It checks language switching, localized destinations, overflow icons, opening/closing and mobile/desktop resizing. Run the full browser suite before publishing changes.
 

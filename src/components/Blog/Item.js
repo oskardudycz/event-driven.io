@@ -1,4 +1,4 @@
-import styles from './Item.module.css';
+import * as styles from './Item.module.css';
 import { FaArrowRight } from 'react-icons/fa/';
 import { FaCalendar } from 'react-icons/fa/';
 import { FaTag } from 'react-icons/fa/';
@@ -37,7 +37,7 @@ const Item = (props) => {
           <h2 className={styles.elementH2}>
             {title} <FaArrowRight className={'arrow'} />
           </h2>
-          <p className={`meta ${styles['meta']}` + ' ' + styles.elementP}>
+          <p className={`meta ${styles.meta}` + ' ' + styles.elementP}>
             <span className={styles.elementSpan}>
               <FaCalendar size={18} /> {prefix}
             </span>

@@ -1,4 +1,4 @@
-import styles from './Expand.module.css';
+import * as styles from './Expand.module.css';
 import { FaAngleDown } from 'react-icons/fa/';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -9,7 +9,7 @@ const Expand = (props) => {
   return (
     <React.Fragment>
       <button
-        className={`more ${styles['more']}`}
+        className={`more ${styles.more}`}
         type="button"
         onClick={onClick}
         aria-label="expand"

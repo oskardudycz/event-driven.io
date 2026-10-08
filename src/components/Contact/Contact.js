@@ -1,4 +1,4 @@
-import styles from './Contact.module.css';
+import * as styles from './Contact.module.css';
 /* eslint no-unused-vars: 0 */
 
 import { navigate } from 'gatsby';
@@ -60,8 +60,8 @@ const Contact = (props) => {
 
   return (
     <React.Fragment>
-      <div className={`form ${styles['form']}`}>
-        <p className={`intro ${styles['intro']}`}>
+      <div className={`form ${styles.form}`}>
+        <p className={`intro ${styles.intro}`}>
           {t('contact.intro')}{' '}
           <a
             href="https://calendly.com/oskar-dudycz/consulting"

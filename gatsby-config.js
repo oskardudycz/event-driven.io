@@ -1,6 +1,5 @@
 require('dotenv').config();
 const config = require('./content/meta/config');
-const { getCssModuleIdent } = require('./scripts/css-module-ident.mts');
 module.exports = {
   trailingSlash: 'always',
   siteMetadata: {
@@ -18,11 +17,9 @@ module.exports = {
       options: {
         cssLoaderOptions: {
           modules: {
-            namedExport: false,
-            exportLocalsConvention: 'asIs',
-            localIdentName: 'content-v1--[local]',
-            // Content-aware SHA-256 exports invalidate Gatsby's cached HTML.
-            getLocalIdent: getCssModuleIdent,
+            // css-loader 5's default MD4 hash is unavailable in Node 24.
+            // Use its supported identifier template, preserving Gatsby's named exports.
+            localIdentName: '[name]--[local]--[sha256:hash:hex:8]',
           },
         },
       },

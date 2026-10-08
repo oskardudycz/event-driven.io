@@ -1,4 +1,4 @@
-import styles from './Article.module.css';
+import * as styles from './Article.module.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -7,7 +7,7 @@ const Article = (props) => {
 
   return (
     <React.Fragment>
-      <article className={`article ${styles['article']}`}>{children}</article>
+      <article className={`article ${styles.article}`}>{children}</article>
     </React.Fragment>
   );
 };

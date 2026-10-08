@@ -1,4 +1,4 @@
-import styles from './Index.module.css';
+import * as styles from './Index.module.css';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { graphql } from 'gatsby';
@@ -43,11 +43,11 @@ class IndexPage extends React.Component {
         <Hero scrollToContent={this.scrollToContent} backgrounds={backgrounds} />
 
         <section
-          className={`latestArticles ${styles['latestArticles']}`}
+          className={`latestArticles ${styles.latestArticles}`}
           id="latest-articles"
           ref={this.separator}
         >
-          <header className={`sectionHeader ${styles['sectionHeader']}`}>
+          <header className={`sectionHeader ${styles.sectionHeader}`}>
             <h2 className={styles.elementH2}>{t('blog.latestTitle')}</h2>
           </header>
           <Blog posts={posts} browseAllPath="/articles/" compactTop />

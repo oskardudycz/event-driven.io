@@ -5,7 +5,7 @@ import path from 'node:path';
 // Hash compatibility inputs, including environment-dependent generated content.
 // Never print credentials; only the digest leaves this process.
 const hash = crypto.createHash('sha256');
-hash.update(`gatsby-cache-v2:${process.version}:${process.platform}:${process.arch}`);
+hash.update(`gatsby-cache-v3:${process.version}:${process.platform}:${process.arch}`);
 function include(file) {
   hash.update(file);
   hash.update(fs.readFileSync(file));
@@ -24,7 +24,6 @@ for (const file of [
   'src/i18n/translation-query.js',
   'src/theme/theme.yaml',
   'scripts/generate-theme-css.mts',
-  'scripts/css-module-ident.mts',
   'scripts/build-search-index.mjs',
   'src/utils/category-posts.mjs',
   'content/meta/config.js',
@@ -39,6 +38,7 @@ function includeDirectory(directory) {
     else include(file);
   }
 }
+includeDirectory('patches');
 includeDirectory('plugins');
 includeDirectory('src/search');
 includeDirectory('src/i18n/locales');

@@ -1,4 +1,4 @@
-import styles from './Blog.module.css';
+import * as styles from './Blog.module.css';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -13,9 +13,9 @@ const Blog = (props) => {
   return (
     <React.Fragment>
       <div
-        className={`main ${styles['main']}${compactTop ? ` compactTop ${styles['compactTop']}` : ''}${heading ? ` withHeading ${styles['withHeading']}` : ''}`}
+        className={`main ${styles.main}${compactTop ? ` compactTop ${styles.compactTop}` : ''}${heading ? ` withHeading ${styles.withHeading}` : ''}`}
       >
-        {heading && <h1 className={`heading ${styles['heading']}`}>{heading}</h1>}
+        {heading && <h1 className={`heading ${styles.heading}`}>{heading}</h1>}
         <ul className={styles.elementUl}>
           {posts.map((post) => {
             const {
@@ -28,7 +28,7 @@ const Blog = (props) => {
           })}
         </ul>
         {browseAllPath && (
-          <div className={`summary ${styles['summary']}`}>
+          <div className={`summary ${styles.summary}`}>
             <Link to={browseAllPath}>{t('blog.browseAll')} →</Link>
           </div>
         )}

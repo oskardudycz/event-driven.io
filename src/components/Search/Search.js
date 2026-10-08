@@ -1,4 +1,4 @@
-import styles from './Search.module.css';
+import * as styles from './Search.module.css';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { withPrefix } from 'gatsby';
 import Hit from './Hit';
@@ -100,19 +100,19 @@ const Search = () => {
   };
   return (
     <React.Fragment>
-      <div className={`search ${styles['search']}`}>
+      <div className={`search ${styles.search}`}>
         <div className={'ais-SearchBox'}>
           <form
-            className={`ais-SearchBox-form ${styles['ais-SearchBox-form']}`}
+            className={`ais-SearchBox-form ${styles.aisSearchBoxForm}`}
             role="search"
             onSubmit={(event) => event.preventDefault()}
           >
             <FaSearch
-              className={`search-input-icon ${styles['search-input-icon']}`}
+              className={`search-input-icon ${styles.searchInputIcon}`}
               aria-hidden="true"
             />
             <input
-              className={`ais-SearchBox-input ${styles['ais-SearchBox-input']}`}
+              className={`ais-SearchBox-input ${styles.aisSearchBoxInput}`}
               type="search"
               aria-label={copy.search}
               placeholder={copy.search}
@@ -122,7 +122,7 @@ const Search = () => {
             />
             <button
               hidden={!query}
-              className={`ais-SearchBox-reset ${styles['ais-SearchBox-reset']}`}
+              className={`ais-SearchBox-reset ${styles.aisSearchBoxReset}`}
               type="button"
               aria-label={copy.clear}
               onClick={() => updateQuery('')}
@@ -133,25 +133,25 @@ const Search = () => {
         </div>
         <div role="status" aria-live="polite">
           {!requested ? (
-            <p className={`search-message ${styles['search-message']}`}>{copy.prompt}</p>
+            <p className={`search-message ${styles.searchMessage}`}>{copy.prompt}</p>
           ) : status === 'error' ? (
-            <p className={`search-message ${styles['search-message']}`}>
+            <p className={`search-message ${styles.searchMessage}`}>
               {copy.error}{' '}
               <button type="button" onClick={() => setRetry((value) => value + 1)}>
                 {copy.retry}
               </button>
             </p>
           ) : loaded?.lang !== lang ? (
-            <p className={`search-message ${styles['search-message']}`}>{copy.loading}</p>
+            <p className={`search-message ${styles.searchMessage}`}>{copy.loading}</p>
           ) : results.length === 0 ? (
-            <p className={`search-message ${styles['search-message']}`}>{copy.empty}</p>
+            <p className={`search-message ${styles.searchMessage}`}>{copy.empty}</p>
           ) : (
-            <span className={`ais-Stats ${styles['ais-Stats']}`}>{copy.stats(results.length)}</span>
+            <span className={`ais-Stats ${styles.aisStats}`}>{copy.stats(results.length)}</span>
           )}
         </div>
         {requested && loaded?.lang === lang && results.length > 0 && (
           <>
-            <ul className={`ais-Hits-list ${styles['ais-Hits-list']}`} ref={resultsList}>
+            <ul className={`ais-Hits-list ${styles.aisHitsList}`} ref={resultsList}>
               {results.slice(currentPage * 10, currentPage * 10 + 10).map((hit) => (
                 <li className={'ais-Hits-item'} key={hit.id}>
                   <Hit hit={hit} />
@@ -160,7 +160,7 @@ const Search = () => {
             </ul>
             {pages > 1 && (
               <nav aria-label={copy.navigation}>
-                <ul className={`ais-Pagination-list ${styles['ais-Pagination-list']}`}>
+                <ul className={`ais-Pagination-list ${styles.aisPaginationList}`}>
                   <li>
                     <button
                       type="button"

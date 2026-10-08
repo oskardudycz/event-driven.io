@@ -1,4 +1,4 @@
-import styles from './Header.module.css';
+import * as styles from './Header.module.css';
 import { Link } from '../Link';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
@@ -43,9 +43,9 @@ const Header = ({ pages, path }) => {
 
   return (
     <React.Fragment>
-      <header className={`header ${styles['header']} ${getHeaderSize()}`}>
+      <header className={`header ${styles.header} ${getHeaderSize()}`}>
         <Link to="/" className={'logoType'}>
-          <div className={`logo ${styles['logo']}`}>
+          <div className={`logo ${styles.logo}`}>
             <img
               src={avatar}
               alt={config.siteTitle}
@@ -55,7 +55,7 @@ const Header = ({ pages, path }) => {
             />
           </div>
           <div className={'type'}>
-            <span className={`siteTitle ${styles['siteTitle']}`}>
+            <span className={`siteTitle ${styles.siteTitle}`}>
               {t('header.title') || config.headerTitle}
             </span>
             <h2 className={styles.elementH2}>{t('header.subTitle') || config.headerSubTitle}</h2>
@@ -85,7 +85,7 @@ const Header = ({ pages, path }) => {
                 ? 'var(--header-height-homepage)'
                 : 'var(--header-height-default)',
           }}
-          className={`sensor ${styles['sensor']}`}
+          className={`sensor ${styles.sensor}`}
         />
       </VisibilitySensor>
     </React.Fragment>

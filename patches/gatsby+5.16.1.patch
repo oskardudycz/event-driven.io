@@ -1,0 +1,35 @@
+diff --git a/node_modules/gatsby/dist/commands/build.js b/node_modules/gatsby/dist/commands/build.js
+index 14cdef5..e4a742b 100644
+--- a/node_modules/gatsby/dist/commands/build.js
++++ b/node_modules/gatsby/dist/commands/build.js
+@@ -98,6 +98,7 @@ externalTelemetryAttributes) {
+   let closeHTMLBundleCompilation;
+   let closePartialHydrationBundleCompilation;
+   let webpackCompilationHash = null;
++  let webpackCSSAssets = [];
+   let webpackSSRCompilationHash = null;
+   let templateCompilationHashes = {};
+   const engineBundlingPromises = [];
+@@ -119,6 +120,13 @@ externalTelemetryAttributes) {
+       (0, _webpackErrorUtils.reportWebpackWarnings)(rawMessages.warnings, _reporter.default);
+     }
+     webpackCompilationHash = stats.hash;
++    // CSS is inlined into HTML but absent from SSR module exports. Include the
++    // emitted content-hashed CSS assets in renderer invalidation, including when
++    // only declarations change and the CSS Module class exports stay identical.
++    webpackCSSAssets = stats.compilation.getAssets()
++      .map(asset => asset.name)
++      .filter(name => name.endsWith(`.css`))
++      .sort();
+   } catch (err) {
+     buildActivityTimer.panic((0, _webpackErrorUtils.structureWebpackErrors)(_types.Stage.BuildJavascript, err));
+   } finally {
+@@ -142,7 +150,7 @@ externalTelemetryAttributes) {
+         stats,
+         components: _redux.store.getState().components
+       });
+-      webpackSSRCompilationHash = renderPageHash;
++      webpackSSRCompilationHash = `${renderPageHash}--${JSON.stringify(webpackCSSAssets)}`;
+       templateCompilationHashes = templateHashes;
+     } else {
+       webpackSSRCompilationHash = stats.hash;

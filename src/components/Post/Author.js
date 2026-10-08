@@ -1,4 +1,4 @@
-import styles from './Author.module.css';
+import * as styles from './Author.module.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -12,8 +12,8 @@ const Author = (props) => {
 
   return (
     <React.Fragment>
-      <div className={`author ${styles['author']}`}>
-        <div className={`avatar ${styles['avatar']}`}>
+      <div className={`author ${styles.author}`}>
+        <div className={`avatar ${styles.avatar}`}>
           <img
             src={avatar}
             alt={config.siteTitle}
@@ -22,7 +22,7 @@ const Author = (props) => {
             className={styles.elementImg}
           />
         </div>
-        <div className={`note ${styles['note']}`} dangerouslySetInnerHTML={{ __html: note }} />
+        <div className={`note ${styles.note}`} dangerouslySetInnerHTML={{ __html: note }} />
       </div>
     </React.Fragment>
   );
