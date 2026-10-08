@@ -270,6 +270,8 @@ async function convertPost(
   applyRecordingEmbeds(post, source, entry);
   const location = sourceLocation(source);
   const assets = new Map();
+  const decorativeImages = [];
+  const { importedAlternative } = await import('../scripts/image-alternatives.mts');
   async function saveImage(input, isCover = false) {
     const original = originalImageUrl(input, location.base);
     const url = location.archive ? `${location.archive}${original}` : original;
@@ -304,7 +306,14 @@ async function convertPost(
     const element = $(image);
     const src = element.attr('src') || element.attr('data-src');
     if (!src) throw new Error(`Image without a source in ${source}`);
-    element.attr('src', await saveImage(src));
+    const original = originalImageUrl(src, location.base);
+    const override = Object.hasOwn(entry.imageAlts || {}, src)
+      ? entry.imageAlts[src]
+      : entry.imageAlts?.[original];
+    const alternative = importedAlternative(element.attr('alt'), override, original);
+    const filename = await saveImage(src);
+    element.attr('src', filename).attr('alt', alternative.alt);
+    if (alternative.decorative) decorativeImages.push(filename);
     element.removeAttr('srcset').removeAttr('sizes').removeAttr('style');
     // Gatsby provides image zoom itself. Unwrap Substack's block-level image
     // links so they don't become invalid multiline Markdown links.
@@ -427,6 +436,7 @@ async function convertPost(
   if (!markdown.trim()) throw new Error(`Conversion produced an empty article: ${source}`);
   return {
     markdown,
+    decorativeImages,
     cover,
     assets: Object.fromEntries(assets),
     embeds: body.find('iframe, video, audio').length,
@@ -466,6 +476,9 @@ async function importPost(entry, options = {}) {
         category: entry.category || 'Software Architecture',
         ...(converted.cover ? { cover: converted.cover } : {}),
         author: 'oskar dudycz',
+        ...(converted.decorativeImages.length
+          ? { decorativeImages: converted.decorativeImages }
+          : {}),
         ...(language === 'en'
           ? {
               redirectFrom: `/${slug}/`,
@@ -495,6 +508,7 @@ async function importPost(entry, options = {}) {
           assets: converted.assets,
           embeds: converted.embeds,
           ...(entry.codeLanguage ? { codeLanguage: entry.codeLanguage } : {}),
+          ...(entry.imageAlts ? { imageAlts: entry.imageAlts } : {}),
           ...(entry.youtubeVideo ? { youtubeVideo: entry.youtubeVideo } : {}),
           ...(entry.recordingEmbeds ? { recordingEmbeds: entry.recordingEmbeds } : {}),
         },

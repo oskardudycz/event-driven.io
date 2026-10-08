@@ -37,7 +37,7 @@ The real answer is simple but uncomfortable:
 
 > _“The neat part is that you don't.”_
 
-![](2025-02-10-cover.jpg)
+![An Invincible meme: “How do you do JOIN in document databases?” “The neat part is, you don't.”](2025-02-10-cover.jpg)
 
 **And this realization should lead to deeper questions.** Instead of thinking about joins, think about access patterns. Who's reading this data? How often? What parts do they need together?
 

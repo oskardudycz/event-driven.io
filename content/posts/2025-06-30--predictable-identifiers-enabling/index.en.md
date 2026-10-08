@@ -433,7 +433,7 @@ class PaymentModule {
 
 Here's the complete flow visualised:
 
-![](image-3.png)
+![Predictable payment identifiers connect order processing, asynchronous payment requests and callbacks, including timeouts and compensation without losing correlation.](image-3.png)
 
 ## Additional Benefits
 

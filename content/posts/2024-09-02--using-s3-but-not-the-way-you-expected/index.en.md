@@ -4,6 +4,8 @@ category: Software Architecture
 cover: 2024-09-02-cover.png
 author: oskar dudycz
 redirectFrom: /using-s3-but-not-the-way-you-expected/
+decorativeImages:
+  - image-4.png
 ---
 
 Welcome to the new week!
@@ -122,7 +124,7 @@ If the _**If-None-Match=”\*”**_ condition fails (resulting in a _\`412 Preco
 
 For instance:
 
-![](2024-09-02-cover.png)
+![Two processes compete to update an S3 object: a successful conditional write advances its version; a conflicting writer reloads and retries.](2024-09-02-cover.png)
 
 ### The key to consistency is a proper key strategy
 
@@ -184,7 +186,7 @@ You can also reconcile old chunks, but we’ll discuss that later.
 
 The JSON file stored in S3 will contain metadata about the stream and the events. Here’s an example structure:
 
-![](image-2.png)
+![An S3 event-stream JSON document contains stream identity, version metadata and stored events.](image-2.png)
 
 ## The Write-Ahead Pattern: A Familiar Approach
 
@@ -247,7 +249,7 @@ ecommerce/orders/12345/004.001.json
 
 It’ll contain the rebuild snapshots and possibly all events from the previous chunks, allowing you to delete the old ones and reducing the storage cost.
 
-![](image-3.png)
+![Reconciliation reads event chunks and snapshots, creates a consolidated version and removes obsolete chunks.](image-3.png)
 
 Following this convention, you can quickly identify the latest chunk using the highest chunk version within the current stream version. This simplifies the process of retrieving and updating your data.
 

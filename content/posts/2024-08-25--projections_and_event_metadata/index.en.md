@@ -5,7 +5,7 @@ cover: 2024-08-25-cover.png
 author: oskar dudycz
 ---
 
-![](2024-08-25-cover.png)
+![Broken windows in a brick building, illustrating missing event metadata.](2024-08-25-cover.png)
 
 **Some time ago, I wrote about the dangers that come from the [I'll just add one more field"](/en/i_will_just_add_one_more_field/) attitude.** Have you heard about the [Broken Window Theory](https://web.archive.org/web/20090418141450/http://www.theatlantic.com//doc//198203//broken-windows)? Authors (James Q. Wilson and George L. Kelling) wrote:
 

@@ -4,6 +4,8 @@ category: Software Architecture
 cover: 2024-12-30-cover.png
 author: oskar dudycz
 redirectFrom: /locks-queues-and-business-workflows/
+decorativeImages:
+  - image-4.png
 ---
 
 [Last week, we discussed Distributed Locking](/en/distributed-locking-a-practical-guide/). Today, we’ll continue with locking but doing it differently: with a full backflip.
@@ -20,7 +22,7 @@ Without locks, you can get unpredictable states - like a read model flipping fro
 
 The basic flow looks like this:
 
-![](image-2.png)
+![Distributed lock lifecycle: acquire the record, handle contention, perform the critical operation and release the lock.](image-2.png)
 
 ## Lock definition
 
@@ -248,7 +250,7 @@ For instance, if you want to coordinate the processing of the specific distribut
 
 For instance, if you’re doing distributed processing like we did in:
 
-![](image-3.png)
+![An online business-workflow modelling session with commands and events arranged on a shared Miro board.](image-3.png)
 
 [
 

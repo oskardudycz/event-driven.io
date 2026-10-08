@@ -12,7 +12,7 @@ Welcome to the next week!
 
 **I had a weird thought on Friday, right after leaving the** **hospital.** I went there because I had complications from my flu. Scratch the details; let’s say they were looking pretty severe. My doctor sent me there to double-check her diagnosis.
 
-![](2025-04-07-cover.jpg)
+![Portrait of a doctor, illustrating uncertainty and things we do not know.](2025-04-07-cover.jpg)
 
 I spent over 5 hours in the hospital, going through several medical treatments. In the end, it appeared that the initial diagnosis was right: pneumonia. I was released home with the note that prescribed antibiotics should be good enough.
 

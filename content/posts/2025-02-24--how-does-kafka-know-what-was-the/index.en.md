@@ -72,7 +72,7 @@ Although `__consumer_offsets` might look like any other Kafka topic from the out
 
 By default, it’s partitioned into a fixed number of partitions (often 50), with each partition managing offset commits for a subset of consumer groups. This design ensures that offset storage can scale horizontally—no single partition is overloaded by too many commits.
 
-![](image-2.png)
+![A consumer commits its offset to the group coordinator, which writes the group, topic, partition and offset to __consumer_offsets before acknowledging it.](image-2.png)
 
 In this simplified flow, a consumer sends an offset commit to the Kafka broker, which appends a commit event to the appropriate partition in `__consumer_offsets`. That commit event is then replicated to follower brokers, and finally, the broker acknowledges success back to the consumer. Such replication across multiple brokers helps to protect against broker failures. When one broker dies, the cluster can still keep up with information on the others.
 

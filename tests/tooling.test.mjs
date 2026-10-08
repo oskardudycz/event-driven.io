@@ -13,7 +13,7 @@ import { resolve, join, delimiter } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { test } from 'node:test';
 
-test('lint-staged formats staged code, ignores article content and blocks lint errors', () => {
+test('lint-staged formats code, preserves article formatting and blocks lint or image errors', () => {
   const root = resolve('.');
   const fixture = mkdtempSync(join(tmpdir(), 'gatsby-lint-staged-'));
   const env = {
@@ -31,6 +31,9 @@ test('lint-staged formats staged code, ignores article content and blocks lint e
     ])
       copyFileSync(join(root, file), join(fixture, file));
     symlinkSync(join(root, 'node_modules'), join(fixture, 'node_modules'), 'dir');
+    mkdirSync(join(fixture, 'scripts'));
+    for (const file of ['check-image-alternatives.mts', 'image-alternatives.mts'])
+      copyFileSync(join(root, 'scripts', file), join(fixture, 'scripts', file));
     assert.equal(run('git', ['init', '--quiet']).status, 0);
     mkdirSync(join(fixture, 'content'));
     writeFileSync(join(fixture, 'example.mjs'), 'export const value = "hello"\n');
@@ -53,6 +56,12 @@ test('lint-staged formats staged code, ignores article content and blocks lint e
       /no-unused-vars/,
       JSON.stringify({ status: rejected.status, signal: rejected.signal, error: rejected.error }),
     );
+    writeFileSync(join(fixture, 'example.mjs'), "export const value = 'hello';\n");
+    writeFileSync(join(fixture, 'content', 'example.md'), '# Diagram\n\n![](queue.png)\n');
+    assert.equal(run('git', ['add', 'example.mjs', 'content/example.md']).status, 0);
+    const missingAlternative = run('lint-staged', ['--no-stash']);
+    assert.notEqual(missingAlternative.status, 0);
+    assert.match(missingAlternative.stdout + missingAlternative.stderr, /Describe this image/);
   } finally {
     rmSync(fixture, { recursive: true, force: true });
   }

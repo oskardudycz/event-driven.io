@@ -30,7 +30,7 @@ Even for non-user data, most of us would have a challenge answering that, not ev
 
 Before we go, a disclaimer. Googling doesn't make us lawyers; even ChatGPTing doesn't. I'm not a lawyer; whatever you read here, consult with your Chief Security Officer, as those rules are highly contextual to your business domain and other laws and practices you do. You don't have CSO? You should.
 
-![](2023-11-10-02.png)
+![Meme contrasting lawyers saying that Googling does not make you a lawyer with programmers looking away.](2023-11-10-02.png)
 
 ## The law to be forgotten
 
@@ -42,7 +42,7 @@ No matter which way we choose, we need to clean all privacy-related data like na
 - deleting physically all rows in tables,
 - anonymising them (taking precise information like first name, last name, and address and replacing them with randomised generic ones).
 
-![](2023-11-10-03.png)
+![The right to erasure: remove a user's personal data from application databases, archives and cloud storage.](2023-11-10-03.png)
 
 **It's worth noting that we don't need to remove all data.** We need to remove only those allowing us to deduce their identity. And that's highly contextual and tricky. For instance, typically, we can leave information like gender as it's not precise, but not always. If we have a class in tech school, and there's only a single woman there, then gender in this context is _[Personally Identifiable Information (PII)](https://en.wikipedia.org/wiki/Personal_data)_, as we can identify a specific woman in this context.
 
@@ -66,7 +66,7 @@ The (not so) simple removal from tables is getting much more complicated if we a
 
 **Besides the application data, we need to store information about users' consents and requests for removal.**  If we keep it in the same database, the recent consents or requests may also be brought back to the previous state, where we were allowed to keep their data. So, we might not even know whether we should anonymise or delete it again after restoring backup.
 
-![](2023-11-10-04.png)
+![Erasing user data also requires accounting for backups containing the original records.](2023-11-10-04.png)
 
 What's more, someone with access to backups can restore it to another place and read the data.
 
@@ -84,7 +84,7 @@ is essential for defining the proper Data Governance process in general, not onl
 - define the maximum length of the backups aligned with your Privacy laws (for GDPR, it's a maximum of 30 days); don't keep them longer. By that, you don't need to clean up data from backups,
 - define your disaster recovery strategy, including the removal/anonymisation process as part of it.
 
-![](2023-11-10-05.png)
+![Separate storage for user consents, requests and restrictions from application data.](2023-11-10-05.png)
 
 ## User Rights
 
@@ -106,7 +106,7 @@ The biggest responsibility lies on us, as we know what data we store and how we 
 
 Yeah, being a man in the middle is always the worst position.
 
-![](2023-11-10-08.png)
+![GDPR obligations include the right to erasure, access and portability, not just deleting one database row.](2023-11-10-08.png)
 
 ## The right to be informed
 
@@ -120,22 +120,22 @@ Some can say that:
 
 If you also think that's easy, see how much data can be considered PII:
 
-![](2023-11-10-06.png)
-![](2023-11-10-07.png)
+![Examples of personally identifiable information include names, email addresses, locations and online identifiers.](2023-11-10-06.png)
+![Additional personal-data examples include birth dates, photographs, financial, medical and employment information.](2023-11-10-07.png)
 
 **Remember that such a registry needs to be actively maintained and reviewed.** We know how hard it is to [keep documentation up to date](/en/how_to_successfully_do_documentation_without_maintenance_burden/). Usually, trying to audit the existing system for GDPR data is like trying to find [where's Wally](https://www.google.com/search?q=where%27s+wally&tbm=isch). 
 
 To make it manageable, we should limit the GDPR data's usage. Instead of spreading it in multiple tables, keep it in the same place.
 
-![](2023-11-10-09.png)
+![Keep personal information and application data in different database tables to support access and portability.](2023-11-10-09.png)
 
 You can consider keeping it in the separate database schema.
 
-![](2023-11-10-10.png)
+![Separate personal information and application data into different database schemas.](2023-11-10-10.png)
 
 Or even a separate database.
 
-![](2023-11-10-11.png)
+![Store personal information separately from application data and retain records of user consents and restrictions.](2023-11-10-11.png)
 
 **Centralising the PII storage is not always the best choice.** As I mentioned, whether or not some data is personally identifiable is always contextual. Also, for some data (e.g., medical or financial), we may be obliged to keep them longer, and for some, shorter. That creates a challenge to create a central, generic PII Data module. Different modules will require different data lifetimes; those requirements can be contrary. We may end up with the lowest common denominator instead of the proper solution.
 
@@ -179,7 +179,7 @@ Those lifecycle policies will make GDPR easier, and our systems faster and bette
 
 We should finally apply privacy by default because we're not baddies, right?
 
-![](2023-11-10-12.png)
+![An officer asks, “Are we the baddies?”](2023-11-10-12.png)
 
 Cheers!
 

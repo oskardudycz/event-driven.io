@@ -60,7 +60,7 @@ This simple rule has powerful implications:
 
 Imagine you have a topic with siz partitions and three consumers in a group. Kafka will distribute the partitions like this:
 
-![](2025-01-27-cover.png)
+![Six partitions are assigned across three consumers in one Kafka consumer group.](2025-01-27-cover.png)
 
 This distribution isn't random - it's managed by a special broker called the Group Coordinator. Think of the Group Coordinator as a supervisor, ensuring work is fairly distributed. It keeps track of:
 
@@ -375,7 +375,7 @@ class KafkaConsumer {
 
 But that's just the beginning. The fetch protocol also includes sophisticated batching and parallel fetching capabilities. Since partitions might be on different brokers, consumers can fetch from multiple brokers simultaneously:
 
-![](image-2.png)
+![A consumer fetches from two brokers; each broker waits for sufficient bytes or a timeout before returning messages.](image-2.png)
 
 This parallel fetching is crucial for performance but introduces its complexities. What happens if one broker is slower than others? What if a broker fails during a fetch? These scenarios need careful handling.
 

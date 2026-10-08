@@ -10,7 +10,7 @@ cover: 2024-11-15-cover.png
 author: oskar dudycz
 ---
 
-![](2024-11-15-cover.png)
+![Spock and his mirror-universe double: “Evil twins unite!”](2024-11-15-cover.png)
 
 > _"Is your command handling idempotent?"_ 
 

@@ -4,6 +4,8 @@ category: Software Architecture
 cover: 2025-03-03-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true
+decorativeImages:
+  - image-2.png
 ---
 
 **I've been involved in several projects that tried to break down a legacy monolith.** Some were successful, but most were not. Even those moderately successful had a common, painful experience. I burned my fingers and saw other teams struggle with this challenge. Not because they lacked skills, but often because their approach was too ambitious.

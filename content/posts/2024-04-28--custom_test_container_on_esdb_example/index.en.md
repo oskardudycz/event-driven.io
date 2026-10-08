@@ -5,7 +5,7 @@ cover: 2024-04-28-cover.png
 author: oskar dudycz
 ---
 
-![](2024-04-28-cover.png)
+![Testcontainers and EventStoreDB logos beside a pipeline supported by testing components.](2024-04-28-cover.png)
 
 **[Testcontainers](https://testcontainers.com/) became a popular way of setting up dependencies for integration testing.** They're not ideal, as configuring them to run your tests efficiently is not as trivial as it's glossed; I explained that in [A simple way to configure integration tests pipeline](/en/configure_ci_for_integration_tests/). Still, undeniably, it can speed up the initial ramp-up phase and, if used wisely, can be a decent way to handle common testing dependencies.
 

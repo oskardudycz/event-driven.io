@@ -19,7 +19,7 @@ Event Sourcing wymaga nowego zestawu praktyk i uzyskania pewności siebie w proj
 
 **Ten praktyczny warsztat ma na celu zbudowanie tej pewności, stopniowo wprowadzając uczestników do Event Sourcing poprzez działania praktyczne.**
 
-![](./workshop.jpg)
+![Uczestnicy analizują model oprogramowania z prowadzącym przy tablicy.](./workshop.jpg)
 
 ## Czego się nauczysz?
 
@@ -74,7 +74,7 @@ Warsztat koncentruje się na praktyce i doświadczeniu praktycznym, aby zapewni�
 Szkolenie nie będzie nagrywane, ale po jego zakończeniu dostaniesz mnóstwo materiałów dodatkowych z pogrupowanymi tematyką materiałami.
 
 
-![](./workshop-online.png)
+![Warsztat Event Sourcing online z modelowaniem procesów biznesowych na wspólnej tablicy Miro.](./workshop-online.png)
 
 ## Agenda
 

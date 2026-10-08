@@ -56,7 +56,7 @@ While doing design sessions, building our user personas, and interviewing domain
 
 **Still, as [Gojko nicely explained in his recent article](https://gojko.net/2024/09/30/from-bugs-to-beam/), there’s always a potential mismatch between our and users’ expectations:**
 
-![](image-2.png)
+![Expectation matrix: agreement between makers and users is acceptable; maker-only success is a mismatch, user-only success is an exploit, and failure for both is a bug.](image-2.png)
 
 [https://gojko.net/2024/09/30/from-bugs-to-beam/](https://gojko.net/2024/09/30/from-bugs-to-beam/)
 

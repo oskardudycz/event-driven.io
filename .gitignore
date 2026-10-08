@@ -78,3 +78,6 @@ temp/
 
 .prettiercache
 .husky/_/
+
+# IndexNow acknowledgement state (retained separately by production CI)
+.indexnow/

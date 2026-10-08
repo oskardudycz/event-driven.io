@@ -28,7 +28,7 @@ You don't ask your manager for permission to create a new file, name a variable,
 
 **Delivering a feature doesn’t end with written code; this is just a part of it.**
 
-![](2025-04-28-cover.png)
+![Feature-complete comic: developers call the work done while bugs and unfinished details accumulate below the surface.](2025-04-28-cover.png)
 
 Source: https://www.monkeyuser.com/2020/feature-complete/
 

@@ -5,7 +5,7 @@ cover: 2024-04-17-cover.png
 author: oskar dudycz
 ---
 
-![](2024-04-17-cover.png)
+![A mime pretending to press against an invisible wall.](2024-04-17-cover.png)
 
 **Last week, we discussed an overused but applicable pattern: [in-memory bus](/en/inmemory_message_bus_in_typescript/).** This time, we'll continue with the leitmotif and talk about mocking. No, I won't mock you; I will mock TypeScript code.
 

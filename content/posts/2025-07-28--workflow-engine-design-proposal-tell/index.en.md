@@ -174,7 +174,7 @@ When a message triggers a workflow, we use a double-hop pattern:
 
 This flow ensures durability at each step:
 
-![](2025-07-28-cover.png)
+![A workflow processor forwards an event, reads workflow state, decides a command, writes the updated state and processes outputs.](2025-07-28-cover.png)
 
 ### Code Example - Group Checkout
 
@@ -334,7 +334,7 @@ This single stream contains the complete story, including what triggered each de
 
 Each workflow instance acts like an actor with its own mailbox:
 
-![](image-2.png)
+![A workflow instance receives input through an inbox, evolves its state, decides commands or events and emits messages through an outbox.](image-2.png)
 
 This isolation brings several benefits:
 

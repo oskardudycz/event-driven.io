@@ -4,6 +4,8 @@ category: Software Architecture
 cover: 2024-10-21-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true
+decorativeImages:
+  - image-2.png
 ---
 
 Welcome to the new week!

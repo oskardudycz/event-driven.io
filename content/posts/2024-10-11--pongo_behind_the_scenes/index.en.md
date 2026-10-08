@@ -5,7 +5,7 @@ cover: 2024-10-11-cover.png
 author: oskar dudycz
 ---
 
-![](2024-10-11-cover.png)
+![An animator sketches Dalmatian characters while two dogs watch.](2024-10-11-cover.png)
 
 **If you want to make God laugh, tell him about your plans.**
 

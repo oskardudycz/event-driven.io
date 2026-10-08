@@ -4,6 +4,27 @@ Last updated: 2026-10-08
 
 This is the live checklist for the strategy in [`plan.md`](./plan.md). Check an item only when its implementation and proportionate verification are complete. Add a short note under blocked or partial items instead of presenting them as finished.
 
+## Test readability and framework helpers — 2026-10-08
+
+- [x] Review actual duplication and primary Vitest/Playwright fixture/assertion/snapshot APIs; merge strategy before implementation.
+- [x] Replace browser lifecycle/manual diffs with matched Playwright Test 1.63.0 fixtures, assertions, traces and native screenshot artifacts; retain component Vitest tests and use built-in mock cleanup.
+- [x] Split browser scenarios into seven TypeScript suites. Share font/image readiness and repeated category slug collection; use test.use for SSR/viewport variants. Expand the 35 previous scenarios into 52 separately reported cases without dropping language, JavaScript-disabled or pixel-ratio coverage. Preserve existing PNGs, identical dimensions, colour threshold 0.2 and the 3% differing-pixel limit; remove the historical reading-order count in favor of current bilingual equality/uniqueness.
+- [x] Let Playwright manage local/CI Gatsby serve lifecycle; remove the shell polling/trap loop. README documents focused runs, debug mode, reports/traces and explicit reviewed snapshot updates. Normal runs reject missing/changed baselines; archive updates require the reviewed slug.
+- [x] Verify frozen installation, lint, component/nonvisual tests and all browser scenarios against unchanged PNGs; strict browser/configuration TypeScript validation is part of yarn test.
+- [x] Frozen installation (0.84s, Gatsby patch reapplied; Husky skipped), lint/format, smoke (80 source files / 18 queries), strict browser/configuration TypeScript checks and the full nonvisual suite (147.22s, including 17 component checks) pass. The refreshed production build passes (144.53s), and the route/feed/sitemap contract passes (697 routes). No application/content changes were made for this refactor. All 52 browser cases pass against the refreshed build (113.34s), with unchanged PNGs/tolerances. Corrected conversion mistakes identified by native traces: browser arguments, header scope, pseudo-element styles and rendered-text case. The build has no CSS extraction/slow-query warnings; a dependency punycode deprecation remains.
+- [ ] Verify the runner/server/artifact changes in hosted CI after publication; local validation does not certify that result.
+
+## Image accessibility and IndexNow — 2026-10-08
+
+- [x] Research primary W3C/Gatsby/IndexNow guidance and merge execution strategy into plan before implementation.
+- [x] Inspect all 137 previously undescribed image references. Add 264 descriptions across 142 EN/PL content files and explicitly retain 14 redundant decorative icon occurrences; appearance is preserved.
+- [x] Validate all 643 Markdown files before builds and in lint-staged (including absolute staged paths); lint native/Gatsby image components; validate all generated HTML and named image-only links. Source alt text is preserved, missing import descriptions require imageAlts overrides, and failed imports leave no partial post. Five image checks pass; the tooling fixture now verifies staged Markdown rejection as well as formatting preservation.
+- [x] Add canonical content fingerprints/diffs, a public verification key, dry-run/manual notification and production-only post-deploy CI. Restore successful acknowledgements separately; recover the previous production manifest before deployment when the cache expires. Verify publication and affected pages before requests; advance state only after every batch succeeds. All 11 IndexNow checks pass, including first-run baseline, 10,000-URL batching, deletion, 200/202, stale deployments, rate limits and cache recovery. First deployment establishes a baseline without historical bulk submission.
+- [x] Frozen installation (0.94s, Gatsby patch reapplied; Husky skipped in this sandbox), lint/format and smoke (80 files / 18 queries) pass. Production build passes (154.50s), the full suite passes (83.30s) and all 35 browser checks pass (74.25s). Existing screenshots, tolerance, route/feed/sitemap contracts remain unchanged. Initial full-suite failure was an outdated lint-staged fixture missing the new checker; the corrected fixture and full rerun pass. Four slow category-query warnings and dependency deprecations remain separate performance work.
+- [x] README documents source/image checks, import overrides, manual/CI IndexNow operation and retry behavior. A 394-page manifest and baseline/one-off dry runs pass locally with no notifications or state writes. CLI/content/submission responsibilities are separate and share existing Remark/Cheerio/traversal helpers; add a readability rule to AGENTS.md.
+- [ ] Verify hosted CI, production key/manifest publication and subsequent real IndexNow submissions after deployment. No deployment or real API submission was performed locally.
+- [ ] Follow-up: the browser-test category is covered above. Continue the bounded review of earlier scripts and Node test helpers for dense control flow, mixed responsibilities and genuine duplication before adding further feature categories; prefer installed packages and small functions over speculative abstractions.
+
 ## CSS completion — 2026-10-08
 
 - [x] Research official Gatsby/PostCSS CSS exports, incremental-build invalidation, upstream build source, Webpack asset APIs and versioned dependency-patch tooling before implementation.
@@ -42,7 +63,7 @@ The initial build reports four slow category queries and dependency deprecations
 - [x] Replace the broad class-hash safeguard with a version-pinned dependency correction at Gatsby's CSS-asset invalidation boundary. Current implementation and final validation are tracked in the CSS completion section above. No private Slice override, Redux actions, warning suppression or HTML rewriting is applied.
 - [x] Local acceptance: production build (55.40s), full nonvisual suite (67.45s), all 35 browser checks (72.07s command time), smoke (79 files / 18 queries), lint/format and CSS-only modification/restoration (155.96s) pass. Existing screenshots and the 3% tolerance are unchanged. Nine CSS-order warnings and a dependency's punycode deprecation remain; the warm build emits no slow-query warnings. Cold category-query profiling remains separate.
 - [ ] Verify these changes in hosted CI and deployment; current local results do not certify either.
-- [ ] Next separate category: systematic image descriptions/validation after CSS acceptance. No images changed during this investigation; the platform cache correction remains tracked above.
+- [x] Systematic image descriptions/validation completed after CSS acceptance; current results are recorded in the image accessibility section above.
 
 ## CodeQL and regression-test cleanup — 2026-10-08
 

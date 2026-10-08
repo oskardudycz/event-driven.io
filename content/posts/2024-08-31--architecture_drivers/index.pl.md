@@ -6,7 +6,7 @@ author: oskar dudycz
 useDefaultLangCanonical: true
 ---
 
-![](2024-08-31-cover.png)
+![A Formula One car navigates a city street circuit, illustrating architectural constraints and drivers.](2024-08-31-cover.png)
 
 **I don't feel like an authority or an expert. I prefer to think about myself as a practitioner.** Our industry is filled with self-proclaimed experts; we need more doers. 
 

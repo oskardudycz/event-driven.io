@@ -9,5 +9,5 @@ export default defineConfig({
       babel: { presets: [['@babel/preset-react', { runtime: 'automatic' }]] },
     }),
   ],
-  test: { include: ['tests/**/*.test.tsx', 'tests/visual.test.js'] },
+  test: { include: ['tests/**/*.test.tsx'], clearMocks: true },
 });

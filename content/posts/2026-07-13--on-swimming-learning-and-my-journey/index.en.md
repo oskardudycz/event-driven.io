@@ -14,7 +14,7 @@ If this story were written in Fakt, Bild, or Sun, it could have been titled:
 
 That’d be almost true about what has happened to me. Almost would already be a lot for Fakt, Bild or Sun. Now, let’s go with the full story.
 
-![](2026-07-13-cover.jpg)
+![A comic shows a swimmer enjoying winning before discovering there are more levels of competition ahead.](2026-07-13-cover.jpg)
 
 I’m a weird type of guy, I don’t have a driving license. And neither did I have it. I learned to ride a bike when I was 9 years old and got it for my First Communion. And I didn’t learn to swim till I was 35. Yes, that happened 6 years ago.
 
@@ -112,7 +112,7 @@ Should you also swim? Well, maybe. You definitely should do some exercises if yo
 
 Why did I write this article? A bit to brag, as I’m happy I made it.
 
-![](2026-07-13-after_competition.jpg)
+![Oskar Dudycz after an open-water swimming competition, wearing his finisher's medal.](2026-07-13-after_competition.jpg)
 
 Brag about being 53 out of 59 after 6 years of training? Seems so! You need to cherish small successes that, from the right perspective, appear to be big ones.
 

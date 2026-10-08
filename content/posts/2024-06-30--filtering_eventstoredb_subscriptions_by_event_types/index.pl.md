@@ -6,7 +6,7 @@ author: oskar dudycz
 useDefaultLangCanonical: true
 ---
 
-![](2024-06-30-cover.png)
+![EventStoreDB beside a complex regular-expression joke captioned “RegEx be like.”](2024-06-30-cover.png)
 
 **Regular expressions are one of the classic examples of hate and hate relationships.** Yes, it's not a typo; hate and hate. Do you know anyone who loves or knows how to write moderately complex regex? And can they keep their skill for longer than two weeks without forgetting how to do it?
 

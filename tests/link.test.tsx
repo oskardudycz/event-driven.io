@@ -1,7 +1,7 @@
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { load } from 'cheerio';
-import { beforeEach, expect, test, vi } from 'vitest';
+import { expect, test, vi } from 'vitest';
 
 const routers = vi.hoisted(() => ({ internal: vi.fn(), localized: vi.fn() }));
 
@@ -22,8 +22,6 @@ vi.mock('gatsby-plugin-react-i18next', () => ({
 }));
 
 import { Link } from '../src/components/Link/index.js';
-
-beforeEach(() => vi.clearAllMocks());
 
 test.each([
   'https://example.com/article?source=blog#heading',

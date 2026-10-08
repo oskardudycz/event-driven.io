@@ -55,11 +55,11 @@ Right.
 
 We could visualise what we discovered in the following way:
 
-![](./em01.jpg)
+![Example Mapping: a guest tries to check out without having prepaid; examples, rules, the checkout command, rejected payment and open questions are recorded together.](./em01.jpg)
 
 Now, this generated another flow for us. We have a new feature we weren't aware of: the guest's stay payment registration. Let's try to start this time from the visualisation.
 
-![](./em02.jpg)
+![Example Mapping: register a payment of 300 euros for the guest's stay and record the payment event.](./em02.jpg)
 
 It's the one Oskar pays for his stay, because he wants to check out but didn't pay upfront. The payment is registered, and we can try checking out again. Sounds fine, but we should ask whether there are any rules for payments. It may appear that:
 
@@ -67,11 +67,11 @@ It's the one Oskar pays for his stay, because he wants to check out but didn't p
 > - Only guests with a valid credit card can pay with it for their stay,
 > - Guests paying in cash need to hand it over before accepting the payment.
 
-![](./em03.jpg)
+![Example Mapping connects payment registration to the business rules needed before a guest can check out.](./em03.jpg)
 
 And hey, we just found out new business rules, let's put them on the board and update our flow to be more precise and reflect our scenario by adding a note that this scenario represents a guest paying with a credit card.
 
-![](./em05.jpg)
+![Example Mapping refines payment rules for a guest paying by credit card before checkout.](./em05.jpg)
 
 Now, what if the payment fails? Can it fail? Let's ask the business!
 
@@ -87,7 +87,7 @@ What if the guest doesn't have cash? 🤔
 
 Here's the updated flow. The one where Oskar pays for his entire stay with a credit card, but the Internet is down, and he doesn't have cash.
 
-![](./em04.jpg)
+![Example Mapping explores a failed card payment when the internet is unavailable and the guest has no cash.](./em04.jpg)
 
 Now, we found out:
 - **A new outcome**, failed payment,
@@ -100,7 +100,7 @@ How would the authorisation look? How should we register a delayed charge?
 
 The flow will look like:
 
-![](./em06.jpg)
+![Example Mapping adds a shift manager's authorisation for checkout with an unsettled balance and a delayed charge.](./em06.jpg)
 
 And that's precisely how the Example Mapping session looks like. It’s a structured conversation format created by [Matt Wynne](https://mattwynne.net/about). You take a user story, gather a small group (usually a developer, tester, and someone from the business side), and spend around 25-30 minutes breaking it down together.
 
@@ -112,7 +112,7 @@ You don’t need a big setup, a huge ceremon, you don't need sticky notes, you c
 
 **Then:** Based on business rules, we get a specific outcome.
 
-![](./em07.jpg)
+![Example Mapping connects Given examples, When commands, business-rule verification and Then outcomes, with open questions noted separately.](./em07.jpg)
 
 Business people don't need to give them to you in such form. You can use the interview as I showed above and note it on your own, while you're discussing stuff. It's also a nice way to collaborate and visualise your discussions.
 

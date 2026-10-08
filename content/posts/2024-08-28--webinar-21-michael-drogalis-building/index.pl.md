@@ -23,7 +23,7 @@ What’s so special about building a product that mimics your production traffic
 
 [
 
-![](image-2.png)Michael Drogalis
+![Michael Drogalis with a cat on his shoulder.](image-2.png)Michael Drogalis
 
 Week 1: I said I'd do what?!
 
@@ -45,7 +45,7 @@ Big KUDOS to Michael for being so open on his journey and sharing all those insi
 
 **Follow Michael on substack; he’s sharing his insights every week:**
 
-[![](image-2.png)Michael Drogalis
+[![Michael Drogalis with a cat on his shoulder.](image-2.png)Michael Drogalis
 
 Weekly experience report as I bootstrap http://shadowtraffic.io from day 1.
 

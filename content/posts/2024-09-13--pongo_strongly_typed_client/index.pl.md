@@ -6,7 +6,7 @@ author: oskar dudycz
 useDefaultLangCanonical: true
 ---
 
-![](2024-09-13-cover.png)
+![A Dalmatian beside the PostgreSQL logo, representing Pongo's strongly typed client.](2024-09-13-cover.png)
 
 **When you think upfront and want to make things right, there's an interesting feedback loop. Quite often, things start to click, often in a surprising way.**
 

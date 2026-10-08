@@ -8,7 +8,7 @@ redirectFrom: /whole-architecture-weekly-content/
 
 **Hi, the only constant in the world is change. Seven months ago, I made a big change and [made the Architecture Weekly a paid newsletter](/en/architecture-weekly-189-mastering/). Now, I have decided to make it fully free.**
 
-![](2025-03-17-cover.jpg)
+![A farmer says, “It ain't much, but it's honest work.”](2025-03-17-cover.jpg)
 
 What’s more, I made all past content available for free! **You can read all past articles now:**
 

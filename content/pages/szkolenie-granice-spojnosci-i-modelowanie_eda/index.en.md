@@ -16,7 +16,7 @@ You'll also see how to use AI as a modelling partner: not just to generate the i
 
 **No slides with abstract examples.** Instead, you'll work in groups on complete problems and on running code, where we'll check the consequences of modelling and implementation decisions. We'll work on a complex example rather than a simplified one from a tutorial, because the problems we're talking about never show up in simple ones.
 
-![](./workshop.jpg)
+![Participants attend a software modelling workshop in a classroom.](./workshop.jpg)
 
 **29 and 30 October 2026, online, in Polish, PLN 2,000 + VAT.**
 
@@ -64,7 +64,7 @@ The workshop is for developers, tech leads and architects who design business lo
 
 **[![Sign up!](./sign-up.png)](https://forms.gle/YxfhZ9wUQetX9iue8)**
 
-![](./workshop-online.png)
+![An online modelling workshop with participants arranging commands and events on a shared Miro board.](./workshop-online.png)
 
 ## Agenda
 

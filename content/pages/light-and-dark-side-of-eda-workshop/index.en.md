@@ -20,7 +20,7 @@ Throughout the workshop, we work on a single distributed business process, from 
 
 Along the way, we'll also look at where GenAI helps with modelling and implementation, and where its output needs careful checking.
 
-![](./workshop.jpg)
+![Participants discuss a software model with the trainer at a whiteboard.](./workshop.jpg)
 
 **23 and 24 November, and 30 November and 1 December 2026, online, in English, EUR 699.**
 
@@ -69,7 +69,7 @@ The workshop is for developers, tech leads and architects who design event-drive
 
 **[![Sign up!](./sign-up.png)](https://forms.gle/uMPEBpKjeP7FtN4k6)**
 
-![](./workshop-online.png)
+![An online EventStorming workshop with participants arranging commands and events on a shared Miro board.](./workshop-online.png)
 
 ## Agenda
 

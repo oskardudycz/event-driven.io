@@ -17,7 +17,7 @@ Welcome to the new week!
 
 **That’s why I wanted to discuss Frontend Architecture, and I’m happy that our special guest, [Tomasz Ducin](https://ducin.dev/), agreed to discuss the current stat of the art complexity, where to draw lines, and all that jazz.**
 
-![](image-2.jpg)
+![Luca Mezzalira, guest discussing frontend and backend architecture.](image-2.jpg)
 
 **I wanted to invite Tomasz for a long time, as he’s one of the best people I know, specialising in Frontend and Architecture.** He’s Independent Consultant, Architect, Developer, Speaker, Trainer. Expertise in Web Technologies & Software Architecture. Angular Devtools Contributor. [Egghead Instructor](https://egghead.io/q/resources-by-tomasz-ducin).
 

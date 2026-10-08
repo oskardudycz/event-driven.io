@@ -18,7 +18,7 @@ However, connection pooling isn't always ideal, especially in serverless archite
 
 You start with a simple architecture. The backend is written in Node.js and PostgreSQL database. The naive version of your database access code could look as:
 
-![](2024-08-05-cover.png)
+![TypeScript opens a PostgreSQL connection for each request, inserts a product and closes the connection.](2024-08-05-cover.png)
 
 **Each HTTP request opens a new database connection.** This can work well for local development or small deployment, but setup quickly hits a wall as your user base grows. Users start complaining about slow load times, and your database server gets overwhelmed by too many open connections.
 
@@ -44,7 +44,7 @@ Here's a breakdown of how connection pooling operates in a technical environment
 
 Do you prefer visuals? There you have it!
 
-![](image-2.png)
+![Connection pool lifecycle: initialise at startup, lend connections to requests, execute queries and return connections to the pool; adjust pool size dynamically.](image-2.png)
 
 Connection pooling can significantly enhance performance and reduce latency by eliminating the latency added by setting up a connection each time.
 
@@ -66,7 +66,7 @@ Each mature development environment has a built-in connection pooling. For insta
 
 We’ll use the last one to address our connection management-related performance bottlenecks. The code could look as follows:
 
-![](image-3.png)
+![TypeScript borrows a PostgreSQL client from a pool and releases it after inserting a product.](image-3.png)
 
 It’s a simple code change, but instead of creating a new connection on each request, we’re asking the connection pool to “borrow” us a connection.
 
@@ -118,7 +118,7 @@ Connection leaks are one of the most common issues. They occur when connections 
 
 Of course, we should cut the number of things developers need to remember. That’s why it’s worth including such cleanup in some common wrappers, reducing the likelihood of misuse. Our updated helper can look as follows:
 
-![](image-4.png)
+![A TypeScript helper wraps borrowed PostgreSQL connections in cleanup logic so they are released after use.](image-4.png)
 
 But even with that, we should continuously monitor our connection usage to identify if we don’t have potential connection leaks.
 
@@ -206,7 +206,7 @@ sudo service pgbouncer start
 
 **Now, we need to modify our application. We cannot use the application level pool anymore.** If we did, then they would clash with each other. If we’re using the connection pool proxy, we must create a client each time and let the proxy manage connections internally. The updated code would look like this:
 
-![](image-5.png)
+![A TypeScript client connects through a PostgreSQL proxy, which manages the shared connection pool.](image-5.png)
 
 Same for other services. Each can just use the native connectivity without being aware of the pooling.
 
@@ -244,7 +244,7 @@ RDS Proxy is a man in the middle between your application and the database, mana
 
 To set it up, you must have RDS Proxy ready and ensure that your AWS Lambda has access to it (so if IAM Role has proper setup). After that, we just need to adjust the setup to be:
 
-![](image-6.png)
+![TypeScript configures a PostgreSQL connection pool to use the AWS RDS Proxy endpoint and authentication.](image-6.png)
 
 Of course, we still need to monitor it to ensure that our RDS Proxy settings match our needs.
 

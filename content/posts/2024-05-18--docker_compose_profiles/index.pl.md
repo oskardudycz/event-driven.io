@@ -6,7 +6,7 @@ author: oskar dudycz
 useDefaultLangCanonical: true
 ---
 
-![](2024-05-18-cover.png)
+![Different user profiles beside the Docker logo.](2024-05-18-cover.png)
 
 **[Erik Shafer](https://www.event-sourcing.dev/about/) asked me on the [Emmett Discord](https://discord.gg/fTpqUTMmVa) if I could provide a sample of how to run the WebApi application using [Emmett](https://event-driven-io.github.io/emmett/getting-started.html).** Of course, I said: _sure will!_ I already had [WebApi sample in the repository](https://github.com/event-driven-io/emmett/tree/main/samples/webApi/expressjs-with-esdb) I also explained here [How to build and push Docker image with GitHub actions?](/pl/how_to_buid_and_push_docker_image_with_github_actions/). Easy peasy, then, right?
 

@@ -34,7 +34,7 @@ Hot Spots are those bright red sticky notes that mark areas of uncertainty or di
 
 Notes, typically white, capture assumptions, decisions, or context discovered during the session.
 
-![](image-2.png)
+![A pack of Post-it notes labelled “Hotspot.”](image-2.png)
 
 Source: https://github.com/ddd-crew/eventstorming-glossary-cheat-sheet?tab=readme-ov-file#core-concepts
 
