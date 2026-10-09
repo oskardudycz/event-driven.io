@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ES2024",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "erasableSyntaxOnly": true,
+    "types": ["node", "react", "react-dom"],
+    "verbatimModuleSyntax": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "site/**/*.mts",
+    "content/meta/config.ts",
+    "gatsby-browser.tsx",
+    "gatsby-ssr.tsx",
+    "scripts/**/*.mts",
+    "import/**/*.mts",
+    "plugins/**/*.mts",
+    "tests/**/*.mts",
+    "tests/**/*.tsx",
+    "tests/browser/**/*.ts",
+    "playwright.config.ts",
+    "vitest.config.ts"
+  ],
+  "exclude": ["node_modules", "public", ".cache", "tests/fixtures"]
+}

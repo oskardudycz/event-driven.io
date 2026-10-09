@@ -2,7 +2,7 @@
 
 ## Scope and status
 
-This review began as source/configuration research. The owner subsequently authorized evidence-led indexing/content repairs and completion of the safe 404/document-resource draft, tracked in [the indexing review](google-indexing-review.md), and now requests completion of the CSS correction and removal of custom hashing. No mass module renaming or TypeScript conversion has started. Current CSS implementation and acceptance are recorded below; earlier checkpoints describe the evidence available at their dates.
+This review began as source/configuration research. The owner subsequently authorized evidence-led indexing/content repairs and completion of the safe 404/document-resource draft, tracked in [the indexing review](google-indexing-review.md), and now requests completion of the CSS correction and removal of custom hashing. The owner has now authorized the coordinated TypeScript/ESM migration; its implementation and validation are tracked at the top of [plan.md](../plan.md) and [todo.md](../todo.md). The earlier no-conversion checkpoint is historical. Current CSS implementation and acceptance are recorded below; earlier checkpoints describe the evidence available at their dates.
 
 The attempted `style-order.ts` entry, every blanket page import and its completeness assertion are removed. That approach forced unrelated dependencies and was not an acceptable root-cause fix. The root `AGENTS.md` records this constraint.
 

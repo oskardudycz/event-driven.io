@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { load } from 'cheerio';
 import { expect, test, vi } from 'vitest';
 import ReadingList from '../src/components/List/ReadingList';
-import List from '../src/components/List/List';
+import List from '../src/components/List/List.tsx';
 
 vi.mock('../src/components/Link', () => ({
   Link: ({ to, ...props }: { to: string }) => <a {...props} href={to} />,

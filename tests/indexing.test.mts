@@ -3,14 +3,12 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, mkdirSync, writeFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'node:test';
-import { createRequire } from 'node:module';
 import yaml from 'js-yaml';
 import cheerio from 'cheerio';
 import { verifyIndexingBuild, siteOrigin } from '../scripts/indexing-build-verifier.mts';
 import { parseAllRedirects } from 'netlify-redirect-parser';
 
-const require = createRequire(import.meta.url);
-const { collectBuildContract } = require('../scripts/build-contract.js');
+import { collectBuildContract } from '../scripts/build-contract.mts';
 
 function linkDestinations(html: string): Set<string> {
   const $ = cheerio.load(html);
@@ -86,7 +84,7 @@ test('canonical validation catches mismatched sitemap destinations and broken al
 });
 
 test('published page/post collisions fail instead of silently changing the route canonical', async () => {
-  const { createPages } = await import('../gatsby-node.mjs');
+  const { createPages } = await import('../site/node.mts');
   const node = (source: string) => ({
     node: {
       id: source,
@@ -95,15 +93,21 @@ test('published page/post collisions fail instead of silently changing the route
     },
   });
   await assert.rejects(
-    createPages({
-      actions: { createPage: () => {}, createRedirect: () => {} },
-      graphql: async () => ({
-        data: {
-          searchCovers: { nodes: [] },
-          allMarkdownRemark: { edges: [node('posts'), node('pages')] },
-        },
-      }),
-    }),
+    Promise.resolve(
+      createPages(
+        {
+          actions: { createPage: () => {}, createRedirect: () => {} },
+          graphql: async () => ({
+            data: {
+              searchCovers: { nodes: [] },
+              allMarkdownRemark: { edges: [node('posts'), node('pages')] },
+            },
+          }),
+        } as unknown as Parameters<typeof createPages>[0],
+        { plugins: [] },
+        () => {},
+      ),
+    ),
     /Multiple published documents claim \/en\/collision\//,
   );
 });

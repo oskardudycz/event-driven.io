@@ -21,7 +21,7 @@ vi.mock('gatsby-plugin-react-i18next', () => ({
   ),
 }));
 
-import { Link } from '../src/components/Link/index.js';
+import { Link } from '../src/components/Link/index.tsx';
 
 test.each([
   'https://example.com/article?source=blog#heading',

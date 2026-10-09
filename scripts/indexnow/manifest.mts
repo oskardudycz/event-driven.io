@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { readFile, readdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import cheerio from 'cheerio';
-import config from '../../content/meta/config.js';
+import config from '../../content/meta/config.ts';
 
 export const origin = config.siteUrl;
 export type Manifest = { version: 1; origin: string; pages: Record<string, string> };

@@ -1,5 +1,4 @@
 import js from '@eslint/js';
-import babelParser from '@babel/eslint-parser';
 import tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import react from 'eslint-plugin-react';
@@ -26,10 +25,9 @@ export default [
   {
     files: ['**/*.{js,jsx,mjs,cjs,ts,tsx,mts}'],
     languageOptions: {
-      parser: babelParser,
+      parser: tsParser,
       parserOptions: {
-        requireConfigFile: false,
-        babelOptions: { babelrc: false, configFile: false, parserOpts: { plugins: ['jsx'] } },
+        ecmaFeatures: { jsx: true },
       },
       ecmaVersion: 'latest',
       globals: { ...globals.node, ...globals.browser },
@@ -57,17 +55,13 @@ export default [
     languageOptions: { parser: tsParser },
     plugins: { '@typescript-eslint': tsPlugin },
     rules: {
+      'no-undef': 'off',
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
       ],
     },
-  },
-  {
-    files: ['tests/browser/**/*.ts', 'playwright.config.ts'],
-    // TypeScript checks these files, including DOM types, through test:browser-types.
-    rules: { 'no-undef': 'off' },
   },
   { ...prettier, files: ['**/*.{js,jsx,mjs,cjs,ts,tsx,mts}'] },
 ];

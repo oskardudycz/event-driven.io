@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { readdir, readFile, rm } from 'node:fs/promises';
 import cheerio from 'cheerio';
 import { imageIssues, importedAlternative } from '../scripts/image-alternatives.mts';
-import importer from '../import/import-substack.js';
+import * as importer from '../import/import-substack.mts';
 import { ESLint } from 'eslint';
 
 test('Markdown images require descriptions, with explicit decorative exceptions and reference support', () => {
