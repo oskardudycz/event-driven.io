@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import type { Frontmatter } from '../../src/types/content.ts';
 
 export function readFrontmatter(source: string | undefined): Frontmatter {

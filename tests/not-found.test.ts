@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { readFileSync, existsSync } from 'node:fs';
-import cheerio from 'cheerio';
-import { parseAllRedirects } from 'netlify-redirect-parser';
+import * as cheerio from 'cheerio';
+import { builtRedirects } from './helpers/redirects.ts';
 
 for (const [file, lang] of [
   ['public/404.html', 'en'],
@@ -33,12 +33,7 @@ void test('fallback rewrites preserve HTTP 404 and follow all specific redirects
     .split('\n')
     .map((line) => line.trim().replace(/\s+/g, ' '))
     .filter((line) => line && !line.startsWith('#'));
-  const { redirects, errors } = await parseAllRedirects({
-    redirectsFiles: ['public/_redirects'],
-    netlifyConfigPath: 'netlify.toml',
-    minimal: true,
-  });
-  assert.deepEqual(errors, []);
+  const redirects = await builtRedirects();
   assert.deepEqual(
     redirects
       .slice(-3)

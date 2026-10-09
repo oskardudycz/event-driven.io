@@ -1,5 +1,9 @@
 # SEO, discoverability, and services plan
 
+## Complete remaining dependency upgrades — 2026-10-09
+
+Continue the owner-requested latest-package upgrade rather than stop at an inventory. Research and migrate remaining utilities/import APIs, matched browser/test tooling, localization, CSS transforms and manual tools in compatible groups. Test actual behavior before retaining an older version; peer ranges alone are not evidence of failure. Evaluate Microsoft's documented TypeScript 7 checker alongside the TypeScript 6 compiler API required by Gatsby/ESLint and project tools. Preserve reviewed screenshots, routes, content, language selection and the deferred contact page behavior. Record concrete blockers separately from completed upgrades and distinguish local acceptance from hosted CI/deployment.
+
 ## Coordinated TypeScript migration — 2026-10-09
 
 The owner now authorizes the repository-wide migration previously deferred. Migrate application components/pages/layouts to .tsx and plain browser modules to .ts; migrate Node scripts/importers/tests/shared build helpers to native ESM .ts with explicit package scopes. Preserve content, CSS ownership, routes, publication identities and all existing assertions. Replace CommonJS imports/exports with native imports/exports, explicit Node-runtime extensions and import.meta.dirname/main. Use Gatsby/React and domain types, narrow external values at boundaries, and run an explicit no-emit TypeScript gate in CI (bundler resolution for Gatsby/Vite, NodeNext for native scripts); do not use ts-nocheck or blanket any declarations to turn renames into a nominal migration.

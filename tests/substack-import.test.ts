@@ -1,11 +1,11 @@
 import type { Node } from 'unist';
-import type { Root, Link } from 'mdast';
+import type { Link } from 'mdast';
 import { readFrontmatter } from './helpers/frontmatter.ts';
 import sharp from 'sharp';
 import * as articleContent from '../import/article-content.ts';
 import * as markdownLabels from '../scripts/markdown-label.ts';
-import remark from 'remark';
-import visitMarkdown from 'unist-util-visit';
+import { remark } from 'remark';
+import { visit as visitMarkdown } from 'unist-util-visit';
 import { temporaryDirectory } from './helpers/temporary-directory.ts';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
@@ -666,7 +666,7 @@ void test('link encoding keeps HTML attribute delimiters inside one Markdown des
     '/en/article/"><img src=x onerror=attack()>?value=a&other=b#part';
   const title = 'A "quoted" <img onerror=attack()> title';
   const markdown = `[Read](${markdownLinkDestination(destination, source)}${markdownLinkTitle(title)})`;
-  const tree = remark().parse(markdown) as Root;
+  const tree = remark().parse(markdown);
   const paragraph = tree.children[0];
   assert.ok(paragraph && 'children' in paragraph);
   const nodes = paragraph.children;

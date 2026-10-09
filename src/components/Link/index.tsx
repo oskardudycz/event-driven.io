@@ -14,6 +14,11 @@ export type LinkProps = Omit<
 const LocalizedLink = PluginLink as React.ForwardRefExoticComponent<
   LinkProps & React.RefAttributes<HTMLAnchorElement>
 >;
+// Gatsby forwards ref to its anchor, although its published type still describes
+// the historical class component. Keep that runtime contract at this boundary.
+const InternalLink = GatsbyLink as React.ComponentType<
+  LinkProps & React.RefAttributes<HTMLAnchorElement>
+>;
 const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
   (
     {
@@ -46,7 +51,7 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     };
     // Already localized destinations must not receive a second language prefix.
     if (/^\/(?:en|pl)(?:[/?#]|$)/i.test(to)) {
-      return <GatsbyLink {...rest} {...routing} innerRef={ref} to={to} />;
+      return <InternalLink {...rest} {...routing} ref={ref} to={to} />;
     }
     return (
       <LocalizedLink

@@ -1,71 +1,57 @@
-import type { TranslatedPageProps } from '../types/content.ts';
+import type { SitePageProps } from '../types/content.ts';
 import * as styles from './Index.module.css';
-import React from 'react';
+import React, { useRef } from 'react';
 import { graphql } from 'gatsby';
 
 import Blog from '../components/Blog/index.ts';
 import Hero from '../components/Hero/index.ts';
 import { createHead } from '../components/Seo/index.ts';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-class IndexPage extends React.Component<
-  TranslatedPageProps<'posts' | 'bgDesktop' | 'bgTablet' | 'bgMobile' | 'site'>
-> {
-  separator = React.createRef<HTMLElement>();
+export default function IndexPage({
+  data,
+}: SitePageProps<'posts' | 'bgDesktop' | 'bgTablet' | 'bgMobile' | 'site'>) {
+  const { t } = useTranslation();
+  const separator = useRef<HTMLElement>(null);
+  const scrollToContent = () => {
+    separator.current?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  };
+  const {
+    posts: { edges: posts = [] },
+    bgDesktop: {
+      resize: { src: desktop },
+    },
+    bgTablet: {
+      resize: { src: tablet },
+    },
+    bgMobile: {
+      resize: { src: mobile },
+    },
+  } = data;
 
-  scrollToContent = () => {
-    this.separator.current?.scrollIntoView({
-      block: 'start',
-      behavior: 'smooth',
-    });
+  const backgrounds = {
+    desktop,
+    tablet,
+    mobile,
   };
 
-  render() {
-    const {
-      t,
-      data: {
-        posts: { edges: posts = [] },
-        bgDesktop: {
-          resize: { src: desktop },
-        },
-        bgTablet: {
-          resize: { src: tablet },
-        },
-        bgMobile: {
-          resize: { src: mobile },
-        },
-      },
-    } = this.props;
+  return (
+    <React.Fragment>
+      <Hero scrollToContent={scrollToContent} backgrounds={backgrounds} />
 
-    const backgrounds = {
-      desktop,
-      tablet,
-      mobile,
-    };
-
-    return (
-      <React.Fragment>
-        <Hero
-          scrollToContent={this.scrollToContent}
-          backgrounds={backgrounds}
-        />
-
-        <section
-          className={`latestArticles ${styles.latestArticles}`}
-          id="latest-articles"
-          ref={this.separator}
-        >
-          <header className={`sectionHeader ${styles.sectionHeader}`}>
-            <h2 className={styles.elementH2}>{t('blog.latestTitle')}</h2>
-          </header>
-          <Blog posts={posts} browseAllPath="/articles/" compactTop />
-        </section>
-      </React.Fragment>
-    );
-  }
+      <section
+        className={`latestArticles ${styles.latestArticles}`}
+        id="latest-articles"
+        ref={separator}
+      >
+        <header className={`sectionHeader ${styles.sectionHeader}`}>
+          <h2 className={styles.elementH2}>{t('blog.latestTitle')}</h2>
+        </header>
+        <Blog posts={posts} browseAllPath="/articles/" compactTop />
+      </section>
+    </React.Fragment>
+  );
 }
-
-export default withTranslation()(IndexPage);
 
 export const query = graphql`
   query IndexQuery($langKey: String!, $language: String!) {

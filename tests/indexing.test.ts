@@ -10,13 +10,13 @@ import {
 } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'node:test';
-import yaml from 'js-yaml';
-import cheerio from 'cheerio';
+import * as yaml from 'js-yaml';
+import * as cheerio from 'cheerio';
 import {
   verifyIndexingBuild,
   siteOrigin,
 } from '../scripts/indexing-build-verifier.ts';
-import { parseAllRedirects } from 'netlify-redirect-parser';
+import { builtRedirects } from './helpers/redirects.ts';
 
 import { collectBuildContract } from '../scripts/build-contract.ts';
 
@@ -142,12 +142,7 @@ void test('published page/post collisions fail instead of silently changing the 
 });
 
 void test('known legacy category queries use literal query conditions, with 404 fallbacks last', async () => {
-  const { redirects, errors } = await parseAllRedirects({
-    redirectsFiles: ['public/_redirects'],
-    netlifyConfigPath: 'netlify.toml',
-    minimal: true,
-  });
-  assert.deepEqual(errors, []);
+  const redirects = await builtRedirects();
   const routes = new Set(collectBuildContract('public').routes);
   const queries = redirects.filter((rule) => rule.query.category);
   assert.equal(queries.length, 24);

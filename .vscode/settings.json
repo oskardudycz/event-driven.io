@@ -36,10 +36,10 @@
       "filePatterns": ["**/*.test.ts"]
     }
   ],
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true,
   "[typescriptreact]": {
     "editor.formatOnSave": false
   },
-  "npm.packageManager": "yarn"
+  "npm.packageManager": "yarn",
+  "js/ts.experimental.useTsgo": true,
+  "js/ts.tsdk.path": "./node_modules/@typescript/native"
 }

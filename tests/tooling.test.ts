@@ -102,3 +102,44 @@ void test('lint-staged formats code, preserves article formatting and blocks lin
     /Describe this image/,
   );
 });
+
+void test('typed linting resolves the project when an editor opens a source subdirectory', async () => {
+  const { ESLint } = await import('eslint');
+  for (const directory of ['src', 'src/components/Video']) {
+    const eslint = new ESLint({ cwd: resolve(directory) });
+    const [result] = await eslint.lintFiles([
+      resolve('src/components/Video/index.ts'),
+    ]);
+    assert.ok(result, `No lint result from ${directory}`);
+    assert.equal(result.errorCount, 0, JSON.stringify(result.messages));
+  }
+});
+
+void test('JSX linting rejects obsolete iframe attributes and accepts CSS styling', async () => {
+  const { ESLint } = await import('eslint');
+  const eslint = new ESLint();
+  const source = (attributes: string) =>
+    `import React from 'react'; export const Frame = () => <iframe title="Demo" ${attributes} />;`;
+  const options = { filePath: 'src/components/Video/Video.tsx' };
+  const [invalid] = await eslint.lintText(
+    source('frameBorder="0" scrolling="no"'),
+    options,
+  );
+  assert.ok(invalid);
+  assert.equal(
+    invalid.messages.filter(
+      (message) => message.ruleId === 'react/forbid-dom-props',
+    ).length,
+    2,
+  );
+  const [valid] = await eslint.lintText(
+    source('style={{ border: 0 }}'),
+    options,
+  );
+  assert.ok(valid);
+  assert.ok(
+    !valid.messages.some(
+      (message) => message.ruleId === 'react/forbid-dom-props',
+    ),
+  );
+});

@@ -51,8 +51,6 @@ const Substack = () => {
           height="320"
           title="Subscribe to Architecture Weekly"
           loading="lazy"
-          frameBorder="0"
-          scrolling="no"
           className={styles.elementIframe}
         ></iframe>
       </div>

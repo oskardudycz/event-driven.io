@@ -6,6 +6,7 @@ import globals from 'globals';
 import react from 'eslint-plugin-react';
 import a11y from 'eslint-plugin-jsx-a11y';
 import hooks from 'eslint-plugin-react-hooks';
+import React from 'react';
 
 export default defineConfig([
   {
@@ -38,6 +39,7 @@ export default defineConfig([
 
       parserOptions: {
         project: './tsconfig.eslint.json',
+        tsconfigRootDir: import.meta.dirname,
       },
     },
 
@@ -76,11 +78,16 @@ export default defineConfig([
     languageOptions: { globals: globals.browser },
     plugins: { react, 'react-hooks': hooks, 'jsx-a11y': a11y },
     settings: {
-      react: { version: 'detect' },
+      react: { version: React.version },
       'jsx-a11y': { components: { GatsbyImage: 'img', StaticImage: 'img' } },
     },
     rules: {
       'jsx-a11y/alt-text': 'error',
+      'react/no-unknown-property': 'error',
+      'react/forbid-dom-props': [
+        'error',
+        { forbid: ['frameBorder', 'scrolling', 'allowTransparency'] },
+      ],
       'react/jsx-uses-react': 'error',
       'react/jsx-uses-vars': 'error',
       'react-hooks/rules-of-hooks': 'error',

@@ -1,5 +1,11 @@
 # SEO, content, and platform progress
 
+## Remaining dependency upgrade execution — 2026-10-09
+
+- [ ] Upgrade and adapt remaining direct packages; verify latest registry versions and document actual compatibility blockers.
+- [ ] Verify frozen install, smoke, strict types, lint/staging, production output, full tests and unchanged browser screenshots; update the dependency inventory and manual commands.
+- [ ] Check hosted CI and deployed behavior after publication (separate from local acceptance).
+
 Last updated: 2026-10-09
 
 This is the live checklist for [plan.md](./plan.md). Completed categories are consolidated here; dated research and earlier timings remain in the plan and linked reviews. A local pass, a hosted CI pass and a deployed check are separate evidence.

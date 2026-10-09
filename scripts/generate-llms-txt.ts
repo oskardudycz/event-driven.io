@@ -2,7 +2,7 @@ import type { Frontmatter } from '../src/types/content.ts';
 type Entry = { title: string; url: string; description: string };
 import fs from 'fs';
 import path from 'path';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import { markdownLabel } from './markdown-label.ts';
 
 const projectRoot = path.resolve(import.meta.dirname, '..');
