@@ -259,7 +259,10 @@ test('Gatsby Head replaces metadata during navigation and keeps language-specifi
   await page.waitForURL(`**${articlePath}`);
   await page.waitForFunction(() => {
     const script = document.querySelector('head script[type="application/ld+json"]');
-    return script && JSON.parse(script.textContent)['@type'] === 'BlogPosting';
+    return (
+      script &&
+      (JSON.parse(script.textContent) as Record<string, unknown>)['@type'] === 'BlogPosting'
+    );
   });
   await expect(page.locator('head link[rel="canonical"]')).toHaveCount(1);
   await expect(page.locator('head link[rel="canonical"]')).toHaveAttribute(

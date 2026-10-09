@@ -52,10 +52,21 @@ export default [
   },
   {
     files: ['**/*.{ts,tsx,mts}'],
-    languageOptions: { parser: tsParser },
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: { project: './tsconfig.json', tsconfigRootDir: import.meta.dirname },
+    },
     plugins: { '@typescript-eslint': tsPlugin },
     rules: {
+      ...tsPlugin.configs['recommended-type-checked'].rules,
       'no-undef': 'off',
+      '@typescript-eslint/no-misused-promises': 'off',
+      '@typescript-eslint/prefer-namespace-keyword': 'off',
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        { prefer: 'type-imports', fixStyle: 'separate-type-imports' },
+      ],
+      '@typescript-eslint/no-import-type-side-effects': 'error',
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',

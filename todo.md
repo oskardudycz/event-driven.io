@@ -6,6 +6,7 @@ This is the live checklist for [plan.md](./plan.md). Completed categories are co
 
 ## Current work
 
+- [ ] Align TypeScript/ESLint/Prettier/editor tooling with Pongo; use ordinary .ts/.tsx sources with explicit ESM package scopes and document Gatsby's tested root-ESM limitation.
 - [ ] Complete the authorized coordinated TypeScript/native-ESM migration across application, Node tooling/importers, local plugins and tests, respecting documented Gatsby/configuration loader boundaries.
 - [ ] Add meaningful no-emit type-checking to commands/CI and update imports, component paths, cache inputs, fixtures and README together.
 - [ ] Validate types/lint/smoke/build/full tests/browser screenshots; preserve existing content, route/feed/sitemap contracts and screenshot tolerance.
@@ -77,6 +78,8 @@ This is the live checklist for [plan.md](./plan.md). Completed categories are co
 - [ ] Re-run external structured-data validators and crawler/CDN/WAF checks when deployed behavior changes.
 
 ## Next technical category
+
+- [ ] Consider Pongo's exactOptionalPropertyTypes and noUncheckedIndexedAccess as a separate stricter-typing pass; the combined diagnostic audit found 154 errors. Refine optional contracts and index guards rather than add blanket non-null assertions.
 
 - [ ] Repair the legacy generate-app-icons command: it calls npx sharp, but the sharp library has no CLI binary. Use its already declared library API in the next manual-tooling pass. This audit does not run the broken command or change icon assets.
 - [ ] Profile first-party font requests, runtime switching and fallback layout shifts; apply only measured improvements preserving final typography and Polish glyph coverage.

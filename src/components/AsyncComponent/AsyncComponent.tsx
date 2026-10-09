@@ -12,9 +12,11 @@ function asyncComponent<Props extends object>(
 
     componentDidMount() {
       if (!this.state.component) {
-        getComponent().then((component) => {
-          if (component) this.setState({ component });
-        });
+        getComponent()
+          .then((component) => {
+            if (component) this.setState({ component });
+          })
+          .catch((error: unknown) => console.error('Could not load component', error));
       }
     }
     render() {

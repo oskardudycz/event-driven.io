@@ -42,7 +42,7 @@ const absoluteUrl = (host: string, path?: string) =>
 // Head renders outside wrapPageElement. Use its explicit page context and a
 // fixed-language translator so parallel SSR and navigation cannot mix locales.
 const headI18n = i18next.createInstance();
-headI18n.init({ ...DEFAULT_OPTIONS.i18nextConfig, initImmediate: false });
+void headI18n.init({ ...DEFAULT_OPTIONS.i18nextConfig, initImmediate: false });
 
 export const createHead = <Data extends HeadData = HeadData>(options: HeadOptions<Data> = {}) =>
   function Head({ data, pageContext }: HeadProps<Data, Partial<SitePageContext>>) {

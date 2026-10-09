@@ -13,4 +13,5 @@ export type SearchDocument = {
 };
 export type SearchHit = Omit<SearchDocument, 'id' | 'date' | 'category'> &
   Partial<Pick<SearchDocument, 'id' | 'date'>> & { category?: string | string[]; terms: string[] };
-export type IndexedSearchResult = SearchResult & SearchDocument;
+export type IndexedSearchResult = Pick<SearchResult, 'score' | 'terms' | 'queryTerms' | 'match'> &
+  SearchDocument;

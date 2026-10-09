@@ -20,9 +20,13 @@ test('article Head emits the actual timestamp in both schema and Open Graph', ()
       ),
     );
   const $ = render(timestamp);
-  expect(JSON.parse($('#page-schema').text()).datePublished).toBe(timestamp);
+  expect((JSON.parse($('#page-schema').text()) as { datePublished: string }).datePublished).toBe(
+    timestamp,
+  );
   expect($('meta[property="article:published_time"]').attr('content')).toBe(timestamp);
   const legacy = render();
-  expect(JSON.parse(legacy('#page-schema').text()).datePublished).toBe('2022-03-16');
+  expect(
+    (JSON.parse(legacy('#page-schema').text()) as { datePublished: string }).datePublished,
+  ).toBe('2022-03-16');
   expect(() => render('2026-10-05T12:34:56')).toThrow(/publishedAt/);
 });
