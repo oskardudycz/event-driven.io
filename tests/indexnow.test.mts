@@ -1,8 +1,8 @@
+import { temporaryDirectory } from './helpers/temporary-directory.mts';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { readFileSync } from 'node:fs';
-import { mkdtemp, readFile, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
+import { readFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { restoreProductionBaseline } from '../scripts/indexnow.mts';
 import {
@@ -230,23 +230,19 @@ test('the static verification file contains the configured public key', () => {
   assert.match(settings.key, /^[a-zA-Z0-9-]{8,128}$/);
   assert.equal(readFileSync(`static/${settings.key}.txt`, 'utf8').trim(), settings.key);
 });
-test('expired acknowledgement caches use the previous deployment, while retained state avoids requests', async () => {
-  const directory = await mkdtemp(join(tmpdir(), 'indexnow-state-'));
+test('expired acknowledgement caches use the previous deployment, while retained state avoids requests', async (t) => {
+  const directory = temporaryDirectory(t, 'indexnow-state-');
   const file = join(directory, 'submitted.json');
-  try {
-    await restoreProductionBaseline(file, async () => Response.json(current));
-    assert.deepEqual(JSON.parse(await readFile(file, 'utf8')), current);
-    await restoreProductionBaseline(file, async () => {
-      throw new Error('Retained state should not fetch');
-    });
-    await rm(file);
-    await restoreProductionBaseline(file, async () => new Response('', { status: 404 }));
-    await assert.rejects(readFile(file), { code: 'ENOENT' });
-    await assert.rejects(
-      restoreProductionBaseline(file, async () => new Response('', { status: 500 })),
-    );
-    await assert.rejects(readFile(file), { code: 'ENOENT' });
-  } finally {
-    await rm(directory, { recursive: true, force: true });
-  }
+  await restoreProductionBaseline(file, async () => Response.json(current));
+  assert.deepEqual(JSON.parse(await readFile(file, 'utf8')), current);
+  await restoreProductionBaseline(file, async () => {
+    throw new Error('Retained state should not fetch');
+  });
+  await rm(file);
+  await restoreProductionBaseline(file, async () => new Response('', { status: 404 }));
+  await assert.rejects(readFile(file), { code: 'ENOENT' });
+  await assert.rejects(
+    restoreProductionBaseline(file, async () => new Response('', { status: 500 })),
+  );
+  await assert.rejects(readFile(file), { code: 'ENOENT' });
 });

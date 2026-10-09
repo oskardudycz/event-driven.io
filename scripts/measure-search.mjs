@@ -3,9 +3,6 @@ import { join } from 'node:path';
 import { chromium } from 'playwright';
 
 const manifest = JSON.parse(readFileSync('public/search-index/manifest.json'));
-const options =
-  readFileSync('src/search/options.mjs', 'utf8').replace(/export /g, '') +
-  '\nwindow.searchOptions = indexOptions;';
 const browser = await chromium.launch();
 const metrics = {};
 try {
@@ -15,8 +12,26 @@ try {
       const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
       const cdp = await page.context().newCDPSession(page);
       await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
-      await page.addScriptTag({ path: 'node_modules/minisearch/dist/umd/index.js' });
-      await page.addScriptTag({ content: options });
+      // Load the real options as a native browser module before measuring.
+      await page.route('https://search-profile.invalid/options.mjs', (route) =>
+        route.fulfill({ path: 'src/search/options.mjs', contentType: 'text/javascript' }),
+      );
+      await page.route('https://search-profile.invalid/minisearch.js', (route) =>
+        route.fulfill({
+          path: 'node_modules/minisearch/dist/umd/index.js',
+          contentType: 'text/javascript',
+        }),
+      );
+      await page.route('https://search-profile.invalid/', (route) =>
+        route.fulfill({
+          contentType: 'text/html',
+          body: `<script src="/minisearch.js"></script><script type="module">
+            import { indexOptions } from '/options.mjs';
+            window.searchOptions = indexOptions;
+          </script>`,
+        }),
+      );
+      await page.goto('https://search-profile.invalid/', { waitUntil: 'load' });
       await cdp.send('Performance.enable');
       await cdp.send('HeapProfiler.collectGarbage');
       const before = await cdp.send('Performance.getMetrics');

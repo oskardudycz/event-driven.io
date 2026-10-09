@@ -1,25 +1,27 @@
+import { parseArgs } from 'node:util';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import cheerio from 'cheerio';
 import { siteOrigin } from './indexing-build-verifier.mts';
 
-const args = process.argv.slice(2);
-const option = (name: string, fallback: string) => {
-  const position = args.indexOf(name);
-  if (position < 0) return fallback;
-  if (!args[position + 1]) throw new Error(`Missing value for ${name}`);
-  return args[position + 1];
-};
-if (args.includes('--help')) {
+const { values } = parseArgs({
+  options: {
+    'base-url': { type: 'string', default: siteOrigin },
+    'urls-file': { type: 'string' },
+    output: { type: 'string', default: 'report/indexing/live.json' },
+    help: { type: 'boolean' },
+  },
+});
+if (values.help) {
   console.log(
     'Usage: yarn audit:indexing [--base-url https://event-driven.io] [--urls-file urls.json] [--output report/indexing/live.json]\nChecks robots, every sitemap URL, canonicals, reciprocal alternates and real 404s. Optional JSON: an array of reported URL strings. Read-only; sends no indexing requests.',
   );
   process.exit(0);
 }
-const base = new URL(option('--base-url', siteOrigin));
+const base = new URL(values['base-url']!);
 if (!['http:', 'https:'].includes(base.protocol) || base.username || base.password)
   throw new Error('Use an HTTP(S) site origin without credentials');
-const output = resolve(option('--output', 'report/indexing/live.json'));
+const output = resolve(values.output!);
 const failures: string[] = [];
 type ResponseRecord = {
   requested: string;
@@ -177,8 +179,8 @@ for (const language of ['en', 'pl']) {
     failures.push(`${path}: expected direct, localized, noindex HTTP 404`);
 }
 const reported: Record<string, unknown>[] = [];
-if (args.includes('--urls-file')) {
-  const inputs: unknown = JSON.parse(await readFile(resolve(option('--urls-file', '')), 'utf8'));
+if (values['urls-file']) {
+  const inputs: unknown = JSON.parse(await readFile(resolve(values['urls-file']), 'utf8'));
   if (!Array.isArray(inputs) || inputs.some((url) => typeof url !== 'string'))
     throw new Error('--urls-file must contain a JSON array of URL strings');
   await pool(inputs as string[], async (url) => {

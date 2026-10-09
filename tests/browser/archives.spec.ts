@@ -98,11 +98,11 @@ test('Event Sourcing keeps shared membership and reading order when switching to
   expect(await articleSlugs(orderedCards)).toEqual(readingOrder);
   expect(readingOrder.length).toBeGreaterThan(0);
   expect(new Set(readingOrder).size).toBe(readingOrder.length);
-  const fallback = page.locator('ol.ordered a.readingCard[href^="/en/"]').first();
-  const target = await fallback.getAttribute('href');
-  await fallback.click();
+  const recommendation = page.locator('ol.ordered a.readingCard').first();
+  const target = await recommendation.getAttribute('href');
+  await recommendation.click();
   await page.waitForURL(`**${target}`);
-  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'pl');
   await expect(page.locator('h1')).toHaveCount(1);
 });
 
@@ -112,4 +112,21 @@ async function articleSlugs(cards: Locator): Promise<string[]> {
       (link) => new URL(link.getAttribute('href')!, window.location.href).pathname.split('/')[2],
     ),
   );
+}
+
+for (const javaScriptEnabled of [true, false]) {
+  test.describe(`Polish archive, JavaScript ${javaScriptEnabled ? 'enabled' : 'disabled'}`, () => {
+    test.use({ javaScriptEnabled });
+    test('article cards retain the selected interface language', async ({ page }) => {
+      await page.goto('/pl/articles/', { waitUntil: 'domcontentloaded' });
+      const card = page.locator('li > a.link').first();
+      await expect(card).toHaveAttribute('href', /^\/pl\//);
+      const destination = await card.getAttribute('href');
+      await card.click();
+      await page.waitForURL(`**${destination}`);
+      await expect(page.locator('html')).toHaveAttribute('lang', 'pl');
+      await expect(page.getByRole('link', { name: 'Change language to en' })).toBeVisible();
+      await expect(page.locator('h1')).toHaveCount(1);
+    });
+  });
 }

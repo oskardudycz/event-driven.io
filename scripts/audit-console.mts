@@ -1,28 +1,30 @@
+import { integerOption } from './cli-options.mts';
+import { parseArgs } from 'node:util';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { chromium, firefox } from 'playwright';
 
-const args = process.argv.slice(2);
-const option = (name: string, fallback: string) => {
-  const index = args.indexOf(name);
-  if (index < 0) return fallback;
-  if (!args[index + 1]) throw new Error(`Missing value for ${name}`);
-  return args[index + 1];
-};
-if (args.includes('--help')) {
+const { values } = parseArgs({
+  options: {
+    url: { type: 'string', default: 'http://127.0.0.1:9000/en/open-source-a-relict-a-charity-or/' },
+    browser: { type: 'string', default: 'firefox' },
+    seconds: { type: 'string', default: '15' },
+    output: { type: 'string' },
+    help: { type: 'boolean' },
+  },
+});
+if (values.help) {
   console.log(
     'Usage: yarn audit:console [--url https://event-driven.io/en/open-source-a-relict-a-charity-or/] [--browser firefox|chromium] [--seconds 15] [--output report/browser-console/firefox.json]',
   );
   process.exit(0);
 }
-const url = new URL(option('--url', 'http://127.0.0.1:9000/en/open-source-a-relict-a-charity-or/'));
+const url = new URL(values.url!);
 if (!['http:', 'https:'].includes(url.protocol)) throw new Error('Use an HTTP(S) page URL');
-const browserName = option('--browser', 'firefox');
+const browserName = values.browser!;
 if (!['firefox', 'chromium'].includes(browserName)) throw new Error('Unsupported browser');
-const seconds = Number(option('--seconds', '15'));
-if (!Number.isInteger(seconds) || seconds < 1 || seconds > 60)
-  throw new Error('--seconds must be between 1 and 60');
-const output = resolve(option('--output', `report/browser-console/${browserName}.json`));
+const seconds = integerOption(values.seconds!, '--seconds', 1, 60);
+const output = resolve(values.output || `report/browser-console/${browserName}.json`);
 const events: Record<string, unknown>[] = [];
 const browser = await (browserName === 'firefox' ? firefox : chromium).launch();
 try {

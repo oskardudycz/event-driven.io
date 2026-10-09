@@ -1,5 +1,22 @@
 # SEO, discoverability, and services plan
 
+## Current execution order — 2026-10-09
+
+The supplied deployment `6ac7e39e32aee76765a22ec6` exposes a navigation regression: Polish related cards select English canonical records, and the reading-list/archive adapters force English for placeholder articles. A canonical URL describes indexing identity; it must not silently override a visitor's chosen interface language. Prefer an existing route in the current locale for related cards, archives, category reading lists and search results, including untranslated copies. Fall back only when that route does not exist. Keep English content labels and canonical/hreflang/sitemap policy accurate; explicit language switching remains available.
+
+Execute the requested categories in order:
+
+1. Reconcile this strategy and the live checklist. Runtime is Node 24, Gatsby 5.16.1, React 18 and Yarn 1. CSS Modules, root/localized 404 recovery, full lint, image descriptions/enforcement, workshop translation and anti-patterns collision removal are complete. Old checkpoint timings describe their original revisions, not current pending work.
+2. Fix locale-preserving discovery navigation and add SSR/client regressions. Complete the bounded script/Node-test readability pass: replace repeated ad-hoc CLI parsing with Node's built-in parseArgs, share actual Markdown traversal duplication, and use Node test cleanup hooks through a small temporary-directory fixture. Keep existing CLI commands and security checks; no repository-wide module rename or generic testing framework.
+3. Next, profile font loading/CLS and select only measured typography-preserving changes. This is separate from the current requested implementation.
+4. Validate the latest hosted CI and deployed behavior, then production IndexNow publication/submission and repeated comparable mobile audits. A supplied preview is evidence of a deployment, not proof of every CI check or production publication.
+
+Research: [Gatsby internal/external links](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-link/), [Google localized/canonical versions](https://developers.google.com/search/docs/specialty/international/localized-versions), [Node 24 CLI parsing](https://nodejs.org/docs/latest-v24.x/api/util.html#utilparseargsconfig), [Node 24 test cleanup](https://nodejs.org/docs/latest-v24.x/api/test.html#contextafterfn-options).
+
+The navigation/readability implementation now passes the production build, full nonvisual suite and all 54 browser cases with unchanged screenshots and route/feed/sitemap contracts. The bounded cleanup uses native CLI parsing/traversal and a small Node test cleanup fixture; search profiling now loads actual native modules instead of rewriting source exports. Validation exposed and corrected a traversal callback return value and an obsolete forced-English category assertion. A traced repeat identifies the negative-timer diagnostics in Gatsby's pinned LMDB scheduleFlush; they remain visible pending an upstream dependency investigation. Warm-cache modification/deletion/restoration and restored-build navigation/search/contract checks pass. Current verification details and pending hosted checks are consolidated in todo.md.
+
+The sections below retain historical research and acceptance evidence. This section and todo.md determine current execution order; earlier “next”, “current” and “pending” statements describe their dated checkpoints.
+
 ## Test readability and framework helpers — 2026-10-08
 
 The owner requests using built-in test helpers and small reusable functions rather than repeated setup or custom frameworks. Research [Playwright fixtures](https://playwright.dev/docs/test-fixtures), [retrying locator assertions](https://playwright.dev/docs/test-assertions), [native screenshot comparisons](https://playwright.dev/docs/test-snapshots) and [Vitest fixtures](https://vitest.dev/guide/test-context) before editing. Use Playwright Test for browser acceptance, with framework-owned page/context cleanup, base URL, local server lifecycle, traces and screenshot artifacts; retain Vitest for component rendering/mocks. Split the browser suite by tested behavior, replace mechanical polling with locator assertions, and share only genuine repeated domain checks. Preserve every existing scenario, static/client locale variants, original screenshot files, colour threshold 0.2, 3% differing-pixel limit and explicit reviewed snapshot updates. Do not add retries that hide failures, generic page-object classes or a second homemade runner. Record local acceptance separately from hosted CI.
@@ -62,7 +79,7 @@ The root AGENTS.md now requires demonstrated root-cause fixes using supported Ga
 
 Global reset/theme tokens belong to the shared layout, as Gatsby documents. Component CSS Modules remain local. The narrower import ordering still leaves nine extraction warnings; it is not an accepted root-cause resolution. Continue the cascade/dependency investigation in the review before further CSS changes; do not add unrelated imports, replace chunk policy or suppress warnings. Acceptance requires unchanged rendered content/screenshots and warm-cache integrity, not merely silence from the compiler. Preserve new bilingual recovery pages and measured Polish font preload work; record their verification separately from the deployed baseline.
 
-## Current CSS stage — 2026-10-06
+## Historical CSS conversion checkpoint — 2026-10-06
 
 The complete styling category is implemented: all 29 remaining styled-jsx consumers are replaced together, leaving 32 native CSS Modules and no styled-jsx consumers. The obsolete Gatsby/styled-jsx integrations and processors are removed. Plain global CSS retains the existing reset/font fallback rules; theme.yaml remains the single value source through a native TypeScript generator. Preserve current colors, fonts, spacing, breakpoints, public state hooks, routes and behavior. Dynamic image/menu/sensor values use CSS custom properties. Keep default module imports and CSS independent of Gatsby queries/providers for eventual Astro reuse.
 
@@ -116,7 +133,7 @@ This document records the improvements made to event-driven.io and the remaining
 - Category landing pages show curated topic descriptions, article counts, and recommended reading paths.
 - Individual category pages use compact responsive image cards, visible reading-order steps, and separate the recommended sequence from the remaining articles.
 - Recommended reading order is deliberately editorial rather than algorithmic. It is controlled by each topic's ordered `recommended` slug list in `data/category-guides.json`; changing that list changes the displayed sequence without changing article dates or URLs.
-- Posts show related articles only when explicitly curated in that post's `related` frontmatter list. Broad category matching produced misleading recommendations; an absent list now means no related block. Slugs must resolve to published canonical articles or the build fails. Related cards prefer a genuine article in the current language, then fall back to the canonical English or other available language; placeholder translations are not used as card destinations.
+- Posts show related articles only when explicitly curated in that post's `related` frontmatter list. Broad category matching produced misleading recommendations; an absent list now means no related block. Slugs must resolve to published canonical articles or the build fails. Related cards prefer an existing route in the current interface language, including an untranslated copy; use another available original only when that locale route is absent. Canonical identity is independent of the visitor destination.
 - Related reading uses the same responsive image-card design as category pages and follows the newsletter signup, before sharing and author information. Chronological earlier/later links remain separate and visibly labelled so they are not mistaken for recommendations.
 - The homepage shows a focused recent selection and links to a dedicated complete article archive instead of rendering every post up front; the topic index remains a separate curated path.
 - The homepage uses one concise “Latest articles” section heading, while a quiet “Read latest articles” label beside the original down-arrow control names its destination without competing with the service calls to action.
@@ -182,10 +199,10 @@ Reposting is not automatically harmful, but publishing identical full articles i
 
 ## Remaining work, in priority order
 
-### P0 — validate the deployed result
+### P0 — remaining hosted validation (historical details below)
 
-- Keep reviewing intentional layout changes at desktop/mobile widths; the existing screenshot tolerances and 25 browser checks are passing locally. See the latest deployment verification below for hosted results.
-- The baseline presentation/runtime changes are deployed since 99519a3c and representative production pages/assets pass public checks. Deploy and verify the later category parity and routing/lint changes separately.
+- Keep reviewing intentional layout changes at desktop/mobile widths; the existing screenshot tolerances and 52 browser cases passed the 2026-10-08 local acceptance. See the latest deployment verification below for hosted results.
+- The baseline presentation/runtime changes are deployed since 99519a3c and representative production pages/assets pass public checks. Later owner-reported deployments supersede this original checkpoint; verify the latest revision independently.
 - Submit the sitemap index in Google Search Console and Bing Webmaster Tools; request indexing for the consulting pages and a few cornerstone articles.
 - Use URL Inspection to compare the declared and Google-selected canonical URLs.
 - Test Article and Service structured data with Google's Rich Results Test and Schema.org Validator.
@@ -194,9 +211,9 @@ Reposting is not automatically harmful, but publishing identical full articles i
 
 ### P1 — high-value content work
 
-- Replace `content/pages/szkolenie-event-sourcing/index.en.md` with an accurate English offer. A literal translation is unsafe because the source currently advertises February/March 2025 dates, a 3000 PLN price, and an old registration form; confirm the current format, schedule, price, and call to action first.
+- The English workshop offer is translated and verified. Updating historical dates, pricing and registration terms requires current editorial input; do not invent new commercial terms.
 - Continue adding hand-written descriptions and summaries beyond the first ten cornerstone articles, prioritising pages with search impressions and articles linked from consulting or training.
-- Curate Polish recommended reading paths once enough Polish translations are available.
+- Curate additional Polish recommended reading paths beyond the shared Event Sourcing sequence; prefer real translations for editorial clarity.
 - Add concise case studies to consulting: starting situation, constraints, intervention, and measurable outcome. Use anonymised examples if necessary.
 - Add specific testimonials or client evidence to the consulting page where permission allows.
 - Translate the most commercially and topically important English-only articles, starting with the articles linked from training and consulting.
@@ -205,7 +222,7 @@ Reposting is not automatically harmful, but publishing identical full articles i
 
 - Add an `updated` frontmatter field and emit `dateModified` in structured data and `lastmod` in the sitemap.
 - Curate `related` frontmatter for additional cornerstone posts where a genuinely useful reading sequence is clear; do not restore automatic category-based fallback.
-- Review image alternative text in article bodies. Decorative images should have empty alt text; diagrams and screenshots should explain the useful information.
+- Image alternatives are described and enforced at import, source, staging and generated-output boundaries. Maintain descriptions for new diagrams and screenshots; explicitly declare decorative exceptions.
 - Add Breadcrumb structured data to categories, articles, training, and consulting pages.
 - Add FAQ structured data only where the visible FAQ and its answers meet Google's current eligibility rules; do not create FAQ markup only for rankings.
 - Review local search quality with curated bilingual queries and tune title/category boosts and prefix/fuzzy matching when evidence supports a change.
@@ -213,7 +230,7 @@ Reposting is not automatically harmful, but publishing identical full articles i
 ### P3 — larger engineering work
 
 - Continue Gatsby 5 modernization from the completed runtime migration. The current baseline is Gatsby 5.16.1, React 18.3.1, Node 24 and Yarn 1. Earlier migration checkpoints below are historical.
-- Revisit the global CSS and JavaScript payload after measuring production coverage. Ant Design remains necessary for the contact form but should not leak into unrelated routes.
+- Revisit the global CSS and JavaScript payload after measuring production coverage. Ant Design is retained with the deferred, unreferenced contact form; review restoration/removal together and measure actual route payload before attributing a cost.
 - Consider archive pagination if the topic and article indexes grow enough to create large HTML pages.
 - Expand the automated SEO assertions when new page types or indexing rules are introduced.
 
@@ -324,7 +341,7 @@ Exit criterion: production runs Gatsby 5.16.x on Node 24 and passes the same che
 - Image migration and Gatsby Head migration are complete and verified.
 - Gatsby 5 deprecates `<StaticQuery>`; its replacement with `useStaticQuery` is included in the current modernization pass.
 - Explicit GraphQL schema types and proven-unused dependency cleanup are included in the current pre-redesign pass.
-- Ant Design modernization, React 19, global lint cleanup, Slices and deferred generation remain deferred. Vitest browser checks are already implemented.
+- Ant Design modernization, React 19, Slices and deferred generation remain deferred. Full-project lint cleanup is subsequently complete; Vitest handles components and Playwright Test handles browsers.
 
 This sequence is intentionally failure-driven. We will not rewrite working integrations pre-emptively; when an unmaintained plugin becomes an actual blocker and replacing it changes visible behavior, implementation pauses for a decision.
 
@@ -362,7 +379,7 @@ All listed local modernization tasks are complete: useStaticQuery/lifecycle clea
 
 The requested article-navigation/category fixes, social profile changes, README reading-order guidance and imported highlighting/cross-links are also verified. JavaScript/js snippet language tags use TypeScript throughout the blog and in future imports; snippet code is unchanged. Polish Event Sourcing shows its six translations plus 82 canonical-English placeholders. See todo.md for current verification evidence and pending external checks.
 
-### Next pre-redesign pass — legacy routing and lint guardrails
+### Completed pre-redesign pass — legacy routing and lint guardrails
 
 Audit the overlapping gatsby-plugin-i18n hooks against the site's native localization hooks. Remove the plugin only if the exact route/redirect/feed/sitemap contract and English/Polish browser checks pass. Preserve the active react-i18next provider, search UI, and comments. Remove unused direct routing and InstantSearch umbrella dependencies after checking source/configuration/scripts; retain directly used react-instantsearch-dom and Algolia APIs.
 
@@ -384,7 +401,7 @@ Production baseline: the owner reports deployment since 99519a3c. Its GitHub Bui
 
 Shared category selection and the Polish Event Sourcing guide are verified: both languages have 89 unique articles and eight ordered steps, with actual translations preferred and missing translations linked to a canonical available language. The production build, full tests, four category-selection regressions and all 15 browser checks pass; route/redirect/sitemap/feed contracts and existing screenshot tolerances remain unchanged. This simplifies one source of custom localization logic without replacing the provider or route generation. Production checks still showed the pre-fix Polish category; later commits require their own deployment/CI check.
 
-## Next planned Gatsby 5 improvements — 2026-10-05
+## Historical search/localization plan — 2026-10-05 (implemented)
 
 Implement these before the CSS redesign, in separate stages so search and localization regressions can be isolated. Keep Node 24, React 18, Yarn, existing styles and static generation.
 
@@ -400,7 +417,7 @@ Adopt the Gatsby 5/React 18-compatible plugin through a staged migration, upgrad
 
 Preserve `/en/` and `/pl/` URLs, import/original-slug redirects, actual translation availability, placeholder navigation, canonical/hreflang/sitemap/feed rules, category membership/reading order and Gatsby Head behavior during SSR, hydration and navigation. Avoid running overlapping locale route generators. Require the exact output contract and all browser checks to pass before removing old hooks/providers. Record local results separately from CI and deployed verification.
 
-Both stages use the package comparison and acceptance criteria in `docs/gatsby-search-and-localization-review.md`. Tailwind, theme variables, dark mode, Slices, npm migration and layout redesign remain later stages.
+Both stages use the package comparison and acceptance criteria in `docs/gatsby-search-and-localization-review.md`. Theme variables are implemented. Tailwind, dark mode, Slices, npm migration and layout redesign remain deferred stages.
 
 ### Deployment verification — 2026-10-05
 
@@ -492,7 +509,7 @@ Controlled PageSpeed attribution now prioritizes reviewing the comments stage: t
 
 Firefox follow-up acceptance: production build, complete tests/lint, all 29 browser checks and fresh Firefox preview verification pass locally. No screenshots or production settings changed. Investigate the preview server's missing root 404 fallback separately. Hosted CI/deployment and owner comments/home-label decisions remain pending.
 
-## Current focus and deferred comments alternatives — 2026-10-06
+## Comments alternatives and earlier execution order — 2026-10-06
 
 The owner wants to keep Disqus for now and focus on improvements that preserve the current comment provider and interaction. Optional affiliate linking was disabled by the owner; this is an owner-reported account change, not an action performed or independently verified here. Re-measure its effect before attributing further savings to it.
 

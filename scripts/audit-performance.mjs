@@ -1,3 +1,5 @@
+import { integerOption } from './cli-options.mts';
+import { parseArgs } from 'node:util';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
@@ -5,34 +7,33 @@ import net from 'node:net';
 import { spawn } from 'node:child_process';
 import { chromium } from 'playwright';
 
-const args = process.argv.slice(2);
-function option(name, fallback) {
-  const index = args.indexOf(name);
-  return index < 0 ? fallback : args[index + 1];
-}
-if (args.includes('--help')) {
+const { values } = parseArgs({
+  options: {
+    'base-url': { type: 'string', default: 'http://127.0.0.1:9000' },
+    runs: { type: 'string', default: '3' },
+    page: { type: 'string' },
+    label: { type: 'string', default: 'baseline' },
+    output: { type: 'string', default: 'report/performance' },
+    'lighthouse-bin': { type: 'string' },
+    'block-pattern': { type: 'string', multiple: true, default: [] },
+    help: { type: 'boolean' },
+  },
+});
+if (values.help) {
   console.log(
     'Usage: yarn audit:performance --base-url URL [--runs 3] [--page /en/] [--label baseline] [--output report/performance] [--lighthouse-bin /path/to/lighthouse/cli/index.js] [--block-pattern *disqus*]',
   );
   process.exit(0);
 }
-const blockedPatterns = args.flatMap((argument, index) => {
-  if (argument !== '--block-pattern') return [];
-  if (!args[index + 1] || args[index + 1].startsWith('--'))
-    throw new Error('Missing value for --block-pattern');
-  return [args[index + 1]];
-});
-const base = new URL(option('--base-url', 'http://127.0.0.1:9000'));
-const runs = Number(option('--runs', '3'));
-if (!Number.isInteger(runs) || runs < 1 || runs > 10)
-  throw new Error('--runs must be between 1 and 10');
-const pages = args.includes('--page')
-  ? [option('--page')]
-  : ['/en/', '/en/introduction_to_event_sourcing/'];
+const blockedPatterns = values['block-pattern'];
+const base = new URL(values['base-url']);
+if (!['http:', 'https:'].includes(base.protocol)) throw new Error('Use an HTTP(S) site URL');
+const runs = integerOption(values.runs, '--runs', 1, 10);
+const pages = values.page ? [values.page] : ['/en/', '/en/introduction_to_event_sourcing/'];
 if (pages.some((page) => !page.startsWith('/') || page.startsWith('//')))
   throw new Error('--page must be a path on the selected site');
-const label = option('--label', 'baseline').replace(/[^a-zA-Z0-9_-]/g, '_');
-const output = path.resolve(option('--output', 'report/performance'), label);
+const label = values.label.replace(/[^a-zA-Z0-9_-]/g, '_');
+const output = path.resolve(values.output, label);
 await fs.mkdir(output, { recursive: true });
 // Playwright owns Chrome profiles; Lighthouse attaches to its debugging port.
 // This avoids chrome-launcher's WSL/Windows profile-path detection.
@@ -89,7 +90,7 @@ try {
           '--quiet',
           ...blockedPatterns.map((pattern) => `--blocked-url-patterns=${pattern}`),
         ];
-        const binary = option('--lighthouse-bin');
+        const binary = values['lighthouse-bin'];
         if (binary) await run(process.execPath, [path.resolve(binary), ...auditArguments]);
         else
           await run(process.platform === 'win32' ? 'npm.cmd' : 'npm', [

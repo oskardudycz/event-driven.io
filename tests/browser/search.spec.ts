@@ -36,7 +36,7 @@ for (const language of ['en', 'pl']) {
     );
     await input.fill('introduction event sourcing');
     const result = page.locator('.search-hit').filter({
-      has: page.locator('a[href="/en/introduction_to_event_sourcing/"]'),
+      has: page.locator(`a[href="/${language}/introduction_to_event_sourcing/"]`),
     });
     await result.waitFor();
     await expect(result.locator('h2')).toContainText('Introduction to Event Sourcing');

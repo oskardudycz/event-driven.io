@@ -1,5 +1,4 @@
-import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { globSync, readFileSync, writeFileSync } from 'node:fs';
 import { normalizeYouTubeEmbeds } from '../import/youtube-markdown.mts';
 
 const args = process.argv.slice(2);
@@ -10,14 +9,9 @@ if (args.includes('--help')) {
   process.exit(0);
 }
 if (args.some((arg) => arg !== '--write')) throw new Error('Supported option: --write');
-function files(directory: string): string[] {
-  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
-    const file = join(directory, entry.name);
-    return entry.isDirectory() ? files(file) : file.endsWith('.md') ? [file] : [];
-  });
-}
+
 let changed = 0;
-for (const file of files('content')) {
+for (const file of globSync('content/**/*.md')) {
   const original = readFileSync(file, 'utf8');
   const normalized = normalizeYouTubeEmbeds(original);
   if (original === normalized) continue;
