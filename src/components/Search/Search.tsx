@@ -67,7 +67,8 @@ const Search = () => {
     Promise.all([
       import(/* webpackChunkName: "local-search-engine" */ '../../search/runtime.ts'),
       fetchText('/search-index/manifest.json').then(async (text) => {
-        const url = JSON.parse(text)[lang];
+        const manifest = JSON.parse(text) as Record<string, unknown>;
+        const url = manifest[lang];
         if (typeof url !== 'string' || !/^\/search-index\/(en|pl)\.[a-f0-9]+\.json$/.test(url))
           throw new Error('Invalid search manifest');
         return fetchText(url);

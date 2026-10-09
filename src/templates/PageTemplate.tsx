@@ -1,3 +1,4 @@
+import type { PageData } from '../types/content.ts';
 import type { SitePageProps } from '../types/content.ts';
 import React from 'react';
 import { graphql } from 'gatsby';
@@ -59,10 +60,8 @@ export const pageQuery = graphql`
   }
 `;
 
-export const Head = createHead<Pick<import('../types/content.ts').PageData, 'page' | 'site'>>(
-  ({ data }) => ({
-    data: data.page,
-    useDefaultLangCanonical: data.page.frontmatter.useDefaultLangCanonical,
-    noIndex: data.page.fields.slug === '/success/',
-  }),
-);
+export const Head = createHead<Pick<PageData, 'page' | 'site'>>(({ data }) => ({
+  data: data.page,
+  useDefaultLangCanonical: data.page.frontmatter.useDefaultLangCanonical,
+  noIndex: data.page.fields.slug === '/success/',
+}));

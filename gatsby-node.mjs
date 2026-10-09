@@ -8,4 +8,4 @@ export {
   createSchemaCustomization,
   onPostBuild,
   onPostBootstrap,
-} from './site/node.mts';
+} from './site/node.ts';

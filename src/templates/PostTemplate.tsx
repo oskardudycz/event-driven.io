@@ -1,3 +1,4 @@
+import type { PageData } from '../types/content.ts';
 import type { ArticleEdge } from '../types/content.ts';
 import type { SitePageProps } from '../types/content.ts';
 import React from 'react';
@@ -112,10 +113,8 @@ export const postQuery = graphql`
   }
 `;
 
-export const Head = createHead<Pick<import('../types/content.ts').PageData, 'post' | 'site'>>(
-  ({ data }) => ({
-    data: data.post,
-    useDefaultLangCanonical: data.post.frontmatter.useDefaultLangCanonical,
-    schemaType: 'BlogPosting',
-  }),
-);
+export const Head = createHead<Pick<PageData, 'post' | 'site'>>(({ data }) => ({
+  data: data.post,
+  useDefaultLangCanonical: data.post.frontmatter.useDefaultLangCanonical,
+  schemaType: 'BlogPosting',
+}));

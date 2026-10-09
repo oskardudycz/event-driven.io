@@ -41,7 +41,7 @@ The [installed extraction plugin's documentation](https://github.com/webpack/min
 
 ### Removed cache workaround
 
-`scripts/css-module-ident.mts` formerly read all source CSS for each local class and made every class depend on every stylesheet. Its exposed loader callback did not make that algorithm Gatsby's recommended caching mechanism. It coupled unrelated components, repeated filesystem work and changed unrelated class exports on every style edit. It is now deleted after the isolated platform correction passed; the observable stale-inline-CSS regression is retained and extended to global CSS.
+`scripts/css-module-ident.ts` formerly read all source CSS for each local class and made every class depend on every stylesheet. Its exposed loader callback did not make that algorithm Gatsby's recommended caching mechanism. It coupled unrelated components, repeated filesystem work and changed unrelated class exports on every style edit. It is now deleted after the isolated platform correction passed; the observable stale-inline-CSS regression is retained and extended to global CSS.
 
 The research did not identify a documented production switch or released upstream fix. The version-pinned dependency correction and its maintenance conditions are recorded in the completion section above. Gatsby's installed ForceCssHMRForEdgeCases is a development HMR mechanism; it is not a supported application fix for production HTML caching. Do not copy or monkey patch that implementation.
 

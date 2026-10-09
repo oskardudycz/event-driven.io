@@ -2,6 +2,7 @@ export function getScreenWidth() {
   if (typeof window !== `undefined`) {
     return window.innerWidth;
   }
+  return undefined;
 }
 
 export function isWideScreen() {
@@ -11,6 +12,7 @@ export function isWideScreen() {
 
     return windowWidth >= mediaQueryL;
   }
+  return undefined;
 }
 
 export function timeoutThrottlerHandler(

@@ -18,8 +18,7 @@ import 'antd/es/button/style/index.css';
 import { usePageContext } from '../../i18n/index.ts';
 import { useTranslation } from 'react-i18next';
 
-const Contact = (props: FormComponentProps) => {
-  const { getFieldDecorator } = props.form;
+const Contact = (props: FormComponentProps<ContactValues>) => {
   const { lang } = usePageContext();
   const { t } = useTranslation();
 
@@ -79,7 +78,7 @@ const Contact = (props: FormComponentProps) => {
           data-netlify-honeypot="bot-field"
         >
           <FormItem label={t('contact.form.name')}>
-            {getFieldDecorator('name', {
+            {props.form.getFieldDecorator('name', {
               rules: [
                 {
                   whitespace: true,
@@ -88,7 +87,7 @@ const Contact = (props: FormComponentProps) => {
             })(<Input name="name" />)}
           </FormItem>
           <FormItem label={t('contact.form.email')}>
-            {getFieldDecorator('email', {
+            {props.form.getFieldDecorator('email', {
               rules: [
                 {
                   required: true,
@@ -100,7 +99,7 @@ const Contact = (props: FormComponentProps) => {
             })(<Input name="email" />)}
           </FormItem>
           <FormItem label={t('contact.form.message')}>
-            {getFieldDecorator('message', {
+            {props.form.getFieldDecorator('message', {
               rules: [
                 { required: true, message: t('contact.form.messageError'), whitespace: true },
               ],
