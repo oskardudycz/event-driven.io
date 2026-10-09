@@ -12,7 +12,9 @@ const LanguagePicker = () => {
     lang,
   } = usePageContext();
   const pagePath = slug || originalPath || '/';
-  const languagesToSwitch = availableLanguages.filter((language) => language !== lang);
+  const languagesToSwitch = availableLanguages.filter(
+    (language) => language !== lang,
+  );
 
   return (
     <React.Fragment>
@@ -21,7 +23,9 @@ const LanguagePicker = () => {
           <Link
             aria-label={`Change language to ${supportedLang}`}
             className={`langSelector ${styles.langSelector}`}
-            onClick={() => localStorage.setItem('last-selected-lang', supportedLang)}
+            onClick={() =>
+              localStorage.setItem('last-selected-lang', supportedLang)
+            }
             key={supportedLang}
             to={pagePath}
             language={supportedLang}

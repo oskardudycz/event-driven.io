@@ -6,7 +6,9 @@ const inputs = process.argv.slice(2);
 const paths = inputs.length
   ? inputs
       .map((file) => relative(process.cwd(), resolve(file)))
-      .filter((file) => file.startsWith(`content${sep}`) && file.endsWith('.md'))
+      .filter(
+        (file) => file.startsWith(`content${sep}`) && file.endsWith('.md'),
+      )
   : globSync('content/**/*.md');
 let errors = 0;
 for (const file of paths) {
@@ -15,5 +17,7 @@ for (const file of paths) {
     errors++;
   }
 }
-console.log(`Checked image alternatives in ${paths.length} Markdown files; ${errors} errors.`);
+console.log(
+  `Checked image alternatives in ${paths.length} Markdown files; ${errors} errors.`,
+);
 process.exitCode = errors ? 1 : 0;

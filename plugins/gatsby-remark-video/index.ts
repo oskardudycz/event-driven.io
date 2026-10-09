@@ -7,7 +7,11 @@ function startSeconds(value: string) {
   if (/^\d+$/.test(value)) return value;
   const match = value.match(/^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$/);
   return match && match[0]
-    ? String(Number(match[1] || 0) * 3600 + Number(match[2] || 0) * 60 + Number(match[3] || 0))
+    ? String(
+        Number(match[1] || 0) * 3600 +
+          Number(match[2] || 0) * 60 +
+          Number(match[3] || 0),
+      )
     : undefined;
 }
 
@@ -21,11 +25,15 @@ function videoPlugin(
   const sources: { node: InlineCode | Html; source: URL }[] = [];
   visit(args.markdownAST, 'inlineCode', (node: InlineCode) => {
     const match = node.value.match(/^(?:youtube|video):\s*(.*)$/i);
-    if (!match) return;
+    if (!match?.[1]) return;
     const titleLink = match[1].match(/\[.*\]\((.*)\)/);
     try {
-      const source = new URL(titleLink ? titleLink[1] : match[1]);
-      if (/^(www\.)?(youtube\.com|youtube-nocookie\.com|youtu\.be)$/.test(source.hostname))
+      const source = new URL(titleLink?.[1] || match[1]);
+      if (
+        /^(www\.)?(youtube\.com|youtube-nocookie\.com|youtu\.be)$/.test(
+          source.hostname,
+        )
+      )
         sources.push({ node, source });
     } catch {
       /* Bare video IDs are handled by the upstream plugin. */
@@ -38,7 +46,8 @@ function videoPlugin(
     $('iframe').each((_, element) => {
       const frame = $(element),
         url = new URL(frame.attr('src')!);
-      if (!/^(www\.)?(youtube\.com|youtube-nocookie\.com)$/.test(url.hostname)) return;
+      if (!/^(www\.)?(youtube\.com|youtube-nocookie\.com)$/.test(url.hostname))
+        return;
       const original = sources.find((item) => item.node === node)?.source;
       if (original) {
         for (const [key, value] of original.searchParams) {

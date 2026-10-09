@@ -12,8 +12,10 @@ for (const language of ['en', 'pl']) {
     const indexRequests: string[] = [];
     const engineRequests: string[] = [];
     page.on('request', (request) => {
-      if (request.url().includes('/local-search-engine-')) engineRequests.push(request.url());
-      if (request.url().includes('/search-index/')) indexRequests.push(request.url());
+      if (request.url().includes('/local-search-engine-'))
+        engineRequests.push(request.url());
+      if (request.url().includes('/search-index/'))
+        indexRequests.push(request.url());
     });
     await page.goto(`/${language}/articles/`, {
       waitUntil: 'domcontentloaded',
@@ -23,23 +25,32 @@ for (const language of ['en', 'pl']) {
     await page.goto(`/${language}/search/`, {
       waitUntil: 'domcontentloaded',
     });
-    const input = page.getByPlaceholder(language === 'pl' ? 'Szukaj' : 'Search', {
-      exact: true,
-    });
+    const input = page.getByPlaceholder(
+      language === 'pl' ? 'Szukaj' : 'Search',
+      {
+        exact: true,
+      },
+    );
     await input.waitFor();
     await expectFonts(page);
     await expect(page.locator('h1')).toHaveCount(1);
     expect(indexRequests).toHaveLength(0);
     expect(engineRequests).toHaveLength(0);
     await expect(page.locator('.search-message')).toHaveText(
-      language === 'pl' ? 'Wpisz wyszukiwaną frazę.' : 'Start typing to search.',
+      language === 'pl'
+        ? 'Wpisz wyszukiwaną frazę.'
+        : 'Start typing to search.',
     );
     await input.fill('introduction event sourcing');
     const result = page.locator('.search-hit').filter({
-      has: page.locator(`a[href="/${language}/introduction_to_event_sourcing/"]`),
+      has: page.locator(
+        `a[href="/${language}/introduction_to_event_sourcing/"]`,
+      ),
     });
     await result.waitFor();
-    await expect(result.locator('h2')).toContainText('Introduction to Event Sourcing');
+    await expect(result.locator('h2')).toContainText(
+      'Introduction to Event Sourcing',
+    );
     expect(await result.locator('mark').count()).toBeGreaterThan(0);
     const cover = result.locator('.search-hit-cover img[data-main-image]');
     await cover.waitFor({
@@ -47,7 +58,10 @@ for (const language of ['en', 'pl']) {
     });
     await expectImageLoaded(cover);
     await expect(cover).toHaveAttribute('alt', '');
-    await expect(cover).toHaveAttribute('sizes', '(max-width: 599px) 88px, 180px');
+    await expect(cover).toHaveAttribute(
+      'sizes',
+      '(max-width: 599px) 88px, 180px',
+    );
     const colors = await result
       .locator('mark')
       .first()
@@ -62,10 +76,14 @@ for (const language of ['en', 'pl']) {
     expect(
       await result
         .locator('.search-hit-cover')
-        .evaluate((element) => Math.round(element.getBoundingClientRect().width)),
+        .evaluate((element) =>
+          Math.round(element.getBoundingClientRect().width),
+        ),
     ).toBe(88);
     expect(
-      await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      ),
     ).toBe(true);
     if (language === 'en')
       await expect(result).toHaveScreenshot('search-card-en-mobile.png', {
@@ -80,7 +98,9 @@ for (const language of ['en', 'pl']) {
     expect(
       await result
         .locator('.search-hit-cover')
-        .evaluate((element) => Math.round(element.getBoundingClientRect().width)),
+        .evaluate((element) =>
+          Math.round(element.getBoundingClientRect().width),
+        ),
     ).toBe(180);
     if (language === 'en')
       await expect(result).toHaveScreenshot('search-card-en-desktop.png', {
@@ -90,30 +110,47 @@ for (const language of ['en', 'pl']) {
       width: 390,
       height: 844,
     });
-    await expect(result.locator('.search-hit-meta')).toContainText('2022-03-16');
+    await expect(result.locator('.search-hit-meta')).toContainText(
+      '2022-03-16',
+    );
     if (language === 'pl')
-      await expect(result.locator('.search-hit-meta')).toContainText('PO ANGIELSKU', {
-        useInnerText: true,
-      });
+      await expect(result.locator('.search-hit-meta')).toContainText(
+        'PO ANGIELSKU',
+        {
+          useInnerText: true,
+        },
+      );
     expect(indexRequests).toHaveLength(2);
     expect(engineRequests).toHaveLength(1);
-    expect(indexRequests[1]).toMatch(new RegExp(`/search-index/${language}\\.[a-f0-9]+\\.json`));
+    expect(indexRequests[1]).toMatch(
+      new RegExp(`/search-index/${language}\\.[a-f0-9]+\\.json`),
+    );
     await input.fill('event sourcing');
     await expect(page.locator('.search-hit')).toHaveCount(10);
-    const first = await page.locator('.search-hit a').first().getAttribute('href');
+    const first = await page
+      .locator('.search-hit a')
+      .first()
+      .getAttribute('href');
     await page
       .getByRole('button', {
         name: language === 'pl' ? 'Następna' : 'Next',
         exact: true,
       })
       .click();
-    await expect(page.locator('.search-hit a').first()).not.toHaveAttribute('href', first!);
+    await expect(page.locator('.search-hit a').first()).not.toHaveAttribute(
+      'href',
+      first!,
+    );
     await input.fill('zzzznotarealwordxyz');
     await expect(page.locator('.search-message')).toHaveText(
-      language === 'pl' ? 'Nie znaleziono pasujących wyników.' : 'No matching results found.',
+      language === 'pl'
+        ? 'Nie znaleziono pasujących wyników.'
+        : 'No matching results found.',
     );
     await input.fill('appendToStream');
-    await expect.poll(() => page.locator('.search-hit').count()).toBeGreaterThan(0);
+    await expect
+      .poll(() => page.locator('.search-hit').count())
+      .toBeGreaterThan(0);
     await page
       .getByRole('button', {
         name: language === 'pl' ? 'Wyczyść' : 'Clear',
@@ -121,12 +158,16 @@ for (const language of ['en', 'pl']) {
       .click();
     await expect(input).toHaveValue('');
     expect(
-      await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      ),
     ).toBe(true);
   });
 }
 
-test('local search reports load failures and retries successfully', async ({ page }) => {
+test('local search reports load failures and retries successfully', async ({
+  page,
+}) => {
   let requests = 0;
   await page.route('**/search-index/manifest.json', async (route) => {
     requests++;

@@ -1,6 +1,11 @@
 import type { HeadProps } from 'gatsby';
 import type { TFunction } from 'i18next';
-import type { ArticleFields, Frontmatter, PageData, SitePageContext } from '../../types/content.ts';
+import type {
+  ArticleFields,
+  Frontmatter,
+  PageData,
+  SitePageContext,
+} from '../../types/content.ts';
 type SeoData = {
   frontmatter?: Partial<Frontmatter>;
   fields?: Partial<ArticleFields>;
@@ -9,9 +14,9 @@ type SeoData = {
 type SeoProps = {
   pageContext: Partial<SitePageContext>;
   data?: SeoData;
-  facebook?: { appId?: string };
+  facebook?: { appId?: string } | undefined;
   meta?: React.ComponentProps<'meta'>[];
-  useDefaultLangCanonical?: boolean;
+  useDefaultLangCanonical?: boolean | undefined;
   title?: string;
   description?: string;
   noIndex?: boolean;
@@ -44,18 +49,37 @@ const absoluteUrl = (host: string, path?: string) =>
 const headI18n = i18next.createInstance();
 void headI18n.init({ ...DEFAULT_OPTIONS.i18nextConfig, initImmediate: false });
 
-export const createHead = <Data extends HeadData = HeadData>(options: HeadOptions<Data> = {}) =>
-  function Head({ data, pageContext }: HeadProps<Data, Partial<SitePageContext>>) {
-    const context: SitePageContext = { ...DEFAULT_OPTIONS, lang: 'en', ...pageContext };
+export const createHead = <Data extends HeadData = HeadData>(
+  options: HeadOptions<Data> = {},
+) =>
+  function Head({
+    data,
+    pageContext,
+  }: HeadProps<Data, Partial<SitePageContext>>) {
+    const context: SitePageContext = {
+      ...DEFAULT_OPTIONS,
+      lang: 'en',
+      ...pageContext,
+    };
     context.lang = pageContext.lang || DEFAULT_OPTIONS.defaultLanguage;
     const t = headI18n.getFixedT(context.lang);
     const seoProps =
-      typeof options === 'function' ? options({ data, pageContext: context, t }) : options;
-    return <Seo facebook={data.site?.siteMetadata?.facebook} {...seoProps} pageContext={context} />;
+      typeof options === 'function'
+        ? options({ data, pageContext: context, t })
+        : options;
+    return (
+      <Seo
+        facebook={data.site?.siteMetadata?.facebook}
+        {...seoProps}
+        pageContext={context}
+      />
+    );
   };
 
 const Seo = (props: SeoProps) => {
-  const t = headI18n.getFixedT(props.pageContext.lang || DEFAULT_OPTIONS.defaultLanguage);
+  const t = headI18n.getFixedT(
+    props.pageContext.lang || DEFAULT_OPTIONS.defaultLanguage,
+  );
   const {
     lang,
     originalPath,
@@ -84,28 +108,38 @@ const Seo = (props: SeoProps) => {
   const postSlug = fields.slug || '';
 
   const pageTitle = suppliedTitle || postTitle;
-  const title = pageTitle ? `${pageTitle} - ${config.shortSiteTitle}` : config.siteTitle;
+  const title = pageTitle
+    ? `${pageTitle} - ${config.shortSiteTitle}`
+    : config.siteTitle;
   const description =
     suppliedDescription ||
     postDescription ||
     (data || {}).excerpt ||
     t('seo.siteDescription', { defaultValue: config.siteDescription });
   const host = config.siteUrl.replace(/\/$/, '');
-  const imagePath = ((postCover.childImageSharp || {}).resize || {}).src || config.siteImage;
+  const imagePath =
+    ((postCover.childImageSharp || {}).resize || {}).src || config.siteImage;
   const image = absoluteUrl(host, imagePath);
   const pagePath = normalizePath(originalPath || postSlug || '/');
-  const canonicalLanguage = useDefaultLangCanonical ? defaultLanguage : lang || defaultLanguage;
+  const canonicalLanguage = useDefaultLangCanonical
+    ? defaultLanguage
+    : lang || defaultLanguage;
   const canonicalUrl = `${host}/${canonicalLanguage}${pagePath}`;
-  const requestedLanguages = canonicalLanguages || availableLanguages || supportedLanguages;
+  const requestedLanguages =
+    canonicalLanguages || availableLanguages || supportedLanguages;
   const languages = requestedLanguages
     .filter(Boolean)
-    .filter((language, index, allLanguages) => allLanguages.indexOf(language) === index);
+    .filter(
+      (language, index, allLanguages) =>
+        allLanguages.indexOf(language) === index,
+    );
   const defaultAlternateLanguage = languages.includes(defaultLanguage)
     ? defaultLanguage
     : languages[0] || canonicalLanguage;
   const isArticle = schemaType === 'BlogPosting' || fields.source === 'posts';
   const isService =
-    fields.source === 'pages' && /training|szkolenie|workshop|consult/i.test(pagePath);
+    fields.source === 'pages' &&
+    /training|szkolenie|workshop|consult/i.test(pagePath);
   const isProfile = fields.source === 'pages' && pagePath === '/about/';
   const person = {
     '@type': 'Person',
@@ -133,7 +167,9 @@ const Seo = (props: SeoProps) => {
     ...(isArticle ? { headline: pageTitle || config.siteTitle } : {}),
     description,
     url: canonicalUrl,
-    ...(resolvedSchemaType !== 'Service' ? { inLanguage: canonicalLanguage } : {}),
+    ...(resolvedSchemaType !== 'Service'
+      ? { inLanguage: canonicalLanguage }
+      : {}),
     ...(image ? { image } : {}),
     ...(isArticle && fields.prefix
       ? {
@@ -142,11 +178,16 @@ const Seo = (props: SeoProps) => {
             '@type': 'WebPage',
             '@id': canonicalUrl,
           },
-          ...([frontmatter.category, ...(frontmatter.categories || [])].filter(Boolean).length
+          ...([frontmatter.category, ...(frontmatter.categories || [])].filter(
+            Boolean,
+          ).length
             ? {
                 articleSection: Array.from(
                   new Set(
-                    [frontmatter.category, ...(frontmatter.categories || [])].filter(Boolean),
+                    [
+                      frontmatter.category,
+                      ...(frontmatter.categories || []),
+                    ].filter(Boolean),
                   ),
                 ),
               }
@@ -157,7 +198,8 @@ const Seo = (props: SeoProps) => {
       : {}),
     ...(resolvedSchemaType === 'Service'
       ? {
-          serviceType: pageTitle || 'Software architecture consulting and training',
+          serviceType:
+            pageTitle || 'Software architecture consulting and training',
           provider: person,
           areaServed: 'Worldwide',
         }
@@ -178,7 +220,10 @@ const Seo = (props: SeoProps) => {
     { property: 'og:image:alt', content: pageTitle || config.siteTitle },
     { property: 'og:type', content: isArticle ? 'article' : 'website' },
     { property: 'og:description', content: description },
-    { property: 'og:locale', content: canonicalLanguage === 'pl' ? 'pl_PL' : 'en_US' },
+    {
+      property: 'og:locale',
+      content: canonicalLanguage === 'pl' ? 'pl_PL' : 'en_US',
+    },
     { property: 'og:url', content: canonicalUrl },
     ...(isArticle && fields.prefix
       ? [{ property: 'article:published_time', content: published }]
@@ -186,7 +231,9 @@ const Seo = (props: SeoProps) => {
     ...(isArticle && frontmatter.category
       ? [{ property: 'article:section', content: frontmatter.category }]
       : []),
-    ...(facebook.appId ? [{ property: 'fb:app_id', content: facebook.appId }] : []),
+    ...(facebook.appId
+      ? [{ property: 'fb:app_id', content: facebook.appId }]
+      : []),
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: title },
     { name: 'twitter:description', content: description },
@@ -218,10 +265,18 @@ const Seo = (props: SeoProps) => {
       <html lang={lang} />
       <title id="page-title">{title}</title>
       {metaTags.map((tag) => (
-        <meta key={tag.name || tag.property} {...tag} id={`meta-${tag.name || tag.property}`} />
+        <meta
+          key={tag.name || tag.property}
+          {...tag}
+          id={`meta-${tag.name || tag.property}`}
+        />
       ))}
       {linkTags.map((tag) => (
-        <link key={tag.hrefLang || tag.rel} {...tag} id={`link-${tag.hrefLang || tag.rel}`} />
+        <link
+          key={tag.hrefLang || tag.rel}
+          {...tag}
+          id={`link-${tag.hrefLang || tag.rel}`}
+        />
       ))}
       {!noIndex && (
         <script

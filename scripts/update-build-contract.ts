@@ -3,7 +3,10 @@ import path from 'path';
 import { collectBuildContract } from './build-contract.ts';
 
 const publicDirectory = path.resolve(import.meta.dirname, '../public');
-const baselinePath = path.resolve(import.meta.dirname, '../tests/fixtures/build-contract.json');
+const baselinePath = path.resolve(
+  import.meta.dirname,
+  '../tests/fixtures/build-contract.json',
+);
 const contract = collectBuildContract(publicDirectory);
 
 fs.mkdirSync(path.dirname(baselinePath), { recursive: true });

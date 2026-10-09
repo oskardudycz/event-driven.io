@@ -16,7 +16,8 @@ test('Introduction newsletter defers its request and loads automatically on scro
   });
   const requests: string[] = [];
   let pendingRequestStarted = false;
-  const { promise: pendingRequest, resolve: releasePendingRequest } = Promise.withResolvers<void>();
+  const { promise: pendingRequest, resolve: releasePendingRequest } =
+    Promise.withResolvers<void>();
   let pendingRequestFinished: Promise<void> | undefined;
   try {
     // Keep a request open to reproduce the CI failure: readiness must not
@@ -42,13 +43,16 @@ test('Introduction newsletter defers its request and loads automatically on scro
         },
       );
     });
-    await page.route('https://www.architecture-weekly.com/embed', async (route) => {
-      requests.push(route.request().url());
-      await route.fulfill({
-        contentType: 'text/html',
-        body: '<!doctype html><html><body>Newsletter form</body></html>',
-      });
-    });
+    await page.route(
+      'https://www.architecture-weekly.com/embed',
+      async (route) => {
+        requests.push(route.request().url());
+        await route.fulfill({
+          contentType: 'text/html',
+          body: '<!doctype html><html><body>Newsletter form</body></html>',
+        });
+      },
+    );
     await page.goto('/en/introduction_to_event_sourcing/', {
       waitUntil: 'domcontentloaded',
     });
@@ -59,13 +63,16 @@ test('Introduction newsletter defers its request and loads automatically on scro
       state: 'attached',
     });
     await expect(iframe).toHaveAttribute('loading', 'lazy');
-    await expect(iframe).toHaveAttribute('title', 'Subscribe to Architecture Weekly');
+    await expect(iframe).toHaveAttribute(
+      'title',
+      'Subscribe to Architecture Weekly',
+    );
     expect(requests).toHaveLength(0);
     await iframe.scrollIntoViewIfNeeded();
     await expect.poll(() => requests.length).toBe(1);
-    await expect(page.frameLocator('#substack iframe').locator('body')).toHaveText(
-      'Newsletter form',
-    );
+    await expect(
+      page.frameLocator('#substack iframe').locator('body'),
+    ).toHaveText('Newsletter form');
   } finally {
     releasePendingRequest();
     await pendingRequestFinished;
@@ -81,13 +88,16 @@ for (const lang of ['en', 'pl']) {
       height: 900,
     });
     const requests: string[] = [];
-    await page.route('https://www.architecture-weekly.com/embed', async (route) => {
-      requests.push(route.request().url());
-      await route.fulfill({
-        contentType: 'text/html',
-        body: '<p>Newsletter form</p>',
-      });
-    });
+    await page.route(
+      'https://www.architecture-weekly.com/embed',
+      async (route) => {
+        requests.push(route.request().url());
+        await route.fulfill({
+          contentType: 'text/html',
+          body: '<p>Newsletter form</p>',
+        });
+      },
+    );
     await page.goto(`/${lang}/introduction_to_event_sourcing/`, {
       waitUntil: 'domcontentloaded',
     });
@@ -110,19 +120,22 @@ test.describe('newsletter without JavaScript', () => {
   test.use({
     javaScriptEnabled: false,
   });
-  test('newsletter keeps a subscription link without requesting its embed', async ({ page }) => {
+  test('newsletter keeps a subscription link without requesting its embed', async ({
+    page,
+  }) => {
     await page.goto('/en/introduction_to_event_sourcing/', {
       waitUntil: 'domcontentloaded',
     });
-    await expect(page.locator('#substack .subscription-fallback')).toHaveAttribute(
-      'href',
-      'https://www.architecture-weekly.com/subscribe',
-    );
+    await expect(
+      page.locator('#substack .subscription-fallback'),
+    ).toHaveAttribute('href', 'https://www.architecture-weekly.com/subscribe');
     await expect(page.locator('#substack iframe')).not.toHaveAttribute('src');
   });
 });
 
-test('newsletter loads automatically when viewport observers are unsupported', async ({ page }) => {
+test('newsletter loads automatically when viewport observers are unsupported', async ({
+  page,
+}) => {
   await page.addInitScript(() => {
     Reflect.deleteProperty(window, 'IntersectionObserver');
   });
@@ -141,15 +154,21 @@ test('newsletter loads automatically when viewport observers are unsupported', a
   );
 });
 
-test('newsletter disconnects its viewport observer when navigating away', async ({ page }) => {
+test('newsletter disconnects its viewport observer when navigating away', async ({
+  page,
+}) => {
   await page.addInitScript(() => {
     const NativeObserver = window.IntersectionObserver;
     window.newsletterObservers = [];
     window.IntersectionObserver = class extends NativeObserver {
       disconnected = false;
-      constructor(callback: IntersectionObserverCallback, options?: IntersectionObserverInit) {
+      constructor(
+        callback: IntersectionObserverCallback,
+        options?: IntersectionObserverInit,
+      ) {
         super(callback, options);
-        if (options?.rootMargin === '200px 0px') window.newsletterObservers.push(this);
+        if (options?.rootMargin === '200px 0px')
+          window.newsletterObservers.push(this);
       }
       disconnect() {
         this.disconnected = true;

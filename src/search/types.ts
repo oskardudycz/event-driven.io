@@ -12,6 +12,12 @@ export type SearchDocument = {
   cover?: IGatsbyImageData | null;
 };
 export type SearchHit = Omit<SearchDocument, 'id' | 'date' | 'category'> &
-  Partial<Pick<SearchDocument, 'id' | 'date'>> & { category?: string | string[]; terms: string[] };
-export type IndexedSearchResult = Pick<SearchResult, 'score' | 'terms' | 'queryTerms' | 'match'> &
+  Partial<Pick<SearchDocument, 'id' | 'date'>> & {
+    category?: string | string[];
+    terms: string[];
+  };
+export type IndexedSearchResult = Pick<
+  SearchResult,
+  'score' | 'terms' | 'queryTerms' | 'match'
+> &
   SearchDocument;

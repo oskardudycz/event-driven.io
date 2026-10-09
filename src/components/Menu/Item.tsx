@@ -1,5 +1,9 @@
 import type { IconType } from 'react-icons';
-export type MenuItem = { to: string; label?: string; icon?: IconType };
+export type MenuItem = {
+  to: string;
+  label?: string;
+  icon?: IconType | undefined;
+};
 import * as styles from './Item.module.css';
 import React from 'react';
 import { Link } from '../Link/index.tsx';

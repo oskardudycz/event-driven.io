@@ -23,10 +23,14 @@ const postsDirectory = path.resolve(import.meta.dirname, '../content/posts');
 function normalizeUrl(input: string): string {
   const url = new URL(input);
   if (url.hostname === 'web.archive.org') {
-    const capture = url.pathname.match(/^\/web\/(\d{14})(?:id_|im_)?\/(https?:\/\/.+)$/);
-    if (!capture) throw new Error(`Expected a dated Wayback capture URL: ${input}`);
+    const capture = url.pathname.match(
+      /^\/web\/(\d{14})(?:id_|im_)?\/(https?:\/\/.+)$/,
+    );
+    if (!capture?.[2])
+      throw new Error(`Expected a dated Wayback capture URL: ${input}`);
     const original = normalizeUrl(capture[2]);
-    if (new URL(original).hostname === 'web.archive.org') throw new Error('Nested archive URL');
+    if (new URL(original).hostname === 'web.archive.org')
+      throw new Error('Nested archive URL');
     return `https://web.archive.org/web/${capture[1]}id_/${original}`;
   }
   const isSubstack = /^\/p\/[a-z0-9-]+\/?$/i.test(url.pathname);
@@ -34,7 +38,9 @@ function normalizeUrl(input: string): string {
     /^(kurrentdb\.kurrent\.io|www\.eventstore\.com)$/.test(url.hostname) &&
     /^\/blog\/[a-z0-9-]+\/?$/i.test(url.pathname);
   if (!/^https?:$/.test(url.protocol) || !(isSubstack || isBlog)) {
-    throw new Error(`Expected a Substack post or Kurrent/EventStore article URL: ${input}`);
+    throw new Error(
+      `Expected a Substack post or Kurrent/EventStore article URL: ${input}`,
+    );
   }
   url.hash = '';
   url.search = '';
@@ -43,9 +49,14 @@ function normalizeUrl(input: string): string {
 }
 
 function sourceLocation(source: string) {
-  const capture = source.match(/^https:\/\/web\.archive\.org\/web\/(\d{14})id_\/(https?:\/\/.+)$/);
-  return capture
-    ? { base: capture[2], archive: `https://web.archive.org/web/${capture[1]}id_/` }
+  const capture = source.match(
+    /^https:\/\/web\.archive\.org\/web\/(\d{14})id_\/(https?:\/\/.+)$/,
+  );
+  return capture?.[2]
+    ? {
+        base: capture[2],
+        archive: `https://web.archive.org/web/${capture[1]}id_/`,
+      }
     : { base: source };
 }
 
@@ -55,10 +66,13 @@ function originalImageUrl(input: string, base: string): string {
   const archived = url.href.match(
     /^https:\/\/web\.archive\.org\/web\/\d+(?:id_|im_)?\/(https?:\/\/.+)$/,
   );
-  if (archived) return originalImageUrl(archived[1], base);
-  if (url.hostname === 'substackcdn.com' && url.pathname.startsWith('/image/fetch/')) {
+  if (archived?.[1]) return originalImageUrl(archived[1], base);
+  if (
+    url.hostname === 'substackcdn.com' &&
+    url.pathname.startsWith('/image/fetch/')
+  ) {
     const original = url.pathname.match(/\/(https?(?:%3A|:).*)$/i);
-    if (original) return new URL(decodeURIComponent(original[1])).href;
+    if (original?.[1]) return new URL(decodeURIComponent(original[1])).href;
   }
   return url.href;
 }
@@ -68,17 +82,23 @@ function extractPost(html: string, source: string) {
   const body = $(
     '.available-content .body.markup, .body.markup, #blog-post-content, #hs_cos_wrapper_post_body',
   ).first();
-  if (!body.length || !body.text().trim()) throw new Error(`Article body missing: ${source}`);
+  if (!body.length || !body.text().trim())
+    throw new Error(`Article body missing: ${source}`);
   let completePublicBody = false;
   // Previously paid posts can retain an empty paywall-jump after becoming
   // public. Only accept that marker when Substack explicitly exposes the full
   // public body and it matches the rendered article; never evaluate scripts.
-  const preloads = html.match(/window\._preloads\s*=\s*JSON\.parse\(("(?:\\.|[^"\\])*")\)/);
-  if (preloads) {
+  const preloads = html.match(
+    /window\._preloads\s*=\s*JSON\.parse\(("(?:\\.|[^"\\])*")\)/,
+  );
+  if (preloads?.[1]) {
     try {
       const serialized: unknown = JSON.parse(preloads[1]);
-      if (typeof serialized !== 'string') throw new Error('Invalid Substack preload');
-      const data = JSON.parse(serialized) as { post?: { audience?: string; body_html?: string } };
+      if (typeof serialized !== 'string')
+        throw new Error('Invalid Substack preload');
+      const data = JSON.parse(serialized) as {
+        post?: { audience?: string; body_html?: string };
+      };
       const text = (value: string) => value.replace(/\s+/g, ' ').trim();
       completePublicBody =
         data.post?.audience === 'everyone' &&
@@ -92,14 +112,27 @@ function extractPost(html: string, source: string) {
     $('.paywall, .paywall-content').length ||
     ($('.paywall-jump').length && !completePublicBody)
   ) {
-    throw new Error(`Paywalled article; refusing to import a preview: ${source}`);
+    throw new Error(
+      `Paywalled article; refusing to import a preview: ${source}`,
+    );
   }
   let article: { headline?: string; datePublished?: string } = {};
   $("script[type='application/ld+json']").each((_, node) => {
     try {
-      type Article = { '@type'?: string; headline?: string; datePublished?: string };
-      const data = JSON.parse($(node).text()) as Article | Article[] | { '@graph': Article[] };
-      const entries = Array.isArray(data) ? data : '@graph' in data ? data['@graph'] : [data];
+      type Article = {
+        '@type'?: string;
+        headline?: string;
+        datePublished?: string;
+      };
+      const data = JSON.parse($(node).text()) as
+        | Article
+        | Article[]
+        | { '@graph': Article[] };
+      const entries = Array.isArray(data)
+        ? data
+        : '@graph' in data
+          ? data['@graph']
+          : [data];
       article =
         entries.find((entry: { '@type'?: string }) =>
           /^(NewsArticle|Article|BlogPosting)$/.test(entry['@type'] || ''),
@@ -108,7 +141,8 @@ function extractPost(html: string, source: string) {
       /* Other structured data is not required for importing. */
     }
   });
-  const title = $("meta[property='og:title']").attr('content') || article.headline;
+  const title =
+    $("meta[property='og:title']").attr('content') || article.headline;
   const published =
     article.datePublished ||
     $("meta[property='article:published_time']").attr('content') ||
@@ -137,16 +171,21 @@ function extractPost(html: string, source: string) {
     date: new Date(published).toISOString().slice(0, 10),
     cover: $('#blog-post-content').length
       ? $('article img').first().attr('src')
-      : $("meta[property='og:image']").attr('content') || body.find('img').first().attr('src'),
+      : $("meta[property='og:image']").attr('content') ||
+        body.find('img').first().attr('src'),
     coverIsBodyFallback:
-      !$('#blog-post-content').length && !$("meta[property='og:image']").attr('content'),
+      !$('#blog-post-content').length &&
+      !$("meta[property='og:image']").attr('content'),
   };
 }
 
 async function request(url: string) {
   const response = await fetch(url, {
     signal: AbortSignal.timeout(60000),
-    headers: { 'User-Agent': 'event-driven.io article importer', Accept: '*/*' },
+    headers: {
+      'User-Agent': 'event-driven.io article importer',
+      Accept: '*/*',
+    },
   });
   if (!response.ok) throw new Error(`HTTP ${response.status} fetching ${url}`);
   return response;
@@ -156,7 +195,7 @@ async function request(url: string) {
 function hasSvgRoot(text: string) {
   let cursor = 0;
   const skipWhitespace = () => {
-    while (cursor < text.length && /\s/.test(text[cursor])) cursor++;
+    while (cursor < text.length && /\s/.test(text.charAt(cursor))) cursor++;
   };
   skipWhitespace();
   if (text.startsWith('<?xml', cursor)) {
@@ -190,10 +229,17 @@ function safeEmphasis(node: Node): string {
 }
 
 function imageExtension(bytes: Buffer) {
-  if (bytes.subarray(0, 3).equals(Buffer.from([0xff, 0xd8, 0xff]))) return '.jpg';
-  if (bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))) return '.png';
+  if (bytes.subarray(0, 3).equals(Buffer.from([0xff, 0xd8, 0xff])))
+    return '.jpg';
+  if (
+    bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))
+  )
+    return '.png';
   if (/^GIF8[79]a/.test(bytes.subarray(0, 6).toString())) return '.gif';
-  if (bytes.subarray(0, 4).toString() === 'RIFF' && bytes.subarray(8, 12).toString() === 'WEBP')
+  if (
+    bytes.subarray(0, 4).toString() === 'RIFF' &&
+    bytes.subarray(8, 12).toString() === 'WEBP'
+  )
     return '.webp';
   if (hasSvgRoot(bytes.toString('utf8'))) return '.svg';
   throw new Error(
@@ -202,7 +248,8 @@ function imageExtension(bytes: Buffer) {
 }
 
 function youtubeId(value: string) {
-  if (!/^[a-zA-Z0-9_-]{11}$/.test(value)) throw new Error(`Invalid YouTube video ID: ${value}`);
+  if (!/^[a-zA-Z0-9_-]{11}$/.test(value))
+    throw new Error(`Invalid YouTube video ID: ${value}`);
   return value;
 }
 
@@ -245,25 +292,33 @@ function applyRecordingEmbeds(
     const link = $(node);
     let url;
     try {
-      url = normalizeUrl(new URL(link.attr('href')!, sourceLocation(source).base).href);
+      url = normalizeUrl(
+        new URL(link.attr('href')!, sourceLocation(source).base).href,
+      );
     } catch {
       return;
     }
     const id = replacements.get(url);
     if (!id) return;
-    const card = link.closest('.embedded-post-wrap, figure, .captioned-image-container');
+    const card = link.closest(
+      '.embedded-post-wrap, figure, .captioned-image-container',
+    );
     if (card.length) {
       card.replaceWith(present.has(id) ? '' : player(id));
     } else {
       const paragraph = link.closest('p, li');
-      if (!present.has(id)) (paragraph.length ? paragraph : link).after(player(id));
+      if (!present.has(id))
+        (paragraph.length ? paragraph : link).after(player(id));
       link.replaceWith(
-        link.contents().filter((_, child) => !('name' in child) || child.name !== 'img'),
+        link
+          .contents()
+          .filter((_, child) => !('name' in child) || child.name !== 'img'),
       );
     }
     present.add(id);
   });
-  if (post.coverIsBodyFallback) post.cover = body.find('img').first().attr('src');
+  if (post.coverIsBodyFallback)
+    post.cover = body.find('img').first().attr('src');
 }
 
 async function convertPost(
@@ -281,7 +336,8 @@ async function convertPost(
   const location = sourceLocation(source);
   const assets = new Map<string, string>();
   const decorativeImages: string[] = [];
-  const { importedAlternative } = await import('../scripts/image-alternatives.ts');
+  const { importedAlternative } =
+    await import('../scripts/image-alternatives.ts');
   async function saveImage(input: string, isCover = false) {
     const original = originalImageUrl(input, location.base);
     const url = location.archive ? `${location.archive}${original}` : original;
@@ -293,7 +349,12 @@ async function convertPost(
       // Some old Substack S3 assets are private now while the publication's
       // CDN still serves their cached image. Preserve that available image.
       const cdn = new URL(input, location.base);
-      if (location.archive || cdn.hostname !== 'substackcdn.com' || cdn.href === url) throw error;
+      if (
+        location.archive ||
+        cdn.hostname !== 'substackcdn.com' ||
+        cdn.href === url
+      )
+        throw error;
       response = await download(cdn.href);
     }
     const bytes = Buffer.from(await response.arrayBuffer());
@@ -319,7 +380,11 @@ async function convertPost(
     const override = Object.hasOwn(entry.imageAlts || {}, src)
       ? entry.imageAlts![src]
       : entry.imageAlts?.[original];
-    const alternative = importedAlternative(element.attr('alt'), override, original);
+    const alternative = importedAlternative(
+      element.attr('alt'),
+      override,
+      original,
+    );
     const filename = await saveImage(src);
     element.attr('src', filename).attr('alt', alternative.alt);
     if (alternative.decorative) decorativeImages.push(filename);
@@ -341,7 +406,8 @@ async function convertPost(
     bulletListMarker: '-',
   });
   converter.use(gfm);
-  const { markdownLinkDestination, markdownLinkTitle } = await import('./markdown-links.ts');
+  const { markdownLinkDestination, markdownLinkTitle } =
+    await import('./markdown-links.ts');
   converter.addRule('articleLinks', {
     filter: (node) => node.nodeName === 'A' && node.hasAttribute('href'),
     replacement: (content, node) => {
@@ -357,7 +423,10 @@ async function convertPost(
         destination = relativeArticleLink(original, location.base, links);
       }
       // Generate Markdown directly; stored mappings never become HTML attributes.
-      const safeDestination = markdownLinkDestination(destination, location.base);
+      const safeDestination = markdownLinkDestination(
+        destination,
+        location.base,
+      );
       const target = localAsset ? href : safeDestination;
       return `[${content}](${target}${markdownLinkTitle(node.getAttribute('title'))})`;
     },
@@ -377,7 +446,9 @@ async function convertPost(
         '';
       const text = (code.textContent || '').replace(/\n$/, '');
       const runs = text.match(/`+/g) || [];
-      const fence = '`'.repeat(Math.max(3, ...runs.map((run) => run.length + 1)));
+      const fence = '`'.repeat(
+        Math.max(3, ...runs.map((run) => run.length + 1)),
+      );
       return `\n\n${fence}${codeLanguage(text, supplied, entry.codeLanguage)}\n${text}\n${fence}\n\n`;
     },
   });
@@ -408,8 +479,13 @@ async function convertPost(
         if (youtube) return youtube;
       }
       element.find('script').remove();
-      for (const child of [...element.toArray(), ...element.find('*').toArray()]) {
-        for (const attribute of Object.keys('attribs' in child ? child.attribs : {})) {
+      for (const child of [
+        ...element.toArray(),
+        ...element.find('*').toArray(),
+      ]) {
+        for (const attribute of Object.keys(
+          'attribs' in child ? child.attribs : {},
+        )) {
           if (/^on/i.test(attribute) || ['srcdoc', 'style'].includes(attribute))
             media(child).removeAttr(attribute);
         }
@@ -419,7 +495,8 @@ async function convertPost(
         .addBack('[src]')
         .each((_, child) => {
           const src = new URL(media(child).attr('src')!, location.base);
-          if (!/^https?:$/.test(src.protocol)) throw new Error(`Unsupported embed URL: ${src}`);
+          if (!/^https?:$/.test(src.protocol))
+            throw new Error(`Unsupported embed URL: ${src}`);
           media(child).attr('src', src.href);
         });
       if (node.nodeName === 'IFRAME' && !element.attr('title'))
@@ -441,8 +518,11 @@ async function convertPost(
       /twitter-tweet|instagram-media/.test(node.getAttribute('class') || ''),
     replacement: (_, node) => `\n\n${node.outerHTML}\n\n`,
   });
-  const markdown = normalizeYouTubeEmbeds(converter.turndown(body.html() || ''));
-  if (!markdown.trim()) throw new Error(`Conversion produced an empty article: ${source}`);
+  const markdown = normalizeYouTubeEmbeds(
+    converter.turndown(body.html() || ''),
+  );
+  if (!markdown.trim())
+    throw new Error(`Conversion produced an empty article: ${source}`);
   return {
     markdown,
     decorativeImages,
@@ -457,16 +537,21 @@ async function importPost(entry: ImportEntry, options: ImportOptions = {}) {
   const download = options.download || request;
   const html = options.html || (await (await download(source)).text());
   const post = extractPost(html, source);
-  const sourceSlug = new URL(sourceLocation(source).base).pathname.split('/').pop();
+  const sourceSlug = new URL(sourceLocation(source).base).pathname
+    .split('/')
+    .pop();
   const slug = entry.slug || sourceSlug || '';
-  if (!/^[a-z0-9][a-z0-9_-]*$/.test(slug)) throw new Error(`Invalid slug: ${slug}`);
+  if (!/^[a-z0-9][a-z0-9_-]*$/.test(slug))
+    throw new Error(`Invalid slug: ${slug}`);
   const root = options.output || postsDirectory;
   const destination = path.join(root, `${post.date}--${slug}`);
   await fs.mkdir(root, { recursive: true });
   // Also prevent date changes or custom slugs from silently duplicating an article.
   for (const name of await fs.readdir(root)) {
     if (name.endsWith(`--${slug}`))
-      throw new Error(`Article already exists: ${name}. Import never overwrites existing posts.`);
+      throw new Error(
+        `Article already exists: ${name}. Import never overwrites existing posts.`,
+      );
   }
   const staging = await fs.mkdtemp(path.join(root, '.substack-import-'));
   try {
@@ -504,7 +589,9 @@ async function importPost(entry: ImportEntry, options: ImportOptions = {}) {
       );
     }
     // .txt avoids gatsby-transformer-json treating source URLs as GraphQL fields.
-    const provenance = new URL(sourceLocation(source).base).pathname.startsWith('/p/')
+    const provenance = new URL(sourceLocation(source).base).pathname.startsWith(
+      '/p/',
+    )
       ? 'substack-source.txt'
       : 'article-source.txt';
     await fs.writeFile(
@@ -512,14 +599,18 @@ async function importPost(entry: ImportEntry, options: ImportOptions = {}) {
       `${JSON.stringify(
         {
           url: source,
-          ...(sourceLocation(source).archive ? { originalUrl: sourceLocation(source).base } : {}),
+          ...(sourceLocation(source).archive
+            ? { originalUrl: sourceLocation(source).base }
+            : {}),
           date: post.date,
           assets: converted.assets,
           embeds: converted.embeds,
           ...(entry.codeLanguage ? { codeLanguage: entry.codeLanguage } : {}),
           ...(entry.imageAlts ? { imageAlts: entry.imageAlts } : {}),
           ...(entry.youtubeVideo ? { youtubeVideo: entry.youtubeVideo } : {}),
-          ...(entry.recordingEmbeds ? { recordingEmbeds: entry.recordingEmbeds } : {}),
+          ...(entry.recordingEmbeds
+            ? { recordingEmbeds: entry.recordingEmbeds }
+            : {}),
         },
         null,
         2,
@@ -557,14 +648,20 @@ async function main() {
   const entries: ImportEntry[] = values.manifest
     ? (JSON.parse(await fs.readFile(values.manifest, 'utf8')) as ImportEntry[])
     : [];
-  if (!Array.isArray(entries)) throw new Error('Manifest must contain an array of post entries');
-  entries.push(...positionals.map((url) => ({ url, category: values.category })));
+  if (!Array.isArray(entries))
+    throw new Error('Manifest must contain an array of post entries');
+  entries.push(
+    ...positionals.map((url) => ({
+      url,
+      ...(values.category ? { category: values.category } : {}),
+    })),
+  );
   const html = values.html ? await fs.readFile(values.html, 'utf8') : undefined;
   const links = buildArticleLinks(postsDirectory, entries);
   for (const entry of entries)
     await importPost(
       { ...entry, ...(values.category ? { category: values.category } : {}) },
-      { html, links },
+      { ...(html !== undefined ? { html } : {}), links },
     );
 }
 

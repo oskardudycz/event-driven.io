@@ -34,7 +34,9 @@ export async function writeSearchIndexes(
       documents: documents.length,
       bytes: Buffer.byteLength(json),
       gzip: gzipSync(json).length,
-      brotli: brotliCompressSync(json, { params: { [constants.BROTLI_PARAM_QUALITY]: 4 } }).length,
+      brotli: brotliCompressSync(json, {
+        params: { [constants.BROTLI_PARAM_QUALITY]: 4 },
+      }).length,
     };
   }
   await writeFile(join(directory, 'manifest.json'), JSON.stringify(manifest));

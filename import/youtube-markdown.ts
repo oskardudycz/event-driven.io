@@ -17,9 +17,15 @@ export function youtubeVideoUrl(input: string): string | undefined {
     const host = url.hostname.replace(/^www\./, '');
     let id: string | undefined;
     if (host === 'youtu.be') id = url.pathname.slice(1);
-    else if (['youtube.com', 'youtube-nocookie.com', 'm.youtube.com'].includes(host)) {
-      if (url.pathname === '/watch') id = url.searchParams.get('v') || undefined;
-      else id = url.pathname.match(/^\/(?:embed|shorts|live)\/([\w-]{11})\/?$/)?.[1];
+    else if (
+      ['youtube.com', 'youtube-nocookie.com', 'm.youtube.com'].includes(host)
+    ) {
+      if (url.pathname === '/watch')
+        id = url.searchParams.get('v') || undefined;
+      else
+        id = url.pathname.match(
+          /^\/(?:embed|shorts|live)\/([\w-]{11})\/?$/,
+        )?.[1];
     }
     if (!id || !/^[\w-]{11}$/.test(id)) return;
     const result = new URL('https://www.youtube.com/watch');
@@ -38,7 +44,9 @@ function label(node: MarkdownNode): string {
 }
 
 function embed(url: string, title: string): string {
-  const safeTitle = escapeHtml(title.replace(/[[\]`\r\n]/g, ' ').trim() || 'Embedded video');
+  const safeTitle = escapeHtml(
+    title.replace(/[[\]`\r\n]/g, ' ').trim() || 'Embedded video',
+  );
   return `\`youtube: [${safeTitle}](${url})\``;
 }
 
@@ -52,12 +60,16 @@ export function normalizeYouTubeEmbeds(markdown: string): string {
       let children = (node.children || []).filter(
         (child) => child.type !== 'text' || !/^\s*$/.test(child.value || ''),
       );
-      while (children.length === 1 && ['strong', 'emphasis'].includes(children[0].type))
-        children = children[0].children || [];
-      if (children.length === 1) {
-        const child = children[0];
+      while (children.length === 1) {
+        const first = children[0];
+        if (!first || !['strong', 'emphasis'].includes(first.type)) break;
+        children = first.children || [];
+      }
+      const child = children.length === 1 ? children[0] : undefined;
+      if (child) {
         const image = child.children?.[0];
-        const url = child.type === 'link' ? youtubeVideoUrl(child.url || '') : undefined;
+        const url =
+          child.type === 'link' ? youtubeVideoUrl(child.url || '') : undefined;
         if (url && child.children?.length === 1 && image?.type === 'image') {
           edits.push({
             start: node.position.start.offset,

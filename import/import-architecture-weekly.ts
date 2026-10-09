@@ -16,5 +16,7 @@ try {
 
   console.log('SUCCESS! ArchitectureWeekly import succeeded.');
 } catch (error) {
-  console.log(`ERROR! Failed to import ArchitectureWeekly repo! \n${String(error)}`);
+  console.log(
+    `ERROR! Failed to import ArchitectureWeekly repo! \n${String(error)}`,
+  );
 }

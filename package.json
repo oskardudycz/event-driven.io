@@ -78,7 +78,8 @@
     "check:images": "node scripts/check-image-alternatives.ts",
     "test:images": "yarn check:images && node --test --test-isolation=none tests/image-alternatives.test.ts",
     "test:browser-types": "tsc --project tests/browser/tsconfig.json",
-    "typecheck": "tsc --project tsconfig.json && tsc --project tsconfig.node.json"
+    "typecheck": "tsc --project tsconfig.json && tsc --project tsconfig.node.json",
+    "typecheck:watch": "tsc --project tsconfig.json --watch"
   },
   "dependencies": {
     "@ant-design/compatible": "^1.0.8",
@@ -115,12 +116,11 @@
     "lodash": "4.17.21",
     "minisearch": "7.2.0",
     "prismjs": "^1.27.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
     "react-i18next": "^12.0.0",
-    "react-icons": "^4.2.0",
+    "react-icons": "5.7.0",
     "react-share": "^5.3.0",
-    "react-visibility-sensor": "^5.1.1",
     "shelljs": "^0.8.5",
     "unist-util-visit": "2.0.3"
   },
@@ -128,7 +128,7 @@
     "gatsby"
   ],
   "devDependencies": {
-    "@eslint/js": "9.39.5",
+    "@eslint/js": "10.0.1",
     "@playwright/browser-chromium": "1.63.0",
     "@playwright/test": "1.63.0",
     "@types/escape-html": "^1.0.4",
@@ -137,8 +137,8 @@
     "@types/lodash": "^4.17.25",
     "@types/mdast": "4.0.4",
     "@types/node": "24.19.1",
-    "@types/react": "18.3.31",
-    "@types/react-dom": "18.3.7",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
     "@types/shelljs": "^0.10.0",
     "@types/turndown": "^5.0.6",
     "@types/webpack-bundle-analyzer": "^4.7.0",
@@ -148,7 +148,7 @@
     "cheerio": "1.0.0-rc.12",
     "dotenv": "^10.0.0",
     "escape-html": "1.0.3",
-    "eslint": "9.39.5",
+    "eslint": "10.12.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-jsx-a11y": "6.10.2",
     "eslint-plugin-prettier": "5.5.5",
@@ -180,6 +180,6 @@
     "webpack-bundle-analyzer": "^4.4.2"
   },
   "resolutions": {
-    "@types/react": "18.3.31"
+    "@types/react": "19.3.0"
   }
 }

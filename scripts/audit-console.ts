@@ -6,7 +6,10 @@ import { chromium, firefox } from 'playwright';
 
 const { values } = parseArgs({
   options: {
-    url: { type: 'string', default: 'http://127.0.0.1:9000/en/open-source-a-relict-a-charity-or/' },
+    url: {
+      type: 'string',
+      default: 'http://127.0.0.1:9000/en/open-source-a-relict-a-charity-or/',
+    },
     browser: { type: 'string', default: 'firefox' },
     seconds: { type: 'string', default: '15' },
     output: { type: 'string' },
@@ -20,11 +23,15 @@ if (values.help) {
   process.exit(0);
 }
 const url = new URL(values.url);
-if (!['http:', 'https:'].includes(url.protocol)) throw new Error('Use an HTTP(S) page URL');
+if (!['http:', 'https:'].includes(url.protocol))
+  throw new Error('Use an HTTP(S) page URL');
 const browserName = values.browser;
-if (!['firefox', 'chromium'].includes(browserName)) throw new Error('Unsupported browser');
+if (!['firefox', 'chromium'].includes(browserName))
+  throw new Error('Unsupported browser');
 const seconds = integerOption(values.seconds, '--seconds', 1, 60);
-const output = resolve(values.output || `report/browser-console/${browserName}.json`);
+const output = resolve(
+  values.output || `report/browser-console/${browserName}.json`,
+);
 const events: Record<string, unknown>[] = [];
 const browser = await (browserName === 'firefox' ? firefox : chromium).launch();
 try {
@@ -38,25 +45,33 @@ try {
       location: message.location(),
     });
   });
-  page.on('pageerror', (error) => events.push({ kind: 'exception', stack: error.stack }));
+  page.on('pageerror', (error) =>
+    events.push({ kind: 'exception', stack: error.stack }),
+  );
   page.on('requestfailed', (request) => {
-    events.push({ kind: 'request-failed', url: request.url(), failure: request.failure() });
+    events.push({
+      kind: 'request-failed',
+      url: request.url(),
+      failure: request.failure(),
+    });
   });
   const response = await page.goto(url.href, { waitUntil: 'domcontentloaded' });
   const comments = page.locator('#disqus_thread');
   if (await comments.count()) await comments.scrollIntoViewIfNeeded();
   // Bounded observation, not networkidle: ad/analytics requests may never settle.
   await page.waitForTimeout(seconds * 1000);
-  const localFileReferences = await page.locator('[href],[src],[data]').evaluateAll((elements) =>
-    elements.flatMap((element) =>
-      ['href', 'src', 'data'].flatMap((attribute) => {
-        const value = element.getAttribute(attribute);
-        return value && /^\s*file:/i.test(value)
-          ? [{ tag: element.tagName, attribute, value }]
-          : [];
-      }),
-    ),
-  );
+  const localFileReferences = await page
+    .locator('[href],[src],[data]')
+    .evaluateAll((elements) =>
+      elements.flatMap((element) =>
+        ['href', 'src', 'data'].flatMap((attribute) => {
+          const value = element.getAttribute(attribute);
+          return value && /^\s*file:/i.test(value)
+            ? [{ tag: element.tagName, attribute, value }]
+            : [];
+        }),
+      ),
+    );
   await mkdir(dirname(output), { recursive: true });
   await writeFile(
     output,

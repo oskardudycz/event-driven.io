@@ -3,32 +3,43 @@
   "editor.formatOnPaste": false,
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
     "source.organizeImports": "explicit",
+    "source.fixAll.eslint": "explicit",
     "source.addMissingImports": "always"
   },
+  "[typescript]": {
+    "editor.formatOnSave": false
+  },
   "editor.tabSize": 2,
+  "files.exclude": {
+    "node_modules/": true,
+    "**/node_modules/": true,
+    "**/dist/": true,
+    "**/*.tsbuildinfo": true,
+    ".cache/": true,
+    "public/": true
+  },
   "files.eol": "\n",
-  "prettier.requireConfig": true,
-  "eslint.useFlatConfig": true,
-  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "typescript.preferences.importModuleSpecifier": "relative",
   "eslint.workingDirectories": [
     {
       "mode": "auto"
     }
   ],
-  "typescript.preferences.importModuleSpecifier": "relative",
+  "debug.javascript.terminalOptions": {
+    "nodeVersionHint": 24
+  },
+  "nodejs-testing.include": ["./tests/*.test.ts"],
+  "nodejs-testing.extensions": [
+    {
+      "extensions": ["ts"],
+      "filePatterns": ["**/*.test.ts"]
+    }
+  ],
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
-  "files.exclude": {
-    "**/node_modules/": true,
-    ".cache/": true,
-    "public/": true
-  },
-  "[typescript]": {
-    "editor.formatOnSave": false
-  },
   "[typescriptreact]": {
     "editor.formatOnSave": false
-  }
+  },
+  "npm.packageManager": "yarn"
 }

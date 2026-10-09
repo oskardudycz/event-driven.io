@@ -34,7 +34,10 @@ declare module 'gatsby-plugin-react-i18next/gatsby-node.js' {
   export function onCreatePage(
     args: {
       page: LocalizedPage;
-      actions: { createPage(page: LocalizedPage): void; deletePage(page: LocalizedPage): void };
+      actions: {
+        createPage(page: LocalizedPage): void;
+        deletePage(page: LocalizedPage): void;
+      };
     },
     options: Record<string, unknown>,
   ): Promise<void>;

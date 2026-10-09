@@ -5,7 +5,12 @@ type LighthouseReport = {
   categories: Record<string, { score: number | null }>;
   audits: Record<
     string,
-    { id: string; score: number | null; scoreDisplayMode: string; numericValue?: number }
+    {
+      id: string;
+      score: number | null;
+      scoreDisplayMode: string;
+      numericValue?: number;
+    }
   >;
 };
 import { integerOption } from './cli-options.ts';
@@ -37,9 +42,12 @@ if (values.help) {
 }
 const blockedPatterns = values['block-pattern'];
 const base = new URL(values['base-url']);
-if (!['http:', 'https:'].includes(base.protocol)) throw new Error('Use an HTTP(S) site URL');
+if (!['http:', 'https:'].includes(base.protocol))
+  throw new Error('Use an HTTP(S) site URL');
 const runs = integerOption(values.runs, '--runs', 1, 10);
-const pages = values.page ? [values.page] : ['/en/', '/en/introduction_to_event_sourcing/'];
+const pages = values.page
+  ? [values.page]
+  : ['/en/', '/en/introduction_to_event_sourcing/'];
 if (pages.some((page) => !page.startsWith('/') || page.startsWith('//')))
   throw new Error('--page must be a path on the selected site');
 const label = values.label.replace(/[^a-zA-Z0-9_-]/g, '_');
@@ -48,7 +56,10 @@ await fs.mkdir(output, { recursive: true });
 // Playwright owns Chrome profiles; Lighthouse attaches to its debugging port.
 // This avoids chrome-launcher's WSL/Windows profile-path detection.
 const temporaryRoot = await fs.mkdtemp(
-  path.join(process.platform === 'win32' ? os.tmpdir() : '/tmp', 'event-driven-audit-'),
+  path.join(
+    process.platform === 'win32' ? os.tmpdir() : '/tmp',
+    'event-driven-audit-',
+  ),
 );
 const environment = {
   ...process.env,
@@ -70,7 +81,9 @@ function run(command: string, arguments_: string[]) {
     });
     child.on('error', reject);
     child.on('exit', (code) =>
-      code === 0 ? resolve() : reject(new Error(`Audit exited with code ${code}`)),
+      code === 0
+        ? resolve()
+        : reject(new Error(`Audit exited with code ${code}`)),
     );
   });
 }
@@ -78,7 +91,8 @@ async function freePort() {
   const server = net.createServer();
   await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));
   const address = server.address();
-  if (!address || typeof address === 'string') throw new Error('Expected a TCP listener address');
+  if (!address || typeof address === 'string')
+    throw new Error('Expected a TCP listener address');
   const port = address.port;
   await new Promise<void>((resolve, reject) =>
     server.close((error) => (error ? reject(error) : resolve())),
@@ -95,17 +109,26 @@ try {
         env: environment,
       });
       try {
-        const file = path.join(output, `${page.replace(/[^a-zA-Z0-9]+/g, '_')}-${attempt}.json`);
+        const file = path.join(
+          output,
+          `${page.replace(/[^a-zA-Z0-9]+/g, '_')}-${attempt}.json`,
+        );
         const auditArguments = [
           new URL(page, base).href,
           `--port=${port}`,
           '--output=json',
           `--output-path=${file}`,
           '--quiet',
-          ...blockedPatterns.map((pattern) => `--blocked-url-patterns=${pattern}`),
+          ...blockedPatterns.map(
+            (pattern) => `--blocked-url-patterns=${pattern}`,
+          ),
         ];
         const binary = values['lighthouse-bin'];
-        if (binary) await run(process.execPath, [path.resolve(binary), ...auditArguments]);
+        if (binary)
+          await run(process.execPath, [
+            path.resolve(binary),
+            ...auditArguments,
+          ]);
         else
           await run(process.platform === 'win32' ? 'npm.cmd' : 'npm', [
             'exec',
@@ -115,9 +138,13 @@ try {
             'lighthouse',
             ...auditArguments,
           ]);
-        const report = JSON.parse(await fs.readFile(file, 'utf8')) as LighthouseReport;
+        const report = JSON.parse(
+          await fs.readFile(file, 'utf8'),
+        ) as LighthouseReport;
         if (report.lighthouseVersion !== '13.5.0')
-          throw new Error('Expected Lighthouse 13.5.0; comparison requires the pinned version');
+          throw new Error(
+            'Expected Lighthouse 13.5.0; comparison requires the pinned version',
+          );
         if (report.runtimeError) throw new Error(report.runtimeError.message);
         results.push({
           page,
@@ -126,7 +153,10 @@ try {
           browserVersion: browser.version(),
           finalUrl: report.finalDisplayedUrl,
           scores: Object.fromEntries(
-            Object.entries(report.categories).map(([name, value]) => [name, value.score]),
+            Object.entries(report.categories).map(([name, value]) => [
+              name,
+              value.score,
+            ]),
           ),
           metrics: Object.fromEntries(
             [
@@ -140,13 +170,19 @@ try {
           failedAudits: Object.values(report.audits)
             .filter(
               (audit) =>
-                audit.score !== null && audit.score < 1 && audit.scoreDisplayMode !== 'informative',
+                audit.score !== null &&
+                audit.score < 1 &&
+                audit.scoreDisplayMode !== 'informative',
             )
             .map((audit) => audit.id),
         });
         await fs.writeFile(
           path.join(output, 'summary.json'),
-          JSON.stringify({ baseUrl: base.href, runs, blockedPatterns, results }, null, 2),
+          JSON.stringify(
+            { baseUrl: base.href, runs, blockedPatterns, results },
+            null,
+            2,
+          ),
         );
         console.log(`Saved ${page}, run ${attempt}: ${file}`);
       } finally {
@@ -157,4 +193,6 @@ try {
 } finally {
   await fs.rm(temporaryRoot, { recursive: true, force: true });
 }
-console.log(`Compare median metrics across ${runs} runs per page; reports: ${output}`);
+console.log(
+  `Compare median metrics across ${runs} runs per page; reports: ${output}`,
+);

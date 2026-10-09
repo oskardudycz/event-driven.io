@@ -44,7 +44,9 @@ export async function checkCssBrowser(expectedColor?: string) {
         waitUntil: 'load',
       });
       if (javaScriptEnabled)
-        await page.waitForFunction(() => document.documentElement.dataset.font400 === 'loaded');
+        await page.waitForFunction(
+          () => document.documentElement.dataset.font400 === 'loaded',
+        );
       const color = await page
         .locator('nav.links time')
         .first()
@@ -55,7 +57,11 @@ export async function checkCssBrowser(expectedColor?: string) {
       colors.push(color);
       await context.close();
     }
-    assert.equal(colors[0], colors[1], 'Hydration changed the warm-build date color');
+    assert.equal(
+      colors[0],
+      colors[1],
+      'Hydration changed the warm-build date color',
+    );
     return colors[0];
   } finally {
     await browser.close();

@@ -5,7 +5,9 @@ import path from 'node:path';
 // Hash compatibility inputs, including environment-dependent generated content.
 // Never print credentials; only the digest leaves this process.
 const hash = crypto.createHash('sha256');
-hash.update(`gatsby-cache-v3:${process.version}:${process.platform}:${process.arch}`);
+hash.update(
+  `gatsby-cache-v3:${process.version}:${process.platform}:${process.arch}`,
+);
 function include(file: string) {
   hash.update(file);
   hash.update(fs.readFileSync(file));
@@ -24,6 +26,7 @@ for (const file of [
   'gatsby-node.mjs',
   'site/node.ts',
   'tsconfig.json',
+  'tsconfig.shared.json',
   'tsconfig.node.json',
   'gatsby-browser.tsx',
   'gatsby-ssr.tsx',
@@ -56,5 +59,8 @@ for (const key of ['FB_APP_ID', 'GATSBY_DISQUS_NAME', 'GOOGLE_TAG_ID'])
   hash.update(`${key}:${process.env[key] || ''}`);
 const compatibility = hash.digest('hex');
 if (process.env.GITHUB_OUTPUT)
-  fs.appendFileSync(process.env.GITHUB_OUTPUT, `compatibility=${compatibility}\n`);
+  fs.appendFileSync(
+    process.env.GITHUB_OUTPUT,
+    `compatibility=${compatibility}\n`,
+  );
 else console.log(compatibility);

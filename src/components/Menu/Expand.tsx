@@ -1,5 +1,5 @@
 import * as styles from './Expand.module.css';
-import { FaAngleDown } from 'react-icons/fa/';
+import { FaAngleDown } from 'react-icons/fa';
 import React from 'react';
 
 const Expand = (props: { onClick: () => void; open: boolean }) => {

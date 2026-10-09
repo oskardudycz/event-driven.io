@@ -17,7 +17,9 @@ void test('imported bare paths redirect permanently to English before the catch-
   const directory = temporaryDirectory(t, 'article-redirects-');
   const root = path.resolve(import.meta.dirname, '../content/posts');
   const names = await fs.readdir(root);
-  const archive = archiveAudit.posts.filter((post) => post.status === 'existing');
+  const archive = archiveAudit.posts.filter(
+    (post) => post.status === 'existing',
+  );
   const entries: { directory?: string; slug?: string; url: string }[] = [
     ...archive,
     ...missingPosts,
@@ -30,21 +32,29 @@ void test('imported bare paths redirect permanently to English before the catch-
       entry.directory?.split('--')[1] ||
       entry.slug ||
       entry.url.replace(/\/$/, '').split('/').pop();
-    const name = entry.directory || names.find((name) => name.endsWith(`--${slug}`));
+    const name =
+      entry.directory || names.find((name) => name.endsWith(`--${slug}`));
     assert(name, `Missing imported article: ${slug}`);
     expected.push(`/${slug}/ /en/${slug}/ 301`);
     for (const lang of ['en', 'pl']) {
-      const markdown = await fs.readFile(path.join(root, name, `index.${lang}.md`), 'utf8');
+      const markdown = await fs.readFile(
+        path.join(root, name, `index.${lang}.md`),
+        'utf8',
+      );
       const frontmatter = readFrontmatter(markdown.split('---')[1]);
-      assert.equal(frontmatter.redirectFrom, lang === 'en' ? `/${slug}/` : undefined);
+      assert.equal(
+        frontmatter.redirectFrom,
+        lang === 'en' ? `/${slug}/` : undefined,
+      );
       if (lang === 'en') {
         for (const alias of frontmatter.redirectAliases || [])
           expected.push(`${alias} /en/${slug}/ 301`);
         const sourceSlug = entry.url.replace(/\/$/, '').split('/').pop();
         assert(
-          [frontmatter.redirectFrom, ...(frontmatter.redirectAliases || [])].includes(
-            `/${sourceSlug}/`,
-          ),
+          [
+            frontmatter.redirectFrom,
+            ...(frontmatter.redirectAliases || []),
+          ].includes(`/${sourceSlug}/`),
         );
       }
       // This test concerns redirects; related content is verified by the SEO tests.
@@ -69,7 +79,8 @@ void test('imported bare paths redirect permanently to English before the catch-
   const redirects: Parameters<Actions['createRedirect']>[0][] = [];
   const pages: Parameters<Actions['createPage']>[0][] = [];
   const actions = {
-    createPage: (page: Parameters<Actions['createPage']>[0]) => pages.push(page),
+    createPage: (page: Parameters<Actions['createPage']>[0]) =>
+      pages.push(page),
     createRedirect: (redirect: Parameters<Actions['createRedirect']>[0]) =>
       redirects.push(redirect),
   };
@@ -80,7 +91,10 @@ void test('imported bare paths redirect permanently to English before the catch-
         assert.match(query, /redirectFrom/);
         // Cover resolution is verified by the generated search-index tests.
         return Promise.resolve({
-          data: { allMarkdownRemark: { edges: nodes }, searchCovers: { nodes: [] } },
+          data: {
+            allMarkdownRemark: { edges: nodes },
+            searchCovers: { nodes: [] },
+          },
         });
       },
     } as unknown as Parameters<typeof createPages>[0],
@@ -99,9 +113,15 @@ void test('imported bare paths redirect permanently to English before the catch-
     { plugins: [] },
     () => {},
   );
-  await writeRedirects({ publicFolder: (file) => path.join(directory, file) }, redirects, []);
+  await writeRedirects(
+    { publicFolder: (file) => path.join(directory, file) },
+    redirects,
+    [],
+  );
   const output = await fs.readFile(path.join(directory, '_redirects'), 'utf8');
-  const lines = output.split(/\r?\n/).map((line) => line.trim().replace(/\s+/g, ' '));
+  const lines = output
+    .split(/\r?\n/)
+    .map((line) => line.trim().replace(/\s+/g, ' '));
   for (const redirect of expected) {
     assert.equal(lines.filter((line) => line === redirect).length, 1);
     assert(

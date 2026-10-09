@@ -20,7 +20,8 @@ if (values.help) {
   process.exit(0);
 }
 const base = new URL(values['base-url']);
-if (!['http:', 'https:'].includes(base.protocol)) throw new Error('Use an HTTP(S) site URL');
+if (!['http:', 'https:'].includes(base.protocol))
+  throw new Error('Use an HTTP(S) site URL');
 const output = resolve(values.output);
 const omitPolishPreloads = values['without-polish-preload'] || false;
 const runs = integerOption(values.runs, '--runs', 1, 10);
@@ -30,11 +31,14 @@ const results = [];
 try {
   for (const language of ['en', 'pl']) {
     for (let attempt = 1; attempt <= runs; attempt++) {
-      const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+      const context = await browser.newContext({
+        viewport: { width: 390, height: 844 },
+      });
       const page = await context.newPage();
       // Attribution run: isolate first-party font/layout costs from vendor scripts.
       await page.route('**/*', async (route) => {
-        if (new URL(route.request().url()).origin !== base.origin) return route.abort();
+        if (new URL(route.request().url()).origin !== base.origin)
+          return route.abort();
         if (
           omitPolishPreloads &&
           route.request().isNavigationRequest() &&
@@ -51,14 +55,18 @@ try {
       });
       await page.addInitScript(() => {
         const record = { shifts: [], switches: [], lcp: [] };
-        (window as unknown as { fontProfile: typeof record }).fontProfile = record;
+        (window as unknown as { fontProfile: typeof record }).fontProfile =
+          record;
         new PerformanceObserver((list) => {
           for (const entry of list.getEntries() as (PerformanceEntry & {
             value: number;
             hadRecentInput: boolean;
           })[]) {
             if (!entry.hadRecentInput)
-              (record.shifts as unknown[]).push({ time: entry.startTime, value: entry.value });
+              (record.shifts as unknown[]).push({
+                time: entry.startTime,
+                value: entry.value,
+              });
           }
         }).observe({ type: 'layout-shift', buffered: true });
         new PerformanceObserver((list) => {
@@ -81,9 +89,12 @@ try {
         });
       });
       try {
-        await page.goto(new URL(`/${language}/introduction_to_event_sourcing/`, base).href, {
-          waitUntil: 'domcontentloaded',
-        });
+        await page.goto(
+          new URL(`/${language}/introduction_to_event_sourcing/`, base).href,
+          {
+            waitUntil: 'domcontentloaded',
+          },
+        );
         await page.waitForFunction(
           () =>
             document.documentElement.dataset.font400 === 'loaded' &&

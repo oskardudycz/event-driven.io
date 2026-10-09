@@ -38,15 +38,17 @@ export const onCreateNode: NonNullable<GatsbyNode['onCreateNode']> = ({
     const separtorIndex = ~slug.indexOf('--') ? slug.indexOf('--') : 0;
     const shortSlugStart = separtorIndex ? separtorIndex + 2 : 0;
 
-    const langFileNamePart = fileNode.relativePath.match(/(\w+)\.(\w+)\.(\w+)$/);
+    const langFileNamePart =
+      fileNode.relativePath.match(/(\w+)\.(\w+)\.(\w+)$/);
 
     const langKey = langFileNamePart ? langFileNamePart[2] : 'en';
 
     if (source !== 'parts') {
-      const originalSlug = `${separtorIndex ? '/' : ''}${slug.substring(shortSlugStart)}`.replace(
-        `/index.${langKey}/`,
-        '/',
-      );
+      const originalSlug =
+        `${separtorIndex ? '/' : ''}${slug.substring(shortSlugStart)}`.replace(
+          `/index.${langKey}/`,
+          '/',
+        );
       createNodeField({
         node,
         name: `slug`,
@@ -81,7 +83,9 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
   return new Promise<void>((resolve, reject) => {
     const postTemplate = path.resolve('./src/templates/PostTemplate.tsx');
     const pageTemplate = path.resolve('./src/templates/PageTemplate.tsx');
-    const categoryTemplate = path.resolve('./src/templates/CategoryTemplate.tsx');
+    const categoryTemplate = path.resolve(
+      './src/templates/CategoryTemplate.tsx',
+    );
     const { supportedLanguages } = DEFAULT_OPTIONS;
 
     // // Create index pages for all supported languages
@@ -155,12 +159,15 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
         .then((result) => {
           if (result.errors || !result.data) {
             console.log(result.errors);
-            return reject(new Error('Could not query pages', { cause: result.errors }));
+            return reject(
+              new Error('Could not query pages', { cause: result.errors }),
+            );
           }
 
           searchCovers = new Map(
             result.data.searchCovers.nodes.flatMap((node) => {
-              const image = node.frontmatter?.cover?.childImageSharp?.gatsbyImageData;
+              const image =
+                node.frontmatter?.cover?.childImageSharp?.gatsbyImageData;
               return node.id && image ? [[node.id, image] as const] : [];
             }),
           );
@@ -169,7 +176,8 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
           const paths = new Set();
           for (const { node } of items) {
             const route = `/${node.fields.langKey}${node.fields.slug}`;
-            if (paths.has(route)) throw new Error(`Multiple published documents claim ${route}`);
+            if (paths.has(route))
+              throw new Error(`Multiple published documents claim ${route}`);
             paths.add(route);
           }
           const availableLanguagesFor = (node: ArticleNode) =>
@@ -200,13 +208,18 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
                   item.node.fields.source === node.fields.source,
               );
               const match =
-                candidates.find((item) => item.node.fields.langKey === node.fields.langKey) ||
+                candidates.find(
+                  (item) => item.node.fields.langKey === node.fields.langKey,
+                ) ||
                 candidates.find(
                   (item) =>
-                    item.node.fields.langKey === DEFAULT_OPTIONS.defaultLanguage &&
+                    item.node.fields.langKey ===
+                      DEFAULT_OPTIONS.defaultLanguage &&
                     !item.node.frontmatter.useDefaultLangCanonical,
                 ) ||
-                candidates.find((item) => !item.node.frontmatter.useDefaultLangCanonical);
+                candidates.find(
+                  (item) => !item.node.frontmatter.useDefaultLangCanonical,
+                );
               if (!match) {
                 throw new Error(
                   `Invalid related article "${slug}" for ${node.fields.langKey}${node.fields.slug}`,
@@ -230,12 +243,15 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
                     item.node.fields.langKey === langKey &&
                     !item.node.frontmatter.useDefaultLangCanonical &&
                     categoriesForNode(item.node).some(
-                      (itemCategory) => _.kebabCase(itemCategory) === categorySlug,
+                      (itemCategory) =>
+                        _.kebabCase(itemCategory) === categorySlug,
                     ),
                 ),
               );
               const guide = categoryGuides.find(
-                (item) => item.language === supportedLangKey && item.slug === categorySlug,
+                (item) =>
+                  item.language === supportedLangKey &&
+                  item.slug === categorySlug,
               );
 
               createPage({
@@ -257,13 +273,15 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
             // Create posts
             const posts = items.filter(
               (item) =>
-                item.node.fields.source === 'posts' && item.node.fields.langKey == supportedLangKey,
+                item.node.fields.source === 'posts' &&
+                item.node.fields.langKey == supportedLangKey,
             );
             posts.forEach(({ node }, index) => {
               const slug = node.fields.slug;
               const langKey = node.fields.langKey;
-              const next = index === 0 ? undefined : posts[index - 1].node;
-              const prev = index === posts.length - 1 ? undefined : posts[index + 1].node;
+              const next = index === 0 ? undefined : posts[index - 1]?.node;
+              const prev =
+                index === posts.length - 1 ? undefined : posts[index + 1]?.node;
               const source = node.fields.source;
               const path = `/${langKey}${slug}`;
 
@@ -300,7 +318,9 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
                   availableLanguages: availableLanguagesFor(node),
                   canonicalLanguages: canonicalLanguagesFor(node),
                   relatedIds: relatedFor(node),
-                  excludeFromSitemap: Boolean(node.frontmatter.useDefaultLangCanonical),
+                  excludeFromSitemap: Boolean(
+                    node.frontmatter.useDefaultLangCanonical,
+                  ),
                 },
               });
             });
@@ -314,11 +334,12 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
             newsletterPlPosts.forEach(({ node }, index) => {
               const slug = node.fields.slug;
               const langKey = node.fields.langKey;
-              const next = index === 0 ? undefined : newsletterPlPosts[index - 1].node;
+              const next =
+                index === 0 ? undefined : newsletterPlPosts[index - 1]?.node;
               const prev =
                 index === newsletterPlPosts.length - 1
                   ? undefined
-                  : newsletterPlPosts[index + 1].node;
+                  : newsletterPlPosts[index + 1]?.node;
               const source = node.fields.source;
               const path = `/${langKey}${slug}`;
 
@@ -336,14 +357,18 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
                   availableLanguages: availableLanguagesFor(node),
                   canonicalLanguages: canonicalLanguagesFor(node),
                   relatedIds: relatedFor(node),
-                  excludeFromSitemap: Boolean(node.frontmatter.useDefaultLangCanonical),
+                  excludeFromSitemap: Boolean(
+                    node.frontmatter.useDefaultLangCanonical,
+                  ),
                 },
               });
             });
           });
 
           // and pages.
-          const pages = items.filter((item) => item.node.fields.source === 'pages');
+          const pages = items.filter(
+            (item) => item.node.fields.source === 'pages',
+          );
           pages.forEach(({ node }) => {
             const slug = node.fields.slug;
             const langKey = node.fields.langKey;
@@ -361,7 +386,9 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
                 originalPath: slug,
                 availableLanguages: availableLanguagesFor(node),
                 canonicalLanguages: canonicalLanguagesFor(node),
-                excludeFromSitemap: Boolean(node.frontmatter.useDefaultLangCanonical),
+                excludeFromSitemap: Boolean(
+                  node.frontmatter.useDefaultLangCanonical,
+                ),
               },
             });
           });
@@ -380,18 +407,24 @@ export const onCreatePage: NonNullable<GatsbyNode['onCreatePage']> = (
   { page, actions: { createPage, deletePage, createRedirect } },
   pluginOptions,
 ) => {
-  const { supportedLanguages, defaultLanguage, notFoundPage, excludedPages, deleteOriginalPages } =
-    {
-      ...DEFAULT_OPTIONS,
-      ...pluginOptions,
-    };
+  const {
+    supportedLanguages,
+    defaultLanguage,
+    notFoundPage,
+    excludedPages,
+    deleteOriginalPages,
+  } = {
+    ...DEFAULT_OPTIONS,
+    ...pluginOptions,
+  };
 
   // The plugin decorates prefixed pages; never localize them a second time.
   if (/^\/(en|pl)(?:\/|$)/.test(page.path) || page.context?.root404) return;
 
   const isEnvDevelopment = process.env.NODE_ENV === 'development';
   const originalPath = page.path;
-  const is404 = originalPath.includes(notFoundPage) || originalPath === '/404.html';
+  const is404 =
+    originalPath.includes(notFoundPage) || originalPath === '/404.html';
 
   // return early if page is exluded
   if (excludedPages.includes(originalPath)) {
@@ -459,15 +492,16 @@ export const onCreatePage: NonNullable<GatsbyNode['onCreatePage']> = (
         statusCode: is404 ? 404 : 301,
       });
 
+    const matchPath =
+      is404 && originalPath !== '/404.html'
+        ? `/${lang}/*`
+        : page.matchPath
+          ? `/${lang}${page.matchPath}`
+          : undefined;
     createPage({
       ...page,
       path: localizedPath,
-      matchPath:
-        is404 && originalPath !== '/404.html'
-          ? `/${lang}/*`
-          : page.matchPath
-            ? `/${lang}${page.matchPath}`
-            : undefined,
+      ...(matchPath ? { matchPath } : {}),
       context: {
         ...page.context,
         originalPath,
@@ -502,10 +536,9 @@ export const onCreatePage: NonNullable<GatsbyNode['onCreatePage']> = (
   }
 };
 
-export const onCreateWebpackConfig: NonNullable<GatsbyNode['onCreateWebpackConfig']> = ({
-  stage,
-  actions,
-}) => {
+export const onCreateWebpackConfig: NonNullable<
+  GatsbyNode['onCreateWebpackConfig']
+> = ({ stage, actions }) => {
   switch (stage) {
     case `build-javascript`:
       if (process.env.ANALYZE === 'true') {
@@ -705,9 +738,9 @@ export const onPreBuild: NonNullable<GatsbyNode['onPreBuild']> = ({
   // netlify.toml, after Gatsby's editorial aliases. See the routing regressions.
 };
 
-export const createSchemaCustomization: NonNullable<GatsbyNode['createSchemaCustomization']> = ({
-  actions,
-}) => {
+export const createSchemaCustomization: NonNullable<
+  GatsbyNode['createSchemaCustomization']
+> = ({ actions }) => {
   actions.createTypes(`
     type MarkdownRemark implements Node {
       frontmatter: MarkdownRemarkFrontmatter
@@ -746,7 +779,8 @@ export const onPostBuild: NonNullable<GatsbyNode['onPostBuild']> = async ({
   getNodesByType,
   reporter,
 }) => {
-  const { writeSearchIndexes } = await import('../scripts/build-search-index.ts');
+  const { writeSearchIndexes } =
+    await import('../scripts/build-search-index.ts');
   const metrics = await writeSearchIndexes(
     getNodesByType('MarkdownRemark') as BuildArticle[],
     'public',
@@ -769,7 +803,8 @@ function scheduleDevelopmentSearch({
   developmentSearchTimer = setTimeout(() => {
     developmentSearchWork = developmentSearchWork
       .then(async () => {
-        const { writeSearchIndexes } = await import('../scripts/build-search-index.ts');
+        const { writeSearchIndexes } =
+          await import('../scripts/build-search-index.ts');
         await writeSearchIndexes(
           getNodesByType('MarkdownRemark') as BuildArticle[],
           'public',
@@ -785,11 +820,12 @@ function scheduleDevelopmentSearch({
       });
   }, 500);
 }
-export const onPostBootstrap: NonNullable<GatsbyNode['onPostBootstrap']> = async ({
-  getNodesByType,
-}) => {
+export const onPostBootstrap: NonNullable<
+  GatsbyNode['onPostBootstrap']
+> = async ({ getNodesByType }) => {
   if (process.env.NODE_ENV !== 'development') return;
-  const { writeSearchIndexes } = await import('../scripts/build-search-index.ts');
+  const { writeSearchIndexes } =
+    await import('../scripts/build-search-index.ts');
   await writeSearchIndexes(
     getNodesByType('MarkdownRemark') as BuildArticle[],
     'public',

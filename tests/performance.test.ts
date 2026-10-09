@@ -17,7 +17,9 @@ for (const lang of ['en', 'pl']) {
     assert.equal(images.first().attr('loading'), 'eager');
     assert.equal(images.first().attr('fetchpriority'), 'high');
     assert.equal($('img[fetchpriority=high]').length, 1);
-    images.slice(1).each((_, image) => assert.equal($(image).attr('loading'), 'lazy'));
+    images
+      .slice(1)
+      .each((_, image) => assert.equal($(image).attr('loading'), 'lazy'));
     const picture = images.first().closest('picture');
     assert.ok(picture.find('source[type="image/webp"]').attr('srcset'));
     assert.ok(picture.find('source[type="image/png"]').attr('srcset'));
@@ -28,7 +30,9 @@ for (const lang of ['en', 'pl']) {
       const $ = html(`${lang}/${page}`);
       const fonts = $('link[rel="preload"][as="font"]');
       assert.equal(fonts.length, lang === 'pl' ? 4 : 2);
-      const extended = fonts.filter((_, font) => $(font).attr('href')!.includes('-latin-ext-'));
+      const extended = fonts.filter((_, font) =>
+        $(font).attr('href')!.includes('-latin-ext-'),
+      );
       assert.equal(extended.length, lang === 'pl' ? 2 : 0);
       fonts.each((_, font) => {
         assert.equal($(font).attr('crossorigin'), 'anonymous');
@@ -48,22 +52,31 @@ void test('image priority ignores unrelated articles, external HTML and later im
     type: 'root',
     children: [{ type: 'html', value }],
   };
-  imagePriority({ markdownAST: ast, markdownNode: { fileAbsolutePath: '/other/index.en.md' } });
+  imagePriority({
+    markdownAST: ast,
+    markdownNode: { fileAbsolutePath: '/other/index.en.md' },
+  });
+  assert.ok(ast.children[0]);
   assert.equal(ast.children[0].value, value);
   const external = '<iframe src="https://example.com"></iframe>';
   ast.children.unshift({ type: 'html', value: external });
   ast.children.push({ type: 'html', value });
   imagePriority({
     markdownAST: ast,
-    markdownNode: { fileAbsolutePath: '/2022-03-16--introduction_to_event_sourcing/index.en.md' },
+    markdownNode: {
+      fileAbsolutePath:
+        '/2022-03-16--introduction_to_event_sourcing/index.en.md',
+    },
   });
+  assert.ok(ast.children[0] && ast.children[1] && ast.children[2]);
   assert.equal(ast.children[0].value, external);
   assert.match(ast.children[1].value, /fetchpriority="high"/);
   assert.equal(ast.children[2].value, value);
 });
 
 void test('menu overflow keeps exact fits and reserves space for its expand control', async () => {
-  const { getOverflowedIndexes } = await import('../src/components/Menu/overflow.ts');
+  const { getOverflowedIndexes } =
+    await import('../src/components/Menu/overflow.ts');
   assert.deepEqual(getOverflowedIndexes([40, 40, 30], 80), [2]);
   assert.deepEqual(getOverflowedIndexes([40, 40, 30], 110), []);
   assert.deepEqual(getOverflowedIndexes([40, 40, 30], 110 - 60), [1, 2]);
@@ -73,8 +86,15 @@ void test('menu overflow keeps exact fits and reserves space for its expand cont
 
 void test('all other Markdown images retain lazy loading and WebP with a fallback', () => {
   let checked = 0;
-  for (const entry of readdirSync('public', { recursive: true, withFileTypes: true })) {
-    if (!entry.isFile() || entry.name !== 'index.html' || entry.parentPath.includes('_gatsby'))
+  for (const entry of readdirSync('public', {
+    recursive: true,
+    withFileTypes: true,
+  })) {
+    if (
+      !entry.isFile() ||
+      entry.name !== 'index.html' ||
+      entry.parentPath.includes('_gatsby')
+    )
       continue;
     const path = join(entry.parentPath, entry.name);
     const $ = cheerio.load(readFileSync(path, 'utf8'));
@@ -89,7 +109,10 @@ void test('all other Markdown images retain lazy loading and WebP with a fallbac
       assert.ok(sources.filter('[type="image/webp"]').length, path);
       assert.ok(img.attr('src'), `fallback img src: ${path}`);
       if (!/\.webp(?:$|\?)/i.test(img.attr('src')!)) {
-        assert.ok(sources.filter('[type="image/png"], [type="image/jpeg"]').length, path);
+        assert.ok(
+          sources.filter('[type="image/png"], [type="image/jpeg"]').length,
+          path,
+        );
       }
       checked++;
     });
@@ -109,19 +132,35 @@ void test("Introduction WebP preserves the PNG cover's dimensions and visual det
       .split(',')
       .map((value) => value.trim().split(/\s+/))
       .find(([, width]) => width === '800w');
-    assert.ok(candidate, `${type} 800px candidate`);
+    assert.ok(candidate?.[0], `${type} 800px candidate`);
     return readFileSync(join('public', candidate[0]));
   };
   const png = asset('image/png');
   const webp = asset('image/webp');
-  assert.ok(webp.length < png.length, 'optimized cover must actually save bytes');
-  const original = await sharp(png).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
-  const optimized = await sharp(webp).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  assert.ok(
+    webp.length < png.length,
+    'optimized cover must actually save bytes',
+  );
+  const original = await sharp(png)
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const optimized = await sharp(webp)
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
   assert.deepEqual(optimized.info, original.info);
   const { width, height } = original.info;
-  const differences = pixelmatch(original.data, optimized.data, undefined, width, height, {
-    threshold: 0.2,
-  });
+  const differences = pixelmatch(
+    original.data,
+    optimized.data,
+    undefined,
+    width,
+    height,
+    {
+      threshold: 0.2,
+    },
+  );
   assert.ok(
     differences / (width * height) <= 0.03,
     'cover detail must remain within existing screenshot tolerance',
@@ -130,19 +169,27 @@ void test("Introduction WebP preserves the PNG cover's dimensions and visual det
 
 void test('font CSS includes basic and extended Latin files for every weight/style', () => {
   const css = readFileSync('public/fonts/open-sans/index.css', 'utf8');
-  const faces = [...css.matchAll(/@font-face\s*\{([^}]+)\}/g)].map((match) => match[1]);
+  const faces = [...css.matchAll(/@font-face\s*\{([^}]+)\}/g)].map(
+    (match) => match[1] || '',
+  );
   assert.equal(faces.length, 20);
   for (const weight of [300, 400, 600, 700, 800]) {
     for (const style of ['normal', 'italic']) {
       const matching = faces.filter(
         (face) =>
-          face.includes(`font-weight: ${weight};`) && face.includes(`font-style: ${style};`),
+          face.includes(`font-weight: ${weight};`) &&
+          face.includes(`font-style: ${style};`),
       );
       assert.equal(matching.length, 2);
       assert.ok(matching.some((face) => /open-sans-latin-ext-/.test(face)));
-      assert.ok(matching.every((face) => /unicode-range:/.test(face) && !/local\(/.test(face)));
+      assert.ok(
+        matching.every(
+          (face) => /unicode-range:/.test(face) && !/local\(/.test(face),
+        ),
+      );
       for (const face of matching) {
         for (const [, file] of face.matchAll(/url\('\.\/(.*?)'\)/g)) {
+          assert.ok(file);
           assert.ok(existsSync(join('public/fonts/open-sans', file)), file);
         }
       }
@@ -154,7 +201,10 @@ void test('publication metadata preserves legacy dates and accepts only real tim
   const { publicationDate } = await import('../src/utils/publication-date.ts');
   assert.equal(publicationDate(undefined, '2022-03-16'), '2022-03-16');
   assert.equal(publicationDate(null, '2022-03-16'), '2022-03-16');
-  for (const date of ['2026-10-05T12:34:56Z', '2026-10-05T12:34:56.123+02:00']) {
+  for (const date of [
+    '2026-10-05T12:34:56Z',
+    '2026-10-05T12:34:56.123+02:00',
+  ]) {
     assert.equal(publicationDate(date, '2022-03-16'), date);
   }
   for (const date of [
@@ -170,10 +220,14 @@ void test('publication metadata preserves legacy dates and accepts only real tim
   for (const lang of ['en', 'pl']) {
     const $ = html(`${lang}/introduction_to_event_sourcing`);
     assert.equal(
-      (JSON.parse($('#page-schema').text()) as { datePublished: string }).datePublished,
+      (JSON.parse($('#page-schema').text()) as { datePublished: string })
+        .datePublished,
       '2022-03-16',
     );
-    assert.equal($('meta[property="article:published_time"]').attr('content'), '2022-03-16');
+    assert.equal(
+      $('meta[property="article:published_time"]').attr('content'),
+      '2022-03-16',
+    );
     assert.equal($('#substack iframe[src]').length, 0);
     assert.equal($('#substack iframe').attr('height'), '320');
     assert.equal(
@@ -205,7 +259,10 @@ void test('contrast text tokens preserve decorative branding and meet 4.5:1 on w
     const linear = channels.map((value) =>
       value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4,
     );
-    return 1.05 / (linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722 + 0.05);
+    const [red, green, blue] = linear;
+    if (red === undefined || green === undefined || blue === undefined)
+      throw new Error('Expected three RGB channels');
+    return 1.05 / (red * 0.2126 + green * 0.7152 + blue * 0.0722 + 0.05);
   };
   assert.ok(contrast(theme.text.color.brand) >= 4.5);
   assert.ok(contrast(theme.color.neutral.gray.h) >= 4.5);
@@ -221,7 +278,10 @@ void test('generated pages never reference local filesystem URLs in resource/lin
     $('[href],[src],[data]').each((_, element) => {
       for (const attribute of ['href', 'src', 'data']) {
         const value = $(element).attr(attribute);
-        assert.ok(!value || !/^\s*file:/i.test(value), `${file}: ${attribute}=${value}`);
+        assert.ok(
+          !value || !/^\s*file:/i.test(value),
+          `${file}: ${attribute}=${value}`,
+        );
       }
     });
   }

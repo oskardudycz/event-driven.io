@@ -5,16 +5,20 @@ type ReadingItem = {
   id: string;
   href: string;
   title: string;
-  date?: string;
-  excerpt?: string;
-  image?: { src: string };
+  date?: string | undefined;
+  excerpt?: string | undefined;
+  image?: { src: string } | undefined;
 };
 
 type ReadingListProps = {
   items: ReadingItem[];
   ordered?: boolean;
   showImages?: boolean;
-  renderLink?: (_props: ComponentProps<'a'> & { href: string }) => ReactNode;
+  renderLink?: (
+    _props: Pick<ComponentProps<'a'>, 'className' | 'children'> & {
+      href: string;
+    },
+  ) => ReactNode;
 };
 
 const anchor = (props: ComponentProps<'a'>) => <a {...props} />;
@@ -52,11 +56,15 @@ export default function ReadingList({
                     height="240"
                   />
                 )}
-                <span className={`readingCardContent ${styles.readingCardContent}`}>
+                <span
+                  className={`readingCardContent ${styles.readingCardContent}`}
+                >
                   {showImages ? <h3>{item.title}</h3> : item.title}
                   {showImages && item.date && <small>{item.date}</small>}
                   {showImages && item.excerpt && (
-                    <span className={`excerpt ${styles.excerpt}`}>{item.excerpt}</span>
+                    <span className={`excerpt ${styles.excerpt}`}>
+                      {item.excerpt}
+                    </span>
                   )}
                 </span>
               </>

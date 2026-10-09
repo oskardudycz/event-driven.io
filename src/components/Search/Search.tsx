@@ -1,7 +1,11 @@
 import type MiniSearch from 'minisearch';
 import type { SearchDocument } from '../../search/types.ts';
 import type { searchIndex } from '../../search/runtime.ts';
-type LoadedSearch = { lang: string; index: MiniSearch<SearchDocument>; search: typeof searchIndex };
+type LoadedSearch = {
+  lang: string;
+  index: MiniSearch<SearchDocument>;
+  search: typeof searchIndex;
+};
 import * as styles from './Search.module.css';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { withPrefix } from 'gatsby';
@@ -31,7 +35,8 @@ const Search = () => {
           previous: 'Poprzednia',
           next: 'Następna',
           navigation: 'Strony wyników',
-          stats: (count: number) => `${count} ${count === 1 ? 'wynik' : 'wyników'}`,
+          stats: (count: number) =>
+            `${count} ${count === 1 ? 'wynik' : 'wyników'}`,
         }
       : {
           prompt: 'Start typing to search.',
@@ -44,7 +49,8 @@ const Search = () => {
           previous: 'Previous',
           next: 'Next',
           navigation: 'Search result pages',
-          stats: (count: number) => `${count} ${count === 1 ? 'result' : 'results'}`,
+          stats: (count: number) =>
+            `${count} ${count === 1 ? 'result' : 'results'}`,
         };
   const requested = Boolean(query.trim());
   useEffect(() => {
@@ -65,11 +71,16 @@ const Search = () => {
       return response.text();
     };
     Promise.all([
-      import(/* webpackChunkName: "local-search-engine" */ '../../search/runtime.ts'),
+      import(
+        /* webpackChunkName: "local-search-engine" */ '../../search/runtime.ts'
+      ),
       fetchText('/search-index/manifest.json').then(async (text) => {
         const manifest = JSON.parse(text) as Record<string, unknown>;
         const url = manifest[lang];
-        if (typeof url !== 'string' || !/^\/search-index\/(en|pl)\.[a-f0-9]+\.json$/.test(url))
+        if (
+          typeof url !== 'string' ||
+          !/^\/search-index\/(en|pl)\.[a-f0-9]+\.json$/.test(url)
+        )
           throw new Error('Invalid search manifest');
         return fetchText(url);
       }),
@@ -90,7 +101,10 @@ const Search = () => {
     };
   }, [lang, requested, retry, loaded]);
   const results = useMemo(
-    () => (loaded?.lang === lang && debounced ? loaded.search(loaded.index, debounced) : []),
+    () =>
+      loaded?.lang === lang && debounced
+        ? loaded.search(loaded.index, debounced)
+        : [],
     [loaded, lang, debounced],
   );
   const pages = Math.ceil(results.length / 10);
@@ -138,34 +152,52 @@ const Search = () => {
         </div>
         <div role="status" aria-live="polite">
           {!requested ? (
-            <p className={`search-message ${styles.searchMessage}`}>{copy.prompt}</p>
+            <p className={`search-message ${styles.searchMessage}`}>
+              {copy.prompt}
+            </p>
           ) : status === 'error' ? (
             <p className={`search-message ${styles.searchMessage}`}>
               {copy.error}{' '}
-              <button type="button" onClick={() => setRetry((value) => value + 1)}>
+              <button
+                type="button"
+                onClick={() => setRetry((value) => value + 1)}
+              >
                 {copy.retry}
               </button>
             </p>
           ) : loaded?.lang !== lang ? (
-            <p className={`search-message ${styles.searchMessage}`}>{copy.loading}</p>
+            <p className={`search-message ${styles.searchMessage}`}>
+              {copy.loading}
+            </p>
           ) : results.length === 0 ? (
-            <p className={`search-message ${styles.searchMessage}`}>{copy.empty}</p>
+            <p className={`search-message ${styles.searchMessage}`}>
+              {copy.empty}
+            </p>
           ) : (
-            <span className={`ais-Stats ${styles.aisStats}`}>{copy.stats(results.length)}</span>
+            <span className={`ais-Stats ${styles.aisStats}`}>
+              {copy.stats(results.length)}
+            </span>
           )}
         </div>
         {requested && loaded?.lang === lang && results.length > 0 && (
           <>
-            <ul className={`ais-Hits-list ${styles.aisHitsList}`} ref={resultsList}>
-              {results.slice(currentPage * 10, currentPage * 10 + 10).map((hit) => (
-                <li className={'ais-Hits-item'} key={hit.id}>
-                  <Hit hit={hit} />
-                </li>
-              ))}
+            <ul
+              className={`ais-Hits-list ${styles.aisHitsList}`}
+              ref={resultsList}
+            >
+              {results
+                .slice(currentPage * 10, currentPage * 10 + 10)
+                .map((hit) => (
+                  <li className={'ais-Hits-item'} key={hit.id}>
+                    <Hit hit={hit} />
+                  </li>
+                ))}
             </ul>
             {pages > 1 && (
               <nav aria-label={copy.navigation}>
-                <ul className={`ais-Pagination-list ${styles.aisPaginationList}`}>
+                <ul
+                  className={`ais-Pagination-list ${styles.aisPaginationList}`}
+                >
                   <li>
                     <button
                       type="button"
@@ -178,14 +210,18 @@ const Search = () => {
                   {Array.from({ length: pages }, (_, index) => index)
                     .filter(
                       (index) =>
-                        index === 0 || index === pages - 1 || Math.abs(index - currentPage) <= 2,
+                        index === 0 ||
+                        index === pages - 1 ||
+                        Math.abs(index - currentPage) <= 2,
                     )
                     .map((index) => (
                       <li key={index}>
                         <button
                           type="button"
                           aria-label={`${copy.navigation}: ${index + 1}`}
-                          aria-current={index === currentPage ? 'page' : undefined}
+                          aria-current={
+                            index === currentPage ? 'page' : undefined
+                          }
                           onClick={() => goToPage(index)}
                         >
                           {index + 1}

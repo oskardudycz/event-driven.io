@@ -8,7 +8,9 @@ import React from 'react';
 
 import type { FormComponentProps } from '@ant-design/compatible/lib/form/Form';
 import type { FormItemProps } from '@ant-design/compatible/lib/form/FormItem';
-const FormItem = Form.Item as React.ComponentType<React.PropsWithChildren<FormItemProps>>;
+const FormItem = Form.Item as React.ComponentType<
+  React.PropsWithChildren<FormItemProps>
+>;
 type ContactValues = { name?: string; email: string; message: string };
 const { TextArea } = Input;
 import '@ant-design/compatible/assets/index.css';
@@ -24,7 +26,10 @@ const Contact = (props: FormComponentProps<ContactValues>) => {
 
   function encode(data: Record<string, string | undefined>) {
     return Object.keys(data)
-      .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(data[key] || ''))
+      .map(
+        (key) =>
+          encodeURIComponent(key) + '=' + encodeURIComponent(data[key] || ''),
+      )
       .join('&');
   }
 
@@ -101,9 +106,19 @@ const Contact = (props: FormComponentProps<ContactValues>) => {
           <FormItem label={t('contact.form.message')}>
             {props.form.getFieldDecorator('message', {
               rules: [
-                { required: true, message: t('contact.form.messageError'), whitespace: true },
+                {
+                  required: true,
+                  message: t('contact.form.messageError'),
+                  whitespace: true,
+                },
               ],
-            })(<TextArea name="message" placeholder="" autoSize={{ minRows: 4, maxRows: 10 }} />)}
+            })(
+              <TextArea
+                name="message"
+                placeholder=""
+                autoSize={{ minRows: 4, maxRows: 10 }}
+              />,
+            )}
           </FormItem>
           <FormItem>
             <Button type="primary" htmlType="submit">

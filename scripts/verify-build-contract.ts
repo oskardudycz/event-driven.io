@@ -1,17 +1,27 @@
 import type { BuildContract } from './build-contract.ts';
 import fs from 'fs';
 import path from 'path';
-import { collectBuildContract, compareBuildContracts } from './build-contract.ts';
+import {
+  collectBuildContract,
+  compareBuildContracts,
+} from './build-contract.ts';
 
 const publicDirectory = path.resolve(import.meta.dirname, '../public');
-const baselinePath = path.resolve(import.meta.dirname, '../tests/fixtures/build-contract.json');
+const baselinePath = path.resolve(
+  import.meta.dirname,
+  '../tests/fixtures/build-contract.json',
+);
 
 if (!fs.existsSync(baselinePath)) {
-  console.error('Missing tests/fixtures/build-contract.json. Run yarn update:build-contract.');
+  console.error(
+    'Missing tests/fixtures/build-contract.json. Run yarn update:build-contract.',
+  );
   process.exit(1);
 }
 
-const expected = JSON.parse(fs.readFileSync(baselinePath, 'utf8')) as BuildContract;
+const expected = JSON.parse(
+  fs.readFileSync(baselinePath, 'utf8'),
+) as BuildContract;
 const actual = collectBuildContract(publicDirectory);
 const failures = compareBuildContracts(expected, actual);
 

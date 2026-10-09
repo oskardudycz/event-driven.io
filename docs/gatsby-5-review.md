@@ -1,6 +1,6 @@
 # Gatsby 5 build review
 
-Reviewed on 2026-10-04 against Gatsby 5.16.1 and the 694-page build.
+Reviewed on 2026-10-04 against Gatsby 5.16.1 and the 694-page build. This is the historical review checkpoint; current implementation, runtime versions and acceptance are in [plan.md](../plan.md), [todo.md](../todo.md) and [the dependency review](dependency-review.md).
 
 ## Changes made
 

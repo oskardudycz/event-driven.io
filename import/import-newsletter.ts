@@ -11,7 +11,11 @@ try {
 
   shell.rm('-rf', 'content/newsletter-pl');
   shell.mkdir('content/newsletter-pl');
-  shell.cp('-R', './temp/event-sourcing-newsletter/content/posts/.', 'content/newsletter-pl/');
+  shell.cp(
+    '-R',
+    './temp/event-sourcing-newsletter/content/posts/.',
+    'content/newsletter-pl/',
+  );
   shell.touch('content/newsletter-pl/.gitkeep');
 
   console.log('SUCCESS! Newsletter import succeeded.');

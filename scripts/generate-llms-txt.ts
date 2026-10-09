@@ -21,7 +21,7 @@ const parseMarkdown = (filePath: string) => {
   const raw = fs.readFileSync(filePath, 'utf8');
   const frontmatterMatch = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
   const frontmatter = frontmatterMatch
-    ? ((yaml.load(frontmatterMatch[1]) || {}) as Partial<Frontmatter>)
+    ? ((yaml.load(frontmatterMatch[1] || '') || {}) as Partial<Frontmatter>)
     : {};
   const body = frontmatterMatch ? raw.slice(frontmatterMatch[0].length) : raw;
 
@@ -48,14 +48,20 @@ const summarize = (body: string, explicitDescription?: string) => {
   if (text.length <= 220) return text;
 
   const shortened = text.slice(0, 221);
-  const sentenceEnd = Math.max(shortened.lastIndexOf('. '), shortened.lastIndexOf('? '));
+  const sentenceEnd = Math.max(
+    shortened.lastIndexOf('. '),
+    shortened.lastIndexOf('? '),
+  );
   const wordEnd = shortened.lastIndexOf(' ');
   const end = sentenceEnd >= 120 ? sentenceEnd + 1 : wordEnd;
   return `${shortened.slice(0, end).trim()}…`;
 };
 
 const slugFromDirectory = (directoryName: string) =>
-  (directoryName.includes('--') ? directoryName.split('--').slice(1).join('--') : directoryName)
+  (directoryName.includes('--')
+    ? directoryName.split('--').slice(1).join('--')
+    : directoryName
+  )
     .replace(/^\/+|\/+$/g, '')
     .toLowerCase();
 
@@ -66,7 +72,8 @@ const readEntries = (source: string, type: string) => {
   return walk(sourceRoot)
     .filter((filePath) => /\/index\.(en|pl)\.md$/.test(filePath))
     .map((filePath) => {
-      const language = path.basename(filePath).match(/^index\.(en|pl)\.md$/)![1];
+      const language =
+        path.basename(filePath).match(/^index\.(en|pl)\.md$/)?.[1] || '';
       const { frontmatter, body } = parseMarkdown(filePath);
       const directoryName = path.basename(path.dirname(filePath));
       const slug = slugFromDirectory(directoryName);
@@ -78,14 +85,17 @@ const readEntries = (source: string, type: string) => {
         category: frontmatter.category || 'Other',
         description: summarize(body, frontmatter.description),
         url: `${siteUrl}/${language}/${slug}/`,
-        date: type === 'article' ? directoryName.split('--')[0] : '',
+        date: type === 'article' ? directoryName.split('--')[0] || '' : '',
         canonical: !frontmatter.useDefaultLangCanonical,
         excluded: ['success'].includes(slug),
       };
     })
     .filter(
       (entry) =>
-        supportedLanguages.has(entry.language) && entry.title && entry.canonical && !entry.excluded,
+        supportedLanguages.has(entry.language) &&
+        entry.title &&
+        entry.canonical &&
+        !entry.excluded,
     );
 };
 
@@ -134,11 +144,13 @@ const corePages = [
   },
 ];
 
-const byLanguage = (language: string) => articles.filter((entry) => entry.language === language);
+const byLanguage = (language: string) =>
+  articles.filter((entry) => entry.language === language);
 
 const destinations = new Set();
 for (const entry of [...corePages, ...pages, ...articles]) {
-  if (destinations.has(entry.url)) throw new Error(`Duplicate llms.txt destination: ${entry.url}`);
+  if (destinations.has(entry.url))
+    throw new Error(`Duplicate llms.txt destination: ${entry.url}`);
   destinations.add(entry.url);
 }
 

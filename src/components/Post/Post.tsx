@@ -24,9 +24,9 @@ const Share = asyncComponent(() =>
 const Post = (props: {
   post: ArticleNode;
   authornote: string;
-  related?: ArticleEdge[];
-  next?: ArticleNode;
-  prev?: ArticleNode;
+  related?: ArticleEdge[] | undefined;
+  next?: ArticleNode | undefined;
+  prev?: ArticleNode | undefined;
 }) => {
   const {
     post,
@@ -51,7 +51,12 @@ const Post = (props: {
       <header>
         <Headline title={title} />
         <Summary>{summary}</Summary>
-        <Meta prefix={prefix} author={author} category={category} categories={categories} />
+        <Meta
+          prefix={prefix}
+          author={author}
+          category={category}
+          categories={categories}
+        />
       </header>
       <Bodytext html={html} />
       <footer>

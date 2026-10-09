@@ -11,8 +11,16 @@ import Footer from '../components/Footer/index.ts';
 import Header from '../components/Header/index.ts';
 import themeObjectFromYaml from '../theme/theme.yaml';
 
-import { ThemeContext, ScreenWidthContext, FontLoadedContext } from './contexts';
-export { ThemeContext, ScreenWidthContext, FontLoadedContext } from './contexts';
+import {
+  ThemeContext,
+  ScreenWidthContext,
+  FontLoadedContext,
+} from './contexts';
+export {
+  ThemeContext,
+  ScreenWidthContext,
+  FontLoadedContext,
+} from './contexts';
 
 type LayoutProps = React.PropsWithChildren<{
   location: { pathname: string };
@@ -65,7 +73,12 @@ class Layout extends React.Component<LayoutProps, LayoutState> {
   }
 
   resizeThrottler = () => {
-    return timeoutThrottlerHandler(this.timeouts, 'resize', 100, this.resizeHandler);
+    return timeoutThrottlerHandler(
+      this.timeouts,
+      'resize',
+      100,
+      this.resizeHandler,
+    );
   };
 
   resizeHandler = () => {

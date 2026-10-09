@@ -11,7 +11,7 @@ const Substack = () => {
     }
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry?.isIntersecting) {
           setReady(true);
           observer.disconnect();
         }
@@ -23,14 +23,19 @@ const Substack = () => {
   }, []);
   return (
     <React.Fragment>
-      <div id="substack" className={`substack ${styles.substack}`} ref={section}>
+      <div
+        id="substack"
+        className={`substack ${styles.substack}`}
+        ref={section}
+      >
         <div className={`substack-legend ${styles.substackLegend}`}>
-          <b>👋 If you found this article helpful</b> and want to get notification about the next
-          one, <b>subscribe to Architecture Weekly.</b>
+          <b>👋 If you found this article helpful</b> and want to get
+          notification about the next one,{' '}
+          <b>subscribe to Architecture Weekly.</b>
           <br />
           <br />
-          <b>✉️ Join over 11500 subscribers</b>, get the best resources to boost your skills, and
-          stay updated with Software Architecture trends!
+          <b>✉️ Join over 11500 subscribers</b>, get the best resources to boost
+          your skills, and stay updated with Software Architecture trends!
           <br />
           <a
             className={`subscription-fallback ${styles.subscriptionFallback}`}

@@ -21,7 +21,10 @@ const Author = (props: { note: string }) => {
             className={styles.elementImg}
           />
         </div>
-        <div className={`note ${styles.note}`} dangerouslySetInnerHTML={{ __html: note }} />
+        <div
+          className={`note ${styles.note}`}
+          dangerouslySetInnerHTML={{ __html: note }}
+        />
       </div>
     </React.Fragment>
   );

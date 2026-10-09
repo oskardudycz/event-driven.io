@@ -1,7 +1,9 @@
 import { test, expect } from './fixtures';
 import { expectFonts, expectImageLoaded } from './readiness';
 
-test('article footer shows the author bio and links to further reading', async ({ page }) => {
+test('article footer shows the author bio and links to further reading', async ({
+  page,
+}) => {
   await page.setViewportSize({
     width: 1440,
     height: 900,
@@ -22,12 +24,16 @@ test('article footer shows the author bio and links to further reading', async (
   expect(bio).not.toContain('Through my window');
   expect(bio.length).toBeLessThan(500);
   const furtherReading = page.locator('.author + .links');
-  await expect(page.locator('article footer > .substack + .related')).toHaveCount(1);
+  await expect(
+    page.locator('article footer > .substack + .related'),
+  ).toHaveCount(1);
   const spacing = await page.evaluate(() => {
     const iframe = document.querySelector('.substack iframe')!;
     const related = document.querySelector('.related')!;
     return {
-      gap: related.getBoundingClientRect().top - iframe.getBoundingClientRect().bottom,
+      gap:
+        related.getBoundingClientRect().top -
+        iframe.getBoundingClientRect().bottom,
       border: getComputedStyle(related).borderTopWidth,
     };
   });
@@ -38,21 +44,31 @@ test('article footer shows the author bio and links to further reading', async (
     await page
       .locator('.related a')
       .evaluateAll((links) => links.map((link) => link.getAttribute('href'))),
-  ).toEqual(['/en/how_to_slice_the_codebase_effectively/', '/en/vertical_slices_in_practice/']);
+  ).toEqual([
+    '/en/how_to_slice_the_codebase_effectively/',
+    '/en/vertical_slices_in_practice/',
+  ]);
   const firstCover = page.locator('.related img').first();
   await expect(firstCover).toHaveAttribute('alt', '');
   await page.locator('.related').scrollIntoViewIfNeeded();
   await expectImageLoaded(firstCover, 200);
   await page.evaluate(() => {
-    const top = document.querySelector('.related')!.getBoundingClientRect().top + window.scrollY;
+    const top =
+      document.querySelector('.related')!.getBoundingClientRect().top +
+      window.scrollY;
     window.scrollTo(0, top - 100);
   });
   await expect(page).toHaveScreenshot('article-related-desktop.png', {
     animations: 'disabled',
   });
   expect(await furtherReading.locator('a').count()).toBeGreaterThan(0);
-  expect(await furtherReading.locator('a').first().getAttribute('href')).toMatch(/^\/en\//);
-  await expect(furtherReading).toHaveAttribute('aria-label', 'Articles by publication date');
+  expect(
+    await furtherReading.locator('a').first().getAttribute('href'),
+  ).toMatch(/^\/en\//);
+  await expect(furtherReading).toHaveAttribute(
+    'aria-label',
+    'Articles by publication date',
+  );
   await expect(furtherReading).toContainText('Earlier article');
   const relatedLink = page.locator('.related a').first();
   await relatedLink.focus();
@@ -62,7 +78,9 @@ test('article footer shows the author bio and links to further reading', async (
   });
 });
 
-test('articles without curated recommendations do not show a related block', async ({ page }) => {
+test('articles without curated recommendations do not show a related block', async ({
+  page,
+}) => {
   test.setTimeout(30_000);
   const response = await page.goto('/en/checkpointing_message_processing/', {
     waitUntil: 'domcontentloaded',
@@ -93,13 +111,16 @@ test('curated article links fit on a narrow screen', async ({ page }) => {
   await page.evaluate(async () => {
     await document.fonts.ready;
     await Promise.all(
-      Array.from(document.querySelectorAll<HTMLImageElement>('.related img'), (image) =>
-        image.decode(),
+      Array.from(
+        document.querySelectorAll<HTMLImageElement>('.related img'),
+        (image) => image.decode(),
       ),
     );
   });
   await page.evaluate(() => {
-    const top = document.querySelector('.related')!.getBoundingClientRect().top + window.scrollY;
+    const top =
+      document.querySelector('.related')!.getBoundingClientRect().top +
+      window.scrollY;
     window.scrollTo(0, top - 80);
   });
   await expect(page).toHaveScreenshot('article-related-mobile.png', {
@@ -111,7 +132,9 @@ test('imported TypeScript examples display syntax colors', async ({ page }) => {
   await page.goto(
     '/en/keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention/',
   );
-  const keyword = page.locator('pre.language-typescript .token.keyword').first();
+  const keyword = page
+    .locator('pre.language-typescript .token.keyword')
+    .first();
   await keyword.waitFor({
     state: 'visible',
   });
@@ -153,7 +176,11 @@ test('separate English and Polish pages keep their locale while following recipr
       `https://event-driven.io/en/${slug}/`,
     );
     await expect(switcher).toHaveAttribute('href', `/${other}/${slug}/`);
-    await page.locator(`.related a[href="/${language}/why-open-source-isnt-always-fair/"]`).click();
+    await page
+      .locator(
+        `.related a[href="/${language}/why-open-source-isnt-always-fair/"]`,
+      )
+      .click();
     await page.waitForURL(`**/${language}/why-open-source-isnt-always-fair/`);
     const returnLink = page.locator(`.related a[href="/${language}/${slug}/"]`);
     await returnLink.waitFor({

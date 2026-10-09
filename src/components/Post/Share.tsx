@@ -31,16 +31,26 @@ const PostShare = (props: { post: ArticleNode }) => {
       <div className={`share ${styles.share}`}>
         <span className={`label ${styles.label}`}>SHARE</span>
         <div className={`links ${styles.links}`}>
-          <TwitterShareButton url={url} title={title} aria-label="Twitter share">
+          <TwitterShareButton
+            url={url}
+            title={title}
+            aria-label="Twitter share"
+          >
             <TwitterIcon round size={iconSize} />
           </TwitterShareButton>
           <FacebookShareButton url={url} aria-label="Facebook share">
             <FacebookIcon round size={iconSize} />
             <FacebookShareCount url={url}>
-              {(count: number) => <div className={'share-count'}>{filter(count)}</div>}
+              {(count: number) => (
+                <div className={'share-count'}>{filter(count)}</div>
+              )}
             </FacebookShareCount>
           </FacebookShareButton>
-          <LinkedinShareButton url={url} title={title} aria-label="LinkedIn share">
+          <LinkedinShareButton
+            url={url}
+            title={title}
+            aria-label="LinkedIn share"
+          >
             <LinkedinIcon round size={iconSize} />
           </LinkedinShareButton>
         </div>

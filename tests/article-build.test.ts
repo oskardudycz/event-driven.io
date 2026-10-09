@@ -15,7 +15,10 @@ import {
 } from '../import/article-content.ts';
 const publicRoot = path.resolve(import.meta.dirname, '../public');
 const articles = fs
-  .readdirSync(path.join(publicRoot, 'page-data'), { recursive: true, withFileTypes: true })
+  .readdirSync(path.join(publicRoot, 'page-data'), {
+    recursive: true,
+    withFileTypes: true,
+  })
   .filter((entry) => entry.isFile() && entry.name === 'page-data.json')
   .flatMap((entry) => {
     const { path: route, result } = JSON.parse(
@@ -38,9 +41,21 @@ void test('published articles have localized metadata, blog cross-links and work
   for (const { route, language } of articles) {
     const file = path.join(publicRoot, route, 'index.html');
     const $ = cheerio.load(fs.readFileSync(file, 'utf8'));
-    assert.equal($('html').attr('lang'), language, `Wrong document language: ${route}`);
-    assert.equal($('head title').length, 1, `Duplicate/missing title: ${route}`);
-    assert.equal($('head link[rel=canonical]').length, 1, `Duplicate/missing canonical: ${route}`);
+    assert.equal(
+      $('html').attr('lang'),
+      language,
+      `Wrong document language: ${route}`,
+    );
+    assert.equal(
+      $('head title').length,
+      1,
+      `Duplicate/missing title: ${route}`,
+    );
+    assert.equal(
+      $('head link[rel=canonical]').length,
+      1,
+      `Duplicate/missing canonical: ${route}`,
+    );
     assert.equal(
       $('head meta[name=description]').length,
       1,
@@ -48,28 +63,43 @@ void test('published articles have localized metadata, blog cross-links and work
     );
     const schemas = $('head script[type="application/ld+json"]');
     assert.equal(schemas.length, 1, `Duplicate/missing schema: ${route}`);
-    assert.equal((JSON.parse(schemas.text()) as Record<string, unknown>)['@type'], 'BlogPosting');
+    assert.equal(
+      (JSON.parse(schemas.text()) as Record<string, unknown>)['@type'],
+      'BlogPosting',
+    );
     const body = $('.bodytext');
     assert(body.text().trim().length > 0, `Empty article: ${route}`);
     body
       .find('p, h2')
       .each((_, element) =>
-        assert(!isSubscriptionPromotion($(element).text()), `Paid prompt: ${route}`),
+        assert(
+          !isSubscriptionPromotion($(element).text()),
+          `Paid prompt: ${route}`,
+        ),
       );
     body.find('a[href]').each((_, element) => {
       const href = $(element).attr('href')!;
       if (!/^https?:\/\//.test(href)) return;
       const url = new URL(href);
-      assert(!links.has(sourceKey(url)), `Unlocalized source link: ${route}: ${href}`);
+      assert(
+        !links.has(sourceKey(url)),
+        `Unlocalized source link: ${route}: ${href}`,
+      );
     });
     body.find('iframe[src]').each((_, element) => {
       const player = $(element);
       const url = new URL(player.attr('src')!);
-      if (!['www.youtube.com', 'www.youtube-nocookie.com'].includes(url.hostname)) return;
+      if (
+        !['www.youtube.com', 'www.youtube-nocookie.com'].includes(url.hostname)
+      )
+        return;
       assert.equal(url.hostname, 'www.youtube-nocookie.com');
       assert.match(url.pathname, /^\/embed\/[\w-]{11}$/);
       assert(player.attr('title')?.trim(), `Missing player title: ${route}`);
-      assert.equal(player.attr('referrerpolicy'), 'strict-origin-when-cross-origin');
+      assert.equal(
+        player.attr('referrerpolicy'),
+        'strict-origin-when-cross-origin',
+      );
       assert.equal(player.attr('loading'), 'lazy');
       assert.equal(player.attr('sandbox'), undefined);
     });
@@ -89,7 +119,13 @@ void test('category pages render configured reading order, excerpts and local co
     if (!routes.has(`/${guide.language}/category/${guide.slug}/`)) continue;
     const $ = cheerio.load(
       fs.readFileSync(
-        path.join(publicRoot, guide.language, 'category', guide.slug, 'index.html'),
+        path.join(
+          publicRoot,
+          guide.language,
+          'category',
+          guide.slug,
+          'index.html',
+        ),
         'utf8',
       ),
     );
@@ -121,17 +157,28 @@ void test('category pages render configured reading order, excerpts and local co
     );
     cards.each((_, card) => {
       assert($(card).find('h3').text().trim(), 'Missing recommendation title');
-      assert($(card).find('.excerpt').text().trim(), 'Missing recommendation excerpt');
+      assert(
+        $(card).find('.excerpt').text().trim(),
+        'Missing recommendation excerpt',
+      );
       const image = $(card).find('img.readingCardImage').attr('src');
-      assert(image?.startsWith('/static/'), 'Missing local recommendation cover');
-      assert(fs.existsSync(path.join(publicRoot, image!)), `Missing generated cover: ${image}`);
+      assert(
+        image?.startsWith('/static/'),
+        'Missing local recommendation cover',
+      );
+      assert(
+        fs.existsSync(path.join(publicRoot, image!)),
+        `Missing generated cover: ${image}`,
+      );
     });
   }
 });
 
 void test('article navigation includes existing placeholder languages without advertising duplicate translations', () => {
   for (const { route, language } of articles) {
-    const $ = cheerio.load(fs.readFileSync(path.join(publicRoot, route, 'index.html'), 'utf8'));
+    const $ = cheerio.load(
+      fs.readFileSync(path.join(publicRoot, route, 'index.html'), 'utf8'),
+    );
     const target = language === 'en' ? 'pl' : 'en';
     const destination = route.replace(`/${language}/`, `/${target}/`);
     assert.equal(
@@ -143,8 +190,13 @@ void test('article navigation includes existing placeholder languages without ad
 });
 
 void test('Event Sourcing category languages share all articles and curated reading order', () => {
-  const expected = new Map<string, { language: string; metadata: Frontmatter }[]>();
-  for (const directory of fs.readdirSync(path.join(import.meta.dirname, '../content/posts'))) {
+  const expected = new Map<
+    string,
+    { language: string; metadata: Frontmatter }[]
+  >();
+  for (const directory of fs.readdirSync(
+    path.join(import.meta.dirname, '../content/posts'),
+  )) {
     const versions = [];
     for (const language of ['en', 'pl']) {
       const file = path.join(
@@ -154,20 +206,26 @@ void test('Event Sourcing category languages share all articles and curated read
         `index.${language}.md`,
       );
       if (!fs.existsSync(file)) continue;
-      const metadata = readFrontmatter(fs.readFileSync(file, 'utf8').split('---')[1]);
+      const metadata = readFrontmatter(
+        fs.readFileSync(file, 'utf8').split('---')[1],
+      );
       versions.push({ language, metadata });
     }
     if (
       !versions.some(
         ({ metadata }) =>
           !metadata.useDefaultLangCanonical &&
-          [metadata.category, ...(metadata.categories || [])].includes('Event Sourcing'),
+          [metadata.category, ...(metadata.categories || [])].includes(
+            'Event Sourcing',
+          ),
       )
     )
       continue;
     // Hosted document URLs normalize case; original folder names retain
     // publication/feed/comment identities.
-    expected.set(directory.split('--')[1].toLowerCase(), versions);
+    const slug = directory.split('--')[1];
+    assert.ok(slug, `Missing article slug: ${directory}`);
+    expected.set(slug.toLowerCase(), versions);
   }
   const guide = categoryGuides.find(
     (item) => item.language === 'en' && item.slug === 'event-sourcing',
@@ -180,20 +238,28 @@ void test('Event Sourcing category languages share all articles and curated read
       ),
     );
     const cards = $('a.readingCard');
-    assert.equal(cards.length, expected.size, `${language}: missing category articles`);
     assert.equal(
-      new Set(cards.map((_, card) => $(card).attr('href')!.split('/')[2]).get()).size,
+      cards.length,
+      expected.size,
+      `${language}: missing category articles`,
+    );
+    assert.equal(
+      new Set(cards.map((_, card) => $(card).attr('href')!.split('/')[2]).get())
+        .size,
       expected.size,
     );
     cards.each((_, card) => {
       const href = $(card).attr('href')!;
       const slug = href.split('/')[2];
+      assert.ok(slug, `Missing article slug: ${href}`);
       const versions = expected.get(slug);
       assert(versions, `Unexpected article ${href}`);
       const target =
         versions.find((version) => version.language === language) ||
         versions.find(
-          (version) => version.language === 'en' && !version.metadata.useDefaultLangCanonical,
+          (version) =>
+            version.language === 'en' &&
+            !version.metadata.useDefaultLangCanonical,
         ) ||
         versions.find((version) => !version.metadata.useDefaultLangCanonical);
       assert.equal(
@@ -218,7 +284,10 @@ void test('Event Sourcing category languages share all articles and curated read
       'Expected one separator between recommended and remaining articles',
     );
     const index = cheerio.load(
-      fs.readFileSync(path.join(publicRoot, language, 'category/index.html'), 'utf8'),
+      fs.readFileSync(
+        path.join(publicRoot, language, 'category/index.html'),
+        'utf8',
+      ),
     );
     assert(
       index(`a[href="/${language}/category/event-sourcing/"] strong`)
@@ -234,7 +303,10 @@ void test('Kurrent TypeScript examples render with Prism syntax tokens in both l
     'keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention';
   for (const language of ['en', 'pl']) {
     const $ = cheerio.load(
-      fs.readFileSync(path.join(publicRoot, language, slug, 'index.html'), 'utf8'),
+      fs.readFileSync(
+        path.join(publicRoot, language, slug, 'index.html'),
+        'utf8',
+      ),
     );
     assert($('.bodytext pre.language-typescript').length > 0);
     assert(
@@ -251,20 +323,27 @@ void test('available blog references use relative URLs and social links follow t
       const file = path.join(directory, entry.name);
       if (entry.isDirectory()) visit(file);
       else if (entry.name.endsWith('.md')) {
-        for (const url of fs.readFileSync(file, 'utf8').match(/https?:\/\/[^\s)<>"\]]+/g) || []) {
+        for (const url of fs
+          .readFileSync(file, 'utf8')
+          .match(/https?:\/\/[^\s)<>"\]]+/g) || []) {
           if (
             !/^https?:\/\/(?:www\.)?(?:architecture-weekly\.com|eventstore\.com|eventstore\.io|kurrent\.io|kurrentdb\.kurrent\.io|web\.archive\.org)\//.test(
               url,
             )
           )
             continue;
-          assert(!links.has(sourceKey(url)), `Known source URL remains in ${file}: ${url}`);
+          assert(
+            !links.has(sourceKey(url)),
+            `Known source URL remains in ${file}: ${url}`,
+          );
         }
       }
     }
   }
   visit(path.join(import.meta.dirname, '../content'));
-  const $ = cheerio.load(fs.readFileSync(path.join(publicRoot, 'en/articles/index.html'), 'utf8'));
+  const $ = cheerio.load(
+    fs.readFileSync(path.join(publicRoot, 'en/articles/index.html'), 'utf8'),
+  );
   assert.deepEqual(
     $('nav .itemList a[href^="http"]')
       .map((_, item) => $(item).attr('href'))
@@ -282,7 +361,9 @@ void test('available blog references use relative URLs and social links follow t
 
 void test('related article cards follow current editorial data and preserve available locale routes with valid canonical identities', () => {
   for (const { route, related } of articles) {
-    const $ = cheerio.load(fs.readFileSync(path.join(publicRoot, route, 'index.html'), 'utf8'));
+    const $ = cheerio.load(
+      fs.readFileSync(path.join(publicRoot, route, 'index.html'), 'utf8'),
+    );
     assert.deepEqual(
       $('.related .readingCard')
         .map((_, card) => $(card).attr('href'))
@@ -293,14 +374,26 @@ void test('related article cards follow current editorial data and preserve avai
     for (const destination of related) {
       const slug = destination.split('/').slice(2).join('/');
       const localDestination = `/${route.split('/')[1]}/${slug}`;
-      if (fs.existsSync(path.join(publicRoot, localDestination, 'index.html'))) {
-        assert.equal(destination, localDestination, `Related link changes locale: ${route}`);
+      if (
+        fs.existsSync(path.join(publicRoot, localDestination, 'index.html'))
+      ) {
+        assert.equal(
+          destination,
+          localDestination,
+          `Related link changes locale: ${route}`,
+        );
       }
       const target = cheerio.load(
-        fs.readFileSync(path.join(publicRoot, destination, 'index.html'), 'utf8'),
+        fs.readFileSync(
+          path.join(publicRoot, destination, 'index.html'),
+          'utf8',
+        ),
       );
       const pageData = JSON.parse(
-        fs.readFileSync(path.join(publicRoot, 'page-data', destination, 'page-data.json'), 'utf8'),
+        fs.readFileSync(
+          path.join(publicRoot, 'page-data', destination, 'page-data.json'),
+          'utf8',
+        ),
       ) as BuildPageData;
       let canonicalPath = destination;
       if (pageData.result.data.post.frontmatter.useDefaultLangCanonical) {
@@ -318,7 +411,10 @@ void test('related article cards follow current editorial data and preserve avai
 void test('archive cards preserve their page locale, including untranslated article copies', () => {
   for (const language of ['en', 'pl']) {
     const $ = cheerio.load(
-      fs.readFileSync(path.join(publicRoot, language, 'articles/index.html'), 'utf8'),
+      fs.readFileSync(
+        path.join(publicRoot, language, 'articles/index.html'),
+        'utf8',
+      ),
     );
     const cards = $('li > a.link');
     assert(cards.length > 0, `${language}: expected archive cards`);
@@ -328,7 +424,10 @@ void test('archive cards preserve their page locale, including untranslated arti
         destination.startsWith(`/${language}/`),
         `Archive link changes locale: ${destination}`,
       );
-      assert(fs.existsSync(path.join(publicRoot, destination, 'index.html')), destination);
+      assert(
+        fs.existsSync(path.join(publicRoot, destination, 'index.html')),
+        destination,
+      );
     });
   }
 });

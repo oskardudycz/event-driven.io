@@ -10,7 +10,8 @@
 }
 @media screen and (min-width: 1024px) {
   :global(.article).article {
-    padding: calc(var(--space-default) * 2 + 90px) 0 calc(var(--space-default) * 2);
+    padding: calc(var(--space-default) * 2 + 90px) 0
+      calc(var(--space-default) * 2);
     max-width: var(--text-max-width-desktop);
   }
 }

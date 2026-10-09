@@ -8,7 +8,9 @@ function asyncComponent<Props extends object>(
     Props,
     { component: React.ComponentType<Props> | null }
   > {
-    state: { component: React.ComponentType<Props> | null } = { component: null };
+    state: { component: React.ComponentType<Props> | null } = {
+      component: null,
+    };
 
     componentDidMount() {
       if (!this.state.component) {
@@ -16,7 +18,9 @@ function asyncComponent<Props extends object>(
           .then((component) => {
             if (component) this.setState({ component });
           })
-          .catch((error: unknown) => console.error('Could not load component', error));
+          .catch((error: unknown) =>
+            console.error('Could not load component', error),
+          );
       }
     }
     render() {

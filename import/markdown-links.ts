@@ -5,7 +5,9 @@ import escapeHtml from 'escape-html';
 export function markdownLinkDestination(destination: string, base: string) {
   const ambiguous = Array.from(destination).some(
     (character) =>
-      character.charCodeAt(0) < 32 || character.charCodeAt(0) === 127 || character === '\\',
+      character.charCodeAt(0) < 32 ||
+      character.charCodeAt(0) === 127 ||
+      character === '\\',
   );
   if (ambiguous || destination.startsWith('//'))
     throw new Error(`Unsupported article link: ${destination}`);
@@ -18,7 +20,10 @@ export function markdownLinkDestination(destination: string, base: string) {
       ? `${url.pathname}${url.search}${url.hash}`
       : url.href;
   return value.replace(/[<>"'()\s]/g, (character) =>
-    Array.from(Buffer.from(character), (byte) => `%${byte.toString(16).toUpperCase()}`).join(''),
+    Array.from(
+      Buffer.from(character),
+      (byte) => `%${byte.toString(16).toUpperCase()}`,
+    ).join(''),
   );
 }
 

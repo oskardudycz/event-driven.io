@@ -1,5 +1,11 @@
 import assert from 'node:assert/strict';
-import { mkdtempSync, openSync, closeSync, readFileSync, writeFileSync } from 'node:fs';
+import {
+  mkdtempSync,
+  openSync,
+  closeSync,
+  readFileSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -35,7 +41,11 @@ function build(label: string) {
       stdio: 'inherit',
     },
   );
-  assert.equal(result.status, 0, `${label} produced obsolete or inconsistent CSS`);
+  assert.equal(
+    result.status,
+    0,
+    `${label} produced obsolete or inconsistent CSS`,
+  );
 }
 function inlineStyles() {
   const $ = cheerio.load(readFileSync(page, 'utf8'));
@@ -67,14 +77,24 @@ for (const change of [
   try {
     writeFileSync(change.file, `${original}\n${change.probe}\n`);
     build(`${change.label}-css-only-change`);
-    assert.notEqual(inlineStyles(), baseline, 'Warm build ignored a CSS-only edit');
+    assert.notEqual(
+      inlineStyles(),
+      baseline,
+      'Warm build ignored a CSS-only edit',
+    );
     assert.match(inlineStyles(), change.pattern);
     await checkCssBrowser(change.color);
   } finally {
     writeFileSync(change.file, original);
     build(`${change.label}-restored`);
   }
-  assert.equal(inlineStyles(), baseline, 'Warm build did not restore the original CSS');
+  assert.equal(
+    inlineStyles(),
+    baseline,
+    'Warm build did not restore the original CSS',
+  );
   await checkCssBrowser(baselineColor);
 }
-console.log('Module/global CSS modification and restoration passed across all generated pages.');
+console.log(
+  'Module/global CSS modification and restoration passed across all generated pages.',
+);

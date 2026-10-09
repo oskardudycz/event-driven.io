@@ -1,7 +1,7 @@
 import type { ArticleEdge } from '../types/content.ts';
 import type { SitePageProps } from '../types/content.ts';
 import * as styles from './CategoryTemplate.module.css';
-import { FaTag } from 'react-icons/fa/';
+import { FaTag } from 'react-icons/fa';
 import React from 'react';
 import { graphql } from 'gatsby';
 
@@ -20,7 +20,8 @@ const CategoryTemplate = (props: SitePageProps<'posts'>) => {
     pageContext: { category, categoryDescription, recommendedSlugs = [] },
   } = props;
   const totalCount = edges.length;
-  const slugKey = (edge: ArticleEdge) => edge.node.fields.slug.replace(/^\/+|\/+$/g, '');
+  const slugKey = (edge: ArticleEdge) =>
+    edge.node.fields.slug.replace(/^\/+|\/+$/g, '');
   const edgesBySlug = new Map(edges.map((edge) => [slugKey(edge), edge]));
   const recommended = recommendedSlugs
     .map((slug) => edgesBySlug.get(slug))
@@ -36,8 +37,13 @@ const CategoryTemplate = (props: SitePageProps<'posts'>) => {
             <FaTag /> {t('categories.topic')}
           </p>
           <Headline title={category} />
-          <p className={`description ${styles.description}` + ' ' + styles.elementP}>
-            {categoryDescription || t('categories.defaultDescription', { category })}
+          <p
+            className={
+              `description ${styles.description}` + ' ' + styles.elementP
+            }
+          >
+            {categoryDescription ||
+              t('categories.defaultDescription', { category })}
           </p>
           <p className={`meta ${styles.meta}` + ' ' + styles.elementP}>
             {t('categories.articleCount', { count: totalCount })}
@@ -46,8 +52,12 @@ const CategoryTemplate = (props: SitePageProps<'posts'>) => {
         {recommended.length > 0 && (
           <section className={`articleSection ${styles.articleSection}`}>
             <div className={`sectionHeader ${styles.sectionHeader}`}>
-              <h2 className={styles.elementH2}>{t('categories.recommended')}</h2>
-              <p className={styles.elementP}>{t('categories.recommendedDescription')}</p>
+              <h2 className={styles.elementH2}>
+                {t('categories.recommended')}
+              </h2>
+              <p className={styles.elementP}>
+                {t('categories.recommendedDescription')}
+              </p>
             </div>
             <List edges={recommended} ordered showImages />
           </section>
@@ -58,7 +68,9 @@ const CategoryTemplate = (props: SitePageProps<'posts'>) => {
           >
             <div className={`sectionHeader ${styles.sectionHeader}`}>
               <h2 className={styles.elementH2}>
-                {recommended.length > 0 ? t('categories.moreArticles') : t('categories.articles')}
+                {recommended.length > 0
+                  ? t('categories.moreArticles')
+                  : t('categories.articles')}
               </h2>
             </div>
             <List edges={remaining} showImages />
@@ -93,7 +105,13 @@ export const query = graphql`
             useDefaultLangCanonical
             cover {
               childImageSharp {
-                resize(width: 420, height: 240, quality: 78, cropFocus: CENTER, toFormat: WEBP) {
+                resize(
+                  width: 420
+                  height: 240
+                  quality: 78
+                  cropFocus: CENTER
+                  toFormat: WEBP
+                ) {
                   src
                 }
               }

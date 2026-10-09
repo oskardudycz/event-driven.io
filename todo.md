@@ -6,10 +6,12 @@ This is the live checklist for [plan.md](./plan.md). Completed categories are co
 
 ## Current work
 
-- [ ] Align TypeScript/ESLint/Prettier/editor tooling with Pongo; use ordinary .ts/.tsx sources with explicit ESM package scopes and document Gatsby's tested root-ESM limitation.
-- [ ] Complete the authorized coordinated TypeScript/native-ESM migration across application, Node tooling/importers, local plugins and tests, respecting documented Gatsby/configuration loader boundaries.
-- [ ] Add meaningful no-emit type-checking to commands/CI and update imports, component paths, cache inputs, fixtures and README together.
-- [ ] Validate types/lint/smoke/build/full tests/browser screenshots; preserve existing content, route/feed/sitemap contracts and screenshot tolerance.
+- [x] Check every direct dependency against its latest stable release; test and validate ESLint 10 and the latest Gatsby-supported React 19 with matching types/icons and native sticky-header visibility. Record remaining coordinated upgrades in the dependency review.
+
+- [x] Align TypeScript/ESLint/Prettier/editor tooling with Pongo; use ordinary .ts/.tsx sources with explicit ESM package scopes and document Gatsby's tested root-ESM limitation.
+- [x] Complete the authorized coordinated TypeScript/native-ESM migration across application, Node tooling/importers, local plugins and tests, respecting documented Gatsby/configuration loader boundaries.
+- [x] Add meaningful no-emit type-checking to commands/CI and update imports, component paths, cache inputs, fixtures and README together.
+- [x] Validate types/lint/smoke/build/full tests/browser screenshots; preserve existing content, route/feed/sitemap contracts and screenshot tolerance.
 
 - [x] Audit dependency imports, configuration, commands, peer requirements and installation hooks; record the bounded cleanup and supporting documentation in plan.md before changing packages.
 - [x] Remove proven unused direct declarations, stale Stylelint command, unused configuration and Facebook Comments/old Talks files; use native promises instead of Bluebird. Remove project-owned Babel setup using TypeScript parsing and existing Vitest; explicitly declare matching runtime types. Keep active/deferred integrations and Gatsby-owned compiler/plugin dependencies.
@@ -22,7 +24,7 @@ This is the live checklist for [plan.md](./plan.md). Completed categories are co
 
 ## Completed implementation
 
-- [x] Gatsby 5.16.1 / React 18 / Node 24 / Yarn 1 baseline; native ESM Gatsby hooks, useStaticQuery wrapper, layout cleanup, explicit GraphQL types, current CI actions and build/download caching. The original Node 16/22 checkpoints are historical, not targets.
+- [x] Gatsby 5.16.1 / React 19.3.0 / Node 24 / Yarn 1 baseline; native ESM Gatsby hooks, useStaticQuery wrapper, layout cleanup, explicit GraphQL types, current CI actions and build/download caching. The original Node 16/22 checkpoints are historical, not targets.
 - [x] Local MiniSearch replaces Algolia. Lazy bilingual indexes, safe snippets, covers, retry/error/empty/loading states, canonical content deduplication and modified/deleted-content checks are implemented. No external indexing account is required for search.
 - [x] gatsby-plugin-react-i18next owns translation resources/provider/navigation; avoid overlapping locale generators. EN/PL routes, genuine translations and untranslated copies remain explicit.
 - [x] Complete portable CSS Modules conversion and component ownership; global reset/fonts/tokens belong to shared layout. theme.yaml generates CSS variables. Remove obsolete styled-jsx packages and blanket imports.
@@ -37,8 +39,25 @@ This is the live checklist for [plan.md](./plan.md). Completed categories are co
 - [x] Full ESLint/Prettier gates, Pongo-inspired editor/staging setup, lint-staged and Husky. Source Markdown formatting is preserved; code/image errors block staging.
 - [x] Image descriptions: inspect 137 references, add 264 descriptions across 142 files and declare 14 decorative occurrences. Validate all 643 Markdown files, staged absolute paths, native/Gatsby JSX images and generated HTML/image-only links. Imports preserve descriptions and require overrides for missing alt text; failed imports leave no partial post.
 - [x] IndexNow CLI/domain/submission separation, public verification key, canonical content fingerprints, dry runs, deletion/batching/retry safeguards and production-only post-deploy CI. Recover acknowledged state across cache expiry; first deployment establishes a baseline without bulk historical submissions. No real notification was sent locally.
-- [x] Native Playwright Test fixtures/assertions/snapshots/webServer replace manual browser cleanup, PNG comparison and CI server polling. Seven TypeScript suites report 55 browser cases; Vitest remains for components with automatic mock cleanup. README covers focused/debug/report/trace and explicit snapshot review. Existing PNGs and the 3% tolerance are unchanged.
+- [x] Native Playwright Test fixtures/assertions/snapshots/webServer replace manual browser cleanup, PNG comparison and CI server polling. Seven TypeScript suites report 57 browser cases; Vitest remains for components with automatic mock cleanup. README covers focused/debug/report/trace and explicit snapshot review. Existing PNGs and the 3% tolerance are unchanged.
 - [x] Replace historical migration/body/count assertions with current generated-output and security checks. Earlier CodeQL fixes use parsed URLs and safe Markdown destinations rather than HTML attribute injection; no findings are suppressed.
+
+## Local acceptance — React 19 / ESLint 10 / package audit — 2026-10-09
+
+- Audit all 86 direct declarations against the registry. Gatsby 5.16.1 and official plugins are current. Upgrade React/React DOM to 19.3.0, matching types to 19.3.0, react-icons to 5.7.0, ESLint to 10.12.0 and @eslint/js to 10.0.1. Remove react-visibility-sensor: 85 declarations remain; 35 still differ from latest, including Node types intentionally matching Node 24. [The complete inventory](docs/dependency-review.md) records before/current/latest versions and the remaining upgrade batches.
+- Replace the header's actual findDOMNode dependency with a native IntersectionObserver and disconnect on unmount. Use passive scroll/resize events with cleanup when observers are unavailable. Browser regressions cover sticky scrolling in EN/PL home/archive pages through both paths. The existing unsupported-observer newsletter case caught the missing header fallback; it passes after correction.
+- An isolated full uncached ESLint 10 probe passes before installation. The installed tool then passes lint, TypeScript staging/accessibility fixtures and the full suite. Frozen installation passes (1.17s), Gatsby patch reapplied and Husky skipped in the sandbox; smoke passes (79 source files / 18 queries), as do strict root/NodeNext checks and formatting.
+- The automatic JSX experiment builds but fails browser fonts/screenshots: it bypasses Gatsby's React.createElement Head compatibility interception and React document singleton handling removes live font attributes. Keep Gatsby's default runtime. A clean build is required when switching runtimes; the clean production build passes (676.97s, including 3375 image jobs taking 615.051s). The final header-fallback build passes (122.64s). No React compatibility patch or weakened assertion is added.
+- Final restored-build full suite passes (170.50s), including 19 component tests, importer/security/image/indexing/IndexNow checks, staging fixtures and browser TypeScript. All 57 browser cases pass (186.31s). The 697-route/feed/sitemap contract, screenshot PNGs and 3% tolerance remain unchanged.
+- Warm-cache modification, canonical deletion and restoration pass (155.77s); article sources and llms.txt restore exactly. Compare rendered article markup across 694 pages with the pre-cleanup baseline: unchanged after excluding React's empty text hydration comments. Source article text, static assets and contract fixtures are unchanged. Search measurement completes all six EN/PL runs (15.29s); this verifies the migrated command, not a measured performance improvement.
+- Remaining diagnostics stay visible: slow category/page queries and dependency punycode deprecation. The localization plugin's current peer declaration still targets React 18; React/accessibility ESLint plugins still declare older ESLint ranges. Their actual integrations pass local compiler/lint/staging/browser checks; metadata is not patched or suppressed. Earlier traced Gatsby-pinned LMDB timer warnings remain a separate investigation. Hosted CI, deployment and production audits remain pending.
+
+## Local acceptance — copied Pongo tooling / TypeScript — 2026-10-09
+
+- Copy Pongo's tsconfig.shared.json, .prettierrc.json and .editorconfig exactly. Root/browser/NodeNext/lint configs extend the shared strict settings, including exact optional properties and indexed-access checking. Fix exposed type/lint errors without blanket any/ts-ignore declarations or relaxed recommended rules. VS Code settings, extensions, tasks and debuggers start from Pongo with Gatsby paths, Node 24 and Yarn adjustments.
+- Application, scripts, importers, local plugins and tests use ordinary .ts/.tsx with native ESM source package scopes. Five .mjs configuration entry points remain for documented loader discovery. A clean root-type-module experiment fails in Gatsby-generated CommonJS SSR output; standard source package scopes pass without rewriting that output or installing a loader.
+- Frozen install (1.70s), strict root/NodeNext checks, lint/format and smoke (79 source files / 18 queries) pass. Production build passes (214.28s). Full nonvisual suite passes (209.85s), including 19 component tests, importer/security/image/indexing/IndexNow checks and actual TypeScript lint-staged fixtures. All 55 browser cases pass (205.34s), preserving screenshot PNGs and the 3% tolerance.
+- Warm-cache content modification, canonical deletion and restoration pass (350.11s). Publication sources and llms.txt restore exactly. No article text/assets or build-contract fixtures are changed. These results precede the separately requested React/ESLint candidate below; hosted CI/deployment remain pending.
 
 ## Local acceptance — dependency cleanup — 2026-10-09
 
@@ -79,7 +98,7 @@ This is the live checklist for [plan.md](./plan.md). Completed categories are co
 
 ## Next technical category
 
-- [ ] Consider Pongo's exactOptionalPropertyTypes and noUncheckedIndexedAccess as a separate stricter-typing pass; the combined diagnostic audit found 154 errors. Refine optional contracts and index guards rather than add blanket non-null assertions.
+- [ ] Apply the remaining compatible minor/patch tooling and utility upgrades, then matched Playwright/browser updates from [the complete dependency review](docs/dependency-review.md). Separate CSS/localization/compiler/deployment major migrations; keep Node types aligned with the actual runtime.
 
 - [ ] Repair the legacy generate-app-icons command: it calls npx sharp, but the sharp library has no CLI binary. Use its already declared library API in the next manual-tooling pass. This audit does not run the broken command or change icon assets.
 - [ ] Profile first-party font requests, runtime switching and fallback layout shifts; apply only measured improvements preserving final typography and Polish glyph coverage.
@@ -101,8 +120,7 @@ This is the live checklist for [plan.md](./plan.md). Completed categories are co
 
 - Contact form repair/restoration: deferred at the owner's request. The live page offers Calendly; preserve unreferenced form files/dependencies until a frontend/Netlify detection/delivery solution is approved and verified.
 - Giscus or custom guest comments remain alternatives. Giscus requires GitHub authorization; a guest backend needs moderation, spam/rate controls, backups and operations. Keep Disqus and current automatic loading now; no click-to-load/provider switch is approved.
-- Tailwind, dark-mode palette/behavior, visual redesign, Slices/DSG, React 19 and npm migration are separate reviewed categories. Keep Yarn, React 18, existing styles and static generation.
-- The coordinated TypeScript/native-ESM migration is now authorized and tracked under Current work; retain documented framework loader boundaries.
+- Tailwind, dark-mode palette/behavior, visual redesign, Slices/DSG and npm migration are separate reviewed categories. Keep Yarn, existing styles and static generation. The authorized React 19.3.0 upgrade passes local acceptance; hosted CI/deployment are separate checks.
 - Home-label decision 4, analytics/security-policy changes and font fallback metric changes need explicit review if they alter visible behavior.
 
 ## Manual operation

@@ -22,7 +22,8 @@ import {
 } from '../import/import-substack.ts';
 
 const source = 'https://example.substack.com/p/example';
-const image = 'https://substack-post-media.s3.amazonaws.com/public/images/example.png';
+const image =
+  'https://substack-post-media.s3.amazonaws.com/public/images/example.png';
 const cdn = `https://substackcdn.com/image/fetch/w_1200,f_auto/${encodeURIComponent(image)}`;
 const html = `<!doctype html><html><head>
 <meta property="og:title" content="A title: with punctuation">
@@ -61,10 +62,14 @@ void test('imports full article and local assets in both languages, preserving e
     { url: source, category: 'Event Sourcing' },
     { output, download },
   );
-  const english = await fs.readFile(path.join(directory, 'index.en.md'), 'utf8');
+  const english = await fs.readFile(
+    path.join(directory, 'index.en.md'),
+    'utf8',
+  );
   const polish = await fs.readFile(path.join(directory, 'index.pl.md'), 'utf8');
   const [enMeta, enBody] = english.slice(4).split('---\n\n');
   const [plMeta, plBody] = polish.slice(4).split('---\n\n');
+  assert.ok(enBody && plBody, 'Missing imported article body');
   assert.equal(enBody, plBody);
   assert.equal(readFrontmatter(enMeta).title, 'A title: with punctuation');
   assert.equal(readFrontmatter(enMeta).publishedAt, '2026-09-07T11:49:46Z');
@@ -74,10 +79,16 @@ void test('imports full article and local assets in both languages, preserving e
   assert.equal(readFrontmatter(enMeta).redirectFrom, '/example/');
   assert.equal(readFrontmatter(plMeta).redirectFrom, undefined);
   assert.deepEqual(fetched, [source, image]); // cover and body reuse one download
-  assert.deepEqual(await fs.readFile(path.join(directory, '2026-09-07-cover.png')), png);
+  assert.deepEqual(
+    await fs.readFile(path.join(directory, '2026-09-07-cover.png')),
+    png,
+  );
   assert.match(enBody, /\*\*world\*\*/);
   assert.match(enBody, /<em>That can be fine if you&#39;<\/em>re learning\./);
-  assert.match(enBody, /\[read more\]\(https:\/\/example.substack.com\/p\/another\)/);
+  assert.match(
+    enBody,
+    /\[read more\]\(https:\/\/example.substack.com\/p\/another\)/,
+  );
   assert.match(enBody, /!\[Example image\]\(2026-09-07-cover.png\)/);
   assert.doesNotMatch(enBody, /^\[$/m);
   assert.match(enBody, /A caption\./);
@@ -91,8 +102,14 @@ void test('imports full article and local assets in both languages, preserving e
     await fs.readFile(path.join(directory, 'substack-source.txt'), 'utf8'),
   ) as { embeds: number };
   assert.equal(metadata.embeds, 1);
-  await assert.rejects(importPost({ url: source }, { output, download }), /already exists/);
-  assert.equal(await fs.readFile(path.join(directory, 'index.en.md'), 'utf8'), english);
+  await assert.rejects(
+    importPost({ url: source }, { output, download }),
+    /already exists/,
+  );
+  assert.equal(
+    await fs.readFile(path.join(directory, 'index.en.md'), 'utf8'),
+    english,
+  );
 });
 
 void test('failed image downloads leave no partial article', async (t) => {
@@ -112,7 +129,10 @@ void test('failed image downloads leave no partial article', async (t) => {
 });
 
 void test('refuses missing metadata, missing bodies and paywall previews', () => {
-  assert.throws(() => extractPost('<p>Not an article</p>', source), /body missing/);
+  assert.throws(
+    () => extractPost('<p>Not an article</p>', source),
+    /body missing/,
+  );
   assert.throws(
     () => extractPost('<div class="body markup">Text</div>', source),
     /title or publication/,
@@ -125,7 +145,8 @@ void test('refuses missing metadata, missing bodies and paywall previews', () =>
 
 void test('Wayback extraction uses publication date and excludes archived site chrome', async (t) => {
   const output = temporaryDirectory(t, 'eventstore-test-');
-  const url = 'https://web.archive.org/web/20230325182019/https://www.eventstore.com/blog/example';
+  const url =
+    'https://web.archive.org/web/20230325182019/https://www.eventstore.com/blog/example';
   const archive = 'https://web.archive.org/web/20230325182019id_/';
   const archivedHtml = `<meta property="og:title" content="Archived article">
     <meta property="article:published_time" content="2021-05-20T13:28:52+00:00">
@@ -134,8 +155,14 @@ void test('Wayback extraction uses publication date and excludes archived site c
     <img src="/hubfs/diagram.png" alt="Diagram">
     <a href="/blog/related">Related</a></span></main><footer>Author bio</footer></article>`;
   const fetched: string[] = [];
-  assert.equal(normalizeUrl(url), `${archive}https://www.eventstore.com/blog/example`);
-  assert.equal(sourceLocation(normalizeUrl(url)).base, 'https://www.eventstore.com/blog/example');
+  assert.equal(
+    normalizeUrl(url),
+    `${archive}https://www.eventstore.com/blog/example`,
+  );
+  assert.equal(
+    sourceLocation(normalizeUrl(url)).base,
+    'https://www.eventstore.com/blog/example',
+  );
   assert.throws(
     () => normalizeUrl(url.replace('20230325182019', '20240000000000*')),
     /dated Wayback/,
@@ -152,11 +179,18 @@ void test('Wayback extraction uses publication date and excludes archived site c
     },
   );
   assert.match(dir, /2021-05-20--example$/);
-  assert.deepEqual(fetched, [`${archive}https://www.eventstore.com/hubfs/diagram.png`]);
+  assert.deepEqual(fetched, [
+    `${archive}https://www.eventstore.com/hubfs/diagram.png`,
+  ]);
   const markdown = await fs.readFile(path.join(dir, 'index.en.md'), 'utf8');
-  assert.match(markdown, /\[Related\]\(https:\/\/www.eventstore.com\/blog\/related\)/);
+  assert.match(
+    markdown,
+    /\[Related\]\(https:\/\/www.eventstore.com\/blog\/related\)/,
+  );
   assert.doesNotMatch(markdown, /Wayback toolbar|Author bio/);
-  const metadata = JSON.parse(await fs.readFile(path.join(dir, 'article-source.txt'), 'utf8')) as {
+  const metadata = JSON.parse(
+    await fs.readFile(path.join(dir, 'article-source.txt'), 'utf8'),
+  ) as {
     originalUrl: string;
   };
   assert.equal(metadata.originalUrl, 'https://www.eventstore.com/blog/example');
@@ -181,7 +215,10 @@ void test('custom import slugs also receive a bare-path redirect', async (t) => 
     '/en/example/',
   ]);
   const polish = await fs.readFile(path.join(dir, 'index.pl.md'), 'utf8');
-  assert.equal(readFrontmatter(polish.split('---')[1]).redirectAliases, undefined);
+  assert.equal(
+    readFrontmatter(polish.split('---')[1]).redirectAliases,
+    undefined,
+  );
 });
 
 void test('Kurrent SVG diagrams stay local, covers become PNG and code keeps its language', async (t) => {
@@ -231,7 +268,11 @@ void test('webinar overrides add the native recording and replace only mapped re
     <p>Related <a href="https://another.substack.com/p/other">article</a>.</p>
     <iframe src="https://www.youtube.com/embed/7IkHIqPeFjY"></iframe><p>Original ending.</p></div>`;
   const dir = await importPost(
-    { url: source, youtubeVideo: 'MLO08iaRvBk', recordingEmbeds: { [recording]: 'EXj9TTJQwNc' } },
+    {
+      url: source,
+      youtubeVideo: 'MLO08iaRvBk',
+      recordingEmbeds: { [recording]: 'EXj9TTJQwNc' },
+    },
     {
       output,
       html: page,
@@ -249,7 +290,9 @@ void test('webinar overrides add the native recording and replace only mapped re
   assert.match(en, /Original ending/);
   assert.match(en, /\[article\]\(https:\/\/another.substack.com\/p\/other\)/);
   assert.doesNotMatch(en, /recording-thumbnail|Listen now|native-player/);
-  const metadata = JSON.parse(await fs.readFile(path.join(dir, 'substack-source.txt'), 'utf8')) as {
+  const metadata = JSON.parse(
+    await fs.readFile(path.join(dir, 'substack-source.txt'), 'utf8'),
+  ) as {
     embeds: number;
     youtubeVideo: string;
   };
@@ -259,7 +302,10 @@ void test('webinar overrides add the native recording and replace only mapped re
 
 void test('recording overrides preserve existing players without adding duplicates', async (t) => {
   const output = temporaryDirectory(t, 'webinar-duplicate-');
-  const page = html.replace('/embed/abc?start=30', '/embed/0NYwN_p2pFI?start=30');
+  const page = html.replace(
+    '/embed/abc?start=30',
+    '/embed/0NYwN_p2pFI?start=30',
+  );
   const dir = await importPost(
     { url: source, youtubeVideo: '0NYwN_p2pFI' },
     { output, html: page, download: () => Promise.resolve(new Response(png)) },
@@ -269,7 +315,11 @@ void test('recording overrides preserve existing players without adding duplicat
   assert.match(en, /start=30/);
   await assert.rejects(
     importPost(
-      { url: source, slug: 'invalid-recording', youtubeVideo: 'bad" onload="oops' },
+      {
+        url: source,
+        slug: 'invalid-recording',
+        youtubeVideo: 'bad" onload="oops',
+      },
       { output, html },
     ),
     /Invalid YouTube/,
@@ -286,11 +336,21 @@ void test('accepts former paywall markers only with a matching complete public b
   ) => `<meta property="og:title" content="Formerly paid article">
     <meta property="article:published_time" content="2025-03-03"><div class="body markup">${body}</div>
     <script>window._preloads = JSON.parse(${JSON.stringify(JSON.stringify({ post: { audience, body_html: content } }))});</script>`;
-  assert.match(extractPost(page('everyone'), source).body.text(), /Full public ending/);
+  assert.match(
+    extractPost(page('everyone'), source).body.text(),
+    /Full public ending/,
+  );
   assert.throws(() => extractPost(page('only_paid'), source), /Paywalled/);
-  assert.throws(() => extractPost(page('everyone', '<p>Preview only.</p>'), source), /Paywalled/);
   assert.throws(
-    () => extractPost(page('everyone') + '<div class="paywall">Locked</div>', source),
+    () => extractPost(page('everyone', '<p>Preview only.</p>'), source),
+    /Paywalled/,
+  );
+  assert.throws(
+    () =>
+      extractPost(
+        page('everyone') + '<div class="paywall">Locked</div>',
+        source,
+      ),
     /Paywalled/,
   );
 });
@@ -312,7 +372,10 @@ void test('uses the cached Substack image when its original S3 asset is unavaila
     },
   );
   assert.deepEqual(fetched, [image, cdn]);
-  assert.deepEqual(await fs.readFile(path.join(dir, '2026-09-07-cover.png')), png);
+  assert.deepEqual(
+    await fs.readFile(path.join(dir, '2026-09-07-cover.png')),
+    png,
+  );
 });
 
 void test('future imports remove paid prompts and use relative URLs for available blog articles', async (t) => {
@@ -326,7 +389,11 @@ void test('future imports remove paid prompts and use relative URLs for availabl
     <iframe src="https://www.youtube-nocookie.com/embed/sQbkUl7-z_U?start=30" title="My recording"></iframe><p>Full ending.</p></div>`;
   const dir = await importPost(
     { url: source },
-    { output, html: page, links: new Map([[sourceKey(existing), '/en/blog-slug/']]) },
+    {
+      output,
+      html: page,
+      links: new Map([[sourceKey(existing), '/en/blog-slug/']]),
+    },
   );
   const en = await fs.readFile(path.join(dir, 'index.en.md'), 'utf8');
   assert.match(en, /\[Existing article\]\(\/en\/blog-slug\/#details\)/);
@@ -357,18 +424,31 @@ void test('imports YouTube text references as links and linked thumbnails as pla
     { output, html: page, download: () => Promise.resolve(new Response(png)) },
   );
   for (const language of ['en', 'pl']) {
-    const markdown = await fs.readFile(path.join(directory, `index.${language}.md`), 'utf8');
-    assert.ok(markdown.includes(`[Heather Wilde - How to Close the Diversity Gap](${textVideo})`));
+    const markdown = await fs.readFile(
+      path.join(directory, `index.${language}.md`),
+      'utf8',
+    );
+    assert.ok(
+      markdown.includes(
+        `[Heather Wilde - How to Close the Diversity Gap](${textVideo})`,
+      ),
+    );
     assert.ok(markdown.includes(`-   [A reference in a list](${textVideo}).`));
     assert.ok(markdown.includes(`\`youtube: [Mr Bean](${imageVideo})\``));
-    assert.doesNotMatch(markdown, /`youtube: \[Heather Wilde|`youtube: \[A reference/);
+    assert.doesNotMatch(
+      markdown,
+      /`youtube: \[Heather Wilde|`youtube: \[A reference/,
+    );
   }
 });
 
 void test('code language inference preserves source languages and recognizes typed examples', async () => {
-  const { codeLanguage, labelCodeFences } = await import('../import/code-languages.ts');
+  const { codeLanguage, labelCodeFences } =
+    await import('../import/code-languages.ts');
   assert.equal(
-    codeLanguage('export type ShiftOpened = Event<"opened", { amount: number }>;'),
+    codeLanguage(
+      'export type ShiftOpened = Event<"opened", { amount: number }>;',
+    ),
     'typescript',
   );
   assert.equal(codeLanguage('SELECT id FROM events;'), 'sql');
@@ -377,7 +457,11 @@ void test('code language inference preserves source languages and recognizes typ
   assert.equal(codeLanguage('public class Order {}'), 'csharp');
   assert.equal(codeLanguage('📁 orders\n  📁 confirming-order'), 'text');
   assert.equal(
-    codeLanguage('await appendToStream(streamName, events)', 'text', 'typescript'),
+    codeLanguage(
+      'await appendToStream(streamName, events)',
+      'text',
+      'typescript',
+    ),
     'typescript',
   );
   assert.equal(codeLanguage('example', 'js'), 'typescript');
@@ -391,7 +475,11 @@ void test('code language inference preserves source languages and recognizes typ
 void test('known EventStore and Kurrent article aliases resolve to canonical blog links', () => {
   const { buildArticleLinks, relativeArticleLink } = articleContent;
   const links = buildArticleLinks();
-  for (const host of ['www.eventstore.com', 'kurrent.io', 'kurrentdb.kurrent.io']) {
+  for (const host of [
+    'www.eventstore.com',
+    'kurrent.io',
+    'kurrentdb.kurrent.io',
+  ]) {
     assert.equal(
       relativeArticleLink(
         `https://${host}/blog/how-to-get-the-current-entity-state-from-events?utm_source=source#example`,
@@ -414,16 +502,27 @@ void test('known EventStore and Kurrent article aliases resolve to canonical blo
 void test('imports actual publication timestamps without guessing date-only publication times', () => {
   assert.equal(extractPost(html, source).publishedAt, '2026-09-07T11:49:46Z');
   assert.equal(
-    extractPost(html.replace('2026-09-07T11:49:46Z', '2026-09-07'), source).publishedAt,
+    extractPost(html.replace('2026-09-07T11:49:46Z', '2026-09-07'), source)
+      .publishedAt,
     undefined,
   );
 });
 
 void test('SVG detection handles declarations and comments without regex backtracking', () => {
-  for (const svg of ['<svg></svg>', ' \n<?xml version="1.0"?>\n<!-- one --><!-- two --><svg />'])
+  for (const svg of [
+    '<svg></svg>',
+    ' \n<?xml version="1.0"?>\n<!-- one --><!-- two --><svg />',
+  ])
     assert.equal(imageExtension(Buffer.from(svg)), '.svg');
-  for (const invalid of ['<!-- missing end', '<?xml missing end', '<svgscript>'])
-    assert.throws(() => imageExtension(Buffer.from(invalid)), /Unsupported image/);
+  for (const invalid of [
+    '<!-- missing end',
+    '<?xml missing end',
+    '<svgscript>',
+  ])
+    assert.throws(
+      () => imageExtension(Buffer.from(invalid)),
+      /Unsupported image/,
+    );
   // A regressed synchronous regex cannot be interrupted by a node:test timeout.
   // Bound the hostile case in a child so CI fails instead of hanging.
   execFileSync(
@@ -448,9 +547,16 @@ void test('partial-word emphasis preserves formatting while stripping executable
   );
   const directory = await importPost(
     { url: source },
-    { output, html: malicious, download: () => Promise.resolve(new Response(png)) },
+    {
+      output,
+      html: malicious,
+      download: () => Promise.resolve(new Response(png)),
+    },
   );
-  const markdown = await fs.readFile(path.join(directory, 'index.en.md'), 'utf8');
+  const markdown = await fs.readFile(
+    path.join(directory, 'index.en.md'),
+    'utf8',
+  );
   assert.match(
     markdown,
     /<em><strong>That<\/strong> &lt;img src=x onerror=attack\(\)&gt; &amp; you&#39;<\/em>re safe\./,
@@ -462,7 +568,10 @@ void test('llms Markdown labels escape backslashes and metacharacters together',
   const { markdownLabel } = markdownLabels;
   assert.equal(markdownLabel('ordinary title'), 'ordinary title');
   for (const character of ['\\', '[', ']', '*', '_', '`', '<', '>'])
-    assert.equal(markdownLabel(character.repeat(2)), ('\\' + character).repeat(2));
+    assert.equal(
+      markdownLabel(character.repeat(2)),
+      ('\\' + character).repeat(2),
+    );
   assert.equal(markdownLabel('\\] [link]'), '\\'.repeat(3) + '] \\[link\\]');
 });
 
@@ -514,15 +623,23 @@ void test('article links reject executable schemes from source HTML and stored m
 
 void test('mapped links cannot break out of Markdown and retain queries, fragments and titles', async (t) => {
   const output = temporaryDirectory(t, 'substack-markdown-links-');
-  const target = '/en/article/)[attack](javascript:alert(1))?filter=a&b=c#details';
+  const target =
+    '/en/article/)[attack](javascript:alert(1))?filter=a&b=c#details';
   const page = `<meta property="og:title" content="Links"><meta property="article:published_time" content="2025-01-01">
     <div class="body markup"><p><a href="/p/another" title="A &quot;quoted&quot; title">Read more</a></p>
     <p><a href="#details">Section</a> <a href="mailto:hello@example.com">Email</a> <a href="tel:+48123456789">Phone</a></p></div>`;
   const directory = await importPost(
     { url: source },
-    { output, html: page, links: new Map([['example.substack.com/p/another', target]]) },
+    {
+      output,
+      html: page,
+      links: new Map([['example.substack.com/p/another', target]]),
+    },
   );
-  const markdown = await fs.readFile(path.join(directory, 'index.en.md'), 'utf8');
+  const markdown = await fs.readFile(
+    path.join(directory, 'index.en.md'),
+    'utf8',
+  );
   const body = markdown.replace(/^---\n[\s\S]*?\n---\n/, '');
   const tree = remark().parse(body);
   const nodes: Node[] = [];
@@ -531,6 +648,7 @@ void test('mapped links cannot break out of Markdown and retain queries, fragmen
   });
   const links = nodes.filter((node): node is Link => node.type === 'link');
   assert.equal(links.length, 4);
+  assert.ok(links[0]);
   assert.equal(decodeURI(links[0].url), target);
   assert.equal(links[0].title, 'A "quoted" title');
   assert.deepEqual(
@@ -544,17 +662,19 @@ void test('mapped links cannot break out of Markdown and retain queries, fragmen
 void test('link encoding keeps HTML attribute delimiters inside one Markdown destination', async () => {
   const { markdownLinkDestination, markdownLinkTitle } =
     await import('../import/markdown-links.ts');
-  const destination = '/en/article/"><img src=x onerror=attack()>?value=a&other=b#part';
+  const destination =
+    '/en/article/"><img src=x onerror=attack()>?value=a&other=b#part';
   const title = 'A "quoted" <img onerror=attack()> title';
   const markdown = `[Read](${markdownLinkDestination(destination, source)}${markdownLinkTitle(title)})`;
   const tree = remark().parse(markdown) as Root;
   const paragraph = tree.children[0];
-  assert.ok('children' in paragraph);
+  assert.ok(paragraph && 'children' in paragraph);
   const nodes = paragraph.children;
   assert.equal(nodes.length, 1);
-  assert.equal(nodes[0].type, 'link');
-  assert.equal(decodeURI(nodes[0].url), destination);
-  assert.equal(nodes[0].title, title);
+  const link = nodes[0];
+  assert.ok(link?.type === 'link');
+  assert.equal(decodeURI(link.url), destination);
+  assert.equal(link.title, title);
   assert.doesNotMatch(markdown, /<img/);
   assert.equal(markdownLinkDestination('#', source), '#');
 });

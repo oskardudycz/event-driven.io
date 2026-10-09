@@ -10,7 +10,9 @@ assert.equal(config.trailingSlash, 'always');
 assert.ok(config.siteMetadata.siteUrl);
 assert.ok(Array.isArray(config.plugins));
 
-const webfinger = JSON.parse(readFileSync('static/.well-known/webfinger', 'utf8')) as {
+const webfinger = JSON.parse(
+  readFileSync('static/.well-known/webfinger', 'utf8'),
+) as {
   subject: string;
 };
 assert.equal(webfinger.subject, 'acct:oskardudycz@hachyderm.io');
@@ -23,7 +25,10 @@ const files = [
 let queryCount = 0;
 
 function checkTemplate(template: ts.Node, file: string, tagged = false) {
-  assert.ok(ts.isNoSubstitutionTemplateLiteral(template), `GraphQL interpolation in ${file}`);
+  assert.ok(
+    ts.isNoSubstitutionTemplateLiteral(template),
+    `GraphQL interpolation in ${file}`,
+  );
   parse(tagged ? template.getText().slice(1, -1) : template.text);
   queryCount += 1;
 }
@@ -33,7 +38,9 @@ function walk(node: ts.Node, file: string) {
     checkTemplate(node.template, file, true);
   } else if (
     ts.isCallExpression(node) &&
-    node.expression.getText() === 'graphql' &&
+    (node.expression.getText() === 'graphql' ||
+      (ts.isPropertyAccessExpression(node.expression) &&
+        node.expression.name.text === 'graphql')) &&
     node.arguments[0] &&
     ts.isTemplateLiteral(node.arguments[0])
   ) {

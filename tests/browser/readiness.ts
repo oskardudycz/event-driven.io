@@ -10,7 +10,8 @@ export async function expectImageLoaded(image: Locator, minimumWidth = 1) {
     .poll(
       () =>
         image.evaluate(
-          (element: HTMLImageElement, width) => element.complete && element.naturalWidth >= width,
+          (element: HTMLImageElement, width) =>
+            element.complete && element.naturalWidth >= width,
           minimumWidth,
         ),
       { timeout: 15_000 },

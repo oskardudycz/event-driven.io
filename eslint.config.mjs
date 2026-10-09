@@ -1,13 +1,13 @@
+import { defineConfig } from 'eslint/config';
 import js from '@eslint/js';
-import tsParser from '@typescript-eslint/parser';
-import tsPlugin from '@typescript-eslint/eslint-plugin';
+import typescriptEslint from '@typescript-eslint/eslint-plugin';
+import prettierRecommended from 'eslint-plugin-prettier/recommended';
+import globals from 'globals';
 import react from 'eslint-plugin-react';
 import a11y from 'eslint-plugin-jsx-a11y';
 import hooks from 'eslint-plugin-react-hooks';
-import prettier from 'eslint-plugin-prettier/recommended';
-import globals from 'globals';
 
-export default [
+export default defineConfig([
   {
     ignores: [
       'node_modules/**',
@@ -20,29 +20,66 @@ export default [
       'tests/fixtures/**',
       'temp/**',
       '.husky/**',
+      '**/*.d.ts',
     ],
   },
   {
-    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx,mts}'],
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      js.configs.recommended,
+      ...typescriptEslint.configs['flat/recommended'],
+      ...typescriptEslint.configs['flat/recommended-type-checked'],
+      prettierRecommended,
+    ],
     languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        ecmaFeatures: { jsx: true },
+      globals: {
+        ...globals.node,
       },
-      ecmaVersion: 'latest',
-      globals: { ...globals.node, ...globals.browser },
+
+      parserOptions: {
+        project: './tsconfig.eslint.json',
+      },
     },
+
+    settings: {
+      'import/resolver': {
+        typescript: {},
+      },
+    },
+
+    rules: {
+      'no-unused-vars': 'off',
+
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          varsIgnorePattern: '^_',
+          argsIgnorePattern: '^_',
+        },
+      ],
+
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        {
+          prefer: 'type-imports',
+          fixStyle: 'separate-type-imports',
+        },
+      ],
+      '@typescript-eslint/no-import-type-side-effects': 'error',
+
+      '@typescript-eslint/no-misused-promises': ['off'],
+      '@typescript-eslint/prefer-namespace-keyword': 'off',
+    },
+  },
+  {
+    files: ['src/**/*.{ts,tsx}', 'gatsby-browser.tsx', 'gatsby-ssr.tsx'],
+    languageOptions: { globals: globals.browser },
     plugins: { react, 'react-hooks': hooks, 'jsx-a11y': a11y },
     settings: {
       react: { version: 'detect' },
       'jsx-a11y': { components: { GatsbyImage: 'img', StaticImage: 'img' } },
     },
     rules: {
-      ...js.configs.recommended.rules,
-      'no-unused-vars': [
-        'error',
-        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
-      ],
       'jsx-a11y/alt-text': 'error',
       'react/jsx-uses-react': 'error',
       'react/jsx-uses-vars': 'error',
@@ -51,28 +88,8 @@ export default [
     },
   },
   {
-    files: ['**/*.{ts,tsx,mts}'],
-    languageOptions: {
-      parser: tsParser,
-      parserOptions: { project: './tsconfig.json', tsconfigRootDir: import.meta.dirname },
-    },
-    plugins: { '@typescript-eslint': tsPlugin },
-    rules: {
-      ...tsPlugin.configs['recommended-type-checked'].rules,
-      'no-undef': 'off',
-      '@typescript-eslint/no-misused-promises': 'off',
-      '@typescript-eslint/prefer-namespace-keyword': 'off',
-      '@typescript-eslint/consistent-type-imports': [
-        'error',
-        { prefer: 'type-imports', fixStyle: 'separate-type-imports' },
-      ],
-      '@typescript-eslint/no-import-type-side-effects': 'error',
-      'no-unused-vars': 'off',
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
-      ],
-    },
+    files: ['**/*.mjs'],
+    extends: [js.configs.recommended, prettierRecommended],
+    languageOptions: { globals: globals.node },
   },
-  { ...prettier, files: ['**/*.{js,jsx,mjs,cjs,ts,tsx,mts}'] },
-];
+]);

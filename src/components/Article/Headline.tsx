@@ -1,7 +1,9 @@
 import * as styles from './Headline.module.css';
 import React from 'react';
 
-const Headline = (props: React.PropsWithChildren<{ title?: string }>) => {
+const Headline = (
+  props: React.PropsWithChildren<{ title?: string | undefined }>,
+) => {
   const { title, children } = props;
 
   return (

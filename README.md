@@ -45,7 +45,7 @@ Playwright starts and stops the local production server automatically; it can al
 VISUAL_BASE_URL=https://your-preview.netlify.app yarn test:visual
 ```
 
-`build` generates theme tokens, `llms.txt`, feeds, sitemaps and search indexes. Tests that inspect generated output require a completed production build. Do not edit content or run another Gatsby process during a build or cache check. To rebuild from an empty cache, run `yarn clean` before `yarn build`.
+`build` generates theme tokens, `llms.txt`, feeds, sitemaps and search indexes. Tests that inspect generated output require a completed production build. Do not edit content or run another Gatsby process during a build or cache check. To rebuild from an empty cache, run `yarn clean` before `yarn build`. Do this when changing React or Gatsby's JSX runtime so previously compiled runtime artifacts cannot affect verification.
 
 If Gatsby logs an unidentified Node warning, include its dependency stack with:
 
@@ -55,17 +55,19 @@ NODE_OPTIONS=--trace-warnings env -u DEBUG yarn build
 
 ## TypeScript and modules
 
-Application components, pages, layouts and Gatsby browser/SSR hooks use `.tsx`; plain browser modules use `.ts`. Node scripts, importers, tests, local remark plugins and build implementations use native ESM `.ts`. Run scripts with Node 24 directly; no ts-node, tsx loader or Babel registration is needed. Use erasable TypeScript syntax (types/interfaces, not runtime enums or parameter properties) and explicit file extensions in Node imports. Gatsby owns JSX compilation; Vitest uses the automatic JSX runtime.
+Application components, pages, layouts and Gatsby browser/SSR hooks use `.tsx`; plain browser modules use `.ts`. Node scripts, importers, tests, local remark plugins and build implementations use native ESM `.ts`. Run scripts with Node 24 directly; no ts-node, tsx loader or Babel registration is needed. Use erasable TypeScript syntax (types/interfaces, not runtime enums or parameter properties) and explicit file extensions in Node imports. Gatsby owns JSX compilation and uses its default runtime for Head API compatibility; Vitest uses the automatic JSX runtime.
 
 Gatsby 5 discovers native ESM configuration and Node hooks through `gatsby-config.mjs` and `gatsby-node.mjs`. Those entry points export the typed implementation from `site/*.ts`. ESLint, lint-staged and PostCSS retain their standard `.mjs` configuration entry points. The root package deliberately has no `type: module`: Gatsby still emits CommonJS SSR bundles into `.cache`. Source package scopes (`src`, `content/meta`, `site`, `scripts`, `import`, `tests` and the local plugins) declare `type: module` for `.ts` modules without changing Gatsby-generated files. Gatsby owns application compilation; `yarn typecheck` separately checks all application, tooling and test TypeScript without emitting files. Browser/Vite code uses bundler resolution in `tsconfig.json`; native Node code also passes NodeNext resolution in `tsconfig.node.json`, which catches missing runtime extensions and incompatible module imports. Both run in CI before the build and as part of `yarn test`.
 
-ESLint follows Pongo's recommended TypeScript rules and recommended type-checked rules, including separate type-only imports. React hooks and image accessibility checks remain enabled. Prettier uses two spaces and single quotes; existing Markdown wrapping is preserved. VS Code uses the workspace TypeScript version, organizes imports and applies ESLint fixes on save; TypeScript formatting runs through ESLint's Prettier integration. `yarn fix` applies the same rules manually, and lint-staged checks staged code and article image descriptions.
+The tooling configuration starts from Pongo: `tsconfig.shared.json`, `.prettierrc.json` and `.editorconfig` are copied; ESLint retains its general recommended/type-checked/Prettier/type-only-import configuration. Gatsby overrides add browser/JSX support, no-emit checking and this repository's source/output locations. React hooks and image accessibility checks are enabled for site code; Pongo's database/Cloudflare rules do not apply here. The copied strict optional-property and indexed-access checks remain enabled. Browser and native Node configurations extend the same shared settings.
+
+VS Code settings, extension recommendations, tasks and the component-test debugger also start from Pongo, with root paths, Node 24 and Yarn. TypeScript formatting runs through ESLint's Prettier integration; imports are organized on save. `yarn typecheck:watch` runs the editor's watch task. Select the component or Node test debugger for the current test file. `yarn fix` applies formatting and lint fixes manually; lint-staged checks staged code and article image descriptions.
 
 Shared content/query types live in `src/types/content.ts`. Keep each page's data type limited to its query. Use published dependency types where available; the narrow declarations in `src/types/vendors.d.ts` cover untyped integrations.
 
 ## Dependency maintenance
 
-Check imports, Gatsby/PostCSS configuration, scripts and peer requirements before removing a dependency. `yarn why <package>` shows which packages still require it transitively; an unused root declaration can be removed even when Gatsby retains its own dependency. Gatsby supplies its compiler configuration; the project uses TypeScript for smoke/lint parsing and Vitest for component rendering tests, with no direct Babel setup. Keep patch-package and postinstall-postinstall together while using Yarn 1 and the Gatsby CSS cache patch.
+Run `yarn outdated` to compare installed, wanted and latest registry versions. [The dependency review](docs/dependency-review.md) records tested upgrades and remaining compatibility work. Check imports, Gatsby/PostCSS configuration, scripts and peer requirements before removing a dependency. `yarn why <package>` shows which packages still require it transitively; an unused root declaration can be removed even when Gatsby retains its own dependency. Gatsby supplies its compiler configuration; the project uses TypeScript for smoke/lint parsing and Vitest for component rendering tests, with no direct Babel setup. Keep patch-package and postinstall-postinstall together while using Yarn 1 and the Gatsby CSS cache patch.
 
 After changing dependencies:
 
@@ -146,7 +148,7 @@ yarn lint
 yarn fix
 ```
 
-Individual commands: `lint:eslint`, `lint:prettier`, `fix:eslint`, `fix:prettier`. `lint:modern` aliases the ESLint check. ESLint parses TypeScript but does not type-check it.
+Individual commands: `lint:eslint`, `lint:prettier`, `fix:eslint`, `fix:prettier`. `lint:modern` aliases the ESLint check. ESLint uses TypeScript type information for lint rules; `yarn typecheck` reports compiler diagnostics.
 
 Installation configures Husky. The pre-commit hook runs `yarn lint-staged` against staged files. VS Code settings and extension recommendations are in `.vscode/`. Generated output, imported content and fixtures are excluded from bulk formatting.
 

@@ -12,5 +12,11 @@
     "tests/**/*.ts",
     "src/types/**/*.d.ts"
   ],
-  "exclude": ["node_modules", "public", ".cache", "tests/fixtures", "tests/browser"]
+  "exclude": [
+    "node_modules",
+    "public",
+    ".cache",
+    "tests/fixtures",
+    "tests/browser"
+  ]
 }

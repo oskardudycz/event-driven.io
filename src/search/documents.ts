@@ -46,16 +46,23 @@ export function searchDocuments(
     groups.set(key, versions);
   }
   return [...groups]
-    .filter(([, versions]) => versions.some((node) => !node.frontmatter.useDefaultLangCanonical))
+    .filter(([, versions]) =>
+      versions.some((node) => !node.frontmatter.useDefaultLangCanonical),
+    )
     .map(([id, versions]) => {
-      const originals = versions.filter((node) => !node.frontmatter.useDefaultLangCanonical);
+      const originals = versions.filter(
+        (node) => !node.frontmatter.useDefaultLangCanonical,
+      );
       const node =
         originals.find((node) => node.fields.langKey === language) ||
         originals.find((node) => node.fields.langKey === defaultLanguage) ||
         originals[0];
+      if (!node) throw new Error(`Missing canonical search document: ${id}`);
       const { fields, frontmatter } = node;
       // Content language and indexing identity do not choose the interface locale.
-      const routeLanguage = versions.some((version) => version.fields.langKey === language)
+      const routeLanguage = versions.some(
+        (version) => version.fields.langKey === language,
+      )
         ? language
         : fields.langKey;
       return {
@@ -66,9 +73,15 @@ export function searchDocuments(
         langKey: fields.langKey,
         source: fields.source || '',
         category: [
-          ...new Set([frontmatter.category, ...(frontmatter.categories || [])].filter(Boolean)),
+          ...new Set(
+            [frontmatter.category, ...(frontmatter.categories || [])].filter(
+              Boolean,
+            ),
+          ),
         ].join(' · '),
-        date: /^\d{4}-\d{2}-\d{2}$/.test(fields.prefix || '') ? fields.prefix || '' : '',
+        date: /^\d{4}-\d{2}-\d{2}$/.test(fields.prefix || '')
+          ? fields.prefix || ''
+          : '',
         content: searchableText(node.rawMarkdownBody || node.internal?.content),
       };
     })

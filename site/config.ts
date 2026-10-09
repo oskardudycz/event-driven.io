@@ -36,7 +36,10 @@ export default {
     {
       resolve: `gatsby-plugin-layout`,
       options: {
-        component: path.resolve(import.meta.dirname, '../src/layouts/index.tsx'),
+        component: path.resolve(
+          import.meta.dirname,
+          '../src/layouts/index.tsx',
+        ),
       },
     },
     {
@@ -54,7 +57,10 @@ export default {
         generateDefaultLanguagePage: true,
         redirect: false,
         siteUrl: config.siteUrl,
-        i18nextOptions: { interpolation: { escapeValue: false }, initImmediate: false },
+        i18nextOptions: {
+          interpolation: { escapeValue: false },
+          initImmediate: false,
+        },
         // Existing server redirects and editorial routes remain authoritative.
         // Recognize prefixed routes; leave unprefixed pages to the site hook.
         pages: [
@@ -114,7 +120,10 @@ export default {
       options: {
         plugins: [
           {
-            resolve: path.resolve(import.meta.dirname, '../plugins/gatsby-remark-video'),
+            resolve: path.resolve(
+              import.meta.dirname,
+              '../plugins/gatsby-remark-video',
+            ),
             options: {
               width: 800,
               ratio: 1.77,
@@ -125,7 +134,8 @@ export default {
               urlOverrides: [
                 {
                   id: 'youtube',
-                  embedURL: (id: string) => `https://www.youtube-nocookie.com/embed/${id}`,
+                  embedURL: (id: string) =>
+                    `https://www.youtube-nocookie.com/embed/${id}`,
                 },
               ],
             },
@@ -141,7 +151,10 @@ export default {
             },
           },
           {
-            resolve: path.resolve(import.meta.dirname, '../plugins/gatsby-remark-image-priority'),
+            resolve: path.resolve(
+              import.meta.dirname,
+              '../plugins/gatsby-remark-image-priority',
+            ),
           },
           {
             resolve: `gatsby-remark-responsive-iframe`,
@@ -362,10 +375,13 @@ export default {
         resolvePages: ({
           allSitePage,
         }: {
-          allSitePage: { nodes: { pageContext?: { excludeFromSitemap?: boolean } }[] };
+          allSitePage: {
+            nodes: { pageContext?: { excludeFromSitemap?: boolean } }[];
+          };
         }) =>
           allSitePage.nodes.filter(
-            (page) => !(page.pageContext && page.pageContext.excludeFromSitemap),
+            (page) =>
+              !(page.pageContext && page.pageContext.excludeFromSitemap),
           ),
         excludes: [
           `/en/404/`,
