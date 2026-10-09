@@ -16,7 +16,10 @@ for (const deviceScaleFactor of [1, 2]) {
           height: 900,
         });
         await page.goto('/en/articles/');
-        await expect(page.locator('html')).toHaveAttribute('data-font400', 'loaded');
+        await expect(page.locator('html')).toHaveAttribute(
+          'data-font400',
+          'loaded',
+        );
         const image = page.locator('img[data-main-image]').first();
         // Wait for the hydrated, visible lazy image rather than relying on
         // load timing while the CI runner is also checking the built output.
@@ -29,7 +32,7 @@ for (const deviceScaleFactor of [1, 2]) {
           let slot;
           for (const candidate of slots) {
             const conditional = candidate.match(/^(\([^)]*\)) (.+)$/);
-            if (!conditional || matchMedia(conditional[1]).matches) {
+            if (!conditional?.[1] || matchMedia(conditional[1]).matches) {
               slot = conditional ? conditional[2] : candidate;
               break;
             }
@@ -45,7 +48,9 @@ for (const deviceScaleFactor of [1, 2]) {
             src: e.currentSrc,
           };
         });
-        expect(Math.abs(result.declared - result.actual)).toBeLessThanOrEqual(2);
+        expect(Math.abs(result.declared - result.actual)).toBeLessThanOrEqual(
+          2,
+        );
         expect(result.src).toContain('.webp');
       }
     });
@@ -71,7 +76,10 @@ test('Polish diacritics use the web Open Sans face across weights and italics', 
         probe.style.cssText = `display:block;font: ${style} ${weight} 24px "Open Sans", sans-serif`;
         probe.textContent = 'ĄĆĘŁŃÓŚŹŻ ąćęłńóśźż';
         document.body.append(probe);
-        await document.fonts.load(`${style} ${weight} 24px "Open Sans"`, probe.textContent);
+        await document.fonts.load(
+          `${style} ${weight} 24px "Open Sans"`,
+          probe.textContent,
+        );
       }
     }
     await document.fonts.ready;
@@ -91,10 +99,14 @@ test('Polish diacritics use the web Open Sans face across weights and italics', 
       });
       expect(fonts.length, `${weight} ${style}`).toBeGreaterThan(0);
       for (const font of fonts) {
-        expect(font.familyName, `${weight} ${style}: ${font.glyphCount} glyphs`).toMatch(
-          /^Open Sans/,
-        );
-        expect(font.isCustomFont, `${weight} ${style}: ${font.familyName}`).toBe(true);
+        expect(
+          font.familyName,
+          `${weight} ${style}: ${font.glyphCount} glyphs`,
+        ).toMatch(/^Open Sans/);
+        expect(
+          font.isCustomFont,
+          `${weight} ${style}: ${font.familyName}`,
+        ).toBe(true);
       }
     }
   }
@@ -111,7 +123,10 @@ test('approved text colors maintain contrast on actual white surfaces and intera
   const colors = async (locator: Locator) =>
     locator.evaluate((node) => {
       let background: Element | null = node;
-      while (background && getComputedStyle(background).backgroundColor === 'rgba(0, 0, 0, 0)')
+      while (
+        background &&
+        getComputedStyle(background).backgroundColor === 'rgba(0, 0, 0, 0)'
+      )
         background = background.parentElement;
       return {
         color: getComputedStyle(node).color,
@@ -181,10 +196,12 @@ for (const [language, javaScriptEnabled] of [
         background: 'rgb(255, 255, 255)',
         padding: '120px',
       });
-      expect(await footer.locator('li').first().evaluate(values)).toMatchObject({
-        color: 'rgb(112, 110, 107)',
-        size: '12.8px',
-      });
+      expect(await footer.locator('li').first().evaluate(values)).toMatchObject(
+        {
+          color: 'rgb(112, 110, 107)',
+          size: '12.8px',
+        },
+      );
       await page.setViewportSize({
         width: 1024,
         height: 900,
@@ -196,7 +213,10 @@ for (const [language, javaScriptEnabled] of [
         });
       await page.evaluate(() => {
         document.documentElement.style.setProperty('--color-text', '#123456');
-        document.documentElement.style.setProperty('--color-surface', '#234567');
+        document.documentElement.style.setProperty(
+          '--color-surface',
+          '#234567',
+        );
       });
       if (language === 'en')
         expect(await summary.evaluate(values)).toMatchObject({
@@ -251,7 +271,10 @@ for (const language of ['en', 'pl']) {
           border: 'rgb(236, 235, 234)',
         });
         expect(await navigation.locator('a').count()).toBeGreaterThan(0);
-        await expect(navigation.locator('svg').first()).toHaveCSS('fill', 'rgb(255, 165, 0)');
+        await expect(navigation.locator('svg').first()).toHaveCSS(
+          'fill',
+          'rgb(255, 165, 0)',
+        );
         expect(await grid.evaluate(style)).toMatchObject({
           columns: 1,
         });
@@ -277,7 +300,10 @@ for (const language of ['en', 'pl']) {
         await card.focus();
         await expect(card).toHaveCSS('outline-style', 'solid');
         await page.evaluate(() =>
-          document.documentElement.style.setProperty('--color-border', '#123456'),
+          document.documentElement.style.setProperty(
+            '--color-border',
+            '#123456',
+          ),
         );
         expect(await navigation.evaluate(style)).toMatchObject({
           border: 'rgb(18, 52, 86)',
@@ -289,19 +315,28 @@ for (const language of ['en', 'pl']) {
         await expect(card).toHaveCSS('transition-duration', '0s');
         await expect(card).toHaveCSS('transform', 'none');
         await navigation.locator('a').first().hover();
-        await expect(navigation.locator('svg').first()).toHaveCSS('transform', 'none');
+        await expect(navigation.locator('svg').first()).toHaveCSS(
+          'transform',
+          'none',
+        );
         await page.goto(`/${language}/category/event-sourcing/`, {
           waitUntil: 'domcontentloaded',
         });
         const ordered = page.locator('ol.ordered');
         await expect(ordered).toHaveCount(1);
-        await expect(ordered.locator('li').first()).toHaveCSS('counter-increment', /reading-order/);
+        await expect(ordered.locator('li').first()).toHaveCSS(
+          'counter-increment',
+          /reading-order/,
+        );
         await expect
           .poll(() =>
             ordered
               .locator('li')
               .first()
-              .evaluate((element) => getComputedStyle(element, '::before').backgroundColor),
+              .evaluate(
+                (element) =>
+                  getComputedStyle(element, '::before').backgroundColor,
+              ),
           )
           .toBe('rgb(112, 148, 37)');
       });
@@ -320,18 +355,28 @@ test('layout loads fonts silently and navigation dates have readable contrast', 
   await expect(page.locator('h1')).toHaveCSS('font-weight', '600');
   await expect(page.locator('body')).toHaveCSS('font-family', /Open Sans/);
   expect(
-    messages.filter((message) => /font(?:400|600) is (?:not )?available/.test(message)),
+    messages.filter((message) =>
+      /font(?:400|600) is (?:not )?available/.test(message),
+    ),
   ).toEqual([]);
   const dates = await page.locator('nav.links time').all();
   expect(dates.length).toBeGreaterThan(0);
   for (const date of dates) {
     const contrast = await date.evaluate((element) => {
-      const channels = getComputedStyle(element).color.match(/\d+/g)!.slice(0, 3).map(Number);
+      const channels = getComputedStyle(element)
+        .color.match(/\d+/g)!
+        .slice(0, 3)
+        .map(Number);
       const linear = channels.map((channel) => {
         const value = channel / 255;
-        return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+        return value <= 0.04045
+          ? value / 12.92
+          : ((value + 0.055) / 1.055) ** 2.4;
       });
-      const luminance = linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722;
+      const [red, green, blue] = linear;
+      if (red === undefined || green === undefined || blue === undefined)
+        throw new Error('Expected three RGB channels');
+      const luminance = red * 0.2126 + green * 0.7152 + blue * 0.0722;
       // Current article/navigation surface is white.
       return 1.05 / (luminance + 0.05);
     });
@@ -356,7 +401,10 @@ for (const language of ['en', 'pl']) {
           waitUntil: 'domcontentloaded',
         });
         if (javaScriptEnabled) {
-          await expect(page.locator('body')).toHaveCSS('font-family', /Open Sans/);
+          await expect(page.locator('body')).toHaveCSS(
+            'font-family',
+            /Open Sans/,
+          );
         } else {
           await expect(page.locator('body')).toHaveCSS('font-family', /Arial/);
         }
@@ -404,7 +452,9 @@ for (const language of ['en', 'pl']) {
             width,
             height: 900,
           });
-          const image = await hero.evaluate((el) => getComputedStyle(el).backgroundImage);
+          const image = await hero.evaluate(
+            (el) => getComputedStyle(el).backgroundImage,
+          );
           expect(image).toMatch(/^url\(/);
           backgrounds.add(image);
         }

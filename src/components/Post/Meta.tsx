@@ -2,20 +2,22 @@ import * as styles from './Meta.module.css';
 import React from 'react';
 import { Link } from '../Link/index.tsx';
 
-import { FaCalendar } from 'react-icons/fa/';
-import { FaUser } from 'react-icons/fa/';
-import { FaTag } from 'react-icons/fa/';
+import { FaCalendar } from 'react-icons/fa';
+import { FaUser } from 'react-icons/fa';
+import { FaTag } from 'react-icons/fa';
 import kebabCase from 'lodash/kebabCase';
 
 const Meta = (props: {
-  prefix?: string;
-  author?: string;
-  category?: string;
-  categories?: string[];
+  prefix?: string | undefined;
+  author?: string | undefined;
+  category?: string | undefined;
+  categories?: string[] | undefined;
 }) => {
   const { prefix, author: authorName, category, categories = [] } = props;
   const additionalCategories = Array.isArray(categories) ? categories : [];
-  const allCategories = Array.from(new Set([category, ...additionalCategories].filter(Boolean)));
+  const allCategories = Array.from(
+    new Set([category, ...additionalCategories].filter(Boolean)),
+  );
 
   return (
     <p className={`meta ${styles.meta}`}>
@@ -28,7 +30,9 @@ const Meta = (props: {
       {allCategories.map((categoryName) => (
         <span key={categoryName} className={styles.elementSpan}>
           <FaTag size={18} />
-          <Link to={`/category/${kebabCase(categoryName)}/`}>{categoryName}</Link>
+          <Link to={`/category/${kebabCase(categoryName)}/`}>
+            {categoryName}
+          </Link>
         </span>
       ))}
     </p>

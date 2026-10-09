@@ -85,5 +85,5 @@ export type SitePageProps<Fields extends keyof PageData> = PageProps<
   Pick<PageData, Fields>,
   SitePageContext
 >;
-export type TranslatedPageProps<Fields extends keyof PageData> = SitePageProps<Fields> &
-  WithTranslation;
+export type TranslatedPageProps<Fields extends keyof PageData> =
+  SitePageProps<Fields> & WithTranslation;

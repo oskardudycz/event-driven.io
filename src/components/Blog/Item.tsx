@@ -1,9 +1,9 @@
 import type { ArticleNode } from '../../types/content.ts';
 import * as styles from './Item.module.css';
-import { FaArrowRight } from 'react-icons/fa/';
-import { FaCalendar } from 'react-icons/fa/';
-import { FaTag } from 'react-icons/fa/';
-import { FaUser } from 'react-icons/fa/';
+import { FaArrowRight } from 'react-icons/fa';
+import { FaCalendar } from 'react-icons/fa';
+import { FaTag } from 'react-icons/fa';
+import { FaUser } from 'react-icons/fa';
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import { Link } from '../Link/index.tsx';
 import React from 'react';
@@ -39,13 +39,13 @@ const Item = (props: { post: ArticleNode }) => {
             <span className={styles.elementSpan}>
               <FaUser size={18} /> {author}
             </span>
-            {Array.from(new Set([category, ...additionalCategories].filter(Boolean))).map(
-              (categoryName) => (
-                <span key={categoryName} className={styles.elementSpan}>
-                  <FaTag size={18} /> {categoryName}
-                </span>
-              ),
-            )}
+            {Array.from(
+              new Set([category, ...additionalCategories].filter(Boolean)),
+            ).map((categoryName) => (
+              <span key={categoryName} className={styles.elementSpan}>
+                <FaTag size={18} /> {categoryName}
+              </span>
+            ))}
           </p>
           <p className={styles.elementP}>{excerpt}</p>
         </Link>

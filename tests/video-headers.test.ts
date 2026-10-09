@@ -13,7 +13,8 @@ import { DEFAULT_OPTIONS } from 'gatsby-plugin-netlify/constants.js';
 void test('Netlify output sends the referrer YouTube requires and keeps other headers', async (t) => {
   const directory = temporaryDirectory(t, 'video-headers-');
   const plugin = config.plugins.find(
-    (entry) => typeof entry === 'object' && entry.resolve === 'gatsby-plugin-netlify',
+    (entry) =>
+      typeof entry === 'object' && entry.resolve === 'gatsby-plugin-netlify',
   );
   await buildHeaders(
     {
@@ -22,7 +23,10 @@ void test('Netlify output sends the referrer YouTube requires and keeps other he
       pathPrefix: '',
       publicFolder: (file) => path.join(directory, file),
     },
-    { ...DEFAULT_OPTIONS, ...(plugin && typeof plugin === 'object' ? plugin.options : {}) },
+    {
+      ...DEFAULT_OPTIONS,
+      ...(plugin && typeof plugin === 'object' ? plugin.options : {}),
+    },
     {
       warn: (message) => {
         throw new Error(message);
@@ -72,7 +76,10 @@ void test('Gatsby video plugin renders bare IDs and preserves URL timestamps and
     const node = child as Html;
     assert.equal(node.type, 'html');
     assert.match(node.value, /youtube-nocookie\.com\/embed\/sQbkUl7-z_U/);
-    assert.match(node.value, /referrerpolicy="strict-origin-when-cross-origin"/);
+    assert.match(
+      node.value,
+      /referrerpolicy="strict-origin-when-cross-origin"/,
+    );
     assert.match(node.value, /loading="lazy"/);
     assert.doesNotMatch(node.value, /Error:|sandbox=/);
   }

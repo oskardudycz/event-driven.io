@@ -8,5 +8,8 @@ export const searchIndex = (index: MiniSearch<SearchDocument>, query: string) =>
     .search(query.slice(0, 160))
     .map((result) => result as IndexedSearchResult)
     .sort(
-      (a, b) => b.score - a.score || b.date.localeCompare(a.date) || a.path.localeCompare(b.path),
+      (a, b) =>
+        b.score - a.score ||
+        b.date.localeCompare(a.date) ||
+        a.path.localeCompare(b.path),
     );

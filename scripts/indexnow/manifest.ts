@@ -5,7 +5,11 @@ import cheerio from 'cheerio';
 import config from '../../content/meta/config.ts';
 
 export const origin = config.siteUrl;
-export type Manifest = { version: 1; origin: string; pages: Record<string, string> };
+export type Manifest = {
+  version: 1;
+  origin: string;
+  pages: Record<string, string>;
+};
 export function productionUrl(input: string): string {
   const url = new URL(input, origin);
   if (
@@ -71,7 +75,9 @@ export function validateManifest(input: unknown): Manifest {
 export function changedUrls(previous: Manifest, current: Manifest): string[] {
   validateManifest(previous);
   validateManifest(current);
-  return [...new Set([...Object.keys(previous.pages), ...Object.keys(current.pages)])]
+  return [
+    ...new Set([...Object.keys(previous.pages), ...Object.keys(current.pages)]),
+  ]
     .filter((url) => previous.pages[url] !== current.pages[url])
     .sort();
 }
@@ -80,19 +86,27 @@ export async function prepare(directory = 'public'): Promise<Manifest> {
   const sitemapDirectory = join(directory, 'sitemap');
   for (const name of (await readdir(sitemapDirectory)).sort()) {
     if (!name.endsWith('.xml') || name === 'sitemap-index.xml') continue;
-    const xml = cheerio.load(await readFile(join(sitemapDirectory, name), 'utf8'), {
-      xmlMode: true,
-    });
+    const xml = cheerio.load(
+      await readFile(join(sitemapDirectory, name), 'utf8'),
+      {
+        xmlMode: true,
+      },
+    );
     for (const element of xml('url > loc').toArray()) {
       const url = productionUrl(xml(element).text());
-      if (Object.hasOwn(pages, url)) throw new Error(`Duplicate sitemap page: ${url}`);
+      if (Object.hasOwn(pages, url))
+        throw new Error(`Duplicate sitemap page: ${url}`);
       pages[url] = fingerprint(
-        await readFile(join(directory, new URL(url).pathname, 'index.html'), 'utf8'),
+        await readFile(
+          join(directory, new URL(url).pathname, 'index.html'),
+          'utf8',
+        ),
         url,
       );
     }
   }
-  if (!Object.keys(pages).length) throw new Error('Empty sitemap: build before preparing IndexNow');
+  if (!Object.keys(pages).length)
+    throw new Error('Empty sitemap: build before preparing IndexNow');
   const manifest: Manifest = { version: 1, origin, pages };
   await writeFile(
     join(directory, 'indexnow-manifest.json'),

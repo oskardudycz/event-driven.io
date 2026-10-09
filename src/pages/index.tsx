@@ -14,7 +14,10 @@ class IndexPage extends React.Component<
   separator = React.createRef<HTMLElement>();
 
   scrollToContent = () => {
-    this.separator.current?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    this.separator.current?.scrollIntoView({
+      block: 'start',
+      behavior: 'smooth',
+    });
   };
 
   render() {
@@ -42,7 +45,10 @@ class IndexPage extends React.Component<
 
     return (
       <React.Fragment>
-        <Hero scrollToContent={this.scrollToContent} backgrounds={backgrounds} />
+        <Hero
+          scrollToContent={this.scrollToContent}
+          backgrounds={backgrounds}
+        />
 
         <section
           className={`latestArticles ${styles.latestArticles}`}
@@ -116,12 +122,24 @@ export const query = graphql`
       }
     }
     bgTablet: imageSharp(original: { src: { regex: "/hero-background/" } }) {
-      resize(width: 800, height: 1100, quality: 80, cropFocus: CENTER, toFormat: WEBP) {
+      resize(
+        width: 800
+        height: 1100
+        quality: 80
+        cropFocus: CENTER
+        toFormat: WEBP
+      ) {
         src
       }
     }
     bgMobile: imageSharp(original: { src: { regex: "/hero-background/" } }) {
-      resize(width: 450, height: 850, quality: 80, cropFocus: CENTER, toFormat: WEBP) {
+      resize(
+        width: 450
+        height: 850
+        quality: 80
+        cropFocus: CENTER
+        toFormat: WEBP
+      ) {
         src
       }
     }

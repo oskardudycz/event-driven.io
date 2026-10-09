@@ -1,7 +1,7 @@
 import * as styles from './Bodytext.module.css';
 import React from 'react';
 
-const Bodytext = (props: { html?: string }) => {
+const Bodytext = (props: { html?: string | undefined }) => {
   const { html } = props;
 
   return (

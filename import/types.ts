@@ -7,7 +7,9 @@ export type ImportEntry = {
   youtubeVideo?: string;
   recordingEmbeds?: Record<string, string>;
 };
-export type Download = (url: string) => Promise<Pick<Response, 'text' | 'arrayBuffer'>>;
+export type Download = (
+  url: string,
+) => Promise<Pick<Response, 'text' | 'arrayBuffer'>>;
 export type ImportOptions = {
   download?: Download;
   html?: string;

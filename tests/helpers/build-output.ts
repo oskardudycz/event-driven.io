@@ -5,7 +5,9 @@ export type BuildPageData = {
   path: string;
   result: {
     data: PageData & {
-      locales: { edges: { node: { language: string; ns: string; data: string } }[] };
+      locales: {
+        edges: { node: { language: string; ns: string; data: string } }[];
+      };
     };
     pageContext: SitePageContext & {
       langKey: string;

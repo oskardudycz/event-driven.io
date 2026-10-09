@@ -19,7 +19,11 @@ const node = (
   placeholder = false,
 ) => ({
   fields: { slug: `/${slug}/`, langKey, source: 'posts', prefix: '2026-10-05' },
-  frontmatter: { title, category: 'Event Sourcing', useDefaultLangCanonical: placeholder },
+  frontmatter: {
+    title,
+    category: 'Event Sourcing',
+    useDefaultLangCanonical: placeholder,
+  },
   rawMarkdownBody: content,
 });
 void test('canonical locale selection, Polish diacritics, identifiers, prefix/fuzzy matches and safe snippets', async () => {
@@ -30,7 +34,9 @@ void test('canonical locale selection, Polish diacritics, identifiers, prefix/fu
     node('two', 'pl', 'Placeholder', 'bogusplaceholder', true),
   ];
   assert.equal(
-    searchableText('![cover](cover.png) Main **text** and [link](https://example.com)'),
+    searchableText(
+      '![cover](cover.png) Main **text** and [link](https://example.com)',
+    ),
     'Main text and link',
   );
   const docs = searchDocuments(nodes, 'pl');
@@ -39,10 +45,22 @@ void test('canonical locale selection, Polish diacritics, identifiers, prefix/fu
     ['/pl/one/', '/pl/two/'],
   );
   assert.equal(docs.length, 2);
-  assert.equal(docs[1].langKey, 'en', 'content badge still identifies the English original');
+  assert.ok(docs[1]);
+  assert.equal(
+    docs[1].langKey,
+    'en',
+    'content badge still identifies the English original',
+  );
   const index = new MiniSearch(indexOptions);
   index.addAll(docs);
-  for (const query of ['zazolc', 'zażółć', 'zolc', 'appendToStr', 'appendToStream', 'architecure'])
+  for (const query of [
+    'zazolc',
+    'zażółć',
+    'zolc',
+    'appendToStr',
+    'appendToStream',
+    'architecure',
+  ])
     assert.ok(index.search(query).length, query);
   assert.equal(index.search('bogusplaceholder').length, 0);
   const malicious = '<img src=x onerror=alert(1)> appendToStream';
@@ -53,15 +71,20 @@ void test('canonical locale selection, Polish diacritics, identifiers, prefix/fu
     malicious,
   );
   assert.equal(
-    highlightParts(malicious, ['appendtostream']).filter((part) => part.highlighted).length,
+    highlightParts(malicious, ['appendtostream']).filter(
+      (part) => part.highlighted,
+    ).length,
     1,
   );
   assert.ok(
-    snippet('a '.repeat(500) + 'appendToStream value', ['appendtostream']).includes(
-      'appendToStream',
-    ),
+    snippet('a '.repeat(500) + 'appendToStream value', [
+      'appendtostream',
+    ]).includes('appendToStream'),
   );
-  assert.equal((await loadIndex(JSON.stringify(index))).documentCount, docs.length);
+  assert.equal(
+    (await loadIndex(JSON.stringify(index))).documentCount,
+    docs.length,
+  );
 });
 void test('rebuilding indexes replaces modified/deleted documents and removes obsolete assets', async (t) => {
   const directory = temporaryDirectory(t, 'local-search-update-');
@@ -72,29 +95,43 @@ void test('rebuilding indexes replaces modified/deleted documents and removes ob
   await writeSearchIndexes(nodes, directory);
   const before = JSON.parse(
     readFileSync(join(directory, 'search-index/manifest.json'), 'utf8'),
-  ) as Record<string, string>;
+  ) as Record<'en' | 'pl', string>;
+  assert.ok(nodes[0]);
   nodes[0].rawMarkdownBody = 'newuniqueterm';
   nodes.pop();
   await writeSearchIndexes(nodes, directory);
   const after = JSON.parse(
     readFileSync(join(directory, 'search-index/manifest.json'), 'utf8'),
-  ) as Record<string, string>;
+  ) as Record<'en' | 'pl', string>;
   assert.notEqual(before.en, after.en);
-  const index = await loadIndex(readFileSync(join(directory, after.en), 'utf8'));
-  assert.equal(index.search('olduniqueterm', { fuzzy: false, prefix: false }).length, 0);
-  assert.equal(index.search('deleteduniqueterm', { fuzzy: false, prefix: false }).length, 0);
+  const index = await loadIndex(
+    readFileSync(join(directory, after.en), 'utf8'),
+  );
+  assert.equal(
+    index.search('olduniqueterm', { fuzzy: false, prefix: false }).length,
+    0,
+  );
+  assert.equal(
+    index.search('deleteduniqueterm', { fuzzy: false, prefix: false }).length,
+    0,
+  );
   assert.equal(index.search('newuniqueterm').length, 1);
   assert.equal(readdirSync(join(directory, 'search-index')).length, 3);
 });
-for (const lang of ['en', 'pl']) {
+for (const lang of ['en', 'pl'] as const) {
   void test(`${lang} generated index includes canonical searchable content once with valid relative links`, async () => {
     const manifest = JSON.parse(
       readFileSync('public/search-index/manifest.json', 'utf8'),
-    ) as Record<string, string>;
-    const index = await loadIndex(readFileSync(join('public', manifest[lang]), 'utf8'));
+    ) as Record<'en' | 'pl', string>;
+    const index = await loadIndex(
+      readFileSync(join('public', manifest[lang]), 'utf8'),
+    );
     const results = searchIndex(index, 'event sourcing');
     assert.ok(results.length > 10);
-    assert.equal(new Set(results.map((result) => result.id)).size, results.length);
+    assert.equal(
+      new Set(results.map((result) => result.id)).size,
+      results.length,
+    );
     const introduction = results.find(
       (result) => result.path === `/${lang}/introduction_to_event_sourcing/`,
     );
@@ -113,7 +150,11 @@ for (const lang of ['en', 'pl']) {
         ...(document.cover.images.sources || []),
       ]) {
         assert.ok(image?.srcSet);
-        for (const variant of image.srcSet.split(', ')) assets.add(variant.split(' ')[0]);
+        for (const variant of image.srcSet.split(', ')) {
+          const url = variant.split(' ')[0];
+          assert.ok(url);
+          assets.add(url);
+        }
       }
     }
     for (const url of assets) {
@@ -124,7 +165,11 @@ for (const lang of ['en', 'pl']) {
       );
     }
 
-    assert.ok(introduction.cover.images.sources!.some((source) => source.type === 'image/webp'));
+    assert.ok(
+      introduction.cover.images.sources!.some(
+        (source) => source.type === 'image/webp',
+      ),
+    );
     for (const image of [
       introduction.cover.images.fallback,
       ...(introduction.cover.images.sources || []),
@@ -132,6 +177,7 @@ for (const lang of ['en', 'pl']) {
       assert.ok(image?.srcSet);
       for (const variant of image.srcSet.split(', ')) {
         const url = variant.split(' ')[0];
+        assert.ok(url);
         assert.match(url, /^\/static\//);
         assert.ok(readFileSync(join('public', decodeURI(url))).length);
       }
@@ -140,7 +186,11 @@ for (const lang of ['en', 'pl']) {
       assert.match(result.path, /^\/(en|pl)\//);
       const localPath = result.path.replace(/^\/(en|pl)\//, `/${lang}/`);
       if (existsSync(join('public', localPath, 'index.html'))) {
-        assert.equal(result.path, localPath, 'Search must preserve an available locale route');
+        assert.equal(
+          result.path,
+          localPath,
+          'Search must preserve an available locale route',
+        );
       }
       assert.ok(readFileSync(join('public', result.path, 'index.html')).length);
     }
@@ -150,7 +200,10 @@ for (const lang of ['en', 'pl']) {
 void test('canonical cover data follows the selected genuine translation and stays optional', async () => {
   const english = { ...node('one', 'en', 'English', 'content'), id: 'english' };
   const polish = { ...node('one', 'pl', 'Polski', 'tekst'), id: 'polish' };
-  const fallback = { ...node('two', 'en', 'Fallback', 'content'), id: 'fallback' };
+  const fallback = {
+    ...node('two', 'en', 'Fallback', 'content'),
+    id: 'fallback',
+  };
   const cover = {
     layout: 'constrained' as const,
     width: 240,
@@ -162,6 +215,7 @@ void test('canonical cover data follows the selected genuine translation and sta
     ['fallback', cover],
   ]);
   const docs = searchDocuments([english, polish, fallback], 'pl', 'en', covers);
+  assert.ok(docs[0] && docs[1]);
   assert.equal(
     docs[0].cover,
     null,
@@ -170,5 +224,8 @@ void test('canonical cover data follows the selected genuine translation and sta
   assert.deepEqual(docs[1].cover, cover);
   const index = new MiniSearch(indexOptions);
   index.addAll(docs);
-  assert.deepEqual((await loadIndex(JSON.stringify(index))).search('fallback')[0].cover, cover);
+  assert.deepEqual(
+    (await loadIndex(JSON.stringify(index))).search('fallback')[0]?.cover,
+    cover,
+  );
 });

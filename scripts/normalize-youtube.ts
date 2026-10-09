@@ -8,7 +8,8 @@ if (args.includes('--help')) {
   );
   process.exit(0);
 }
-if (args.some((arg) => arg !== '--write')) throw new Error('Supported option: --write');
+if (args.some((arg) => arg !== '--write'))
+  throw new Error('Supported option: --write');
 
 let changed = 0;
 for (const file of globSync('content/**/*.md')) {

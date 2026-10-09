@@ -58,7 +58,10 @@ test('Gatsby reading-list adapter preserves available locale routes independentl
     {
       node: {
         fields: { slug: '/fallback/', langKey: 'pl' },
-        frontmatter: { title: 'English original', useDefaultLangCanonical: true },
+        frontmatter: {
+          title: 'English original',
+          useDefaultLangCanonical: true,
+        },
       },
     },
   ];

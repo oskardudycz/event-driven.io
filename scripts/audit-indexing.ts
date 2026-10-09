@@ -19,7 +19,11 @@ if (values.help) {
   process.exit(0);
 }
 const base = new URL(values['base-url']);
-if (!['http:', 'https:'].includes(base.protocol) || base.username || base.password)
+if (
+  !['http:', 'https:'].includes(base.protocol) ||
+  base.username ||
+  base.password
+)
   throw new Error('Use an HTTP(S) site origin without credentials');
 const output = resolve(values.output);
 const failures: string[] = [];
@@ -45,7 +49,10 @@ function get(path: string): Promise<ResponseRecord> {
   // Preview HTML should still declare production canonicals; fetch those
   // documents from the selected preview rather than crossing deployments.
   if (input.origin === siteOrigin)
-    input = new URL(`${input.pathname}${input.search}${input.hash}`, base.origin);
+    input = new URL(
+      `${input.pathname}${input.search}${input.hash}`,
+      base.origin,
+    );
   if (!allowed(input)) throw new Error(`URL outside audited origin: ${path}`);
   if (fetched.has(input.href)) return fetched.get(input.href)!;
   const requested = input.href;
@@ -63,7 +70,8 @@ function get(path: string): Promise<ResponseRecord> {
       if ([301, 302, 303, 307, 308].includes(response.status) && location) {
         await response.body?.cancel();
         const next = new URL(location, url);
-        if (!allowed(next)) throw new Error(`Cross-origin redirect: ${url} → ${next}`);
+        if (!allowed(next))
+          throw new Error(`Cross-origin redirect: ${url} → ${next}`);
         url = next;
         continue;
       }
@@ -106,6 +114,7 @@ async function pool<T>(values: T[], run: (_value: T) => Promise<void>) {
     Array.from({ length: Math.min(3, values.length) }, async () => {
       while (next < values.length) {
         const value = values[next++];
+        if (value === undefined) throw new Error('Missing audit work item');
         try {
           await run(value);
         } catch (error) {
@@ -123,7 +132,7 @@ if (
   failures.push('robots.txt does not serve the expected sitemap declaration');
 const sitemapIndex = await get('/sitemap/sitemap-index.xml');
 const locations = (body: string) =>
-  [...body.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+  [...body.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1] || '');
 if (sitemapIndex.status !== 200 || !/xml/.test(sitemapIndex.contentType))
   failures.push('Sitemap index is not HTTP 200 XML');
 const urls: string[] = [];
@@ -139,8 +148,14 @@ await pool(urls, async (url) => {
   const response = await get(url);
   const page = metadata(response);
   if (response.status !== 200 || response.hops.length !== 1)
-    failures.push(`${url}: sitemap destination redirects or returns ${response.status}`);
-  if (!/text\/html/.test(response.contentType) || page.noIndex || page.headingCount !== 1)
+    failures.push(
+      `${url}: sitemap destination redirects or returns ${response.status}`,
+    );
+  if (
+    !/text\/html/.test(response.contentType) ||
+    page.noIndex ||
+    page.headingCount !== 1
+  )
     failures.push(`${url}: non-indexable HTML, noindex or invalid H1 count`);
   if (page.canonicalCount !== 1 || page.canonical !== url)
     failures.push(`${url}: inconsistent canonical ${page.canonical}`);
@@ -154,16 +169,24 @@ await pool(urls, async (url) => {
     }
     const response = await get(alternate.href);
     const target = metadata(response);
-    if (response.status !== 200 || target.noIndex || target.canonical !== alternate.href)
+    if (
+      response.status !== 200 ||
+      target.noIndex ||
+      target.canonical !== alternate.href
+    )
       failures.push(`${url}: non-canonical alternate ${alternate.href}`);
     if (alternate.language !== 'x-default')
       for (const other of page.alternates)
         if (
           !target.alternates.some(
-            (candidate) => candidate.language === other.language && candidate.href === other.href,
+            (candidate) =>
+              candidate.language === other.language &&
+              candidate.href === other.href,
           )
         )
-          failures.push(`${url}: non-reciprocal alternate ${alternate.language}/${other.language}`);
+          failures.push(
+            `${url}: non-reciprocal alternate ${alternate.language}/${other.language}`,
+          );
   }
 });
 for (const language of ['en', 'pl']) {
@@ -180,7 +203,9 @@ for (const language of ['en', 'pl']) {
 }
 const reported: Record<string, unknown>[] = [];
 if (values['urls-file']) {
-  const inputs: unknown = JSON.parse(await readFile(resolve(values['urls-file']), 'utf8'));
+  const inputs: unknown = JSON.parse(
+    await readFile(resolve(values['urls-file']), 'utf8'),
+  );
   if (!Array.isArray(inputs) || inputs.some((url) => typeof url !== 'string'))
     throw new Error('--urls-file must contain a JSON array of URL strings');
   await pool(inputs as string[], async (url) => {
@@ -193,7 +218,8 @@ if (values['urls-file']) {
       hops: response.hops,
       ...page,
     });
-    if (response.status >= 500) failures.push(`${url}: current server error ${response.status}`);
+    if (response.status >= 500)
+      failures.push(`${url}: current server error ${response.status}`);
     // Reported 404s and canonical alternatives require interpretation; don't
     // count expected exclusions as errors or silently select replacement URLs.
   });
@@ -203,5 +229,7 @@ await writeFile(
   output,
   `${JSON.stringify({ capturedAt: new Date().toISOString(), baseUrl: base.origin, sitemapUrls: urls.length, failures, reported }, null, 2)}\n`,
 );
-console.log(`Checked ${urls.length} sitemap URLs; ${failures.length} failures. Report: ${output}`);
+console.log(
+  `Checked ${urls.length} sitemap URLs; ${failures.length} failures. Report: ${output}`,
+);
 process.exitCode = failures.length ? 1 : 0;

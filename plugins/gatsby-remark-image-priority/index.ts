@@ -11,7 +11,12 @@ export default function imagePriority({
   markdownAST: Root;
   markdownNode: { fileAbsolutePath?: string };
 }) {
-  if (!/--introduction_to_event_sourcing\//.test(markdownNode.fileAbsolutePath || '')) return;
+  if (
+    !/--introduction_to_event_sourcing\//.test(
+      markdownNode.fileAbsolutePath || '',
+    )
+  )
+    return;
   let promoted = false;
   visit(markdownAST, 'html', (node: Html) => {
     if (promoted || !node.value.includes('gatsby-resp-image-image')) return;

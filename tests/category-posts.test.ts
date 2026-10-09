@@ -1,8 +1,16 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { categoriesForLanguage, categoryPostsForLanguage } from '../src/utils/category-posts.ts';
+import {
+  categoriesForLanguage,
+  categoryPostsForLanguage,
+} from '../src/utils/category-posts.ts';
 
-const post = (slug: string, langKey: string, categories: string[], placeholder = false) => ({
+const post = (
+  slug: string,
+  langKey: string,
+  categories: string[],
+  placeholder = false,
+) => ({
   id: `${langKey}:${slug}`,
   fields: { slug: `/${slug}/`, langKey, source: 'posts' },
   frontmatter: { categories, useDefaultLangCanonical: placeholder },
@@ -36,7 +44,10 @@ void test('canonical translation membership wins over stale placeholder metadata
     post('article', 'en', ['Event Sourcing']),
     post('article', 'pl', ['Old Topic'], true),
   ];
-  assert.equal(categoryPostsForLanguage(nodes, 'event-sourcing', 'pl')[0].fields.langKey, 'pl');
+  assert.equal(
+    categoryPostsForLanguage(nodes, 'event-sourcing', 'pl')[0]?.fields.langKey,
+    'pl',
+  );
   assert.deepEqual(categoryPostsForLanguage(nodes, 'old-topic', 'en'), []);
   assert.deepEqual(categoriesForLanguage(nodes, 'pl'), []);
 });
@@ -46,9 +57,13 @@ void test('a translation is selected even when its category metadata differs', (
     post('article', 'en', ['Event Sourcing']),
     post('article', 'pl', ['Software Architecture']),
   ];
-  assert.equal(categoryPostsForLanguage(nodes, 'event-sourcing', 'pl')[0].fields.langKey, 'pl');
   assert.equal(
-    categoryPostsForLanguage(nodes, 'software-architecture', 'en')[0].fields.langKey,
+    categoryPostsForLanguage(nodes, 'event-sourcing', 'pl')[0]?.fields.langKey,
+    'pl',
+  );
+  assert.equal(
+    categoryPostsForLanguage(nodes, 'software-architecture', 'en')[0]?.fields
+      .langKey,
     'en',
   );
 });

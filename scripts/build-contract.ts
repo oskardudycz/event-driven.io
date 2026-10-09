@@ -33,15 +33,24 @@ function uniqueSorted(values: string[]) {
 }
 
 function extractXmlValues(xml: string, tagName: string) {
-  const pattern = new RegExp(`<${tagName}(?:\\s[^>]*)?>([^<]+)</${tagName}>`, 'g');
-  return Array.from(xml.matchAll(pattern), (match) => match[1].replace(/&amp;/g, '&'));
+  const pattern = new RegExp(
+    `<${tagName}(?:\\s[^>]*)?>([^<]+)</${tagName}>`,
+    'g',
+  );
+  return Array.from(xml.matchAll(pattern), (match) =>
+    (match[1] || '').replace(/&amp;/g, '&'),
+  );
 }
 
 function collectRoutes(publicDirectory: string) {
   return uniqueSorted(
     walkFiles(path.join(publicDirectory, 'page-data'))
       .filter((filePath) => path.basename(filePath) === 'page-data.json')
-      .map((filePath) => (JSON.parse(fs.readFileSync(filePath, 'utf8')) as { path: string }).path)
+      .map(
+        (filePath) =>
+          (JSON.parse(fs.readFileSync(filePath, 'utf8')) as { path: string })
+            .path,
+      )
       .filter(Boolean),
   );
 }
@@ -60,7 +69,9 @@ function collectSitemapUrls(publicDirectory: string) {
   return uniqueSorted(
     walkFiles(sitemapDirectory)
       .filter((filePath) => /^sitemap-\d+\.xml$/.test(path.basename(filePath)))
-      .flatMap((filePath) => extractXmlValues(fs.readFileSync(filePath, 'utf8'), 'loc')),
+      .flatMap((filePath) =>
+        extractXmlValues(fs.readFileSync(filePath, 'utf8'), 'loc'),
+      ),
   );
 }
 
@@ -68,7 +79,9 @@ function collectFeedEntries(publicDirectory: string) {
   return Object.fromEntries(
     FEED_FILES.map((feedFile) => [
       feedFile,
-      uniqueSorted(extractXmlValues(readRequired(publicDirectory, feedFile), 'guid')),
+      uniqueSorted(
+        extractXmlValues(readRequired(publicDirectory, feedFile), 'guid'),
+      ),
     ]),
   );
 }
@@ -85,14 +98,21 @@ function collectBuildContract(publicDirectory: string) {
   };
 }
 
-function compareValues(label: string, expected: string[], actual: string[], failures: string[]) {
+function compareValues(
+  label: string,
+  expected: string[],
+  actual: string[],
+  failures: string[],
+) {
   const expectedSet = new Set(expected);
   const actualSet = new Set(actual);
   const missing = expected.filter((value) => !actualSet.has(value));
   const unexpected = actual.filter((value) => !expectedSet.has(value));
 
-  if (missing.length > 0) failures.push(`${label} missing: ${missing.join(', ')}`);
-  if (unexpected.length > 0) failures.push(`${label} added: ${unexpected.join(', ')}`);
+  if (missing.length > 0)
+    failures.push(`${label} missing: ${missing.join(', ')}`);
+  if (unexpected.length > 0)
+    failures.push(`${label} added: ${unexpected.join(', ')}`);
 }
 
 function compareBuildContracts(expected: BuildContract, actual: BuildContract) {
@@ -104,12 +124,19 @@ function compareBuildContracts(expected: BuildContract, actual: BuildContract) {
     );
   }
   if (expected.pageCount !== actual.pageCount) {
-    failures.push(`Generated page count changed from ${expected.pageCount} to ${actual.pageCount}`);
+    failures.push(
+      `Generated page count changed from ${expected.pageCount} to ${actual.pageCount}`,
+    );
   }
 
   compareValues('Routes', expected.routes, actual.routes, failures);
   compareValues('Redirects', expected.redirects, actual.redirects, failures);
-  compareValues('Sitemap URLs', expected.sitemapUrls, actual.sitemapUrls, failures);
+  compareValues(
+    'Sitemap URLs',
+    expected.sitemapUrls,
+    actual.sitemapUrls,
+    failures,
+  );
 
   const feedFiles = uniqueSorted([
     ...Object.keys(expected.feedEntries),

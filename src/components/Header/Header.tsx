@@ -1,8 +1,7 @@
 import type { ArticleEdge } from '../../types/content.ts';
 import * as styles from './Header.module.css';
 import { Link } from '../Link/index.tsx';
-import React, { useState } from 'react';
-import VisibilitySensor from 'react-visibility-sensor';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { ScreenWidthContext, FontLoadedContext } from '../../layouts/contexts';
 import config from '../../../content/meta/config.ts';
@@ -18,23 +17,46 @@ const avatar = withPrefix('/images/avatar.webp');
 const Header = ({ pages, path }: { pages: ArticleEdge[]; path: string }) => {
   const { t } = useTranslation();
   const [fixed, setFixed] = useState(false);
+  const sensorRef = useRef<HTMLDivElement>(null);
   const { lang } = usePageContext();
   const filteredPages = pages.filter((p) => p.node.fields.langKey === lang);
 
-  const visibilitySensorChange = (val: boolean) => {
-    if (val) {
-      setFixed(false);
-    } else {
-      setFixed(true);
+  useEffect(() => {
+    const sensor = sensorRef.current;
+    if (!sensor) return;
+
+    if (typeof IntersectionObserver === 'undefined') {
+      const updateFixed = () => {
+        const bounds = sensor.getBoundingClientRect();
+        setFixed(bounds.top < 0 || bounds.bottom > window.innerHeight);
+      };
+      updateFixed();
+      window.addEventListener('scroll', updateFixed, { passive: true });
+      window.addEventListener('resize', updateFixed);
+      return () => {
+        window.removeEventListener('scroll', updateFixed);
+        window.removeEventListener('resize', updateFixed);
+      };
     }
-  };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry) setFixed(entry.intersectionRatio < 1);
+      },
+      { threshold: 1 },
+    );
+    observer.observe(sensor);
+    return () => observer.disconnect();
+  }, []);
 
   const getHeaderSize = () => {
     const fixedText = fixed ? `fixed ${styles.fixed}` : '';
 
     const homePages = [`/${lang}`]; //, `/${lang}/newsletter-pl`];
 
-    const homepage = homePages.some((page) => path === `${page}/` || path === `${page}`)
+    const homepage = homePages.some(
+      (page) => path === `${page}/` || path === `${page}`,
+    )
       ? `homepage ${styles.homepage}`
       : '';
 
@@ -58,7 +80,9 @@ const Header = ({ pages, path }: { pages: ArticleEdge[]; path: string }) => {
             <span className={`siteTitle ${styles.siteTitle}`}>
               {t('header.title') || config.headerTitle}
             </span>
-            <h2 className={styles.elementH2}>{t('header.subTitle') || config.headerSubTitle}</h2>
+            <h2 className={styles.elementH2}>
+              {t('header.subTitle') || config.headerSubTitle}
+            </h2>
           </div>
         </Link>
         <FontLoadedContext.Consumer>
@@ -77,19 +101,18 @@ const Header = ({ pages, path }: { pages: ArticleEdge[]; path: string }) => {
           )}
         </FontLoadedContext.Consumer>
       </header>
-      <VisibilitySensor onChange={visibilitySensorChange}>
-        <div
-          style={
-            {
-              '--sensor-top':
-                path === `/${lang}/`
-                  ? 'var(--header-height-homepage)'
-                  : 'var(--header-height-default)',
-            } as React.CSSProperties
-          }
-          className={`sensor ${styles.sensor}`}
-        />
-      </VisibilitySensor>
+      <div
+        ref={sensorRef}
+        style={
+          {
+            '--sensor-top':
+              path === `/${lang}/`
+                ? 'var(--header-height-homepage)'
+                : 'var(--header-height-default)',
+          } as React.CSSProperties
+        }
+        className={`sensor ${styles.sensor}`}
+      />
     </React.Fragment>
   );
 };

@@ -27,9 +27,17 @@ function verifySeoBuild(publicDirectory: string) {
     }
   }
 
-  function verifyPage(relativePath: string, canonicalUrl: string, schemaType: string) {
+  function verifyPage(
+    relativePath: string,
+    canonicalUrl: string,
+    schemaType: string,
+  ) {
     const html = read(relativePath);
-    expectContains(relativePath, html, `rel="canonical" href="${canonicalUrl}"`);
+    expectContains(
+      relativePath,
+      html,
+      `rel="canonical" href="${canonicalUrl}"`,
+    );
     expectContains(relativePath, html, 'name="description" content="');
     expectContains(relativePath, html, `"@type":"${schemaType}"`);
     return html;
@@ -55,9 +63,21 @@ function verifySeoBuild(publicDirectory: string) {
     'https://event-driven.io/en/introduction_to_event_sourcing/',
     'BlogPosting',
   );
-  verifyPage('en/articles/index.html', 'https://event-driven.io/en/articles/', 'CollectionPage');
-  verifyPage('pl/articles/index.html', 'https://event-driven.io/pl/articles/', 'CollectionPage');
-  verifyPage('en/talks/index.html', 'https://event-driven.io/en/talks/', 'CollectionPage');
+  verifyPage(
+    'en/articles/index.html',
+    'https://event-driven.io/en/articles/',
+    'CollectionPage',
+  );
+  verifyPage(
+    'pl/articles/index.html',
+    'https://event-driven.io/pl/articles/',
+    'CollectionPage',
+  );
+  verifyPage(
+    'en/talks/index.html',
+    'https://event-driven.io/en/talks/',
+    'CollectionPage',
+  );
 
   // Validate every rendered page, including translated placeholders and noindex routes.
   // Gatsby's internal HTML fragments are not standalone pages.
@@ -77,7 +97,7 @@ function verifySeoBuild(publicDirectory: string) {
         for (const match of html.matchAll(
           /<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi,
         )) {
-          const schema = JSON.parse(match[1]) as Record<string, unknown>;
+          const schema = JSON.parse(match[1] || '') as Record<string, unknown>;
           if (schema['@type'] === 'Service' && 'inLanguage' in schema) {
             failures.push(
               `${path.relative(publicDirectory, filePath)} uses unsupported inLanguage on Service`,
@@ -92,7 +112,11 @@ function verifySeoBuild(publicDirectory: string) {
             match[0],
             'title="Subscribe to Architecture Weekly"',
           );
-          expectContains(path.relative(publicDirectory, filePath), match[0], 'loading="lazy"');
+          expectContains(
+            path.relative(publicDirectory, filePath),
+            match[0],
+            'loading="lazy"',
+          );
         }
       }
     }
@@ -100,7 +124,11 @@ function verifySeoBuild(publicDirectory: string) {
   if (fs.existsSync(publicDirectory)) verifyHeadings(publicDirectory);
 
   for (const html of [consultingEn, consultingPl]) {
-    expectContains('consulting language alternates', html, 'hrefLang="x-default"');
+    expectContains(
+      'consulting language alternates',
+      html,
+      'hrefLang="x-default"',
+    );
     expectContains('consulting language alternates', html, 'hrefLang="en"');
     expectContains('consulting language alternates', html, 'hrefLang="pl"');
   }
@@ -114,7 +142,9 @@ function verifySeoBuild(publicDirectory: string) {
     'pl/callback/index.html',
   ]) {
     if (fs.existsSync(path.join(publicDirectory, retiredPage))) {
-      failures.push(`Retired sign-in page still generated: public/${retiredPage}`);
+      failures.push(
+        `Retired sign-in page still generated: public/${retiredPage}`,
+      );
     }
   }
 
@@ -135,7 +165,10 @@ function verifySeoBuild(publicDirectory: string) {
   );
 
   const sitemap = read('sitemap/sitemap-0.xml');
-  const sitemapUrls = Array.from(sitemap.matchAll(/<loc>([^<]+)<\/loc>/g), (match) => match[1]);
+  const sitemapUrls = Array.from(
+    sitemap.matchAll(/<loc>([^<]+)<\/loc>/g),
+    (match) => match[1] || '',
+  );
   if (new Set(sitemapUrls).size !== sitemapUrls.length) {
     failures.push('sitemap contains duplicate URLs');
   }
@@ -158,7 +191,11 @@ function verifySeoBuild(publicDirectory: string) {
     '/en/introduction_to_event_sourcing/',
     '/en/talks/',
   ]) {
-    expectContains('sitemap', sitemap, `<loc>https://event-driven.io${publicRoute}</loc>`);
+    expectContains(
+      'sitemap',
+      sitemap,
+      `<loc>https://event-driven.io${publicRoute}</loc>`,
+    );
   }
 
   for (const excludedRoute of [
@@ -171,20 +208,36 @@ function verifySeoBuild(publicDirectory: string) {
     '/en/search/',
     '/404/',
   ]) {
-    expectExcludes('sitemap', sitemap, `<loc>https://event-driven.io${excludedRoute}</loc>`);
+    expectExcludes(
+      'sitemap',
+      sitemap,
+      `<loc>https://event-driven.io${excludedRoute}</loc>`,
+    );
   }
 
   const llms = read('llms.txt');
   expectContains('llms.txt', llms, 'https://event-driven.io/en/consulting/');
   expectContains('llms.txt', llms, 'https://event-driven.io/pl/consulting/');
-  expectContains('llms.txt', llms, 'https://event-driven.io/en/introduction_to_event_sourcing/');
-  expectContains('llms.txt', llms, 'https://event-driven.io/sitemap/sitemap-index.xml');
+  expectContains(
+    'llms.txt',
+    llms,
+    'https://event-driven.io/en/introduction_to_event_sourcing/',
+  );
+  expectContains(
+    'llms.txt',
+    llms,
+    'https://event-driven.io/sitemap/sitemap-index.xml',
+  );
 
   const headers = read('_headers');
   expectContains('_headers', headers, 'X-Frame-Options: DENY');
   expectContains('_headers', headers, 'X-Content-Type-Options: nosniff');
   expectContains('_headers', headers, '/llms.txt');
-  expectContains('_headers', headers, 'Content-Type: text/plain; charset=UTF-8');
+  expectContains(
+    '_headers',
+    headers,
+    'Content-Type: text/plain; charset=UTF-8',
+  );
 
   return failures;
 }

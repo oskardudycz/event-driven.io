@@ -1,12 +1,21 @@
 import type { BuildPageData } from './helpers/build-output.ts';
 import { temporaryDirectory } from './helpers/temporary-directory.ts';
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync, mkdirSync, writeFileSync, existsSync } from 'node:fs';
+import {
+  readFileSync,
+  readdirSync,
+  mkdirSync,
+  writeFileSync,
+  existsSync,
+} from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import yaml from 'js-yaml';
 import cheerio from 'cheerio';
-import { verifyIndexingBuild, siteOrigin } from '../scripts/indexing-build-verifier.ts';
+import {
+  verifyIndexingBuild,
+  siteOrigin,
+} from '../scripts/indexing-build-verifier.ts';
 import { parseAllRedirects } from 'netlify-redirect-parser';
 
 import { collectBuildContract } from '../scripts/build-contract.ts';
@@ -31,7 +40,10 @@ void test('link checks require the complete anchor destination, not text or a UR
     const html = `<p>${destination}</p><a href="${href}">${destination}</a>`;
     assert.equal(linkDestinations(html).has(destination), false, href);
   }
-  assert.equal(linkDestinations(`<a href="${destination}">Register</a>`).has(destination), true);
+  assert.equal(
+    linkDestinations(`<a href="${destination}">Register</a>`).has(destination),
+    true,
+  );
 });
 
 void test('every generated canonical, sitemap URL and reciprocal alternate resolves consistently', () => {
@@ -41,19 +53,30 @@ void test('every generated canonical, sitemap URL and reciprocal alternate resol
 void test('untranslated copies declare English canonical and English originals stay discoverable', () => {
   for (const directory of readdirSync('content/posts')) {
     const parse = (language: string) => {
-      const source = readFileSync(join('content/posts', directory, `index.${language}.md`), 'utf8');
-      const match = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)([\s\S]*)$/.exec(source);
+      const source = readFileSync(
+        join('content/posts', directory, `index.${language}.md`),
+        'utf8',
+      );
+      const match = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)([\s\S]*)$/.exec(
+        source,
+      );
       assert.ok(match, directory);
       const [, header, body] = match;
+      assert.equal(typeof header, 'string');
+      assert.equal(typeof body, 'string');
       return {
-        frontmatter: yaml.load(header) as { useDefaultLangCanonical?: boolean },
-        body: body.trim().replace(/\/(?:en|pl)\//g, '/locale/'),
+        frontmatter: yaml.load(header as string) as {
+          useDefaultLangCanonical?: boolean;
+        },
+        body: (body as string).trim().replace(/\/(?:en|pl)\//g, '/locale/'),
       };
     };
-    if (!readdirSync(join('content/posts', directory)).includes('index.en.md')) continue;
+    if (!readdirSync(join('content/posts', directory)).includes('index.en.md'))
+      continue;
     const en = parse('en');
     assert.notEqual(en.frontmatter.useDefaultLangCanonical, true, directory);
-    if (!readdirSync(join('content/posts', directory)).includes('index.pl.md')) continue;
+    if (!readdirSync(join('content/posts', directory)).includes('index.pl.md'))
+      continue;
     const pl = parse('pl');
     if (en.body === pl.body) {
       assert.equal(pl.frontmatter.useDefaultLangCanonical, true, directory);
@@ -79,8 +102,12 @@ void test('canonical validation catches mismatched sitemap destinations and brok
     `<urlset><loc>${siteOrigin}/pl/</loc></urlset>`,
   );
   const failures = verifyIndexingBuild(fixture);
-  assert.ok(failures.some((failure) => failure.includes('Sitemap: destination')));
-  assert.ok(failures.some((failure) => failure.includes('alternate pl: destination')));
+  assert.ok(
+    failures.some((failure) => failure.includes('Sitemap: destination')),
+  );
+  assert.ok(
+    failures.some((failure) => failure.includes('alternate pl: destination')),
+  );
   assert.ok(failures.some((failure) => failure.includes('non-reciprocal')));
 });
 
@@ -128,14 +155,23 @@ void test('known legacy category queries use literal query conditions, with 404 
     assert.equal(rule.status, 301);
     assert.equal(rule.force, true);
     assert.ok(routes.has(rule.to), rule.to);
-    assert.ok(!/[%+]/.test(rule.query.category), 'Match decoded values; do not double-encode');
+    assert.ok(rule.query.category);
+    assert.ok(
+      !/[%+]/.test(rule.query.category),
+      'Match decoded values; do not double-encode',
+    );
   }
   assert.equal(
-    queries.find((rule) => rule.from === '/pl/category/' && rule.query.category === 'Postgres')?.to,
+    queries.find(
+      (rule) =>
+        rule.from === '/pl/category/' && rule.query.category === 'Postgres',
+    )?.to,
     '/en/category/postgres/',
   );
   assert.deepEqual(
-    redirects.slice(-3).map(({ from, to, status, force }) => ({ from, to, status, force })),
+    redirects
+      .slice(-3)
+      .map(({ from, to, status, force }) => ({ from, to, status, force })),
     [
       { from: '/en/*', to: '/en/404/', status: 404, force: false },
       { from: '/pl/*', to: '/pl/404/', status: 404, force: false },
@@ -148,8 +184,14 @@ void test('confirmed reported aliases lead directly to a generated canonical art
   const rules = collectBuildContract('public').redirects;
   for (const [source, destination] of [
     ['/en/risk_of_ignoring_risks/', '/en/the_risk_of_ignoring_risks/'],
-    ['/en/rebuilding_read_models_safely/', '/en/rebuilding_event_driven_read_models/'],
-    ['/2026/04/09/vibing-harness-and-ooda-loop/', '/en/vibing_harness_and_ooda_loops/'],
+    [
+      '/en/rebuilding_read_models_safely/',
+      '/en/rebuilding_event_driven_read_models/',
+    ],
+    [
+      '/2026/04/09/vibing-harness-and-ooda-loop/',
+      '/en/vibing_harness_and_ooda_loops/',
+    ],
   ]) {
     assert.ok(rules.includes(`${source} ${destination} 301`));
     assert.match(
@@ -171,22 +213,34 @@ void test('case-normalized article routes retain feed GUIDs and Disqus thread id
     const data = JSON.parse(
       readFileSync(`public/page-data${route}page-data.json`, 'utf8'),
     ) as BuildPageData;
-    assert.equal(data.result.data.post.fields.slug, `/${original.toLowerCase()}/`);
+    assert.equal(
+      data.result.data.post.fields.slug,
+      `/${original.toLowerCase()}/`,
+    );
     assert.equal(data.result.data.post.fields.originalSlug, `/${original}/`);
-    assert.ok(feed.includes(`<guid isPermaLink="false">${siteOrigin}/en/${original}/</guid>`));
+    assert.ok(
+      feed.includes(
+        `<guid isPermaLink="false">${siteOrigin}/en/${original}/</guid>`,
+      ),
+    );
     assert.ok(feed.includes(`<link>${siteOrigin}${route}</link>`));
   }
 });
 
 void test('the anti-patterns article links its series and talks and has one canonical discovery entry', () => {
   for (const language of ['en', 'pl']) {
-    const html = readFileSync(`public/${language}/anti-patterns/index.html`, 'utf8');
+    const html = readFileSync(
+      `public/${language}/anti-patterns/index.html`,
+      'utf8',
+    );
     const destinations = linkDestinations(html);
     const series = readdirSync('content/posts').filter((directory) => {
       const file = join('content/posts', directory, 'index.en.md');
       return (
         existsSync(file) &&
-        /^title: Anti-patterns in event modelling - /m.test(readFileSync(file, 'utf8'))
+        /^title: Anti-patterns in event modelling - /m.test(
+          readFileSync(file, 'utf8'),
+        )
       );
     });
     assert.ok(series.length >= 5);
@@ -205,32 +259,57 @@ void test('the anti-patterns article links its series and talks and has one cano
       assert.ok(destinations.has(`https://www.youtube.com/watch?v=${video}`));
   }
   const discovery = readFileSync('public/llms.txt', 'utf8');
-  assert.equal(discovery.split('](https://event-driven.io/en/anti-patterns/)').length - 1, 1);
-  assert.equal(discovery.includes('](https://event-driven.io/pl/anti-patterns/)'), false);
+  assert.equal(
+    discovery.split('](https://event-driven.io/en/anti-patterns/)').length - 1,
+    1,
+  );
+  assert.equal(
+    discovery.includes('](https://event-driven.io/pl/anti-patterns/)'),
+    false,
+  );
   const urls = [
-    ...discovery.matchAll(/^- \[[^\n]*\]\((https:\/\/event-driven\.io\/[^)]+)\)/gm),
+    ...discovery.matchAll(
+      /^- \[[^\n]*\]\((https:\/\/event-driven\.io\/[^)]+)\)/gm,
+    ),
   ].map((match) => match[1]);
-  assert.equal(new Set(urls).size, urls.length, 'llms.txt repeats a destination');
+  assert.equal(
+    new Set(urls).size,
+    urls.length,
+    'llms.txt repeats a destination',
+  );
 });
 
 void test('the workshop has distinct English and Polish content and discovery titles', () => {
   const discovery = readFileSync('public/llms.txt', 'utf8');
   for (const [language, heading, title] of [
-    ['en', 'What will you learn?', 'Understand Event Sourcing in practice - public workshop'],
-    ['pl', 'Czego się nauczysz?', 'Zrozum Event Sourcing w praktyce - otwarte szkolenie'],
+    [
+      'en',
+      'What will you learn?',
+      'Understand Event Sourcing in practice - public workshop',
+    ],
+    [
+      'pl',
+      'Czego się nauczysz?',
+      'Zrozum Event Sourcing w praktyce - otwarte szkolenie',
+    ],
   ]) {
     assert.ok(
       discovery.includes(
         `[${title}](https://event-driven.io/${language}/szkolenie-event-sourcing/)`,
       ),
     );
-    const html = readFileSync(`public/${language}/szkolenie-event-sourcing/index.html`, 'utf8');
+    const html = readFileSync(
+      `public/${language}/szkolenie-event-sourcing/index.html`,
+      'utf8',
+    );
     const $ = cheerio.load(html);
     assert.ok(
       $('h2')
         .toArray()
         .some((element) => $(element).text() === heading),
     );
-    assert.ok(linkDestinations(html).has('https://forms.gle/YxfhZ9wUQetX9iue8'));
+    assert.ok(
+      linkDestinations(html).has('https://forms.gle/YxfhZ9wUQetX9iue8'),
+    );
   }
 });

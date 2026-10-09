@@ -2,7 +2,10 @@ import { normalizeTerm, tokenize } from './options.ts';
 export function highlightParts(text: string, terms: string[]) {
   const words = text.split(/([\p{L}\p{N}_]+)/u);
   const matches = new Set(terms.map(normalizeTerm));
-  return words.map((value) => ({ text: value, highlighted: matches.has(normalizeTerm(value)) }));
+  return words.map((value) => ({
+    text: value,
+    highlighted: matches.has(normalizeTerm(value)),
+  }));
 }
 export function snippet(content: string, terms: string[], length = 220) {
   const normalized = normalizeTerm(content);

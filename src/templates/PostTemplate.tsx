@@ -9,7 +9,9 @@ import Article from '../components/Article/index.ts';
 import Post from '../components/Post/index.ts';
 import { createHead } from '../components/Seo/index.ts';
 
-const PostTemplate = (props: SitePageProps<'post' | 'relatedPosts' | 'authornote' | 'site'>) => {
+const PostTemplate = (
+  props: SitePageProps<'post' | 'relatedPosts' | 'authornote' | 'site'>,
+) => {
   const {
     data: {
       post,
@@ -39,7 +41,12 @@ const PostTemplate = (props: SitePageProps<'post' | 'relatedPosts' | 'authornote
 export default PostTemplate;
 
 export const postQuery = graphql`
-  query PostBySlug($slug: String!, $langKey: String!, $relatedIds: [String!]!, $language: String!) {
+  query PostBySlug(
+    $slug: String!
+    $langKey: String!
+    $relatedIds: [String!]!
+    $language: String!
+  ) {
     locales: allLocale(filter: { language: { in: [$language, "en"] } }) {
       ...TranslationResources
     }
@@ -57,7 +64,13 @@ export const postQuery = graphql`
             title
             cover {
               childImageSharp {
-                resize(width: 420, height: 240, quality: 78, cropFocus: CENTER, toFormat: WEBP) {
+                resize(
+                  width: 420
+                  height: 240
+                  quality: 78
+                  cropFocus: CENTER
+                  toFormat: WEBP
+                ) {
                   src
                 }
               }
@@ -66,7 +79,9 @@ export const postQuery = graphql`
         }
       }
     }
-    post: markdownRemark(fields: { slug: { eq: $slug }, langKey: { eq: $langKey } }) {
+    post: markdownRemark(
+      fields: { slug: { eq: $slug }, langKey: { eq: $langKey } }
+    ) {
       id
       html
       excerpt(pruneLength: 170)

@@ -154,7 +154,10 @@ h2.elementH2 {
       width: 36px;
     }
 
-    :global(.header).header:global(.homepage).homepage:not(:global(.fixed).fixed) & {
+    :global(.header).header:global(.homepage).homepage:not(
+        :global(.fixed).fixed
+      )
+      & {
       border: none;
     }
   }

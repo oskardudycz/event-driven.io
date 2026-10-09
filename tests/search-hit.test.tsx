@@ -16,7 +16,9 @@ vi.mock('gatsby-plugin-image', () => ({
     alt: string;
   }) => <img src={image.images.fallback.src} alt={alt} />,
 }));
-vi.mock('../src/i18n/page-context', () => ({ usePageContext: () => ({ lang: 'en' }) }));
+vi.mock('../src/i18n/page-context', () => ({
+  usePageContext: () => ({ lang: 'en' }),
+}));
 
 import Hit from '../src/components/Search/Hit.tsx';
 

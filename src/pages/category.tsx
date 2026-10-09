@@ -1,6 +1,6 @@
 import type { SitePageProps } from '../types/content.ts';
 import * as styles from './category.module.css';
-import { FaTag } from 'react-icons/fa/';
+import { FaTag } from 'react-icons/fa';
 import React from 'react';
 import { graphql } from 'gatsby';
 import kebabCase from 'lodash/kebabCase';
@@ -24,7 +24,8 @@ const CategoryPage = (props: SitePageProps<'posts'>) => {
   } = props;
 
   const guides = categoryGuides.filter((guide) => guide.language === lang);
-  const guideFor = (category: string) => guides.find((guide) => guide.slug === kebabCase(category));
+  const guideFor = (category: string) =>
+    guides.find((guide) => guide.slug === kebabCase(category));
   const categoryList = categoriesForLanguage(
     posts.map(({ node }) => node),
     lang,
@@ -41,7 +42,9 @@ const CategoryPage = (props: SitePageProps<'posts'>) => {
       <Article>
         <header>
           <Headline title={t('categories.title')} />
-          <p className={`intro ${styles.intro}` + ' ' + styles.elementP}>{t('categories.intro')}</p>
+          <p className={`intro ${styles.intro}` + ' ' + styles.elementP}>
+            {t('categories.intro')}
+          </p>
         </header>
         <div className={`categoryGrid ${styles.categoryGrid}`}>
           {categoryList.map(([category, categoryPosts]) => {
@@ -53,10 +56,15 @@ const CategoryPage = (props: SitePageProps<'posts'>) => {
                     <FaTag /> {category}
                   </h2>
                   <p className={styles.elementP}>
-                    {guide ? guide.description : t('categories.defaultDescription', { category })}
+                    {guide
+                      ? guide.description
+                      : t('categories.defaultDescription', { category })}
                   </p>
                   <strong className={styles.elementStrong}>
-                    {t('categories.articleCount', { count: categoryPosts.length })} →
+                    {t('categories.articleCount', {
+                      count: categoryPosts.length,
+                    })}{' '}
+                    →
                   </strong>
                 </Link>
               </section>

@@ -1,16 +1,20 @@
 import type { Frontmatter } from '../types/content.ts';
 type CategorizedPost = {
   fields: { slug: string; langKey: string; source?: string };
-  frontmatter: Pick<Frontmatter, 'category' | 'categories' | 'useDefaultLangCanonical'>;
+  frontmatter: Pick<
+    Frontmatter,
+    'category' | 'categories' | 'useDefaultLangCanonical'
+  >;
 };
 import kebabCase from 'lodash/kebabCase.js';
 
 export const categoriesForPost = (node: Pick<CategorizedPost, 'frontmatter'>) =>
   Array.from(
     new Set(
-      [node.frontmatter.category, ...(node.frontmatter.categories || [])].filter(
-        (category): category is string => Boolean(category),
-      ),
+      [
+        node.frontmatter.category,
+        ...(node.frontmatter.categories || []),
+      ].filter((category): category is string => Boolean(category)),
     ),
   );
 
@@ -28,7 +32,9 @@ export function categoryPostsForLanguage<T extends CategorizedPost>(
       .filter(
         (node) =>
           !node.frontmatter.useDefaultLangCanonical &&
-          categoriesForPost(node).some((category) => kebabCase(category) === categorySlug),
+          categoriesForPost(node).some(
+            (category) => kebabCase(category) === categorySlug,
+          ),
       )
       .map((node) => node.fields.slug),
   );
@@ -45,7 +51,8 @@ export function categoryPostsForLanguage<T extends CategorizedPost>(
       versions.find((node) => node.fields.langKey === language) ||
       versions.find(
         (node) =>
-          node.fields.langKey === defaultLanguage && !node.frontmatter.useDefaultLangCanonical,
+          node.fields.langKey === defaultLanguage &&
+          !node.frontmatter.useDefaultLangCanonical,
       ) ||
       versions.find((node) => !node.frontmatter.useDefaultLangCanonical)!
     );
@@ -66,7 +73,9 @@ export function categoriesForLanguage<T extends CategorizedPost>(
         node.fields.langKey === language &&
         !node.frontmatter.useDefaultLangCanonical,
     )
-    .forEach((node) => categoriesForPost(node).forEach((category) => categories.add(category)));
+    .forEach((node) =>
+      categoriesForPost(node).forEach((category) => categories.add(category)),
+    );
   return [...categories].map((category) => [
     category,
     categoryPostsForLanguage(nodes, kebabCase(category), language),

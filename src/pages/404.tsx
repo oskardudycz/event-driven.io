@@ -16,20 +16,29 @@ const NotFoundPage = () => {
     <Article>
       <section className={styles.recovery}>
         <p className={styles.code}>404</p>
-        <Headline title={polish ? 'Ups! Nie znaleziono strony.' : 'Oops! Page not found.'} />
+        <Headline
+          title={
+            polish ? 'Ups! Nie znaleziono strony.' : 'Oops! Page not found.'
+          }
+        />
         <p>
           {polish
             ? 'Ten adres nie prowadzi do żadnej strony. Być może link jest nieaktualny lub w adresie jest literówka.'
             : 'There’s no page at this address. The link may be out of date, or there may be a typo in the URL.'}
         </p>
-        <nav aria-label={polish ? 'Dokąd dalej?' : 'Where next?'} className={styles.links}>
+        <nav
+          aria-label={polish ? 'Dokąd dalej?' : 'Where next?'}
+          className={styles.links}
+        >
           <Link to={`/${lang}/`} className={styles.primary}>
             {polish ? 'Wróć na stronę główną' : 'Back to home'}
           </Link>
           <Link to={`/${lang}/articles/`}>
             {polish ? 'Przeglądaj artykuły' : 'Browse articles'}
           </Link>
-          <Link to={`/${lang}/search/`}>{polish ? 'Szukaj na blogu' : 'Search the blog'}</Link>
+          <Link to={`/${lang}/search/`}>
+            {polish ? 'Szukaj na blogu' : 'Search the blog'}
+          </Link>
         </nav>
       </section>
     </Article>
@@ -38,11 +47,14 @@ const NotFoundPage = () => {
 
 export default NotFoundPage;
 
-export const Head = ({ pageContext }: HeadProps<object, Partial<SitePageContext>>) => (
+export const Head = ({
+  pageContext,
+}: HeadProps<object, Partial<SitePageContext>>) => (
   <React.Fragment>
     <html lang={pageContext.lang || 'en'} />
     <title>
-      {pageContext.lang === 'pl' ? 'Nie znaleziono strony' : 'Page not found'} - Event-Driven.io
+      {pageContext.lang === 'pl' ? 'Nie znaleziono strony' : 'Page not found'} -
+      Event-Driven.io
     </title>
     <meta name="robots" content="noindex, nofollow" />
   </React.Fragment>

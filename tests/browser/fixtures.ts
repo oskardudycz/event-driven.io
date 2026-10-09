@@ -1,6 +1,14 @@
-import { test as base, expect, type BrowserContext, type Page } from '@playwright/test';
+import {
+  test as base,
+  expect,
+  type BrowserContext,
+  type Page,
+} from '@playwright/test';
 
-async function isolateExternalRequests(context: BrowserContext, baseURL: string) {
+async function isolateExternalRequests(
+  context: BrowserContext,
+  baseURL: string,
+) {
   const origin = new URL(baseURL).origin;
   await context.route('**/*', (route) => {
     const url = new URL(route.request().url());
@@ -8,7 +16,10 @@ async function isolateExternalRequests(context: BrowserContext, baseURL: string)
   });
 }
 
-export const test = base.extend<{ isolateExternalRequests: void; otherPage: Page }>({
+export const test = base.extend<{
+  isolateExternalRequests: void;
+  otherPage: Page;
+}>({
   // Individual page.route mocks take precedence over this context-level policy.
   isolateExternalRequests: [
     async ({ context, baseURL }, provide) => {
@@ -19,7 +30,7 @@ export const test = base.extend<{ isolateExternalRequests: void; otherPage: Page
   ],
   // Locale isolation requires separate storage, not two tabs in the same context.
   otherPage: async ({ browser, baseURL }, provide) => {
-    const context = await browser.newContext({ baseURL });
+    const context = await browser.newContext(baseURL ? { baseURL } : {});
     try {
       await isolateExternalRequests(context, baseURL!);
       await provide(await context.newPage());

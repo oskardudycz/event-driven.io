@@ -8,11 +8,17 @@ import { indexOptions } from '../src/search/options.ts';
 
 // Opt-in integration check. Use an existing article and its non-indexed Polish
 // placeholder; never create test publications or add entries to llms.txt.
-const manifest = JSON.parse(fs.readFileSync('import/architecture-weekly-missing.json', 'utf8')) as {
+const manifest = JSON.parse(
+  fs.readFileSync('import/architecture-weekly-missing.json', 'utf8'),
+) as {
   url: string;
 }[];
-const slug = new URL(manifest[0].url).pathname.split('/').filter(Boolean).pop();
-const directory = fs.readdirSync('content/posts').find((name) => name.endsWith(`--${slug}`));
+const first = manifest[0];
+assert(first, 'Expected at least one import entry');
+const slug = new URL(first.url).pathname.split('/').filter(Boolean).pop();
+const directory = fs
+  .readdirSync('content/posts')
+  .find((name) => name.endsWith(`--${slug}`));
 assert(directory, 'Cache-check article not found');
 const englishFile = path.join('content/posts', directory, 'index.en.md');
 const polishFile = path.join('content/posts', directory, 'index.pl.md');
@@ -23,13 +29,15 @@ assert(
   'Deletion check must use a non-indexed placeholder',
 );
 const index = fs.readFileSync('static/llms.txt');
-const logDirectory = fs.mkdtempSync(path.join(os.tmpdir(), 'gatsby-cache-check-'));
+const logDirectory = fs.mkdtempSync(
+  path.join(os.tmpdir(), 'gatsby-cache-check-'),
+);
 const marker = 'gatsbycachemodificationverificationtoken';
 const searchId = `posts:/${slug}/`;
-function searchIndex(language: string) {
+function searchIndex(language: 'en' | 'pl') {
   const manifest = JSON.parse(
     fs.readFileSync('public/search-index/manifest.json', 'utf8'),
-  ) as Record<string, string>;
+  ) as Record<'en' | 'pl', string>;
   return MiniSearch.loadJSON(
     fs.readFileSync(path.join('public', manifest[language]), 'utf8'),
     indexOptions,
@@ -64,8 +72,11 @@ try {
     fs.readFileSync(articleHtml, 'utf8').includes(marker),
     'Warm cache ignored modified content',
   );
-  for (const language of ['en', 'pl']) {
-    const matches = searchIndex(language).search(marker, { fuzzy: false, prefix: false });
+  for (const language of ['en', 'pl'] as const) {
+    const matches = searchIndex(language).search(marker, {
+      fuzzy: false,
+      prefix: false,
+    });
     assert(
       matches.some((hit) => hit.id === searchId && hit.path === `/en/${slug}/`),
       'Warm search index ignored modified canonical content/fallback',
@@ -80,7 +91,7 @@ try {
   );
   fs.unlinkSync(englishFile);
   build('deleted-canonical-article');
-  for (const language of ['en', 'pl'])
+  for (const language of ['en', 'pl'] as const)
     assert(
       !searchIndex(language).has(searchId),
       'Warm search index retained a deleted canonical article',
@@ -95,18 +106,22 @@ try {
     fs.writeFileSync('static/llms.txt', index);
   }
 }
-assert(!fs.readFileSync(articleHtml, 'utf8').includes(marker), 'Warm cache retained removed text');
+assert(
+  !fs.readFileSync(articleHtml, 'utf8').includes(marker),
+  'Warm cache retained removed text',
+);
 assert(
   fs.existsSync(polishData) && fs.existsSync(polishHtml),
   'Warm cache did not restore the page',
 );
-for (const language of ['en', 'pl']) {
+for (const language of ['en', 'pl'] as const) {
   assert(
     searchIndex(language).has(searchId),
     'Warm search index did not restore the canonical article',
   );
   assert.equal(
-    searchIndex(language).search(marker, { fuzzy: false, prefix: false }).length,
+    searchIndex(language).search(marker, { fuzzy: false, prefix: false })
+      .length,
     0,
     'Warm search index retained removed text',
   );

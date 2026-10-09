@@ -8,7 +8,7 @@ for (const [file, lang] of [
   ['public/404.html', 'en'],
   ['public/en/404/index.html', 'en'],
   ['public/pl/404/index.html', 'pl'],
-]) {
+] as const) {
   void test(`${file} provides localized, index-excluded recovery links without JavaScript`, () => {
     const $ = cheerio.load(readFileSync(file, 'utf8'));
     assert.equal($('html').attr('lang'), lang);
@@ -18,8 +18,13 @@ for (const [file, lang] of [
     const links = $('article nav a')
       .map((_, element) => $(element).attr('href'))
       .get();
-    assert.deepEqual(links, [`/${lang}/`, `/${lang}/articles/`, `/${lang}/search/`]);
-    for (const link of links) assert.ok(existsSync(`public${link}index.html`), link);
+    assert.deepEqual(links, [
+      `/${lang}/`,
+      `/${lang}/articles/`,
+      `/${lang}/search/`,
+    ]);
+    for (const link of links)
+      assert.ok(existsSync(`public${link}index.html`), link);
   });
 }
 
@@ -35,14 +40,18 @@ void test('fallback rewrites preserve HTTP 404 and follow all specific redirects
   });
   assert.deepEqual(errors, []);
   assert.deepEqual(
-    redirects.slice(-3).map(({ from, to, status }) => `${from} ${to} ${status}`),
+    redirects
+      .slice(-3)
+      .map(({ from, to, status }) => `${from} ${to} ${status}`),
     ['/en/* /en/404/ 404', '/pl/* /pl/404/ 404', '/* /404.html 404'],
   );
   assert.ok(
     !lines.some((line) => /^\/404(?:\/|\.html) /.test(line)),
     'Root error pages must not redirect to themselves or another error route',
   );
-  const matches = JSON.parse(readFileSync('.cache/match-paths.json', 'utf8')) as {
+  const matches = JSON.parse(
+    readFileSync('.cache/match-paths.json', 'utf8'),
+  ) as {
     path: string;
     matchPath: string;
   }[];

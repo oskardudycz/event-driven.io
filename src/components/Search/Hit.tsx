@@ -9,7 +9,10 @@ import { usePageContext } from '../../i18n/page-context';
 const Highlight = ({ text, terms }: { text: string; terms: string[] }) =>
   highlightParts(text, terms).map((part, index) =>
     part.highlighted ? (
-      <mark key={index} className={`search-highlight ${styles.searchHighlight}`}>
+      <mark
+        key={index}
+        className={`search-highlight ${styles.searchHighlight}`}
+      >
         {part.text}
       </mark>
     ) : (
@@ -28,7 +31,10 @@ const Hit = ({ hit }: { hit: SearchHit }) => {
     : hit.category
       ? [hit.category]
       : [];
-  const details = [sourceLabels[hit.source] || hit.source, ...categories].filter(Boolean);
+  const details = [
+    sourceLabels[hit.source] || hit.source,
+    ...categories,
+  ].filter(Boolean);
 
   return (
     <article
@@ -57,7 +63,9 @@ const Hit = ({ hit }: { hit: SearchHit }) => {
               </>
             )}
             {hit.langKey !== lang && (
-              <span className={`search-hit-language ${styles.searchHitLanguage}`}>
+              <span
+                className={`search-hit-language ${styles.searchHitLanguage}`}
+              >
                 {lang === 'pl' ? 'Po angielsku' : 'In Polish'}
               </span>
             )}

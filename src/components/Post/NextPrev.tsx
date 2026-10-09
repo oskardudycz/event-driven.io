@@ -4,10 +4,13 @@ import * as styles from './NextPrev.module.css';
 import { useTranslation } from 'react-i18next';
 import { Link } from '../Link/index.tsx';
 
-import { FaArrowRight } from 'react-icons/fa/';
-import { FaArrowLeft } from 'react-icons/fa/';
+import { FaArrowRight } from 'react-icons/fa';
+import { FaArrowLeft } from 'react-icons/fa';
 
-const NextPrev = (props: { next?: ArticleNode; prev?: ArticleNode }) => {
+const NextPrev = (props: {
+  next?: ArticleNode | undefined;
+  prev?: ArticleNode | undefined;
+}) => {
   const { t } = useTranslation();
   const {
     next: {
@@ -22,7 +25,10 @@ const NextPrev = (props: { next?: ArticleNode; prev?: ArticleNode }) => {
 
   return (
     <React.Fragment>
-      <nav className={`links ${styles.links}`} aria-label={t('articleNavigation.title')}>
+      <nav
+        className={`links ${styles.links}`}
+        aria-label={t('articleNavigation.title')}
+      >
         {nextSlug && (
           <Link to={nextSlug}>
             <FaArrowRight />

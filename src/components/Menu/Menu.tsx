@@ -13,10 +13,10 @@ import {
   FaYoutube,
   FaUserGraduate,
   FaHandshake,
-} from 'react-icons/fa/';
-import { FaSearch } from 'react-icons/fa/';
-import { FaEnvelope } from 'react-icons/fa/';
-import { FaTag } from 'react-icons/fa/';
+} from 'react-icons/fa';
+import { FaSearch } from 'react-icons/fa';
+import { FaEnvelope } from 'react-icons/fa';
+import { FaTag } from 'react-icons/fa';
 import LanguagePicker from '../LanguagePicker/index.tsx';
 
 import Item from './Item.tsx';
@@ -75,6 +75,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
   componentDidMount() {
     if (typeof ResizeObserver !== 'undefined') {
       this.resizeObserver = new ResizeObserver(([entry]) => {
+        if (!entry) return;
         if (entry.contentRect.width === this.containerWidth) return;
         this.containerWidth = entry.contentRect.width;
         if (this.props.screenWidth > 0) {
@@ -83,7 +84,8 @@ class Menu extends React.Component<MenuProps, MenuState> {
       });
       // Header transitions change the available width after the window resize
       // handler. Observe the container, whose width is independent of hiding items.
-      if (this.container.current) this.resizeObserver.observe(this.container.current);
+      if (this.container.current)
+        this.resizeObserver.observe(this.container.current);
     }
     if (this.props.screenWidth > 0) this.measureOverflow();
   }
@@ -116,9 +118,15 @@ class Menu extends React.Component<MenuProps, MenuState> {
     const list = this.itemList.current;
     if (!list) return;
     const reservedWidth = this.props.screenWidth >= 1024 ? 60 : 0;
-    const widths = Array.from(list.children, (item) => (item as HTMLElement).offsetWidth);
+    const widths = Array.from(
+      list.children,
+      (item) => (item as HTMLElement).offsetWidth,
+    );
     this.setState({
-      hiddenIndexes: getOverflowedIndexes(widths, list.offsetWidth - reservedWidth),
+      hiddenIndexes: getOverflowedIndexes(
+        widths,
+        list.offsetWidth - reservedWidth,
+      ),
       measuring: false,
     });
   };
@@ -144,16 +152,23 @@ class Menu extends React.Component<MenuProps, MenuState> {
               <Item
                 item={item}
                 key={item.to || i}
-                overflowHidden={hiddenIndexes.includes(i) && !(open && screenWidth < 1024)}
+                overflowHidden={
+                  hiddenIndexes.includes(i) && !(open && screenWidth < 1024)
+                }
               />
             ))}
           </ul>
-          {hiddenIndexes.length > 0 && <Expand onClick={this.toggleMenu} open={open} />}
+          {hiddenIndexes.length > 0 && (
+            <Expand onClick={this.toggleMenu} open={open} />
+          )}
           {open && screenWidth >= 1024 && (
             <ul className={`hiddenItemList ${styles.hiddenItemList}`}>
-              {hiddenIndexes.map((index) => (
-                <Item item={items[index]} key={items[index].to} hiddenItem />
-              ))}
+              {hiddenIndexes.map((index) => {
+                const item = items[index];
+                return item ? (
+                  <Item item={item} key={item.to} hiddenItem />
+                ) : null;
+              })}
             </ul>
           )}
 

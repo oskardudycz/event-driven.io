@@ -5,11 +5,16 @@ import { globSync, readFileSync } from 'node:fs';
 
 import config from '../site/config.ts';
 const plugin = config.plugins.find(
-  (entry) => typeof entry === 'object' && entry.resolve === 'gatsby-plugin-react-i18next',
+  (entry) =>
+    typeof entry === 'object' &&
+    entry.resolve === 'gatsby-plugin-react-i18next',
 );
 assert.ok(plugin && typeof plugin === 'object');
 const options = plugin.options;
-import { onCreatePage, type LocalizedPage } from 'gatsby-plugin-react-i18next/gatsby-node.js';
+import {
+  onCreatePage,
+  type LocalizedPage,
+} from 'gatsby-plugin-react-i18next/gatsby-node.js';
 
 void test('the locale plugin decorates existing routes without generating duplicate language pages', async () => {
   for (const path of [
@@ -23,11 +28,15 @@ void test('the locale plugin decorates existing routes without generating duplic
     await onCreatePage(
       {
         page: { path, context: {} },
-        actions: { createPage: (page) => created.push(page), deletePage: () => {} },
+        actions: {
+          createPage: (page) => created.push(page),
+          deletePage: () => {},
+        },
       },
       options,
     );
     assert.equal(created.length, 1);
+    assert.ok(created[0]);
     assert.equal(created[0].path, path);
     assert.equal(created[0].context.language, path.split('/')[1]);
   }
@@ -35,7 +44,10 @@ void test('the locale plugin decorates existing routes without generating duplic
   await onCreatePage(
     {
       page: { path: '/articles/', context: {} },
-      actions: { createPage: (page) => created.push(page), deletePage: () => {} },
+      actions: {
+        createPage: (page) => created.push(page),
+        deletePage: () => {},
+      },
     },
     options,
   );
@@ -48,9 +60,11 @@ void test('the locale plugin decorates existing routes without generating duplic
 void test('every built page has matching editorial and plugin language with queried translations', () => {
   const languages = new Set();
   for (const file of globSync('public/page-data/**/page-data.json')) {
-    const { path, result } = JSON.parse(readFileSync(file, 'utf8')) as BuildPageData;
+    const { path, result } = JSON.parse(
+      readFileSync(file, 'utf8'),
+    ) as BuildPageData;
     const language = path.split('/')[1];
-    if (!['en', 'pl'].includes(language)) continue;
+    if (language !== 'en' && language !== 'pl') continue;
     languages.add(language);
     const context = result.pageContext;
     assert.equal(context.lang, language, path);
@@ -60,9 +74,11 @@ void test('every built page has matching editorial and plugin language with quer
     assert.equal(context.i18n.generateDefaultLanguagePage, true, path);
     assert.equal(context.i18n.routed, true, path);
     assert.equal(context.i18n.originalPath, context.originalPath, path);
-    const locales: { language: string; ns: string; data: string }[] = result.data.locales.edges.map(
-      ({ node }: { node: { language: string; ns: string; data: string } }) => node,
-    );
+    const locales: { language: string; ns: string; data: string }[] =
+      result.data.locales.edges.map(
+        ({ node }: { node: { language: string; ns: string; data: string } }) =>
+          node,
+      );
     assert.deepEqual(
       locales.map(({ language }) => language).sort(),
       language === 'en' ? ['en'] : ['en', 'pl'],
@@ -72,7 +88,8 @@ void test('every built page has matching editorial and plugin language with quer
     assert.ok(resource);
     assert.equal(resource.ns, 'translation', path);
     assert.equal(
-      (JSON.parse(resource.data) as { menu: { articles: string } }).menu.articles,
+      (JSON.parse(resource.data) as { menu: { articles: string } }).menu
+        .articles,
       language === 'en' ? 'Articles' : 'Artykuły',
       path,
     );

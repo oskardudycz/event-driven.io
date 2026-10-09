@@ -1,7 +1,7 @@
 import * as styles from './Hero.module.css';
 import React from 'react';
 
-import { FaArrowDown } from 'react-icons/fa/';
+import { FaArrowDown } from 'react-icons/fa';
 
 import { Trans, useTranslation } from 'react-i18next';
 import { Link } from '../Link/index.tsx';
@@ -63,7 +63,10 @@ const Hero = (props: {
           <br />
           {t('hero.introBlog')}
         </h3>
-        <nav className={`services ${styles.services}`} aria-label={t('hero.servicesLabel')}>
+        <nav
+          className={`services ${styles.services}`}
+          aria-label={t('hero.servicesLabel')}
+        >
           <Link to="/training/">{t('hero.trainingCta')}</Link>
           <Link to="/consulting/">{t('hero.consultingCta')}</Link>
         </nav>
@@ -72,7 +75,9 @@ const Hero = (props: {
           aria-label={t('hero.articlesCta')}
           className={styles.elementButton}
         >
-          <span className={`articlesLabel ${styles.articlesLabel}`}>{t('hero.articlesCta')}</span>
+          <span className={`articlesLabel ${styles.articlesLabel}`}>
+            {t('hero.articlesCta')}
+          </span>
           <span className={`arrowCircle ${styles.arrowCircle}`}>
             <FaArrowDown />
           </span>

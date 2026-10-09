@@ -48,11 +48,15 @@ function fakeProduction({
   const request: typeof fetch = (input, options) => {
     const url = requestUrl(input);
     calls.push({ url, options });
-    if (options?.method === 'POST') return Promise.resolve(new Response('', { status }));
-    if (url === `${origin}/${key}.txt`) return Promise.resolve(new Response(publishedKey));
-    if (url === `${origin}/indexnow-manifest.json`) return Promise.resolve(Response.json(deployed));
+    if (options?.method === 'POST')
+      return Promise.resolve(new Response('', { status }));
+    if (url === `${origin}/${key}.txt`)
+      return Promise.resolve(new Response(publishedKey));
+    if (url === `${origin}/indexnow-manifest.json`)
+      return Promise.resolve(Response.json(deployed));
     if (url === article) return Promise.resolve(new Response(html));
-    if (url === removed) return Promise.resolve(new Response('', { status: removedStatus }));
+    if (url === removed)
+      return Promise.resolve(new Response('', { status: removedStatus }));
     return Promise.reject(new Error(`Unexpected request: ${url}`));
   };
   return { calls, request };
@@ -81,11 +85,19 @@ void test('content fingerprints ignore CSS/classes and detect meaningful page ch
       article,
     ),
   );
-  assert.notEqual(fingerprint(page(), article), fingerprint(page('Updated'), article));
-  assert.throws(() =>
-    fingerprint(page('Content', '<meta name="robots" content="noindex">'), article),
+  assert.notEqual(
+    fingerprint(page(), article),
+    fingerprint(page('Updated'), article),
   );
-  assert.throws(() => fingerprint(page().replace(article, `${origin}/pl/example/`), article));
+  assert.throws(() =>
+    fingerprint(
+      page('Content', '<meta name="robots" content="noindex">'),
+      article,
+    ),
+  );
+  assert.throws(() =>
+    fingerprint(page().replace(article, `${origin}/pl/example/`), article),
+  );
 });
 void test('diffs include added, updated and deleted URLs, but not unchanged pages', () => {
   const unchanged = `${origin}/en/unchanged/`;
@@ -99,7 +111,10 @@ void test('diffs include added, updated and deleted URLs, but not unchanged page
     [unchanged]: 'c'.repeat(64),
     [`${origin}/pl/new/`]: 'd'.repeat(64),
   });
-  assert.deepEqual(changedUrls(before, after), [article, `${origin}/pl/new/`, removed].sort());
+  assert.deepEqual(
+    changedUrls(before, after),
+    [article, `${origin}/pl/new/`, removed].sort(),
+  );
 });
 void test('dry runs perform no network requests or state writes', async () => {
   await notify({
@@ -148,6 +163,7 @@ void test('production changes and deletions are verified, submitted once and ack
     });
     const posts = calls.filter((call) => call.options?.method === 'POST');
     assert.equal(posts.length, 1);
+    assert.ok(posts[0]);
     assert.equal(posts[0].url, 'https://api.indexnow.org/indexnow');
     const body = posts[0].options?.body;
     assert.equal(typeof body, 'string');
@@ -213,15 +229,20 @@ void test('large changes are split at the protocol limit and state is saved only
     const request: typeof fetch = (input, options) => {
       if (options?.method === 'POST') {
         assert.equal(typeof options.body, 'string');
-        const body = JSON.parse(options.body as string) as { urlList: string[] };
+        const body = JSON.parse(options.body as string) as {
+          urlList: string[];
+        };
         batches.push(body.urlList.length);
         return Promise.resolve(
-          new Response('', { status: failLastBatch && batches.length === 2 ? 429 : 200 }),
+          new Response('', {
+            status: failLastBatch && batches.length === 2 ? 429 : 200,
+          }),
         );
       }
       if (requestUrl(input).endsWith('/indexnow-manifest.json'))
         return Promise.resolve(Response.json(empty));
-      if (requestUrl(input).endsWith(`/${key}.txt`)) return Promise.resolve(new Response(key));
+      if (requestUrl(input).endsWith(`/${key}.txt`))
+        return Promise.resolve(new Response(key));
       return Promise.resolve(new Response('', { status: 404 }));
     };
     const result = notify({
@@ -242,23 +263,34 @@ void test('large changes are split at the protocol limit and state is saved only
   }
 });
 void test('the static verification file contains the configured public key', () => {
-  const settings = JSON.parse(readFileSync('data/indexnow.json', 'utf8')) as { key: string };
+  const settings = JSON.parse(readFileSync('data/indexnow.json', 'utf8')) as {
+    key: string;
+  };
   assert.match(settings.key, /^[a-zA-Z0-9-]{8,128}$/);
-  assert.equal(readFileSync(`static/${settings.key}.txt`, 'utf8').trim(), settings.key);
+  assert.equal(
+    readFileSync(`static/${settings.key}.txt`, 'utf8').trim(),
+    settings.key,
+  );
 });
 void test('expired acknowledgement caches use the previous deployment, while retained state avoids requests', async (t) => {
   const directory = temporaryDirectory(t, 'indexnow-state-');
   const file = join(directory, 'submitted.json');
-  await restoreProductionBaseline(file, () => Promise.resolve(Response.json(current)));
+  await restoreProductionBaseline(file, () =>
+    Promise.resolve(Response.json(current)),
+  );
   assert.deepEqual(JSON.parse(await readFile(file, 'utf8')), current);
   await restoreProductionBaseline(file, () => {
     return Promise.reject(new Error('Retained state should not fetch'));
   });
   await rm(file);
-  await restoreProductionBaseline(file, () => Promise.resolve(new Response('', { status: 404 })));
+  await restoreProductionBaseline(file, () =>
+    Promise.resolve(new Response('', { status: 404 })),
+  );
   await assert.rejects(readFile(file), { code: 'ENOENT' });
   await assert.rejects(
-    restoreProductionBaseline(file, () => Promise.resolve(new Response('', { status: 500 }))),
+    restoreProductionBaseline(file, () =>
+      Promise.resolve(new Response('', { status: 500 })),
+    ),
   );
   await assert.rejects(readFile(file), { code: 'ENOENT' });
 });

@@ -18,9 +18,12 @@ export function codeLanguage(code: string, supplied = '', fallback = '') {
     /\b(?:export\s+type|(?:export\s+)?interface|type\s+\w+(?:\s*<[^>]+>)?\s*(?:=|\{)|Readonly<|Promise<|import\s*\{[^}]*\btype\b)/m.test(
       code,
     ) ||
-    /\b(?:const|let|private|public|readonly)\s+\w+\s*[?!]?\s*:\s*[A-Za-z]/.test(code) ||
+    /\b(?:const|let|private|public|readonly)\s+\w+\s*[?!]?\s*:\s*[A-Za-z]/.test(
+      code,
+    ) ||
     /function\s+\w+\s*\([^)]*\b\w+\s*:\s*[A-Za-z]/.test(code);
-  if ((language === 'javascript' || language === 'js') && typed) return 'typescript';
+  if ((language === 'javascript' || language === 'js') && typed)
+    return 'typescript';
   if (!generic.has(language)) return aliases[language] || language;
   if (fallback) return fallback;
   const text = code.trim();
@@ -32,7 +35,11 @@ export function codeLanguage(code: string, supplied = '', fallback = '') {
   } catch {
     // A JSON-shaped example may be another language; continue inference.
   }
-  if (/^\s*public\s+(?:static |async )?(?:void|Task(?:<[^>]*>)?)\s+[A-Z]\w+\(/m.test(text))
+  if (
+    /^\s*public\s+(?:static |async )?(?:void|Task(?:<[^>]*>)?)\s+[A-Z]\w+\(/m.test(
+      text,
+    )
+  )
     return 'csharp';
   if (
     /^(?:using [\w.]+;|namespace \w|public (?:sealed |abstract |static )?(?:class|record|interface|enum)\b)/m.test(
@@ -54,7 +61,11 @@ export function codeLanguage(code: string, supplied = '', fallback = '') {
     /\([^\n]*\)\s*=>/.test(text)
   )
     return 'typescript';
-  if (/^\s*(?:\$\s+)?(?:sudo|npm|npx|yarn|docker|aws|curl|psql|git|dotnet|node)\s+/m.test(text))
+  if (
+    /^\s*(?:\$\s+)?(?:sudo|npm|npx|yarn|docker|aws|curl|psql|git|dotnet|node)\s+/m.test(
+      text,
+    )
+  )
     return 'bash';
   if (/^<\?xml\b|^<[a-z][\w:-]*(?:\s|>)/i.test(text)) return 'xml';
   if (/^\[[\w.-]+\]\s*$/m.test(text) && /^\w+\s*=/m.test(text)) return 'ini';

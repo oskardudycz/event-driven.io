@@ -1,10 +1,15 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { normalizeYouTubeEmbeds, youtubeVideoUrl } from '../import/youtube-markdown.ts';
+import {
+  normalizeYouTubeEmbeds,
+  youtubeVideoUrl,
+} from '../import/youtube-markdown.ts';
 
 void test('only linked thumbnails become players; text links keep their exact Markdown', () => {
-  const prose = 'A reference to [a song](https://youtu.be/0pYmuk0-N_4) inside a sentence.';
-  const code = '```typescript\nconst url = "https://youtu.be/0pYmuk0-N_4";\n```';
+  const prose =
+    'A reference to [a song](https://youtu.be/0pYmuk0-N_4) inside a sentence.';
+  const code =
+    '```typescript\nconst url = "https://youtu.be/0pYmuk0-N_4";\n```';
   const existing = '`youtube: https://www.youtube.com/watch?v=20zvAJAhqS0`';
   const textLinks = [
     '[My talk](https://youtu.be/0pYmuk0-N_4?t=1m30s)',
@@ -23,7 +28,9 @@ void test('only linked thumbnails become players; text links keep their exact Ma
   assert.ok(result.includes(existing));
   for (const link of textLinks) assert.ok(result.includes(link), link);
   assert.ok(
-    result.includes('`youtube: [Thumbnail](https://www.youtube.com/watch?v=20zvAJAhqS0&start=30)`'),
+    result.includes(
+      '`youtube: [Thumbnail](https://www.youtube.com/watch?v=20zvAJAhqS0&start=30)`',
+    ),
   );
   assert.equal(normalizeYouTubeEmbeds(result), result);
 });
@@ -38,7 +45,9 @@ void test('video URLs retain timestamps and playlists, reject non-video and look
     'https://www.youtube.com/watch?v=0pYmuk0-N_4',
   );
   assert.equal(
-    youtubeVideoUrl('https://www.youtube.com/watch?v=0pYmuk0-N_4&list=playlist&start=30'),
+    youtubeVideoUrl(
+      'https://www.youtube.com/watch?v=0pYmuk0-N_4&list=playlist&start=30',
+    ),
     'https://www.youtube.com/watch?v=0pYmuk0-N_4&list=playlist&start=30',
   );
   for (const url of [
@@ -50,7 +59,9 @@ void test('video URLs retain timestamps and playlists, reject non-video and look
   ])
     assert.equal(youtubeVideoUrl(url), undefined);
   assert.match(
-    normalizeYouTubeEmbeds('[!["<unsafe>"](cover.png)](https://youtu.be/0pYmuk0-N_4)'),
+    normalizeYouTubeEmbeds(
+      '[!["<unsafe>"](cover.png)](https://youtu.be/0pYmuk0-N_4)',
+    ),
     /&quot;&lt;unsafe&gt;&quot;/,
   );
 });
