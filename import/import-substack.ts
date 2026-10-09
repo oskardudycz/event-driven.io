@@ -3,10 +3,10 @@ import sharp from 'sharp';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import TurndownService from 'turndown';
 import { gfm } from 'turndown-plugin-gfm';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import escapeHtml from 'escape-html';
 import {
   isSubscriptionPromotion,
@@ -125,9 +125,7 @@ function extractPost(html: string, source: string) {
         datePublished?: string;
       };
       const data = JSON.parse($(node).text()) as
-        | Article
-        | Article[]
-        | { '@graph': Article[] };
+        Article | Article[] | { '@graph': Article[] };
       const entries = Array.isArray(data)
         ? data
         : '@graph' in data

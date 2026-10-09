@@ -42,3 +42,7 @@
 :global(.video).video button.elementButton:focus span.elementSpan {
   background: #d00;
 }
+
+:global(.video).video iframe.elementIframe {
+  border: 0;
+}

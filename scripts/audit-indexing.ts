@@ -1,7 +1,7 @@
 import { parseArgs } from 'node:util';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import { siteOrigin } from './indexing-build-verifier.ts';
 
 const { values } = parseArgs({

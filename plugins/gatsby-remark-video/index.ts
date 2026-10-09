@@ -1,7 +1,7 @@
 import type { InlineCode, Html } from 'mdast';
 import embedVideo from 'gatsby-remark-embed-video';
-import cheerio from 'cheerio';
-import visit from 'unist-util-visit';
+import * as cheerio from 'cheerio';
+import { visit } from 'unist-util-visit';
 
 function startSeconds(value: string) {
   if (/^\d+$/.test(value)) return value;

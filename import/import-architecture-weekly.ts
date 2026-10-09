@@ -1,22 +1,16 @@
-import simpleGit from 'simple-git';
-import shell from 'shelljs';
-const git = simpleGit();
+import { mkdir, rm, writeFile } from 'node:fs/promises';
+import { execFileSync } from 'node:child_process';
 
-try {
-  shell.rm('-rf', './temp/ArchitectureWeekly');
-  await git.clone(
-    'https://github.com/oskardudycz/ArchitectureWeekly.git',
-    './temp/ArchitectureWeekly',
-  );
+const repository = 'https://github.com/oskardudycz/ArchitectureWeekly.git';
+const checkout = 'temp/ArchitectureWeekly';
+const destination = 'content/architecture-weekly';
 
-  shell.rm('-rf', 'content/architecture-weekly');
-  shell.mkdir('content/architecture-weekly');
-  // shell.cp("-R", "./temp/content/posts/", "content/newsletter-pl");
-  shell.touch('content/architecture-weekly/.gitkeep');
-
-  console.log('SUCCESS! ArchitectureWeekly import succeeded.');
-} catch (error) {
-  console.log(
-    `ERROR! Failed to import ArchitectureWeekly repo! \n${String(error)}`,
-  );
-}
+await mkdir('temp', { recursive: true });
+await rm(checkout, { recursive: true, force: true });
+execFileSync('git', ['clone', '--', repository, checkout], {
+  stdio: 'inherit',
+});
+await rm(destination, { recursive: true, force: true });
+await mkdir(destination, { recursive: true });
+await writeFile(`${destination}/.gitkeep`, '');
+console.log('SUCCESS! ArchitectureWeekly checkout succeeded.');

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'node:test';
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import imagePriority from '../plugins/gatsby-remark-image-priority/index.ts';
 
 const html = (route: string) =>
@@ -238,7 +238,7 @@ void test('publication metadata preserves legacy dates and accepts only real tim
 });
 
 void test('contrast text tokens preserve decorative branding and meet 4.5:1 on white', async () => {
-  const { default: yaml } = await import('js-yaml');
+  const yaml = await import('js-yaml');
   const theme = yaml.load(readFileSync('src/theme/theme.yaml', 'utf8')) as {
     background: { color: { brand: string } };
     color: { brand: { primary: string }; neutral: { gray: { h: string } } };

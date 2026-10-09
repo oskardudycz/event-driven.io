@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import { format, resolveConfig } from 'prettier';
 import { fileURLToPath } from 'node:url';
 

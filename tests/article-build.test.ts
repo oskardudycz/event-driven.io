@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import {
   buildArticleLinks,
   sourceKey,

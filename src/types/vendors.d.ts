@@ -3,11 +3,6 @@ declare module 'turndown-plugin-gfm' {
   import type TurndownService from 'turndown';
   export const gfm: TurndownService.Plugin;
 }
-declare module 'simple-git' {
-  export default function simpleGit(): {
-    clone(repository: string, destination: string): Promise<unknown>;
-  };
-}
 declare module 'gatsby-remark-embed-video' {
   import type { Root } from 'mdast';
   type Options = {
@@ -70,20 +65,4 @@ declare module 'gatsby-plugin-netlify/create-redirects.js' {
     ) => Promise<void | null>;
   };
   export default module;
-}
-declare module 'netlify-redirect-parser' {
-  export function parseAllRedirects(options: {
-    redirectsFiles: string[];
-    netlifyConfigPath: string;
-    minimal?: boolean;
-  }): Promise<{
-    redirects: {
-      from: string;
-      to: string;
-      status: number;
-      query: Record<string, string>;
-      force?: boolean;
-    }[];
-    errors: unknown[];
-  }>;
 }

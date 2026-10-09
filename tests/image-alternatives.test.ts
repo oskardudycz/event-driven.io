@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { readdir, readFile, rm } from 'node:fs/promises';
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import {
   imageIssues,
   importedAlternative,

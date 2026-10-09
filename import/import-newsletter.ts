@@ -1,24 +1,18 @@
-import simpleGit from 'simple-git';
-import shell from 'shelljs';
-const git = simpleGit();
+import { cp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { execFileSync } from 'node:child_process';
 
-try {
-  const repoUrl =
-    process.env.NEWSLETTER_REPO_URL ||
-    'https://github.com/oskardudycz/event-sourcing-newsletter.git';
-  shell.rm('-rf', './temp/event-sourcing-newsletter');
-  await git.clone(repoUrl, './temp/event-sourcing-newsletter');
+const repository =
+  process.env.NEWSLETTER_REPO_URL ||
+  'https://github.com/oskardudycz/event-sourcing-newsletter.git';
+const checkout = 'temp/event-sourcing-newsletter';
+const destination = 'content/newsletter-pl';
 
-  shell.rm('-rf', 'content/newsletter-pl');
-  shell.mkdir('content/newsletter-pl');
-  shell.cp(
-    '-R',
-    './temp/event-sourcing-newsletter/content/posts/.',
-    'content/newsletter-pl/',
-  );
-  shell.touch('content/newsletter-pl/.gitkeep');
-
-  console.log('SUCCESS! Newsletter import succeeded.');
-} catch (error) {
-  console.log(`ERROR! Failed to import newsletter repo! \n${String(error)}`);
-}
+await mkdir('temp', { recursive: true });
+await rm(checkout, { recursive: true, force: true });
+execFileSync('git', ['clone', '--', repository, checkout], {
+  stdio: 'inherit',
+});
+await rm(destination, { recursive: true, force: true });
+await cp(`${checkout}/content/posts`, destination, { recursive: true });
+await writeFile(`${destination}/.gitkeep`, '');
+console.log('SUCCESS! Newsletter import succeeded.');

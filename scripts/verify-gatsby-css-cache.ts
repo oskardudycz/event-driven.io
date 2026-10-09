@@ -9,7 +9,7 @@ import {
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import { checkCssBrowser } from './check-css-browser.ts';
 
 // Opt-in integration check: change only a declaration, keeping every CSS Module

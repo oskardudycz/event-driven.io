@@ -1,7 +1,7 @@
 import type { ImportEntry } from './types.ts';
 import fs from 'node:fs';
 import path from 'node:path';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 
 function isSubscriptionPromotion(text: string) {
   return /The next part of the article is for paid users|Become a paid subscriber|^👋 Before I move on.*besides the paid content|^I have a special offer for you: a FREE 30.day trial|^You’ll be able to try the Architecture Weekly, read the old paid content|use a free month[’']s trial|^👋 This Friday is Black Friday/i.test(

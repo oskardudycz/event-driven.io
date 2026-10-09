@@ -6,9 +6,12 @@ type FeedQuery = {
     allMarkdownRemark: { edges: ArticleEdge[] };
   };
 };
-import 'dotenv/config';
+import { existsSync } from 'node:fs';
+import { loadEnvFile } from 'node:process';
 import path from 'node:path';
 import config from '../content/meta/config.ts';
+if (existsSync('.env')) loadEnvFile();
+
 export default {
   trailingSlash: 'always',
   siteMetadata: {
@@ -59,7 +62,7 @@ export default {
         siteUrl: config.siteUrl,
         i18nextOptions: {
           interpolation: { escapeValue: false },
-          initImmediate: false,
+          initAsync: false,
         },
         // Existing server redirects and editorial routes remain authoritative.
         // Recognize prefixed routes; leave unprefixed pages to the site hook.

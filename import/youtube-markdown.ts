@@ -1,4 +1,4 @@
-import remark from 'remark';
+import { remark } from 'remark';
 import escapeHtml from 'escape-html';
 
 type MarkdownNode = {

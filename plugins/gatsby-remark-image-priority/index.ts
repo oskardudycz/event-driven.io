@@ -1,6 +1,6 @@
 import type { Root, Html } from 'mdast';
-import cheerio from 'cheerio';
-import visit from 'unist-util-visit';
+import * as cheerio from 'cheerio';
+import { visit } from 'unist-util-visit';
 
 // This article's leading cover is a measured LCP element. Do not promote
 // the first image in every article: it may occur far below the viewport.

@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { readFile, readdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import config from '../../content/meta/config.ts';
 
 export const origin = config.siteUrl;
