@@ -1,8 +1,8 @@
+const { temporaryDirectory } = require('./helpers/temporary-directory.mts');
 const assert = require('node:assert/strict');
 const { test } = require('node:test');
 const { execFileSync } = require('node:child_process');
 const fs = require('node:fs/promises');
-const os = require('node:os');
 const path = require('node:path');
 const yaml = require('js-yaml');
 const {
@@ -43,71 +43,63 @@ test('URL validation and CDN originals', () => {
   assert.equal(originalImageUrl(cdn, source), image);
 });
 
-test('imports full article and local assets in both languages, preserving embeds', async () => {
-  const output = await fs.mkdtemp(path.join(os.tmpdir(), 'substack-test-'));
+test('imports full article and local assets in both languages, preserving embeds', async (t) => {
+  const output = temporaryDirectory(t, 'substack-test-');
   const fetched = [];
   const download = async (url) => {
     fetched.push(url);
     return new Response(url === source ? html : png);
   };
-  try {
-    const directory = await importPost(
-      { url: source, category: 'Event Sourcing' },
-      { output, download },
-    );
-    const english = await fs.readFile(path.join(directory, 'index.en.md'), 'utf8');
-    const polish = await fs.readFile(path.join(directory, 'index.pl.md'), 'utf8');
-    const [enMeta, enBody] = english.slice(4).split('---\n\n');
-    const [plMeta, plBody] = polish.slice(4).split('---\n\n');
-    assert.equal(enBody, plBody);
-    assert.equal(yaml.load(enMeta).title, 'A title: with punctuation');
-    assert.equal(yaml.load(enMeta).publishedAt, '2026-09-07T11:49:46Z');
-    assert.equal(yaml.load(plMeta).publishedAt, '2026-09-07T11:49:46Z');
-    assert.equal(yaml.load(plMeta).useDefaultLangCanonical, true);
-    assert.equal(yaml.load(enMeta).cover, '2026-09-07-cover.png');
-    assert.equal(yaml.load(enMeta).redirectFrom, '/example/');
-    assert.equal(yaml.load(plMeta).redirectFrom, undefined);
-    assert.deepEqual(fetched, [source, image]); // cover and body reuse one download
-    assert.deepEqual(await fs.readFile(path.join(directory, '2026-09-07-cover.png')), png);
-    assert.match(enBody, /\*\*world\*\*/);
-    assert.match(enBody, /<em>That can be fine if you&#39;<\/em>re learning\./);
-    assert.match(enBody, /\[read more\]\(https:\/\/example.substack.com\/p\/another\)/);
-    assert.match(enBody, /!\[Example image\]\(2026-09-07-cover.png\)/);
-    assert.doesNotMatch(enBody, /^\[$/m);
-    assert.match(enBody, /A caption\./);
-    assert.match(enBody, /## A heading/);
-    assert.match(enBody, /```typescript\nif \(x < 2\) return true;/);
-    assert.match(enBody, /\| Name \| Value \|/);
-    assert.match(enBody, /<iframe[^>]+start=30[^>]+allowfullscreen/);
-    assert.match(enBody, /referrerpolicy="strict-origin-when-cross-origin"/);
-    assert.doesNotMatch(enBody, /Navigation|Discussion|Subscribe|onload|srcdoc/);
-    const metadata = JSON.parse(await fs.readFile(path.join(directory, 'substack-source.txt')));
-    assert.equal(metadata.embeds, 1);
-    await assert.rejects(importPost({ url: source }, { output, download }), /already exists/);
-    assert.equal(await fs.readFile(path.join(directory, 'index.en.md'), 'utf8'), english);
-  } finally {
-    await fs.rm(output, { recursive: true, force: true });
-  }
+  const directory = await importPost(
+    { url: source, category: 'Event Sourcing' },
+    { output, download },
+  );
+  const english = await fs.readFile(path.join(directory, 'index.en.md'), 'utf8');
+  const polish = await fs.readFile(path.join(directory, 'index.pl.md'), 'utf8');
+  const [enMeta, enBody] = english.slice(4).split('---\n\n');
+  const [plMeta, plBody] = polish.slice(4).split('---\n\n');
+  assert.equal(enBody, plBody);
+  assert.equal(yaml.load(enMeta).title, 'A title: with punctuation');
+  assert.equal(yaml.load(enMeta).publishedAt, '2026-09-07T11:49:46Z');
+  assert.equal(yaml.load(plMeta).publishedAt, '2026-09-07T11:49:46Z');
+  assert.equal(yaml.load(plMeta).useDefaultLangCanonical, true);
+  assert.equal(yaml.load(enMeta).cover, '2026-09-07-cover.png');
+  assert.equal(yaml.load(enMeta).redirectFrom, '/example/');
+  assert.equal(yaml.load(plMeta).redirectFrom, undefined);
+  assert.deepEqual(fetched, [source, image]); // cover and body reuse one download
+  assert.deepEqual(await fs.readFile(path.join(directory, '2026-09-07-cover.png')), png);
+  assert.match(enBody, /\*\*world\*\*/);
+  assert.match(enBody, /<em>That can be fine if you&#39;<\/em>re learning\./);
+  assert.match(enBody, /\[read more\]\(https:\/\/example.substack.com\/p\/another\)/);
+  assert.match(enBody, /!\[Example image\]\(2026-09-07-cover.png\)/);
+  assert.doesNotMatch(enBody, /^\[$/m);
+  assert.match(enBody, /A caption\./);
+  assert.match(enBody, /## A heading/);
+  assert.match(enBody, /```typescript\nif \(x < 2\) return true;/);
+  assert.match(enBody, /\| Name \| Value \|/);
+  assert.match(enBody, /<iframe[^>]+start=30[^>]+allowfullscreen/);
+  assert.match(enBody, /referrerpolicy="strict-origin-when-cross-origin"/);
+  assert.doesNotMatch(enBody, /Navigation|Discussion|Subscribe|onload|srcdoc/);
+  const metadata = JSON.parse(await fs.readFile(path.join(directory, 'substack-source.txt')));
+  assert.equal(metadata.embeds, 1);
+  await assert.rejects(importPost({ url: source }, { output, download }), /already exists/);
+  assert.equal(await fs.readFile(path.join(directory, 'index.en.md'), 'utf8'), english);
 });
 
-test('failed image downloads leave no partial article', async () => {
-  const output = await fs.mkdtemp(path.join(os.tmpdir(), 'substack-failure-'));
-  try {
-    await assert.rejects(
-      importPost(
-        { url: source },
-        {
-          output,
-          html,
-          download: async () => new Response('Not an image'),
-        },
-      ),
-      /Unsupported image/,
-    );
-    assert.deepEqual(await fs.readdir(output), []);
-  } finally {
-    await fs.rm(output, { recursive: true, force: true });
-  }
+test('failed image downloads leave no partial article', async (t) => {
+  const output = temporaryDirectory(t, 'substack-failure-');
+  await assert.rejects(
+    importPost(
+      { url: source },
+      {
+        output,
+        html,
+        download: async () => new Response('Not an image'),
+      },
+    ),
+    /Unsupported image/,
+  );
+  assert.deepEqual(await fs.readdir(output), []);
 });
 
 test('refuses missing metadata, missing bodies and paywall previews', () => {
@@ -122,8 +114,8 @@ test('refuses missing metadata, missing bodies and paywall previews', () => {
   );
 });
 
-test('Wayback extraction uses publication date and excludes archived site chrome', async () => {
-  const output = await fs.mkdtemp(path.join(os.tmpdir(), 'eventstore-test-'));
+test('Wayback extraction uses publication date and excludes archived site chrome', async (t) => {
+  const output = temporaryDirectory(t, 'eventstore-test-');
   const url = 'https://web.archive.org/web/20230325182019/https://www.eventstore.com/blog/example';
   const archive = 'https://web.archive.org/web/20230325182019id_/';
   const archivedHtml = `<meta property="og:title" content="Archived article">
@@ -133,64 +125,56 @@ test('Wayback extraction uses publication date and excludes archived site chrome
     <img src="/hubfs/diagram.png" alt="Diagram">
     <a href="/blog/related">Related</a></span></main><footer>Author bio</footer></article>`;
   const fetched = [];
-  try {
-    assert.equal(normalizeUrl(url), `${archive}https://www.eventstore.com/blog/example`);
-    assert.equal(sourceLocation(normalizeUrl(url)).base, 'https://www.eventstore.com/blog/example');
-    assert.throws(
-      () => normalizeUrl(url.replace('20230325182019', '20240000000000*')),
-      /dated Wayback/,
-    );
-    const dir = await importPost(
-      { url },
-      {
-        output,
-        html: archivedHtml,
-        download: async (asset) => {
-          fetched.push(asset);
-          return new Response(png);
-        },
+  assert.equal(normalizeUrl(url), `${archive}https://www.eventstore.com/blog/example`);
+  assert.equal(sourceLocation(normalizeUrl(url)).base, 'https://www.eventstore.com/blog/example');
+  assert.throws(
+    () => normalizeUrl(url.replace('20230325182019', '20240000000000*')),
+    /dated Wayback/,
+  );
+  const dir = await importPost(
+    { url },
+    {
+      output,
+      html: archivedHtml,
+      download: async (asset) => {
+        fetched.push(asset);
+        return new Response(png);
       },
-    );
-    assert.match(dir, /2021-05-20--example$/);
-    assert.deepEqual(fetched, [`${archive}https://www.eventstore.com/hubfs/diagram.png`]);
-    const markdown = await fs.readFile(path.join(dir, 'index.en.md'), 'utf8');
-    assert.match(markdown, /\[Related\]\(https:\/\/www.eventstore.com\/blog\/related\)/);
-    assert.doesNotMatch(markdown, /Wayback toolbar|Author bio/);
-    const metadata = JSON.parse(await fs.readFile(path.join(dir, 'article-source.txt')));
-    assert.equal(metadata.originalUrl, 'https://www.eventstore.com/blog/example');
-    assert.match(markdown, /redirectFrom: \/example\//);
-  } finally {
-    await fs.rm(output, { recursive: true, force: true });
-  }
+    },
+  );
+  assert.match(dir, /2021-05-20--example$/);
+  assert.deepEqual(fetched, [`${archive}https://www.eventstore.com/hubfs/diagram.png`]);
+  const markdown = await fs.readFile(path.join(dir, 'index.en.md'), 'utf8');
+  assert.match(markdown, /\[Related\]\(https:\/\/www.eventstore.com\/blog\/related\)/);
+  assert.doesNotMatch(markdown, /Wayback toolbar|Author bio/);
+  const metadata = JSON.parse(await fs.readFile(path.join(dir, 'article-source.txt')));
+  assert.equal(metadata.originalUrl, 'https://www.eventstore.com/blog/example');
+  assert.match(markdown, /redirectFrom: \/example\//);
 });
 
-test('custom import slugs also receive a bare-path redirect', async () => {
-  const output = await fs.mkdtemp(path.join(os.tmpdir(), 'substack-slug-'));
-  try {
-    const dir = await importPost(
-      { url: source, slug: 'custom-slug' },
-      {
-        output,
-        html,
-        download: async () => new Response(png),
-      },
-    );
-    const markdown = await fs.readFile(path.join(dir, 'index.en.md'), 'utf8');
-    assert.match(dir, /--custom-slug$/);
-    assert.match(markdown, /redirectFrom: \/custom-slug\//);
-    assert.deepEqual(yaml.load(markdown.split('---')[1]).redirectAliases, [
-      '/example/',
-      '/en/example/',
-    ]);
-    const polish = await fs.readFile(path.join(dir, 'index.pl.md'), 'utf8');
-    assert.equal(yaml.load(polish.split('---')[1]).redirectAliases, undefined);
-  } finally {
-    await fs.rm(output, { recursive: true, force: true });
-  }
+test('custom import slugs also receive a bare-path redirect', async (t) => {
+  const output = temporaryDirectory(t, 'substack-slug-');
+  const dir = await importPost(
+    { url: source, slug: 'custom-slug' },
+    {
+      output,
+      html,
+      download: async () => new Response(png),
+    },
+  );
+  const markdown = await fs.readFile(path.join(dir, 'index.en.md'), 'utf8');
+  assert.match(dir, /--custom-slug$/);
+  assert.match(markdown, /redirectFrom: \/custom-slug\//);
+  assert.deepEqual(yaml.load(markdown.split('---')[1]).redirectAliases, [
+    '/example/',
+    '/en/example/',
+  ]);
+  const polish = await fs.readFile(path.join(dir, 'index.pl.md'), 'utf8');
+  assert.equal(yaml.load(polish.split('---')[1]).redirectAliases, undefined);
 });
 
-test('Kurrent SVG diagrams stay local, covers become PNG and code keeps its language', async () => {
-  const output = await fs.mkdtemp(path.join(os.tmpdir(), 'kurrent-test-'));
+test('Kurrent SVG diagrams stay local, covers become PNG and code keeps its language', async (t) => {
+  const output = temporaryDirectory(t, 'kurrent-test-');
   const url = 'https://kurrentdb.kurrent.io/blog/example/';
   const svg =
     '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="50"><rect width="100" height="50" fill="red"/></svg>';
@@ -200,38 +184,34 @@ test('Kurrent SVG diagrams stay local, covers become PNG and code keeps its lang
     <article><img src="/_astro/hero.svg"><section id="blog-post-content"><p>Article text.</p>
     <img src="/_astro/diagram.svg" alt="Diagram"><pre data-language="typescript"><code><span>const x: number = 1;</span></code></pre></section><aside>Table of contents</aside></article>`;
   const fetched = [];
-  try {
-    const dir = await importPost(
-      { url },
-      {
-        output,
-        html: page,
-        download: async (asset) => {
-          fetched.push(asset);
-          return new Response(svg);
-        },
+  const dir = await importPost(
+    { url },
+    {
+      output,
+      html: page,
+      download: async (asset) => {
+        fetched.push(asset);
+        return new Response(svg);
       },
-    );
-    const markdown = await fs.readFile(path.join(dir, 'index.en.md'), 'utf8');
-    assert.match(markdown, /cover: 2021-12-09-cover.png/);
-    assert.match(markdown, /!\[Diagram\]\(image-2.svg\)/);
-    assert.match(markdown, /```typescript\nconst x: number = 1;/);
-    assert.doesNotMatch(markdown, /Table of contents/);
-    assert.deepEqual(fetched, [
-      'https://kurrentdb.kurrent.io/_astro/hero.svg',
-      'https://kurrentdb.kurrent.io/_astro/diagram.svg',
-    ]);
-    const cover = await require('sharp')(path.join(dir, '2021-12-09-cover.png')).metadata();
-    assert.equal(cover.format, 'png');
-    assert.equal(cover.width, 1200);
-    assert.equal(await fs.readFile(path.join(dir, 'image-2.svg'), 'utf8'), svg);
-  } finally {
-    await fs.rm(output, { recursive: true, force: true });
-  }
+    },
+  );
+  const markdown = await fs.readFile(path.join(dir, 'index.en.md'), 'utf8');
+  assert.match(markdown, /cover: 2021-12-09-cover.png/);
+  assert.match(markdown, /!\[Diagram\]\(image-2.svg\)/);
+  assert.match(markdown, /```typescript\nconst x: number = 1;/);
+  assert.doesNotMatch(markdown, /Table of contents/);
+  assert.deepEqual(fetched, [
+    'https://kurrentdb.kurrent.io/_astro/hero.svg',
+    'https://kurrentdb.kurrent.io/_astro/diagram.svg',
+  ]);
+  const cover = await require('sharp')(path.join(dir, '2021-12-09-cover.png')).metadata();
+  assert.equal(cover.format, 'png');
+  assert.equal(cover.width, 1200);
+  assert.equal(await fs.readFile(path.join(dir, 'image-2.svg'), 'utf8'), svg);
 });
 
-test('webinar overrides add the native recording and replace only mapped recording cards', async () => {
-  const output = await fs.mkdtemp(path.join(os.tmpdir(), 'webinar-test-'));
+test('webinar overrides add the native recording and replace only mapped recording cards', async (t) => {
+  const output = temporaryDirectory(t, 'webinar-test-');
   const recording =
     'https://www.architecture-weekly.com/p/frontent-architecture-backend-architecture';
   const page = `<meta property="og:title" content="A webinar"><meta property="article:published_time" content="2025-01-01">
@@ -239,56 +219,48 @@ test('webinar overrides add the native recording and replace only mapped recordi
     <p>Original introduction.</p><div class="embedded-post-wrap"><a href="${recording}?utm_source=email"><img src="https://example.com/recording-thumbnail.png">Listen now</a></div>
     <p>Related <a href="https://another.substack.com/p/other">article</a>.</p>
     <iframe src="https://www.youtube.com/embed/7IkHIqPeFjY"></iframe><p>Original ending.</p></div>`;
-  try {
-    const dir = await importPost(
-      { url: source, youtubeVideo: 'MLO08iaRvBk', recordingEmbeds: { [recording]: 'EXj9TTJQwNc' } },
-      {
-        output,
-        html: page,
-        download: async (url) => {
-          throw new Error(`Unexpected image download: ${url}`);
-        },
+  const dir = await importPost(
+    { url: source, youtubeVideo: 'MLO08iaRvBk', recordingEmbeds: { [recording]: 'EXj9TTJQwNc' } },
+    {
+      output,
+      html: page,
+      download: async (url) => {
+        throw new Error(`Unexpected image download: ${url}`);
       },
-    );
-    const en = await fs.readFile(path.join(dir, 'index.en.md'), 'utf8');
-    const pl = await fs.readFile(path.join(dir, 'index.pl.md'), 'utf8');
-    assert.equal(en.split('---\n\n')[1], pl.split('---\n\n')[1]);
-    for (const id of ['MLO08iaRvBk', 'EXj9TTJQwNc', '7IkHIqPeFjY'])
-      assert.equal(en.split(`v=${id}`).length - 1, 1);
-    assert.match(en, /Original introduction/);
-    assert.match(en, /Original ending/);
-    assert.match(en, /\[article\]\(https:\/\/another.substack.com\/p\/other\)/);
-    assert.doesNotMatch(en, /recording-thumbnail|Listen now|native-player/);
-    const metadata = JSON.parse(await fs.readFile(path.join(dir, 'substack-source.txt')));
-    assert.equal(metadata.embeds, 3);
-    assert.equal(metadata.youtubeVideo, 'MLO08iaRvBk');
-  } finally {
-    await fs.rm(output, { recursive: true, force: true });
-  }
+    },
+  );
+  const en = await fs.readFile(path.join(dir, 'index.en.md'), 'utf8');
+  const pl = await fs.readFile(path.join(dir, 'index.pl.md'), 'utf8');
+  assert.equal(en.split('---\n\n')[1], pl.split('---\n\n')[1]);
+  for (const id of ['MLO08iaRvBk', 'EXj9TTJQwNc', '7IkHIqPeFjY'])
+    assert.equal(en.split(`v=${id}`).length - 1, 1);
+  assert.match(en, /Original introduction/);
+  assert.match(en, /Original ending/);
+  assert.match(en, /\[article\]\(https:\/\/another.substack.com\/p\/other\)/);
+  assert.doesNotMatch(en, /recording-thumbnail|Listen now|native-player/);
+  const metadata = JSON.parse(await fs.readFile(path.join(dir, 'substack-source.txt')));
+  assert.equal(metadata.embeds, 3);
+  assert.equal(metadata.youtubeVideo, 'MLO08iaRvBk');
 });
 
-test('recording overrides preserve existing players without adding duplicates', async () => {
-  const output = await fs.mkdtemp(path.join(os.tmpdir(), 'webinar-duplicate-'));
-  try {
-    const page = html.replace('/embed/abc?start=30', '/embed/0NYwN_p2pFI?start=30');
-    const dir = await importPost(
-      { url: source, youtubeVideo: '0NYwN_p2pFI' },
-      { output, html: page, download: async () => new Response(png) },
-    );
-    const en = await fs.readFile(path.join(dir, 'index.en.md'), 'utf8');
-    assert.equal(en.split('v=0NYwN_p2pFI').length - 1, 1);
-    assert.match(en, /start=30/);
-    await assert.rejects(
-      importPost(
-        { url: source, slug: 'invalid-recording', youtubeVideo: 'bad" onload="oops' },
-        { output, html },
-      ),
-      /Invalid YouTube/,
-    );
-    assert.deepEqual(await fs.readdir(output), [path.basename(dir)]);
-  } finally {
-    await fs.rm(output, { recursive: true, force: true });
-  }
+test('recording overrides preserve existing players without adding duplicates', async (t) => {
+  const output = temporaryDirectory(t, 'webinar-duplicate-');
+  const page = html.replace('/embed/abc?start=30', '/embed/0NYwN_p2pFI?start=30');
+  const dir = await importPost(
+    { url: source, youtubeVideo: '0NYwN_p2pFI' },
+    { output, html: page, download: async () => new Response(png) },
+  );
+  const en = await fs.readFile(path.join(dir, 'index.en.md'), 'utf8');
+  assert.equal(en.split('v=0NYwN_p2pFI').length - 1, 1);
+  assert.match(en, /start=30/);
+  await assert.rejects(
+    importPost(
+      { url: source, slug: 'invalid-recording', youtubeVideo: 'bad" onload="oops' },
+      { output, html },
+    ),
+    /Invalid YouTube/,
+  );
+  assert.deepEqual(await fs.readdir(output), [path.basename(dir)]);
 });
 
 test('accepts former paywall markers only with a matching complete public body', () => {
@@ -309,32 +281,28 @@ test('accepts former paywall markers only with a matching complete public body',
   );
 });
 
-test('uses the cached Substack image when its original S3 asset is unavailable', async () => {
-  const output = await fs.mkdtemp(path.join(os.tmpdir(), 'substack-cdn-fallback-'));
+test('uses the cached Substack image when its original S3 asset is unavailable', async (t) => {
+  const output = temporaryDirectory(t, 'substack-cdn-fallback-');
   const fetched = [];
-  try {
-    const dir = await importPost(
-      { url: source },
-      {
-        output,
-        html,
-        download: async (url) => {
-          fetched.push(url);
-          if (url === image) throw new Error('HTTP 403');
-          assert.equal(url, cdn);
-          return new Response(png);
-        },
+  const dir = await importPost(
+    { url: source },
+    {
+      output,
+      html,
+      download: async (url) => {
+        fetched.push(url);
+        if (url === image) throw new Error('HTTP 403');
+        assert.equal(url, cdn);
+        return new Response(png);
       },
-    );
-    assert.deepEqual(fetched, [image, cdn]);
-    assert.deepEqual(await fs.readFile(path.join(dir, '2026-09-07-cover.png')), png);
-  } finally {
-    await fs.rm(output, { recursive: true, force: true });
-  }
+    },
+  );
+  assert.deepEqual(fetched, [image, cdn]);
+  assert.deepEqual(await fs.readFile(path.join(dir, '2026-09-07-cover.png')), png);
 });
 
-test('future imports remove paid prompts and use relative URLs for available blog articles', async () => {
-  const output = await fs.mkdtemp(path.join(os.tmpdir(), 'substack-local-links-'));
+test('future imports remove paid prompts and use relative URLs for available blog articles', async (t) => {
+  const output = temporaryDirectory(t, 'substack-local-links-');
   const { sourceKey } = require('../import/article-content');
   const existing = 'https://www.architecture-weekly.com/p/original-source-slug';
   const page = `<meta property="og:title" content="A migrated article"><meta property="article:published_time" content="2025-01-01">
@@ -342,54 +310,44 @@ test('future imports remove paid prompts and use relative URLs for available blo
     <p><a href="${existing}?utm_source=email#details">Existing article</a> and <a href="https://www.architecture-weekly.com/p/not-yet-imported">Older article</a>.</p>
     <p><a href="https://event-driven.io/en/another/">Another blog article</a>.</p>
     <iframe src="https://www.youtube-nocookie.com/embed/sQbkUl7-z_U?start=30" title="My recording"></iframe><p>Full ending.</p></div>`;
-  try {
-    const dir = await importPost(
-      { url: source },
-      { output, html: page, links: new Map([[sourceKey(existing), '/en/blog-slug/']]) },
-    );
-    const en = await fs.readFile(path.join(dir, 'index.en.md'), 'utf8');
-    assert.match(en, /\[Existing article\]\(\/en\/blog-slug\/#details\)/);
-    assert.match(
-      en,
-      /\[Older article\]\(https:\/\/www.architecture-weekly.com\/p\/not-yet-imported\)/,
-    );
-    assert.match(en, /\[Another blog article\]\(\/en\/another\/\)/);
-    assert.match(
-      en,
-      /`youtube: \[My recording\]\(https:\/\/www.youtube.com\/watch\?start=30&v=sQbkUl7-z_U\)`/,
-    );
-    assert.doesNotMatch(en, /paid users|free trial|<iframe/);
-    assert.match(en, /Full introduction/);
-    assert.match(en, /Full ending/);
-  } finally {
-    await fs.rm(output, { recursive: true, force: true });
-  }
+  const dir = await importPost(
+    { url: source },
+    { output, html: page, links: new Map([[sourceKey(existing), '/en/blog-slug/']]) },
+  );
+  const en = await fs.readFile(path.join(dir, 'index.en.md'), 'utf8');
+  assert.match(en, /\[Existing article\]\(\/en\/blog-slug\/#details\)/);
+  assert.match(
+    en,
+    /\[Older article\]\(https:\/\/www.architecture-weekly.com\/p\/not-yet-imported\)/,
+  );
+  assert.match(en, /\[Another blog article\]\(\/en\/another\/\)/);
+  assert.match(
+    en,
+    /`youtube: \[My recording\]\(https:\/\/www.youtube.com\/watch\?start=30&v=sQbkUl7-z_U\)`/,
+  );
+  assert.doesNotMatch(en, /paid users|free trial|<iframe/);
+  assert.match(en, /Full introduction/);
+  assert.match(en, /Full ending/);
 });
 
-test('imports YouTube text references as links and linked thumbnails as players in both languages', async () => {
-  const output = await fs.mkdtemp(path.join(os.tmpdir(), 'substack-video-link-scope-'));
+test('imports YouTube text references as links and linked thumbnails as players in both languages', async (t) => {
+  const output = temporaryDirectory(t, 'substack-video-link-scope-');
   const textVideo = 'https://www.youtube.com/watch?v=JQL4doMy73w';
   const imageVideo = 'https://www.youtube.com/watch?v=GOd7oj1AT00&start=30';
   const page = `<meta property="og:title" content="Video references"><meta property="article:published_time" content="2025-01-01">
     <div class="body markup"><p><a href="${textVideo}">Heather Wilde - How to Close the Diversity Gap</a></p>
     <ul><li><a href="${textVideo}">A reference in a list</a>.</li></ul>
     <p><a class="image-link" href="${imageVideo}"><img src="${image}" alt="Mr Bean"></a></p></div>`;
-  try {
-    const directory = await importPost(
-      { url: source },
-      { output, html: page, download: async () => new Response(png) },
-    );
-    for (const language of ['en', 'pl']) {
-      const markdown = await fs.readFile(path.join(directory, `index.${language}.md`), 'utf8');
-      assert.ok(
-        markdown.includes(`[Heather Wilde - How to Close the Diversity Gap](${textVideo})`),
-      );
-      assert.ok(markdown.includes(`-   [A reference in a list](${textVideo}).`));
-      assert.ok(markdown.includes(`\`youtube: [Mr Bean](${imageVideo})\``));
-      assert.doesNotMatch(markdown, /`youtube: \[Heather Wilde|`youtube: \[A reference/);
-    }
-  } finally {
-    await fs.rm(output, { recursive: true, force: true });
+  const directory = await importPost(
+    { url: source },
+    { output, html: page, download: async () => new Response(png) },
+  );
+  for (const language of ['en', 'pl']) {
+    const markdown = await fs.readFile(path.join(directory, `index.${language}.md`), 'utf8');
+    assert.ok(markdown.includes(`[Heather Wilde - How to Close the Diversity Gap](${textVideo})`));
+    assert.ok(markdown.includes(`-   [A reference in a list](${textVideo}).`));
+    assert.ok(markdown.includes(`\`youtube: [Mr Bean](${imageVideo})\``));
+    assert.doesNotMatch(markdown, /`youtube: \[Heather Wilde|`youtube: \[A reference/);
   }
 });
 
@@ -468,26 +426,22 @@ test('SVG detection handles declarations and comments without regex backtracking
   );
 });
 
-test('partial-word emphasis preserves formatting while stripping executable HTML', async () => {
-  const output = await fs.mkdtemp(path.join(os.tmpdir(), 'substack-emphasis-'));
-  try {
-    const malicious = html.replace(
-      '<p>Cheers!</p>',
-      `<p><em onclick="attack()"><strong onmouseover="attack()">That</strong> &lt;img src=x onerror=attack()&gt; &amp; you'</em>re safe.</p>`,
-    );
-    const directory = await importPost(
-      { url: source },
-      { output, html: malicious, download: async () => new Response(png) },
-    );
-    const markdown = await fs.readFile(path.join(directory, 'index.en.md'), 'utf8');
-    assert.match(
-      markdown,
-      /<em><strong>That<\/strong> &lt;img src=x onerror=attack\(\)&gt; &amp; you&#39;<\/em>re safe\./,
-    );
-    assert.doesNotMatch(markdown, /onclick=|onmouseover=|<img src=x/);
-  } finally {
-    await fs.rm(output, { recursive: true, force: true });
-  }
+test('partial-word emphasis preserves formatting while stripping executable HTML', async (t) => {
+  const output = temporaryDirectory(t, 'substack-emphasis-');
+  const malicious = html.replace(
+    '<p>Cheers!</p>',
+    `<p><em onclick="attack()"><strong onmouseover="attack()">That</strong> &lt;img src=x onerror=attack()&gt; &amp; you'</em>re safe.</p>`,
+  );
+  const directory = await importPost(
+    { url: source },
+    { output, html: malicious, download: async () => new Response(png) },
+  );
+  const markdown = await fs.readFile(path.join(directory, 'index.en.md'), 'utf8');
+  assert.match(
+    markdown,
+    /<em><strong>That<\/strong> &lt;img src=x onerror=attack\(\)&gt; &amp; you&#39;<\/em>re safe\./,
+  );
+  assert.doesNotMatch(markdown, /onclick=|onmouseover=|<img src=x/);
 });
 
 test('llms Markdown labels escape backslashes and metacharacters together', () => {
@@ -498,89 +452,79 @@ test('llms Markdown labels escape backslashes and metacharacters together', () =
   assert.equal(markdownLabel('\\] [link]'), '\\'.repeat(3) + '] \\[link\\]');
 });
 
-test('article links reject executable schemes from source HTML and stored mappings', async () => {
-  const output = await fs.mkdtemp(path.join(os.tmpdir(), 'substack-link-security-'));
-  try {
-    for (const href of [
-      'javascript:alert(1)',
-      'data:text/html,<script>alert(1)</script>',
-      'vbscript:attack()',
-      'java&#x09;script:attack()',
-      'JaVaScRiPt:attack()',
-    ]) {
-      await assert.rejects(
-        importPost(
-          { url: source },
-          {
-            output,
-            html: html.replace('/p/another', href),
-            download: async () => new Response(png),
-          },
-        ),
-        /Unsupported article link/,
-      );
-      assert.deepEqual(await fs.readdir(output), []);
-    }
-    for (const target of [
-      'javascript:attack()',
-      'data:text/html,<script>attack()</script>',
-      'vbscript:attack()',
-      '/\\evil.example/attack',
-      '//evil.example/attack',
-      '/en/safe/\u0000attack',
-    ]) {
-      await assert.rejects(
-        importPost(
-          { url: source },
-          {
-            output,
-            html,
-            links: new Map([['example.substack.com/p/another', target]]),
-            download: async () => new Response(png),
-          },
-        ),
-        /Unsupported article link/,
-      );
-      assert.deepEqual(await fs.readdir(output), []);
-    }
-  } finally {
-    await fs.rm(output, { recursive: true, force: true });
+test('article links reject executable schemes from source HTML and stored mappings', async (t) => {
+  const output = temporaryDirectory(t, 'substack-link-security-');
+  for (const href of [
+    'javascript:alert(1)',
+    'data:text/html,<script>alert(1)</script>',
+    'vbscript:attack()',
+    'java&#x09;script:attack()',
+    'JaVaScRiPt:attack()',
+  ]) {
+    await assert.rejects(
+      importPost(
+        { url: source },
+        {
+          output,
+          html: html.replace('/p/another', href),
+          download: async () => new Response(png),
+        },
+      ),
+      /Unsupported article link/,
+    );
+    assert.deepEqual(await fs.readdir(output), []);
+  }
+  for (const target of [
+    'javascript:attack()',
+    'data:text/html,<script>attack()</script>',
+    'vbscript:attack()',
+    '/\\evil.example/attack',
+    '//evil.example/attack',
+    '/en/safe/\u0000attack',
+  ]) {
+    await assert.rejects(
+      importPost(
+        { url: source },
+        {
+          output,
+          html,
+          links: new Map([['example.substack.com/p/another', target]]),
+          download: async () => new Response(png),
+        },
+      ),
+      /Unsupported article link/,
+    );
+    assert.deepEqual(await fs.readdir(output), []);
   }
 });
 
-test('mapped links cannot break out of Markdown and retain queries, fragments and titles', async () => {
-  const output = await fs.mkdtemp(path.join(os.tmpdir(), 'substack-markdown-links-'));
-  try {
-    const target = '/en/article/)[attack](javascript:alert(1))?filter=a&b=c#details';
-    const page = `<meta property="og:title" content="Links"><meta property="article:published_time" content="2025-01-01">
-      <div class="body markup"><p><a href="/p/another" title="A &quot;quoted&quot; title">Read more</a></p>
-      <p><a href="#details">Section</a> <a href="mailto:hello@example.com">Email</a> <a href="tel:+48123456789">Phone</a></p></div>`;
-    const directory = await importPost(
-      { url: source },
-      { output, html: page, links: new Map([['example.substack.com/p/another', target]]) },
-    );
-    const markdown = await fs.readFile(path.join(directory, 'index.en.md'), 'utf8');
-    const body = markdown.replace(/^---\n[\s\S]*?\n---\n/, '');
-    const tree = require('remark')().parse(body);
-    const nodes = [];
-    const visit = (node) => {
-      nodes.push(node);
-      node.children?.forEach(visit);
-    };
-    visit(tree);
-    const links = nodes.filter((node) => node.type === 'link');
-    assert.equal(links.length, 4);
-    assert.equal(decodeURI(links[0].url), target);
-    assert.equal(links[0].title, 'A "quoted" title');
-    assert.deepEqual(
-      links.slice(1).map((node) => node.url),
-      ['#details', 'mailto:hello@example.com', 'tel:+48123456789'],
-    );
-    assert.equal(nodes.filter((node) => node.type === 'html').length, 0);
-    assert.doesNotMatch(markdown, /\]\(javascript:/);
-  } finally {
-    await fs.rm(output, { recursive: true, force: true });
-  }
+test('mapped links cannot break out of Markdown and retain queries, fragments and titles', async (t) => {
+  const output = temporaryDirectory(t, 'substack-markdown-links-');
+  const target = '/en/article/)[attack](javascript:alert(1))?filter=a&b=c#details';
+  const page = `<meta property="og:title" content="Links"><meta property="article:published_time" content="2025-01-01">
+    <div class="body markup"><p><a href="/p/another" title="A &quot;quoted&quot; title">Read more</a></p>
+    <p><a href="#details">Section</a> <a href="mailto:hello@example.com">Email</a> <a href="tel:+48123456789">Phone</a></p></div>`;
+  const directory = await importPost(
+    { url: source },
+    { output, html: page, links: new Map([['example.substack.com/p/another', target]]) },
+  );
+  const markdown = await fs.readFile(path.join(directory, 'index.en.md'), 'utf8');
+  const body = markdown.replace(/^---\n[\s\S]*?\n---\n/, '');
+  const tree = require('remark')().parse(body);
+  const nodes = [];
+  require('unist-util-visit')(tree, (node) => {
+    nodes.push(node);
+  });
+  const links = nodes.filter((node) => node.type === 'link');
+  assert.equal(links.length, 4);
+  assert.equal(decodeURI(links[0].url), target);
+  assert.equal(links[0].title, 'A "quoted" title');
+  assert.deepEqual(
+    links.slice(1).map((node) => node.url),
+    ['#details', 'mailto:hello@example.com', 'tel:+48123456789'],
+  );
+  assert.equal(nodes.filter((node) => node.type === 'html').length, 0);
+  assert.doesNotMatch(markdown, /\]\(javascript:/);
 });
 
 test('link encoding keeps HTML attribute delimiters inside one Markdown destination', async () => {

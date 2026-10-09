@@ -47,7 +47,7 @@ test('reading list preserves editorial order and usable destinations without a r
   expect($('img').length).toBe(1);
 });
 
-test('Gatsby reading-list adapter preserves translated and canonical fallback links', () => {
+test('Gatsby reading-list adapter preserves available locale routes independently of canonical identity', () => {
   const edges = [
     {
       node: {
@@ -67,7 +67,7 @@ test('Gatsby reading-list adapter preserves translated and canonical fallback li
     $('ul > li a')
       .map((_, a) => $(a).attr('href'))
       .get(),
-  ).toEqual(['/pl/translated/', '/en/fallback/']);
+  ).toEqual(['/pl/translated/', '/pl/fallback/']);
   expect(
     $('a')
       .map((_, a) => $(a).text())

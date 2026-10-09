@@ -36,7 +36,7 @@ test('canonical translation membership wins over stale placeholder metadata', ()
     post('article', 'en', ['Event Sourcing']),
     post('article', 'pl', ['Old Topic'], true),
   ];
-  assert.equal(categoryPostsForLanguage(nodes, 'event-sourcing', 'pl')[0].fields.langKey, 'en');
+  assert.equal(categoryPostsForLanguage(nodes, 'event-sourcing', 'pl')[0].fields.langKey, 'pl');
   assert.deepEqual(categoryPostsForLanguage(nodes, 'old-topic', 'en'), []);
   assert.deepEqual(categoriesForLanguage(nodes, 'pl'), []);
 });

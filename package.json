@@ -56,7 +56,7 @@
     "fix:prettier": "prettier --cache --write .",
     "lint-staged": "lint-staged",
     "prepare": "husky",
-    "test:tooling": "node --test --test-isolation=none tests/tooling.test.mjs",
+    "test:tooling": "node --test --test-isolation=none tests/tooling.test.mjs tests/cli.test.mts",
     "test:search": "node --test --test-isolation=none tests/search.test.mjs",
     "measure:search": "node scripts/measure-search.mjs",
     "test:search:dev": "node scripts/verify-search-development.mjs",

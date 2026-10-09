@@ -1,9 +1,9 @@
+import { temporaryDirectory } from './helpers/temporary-directory.mts';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { mkdtemp, readdir, readFile, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
+import { readdir, readFile, rm } from 'node:fs/promises';
 import cheerio from 'cheerio';
 import { imageIssues, importedAlternative } from '../scripts/image-alternatives.mts';
 import importer from '../import/import-substack.js';
@@ -59,8 +59,8 @@ test('image component linting requires explicit alt on native and Gatsby images'
     0,
   );
 });
-test('imports reject undescribed images without partial posts; manifest overrides survive in both languages', async () => {
-  const output = await mkdtemp(join(tmpdir(), 'image-description-import-'));
+test('imports reject undescribed images without partial posts; manifest overrides survive in both languages', async (t) => {
+  const output = temporaryDirectory(t, 'image-description-import-');
   const url = 'https://example.substack.com/p/descriptions';
   const imageUrl = 'https://example.substack.com/diagram.png';
   const html = `<meta property="og:title" content="Image alternatives"><script type="application/ld+json">{"@type":"NewsArticle","datePublished":"2026-10-08"}</script><div class="available-content"><div class="body markup"><p>A queue diagram.</p><img src="${imageUrl}" alt=""></div></div>`;
@@ -69,32 +69,28 @@ test('imports reject undescribed images without partial posts; manifest override
     'base64',
   );
   const download = async () => new Response(png);
-  try {
-    await assert.rejects(
-      importer.importPost({ url }, { html, output, download }),
-      /Image needs a description/,
-    );
-    assert.deepEqual(await readdir(output), []);
-    const directory = await importer.importPost(
-      { url, imageAlts: { [imageUrl]: 'Requests enter a FIFO queue before processing.' } },
-      { html, output, download },
-    );
-    for (const language of ['en', 'pl']) {
-      const markdown = await readFile(join(directory, `index.${language}.md`), 'utf8');
-      assert.match(markdown, /!\[Requests enter a FIFO queue before processing\.\]/);
-      assert.deepEqual(imageIssues(markdown), []);
-    }
-    await rm(directory, { recursive: true });
-    const decorative = await importer.importPost(
-      { url, imageAlts: { [imageUrl]: '' } },
-      { html, output, download },
-    );
-    const markdown = await readFile(join(decorative, 'index.en.md'), 'utf8');
-    assert.match(markdown, /decorativeImages:/);
+  await assert.rejects(
+    importer.importPost({ url }, { html, output, download }),
+    /Image needs a description/,
+  );
+  assert.deepEqual(await readdir(output), []);
+  const directory = await importer.importPost(
+    { url, imageAlts: { [imageUrl]: 'Requests enter a FIFO queue before processing.' } },
+    { html, output, download },
+  );
+  for (const language of ['en', 'pl']) {
+    const markdown = await readFile(join(directory, `index.${language}.md`), 'utf8');
+    assert.match(markdown, /!\[Requests enter a FIFO queue before processing\.\]/);
     assert.deepEqual(imageIssues(markdown), []);
-  } finally {
-    await rm(output, { recursive: true, force: true });
   }
+  await rm(directory, { recursive: true });
+  const decorative = await importer.importPost(
+    { url, imageAlts: { [imageUrl]: '' } },
+    { html, output, download },
+  );
+  const markdown = await readFile(join(decorative, 'index.en.md'), 'utf8');
+  assert.match(markdown, /decorativeImages:/);
+  assert.deepEqual(imageIssues(markdown), []);
 });
 test('every generated page has explicit image alternatives and named image-only links', () => {
   const directory = 'public';

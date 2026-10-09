@@ -1,9 +1,9 @@
+import { temporaryDirectory } from './helpers/temporary-directory.mts';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import yaml from 'js-yaml';
-import { readFileSync, mkdtempSync, rmSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { tmpdir } from 'node:os';
 import MiniSearch from 'minisearch';
 import { searchDocuments, searchableText } from '../src/search/documents.mjs';
 import { indexOptions } from '../src/search/options.mjs';
@@ -30,9 +30,10 @@ test('canonical locale selection, Polish diacritics, identifiers, prefix/fuzzy m
   const docs = searchDocuments(nodes, 'pl');
   assert.deepEqual(
     docs.map((doc) => doc.path),
-    ['/pl/one/', '/en/two/'],
+    ['/pl/one/', '/pl/two/'],
   );
   assert.equal(docs.length, 2);
+  assert.equal(docs[1].langKey, 'en', 'content badge still identifies the English original');
   const index = new MiniSearch(indexOptions);
   index.addAll(docs);
   for (const query of ['zazolc', 'zażółć', 'zolc', 'appendToStr', 'appendToStream', 'architecure'])
@@ -56,28 +57,24 @@ test('canonical locale selection, Polish diacritics, identifiers, prefix/fuzzy m
   );
   assert.equal((await loadIndex(JSON.stringify(index))).documentCount, docs.length);
 });
-test('rebuilding indexes replaces modified/deleted documents and removes obsolete assets', async () => {
-  const directory = mkdtempSync(join(tmpdir(), 'local-search-update-'));
-  try {
-    const nodes = [
-      node('one', 'en', 'First', 'olduniqueterm'),
-      node('two', 'en', 'Second', 'deleteduniqueterm'),
-    ];
-    await writeSearchIndexes(nodes, directory);
-    const before = JSON.parse(readFileSync(join(directory, 'search-index/manifest.json')));
-    nodes[0].rawMarkdownBody = 'newuniqueterm';
-    nodes.pop();
-    await writeSearchIndexes(nodes, directory);
-    const after = JSON.parse(readFileSync(join(directory, 'search-index/manifest.json')));
-    assert.notEqual(before.en, after.en);
-    const index = await loadIndex(readFileSync(join(directory, after.en), 'utf8'));
-    assert.equal(index.search('olduniqueterm', { fuzzy: false, prefix: false }).length, 0);
-    assert.equal(index.search('deleteduniqueterm', { fuzzy: false, prefix: false }).length, 0);
-    assert.equal(index.search('newuniqueterm').length, 1);
-    assert.equal(readdirSync(join(directory, 'search-index')).length, 3);
-  } finally {
-    rmSync(directory, { recursive: true, force: true });
-  }
+test('rebuilding indexes replaces modified/deleted documents and removes obsolete assets', async (t) => {
+  const directory = temporaryDirectory(t, 'local-search-update-');
+  const nodes = [
+    node('one', 'en', 'First', 'olduniqueterm'),
+    node('two', 'en', 'Second', 'deleteduniqueterm'),
+  ];
+  await writeSearchIndexes(nodes, directory);
+  const before = JSON.parse(readFileSync(join(directory, 'search-index/manifest.json')));
+  nodes[0].rawMarkdownBody = 'newuniqueterm';
+  nodes.pop();
+  await writeSearchIndexes(nodes, directory);
+  const after = JSON.parse(readFileSync(join(directory, 'search-index/manifest.json')));
+  assert.notEqual(before.en, after.en);
+  const index = await loadIndex(readFileSync(join(directory, after.en), 'utf8'));
+  assert.equal(index.search('olduniqueterm', { fuzzy: false, prefix: false }).length, 0);
+  assert.equal(index.search('deleteduniqueterm', { fuzzy: false, prefix: false }).length, 0);
+  assert.equal(index.search('newuniqueterm').length, 1);
+  assert.equal(readdirSync(join(directory, 'search-index')).length, 3);
 });
 for (const lang of ['en', 'pl']) {
   test(`${lang} generated index includes canonical searchable content once with valid relative links`, async () => {
@@ -87,7 +84,7 @@ for (const lang of ['en', 'pl']) {
     assert.ok(results.length > 10);
     assert.equal(new Set(results.map((result) => result.id)).size, results.length);
     const introduction = results.find(
-      (result) => result.path === '/en/introduction_to_event_sourcing/',
+      (result) => result.path === `/${lang}/introduction_to_event_sourcing/`,
     );
     assert.ok(introduction?.cover, 'canonical fallback keeps its real cover');
     assert.equal(introduction.cover.width, 240);
@@ -122,6 +119,10 @@ for (const lang of ['en', 'pl']) {
     }
     for (const result of results) {
       assert.match(result.path, /^\/(en|pl)\//);
+      const localPath = result.path.replace(/^\/(en|pl)\//, `/${lang}/`);
+      if (existsSync(join('public', localPath, 'index.html'))) {
+        assert.equal(result.path, localPath, 'Search must preserve an available locale route');
+      }
       assert.ok(readFileSync(join('public', result.path, 'index.html')).length);
     }
   });

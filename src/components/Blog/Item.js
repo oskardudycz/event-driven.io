@@ -13,7 +13,7 @@ const Item = (props) => {
     post: {
       excerpt,
       fields: { slug, prefix },
-      frontmatter: { title, category, categories = [], author, useDefaultLangCanonical, cover },
+      frontmatter: { title, category, categories = [], author, cover },
     },
   } = props;
   const additionalCategories = Array.isArray(categories) ? categories : [];
@@ -21,12 +21,7 @@ const Item = (props) => {
   return (
     <React.Fragment>
       <li className={styles.elementLi}>
-        <Link
-          to={slug}
-          language={useDefaultLangCanonical ? 'en' : undefined}
-          key={slug}
-          className={`link ${styles.link}`}
-        >
+        <Link to={slug} key={slug} className={`link ${styles.link}`}>
           <div className={'gatsby-image-outer-wrapper'}>
             <GatsbyImage
               image={getImage(cover)}

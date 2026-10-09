@@ -140,11 +140,13 @@ test('Event Sourcing category languages share all articles and curated reading o
       const file = path.join(__dirname, '../content/posts', directory, `index.${language}.md`);
       if (!fs.existsSync(file)) continue;
       const metadata = yaml.load(fs.readFileSync(file, 'utf8').split('---')[1]);
-      if (!metadata.useDefaultLangCanonical) versions.push({ language, metadata });
+      versions.push({ language, metadata });
     }
     if (
-      !versions.some(({ metadata }) =>
-        [metadata.category, ...(metadata.categories || [])].includes('Event Sourcing'),
+      !versions.some(
+        ({ metadata }) =>
+          !metadata.useDefaultLangCanonical &&
+          [metadata.category, ...(metadata.categories || [])].includes('Event Sourcing'),
       )
     )
       continue;
@@ -175,8 +177,10 @@ test('Event Sourcing category languages share all articles and curated reading o
       assert(versions, `Unexpected article ${href}`);
       const target =
         versions.find((version) => version.language === language) ||
-        versions.find((version) => version.language === 'en') ||
-        versions[0];
+        versions.find(
+          (version) => version.language === 'en' && !version.metadata.useDefaultLangCanonical,
+        ) ||
+        versions.find((version) => !version.metadata.useDefaultLangCanonical);
       assert.equal(
         href,
         `/${target.language}/${slug}/`,
@@ -261,7 +265,7 @@ test('available blog references use relative URLs and social links follow the co
   );
 });
 
-test('related article cards follow current editorial data and resolve to canonical destinations', () => {
+test('related article cards follow current editorial data and preserve available locale routes with valid canonical identities', () => {
   for (const { route, related } of articles) {
     const $ = cheerio.load(fs.readFileSync(path.join(publicRoot, route, 'index.html'), 'utf8'));
     assert.deepEqual(
@@ -272,14 +276,44 @@ test('related article cards follow current editorial data and resolve to canonic
       route,
     );
     for (const destination of related) {
+      const slug = destination.split('/').slice(2).join('/');
+      const localDestination = `/${route.split('/')[1]}/${slug}`;
+      if (fs.existsSync(path.join(publicRoot, localDestination, 'index.html'))) {
+        assert.equal(destination, localDestination, `Related link changes locale: ${route}`);
+      }
       const target = cheerio.load(
         fs.readFileSync(path.join(publicRoot, destination, 'index.html'), 'utf8'),
       );
+      const pageData = JSON.parse(
+        fs.readFileSync(path.join(publicRoot, 'page-data', destination, 'page-data.json'), 'utf8'),
+      );
+      let canonicalPath = destination;
+      if (pageData.result.data.post.frontmatter.useDefaultLangCanonical) {
+        canonicalPath = destination.replace(/^\/pl\//, '/en/');
+      }
       assert.equal(
         target('head link[rel="canonical"]').attr('href'),
-        `https://event-driven.io${destination}`,
+        `https://event-driven.io${canonicalPath}`,
         destination,
       );
     }
+  }
+});
+
+test('archive cards preserve their page locale, including untranslated article copies', () => {
+  for (const language of ['en', 'pl']) {
+    const $ = cheerio.load(
+      fs.readFileSync(path.join(publicRoot, language, 'articles/index.html'), 'utf8'),
+    );
+    const cards = $('li > a.link');
+    assert(cards.length > 0, `${language}: expected archive cards`);
+    cards.each((_, card) => {
+      const destination = $(card).attr('href');
+      assert(
+        destination.startsWith(`/${language}/`),
+        `Archive link changes locale: ${destination}`,
+      );
+      assert(fs.existsSync(path.join(publicRoot, destination, 'index.html')), destination);
+    });
   }
 });

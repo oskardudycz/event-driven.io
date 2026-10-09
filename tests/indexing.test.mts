@@ -1,15 +1,7 @@
+import { temporaryDirectory } from './helpers/temporary-directory.mts';
 import assert from 'node:assert/strict';
-import {
-  readFileSync,
-  readdirSync,
-  mkdtempSync,
-  mkdirSync,
-  writeFileSync,
-  rmSync,
-  existsSync,
-} from 'node:fs';
+import { readFileSync, readdirSync, mkdirSync, writeFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { tmpdir } from 'node:os';
 import { test } from 'node:test';
 import { createRequire } from 'node:module';
 import yaml from 'js-yaml';
@@ -70,31 +62,27 @@ test('untranslated copies declare English canonical and English originals stay d
   }
 });
 
-test('canonical validation catches mismatched sitemap destinations and broken alternates', () => {
-  const fixture = mkdtempSync(join(tmpdir(), 'indexing-regression-'));
-  try {
-    mkdirSync(join(fixture, 'sitemap'));
-    mkdirSync(join(fixture, 'en'), { recursive: true });
-    mkdirSync(join(fixture, 'pl'), { recursive: true });
-    writeFileSync(
-      join(fixture, 'en/index.html'),
-      `<head><link rel="canonical" href="${siteOrigin}/en/"><link rel="alternate" hreflang="pl" href="${siteOrigin}/pl/"></head>`,
-    );
-    writeFileSync(
-      join(fixture, 'pl/index.html'),
-      `<head><link rel="canonical" href="${siteOrigin}/en/"></head>`,
-    );
-    writeFileSync(
-      join(fixture, 'sitemap/sitemap-0.xml'),
-      `<urlset><loc>${siteOrigin}/pl/</loc></urlset>`,
-    );
-    const failures = verifyIndexingBuild(fixture);
-    assert.ok(failures.some((failure) => failure.includes('Sitemap: destination')));
-    assert.ok(failures.some((failure) => failure.includes('alternate pl: destination')));
-    assert.ok(failures.some((failure) => failure.includes('non-reciprocal')));
-  } finally {
-    rmSync(fixture, { recursive: true, force: true });
-  }
+test('canonical validation catches mismatched sitemap destinations and broken alternates', (t) => {
+  const fixture = temporaryDirectory(t, 'indexing-regression-');
+  mkdirSync(join(fixture, 'sitemap'));
+  mkdirSync(join(fixture, 'en'), { recursive: true });
+  mkdirSync(join(fixture, 'pl'), { recursive: true });
+  writeFileSync(
+    join(fixture, 'en/index.html'),
+    `<head><link rel="canonical" href="${siteOrigin}/en/"><link rel="alternate" hreflang="pl" href="${siteOrigin}/pl/"></head>`,
+  );
+  writeFileSync(
+    join(fixture, 'pl/index.html'),
+    `<head><link rel="canonical" href="${siteOrigin}/en/"></head>`,
+  );
+  writeFileSync(
+    join(fixture, 'sitemap/sitemap-0.xml'),
+    `<urlset><loc>${siteOrigin}/pl/</loc></urlset>`,
+  );
+  const failures = verifyIndexingBuild(fixture);
+  assert.ok(failures.some((failure) => failure.includes('Sitemap: destination')));
+  assert.ok(failures.some((failure) => failure.includes('alternate pl: destination')));
+  assert.ok(failures.some((failure) => failure.includes('non-reciprocal')));
 });
 
 test('published page/post collisions fail instead of silently changing the route canonical', async () => {

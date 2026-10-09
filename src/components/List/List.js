@@ -8,7 +8,7 @@ import ReadingList from './ReadingList';
 const List = ({ edges, ordered = false, showImages = false }) => {
   const items = edges.map(({ node }) => ({
     id: node.fields.slug,
-    href: `/${node.frontmatter.useDefaultLangCanonical ? 'en' : node.fields.langKey}${node.fields.slug}`,
+    href: `/${node.fields.langKey}${node.fields.slug}`,
     title: node.frontmatter.title,
     date: node.fields.prefix,
     excerpt: node.excerpt,

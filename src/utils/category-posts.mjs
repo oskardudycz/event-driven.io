@@ -6,7 +6,7 @@ export const categoriesForPost = (node) =>
   );
 
 // Category membership belongs to the article, while a card's language belongs
-// to the best available translation. Placeholder copies do not define topics.
+// to the available locale route. Placeholder copies do not define topics.
 export function categoryPostsForLanguage(nodes, categorySlug, language, defaultLanguage = 'en') {
   const posts = nodes.filter((node) => node.fields.source === 'posts');
   const members = new Set(
@@ -20,7 +20,7 @@ export function categoryPostsForLanguage(nodes, categorySlug, language, defaultL
   );
   const translations = new Map();
   for (const post of posts) {
-    if (!members.has(post.fields.slug) || post.frontmatter.useDefaultLangCanonical) continue;
+    if (!members.has(post.fields.slug)) continue;
     const versions = translations.get(post.fields.slug) || [];
     versions.push(post);
     translations.set(post.fields.slug, versions);
@@ -29,8 +29,11 @@ export function categoryPostsForLanguage(nodes, categorySlug, language, defaultL
     const versions = translations.get(slug);
     return (
       versions.find((node) => node.fields.langKey === language) ||
-      versions.find((node) => node.fields.langKey === defaultLanguage) ||
-      versions[0]
+      versions.find(
+        (node) =>
+          node.fields.langKey === defaultLanguage && !node.frontmatter.useDefaultLangCanonical,
+      ) ||
+      versions.find((node) => !node.frontmatter.useDefaultLangCanonical)
     );
   });
 }

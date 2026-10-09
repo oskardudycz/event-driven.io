@@ -1,24 +1,12 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { readFileSync, readdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { globSync, readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
 const config = require('../gatsby-config.js');
 const { options } = config.plugins.find(({ resolve }) => resolve === 'gatsby-plugin-react-i18next');
 const { onCreatePage } = require('gatsby-plugin-react-i18next/gatsby-node');
-
-function pageDataFiles(directory) {
-  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
-    const file = join(directory, entry.name);
-    return entry.isDirectory()
-      ? pageDataFiles(file)
-      : entry.name === 'page-data.json'
-        ? [file]
-        : [];
-  });
-}
 
 test('the locale plugin decorates existing routes without generating duplicate language pages', async () => {
   for (const path of [
@@ -56,7 +44,7 @@ test('the locale plugin decorates existing routes without generating duplicate l
 
 test('every built page has matching editorial and plugin language with queried translations', () => {
   const languages = new Set();
-  for (const file of pageDataFiles('public/page-data')) {
+  for (const file of globSync('public/page-data/**/page-data.json')) {
     const { path, result } = JSON.parse(readFileSync(file, 'utf8'));
     const language = path.split('/')[1];
     if (!['en', 'pl'].includes(language)) continue;

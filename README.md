@@ -46,6 +46,12 @@ VISUAL_BASE_URL=https://your-preview.netlify.app yarn test:visual
 
 `build` generates theme tokens, `llms.txt`, feeds, sitemaps and search indexes. Tests that inspect generated output require a completed production build. Do not edit content or run another Gatsby process during a build or cache check. To rebuild from an empty cache, run `yarn clean` before `yarn build`.
 
+If Gatsby logs an unidentified Node warning, include its dependency stack with:
+
+```bash
+NODE_OPTIONS=--trace-warnings env -u DEBUG yarn build
+```
+
 ## Tests
 
 `yarn test` runs all non-browser suites below. Browser tests run separately.
@@ -66,11 +72,13 @@ VISUAL_BASE_URL=https://your-preview.netlify.app yarn test:visual
 | `yarn test:search`                                        | Local search data, fallback languages and safe result rendering                              |
 | `yarn test:localization`                                  | Translation resources, routing and canonical-language policy                                 |
 | `yarn test:css`                                           | Generated CSS assets and stale inline styles                                                 |
-| `yarn test:tooling`                                       | Lint, formatting and editor configuration                                                    |
+| `yarn test:tooling`                                       | Lint, formatting, editor configuration and audit CLI validation                              |
 | `yarn test:components`                                    | Link destinations, native attributes and locale routing                                      |
 | `yarn test:images`                                        | Markdown descriptions, import alternatives and all generated image/link alternatives         |
 | `yarn test:indexnow`                                      | Production URL validation, content diffs, dry runs, submissions and failure-safe state       |
 | `yarn test:visual`                                        | Browser hydration, navigation, search, mobile layouts and screenshots                        |
+
+Internal discovery links (archive, related cards, category reading lists and search) preserve the current interface language when that article route exists. An untranslated `/pl/` copy can still declare its English original as canonical; canonical metadata does not change the navigation destination. Search labels the actual content language. When there is no route in the selected language, links use the available version.
 
 Cache checks temporarily modify/delete/restore existing source files and rebuild. Stop development/preview servers and pause content edits first. Wait for the checks to finish before staging, committing or deploying, so temporary edits/deletions are not included:
 
@@ -230,7 +238,7 @@ Repeat `--url` for multiple pages. One-off notifications do not acknowledge othe
 
 Content lives in `content/posts/` and `content/pages/`. UI translations live in `src/i18n/locales/en/translation.json` and `src/i18n/locales/pl/translation.json`. Edit site metadata and social links in `content/meta/config.js`.
 
-An article's `related` frontmatter array contains article slugs without locale/date prefixes. Missing references fail the build. The card uses a genuine translation when available, otherwise the canonical original.
+An article's `related` frontmatter array contains article slugs without locale/date prefixes. Missing references fail the build. The card links to the article's route in the visitor's interface language, including an untranslated copy. It uses another available language only when that route does not exist. Canonical tags remain independent of this navigation choice.
 
 Use `publishedAt: '2026-10-05T12:34:56+02:00'` when the source publication time is known. The timezone is required. Filename dates still control display and ordering. Do not invent times for historical date-only posts.
 

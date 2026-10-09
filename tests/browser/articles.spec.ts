@@ -153,17 +153,19 @@ test('separate English and Polish pages keep their locale while following recipr
       `https://event-driven.io/en/${slug}/`,
     );
     await expect(switcher).toHaveAttribute('href', `/${other}/${slug}/`);
-    await page.locator('.related a[href="/en/why-open-source-isnt-always-fair/"]').click();
-    await page.waitForURL('**/en/why-open-source-isnt-always-fair/');
-    const returnLink = page.locator(`.related a[href="/en/${slug}/"]`);
+    await page.locator(`.related a[href="/${language}/why-open-source-isnt-always-fair/"]`).click();
+    await page.waitForURL(`**/${language}/why-open-source-isnt-always-fair/`);
+    const returnLink = page.locator(`.related a[href="/${language}/${slug}/"]`);
     await returnLink.waitFor({
       state: 'visible',
     });
     await returnLink.click();
-    await page.waitForURL(`**/en/${slug}/`);
+    await page.waitForURL(`**/${language}/${slug}/`);
     // The URL changes before Gatsby Head commits the next page's attributes.
-    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
-    await expect(page.locator('.related h2')).toHaveText('Related articles');
+    await expect(page.locator('html')).toHaveAttribute('lang', language);
+    await expect(page.locator('.related h2')).toHaveText(
+      language === 'en' ? 'Related articles' : 'Powiązane artykuły',
+    );
     await expect(page.locator('link[rel=canonical]')).toHaveAttribute(
       'href',
       `https://event-driven.io/en/${slug}/`,
@@ -171,12 +173,14 @@ test('separate English and Polish pages keep their locale while following recipr
     await expect(page.locator('h1')).toHaveCount(1);
     await page
       .getByRole('link', {
-        name: 'Change language to pl',
+        name: `Change language to ${other}`,
       })
       .click();
-    await page.waitForURL(`**/pl/${slug}/`);
-    await expect(page.locator('.related h2')).toHaveText('Powiązane artykuły');
-    await expect(page.locator('html')).toHaveAttribute('lang', 'pl');
+    await page.waitForURL(`**/${other}/${slug}/`);
+    await expect(page.locator('.related h2')).toHaveText(
+      other === 'pl' ? 'Powiązane artykuły' : 'Related articles',
+    );
+    await expect(page.locator('html')).toHaveAttribute('lang', other);
     await expect(page.locator('footer.footer')).toHaveCount(1);
   }
 });

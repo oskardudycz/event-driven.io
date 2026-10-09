@@ -177,15 +177,16 @@ export const createPages = ({ graphql, actions, getNodesByType, reporter }) => {
               (item) =>
                 item.node.id !== node.id &&
                 item.node.fields.slug === `/${slug}/` &&
-                item.node.fields.source === node.fields.source &&
-                !item.node.frontmatter.useDefaultLangCanonical,
+                item.node.fields.source === node.fields.source,
             );
             const match =
               candidates.find((item) => item.node.fields.langKey === node.fields.langKey) ||
               candidates.find(
-                (item) => item.node.fields.langKey === DEFAULT_OPTIONS.defaultLanguage,
+                (item) =>
+                  item.node.fields.langKey === DEFAULT_OPTIONS.defaultLanguage &&
+                  !item.node.frontmatter.useDefaultLangCanonical,
               ) ||
-              candidates[0];
+              candidates.find((item) => !item.node.frontmatter.useDefaultLangCanonical);
             if (!match) {
               throw new Error(
                 `Invalid related article "${slug}" for ${node.fields.langKey}${node.fields.slug}`,

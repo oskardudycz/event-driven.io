@@ -1,17 +1,29 @@
+import { integerOption } from './cli-options.mts';
+import { parseArgs } from 'node:util';
 import { chromium } from 'playwright';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
-const args = process.argv.slice(2);
-const option = (name: string, fallback: string) => {
-  const index = args.indexOf(name);
-  return index < 0 ? fallback : args[index + 1];
-};
-const base = new URL(option('--base-url', 'http://127.0.0.1:9000'));
-const output = resolve(option('--output', 'report/fonts'));
-const omitPolishPreloads = args.includes('--without-polish-preload');
-const runs = Number(option('--runs', '3'));
-if (!Number.isInteger(runs) || runs < 1 || runs > 10) throw new Error('Use 1–10 runs');
+const { values } = parseArgs({
+  options: {
+    'base-url': { type: 'string', default: 'http://127.0.0.1:9000' },
+    output: { type: 'string', default: 'report/fonts' },
+    'without-polish-preload': { type: 'boolean' },
+    runs: { type: 'string', default: '3' },
+    help: { type: 'boolean' },
+  },
+});
+if (values.help) {
+  console.log(
+    'Usage: yarn audit:fonts [--base-url URL] [--output report/fonts] [--runs 3] [--without-polish-preload]',
+  );
+  process.exit(0);
+}
+const base = new URL(values['base-url']!);
+if (!['http:', 'https:'].includes(base.protocol)) throw new Error('Use an HTTP(S) site URL');
+const output = resolve(values.output!);
+const omitPolishPreloads = values['without-polish-preload'] || false;
+const runs = integerOption(values.runs!, '--runs', 1, 10);
 await mkdir(output, { recursive: true });
 const browser = await chromium.launch();
 const results = [];

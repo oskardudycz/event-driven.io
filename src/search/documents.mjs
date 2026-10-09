@@ -24,7 +24,6 @@ export function searchDocuments(nodes, language, defaultLanguage = 'en', covers 
     if (
       !fields?.slug ||
       !frontmatter?.title ||
-      frontmatter.useDefaultLangCanonical ||
       !['posts', 'pages', 'newsletter-pl'].includes(fields.source)
     )
       continue;
@@ -40,17 +39,23 @@ export function searchDocuments(nodes, language, defaultLanguage = 'en', covers 
     groups.set(key, versions);
   }
   return [...groups]
+    .filter(([, versions]) => versions.some((node) => !node.frontmatter.useDefaultLangCanonical))
     .map(([id, versions]) => {
+      const originals = versions.filter((node) => !node.frontmatter.useDefaultLangCanonical);
       const node =
-        versions.find((node) => node.fields.langKey === language) ||
-        versions.find((node) => node.fields.langKey === defaultLanguage) ||
-        versions[0];
+        originals.find((node) => node.fields.langKey === language) ||
+        originals.find((node) => node.fields.langKey === defaultLanguage) ||
+        originals[0];
       const { fields, frontmatter } = node;
+      // Content language and indexing identity do not choose the interface locale.
+      const routeLanguage = versions.some((version) => version.fields.langKey === language)
+        ? language
+        : fields.langKey;
       return {
         id,
         title: frontmatter.title,
         cover: covers.get(node.id) || null,
-        path: `/${fields.langKey}${fields.slug}`,
+        path: `/${routeLanguage}${fields.slug}`,
         langKey: fields.langKey,
         source: fields.source,
         category: [
