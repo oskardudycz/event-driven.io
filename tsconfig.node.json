@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
+  },
+  "include": [
+    "site/**/*.mts",
+    "scripts/**/*.mts",
+    "import/**/*.mts",
+    "plugins/**/*.mts",
+    "tests/**/*.mts",
+    "src/types/**/*.d.ts"
+  ]
+}

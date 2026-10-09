@@ -36,7 +36,7 @@ jobs:
           cache: yarn
       - name: Compute Gatsby cache compatibility
         id: gatsby-cache-key
-        run: node scripts/gatsby-cache-key.mjs
+        run: node scripts/gatsby-cache-key.mts
         env:
           GATSBY_DISQUS_NAME: ${{ secrets.GATSBY_DISQUS_NAME }}
           GOOGLE_TAG_ID: ${{ secrets.GOOGLE_TAG_ID }}
@@ -53,6 +53,7 @@ jobs:
       - run: yarn --frozen-lockfile
       - run: yarn smoke
       - run: yarn lint
+      - run: yarn typecheck
       # build
       - run: yarn build
         env:

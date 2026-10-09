@@ -31,6 +31,7 @@ yarn develop
 For a production check:
 
 ```bash
+yarn typecheck
 yarn smoke
 yarn lint
 env -u DEBUG yarn build
@@ -52,12 +53,40 @@ If Gatsby logs an unidentified Node warning, include its dependency stack with:
 NODE_OPTIONS=--trace-warnings env -u DEBUG yarn build
 ```
 
+## TypeScript and modules
+
+Application components, pages, layouts and Gatsby browser/SSR hooks use `.tsx`; plain browser modules use `.ts`. Node scripts, importers, tests, local remark plugins and build implementations use native ESM `.mts`. Run scripts with Node 24 directly; no ts-node, tsx loader or Babel registration is needed. Use erasable TypeScript syntax (types/interfaces, not runtime enums or parameter properties) and explicit file extensions in Node imports. React code uses the automatic JSX runtime.
+
+Gatsby 5 discovers native ESM configuration and Node hooks through `gatsby-config.mjs` and `gatsby-node.mjs`. Those entry points export the typed implementation from `site/*.mts`. ESLint, lint-staged and PostCSS retain their standard `.mjs` configuration entry points. The root package deliberately has no `type: module`: Gatsby still emits CommonJS SSR bundles into `.cache`. Source package scopes (`src/package.json`, `content/meta/package.json`) declare ESM for shared `.ts` modules without changing Gatsby-generated files. Gatsby owns application compilation; `yarn typecheck` separately checks all application, tooling and test TypeScript without emitting files. Browser/Vite code uses bundler resolution in `tsconfig.json`; native Node code also passes NodeNext resolution in `tsconfig.node.json`, which catches missing runtime extensions and incompatible module imports. Both run in CI before the build and as part of `yarn test`.
+
+Shared content/query types live in `src/types/content.ts`. Keep each page's data type limited to its query. Use published dependency types where available; the narrow declarations in `src/types/vendors.d.ts` cover untyped integrations. VS Code uses the workspace TypeScript version.
+
+## Dependency maintenance
+
+Check imports, Gatsby/PostCSS configuration, scripts and peer requirements before removing a dependency. `yarn why <package>` shows which packages still require it transitively; an unused root declaration can be removed even when Gatsby retains its own dependency. Gatsby supplies its compiler configuration; the project uses TypeScript for smoke/lint parsing and Vitest for component rendering tests, with no direct Babel setup. Keep patch-package and postinstall-postinstall together while using Yarn 1 and the Gatsby CSS cache patch.
+
+After changing dependencies:
+
+```bash
+yarn install
+yarn install --frozen-lockfile
+yarn smoke
+yarn lint
+yarn clean
+env -u DEBUG yarn build
+yarn test
+yarn test:visual
+```
+
+Review both package.json and yarn.lock. Dependency cleanup should pass existing screenshots without regenerating them.
+
 ## Tests
 
 `yarn test` runs all non-browser suites below. Browser tests run separately.
 
 | Command                                                   | Checks                                                                                       |
 | --------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `yarn typecheck`                                          | Strict application, Node tooling, importer and test types without emitting files             |
 | `yarn smoke`                                              | Source syntax, configuration and GraphQL queries                                             |
 | `yarn test:seo` / `yarn verify-seo`                       | Generated headings, metadata, schema, sitemap and security headers                           |
 | `yarn test:build-contract` / `yarn verify:build-contract` | Exact routes, redirects, sitemap URLs and feed identities                                    |
@@ -73,7 +102,7 @@ NODE_OPTIONS=--trace-warnings env -u DEBUG yarn build
 | `yarn test:localization`                                  | Translation resources, routing and canonical-language policy                                 |
 | `yarn test:css`                                           | Generated CSS assets and stale inline styles                                                 |
 | `yarn test:tooling`                                       | Lint, formatting, editor configuration and audit CLI validation                              |
-| `yarn test:components`                                    | Link destinations, native attributes and locale routing                                      |
+| `yarn test:components`                                    | Link/reading-list routing, safe search markup and SEO timestamp rendering                    |
 | `yarn test:images`                                        | Markdown descriptions, import alternatives and all generated image/link alternatives         |
 | `yarn test:indexnow`                                      | Production URL validation, content diffs, dry runs, submissions and failure-safe state       |
 | `yarn test:visual`                                        | Browser hydration, navigation, search, mobile layouts and screenshots                        |
@@ -236,7 +265,7 @@ Repeat `--url` for multiple pages. One-off notifications do not acknowledge othe
 
 ## Article configuration
 
-Content lives in `content/posts/` and `content/pages/`. UI translations live in `src/i18n/locales/en/translation.json` and `src/i18n/locales/pl/translation.json`. Edit site metadata and social links in `content/meta/config.js`.
+Content lives in `content/posts/` and `content/pages/`. UI translations live in `src/i18n/locales/en/translation.json` and `src/i18n/locales/pl/translation.json`. Edit site metadata and social links in `content/meta/config.ts`.
 
 An article's `related` frontmatter array contains article slugs without locale/date prefixes. Missing references fail the build. The card links to the article's route in the visitor's interface language, including an untranslated copy. It uses another available language only when that route does not exist. Canonical tags remain independent of this navigation choice.
 

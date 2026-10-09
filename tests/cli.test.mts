@@ -5,7 +5,7 @@ import { test } from 'node:test';
 const audits = [
   'scripts/audit-console.mts',
   'scripts/audit-indexing.mts',
-  'scripts/audit-performance.mjs',
+  'scripts/audit-performance.mts',
   'scripts/profile-fonts.mts',
 ];
 
@@ -24,7 +24,7 @@ for (const script of audits) {
 
 for (const [script, option, value] of [
   ['scripts/audit-console.mts', '--seconds', '61'],
-  ['scripts/audit-performance.mjs', '--runs', '0'],
+  ['scripts/audit-performance.mts', '--runs', '0'],
   ['scripts/profile-fonts.mts', '--runs', '1.5'],
 ]) {
   test(`${script} bounds ${option} before launching a browser`, () => {

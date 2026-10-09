@@ -87,6 +87,35 @@ for (const width of [390, 1280]) {
   });
 }
 
+test('desktop menu adapts to container resizing without a viewport resize', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('/pl/articles/', { waitUntil: 'domcontentloaded' });
+  await expectFonts(page);
+  for (const weight of [400, 600]) {
+    await expect(page.locator('html')).toHaveAttribute(`data-font${weight}`, 'loaded');
+  }
+  const menu = page.locator('nav.menu');
+  const consulting = menu.locator('.itemList a[href="/pl/consulting/"]');
+  await expect(consulting).toBeVisible();
+
+  // Header padding transitions and translated labels also change this available
+  // width without another window resize. Exercise that layout boundary directly.
+  await page.locator('header.header').evaluate((header) => {
+    header.style.width = '800px';
+  });
+  await expect(consulting).not.toBeVisible();
+  await menu.getByRole('button', { name: 'expand' }).click();
+  await expect(menu.locator('.hiddenItemList a[href="/pl/consulting/"]')).toBeVisible();
+  await page.locator('header.header').evaluate((header) => {
+    header.style.width = '';
+  });
+  await expect(consulting).toBeVisible();
+  await expect(menu.locator('.hiddenItemList a[href="/pl/consulting/"]')).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
 test('article video references remain links and players have accessible titles in both languages', async ({
   page,
 }) => {
