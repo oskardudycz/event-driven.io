@@ -6,6 +6,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ScreenWidthContext, FontLoadedContext } from '../../layouts/contexts';
 import config from '../../../content/meta/config.ts';
 import Menu from '../Menu/index.ts';
+import ThemePicker from '../ThemePicker/ThemePicker.tsx';
 
 import { withPrefix } from 'gatsby';
 
@@ -40,7 +41,9 @@ const Header = ({ pages, path }: { pages: ArticleEdge[]; path: string }) => {
     }
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
+      (entries) => {
+        // One sensor can have several queued visibility changes in a batch.
+        const entry = entries.at(-1);
         if (entry) setFixed(entry.intersectionRatio < 1);
       },
       { threshold: 1 },
@@ -100,6 +103,7 @@ const Header = ({ pages, path }: { pages: ArticleEdge[]; path: string }) => {
             </ScreenWidthContext.Consumer>
           )}
         </FontLoadedContext.Consumer>
+        <ThemePicker />
       </header>
       <div
         ref={sensorRef}

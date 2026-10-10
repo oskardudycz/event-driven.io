@@ -1,4 +1,5 @@
 import { temporaryDirectory } from './helpers/temporary-directory.ts';
+import { lintTsxFixtures } from './helpers/lint-tsx-fixtures.ts';
 import assert from 'node:assert/strict';
 import {
   copyFileSync,
@@ -115,31 +116,28 @@ void test('typed linting resolves the project when an editor opens a source subd
   }
 });
 
-void test('JSX linting rejects obsolete iframe attributes and accepts CSS styling', async () => {
-  const { ESLint } = await import('eslint');
-  const eslint = new ESLint();
-  const source = (attributes: string) =>
-    `import React from 'react'; export const Frame = () => <iframe title="Demo" ${attributes} />;`;
-  const options = { filePath: 'src/components/Video/Video.tsx' };
-  const [invalid] = await eslint.lintText(
-    source('frameBorder="0" scrolling="no"'),
-    options,
-  );
+void test('JSX linting rejects obsolete iframe attributes and accepts CSS styling', async (t) => {
+  const [invalid, valid] = await lintTsxFixtures(t, {
+    'Invalid.tsx': `import React from 'react';
+
+export const Frame = () => (
+  <iframe title="Demo" frameBorder="0" scrolling="no" />
+);
+`,
+    'Valid.tsx': `import React from 'react';
+
+export const Frame = () => <iframe title="Demo" style={{ border: 0 }} />;
+`,
+  });
   assert.ok(invalid);
+  assert.equal(invalid.fatalErrorCount, 0, JSON.stringify(invalid.messages));
   assert.equal(
     invalid.messages.filter(
       (message) => message.ruleId === 'react/forbid-dom-props',
     ).length,
     2,
-  );
-  const [valid] = await eslint.lintText(
-    source('style={{ border: 0 }}'),
-    options,
+    JSON.stringify(invalid.messages),
   );
   assert.ok(valid);
-  assert.ok(
-    !valid.messages.some(
-      (message) => message.ruleId === 'react/forbid-dom-props',
-    ),
-  );
+  assert.equal(valid.errorCount, 0, JSON.stringify(valid.messages));
 });

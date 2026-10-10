@@ -1,4 +1,5 @@
 import { temporaryDirectory } from './helpers/temporary-directory.ts';
+import { lintTsxFixtures } from './helpers/lint-tsx-fixtures.ts';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { readFileSync, readdirSync } from 'node:fs';
@@ -10,7 +11,6 @@ import {
   importedAlternative,
 } from '../scripts/image-alternatives.ts';
 import * as importer from '../import/import-substack.ts';
-import { ESLint } from 'eslint';
 
 void test('Markdown images require descriptions, with explicit decorative exceptions and reference support', () => {
   const markdown =
@@ -49,31 +49,34 @@ void test('import alternatives preserve descriptions and require intentional ove
     /must be strings/,
   );
 });
-void test('image component linting requires explicit alt on native and Gatsby images', async () => {
-  const eslint = new ESLint();
-  const source =
-    'import React from "react"; import { GatsbyImage, StaticImage } from "gatsby-plugin-image"; export const Example = () => <><img src="photo.jpg" /><GatsbyImage image={{}} /><StaticImage src="photo.jpg" /></>;';
-  const [invalid] = await eslint.lintText(source, {
-    filePath: 'src/components/Article/Bodytext.tsx',
+void test('image component linting requires explicit alt on native and Gatsby images', async (t) => {
+  const source = `import React from 'react';
+import { GatsbyImage, StaticImage } from 'gatsby-plugin-image';
+
+export const Example = () => (
+  <>
+    <img src="photo.jpg" />
+    <GatsbyImage image={{}} />
+    <StaticImage src="photo.jpg" />
+  </>
+);
+`;
+  const [invalid, valid] = await lintTsxFixtures(t, {
+    'Invalid.tsx': source,
+    'Valid.tsx': source
+      .replaceAll('src="photo.jpg"', 'src="photo.jpg" alt="A workshop"')
+      .replace('image={{}}', 'image={{}} alt=""'),
   });
   assert.ok(invalid, 'Missing ESLint result');
+  assert.equal(invalid.fatalErrorCount, 0, JSON.stringify(invalid.messages));
   assert.equal(
     invalid.messages.filter((message) => message.ruleId === 'jsx-a11y/alt-text')
       .length,
     3,
-  );
-  const [valid] = await eslint.lintText(
-    source
-      .replaceAll('src="photo.jpg"', 'src="photo.jpg" alt="A workshop"')
-      .replace('image={{}}', 'image={{}} alt=""'),
-    { filePath: 'src/components/Article/Bodytext.tsx' },
+    JSON.stringify(invalid.messages),
   );
   assert.ok(valid, 'Missing ESLint result');
-  assert.equal(
-    valid.messages.filter((message) => message.ruleId === 'jsx-a11y/alt-text')
-      .length,
-    0,
-  );
+  assert.equal(valid.errorCount, 0, JSON.stringify(valid.messages));
 });
 void test('imports reject undescribed images without partial posts; manifest overrides survive in both languages', async (t) => {
   const output = temporaryDirectory(t, 'image-description-import-');
