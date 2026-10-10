@@ -17,7 +17,7 @@ The 2026-10-06 [Firefox findings](#firefox-and-new-production-audit--2026-10-06)
 
 All remaining styled-jsx styles are replaced with native CSS Modules and portable YAML-generated variables. Retired styling packages/processors are removed. Global CSS preserves existing reset/font fallback rules and final typography; dynamic image/menu/sensor values use CSS properties. Named hero translation components preserve formatting-independent English/Polish markup. Existing layout, interaction, routes and screenshot fixtures remain.
 
-The CSS-only warm-build check reproduced obsolete inline CSS. Content-aware SHA-256 class exports and tracked stylesheet dependencies resolve it without clearing data/image caches. `yarn test:cache:css` verifies baseline/edit/restoration across every generated page and actual browser styles with/without JavaScript; it passes in 138.61s. Content modification/deletion/restoration also passes (128.72s). Final full suite, all 30 browser checks, lint/format and smoke pass. Ten extraction-order warnings remain between scoped CSS Modules and are recorded in todo.md; they were not hidden. CI/deployment remain unverified here.
+The CSS-only warm-build check reproduced obsolete inline CSS. Content-aware SHA-256 class exports and tracked stylesheet dependencies resolve it without clearing data/image caches. `npm run test:cache:css` verifies baseline/edit/restoration across every generated page and actual browser styles with/without JavaScript; it passes in 138.61s. Content modification/deletion/restoration also passes (128.72s). Final full suite, all 30 browser checks, lint/format and smoke pass. Ten extraction-order warnings remain between scoped CSS Modules and are recorded in todo.md; they were not hidden. CI/deployment remain unverified here.
 
 **Still to investigate:** first-party font request/switching/fallback metrics and CLS, plus the root 404 fallback. This CSS implementation change does not establish a new PageSpeed score. Repeat normal production audits after deployment, separately from the earlier audit-only blocked-Disqus comparison.
 
@@ -37,7 +37,7 @@ The CSS-only warm-build check reproduced obsolete inline CSS. Content-aware SHA-
 | Font loading                           | Preloaded the existing 400/600 Latin WOFF2 files. Font-loading lifecycle, weights and font-display remain.                                                                                                                      | Checks for exactly two existing local font preloads; font/navigation browser tests.                                                                                                                                        |
 | Polish glyph mismatch                  | Added matching Open Sans 1.10 Latin Extended files for all five weights and italics, with Unicode ranges and consistent self-hosted sources. Existing Latin WOFF2 files are unchanged and byte-identical to the source release. | The new regression failed before the fix (DejaVu Sans fallback), then passed: Chromium confirms ĄĆĘŁŃÓŚŹŻ/ąćęłńóśźż use web Open Sans for all ten weight/style combinations. CSS/output tests check all font files/ranges. |
 | Repeated menu layouts                  | Grouped class writes, width reads and final overflow writes; one state update.                                                                                                                                                  | Read/write-order and exact-fit tests; sticky header, resize and mobile-menu browser checks.                                                                                                                                |
-| Repeatable browser/performance tooling | Pinned Playwright and matching Chromium as project dev dependencies, added browser-install scripts, wired CI installation and added the Lighthouse audit command.                                                               | Frozen install, smoke and lint pass; `yarn test:performance` is included in `yarn test`/CI. Audit-runner smoke was verified separately.                                                                                    |
+| Repeatable browser/performance tooling | Pinned Playwright and matching Chromium as project dev dependencies, added browser-install scripts, wired CI installation and added the Lighthouse audit command.                                                               | Frozen install, smoke and lint pass; `npm run test:performance` is included in `npm run test`/CI. Audit-runner smoke was verified separately.                                                                              |
 | CI navigation timeout                  | Replaced networkidle with DOM plus explicit hydration/iframe readiness checks. A request deliberately stays open during the newsletter test.                                                                                    | All 18 browser checks pass, including the pending-request regression. Screenshot tolerances unchanged.                                                                                                                     |
 
 **Previous local result:** production build passed after the Polish font fix; full tests include 15 performance regressions; all 19 browser checks passed. Routes, redirects, sitemap URLs, feeds and screenshot baselines remain unchanged. Detailed timings and remaining build warnings are in [Local verification](#local-verification).
@@ -154,47 +154,47 @@ No Giscus installation, repository mutation, comment export/import or provider s
 
 ## Repeatable testing
 
-The repository now has `yarn audit:performance`. It pins Lighthouse 13.5.0, uses the lockfile's Playwright Chromium, audits pages sequentially with fresh browser profiles, and saves JSON plus a summary. Browser profiles are temporary and cleaned up, avoiding chrome-launcher's WSL profile folders in the repo. The default reports directory `report/performance/` is ignored by Git.
+The repository now has `npm run audit:performance`. It pins Lighthouse 13.5.0, uses the lockfile's Playwright Chromium, audits pages sequentially with fresh browser profiles, and saves JSON plus a summary. Browser profiles are temporary and cleaned up, avoiding chrome-launcher's WSL profile folders in the repo. The default reports directory `report/performance/` is ignored by Git.
 
-Playwright and the matching official `@playwright/browser-chromium` package are pinned project development dependencies (1.63.0). Yarn installs Chromium automatically. If its browser cache is missing, recover it with:
+Playwright and the matching official `@playwright/browser-chromium` package are pinned project development dependencies (1.64.0). npm installs Chromium automatically. If its browser cache is missing, recover it with:
 
 ```sh
-yarn browsers:install
+npm run browsers:install
 ```
 
-On Linux CI use `yarn browsers:install:ci` to install browser OS dependencies too; the workflow uses this command.
+On Linux CI use `npm run browsers:install:ci` to install browser OS dependencies too; the workflow uses this command.
 
 Take a production baseline before changes:
 
 ```sh
-yarn audit:performance --base-url https://event-driven.io --label production-before
+npm run audit:performance -- --base-url https://event-driven.io --label production-before
 ```
 
 The default is three mobile runs each for the homepage and Introduction to Event Sourcing. Lighthouse's pinned npm package is fetched on first use; it is not added as an application dependency. Add a representative route explicitly:
 
 ```sh
-yarn audit:performance --base-url https://event-driven.io --page /pl/training/ --label training-before
+npm run audit:performance -- --base-url https://event-driven.io --page /pl/training/ --label training-before
 ```
 
 For local comparisons, build with the same environment/indexing/analytics/comment settings for both revisions, then serve in one terminal:
 
 ```sh
-ALGOLIA_SKIP_INDEXING=true yarn build
-yarn test
-yarn serve -H 127.0.0.1 -p 9000
+ALGOLIA_SKIP_INDEXING=true npm run build
+npm run test
+npm run serve -- -H 127.0.0.1 -p 9000
 ```
 
 In another terminal:
 
 ```sh
-yarn audit:performance --base-url http://127.0.0.1:9000 --label local-before
+npm run audit:performance -- --base-url http://127.0.0.1:9000 --label local-before
 ```
 
 Repeat with `--label local-after` after a candidate change. Keep the lockfile, browser, Lighthouse version, build environment and machine fixed. Run audits sequentially without builds or other heavy tasks in parallel. Fresh profiles provide cold browser caches; CDN caches and vendor responses are not controlled. Do not compare a credential-free local build to production with analytics/Disqus enabled and call that a performance improvement.
 
 Compare **median** LCP, blocking time, CLS and transfer bytes across three runs, plus concrete failed audit IDs and affected URLs/elements. Summary includes browser/Lighthouse versions. Reports retain request origins and details, so distinguish first-party regressions from vendor changes. Scores are diagnostics, not a deterministic CI gate. The browser test checks native iframe lazy loading initially and on scroll on the longer GDPR article, with the form available without a click. Chromium can preload nearer embeds; Introduction loaded its embed initially at both desktop and mobile sizes. Do not claim that its vendor payload is deferred by this attribute.
 
-Keep deterministic `yarn smoke`, `yarn lint`, `yarn test` and `yarn test:visual` gates. The existing CI gate now checks headings across all 694 generated standalone pages; the small Service/iframe fixes have output checks. Continue external Rich Results/Schema.org validation after deployment. PageSpeed field data covers a rolling period and cannot immediately prove a new deployment's effect; the supplied reports do not provide INP.
+Keep deterministic `npm run smoke`, `npm run lint`, `npm run test` and `npm run test:visual` gates. The existing CI gate now checks headings across all 694 generated standalone pages; the small Service/iframe fixes have output checks. Continue external Rich Results/Schema.org validation after deployment. PageSpeed field data covers a rolling period and cannot immediately prove a new deployment's effect; the supplied reports do not provide INP.
 
 A useful later CI extension is a saved Lighthouse artifact on a controlled runner, with request/payload budgets agreed from a repeated baseline. Do not make a single live Lighthouse score fail deployment.
 
@@ -202,7 +202,7 @@ A useful later CI extension is a saved Lighthouse artifact on a controlled runne
 
 Before the Polish coverage follow-up: frozen Yarn installation passed (0.68s); smoke passed with 72 source files and 17 GraphQL queries; scoped lint and diff checks passed; final production build passed (28.84s); full tests passed (18.11s), including all 14 new performance regressions; all 18 browser checks passed (44.06s command time). Existing screenshots and tolerances were retained. Exact routes, redirects, sitemap URLs and feeds remain unchanged; the existing SEO gate still checks all 694 standalone pages.
 
-`yarn test:performance`, included in `yarn test` and therefore CI, checks EN/PL cover priority, WebP with original fallback, lazy loading across generated Markdown images, real local font preloads, portrait dimensions, image-priority exclusions, grouped menu DOM reads/writes and cover visual detail/byte savings. `yarn test:visual` verifies image slot widths/WebP delivery at five breakpoints and DPR 1/2, plus distant-newsletter request deferral and automatic loading on scroll. Existing hydration, font, sticky menu, language switching, metadata and screenshots remain regression gates. The CI browser installation now uses `yarn browsers:install:ci`.
+`npm run test:performance`, included in `npm run test` and therefore CI, checks EN/PL cover priority, WebP with original fallback, lazy loading across generated Markdown images, real local font preloads, portrait dimensions, image-priority exclusions, grouped menu DOM reads/writes and cover visual detail/byte savings. `npm run test:visual` verifies image slot widths/WebP delivery at five breakpoints and DPR 1/2, plus distant-newsletter request deferral and automatic loading on scroll. Existing hydration, font, sticky menu, language switching, metadata and screenshots remain regression gates. The CI browser installation now uses `npm run browsers:install:ci`.
 
 The first WebP-generation build took substantially longer and encountered a workspace-only permission error while saving Gatsby's user configuration after generating pages. The permitted retry passed (144.77s); final warm validation passed in 28.84s. Intermediate cold-query warnings over 15s still occurred; the final warm build had no Gatsby warnings. These timings are different cache states, not a controlled speedup claim. Yarn still reports its existing url.parse deprecation on installation. No lockfile/package-manager/runtime migration is included.
 

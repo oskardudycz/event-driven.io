@@ -1,6 +1,9 @@
 [build]
 	publish = "public/"
-	command = "yarn import-and-build"
+	command = "npm run import-and-build"
+
+[build.environment]
+NPM_VERSION = "11.9.0"
 
 # Query-specific legacy category aliases precede the final error rewrites.
 # Literal query values let Netlify decode both + and %20 correctly.

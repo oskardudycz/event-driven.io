@@ -34,7 +34,7 @@ export default defineConfig({
     ? {}
     : {
         webServer: {
-          command: 'env -u DEBUG yarn serve -H 127.0.0.1 -p 9000',
+          command: 'env -u DEBUG npm run serve -- -H 127.0.0.1 -p 9000',
           url: `${baseURL}/en/articles/`,
           reuseExistingServer: !process.env.CI,
           timeout: 30000,

@@ -48,7 +48,7 @@ function build(label: string) {
   const fd = fs.openSync(log, 'w');
   console.log(`Building ${label}; log: ${log}`);
   try {
-    const result = spawnSync('yarn', ['build'], {
+    const result = spawnSync('npm', ['run', 'build'], {
       stdio: ['ignore', fd, fd],
       env: {
         ...process.env,

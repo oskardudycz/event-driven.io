@@ -12,14 +12,14 @@ References: [Gatsby incremental-build inputs](https://www.gatsbyjs.com/docs/debu
 
 ## Installation and maintenance
 
-- Gatsby is pinned to 5.16.1. Normal Yarn installation applies the checked-in patch through `postinstall`; patch failures stop installation.
-- If installation deliberately uses `--ignore-scripts`, run `yarn postinstall` before building.
+- Gatsby is pinned to 5.16.1. Normal npm installation applies the checked-in patch through `postinstall`; patch failures stop installation.
+- If installation deliberately uses `--ignore-scripts`, run `npm run postinstall` before building.
 - Gatsby cache compatibility includes the patch directory. Do not restore caches built with a different patch.
 - Keep the patch visible in code review. It changes Gatsby's compiled CommonJS dependency file; application code retains its own ECMAScript/TypeScript conventions.
-- Before upgrading Gatsby, test the unpatched candidate with `yarn test:cache:css`. Remove the patch and version pin once a released correction passes module/global declaration-only edits and restoration, then run the full build/browser/content-cache checks.
+- Before upgrading Gatsby, test the unpatched candidate with `npm run test:cache:css`. Remove the patch and version pin once a released correction passes module/global declaration-only edits and restoration, then run the full build/browser/content-cache checks.
 
 ## Repeatable validation
 
-Run `yarn build`, `yarn test`, `yarn test:visual`, `yarn test:cache:css` and `yarn test:cache`. The CSS cache check modifies a module declaration and a global declaration independently, checks every generated page against current compilation assets, checks browser computed styles with and without JavaScript, and always restores each stylesheet in `finally`.
+Run `npm run build`, `npm run test`, `npm run test:visual`, `npm run test:cache:css` and `npm run test:cache`. The CSS cache check modifies a module declaration and a global declaration independently, checks every generated page against current compilation assets, checks browser computed styles with and without JavaScript, and always restores each stylesheet in `finally`.
 
 An isolated two-page reproduction first failed without the correction: updated CSS existed on disk but both pages retained the old inline asset. With the patch, declaration-only changes update both pages while identifiers remain based on their path/local name. Final repository acceptance is tracked in [todo.md](../todo.md).

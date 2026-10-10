@@ -2,16 +2,16 @@
 
 ## Setup
 
-Use Node 24 and Yarn 1.
+Use Node 24 and npm 11.9.0 (the same npm baseline as Pongo). Install it with `npm install --global npm@11.9.0` if needed.
 
 ```bash
 nvm install
 nvm use
-yarn --frozen-lockfile
-yarn browsers:install
+npm ci
+npm run browsers:install
 ```
 
-On Linux, install Chromium's system libraries with `yarn browsers:install:ci`. Firefox is optional: `yarn browsers:install:firefox`.
+On Linux, install Chromium's system libraries with `npm run browsers:install:ci`. Firefox is optional: `npm run browsers:install:firefox`.
 
 Optional local `.env` settings:
 
@@ -25,143 +25,151 @@ CI uses the corresponding repository secrets. Search uses local MiniSearch index
 ## Development and production checks
 
 ```bash
-yarn develop
+npm run develop
 ```
 
 For a production check:
 
 ```bash
-yarn typecheck
-yarn smoke
-yarn lint
-env -u DEBUG yarn build
-yarn test
-yarn test:visual
+npm run typecheck
+npm run smoke
+npm run lint
+env -u DEBUG npm run build
+npm run test
+npm run test:visual
 ```
 
 Playwright starts and stops the local production server automatically; it can also reuse a running local server. Set `VISUAL_BASE_URL` to test a deployment preview:
 
 ```bash
-VISUAL_BASE_URL=https://your-preview.netlify.app yarn test:visual
+VISUAL_BASE_URL=https://your-preview.netlify.app npm run test:visual
 ```
 
-`build` generates theme tokens, `llms.txt`, feeds, sitemaps and search indexes. Tests that inspect generated output require a completed production build. Do not edit content or run another Gatsby process during a build or cache check. To rebuild from an empty cache, run `yarn clean` before `yarn build`. Do this when changing React or Gatsby's JSX runtime so previously compiled runtime artifacts cannot affect verification.
+`build` generates theme tokens, `llms.txt`, feeds, sitemaps and search indexes. Tests that inspect generated output require a completed production build. Do not edit content or run another Gatsby process during a build or cache check. To rebuild from an empty cache, run `npm run clean` before `npm run build`. Do this when changing React or Gatsby's JSX runtime so previously compiled runtime artifacts cannot affect verification.
 
 If Gatsby logs an unidentified Node warning, include its dependency stack with:
 
 ```bash
-NODE_OPTIONS=--trace-warnings env -u DEBUG yarn build
+NODE_OPTIONS=--trace-warnings env -u DEBUG npm run build
 ```
 
 ## TypeScript and modules
 
 Application components, pages, layouts and Gatsby browser/SSR hooks use `.tsx`; plain browser modules use `.ts`. Node scripts, importers, tests, local remark plugins and build implementations use native ESM `.ts`. Run scripts with Node 24 directly; no ts-node, tsx loader or Babel registration is needed. Use erasable TypeScript syntax (types/interfaces, not runtime enums or parameter properties) and explicit file extensions in Node imports. Gatsby owns JSX compilation and uses its default runtime for Head API compatibility; Vitest uses the automatic JSX runtime.
 
-Gatsby 5 discovers native ESM configuration and Node hooks through `gatsby-config.mjs` and `gatsby-node.mjs`. Those entry points export the typed implementation from `site/*.ts`. ESLint, lint-staged and PostCSS retain their standard `.mjs` configuration entry points. The root package deliberately has no `type: module`: Gatsby still emits CommonJS SSR bundles into `.cache`. Source package scopes (`src`, `content/meta`, `site`, `scripts`, `import`, `tests` and the local plugins) declare `type: module` for `.ts` modules without changing Gatsby-generated files. Gatsby owns application compilation; `yarn typecheck` separately checks all application, tooling and test TypeScript without emitting files. Browser/Vite code uses bundler resolution in `tsconfig.json`; native Node code also passes NodeNext resolution in `tsconfig.node.json`, which catches missing runtime extensions and incompatible module imports. Both run in CI before the build and as part of `yarn test`.
+Gatsby 5 discovers native ESM configuration and Node hooks through `gatsby-config.mjs` and `gatsby-node.mjs`. Those entry points export the typed implementation from `site/*.ts`. ESLint, lint-staged and PostCSS retain their standard `.mjs` configuration entry points. The root package deliberately has no `type: module`: Gatsby still emits CommonJS SSR bundles into `.cache`. Source package scopes (`src`, `content/meta`, `site`, `scripts`, `import`, `tests` and the local plugins) declare `type: module` for `.ts` modules without changing Gatsby-generated files. Gatsby owns application compilation; `npm run typecheck` separately checks all application, tooling and test TypeScript without emitting files. Browser/Vite code uses bundler resolution in `tsconfig.json`; native Node code also passes NodeNext resolution in `tsconfig.node.json`, which catches missing runtime extensions and incompatible module imports. Both run in CI before the build and as part of `npm run test`.
 
 The tooling configuration starts from Pongo: `tsconfig.shared.json`, `.prettierrc.json` and `.editorconfig` are copied; ESLint retains its general recommended/type-checked/Prettier/type-only-import configuration. Gatsby overrides add browser/JSX support, no-emit checking and this repository's source/output locations. React hooks and image accessibility checks are enabled for site code; Pongo's database/Cloudflare rules do not apply here. The copied strict optional-property and indexed-access checks remain enabled. Browser and native Node configurations extend the same shared settings.
 
-VS Code settings, extension recommendations, tasks and the component-test debugger also start from Pongo, with root paths, Node 24 and Yarn. TypeScript formatting runs through ESLint's Prettier integration; imports are organized on save. `yarn typecheck:watch` runs the editor's watch task. Select the component or Node test debugger for the current test file. `yarn fix` applies formatting and lint fixes manually; lint-staged checks staged code and article image descriptions.
+The native TypeScript 7 checker supplies `tsc`; the `typescript` import is Microsoft's TS6 compatibility alias for Gatsby, ESLint and compiler-API tools. Install the recommended TypeScript native VS Code extension to use the matching editor service. Do not point the editor at the compatibility package's missing tsserver.
+
+VS Code settings, extension recommendations, tasks and the component-test debugger also start from Pongo, with root paths, Node 24 and npm. TypeScript formatting runs through ESLint's Prettier integration; imports are organized on save. `npm run typecheck:watch` runs the editor's watch task. Select the component or Node test debugger for the current test file. `npm run fix` applies formatting and lint fixes manually; lint-staged checks staged code and article image descriptions.
+
+ESLint anchors its project path to the configuration directory, so opening `src` or a component folder in the editor does not change tsconfig resolution. Vitest's TypeScript configuration lives in the ESM `tests` scope; `npm run test:components` and the debugger select it explicitly.
 
 Shared content/query types live in `src/types/content.ts`. Keep each page's data type limited to its query. Use published dependency types where available; the narrow declarations in `src/types/vendors.d.ts` cover untyped integrations.
 
 ## Dependency maintenance
 
-Run `yarn outdated` to compare installed, wanted and latest registry versions. [The dependency review](docs/dependency-review.md) records tested upgrades and remaining compatibility work. Check imports, Gatsby/PostCSS configuration, scripts and peer requirements before removing a dependency. `yarn why <package>` shows which packages still require it transitively; an unused root declaration can be removed even when Gatsby retains its own dependency. Gatsby supplies its compiler configuration; the project uses TypeScript for smoke/lint parsing and Vitest for component rendering tests, with no direct Babel setup. Keep patch-package and postinstall-postinstall together while using Yarn 1 and the Gatsby CSS cache patch.
+Scoped npm overrides retain the tested ESLint and localization versions where upstream peer ranges lag behind. They are listed with their rationale in [the dependency review](docs/dependency-review.md); installations use normal peer resolution without `--force` or `--legacy-peer-deps`.
+
+Run `npm outdated` to compare installed, wanted and latest registry versions. [The dependency review](docs/dependency-review.md) records tested upgrades and remaining compatibility work. Check imports, Gatsby/PostCSS configuration, scripts and peer requirements before removing a dependency. `npm explain <package>` shows which packages still require it transitively; an unused root declaration can be removed even when Gatsby retains its own dependency. Gatsby supplies its compiler configuration; the project uses TypeScript for smoke/lint parsing and Vitest for component rendering tests, with no direct Babel setup. npm runs patch-package from the postinstall lifecycle to apply the Gatsby CSS cache correction; the Yarn-only postinstall-postinstall helper is removed.
 
 After changing dependencies:
 
 ```bash
-yarn install
-yarn install --frozen-lockfile
-yarn smoke
-yarn lint
-yarn clean
-env -u DEBUG yarn build
-yarn test
-yarn test:visual
+npm install
+npm ci
+npm run smoke
+npm run lint
+npm run clean
+env -u DEBUG npm run build
+npm run test
+npm run test:visual
 ```
 
-Review both package.json and yarn.lock. Dependency cleanup should pass existing screenshots without regenerating them.
+Review both package.json and package-lock.json. Dependency cleanup should pass existing screenshots without regenerating them.
+
+Run `npm audit` to inspect advisories and `npm audit fix --dry-run` to preview compatible fixes. Review the proposed updates before applying them, then repeat installation/build/test checks. Some remaining Gatsby dependencies require upstream changes; the audit's `--force` suggestion can downgrade Gatsby plugins and is not a safe routine update.
 
 ## Tests
 
-`yarn test` runs all non-browser suites below. Browser tests run separately.
+`npm run test` runs all non-browser suites below. Browser tests run separately.
 
-| Command                                                   | Checks                                                                                       |
-| --------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `yarn typecheck`                                          | Strict application, Node tooling, importer and test types without emitting files             |
-| `yarn smoke`                                              | Source syntax, configuration and GraphQL queries                                             |
-| `yarn test:seo` / `yarn verify-seo`                       | Generated headings, metadata, schema, sitemap and security headers                           |
-| `yarn test:build-contract` / `yarn verify:build-contract` | Exact routes, redirects, sitemap URLs and feed identities                                    |
-| `yarn test:indexing`                                      | Canonical destinations, reciprocal language alternates, fallback markers and Netlify routing |
-| `yarn test:404`                                           | Root/localized error HTML, recovery links and native 404 rules                               |
-| `yarn test:substack`                                      | Import conversion, assets, code languages and link safety                                    |
-| `yarn test:articles`                                      | All published articles: metadata, video markup, language links and related cards             |
-| `yarn test:video`                                         | YouTube conversion, player parameters and referrer headers                                   |
-| `yarn test:redirects`                                     | Imported article aliases and generated redirects                                             |
-| `yarn test:categories`                                    | Category membership, locale parity and reading order                                         |
-| `yarn test:performance`                                   | Image priority/lazy loading, local fonts, newsletter and menu regressions                    |
-| `yarn test:search`                                        | Local search data, fallback languages and safe result rendering                              |
-| `yarn test:localization`                                  | Translation resources, routing and canonical-language policy                                 |
-| `yarn test:css`                                           | Generated CSS assets and stale inline styles                                                 |
-| `yarn test:tooling`                                       | Lint, formatting, editor configuration and audit CLI validation                              |
-| `yarn test:components`                                    | Link/reading-list routing, safe search markup and SEO timestamp rendering                    |
-| `yarn test:images`                                        | Markdown descriptions, import alternatives and all generated image/link alternatives         |
-| `yarn test:indexnow`                                      | Production URL validation, content diffs, dry runs, submissions and failure-safe state       |
-| `yarn test:visual`                                        | Browser hydration, navigation, search, mobile layouts and screenshots                        |
+| Command                                                         | Checks                                                                                       |
+| --------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `npm run typecheck`                                             | Strict application, Node tooling, importer and test types without emitting files             |
+| `npm run smoke`                                                 | Source syntax, configuration and GraphQL queries                                             |
+| `npm run test:seo` / `npm run verify-seo`                       | Generated headings, metadata, schema, sitemap and security headers                           |
+| `npm run test:build-contract` / `npm run verify:build-contract` | Exact routes, redirects, sitemap URLs and feed identities                                    |
+| `npm run test:indexing`                                         | Canonical destinations, reciprocal language alternates, fallback markers and Netlify routing |
+| `npm run test:404`                                              | Root/localized error HTML, recovery links and native 404 rules                               |
+| `npm run test:substack`                                         | Import conversion, assets, code languages and link safety                                    |
+| `npm run test:articles`                                         | All published articles: metadata, video markup, language links and related cards             |
+| `npm run test:video`                                            | YouTube conversion, player parameters and referrer headers                                   |
+| `npm run test:redirects`                                        | Imported article aliases and generated redirects                                             |
+| `npm run test:categories`                                       | Category membership, locale parity and reading order                                         |
+| `npm run test:performance`                                      | Image priority/lazy loading, local fonts, newsletter and menu regressions                    |
+| `npm run test:search`                                           | Local search data, fallback languages and safe result rendering                              |
+| `npm run test:localization`                                     | Translation resources, routing and canonical-language policy                                 |
+| `npm run test:css`                                              | Generated CSS assets and stale inline styles                                                 |
+| `npm run test:tooling`                                          | Lint, formatting, editor configuration and audit CLI validation                              |
+| `npm run test:components`                                       | Link/reading-list routing, safe search markup and SEO timestamp rendering                    |
+| `npm run test:images`                                           | Markdown descriptions, import alternatives and all generated image/link alternatives         |
+| `npm run test:indexnow`                                         | Production URL validation, content diffs, dry runs, submissions and failure-safe state       |
+| `npm run test:visual`                                           | Browser hydration, navigation, search, mobile layouts and screenshots                        |
 
 Internal discovery links (archive, related cards, category reading lists and search) preserve the current interface language when that article route exists. An untranslated `/pl/` copy can still declare its English original as canonical; canonical metadata does not change the navigation destination. Search labels the actual content language. When there is no route in the selected language, links use the available version.
 
 Cache checks temporarily modify/delete/restore existing source files and rebuild. Stop development/preview servers and pause content edits first. Wait for the checks to finish before staging, committing or deploying, so temporary edits/deletions are not included:
 
 ```bash
-env -u DEBUG yarn test:cache
-env -u DEBUG yarn test:cache:css
-yarn test
+env -u DEBUG npm run test:cache
+env -u DEBUG npm run test:cache:css
+npm run test
 ```
 
 Run browser checks against the restored build afterward. Cache logs are saved in temporary directories printed by each command.
 
-To check search refresh in development, start `yarn develop -H 127.0.0.1 -p 8001`, then run `yarn test:search:dev` in another terminal. This check also temporarily modifies and restores an article. Set `DEV_SEARCH_BASE_URL` to use another address. Reload the search page after its index changes.
+To check search refresh in development, start `npm run develop -- -H 127.0.0.1 -p 8001`, then run `npm run test:search:dev` in another terminal. This check also temporarily modifies and restores an article. Set `DEV_SEARCH_BASE_URL` to use another address. Reload the search page after its index changes.
 
 ### Browser test commands and helpers
 
-Browser tests live in `tests/browser/*.spec.ts` and run with Playwright Test. React component tests use Vitest. `yarn test:browser-types` checks the browser tests and configuration with TypeScript; it is also part of `yarn test`.
+Browser tests live in `tests/browser/*.spec.ts` and run with Playwright Test. React component tests use Vitest. `npm run test:browser-types` checks the browser tests and configuration with TypeScript; it is also part of `npm run test`.
 
 ```bash
-yarn test:visual --list
-yarn test:visual search.spec.ts
-yarn test:visual --grep 'persistent menu'
-yarn test:visual --debug --grep 'article language switch'
-yarn exec playwright show-report visual-artifacts/report
+npm run test:visual -- --list
+npm run test:visual -- search.spec.ts
+npm run test:visual -- --grep 'persistent menu'
+npm run test:visual -- --debug --grep 'article language switch'
+npm exec -- playwright show-report visual-artifacts/report
 ```
 
 Use Playwright's `page` fixture, `test.use` for browser options, and retrying assertions such as `await expect(locator).toHaveText(...)`. Import `test` and `expect` from `./fixtures` in browser specs: it blocks live third-party requests; `page.route` supplies explicit widget mocks when needed. Use `expectFonts` and `expectImageLoaded` from `./readiness` for repeated font/image readiness. Vitest clears component mocks automatically and supports `test.each` for input variants.
 
-Failed browser tests retain screenshots and traces under `visual-artifacts/results/`; the HTML report links to them and CI uploads the whole directory. Open a retained trace with `yarn exec playwright show-trace path/to/trace.zip`. Normal runs never update missing or changed baselines. Each viewport/language/JavaScript variant is reported separately; retries are disabled.
+Failed browser tests retain screenshots and traces under `visual-artifacts/results/`; the HTML report links to them and CI uploads the whole directory. Open a retained trace with `npm exec -- playwright show-trace path/to/trace.zip`. Normal runs never update missing or changed baselines. Each viewport/language/JavaScript variant is reported separately; retries are disabled.
 
 ## Formatting and editor setup
 
 ```bash
-yarn lint
-yarn fix
+npm run lint
+npm run fix
 ```
 
-Individual commands: `lint:eslint`, `lint:prettier`, `fix:eslint`, `fix:prettier`. `lint:modern` aliases the ESLint check. ESLint uses TypeScript type information for lint rules; `yarn typecheck` reports compiler diagnostics.
+Individual commands: `lint:eslint`, `lint:prettier`, `fix:eslint`, `fix:prettier`. `lint:modern` aliases the ESLint check. ESLint uses TypeScript type information for lint rules; `npm run typecheck` reports compiler diagnostics.
 
-Installation configures Husky. The pre-commit hook runs `yarn lint-staged` against staged files. VS Code settings and extension recommendations are in `.vscode/`. Generated output, imported content and fixtures are excluded from bulk formatting.
+Installation configures Husky. The pre-commit hook runs `npm run lint-staged` against staged files. VS Code settings and extension recommendations are in `.vscode/`. Generated output, imported content and fixtures are excluded from bulk formatting.
 
 ## Importing articles
 
 Import a URL, a batch manifest or a saved HTML page:
 
 ```bash
-yarn import-articles https://www.architecture-weekly.com/p/post-slug --category 'Software Architecture'
-yarn import-articles https://kurrentdb.kurrent.io/blog/post-slug/ --category 'Event Sourcing'
-yarn import-articles --manifest import/substack-posts.json
-yarn import-articles --manifest import/eventstore-posts.json
-yarn import-articles https://www.architecture-weekly.com/p/post-slug --html saved-page.html
+npm run import-articles -- https://www.architecture-weekly.com/p/post-slug --category 'Software Architecture'
+npm run import-articles -- https://kurrentdb.kurrent.io/blog/post-slug/ --category 'Event Sourcing'
+npm run import-articles -- --manifest import/substack-posts.json
+npm run import-articles -- --manifest import/eventstore-posts.json
+npm run import-articles -- https://www.architecture-weekly.com/p/post-slug --html saved-page.html
 ```
 
 `import-substack` is an alias for the same importer. It supports Substack, Kurrent/EventStore and dated Wayback captures. Images require network access even with `--html`.
@@ -197,10 +205,10 @@ The importer adds `redirectFrom: /source-slug/` and, for custom slugs, `redirect
 Existing posts are never overwritten. A failed batch retains earlier successful imports; retry with a manifest containing only unfinished entries. Review images, captions, code labels, source links and interactive embeds, then run:
 
 ```bash
-yarn normalize:youtube
-yarn test:substack
-env -u DEBUG yarn build
-yarn test
+npm run normalize:youtube
+npm run test:substack
+env -u DEBUG npm run build
+npm run test
 ```
 
 The Architecture Weekly migration records are [the manifest](import/architecture-weekly-missing.json), [the archive audit](import/architecture-weekly-audit.json) and [the remaining source-link report](import/architecture-weekly-link-report.json). The reviewed archive cutoff is #189, August 5, 2024. Re-running the completed manifest refuses to overwrite its posts.
@@ -208,8 +216,8 @@ The Architecture Weekly migration records are [the manifest](import/architecture
 Legacy repository imports replace their local destination directories:
 
 ```bash
-yarn import-newsletter
-yarn import-architecture-weekly
+npm run import-newsletter
+npm run import-architecture-weekly
 ```
 
 `import-newsletter` replaces `content/newsletter-pl/`; `NEWSLETTER_REPO_URL` can override its repository. `import-architecture-weekly` currently refreshes its repository checkout and the placeholder directory. `import-and-build` runs both commands and a build; it is not the Substack URL importer.
@@ -232,8 +240,8 @@ decorativeImages:
 Use `![](./separator.png)` for that image. Raw HTML images require an explicit `alt` attribute; use `alt=""` only when decorative. JSX linting checks native images, `GatsbyImage` and `StaticImage`.
 
 ```bash
-yarn check:images
-yarn test:images
+npm run check:images
+npm run test:images
 ```
 
 The source check runs before production builds and on staged Markdown. The generated-output test checks every HTML page for missing alt attributes and unnamed image-only links. Automated checks cannot judge whether a description is accurate: inspect new diagrams and their text alternatives manually, and check images with a screen reader when reviewing content.
@@ -247,13 +255,13 @@ The public verification key is configured in `data/indexnow.json`; its matching 
 For manual deployment:
 
 ```bash
-yarn build
-yarn test
-yarn indexnow:prepare
-yarn indexnow --restore
-yarn indexnow --dry-run
-yarn deploy:prod
-yarn indexnow --submit
+npm run build
+npm run test
+npm run indexnow:prepare
+npm run indexnow -- --restore
+npm run indexnow -- --dry-run
+npm run deploy:prod
+npm run indexnow -- --submit
 ```
 
 Run `--restore` **before** deploying: it retains `.indexnow/submitted.json` when present, otherwise downloads the previous production manifest. Preserve that local state between manual releases. CI retains successful acknowledgements in a separate production cache; if it expires, the previous deployed manifest supplies the comparison baseline. If that fallback follows an earlier failed notification, retry those URLs explicitly. Failed verification/API responses never advance acknowledgement state or save a new CI state cache. Notification failure does not roll back an already successful deployment.
@@ -261,8 +269,8 @@ Run `--restore` **before** deploying: it retains `.indexnow/submitted.json` when
 To inspect or retry specific recently changed URLs after deployment:
 
 ```bash
-yarn indexnow --dry-run --url /en/article-slug/
-yarn indexnow --submit --url /en/article-slug/
+npm run indexnow -- --dry-run --url /en/article-slug/
+npm run indexnow -- --submit --url /en/article-slug/
 ```
 
 Repeat `--url` for multiple pages. One-off notifications do not acknowledge other pending changes. Paths must be canonical production English/Polish URLs with trailing slashes and no tracking query or fragment; previews, foreign hosts and language-fallback duplicates are rejected. A deleted/moved URL must return 404/410 or a redirect. HTTP 200/202 count as received; throttling or errors require a later retry. Local tests mock submissions and never contact the API.
@@ -286,9 +294,9 @@ Use this format for a player. The importer and normalization command automatical
 Check or convert existing Markdown:
 
 ```bash
-yarn normalize:youtube
-yarn normalize:youtube --write
-yarn test:video
+npm run normalize:youtube
+npm run normalize:youtube -- --write
+npm run test:video
 ```
 
 Future article imports perform the same normalization automatically.
@@ -311,29 +319,29 @@ Edit `data/category-guides.json`:
 
 `recommended` controls the numbered order. Use article slugs without dates, locale prefixes or surrounding slashes. Each article must belong to the category through `category` or `categories` on its canonical version. Remaining articles follow by date; an empty array uses chronological order only. English and Polish guides are independent. Missing/out-of-category recommendations are ignored, so inspect the resulting category page after editing.
 
-A guide does not create a category route by itself; at least one canonical article in that language must belong to the category. Run `yarn build`, `yarn test:categories` and inspect `/en/category/event-sourcing/` and `/pl/category/event-sourcing/`.
+A guide does not create a category route by itself; at least one canonical article in that language must belong to the category. Run `npm run build`, `npm run test:categories` and inspect `/en/category/event-sourcing/` and `/pl/category/event-sourcing/`.
 
 ### Styles
 
-Edit component-owned `.module.css` files, `src/theme/global.css` for the shared reset, and `src/theme/theme.yaml` for tokens. `yarn generate-theme-css` regenerates `src/theme/tokens.css`; do not edit generated tokens directly. Production/development startup runs the generator. After changing YAML during a development session, run it again.
+Edit component-owned `.module.css` files, `src/theme/global.css` for the shared reset, and `src/theme/theme.yaml` for tokens. `npm run generate-theme-css` regenerates `src/theme/tokens.css`; do not edit generated tokens directly. Production/development startup runs the generator. After changing YAML during a development session, run it again.
 
 Use named CSS exports, for example `import * as styles from './Component.module.css'` and `className={styles.container}`. Dashed local selectors are exported in camel case. Keep Gatsby data/routing adapters separate from reusable presentation components where needed; the reading-list view accepts a link renderer and owns its stylesheet.
 
-After styling changes, run `yarn build`, `yarn test:css`, `yarn test:visual` and `yarn test:cache:css`.
+After styling changes, run `npm run build`, `npm run test:css`, `npm run test:visual` and `npm run test:cache:css`.
 
-Gatsby 5.16.1 requires the checked-in CSS cache correction in `patches/`. Yarn applies it automatically during installation; after `--ignore-scripts`, run `yarn postinstall` before building. The cache check covers module and global stylesheet edits/restoration. Upgrade/removal instructions are in [the patch notes](docs/gatsby-css-cache-patch.md).
+Gatsby 5.16.1 requires the checked-in CSS cache correction in `patches/`. npm applies it automatically during installation; after `--ignore-scripts`, run `npm run postinstall` before building. The cache check covers module and global stylesheet edits/restoration. Upgrade/removal instructions are in [the patch notes](docs/gatsby-css-cache-patch.md).
 
-For a focused menu check, use `yarn test:visual --grep 'persistent menu'`. It checks language switching, localized destinations, overflow icons, opening/closing and mobile/desktop resizing. Run the full browser suite before publishing changes.
+For a focused menu check, use `npm run test:visual -- --grep 'persistent menu'`. It checks language switching, localized destinations, overflow icons, opening/closing and mobile/desktop resizing. Run the full browser suite before publishing changes.
 
 ## Updating fixtures
 
-For intentional route/feed changes, run `yarn verify:build-contract`, inspect the exact differences, then use `yarn update:build-contract`. Review `tests/fixtures/build-contract.json` and rerun `yarn test:build-contract`. Do not update the fixture to accept unexplained missing routes.
+For intentional route/feed changes, run `npm run verify:build-contract`, inspect the exact differences, then use `npm run update:build-contract`. Review `tests/fixtures/build-contract.json` and rerun `npm run test:build-contract`. Do not update the fixture to accept unexplained missing routes.
 
-After publishing a new first article, run `yarn test:visual` and inspect the expected, actual and diff images in the Playwright report. If only the intended archive content changed:
+After publishing a new first article, run `npm run test:visual` and inspect the expected, actual and diff images in the Playwright report. If only the intended archive content changed:
 
 ```bash
-ARCHIVE_SNAPSHOT_SLUG=reviewed-newest-article-slug yarn test:visual:update:archive
-yarn test:visual
+ARCHIVE_SNAPSHOT_SLUG=reviewed-newest-article-slug npm run test:visual:update:archive
+npm run test:visual
 ```
 
 The command verifies the first card's exact slug and updates only the archive screenshot in `tests/fixtures/visual/`. Review the PNG diff before committing. `test:visual:update` updates all visual baselines and should be reserved for a reviewed design change. The comparison tolerance remains 3%.
@@ -343,11 +351,11 @@ The command verifies the first card's exact slug and updates only the archive sc
 Run performance audits sequentially on an idle machine after builds/tests finish. Output belongs in ignored `report/`, not published content.
 
 ```bash
-yarn audit:performance --base-url http://127.0.0.1:9000 --runs 3 --label local
-yarn audit:performance --base-url https://event-driven.io --page /en/introduction_to_event_sourcing/ --runs 3 --label production
-yarn audit:console --browser firefox --url https://event-driven.io/en/introduction_to_event_sourcing/ --output report/browser-console/firefox.json
-yarn audit:fonts --base-url http://127.0.0.1:9000 --runs 3 --output report/fonts/current
-yarn measure:search
+npm run audit:performance -- --base-url http://127.0.0.1:9000 --runs 3 --label local
+npm run audit:performance -- --base-url https://event-driven.io --page /en/introduction_to_event_sourcing/ --runs 3 --label production
+npm run audit:console -- --browser firefox --url https://event-driven.io/en/introduction_to_event_sourcing/ --output report/browser-console/firefox.json
+npm run audit:fonts -- --base-url http://127.0.0.1:9000 --runs 3 --output report/fonts/current
+npm run measure:search
 ```
 
 The performance command downloads pinned Lighthouse 13.5.0 on its first run. Use the same versions/throttling and compare medians. The console audit uses a fresh profile, scrolls to comments and observes for 15 seconds (`--seconds` accepts 1–60). It retains vendor requests. Font profiling blocks vendors to isolate font timing; `--without-polish-preload` provides a same-build comparison.
@@ -355,7 +363,7 @@ The performance command downloads pinned Lighthouse 13.5.0 on its first run. Use
 For a diagnostic comparison that blocks Disqus only in the audit browser:
 
 ```bash
-yarn audit:performance --base-url https://event-driven.io --page /en/introduction_to_event_sourcing/ --runs 3 --label diagnostic-no-disqus --block-pattern '*disqus*'
+npm run audit:performance -- --base-url https://event-driven.io --page /en/introduction_to_event_sourcing/ --runs 3 --label diagnostic-no-disqus --block-pattern '*disqus*'
 ```
 
 Blocked-vendor results are diagnostic and do not represent the normal page.
@@ -363,10 +371,10 @@ Blocked-vendor results are diagnostic and do not represent the normal page.
 ### Indexing and error pages
 
 ```bash
-yarn generate-llms
-yarn test:indexing
-yarn test:404
-yarn audit:indexing --base-url https://event-driven.io --output report/indexing/production.json
+npm run generate-llms
+npm run test:indexing
+npm run test:404
+npm run audit:indexing -- --base-url https://event-driven.io --output report/indexing/production.json
 ```
 
 Use a Netlify preview origin to audit an unpublished deployment. Optional `--urls-file /path/to/urls.json` accepts a JSON array of Search Console example URLs. The audit checks robots, sitemaps, HTTP statuses, canonicals, headings, reciprocal alternates and direct localized 404 responses. It does not submit URLs to Google.
@@ -389,8 +397,8 @@ CI configuration is in `.github/workflows/ci.yml`; CodeQL is in `.github/workflo
 For manual deployment, configure `NETLIFY_AUTH_TOKEN` and `NETLIFY_SITE_ID`, finish the checks above, then run:
 
 ```bash
-yarn deploy       # preview
-yarn deploy:prod  # production
+npm run deploy       # upload the existing build as a preview
+npm run deploy:prod  # upload the existing build to production
 ```
 
 ## License

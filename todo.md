@@ -1,18 +1,20 @@
 # SEO, content, and platform progress
 
-## Remaining dependency upgrade execution — 2026-10-09
+## Dependency acceptance and npm migration — 2026-10-10
 
-- [ ] Upgrade and adapt remaining direct packages; verify latest registry versions and document actual compatibility blockers.
-- [ ] Verify frozen install, smoke, strict types, lint/staging, production output, full tests and unchanged browser screenshots; update the dependency inventory and manual commands.
-- [ ] Check hosted CI and deployed behavior after publication (separate from local acceptance).
+- [x] Resolve the demonstrated Sharp native-loader failure with clean npm ci; strict types, real lint/fix/format and tooling acceptance pass.
+- [x] Migrate commands, lockfile, CI/download and Gatsby caches, hooks, editor configuration and README to npm; retain one lockfile.
+- [x] Validate npm ci, types, smoke, lint/fix/format, build, full tests, browser screenshots and content/CSS cache modification/deletion/restoration.
+- [ ] Verify hosted CI/deployment separately after publication.
+- [ ] Review the remaining 112 transitive audit findings in Gatsby/Netlify chains; compatible fixes removed both critical advisories. Avoid audit-force plugin downgrades.
 
-Last updated: 2026-10-09
+Last updated: 2026-10-10
 
 This is the live checklist for [plan.md](./plan.md). Completed categories are consolidated here; dated research and earlier timings remain in the plan and linked reviews. A local pass, a hosted CI pass and a deployed check are separate evidence.
 
 ## Current work
 
-- [x] Check every direct dependency against its latest stable release; test and validate ESLint 10 and the latest Gatsby-supported React 19 with matching types/icons and native sticky-header visibility. Record remaining coordinated upgrades in the dependency review.
+- [x] Check every direct dependency against its latest stable release; test and validate ESLint 10 and the latest Gatsby-supported React 19 with matching types/icons and native sticky-header visibility. Record current versions and tested peer compatibility exceptions in the dependency review.
 
 - [x] Align TypeScript/ESLint/Prettier/editor tooling with Pongo; use ordinary .ts/.tsx sources with explicit ESM package scopes and document Gatsby's tested root-ESM limitation.
 - [x] Complete the authorized coordinated TypeScript/native-ESM migration across application, Node tooling/importers, local plugins and tests, respecting documented Gatsby/configuration loader boundaries.
@@ -30,7 +32,7 @@ This is the live checklist for [plan.md](./plan.md). Completed categories are co
 
 ## Completed implementation
 
-- [x] Gatsby 5.16.1 / React 19.3.0 / Node 24 / Yarn 1 baseline; native ESM Gatsby hooks, useStaticQuery wrapper, layout cleanup, explicit GraphQL types, current CI actions and build/download caching. The original Node 16/22 checkpoints are historical, not targets.
+- [x] Gatsby 5.16.1 / React 19.3.0 / Node 24 / npm 11.9.0 baseline; native ESM Gatsby hooks, useStaticQuery wrapper, layout cleanup, explicit GraphQL types, current CI actions and build/download caching. The original Node 16/22 checkpoints are historical, not targets.
 - [x] Local MiniSearch replaces Algolia. Lazy bilingual indexes, safe snippets, covers, retry/error/empty/loading states, canonical content deduplication and modified/deleted-content checks are implemented. No external indexing account is required for search.
 - [x] gatsby-plugin-react-i18next owns translation resources/provider/navigation; avoid overlapping locale generators. EN/PL routes, genuine translations and untranslated copies remain explicit.
 - [x] Complete portable CSS Modules conversion and component ownership; global reset/fonts/tokens belong to shared layout. theme.yaml generates CSS variables. Remove obsolete styled-jsx packages and blanket imports.
@@ -47,6 +49,18 @@ This is the live checklist for [plan.md](./plan.md). Completed categories are co
 - [x] IndexNow CLI/domain/submission separation, public verification key, canonical content fingerprints, dry runs, deletion/batching/retry safeguards and production-only post-deploy CI. Recover acknowledged state across cache expiry; first deployment establishes a baseline without bulk historical submissions. No real notification was sent locally.
 - [x] Native Playwright Test fixtures/assertions/snapshots/webServer replace manual browser cleanup, PNG comparison and CI server polling. Seven TypeScript suites report 57 browser cases; Vitest remains for components with automatic mock cleanup. README covers focused/debug/report/trace and explicit snapshot review. Existing PNGs and the 3% tolerance are unchanged.
 - [x] Replace historical migration/body/count assertions with current generated-output and security checks. Earlier CodeQL fixes use parsed URLs and safe Markdown destinations rather than HTML attribute injection; no findings are suppressed.
+
+## Local acceptance — final dependencies / npm — 2026-10-10
+
+- Read Pongo's actual npm/workflow, TypeScript, lint, Prettier, EditorConfig and VS Code files again. Shared TS/Prettier/EditorConfig compare byte-for-byte equal. Use its npm 11.9.0 baseline and npm ci/run conventions; retain documented Gatsby JSX/DOM/generated-output and module-loader differences.
+- Clean npm ci passes before and after compatible security updates. npm postinstall applies the Gatsby patch and fails on a rejected patch; remove the Yarn-only installation helper and yarn.lock. Sharp 0.35.5 loads libvips 8.18.7 in a fresh process, and the native icon command verifies all 19 PNG sizes. No library-path workaround is added.
+- npm outdated reports only @types/node: keep 24.19.2 for the Node 24 runtime rather than install Node 26 types. The manifest has 84 direct declarations. The full before/current inventory and explicit peer overrides are in docs/dependency-review.md.
+- Root/NodeNext/browser TypeScript checks, smoke (79 source files / 18 GraphQL queries), actual npm run fix, full lint/Prettier and uncached ESLint pass. All 12 tooling/CLI cases pass, including source-subdirectory editor resolution, deprecated iframe attributes, real staging rejection and local repository imports. Sandbox child-process restrictions required unrestricted local tooling/test execution; assertions were retained.
+- All 19 component tests and the full npm run test command pass. Update the ref-forwarding assertion to Gatsby's current ref API. Move Vitest configuration into the existing ESM tests scope and update its command/debugger path; Vite's CommonJS-config warning is gone.
+- First npm production build: 163.53s. Final security-updated graph: 120.08s. All 57 browser cases pass (2.8m), including EN/PL hydration/navigation, screenshots, fonts, mobile menus, sticky navigation, search and newsletter behavior. Preserve screenshot PNGs/tolerances and the 697-route/feed/sitemap contract.
+- Warm content modification, canonical deletion and restoration pass (build phases 38.38s / 36.52s / 35.69s), including search indexes and exact publication/llms restoration. Module/global CSS edits and restoration pass across every generated page and browser computed styles with/without JavaScript; five warm build phases take 31.10–33.44s. These are local build timings, not a PageSpeed or hosted performance claim.
+- Workflow YAML parses; manual Netlify deploy help and npm argument forwarding are verified. Netlify CLI 27 deploy commands use its documented --no-build flag so CI uploads the already validated build and prepared IndexNow manifest. Gatsby cache compatibility now includes package-lock.json and a new cache generation; save still follows successful test gates.
+- Compatible npm audit fix removes both critical findings (loader-utils 2.0.4 / shell-quote 1.12.0) and reduces 126 findings to 112: 19 low, 32 moderate, 61 high, zero critical. Remaining Gatsby/Netlify dependency chains require separate review; do not accept proposed incompatible plugin downgrades. Peer/deprecation warnings remain visible. Builds still report slow category queries and dependency punycode deprecation (Gatsby labels the warning UNKNOWN but exits successfully). No warning suppression, deployment or real indexing submission is performed. Hosted CI/deployment remain pending.
 
 ## Local acceptance — React 19 / ESLint 10 / package audit — 2026-10-09
 
@@ -104,7 +118,7 @@ This is the live checklist for [plan.md](./plan.md). Completed categories are co
 
 ## Next technical category
 
-- [ ] Apply the remaining compatible minor/patch tooling and utility upgrades, then matched Playwright/browser updates from [the complete dependency review](docs/dependency-review.md). Separate CSS/localization/compiler/deployment major migrations; keep Node types aligned with the actual runtime.
+- [x] Accept the implemented tooling, browser, CSS/localization/compiler and manual-tool upgrades in [the dependency review](docs/dependency-review.md); keep Node types aligned with the actual runtime. Cache acceptance is tracked above.
 
 - [ ] Repair the legacy generate-app-icons command: it calls npx sharp, but the sharp library has no CLI binary. Use its already declared library API in the next manual-tooling pass. This audit does not run the broken command or change icon assets.
 - [ ] Profile first-party font requests, runtime switching and fallback layout shifts; apply only measured improvements preserving final typography and Polish glyph coverage.
@@ -126,7 +140,7 @@ This is the live checklist for [plan.md](./plan.md). Completed categories are co
 
 - Contact form repair/restoration: deferred at the owner's request. The live page offers Calendly; preserve unreferenced form files/dependencies until a frontend/Netlify detection/delivery solution is approved and verified.
 - Giscus or custom guest comments remain alternatives. Giscus requires GitHub authorization; a guest backend needs moderation, spam/rate controls, backups and operations. Keep Disqus and current automatic loading now; no click-to-load/provider switch is approved.
-- Tailwind, dark-mode palette/behavior, visual redesign, Slices/DSG and npm migration are separate reviewed categories. Keep Yarn, existing styles and static generation. The authorized React 19.3.0 upgrade passes local acceptance; hosted CI/deployment are separate checks.
+- Tailwind, dark-mode palette/behavior, visual redesign and Slices/DSG remain separate reviewed categories. npm migration is active above; preserve existing styles and static generation. The authorized React 19.3.0 upgrade passes local acceptance; hosted CI/deployment are separate checks.
 - Home-label decision 4, analytics/security-policy changes and font fallback metric changes need explicit review if they alter visible behavior.
 
 ## Manual operation

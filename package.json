@@ -2,14 +2,15 @@
   "name": "eternal-sunshine",
   "version": "2.0.0",
   "engines": {
-    "node": ">=24 <25"
+    "node": ">=24 <25",
+    "npm": ">=11.9 <12"
   },
   "author": "oskar dudycz <oskar.dudycz@gmail.com>",
   "license": "MIT",
   "scripts": {
     "generate-llms": "node ./scripts/generate-llms-txt.ts",
     "verify-seo": "node ./scripts/verify-seo-build.ts",
-    "test": "yarn typecheck && yarn test:seo && yarn test:build-contract && yarn test:substack && yarn test:video && yarn test:redirects && yarn test:articles && yarn test:categories && yarn test:performance && yarn test:tooling && yarn test:search && yarn test:localization && yarn test:css && yarn test:404 && yarn test:indexing && yarn test:components && yarn test:indexnow && yarn test:images && yarn test:browser-types",
+    "test": "npm run typecheck && npm run test:seo && npm run test:build-contract && npm run test:substack && npm run test:video && npm run test:redirects && npm run test:articles && npm run test:categories && npm run test:performance && npm run test:tooling && npm run test:search && npm run test:localization && npm run test:css && npm run test:404 && npm run test:indexing && npm run test:components && npm run test:indexnow && npm run test:images && npm run test:browser-types",
     "test:seo": "node ./tests/seo-build.test.ts",
     "test:build-contract": "node ./tests/build-contract.test.ts",
     "test:visual": "playwright test",
@@ -21,20 +22,20 @@
     "smoke": "node ./scripts/smoke.ts",
     "verify:build-contract": "node ./scripts/verify-build-contract.ts",
     "update:build-contract": "node ./scripts/update-build-contract.ts",
-    "prebuild": "yarn check:images && yarn generate-theme-css && node ./scripts/generate-llms-txt.ts",
+    "prebuild": "npm run check:images && npm run generate-theme-css && node ./scripts/generate-llms-txt.ts",
     "import-newsletter": "node ./import/import-newsletter.ts",
     "import-architecture-weekly": "node ./import/import-architecture-weekly.ts",
-    "import-and-build": "yarn import-newsletter && yarn import-architecture-weekly && yarn build",
+    "import-and-build": "npm run import-newsletter && npm run import-architecture-weekly && npm run build",
     "build": "gatsby build",
     "clean": "gatsby clean",
     "develop": "gatsby develop",
     "devhost": "gatsby develop --host 192.168.0.112",
     "serve": "gatsby serve",
-    "deploy": "netlify deploy",
-    "deploy:prod": "netlify deploy --prod",
-    "format": "yarn fix:prettier",
-    "lint-errors": "yarn lint:eslint",
-    "lint": "yarn lint:eslint && yarn lint:prettier",
+    "deploy": "netlify deploy --no-build",
+    "deploy:prod": "netlify deploy --no-build --prod",
+    "format": "npm run fix:prettier",
+    "lint-errors": "npm run lint:eslint",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
     "generate-app-icons": "node ./scripts/generate-app-icons.ts",
     "import-substack": "node ./import/import-substack.ts",
     "import-articles": "node ./import/import-articles.ts",
@@ -43,14 +44,14 @@
     "test:redirects": "node ./tests/article-redirects.test.ts",
     "test:articles": "node ./tests/article-build.test.ts",
     "test:cache": "node ./scripts/verify-gatsby-cache.ts",
-    "lint:modern": "yarn lint:eslint",
+    "lint:modern": "npm run lint:eslint",
     "test:categories": "node ./tests/category-posts.test.ts",
     "browsers:install": "playwright install chromium",
     "browsers:install:ci": "playwright install --with-deps chromium",
     "test:performance": "node --test --test-isolation=none tests/performance.test.ts",
     "lint:eslint": "eslint --cache . --max-warnings 0",
     "lint:prettier": "prettier --cache --check .",
-    "fix": "yarn fix:eslint && yarn fix:prettier",
+    "fix": "npm run fix:eslint && npm run fix:prettier",
     "fix:eslint": "eslint --cache . --fix --max-warnings 0",
     "fix:prettier": "prettier --cache --write .",
     "lint-staged": "lint-staged",
@@ -61,8 +62,8 @@
     "test:search:dev": "node scripts/verify-search-development.ts",
     "test:localization": "node --test --test-isolation=none tests/localization.test.ts",
     "generate-theme-css": "node scripts/generate-theme-css.ts",
-    "predevelop": "yarn generate-theme-css",
-    "predevhost": "yarn generate-theme-css",
+    "predevelop": "npm run generate-theme-css",
+    "predevhost": "npm run generate-theme-css",
     "test:css": "node --test --test-isolation=none tests/css-build.test.ts",
     "test:cache:css": "node scripts/verify-gatsby-css-cache.ts",
     "test:404": "node --test --test-isolation=none tests/not-found.test.ts",
@@ -70,13 +71,13 @@
     "test:indexing": "node --test --test-isolation=none tests/indexing.test.ts",
     "audit:indexing": "node scripts/audit-indexing.ts",
     "normalize:youtube": "node scripts/normalize-youtube.ts",
-    "test:components": "vitest run",
+    "test:components": "vitest run --config tests/vitest.config.ts",
     "postinstall": "patch-package --error-on-fail",
     "indexnow": "node scripts/indexnow.ts",
     "indexnow:prepare": "node scripts/indexnow.ts --prepare",
     "test:indexnow": "node --test --test-isolation=none tests/indexnow.test.ts",
     "check:images": "node scripts/check-image-alternatives.ts",
-    "test:images": "yarn check:images && node --test --test-isolation=none tests/image-alternatives.test.ts",
+    "test:images": "npm run check:images && node --test --test-isolation=none tests/image-alternatives.test.ts",
     "test:browser-types": "tsc --project tests/browser/tsconfig.json",
     "typecheck": "tsc --project tsconfig.json && tsc --project tsconfig.node.json",
     "typecheck:watch": "tsc --project tsconfig.json --watch"
@@ -110,7 +111,7 @@
     "gatsby-transformer-json": "^5.16.0",
     "gatsby-transformer-remark": "^6.16.0",
     "gatsby-transformer-sharp": "^5.16.0",
-    "i18next": "26.4.2",
+    "i18next": "26.4.3",
     "js-yaml": "5.4.3",
     "lodash": "4.18.1",
     "minisearch": "7.2.0",
@@ -131,9 +132,9 @@
     "@playwright/test": "1.64.0",
     "@types/escape-html": "^1.0.4",
     "@types/fontfaceobserver": "^2.1.3",
-    "@types/lodash": "^4.17.25",
+    "@types/lodash": "^4.17.26",
     "@types/mdast": "4.0.4",
-    "@types/node": "24.19.1",
+    "@types/node": "24.19.2",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@types/turndown": "^5.0.6",
@@ -161,8 +162,7 @@
     "postcss": "8.5.29",
     "postcss-nested": "8.0.1",
     "postcss-preset-env": "11.6.1",
-    "postinstall-postinstall": "2.1.0",
-    "prettier": "3.9.9",
+    "prettier": "3.9.10",
     "remark": "15.0.1",
     "sharp": "0.35.5",
     "turndown": "7.2.4",
@@ -173,7 +173,19 @@
     "webpack-bundle-analyzer": "5.4.0",
     "@typescript/native": "npm:typescript@7.0.2"
   },
-  "resolutions": {
-    "@types/react": "19.3.0"
-  }
+  "overrides": {
+    "@types/react": "$@types/react",
+    "eslint-plugin-react": {
+      "eslint": "$eslint"
+    },
+    "eslint-plugin-jsx-a11y": {
+      "eslint": "$eslint"
+    },
+    "gatsby-plugin-react-i18next": {
+      "react": "$react",
+      "i18next": "$i18next",
+      "react-i18next": "$react-i18next"
+    }
+  },
+  "packageManager": "npm@11.9.0"
 }

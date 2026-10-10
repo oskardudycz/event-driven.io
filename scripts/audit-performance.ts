@@ -36,7 +36,7 @@ const { values } = parseArgs({
 });
 if (values.help) {
   console.log(
-    'Usage: yarn audit:performance --base-url URL [--runs 3] [--page /en/] [--label baseline] [--output report/performance] [--lighthouse-bin /path/to/lighthouse/cli/index.js] [--block-pattern *disqus*]',
+    'Usage: npm run audit:performance -- --base-url URL [--runs 3] [--page /en/] [--label baseline] [--output report/performance] [--lighthouse-bin /path/to/lighthouse/cli/index.js] [--block-pattern *disqus*]',
   );
   process.exit(0);
 }
