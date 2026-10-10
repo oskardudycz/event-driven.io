@@ -3,7 +3,7 @@ import * as styles from './category.module.css';
 import { FaTag } from 'react-icons/fa';
 import React from 'react';
 import { graphql } from 'gatsby';
-import kebabCase from 'lodash/kebabCase.js';
+import { categorySlug } from '../utils/category-slug.ts';
 import { useTranslation } from 'react-i18next';
 
 import { usePageContext } from '../i18n/page-context.ts';
@@ -25,7 +25,7 @@ const CategoryPage = (props: SitePageProps<'posts'>) => {
 
   const guides = categoryGuides.filter((guide) => guide.language === lang);
   const guideFor = (category: string) =>
-    guides.find((guide) => guide.slug === kebabCase(category));
+    guides.find((guide) => guide.slug === categorySlug(category));
   const categoryList = categoriesForLanguage(
     posts.map(({ node }) => node),
     lang,
@@ -51,7 +51,7 @@ const CategoryPage = (props: SitePageProps<'posts'>) => {
             const guide = guideFor(category);
             return (
               <section key={category} className={styles.elementSection}>
-                <Link to={`/category/${kebabCase(category)}/`}>
+                <Link to={`/category/${categorySlug(category)}/`}>
                   <h2 className={styles.elementH2}>
                     <FaTag /> {category}
                   </h2>

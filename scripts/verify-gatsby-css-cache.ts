@@ -12,8 +12,8 @@ import { spawnSync } from 'node:child_process';
 import * as cheerio from 'cheerio';
 import { checkCssBrowser } from './check-css-browser.ts';
 
-// Opt-in integration check: change only a declaration, keeping every CSS Module
-// export and all publication sources unchanged. Always rebuild restored styles.
+// Opt-in integration check: edit CSS declarations and a literal utility class,
+// keeping publication sources unchanged. Always rebuild restored styles.
 const logs = mkdtempSync(join(tmpdir(), 'gatsby-css-cache-'));
 const page = 'public/en/introduction_to_event_sourcing/index.html';
 function build(label: string) {
@@ -95,6 +95,25 @@ for (const change of [
   );
   await checkCssBrowser(baselineColor);
 }
+const layout = 'src/layouts/index.tsx';
+const originalLayout = readFileSync(layout, 'utf8');
+const changedLayout = originalLayout.replace('min-h-[80vh]', 'min-h-[81vh]');
+assert.notEqual(changedLayout, originalLayout, 'Main utility probe is missing');
+try {
+  writeFileSync(layout, changedLayout);
+  build('utility-class-change');
+  assert.match(inlineStyles(), /min-height:81vh/);
+  await checkCssBrowser(baselineColor, 81);
+} finally {
+  writeFileSync(layout, originalLayout);
+  build('utility-class-restored');
+}
+assert.equal(
+  inlineStyles(),
+  baseline,
+  'Warm build did not remove the temporary utility and restore original CSS',
+);
+await checkCssBrowser(baselineColor);
 console.log(
-  'Module/global CSS modification and restoration passed across all generated pages.',
+  'Module/global CSS and utility class edits/restoration passed before and after hydration.',
 );

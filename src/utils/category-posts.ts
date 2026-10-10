@@ -6,7 +6,7 @@ type CategorizedPost = {
     'category' | 'categories' | 'useDefaultLangCanonical'
   >;
 };
-import kebabCase from 'lodash/kebabCase.js';
+import { categorySlug as slugForCategory } from './category-slug.ts';
 
 export const categoriesForPost = (node: Pick<CategorizedPost, 'frontmatter'>) =>
   Array.from(
@@ -33,7 +33,7 @@ export function categoryPostsForLanguage<T extends CategorizedPost>(
         (node) =>
           !node.frontmatter.useDefaultLangCanonical &&
           categoriesForPost(node).some(
-            (category) => kebabCase(category) === categorySlug,
+            (category) => slugForCategory(category) === categorySlug,
           ),
       )
       .map((node) => node.fields.slug),
@@ -78,6 +78,6 @@ export function categoriesForLanguage<T extends CategorizedPost>(
     );
   return [...categories].map((category) => [
     category,
-    categoryPostsForLanguage(nodes, kebabCase(category), language),
+    categoryPostsForLanguage(nodes, slugForCategory(category), language),
   ]);
 }

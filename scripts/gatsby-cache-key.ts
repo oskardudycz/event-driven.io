@@ -39,6 +39,7 @@ for (const file of [
   'src/theme/tailwind.css',
   'scripts/build-search-index.ts',
   'src/utils/category-posts.ts',
+  'src/utils/category-slug.ts',
   'content/meta/config.ts',
 ])
   include(file);
