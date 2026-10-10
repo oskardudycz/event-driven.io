@@ -75,14 +75,12 @@
     "seoTitle": "Skontaktuj się z Oskarem Dudyczem",
     "description": "Skontaktuj się z Oskarem Dudyczem w sprawie szkoleń z Event Sourcingu, konsultingu architektonicznego i wystąpień.",
     "intro": "W sprawie konsultingu, przeglądu architektury lub szkolenia",
-    "bookCall": "umów bezpłatną rozmowę wstępną.",
-    "form": {
-      "name": "Imię i nazwisko",
-      "email": "E-mail",
-      "message": "Wiadomość",
-      "emailError": "Podaj poprawny adres e-mail.",
-      "messageError": "Wpisz wiadomość.",
-      "submit": "Wyślij wiadomość"
-    }
+    "bookCall": "umów bezpłatną rozmowę wstępną."
+  },
+  "appearance": {
+    "label": "Motyw",
+    "system": "Systemowy",
+    "light": "Jasny",
+    "dark": "Ciemny"
   }
 }

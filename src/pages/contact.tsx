@@ -1,4 +1,3 @@
-import * as styles from './contact.module.css';
 import React from 'react';
 import { graphql } from 'gatsby';
 
@@ -16,13 +15,13 @@ const ContactPage = () => {
         <header>
           <Headline title={t('contact.title')} />
         </header>
-        <p className={styles.elementP}>
+        <p className="text-body leading-summary">
           {t('contact.intro')}{' '}
           <a
             href="https://calendly.com/oskar-dudycz/consulting"
             target="_blank"
             rel="noopener noreferrer"
-            className={styles.elementA}
+            className="font-semibold text-accent underline"
           >
             {t('contact.bookCall')}
           </a>

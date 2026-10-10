@@ -3,7 +3,7 @@ import * as styles from './category.module.css';
 import { FaTag } from 'react-icons/fa';
 import React from 'react';
 import { graphql } from 'gatsby';
-import kebabCase from 'lodash/kebabCase';
+import kebabCase from 'lodash/kebabCase.js';
 import { useTranslation } from 'react-i18next';
 
 import { usePageContext } from '../i18n/page-context.ts';

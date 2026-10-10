@@ -3,6 +3,45 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import * as cheerio from 'cheerio';
+import postcss from 'postcss';
+import postcssConfig from '../postcss.config.mjs';
+
+void test('the styling pipeline emits token utilities and preserves nested module selectors', async () => {
+  const input =
+    readFileSync('src/theme/tailwind.css', 'utf8') +
+    `
+    @source inline("text-accent gap-gutter min-h-[80vh]");
+    .menu { :global(.homepage) & { color: var(--text-color-brand); } }
+  `;
+  const { root } = await postcss(postcssConfig().plugins).process(input, {
+    from: join(process.cwd(), 'src/theme/tailwind.css'),
+  });
+  const declarations = new Map<string, Map<string, string>>();
+  root.walkRules((rule) => {
+    const values = new Map<string, string>();
+    rule.walkDecls((declaration) => {
+      values.set(declaration.prop, declaration.value);
+    });
+    declarations.set(rule.selector, values);
+  });
+  assert.equal(
+    declarations.get('.text-accent')?.get('color'),
+    'var(--text-color-brand)',
+  );
+  assert.equal(declarations.get('.gap-gutter')?.get('gap'), 'var(--space-md)');
+  assert.equal(
+    declarations.get('.min-h-\\[80vh\\]')?.get('min-height'),
+    '80vh',
+  );
+  assert.equal(
+    declarations.get(':global(.homepage) .menu')?.get('color'),
+    'var(--text-color-brand)',
+  );
+  // Adding utilities must not introduce a different heading reset.
+  for (const selector of declarations.keys()) {
+    assert.ok(!selector.split(',').some((part) => part.trim() === 'h1'));
+  }
+});
 
 // Old CSS assets may legitimately remain on disk after a warm build. Compare
 // with the current compilation, not just with whichever file the HTML names.

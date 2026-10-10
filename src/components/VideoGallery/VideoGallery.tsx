@@ -1,5 +1,4 @@
 import type { VideoDetails } from '../../types/content.ts';
-import * as styles from './VideoGallery.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Video from '../Video/index.ts';
@@ -9,28 +8,31 @@ const VideoGallery = ({ videos }: { videos: VideoDetails[] }) => {
 
   return (
     <React.Fragment>
-      <ul className={`videoGrid ${styles.videoGrid}`}>
+      <ul className="videoGrid my-section grid list-none gap-section p-0 min-[600px]:grid-cols-2">
         {videos.map((video) => {
           const url = `https://www.youtube.com/watch?v=${video.VideoId}`;
           return (
-            <li key={video.VideoId} className={styles.elementLi}>
+            <li
+              key={video.VideoId}
+              className="overflow-hidden rounded-panel border border-solid border-line"
+            >
               <Video
                 videoSrcURL={video.VideoId}
                 videoTitle={video.Title}
                 playLabel={t('talks.play', { title: video.Title })}
               />
-              <div className={`videoDetails ${styles.videoDetails}`}>
-                <h3 className={styles.elementH3}>
+              <div className="videoDetails p-gutter">
+                <h3 className="mb-2.5 text-summary leading-[var(--line-height-card)]">
                   <a
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={styles.elementA}
+                    className="text-ink"
                   >
                     {video.Title}
                   </a>
                 </h3>
-                <p className={styles.elementP}>
+                <p className="text-caption">
                   {video.Channel} · {video.Duration} · {video.Language}
                 </p>
               </div>

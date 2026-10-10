@@ -4,7 +4,7 @@
 
 @media screen and (max-width: 1023px) {
   :global(.more).more {
-    background: var(--color-neutral-white);
+    background: var(--color-surface);
     border: 1px solid var(--color-brand);
     border-radius: var(--size-radius-small) var(--size-radius-small) 0 0;
     border-bottom: none;
@@ -73,12 +73,12 @@
     }
 
     :global(.open) & {
-      background-color: rgba(255, 255, 255, 0.9);
+      background-color: var(--color-menu-overlay);
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
 
       &:hover {
-        background-color: rgba(255, 255, 255, 0.9);
+        background-color: var(--color-menu-overlay);
       }
 
       :global(svg) {

@@ -1,11 +1,8 @@
 import postcssNested from 'postcss-nested';
-import postcssPresetEnv from 'postcss-preset-env';
+import tailwindcss from '@tailwindcss/postcss';
 
 export default () => ({
-  plugins: [
-    postcssPresetEnv({
-      stage: 0,
-    }),
-    postcssNested,
-  ],
+  // Flatten component nesting before Gatsby's CSS Module selector processing.
+  // Tailwind owns imports, prefixing and modern syntax for its utility output.
+  plugins: [postcssNested, tailwindcss],
 });

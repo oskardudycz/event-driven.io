@@ -1,8 +1,0 @@
-.related {
-  margin: var(--space-md) 0 var(--space-lg);
-}
-.related h2 {
-  font-size: var(--font-size-heading);
-  line-height: var(--line-height-heading);
-  margin: 0 0 var(--space-md);
-}

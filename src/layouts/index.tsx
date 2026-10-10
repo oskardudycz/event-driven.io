@@ -1,7 +1,7 @@
 import type { ArticleEdge } from '../types/content.ts';
 import '../theme/tokens.css';
+import '../theme/tailwind.css';
 import '../theme/global.css';
-import * as styles from './Layout.module.css';
 import FontFaceObserver from 'fontfaceobserver';
 import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
@@ -9,18 +9,8 @@ import { graphql, useStaticQuery } from 'gatsby';
 import { getScreenWidth, timeoutThrottlerHandler } from '../utils/helpers.ts';
 import Footer from '../components/Footer/index.ts';
 import Header from '../components/Header/index.ts';
-import themeObjectFromYaml from '../theme/theme.yaml';
-
-import {
-  ThemeContext,
-  ScreenWidthContext,
-  FontLoadedContext,
-} from './contexts';
-export {
-  ThemeContext,
-  ScreenWidthContext,
-  FontLoadedContext,
-} from './contexts';
+import { ScreenWidthContext, FontLoadedContext } from './contexts';
+export { ScreenWidthContext, FontLoadedContext } from './contexts';
 
 type LayoutProps = React.PropsWithChildren<{
   location: { pathname: string };
@@ -31,7 +21,6 @@ type LayoutState = {
   font600loaded: boolean;
   screenWidth: number;
   headerMinimized: boolean;
-  theme: typeof themeObjectFromYaml;
 };
 class Layout extends React.Component<LayoutProps, LayoutState> {
   mounted = false;
@@ -43,7 +32,6 @@ class Layout extends React.Component<LayoutProps, LayoutState> {
       font600loaded: false,
       screenWidth: 0,
       headerMinimized: false,
-      theme: themeObjectFromYaml,
     };
   }
 
@@ -119,17 +107,15 @@ class Layout extends React.Component<LayoutProps, LayoutState> {
     } = this.props.data;
 
     return (
-      <ThemeContext.Provider value={this.state.theme}>
-        <FontLoadedContext.Provider value={this.state.font400loaded}>
-          <ScreenWidthContext.Provider value={this.state.screenWidth}>
-            <React.Fragment>
-              <Header path={this.props.location.pathname} pages={pages} />
-              <main className={styles.main}>{children}</main>
-              <Footer html={footnoteHTML} />
-            </React.Fragment>
-          </ScreenWidthContext.Provider>
-        </FontLoadedContext.Provider>
-      </ThemeContext.Provider>
+      <FontLoadedContext.Provider value={this.state.font400loaded}>
+        <ScreenWidthContext.Provider value={this.state.screenWidth}>
+          <React.Fragment>
+            <Header path={this.props.location.pathname} pages={pages} />
+            <main className="min-h-[80vh]">{children}</main>
+            <Footer html={footnoteHTML} />
+          </React.Fragment>
+        </ScreenWidthContext.Provider>
+      </FontLoadedContext.Provider>
     );
   }
 }

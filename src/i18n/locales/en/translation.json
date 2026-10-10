@@ -74,14 +74,12 @@
     "seoTitle": "Contact Oskar Dudycz",
     "description": "Contact Oskar Dudycz about Event Sourcing training, software architecture consulting, and speaking.",
     "intro": "For consulting, architecture reviews, or training,",
-    "bookCall": "book a free introductory call.",
-    "form": {
-      "name": "Name",
-      "email": "Email",
-      "message": "Message",
-      "emailError": "Please enter a valid email address.",
-      "messageError": "Please enter your message.",
-      "submit": "Send message"
-    }
+    "bookCall": "book a free introductory call."
+  },
+  "appearance": {
+    "label": "Theme",
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark"
   }
 }

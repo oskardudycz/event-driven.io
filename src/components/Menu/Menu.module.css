@@ -1,6 +1,6 @@
 :global(.menu).menu {
   align-items: center;
-  background: var(--color-neutral-white);
+  background: var(--color-surface);
   bottom: 0;
   display: flex;
   flex-grow: 1;
@@ -92,14 +92,14 @@
 
     :global(.homepage):not(:global(.fixed)) & {
       border: 1px solid transparent;
-      background: rgba(255, 255, 255, 0.9);
+      background: var(--color-menu-overlay);
       top: 50px;
 
       &:after {
         top: -11px;
         border-left: 1px solid transparent;
         border-right: 1px solid transparent;
-        background: rgba(255, 255, 255, 0.9);
+        background: var(--color-menu-overlay);
       }
     }
 

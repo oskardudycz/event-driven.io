@@ -43,12 +43,6 @@ export default defineConfig([
       },
     },
 
-    settings: {
-      'import/resolver': {
-        typescript: {},
-      },
-    },
-
     rules: {
       'no-unused-vars': 'off',
 
