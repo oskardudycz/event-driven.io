@@ -34,7 +34,7 @@
     }
 
     :global(a:hover) {
-      color: black;
+      color: var(--color-body);
       background: rgba(255, 255, 255, 0.4);
     }
 
@@ -48,7 +48,7 @@
     }
 
     &:hover :global(svg) {
-      fill: black;
+      fill: var(--color-body);
       opacity: 1;
 
       :global(.hero) & :global(svg) {

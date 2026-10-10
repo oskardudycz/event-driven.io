@@ -323,7 +323,15 @@ A guide does not create a category route by itself; at least one canonical artic
 
 ### Styles
 
-Edit component-owned `.module.css` files, `src/theme/global.css` for the shared reset, and `src/theme/theme.yaml` for tokens. `npm run generate-theme-css` regenerates `src/theme/tokens.css`; do not edit generated tokens directly. Production/development startup runs the generator. After changing YAML during a development session, run it again.
+Edit component-owned `.module.css` files, `src/theme/global.css` for the shared reset, and `src/theme/tokens.css` for colors, spacing and other design tokens. Tokens are ordinary CSS variables; no generator is needed.
+
+Tailwind 4 runs through Gatsby's PostCSS pipeline. Shared configuration lives in `src/theme/tailwind.css`; it imports the theme and utilities while preserving the existing reset. Use literal utility classes in `.tsx` files, such as `min-h-[80vh]`, `text-accent` or `gap-gutter`. Avoid constructing class names from string fragments: Tailwind scans complete names. Existing component CSS Modules remain supported. Prefer direct CSS variables in modules; utilities do not need to be copied into modules with `@apply`.
+
+The styling baseline is Safari 16.4+, Chrome 111+ and Firefox 128+. The existing reset is in the `base` cascade layer so utilities can override it deliberately. Unlayered component CSS takes precedence over layered utilities, so remove an old property from its module when deliberately moving that property to a utility. A new reset and broader visual redesign remain separate work.
+
+The footer's **Theme / Motyw** selector offers system, light and dark modes. Preference is stored as `color-theme` in local storage. System mode follows OS changes; explicit choices persist across reloads and EN/PL navigation. `src/theme/preference.ts` provides the small document-head initializer so saved preferences apply before React loads. Without JavaScript, the site uses the light stylesheet and the selector is disabled. Storage failures fall back to system preference without preventing a change on the current page.
+
+Edit light values in `:root` and dark overrides in `:root[data-theme='dark']` in `src/theme/tokens.css`. Transparent article diagrams keep a white canvas for readable labels. Embedded third-party widgets retain their provider's own appearance. Run `npm run test:visual -- theme.spec.ts` for theme behavior, and the full browser suite for shared styling/navigation changes.
 
 Use named CSS exports, for example `import * as styles from './Component.module.css'` and `className={styles.container}`. Dashed local selectors are exported in camel case. Keep Gatsby data/routing adapters separate from reusable presentation components where needed; the reading-list view accepts a link renderer and owns its stylesheet.
 

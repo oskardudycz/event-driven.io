@@ -1,12 +1,38 @@
 # SEO, content, and platform progress
 
+## Portable styling and dependency quick wins — 2026-10-10
+
+- [x] Agree the shorter scope: keep useful CSS Modules, finish the portable foundation, then one coordinated Tailwind shared-layout/theme change. No blanket utility conversion, automatic snapshot acceptance or Astro migration in this stage.
+- [ ] Finish Tailwind 4 integration through supported Gatsby/PostCSS configuration loading, without Preflight. Packages/configuration are present, but generated CSS still contains unprocessed Tailwind directives; a standalone pipeline check does not establish Gatsby integration. Verify emitted utilities and real computed styles before accepting the foundation.
+- [x] Implement direct CSS-variable token editing and remove YAML generation and the unused runtime ThemeContext. Final appearance/cache acceptance remains part of the foundation checks below.
+- [x] Remove unused pngjs and inert resolver configuration; narrow active Lodash use and retain the Turndown importer.
+- [x] Keep Pongo's ESLint/Prettier integration; remove the rejected separate-tool proposal from current recommendations.
+- [x] Record Starlight inspiration, Astro migration tradeoffs and sharing alternatives in the comparison. Keep Gatsby and existing sharing behavior for this pass.
+- [ ] Run installation, types/lint, production build, full tests and existing browser checks; distinguish filesystem/approval restrictions from code failures and pending hosted validation.
+- [ ] Investigate and resolve installation warnings where supported fixes exist; list Gatsby-owned unresolved warnings explicitly rather than suppressing them or claiming warning-free acceptance.
+- [ ] After foundation acceptance, finish the single coordinated shared-layout/theme pass already drafted in the working tree: Tailwind for shell/reusable presentation, retained scoped typography/complex styles, and light/dark/system selection. Preserve routing/content/language behavior; review intentional layout changes within the owner's close-enough allowance. No exhaustive module-to-utility conversion.
+- [ ] Resolve both current focused browser failures: the video list renders as a block instead of a grid, and the 390px mobile viewport has a 395px document width. Three preference/system/storage cases pass; the layout/theme category is not complete.
+- [ ] Run the full browser suite with existing screenshot tolerances, EN/PL navigation, theme first paint/persistence/system changes, responsive menus and diagrams. Recheck CSS modification/restoration with warm Gatsby caches after fixing the real PostCSS integration. Record hosted CI and deployment separately.
+
+Current evidence: production build, smoke checks, types, lint and nonvisual checks have passed locally for the draft; focused browser checks are **3 passed / 2 failed**. Earlier 57-case browser acceptance predates the coordinated layout/theme draft and must not be reported as its acceptance. Installation still emits Gatsby-chain peer/deprecation warnings and the audit remains at 111 affected entries; the warning-free target is open. This documentation update changes the agreed scope/status only; it does not resolve those implementation failures.
+
+## Starter research and authorized form retirement — 2026-10-10
+
+- [x] Download and compare the official minimal/blog Gatsby starters and maintained modern Tailwind references; exclude the archived Gatsby 2 example from recommendations. Record pinned commits, maintenance, manifest/source comparisons, isolated Linux npm resolutions, peer/security causes and all 84 starting dependency dispositions in [gatsby-starter-comparison.md](docs/gatsby-starter-comparison.md).
+- [x] Retire the unused Contact component/barrel/CSS, form-only EN/PL translations and Ant Design, as authorized. Preserve the live Calendly pages and routes. At that checkpoint the lockfile dropped from 3,040 to 2,970 entries without retained version changes. After the subsequent foundation cleanup it contains 2,907 entries; the manifest has 83 direct declarations (38 dependencies, 45 development tools/types).
+- [x] Verify clean npm ci with Gatsby patch hook, strict types and all 19 component cases. Further build/browser results will be recorded below when complete.
+- [ ] Validate production output and bilingual contact/navigation behavior after retirement; hosted CI/deployment remain separate.
+- [x] Apply the demonstrated cleanup category: unused pngjs declaration, inert resolver configuration and unused runtime theme provider. Final foundation validation is tracked above.
+- [ ] Resolve project-owned lint/localization peer exceptions and investigate Gatsby's nested dependency/security chains. Current audit: 111 affected entries (19 low, 31 moderate, 61 high; no critical), representing 29 distinct advisory URLs. Fresh starters reproduce some upstream problems; that does not make this graph accepted as clean.
+- [x] Record settled choices: Tailwind alongside useful modules, modern browser CSS, CSS variables as editable tokens, and Pongo's integrated formatting rules. Keep share features pending a measured replacement review. Astro remains a later decision.
+
 ## Dependency acceptance and npm migration — 2026-10-10
 
 - [x] Resolve the demonstrated Sharp native-loader failure with clean npm ci; strict types, real lint/fix/format and tooling acceptance pass.
 - [x] Migrate commands, lockfile, CI/download and Gatsby caches, hooks, editor configuration and README to npm; retain one lockfile.
 - [x] Validate npm ci, types, smoke, lint/fix/format, build, full tests, browser screenshots and content/CSS cache modification/deletion/restoration.
 - [ ] Verify hosted CI/deployment separately after publication.
-- [ ] Review the remaining 112 transitive audit findings in Gatsby/Netlify chains; compatible fixes removed both critical advisories. Avoid audit-force plugin downgrades.
+- [ ] Remediate the remaining audit chains as tracked in the current research above. The earlier 112-entry audit fell to 111 with form retirement; compatible fixes had removed both critical advisories. Avoid audit-force plugin downgrades.
 
 Last updated: 2026-10-10
 
@@ -35,7 +61,7 @@ This is the live checklist for [plan.md](./plan.md). Completed categories are co
 - [x] Gatsby 5.16.1 / React 19.3.0 / Node 24 / npm 11.9.0 baseline; native ESM Gatsby hooks, useStaticQuery wrapper, layout cleanup, explicit GraphQL types, current CI actions and build/download caching. The original Node 16/22 checkpoints are historical, not targets.
 - [x] Local MiniSearch replaces Algolia. Lazy bilingual indexes, safe snippets, covers, retry/error/empty/loading states, canonical content deduplication and modified/deleted-content checks are implemented. No external indexing account is required for search.
 - [x] gatsby-plugin-react-i18next owns translation resources/provider/navigation; avoid overlapping locale generators. EN/PL routes, genuine translations and untranslated copies remain explicit.
-- [x] Complete portable CSS Modules conversion and component ownership; global reset/fonts/tokens belong to shared layout. theme.yaml generates CSS variables. Remove obsolete styled-jsx packages and blanket imports.
+- [x] Complete portable CSS Modules conversion and component ownership; global reset/fonts/tokens belong to shared layout. CSS variables are now edited directly in src/theme/tokens.css; the earlier YAML generator is retired. Remove obsolete styled-jsx packages and blanket imports.
 - [x] Resolve CSS extraction-order cause through the reading-list adapter/view boundary; use standard named exports and SHA-256 loader identifiers. Keep the documented [Gatsby CSS cache correction](docs/gatsby-css-cache-patch.md) until an upstream release passes edit/restoration regressions. Module/global CSS and modified/deleted-content warm builds pass.
 - [x] Bilingual root/localized 404 recovery with generated-output and browser checks. Unknown URLs retain HTTP 404 and noindex; confirmed historical aliases redirect to actual replacements. Unknown content is not redirected to unrelated pages.
 - [x] Fix H1 multiplicity, structured-data timestamps/timezones, Service schema language handling, canonical/hreflang/sitemap rules and anti-patterns page/post collision. The article owns the route, links the series/talks and appears once in llms.txt.
@@ -120,7 +146,7 @@ This is the live checklist for [plan.md](./plan.md). Completed categories are co
 
 - [x] Accept the implemented tooling, browser, CSS/localization/compiler and manual-tool upgrades in [the dependency review](docs/dependency-review.md); keep Node types aligned with the actual runtime. Cache acceptance is tracked above.
 
-- [ ] Repair the legacy generate-app-icons command: it calls npx sharp, but the sharp library has no CLI binary. Use its already declared library API in the next manual-tooling pass. This audit does not run the broken command or change icon assets.
+- [x] Replace the broken npx sharp icon command with the native TypeScript Sharp API command. The existing tooling fixture verifies all 19 output sizes; this was completed during npm/manual-tool acceptance.
 - [ ] Profile first-party font requests, runtime switching and fallback layout shifts; apply only measured improvements preserving final typography and Polish glyph coverage.
 - [ ] Trace any application-owned console/network failures reproduced in a clean browser. Investigate a file:/// initiator only if it recurs; third-party Disqus/Firefox policy warnings are documented in [pagespeed-review.md](docs/pagespeed-review.md).
 - [ ] Investigate the reproduced LMDB scheduleFlush negative interval and a Gatsby-supported upstream correction; preserve cache integrity and do not suppress warnings or force a database upgrade.
@@ -138,9 +164,9 @@ This is the live checklist for [plan.md](./plan.md). Completed categories are co
 
 ## Deferred decisions
 
-- Contact form repair/restoration: deferred at the owner's request. The live page offers Calendly; preserve unreferenced form files/dependencies until a frontend/Netlify detection/delivery solution is approved and verified.
+- New contact form: old inactive form and Ant Design are now retired by owner decision. Keep Calendly; design the replacement separately using native controls and verified hosted processing/delivery. Research and acceptance requirements are in the starter comparison.
 - Giscus or custom guest comments remain alternatives. Giscus requires GitHub authorization; a guest backend needs moderation, spam/rate controls, backups and operations. Keep Disqus and current automatic loading now; no click-to-load/provider switch is approved.
-- Tailwind, dark-mode palette/behavior, visual redesign and Slices/DSG remain separate reviewed categories. npm migration is active above; preserve existing styles and static generation. The authorized React 19.3.0 upgrade passes local acceptance; hosted CI/deployment are separate checks.
+- Tailwind integration and the coordinated shared-layout/theme draft are in progress; the current checklist records their acceptance blockers. Broader visual redesign and Slices/DSG remain later categories. npm migration is locally complete; dependency compatibility/security remediation remains open. Preserve useful CSS Modules and static generation. The authorized React 19.3.0 upgrade passed earlier local application acceptance; hosted CI/deployment are separate checks.
 - Home-label decision 4, analytics/security-policy changes and font fallback metric changes need explicit review if they alter visible behavior.
 
 ## Manual operation

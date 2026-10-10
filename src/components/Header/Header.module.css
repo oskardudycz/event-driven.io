@@ -1,7 +1,7 @@
 :global(.header).header {
   align-items: center;
   justify-content: center;
-  background-color: var(--color-neutral-white);
+  background-color: var(--color-surface);
   display: flex;
   height: var(--header-height-default);
   position: relative;
@@ -101,7 +101,7 @@ h2.elementH2 {
 @media screen and (min-width: 1024px) {
   :global(.header).header {
     align-items: center;
-    background-color: var(--color-neutral-white);
+    background-color: var(--color-surface);
     display: flex;
     position: absolute;
     top: 0;
@@ -111,7 +111,7 @@ h2.elementH2 {
 
     &:global(.fixed).fixed {
       height: var(--header-height-fixed);
-      background-color: var(--color-neutral-white);
+      background-color: var(--color-surface);
       left: 0;
       padding: 0 var(--space-md);
       position: fixed;

@@ -4,6 +4,7 @@ import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import * as cheerio from 'cheerio';
+import postcss from 'postcss';
 import imagePriority from '../plugins/gatsby-remark-image-priority/index.ts';
 
 const html = (route: string) =>
@@ -237,36 +238,47 @@ void test('publication metadata preserves legacy dates and accepts only real tim
   }
 });
 
-void test('contrast text tokens preserve decorative branding and meet 4.5:1 on white', async () => {
-  const yaml = await import('js-yaml');
-  const theme = yaml.load(readFileSync('src/theme/theme.yaml', 'utf8')) as {
-    background: { color: { brand: string } };
-    color: { brand: { primary: string }; neutral: { gray: { h: string } } };
-    icon: { color: string };
-    text: { color: { brand: string } };
-    blog: { h1: { hoverColor: string } };
-  };
-  assert.equal(theme.background.color.brand, '#709425');
-  assert.equal(theme.color.brand.primary, '#709425');
-  assert.equal(theme.icon.color, '#709425');
-  assert.equal(theme.text.color.brand, '#55701c');
-  assert.equal(theme.blog.h1.hoverColor, '#55701c');
-  const contrast = (color: string) => {
-    const channels = color
-      .slice(1)
-      .match(/../g)!
-      .map((value) => parseInt(value, 16) / 255);
-    const linear = channels.map((value) =>
-      value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4,
-    );
-    const [red, green, blue] = linear;
-    if (red === undefined || green === undefined || blue === undefined)
-      throw new Error('Expected three RGB channels');
-    return 1.05 / (red * 0.2126 + green * 0.7152 + blue * 0.0722 + 0.05);
-  };
-  assert.ok(contrast(theme.text.color.brand) >= 4.5);
-  assert.ok(contrast(theme.color.neutral.gray.h) >= 4.5);
-});
+for (const theme of ['light', 'dark'])
+  void test(`${theme} brand and muted text meet 4.5:1 against the page background`, () => {
+    const stylesheet = postcss.parse(html('en')('style[data-href]').text());
+    const tokens = new Map<string, string>();
+    stylesheet.walkDecls((declaration) => {
+      if (
+        declaration.parent?.type === 'rule' &&
+        (declaration.parent.selector === ':root' ||
+          (theme === 'dark' &&
+            declaration.parent.selector.replace(/["']/g, '') ===
+              ':root[data-theme=dark]')) &&
+        declaration.prop.startsWith('--')
+      )
+        tokens.set(declaration.prop, declaration.value);
+    });
+    const luminance = (name: string) => {
+      const color = tokens.get(name);
+      assert.ok(color && /^#[a-f0-9]{3}(?:[a-f0-9]{3})?$/i.test(color), name);
+      const hex = color.slice(1);
+      const expanded =
+        hex.length === 3 ? [...hex].map((c) => c + c).join('') : hex;
+      const channels = expanded
+        .match(/../g)!
+        .map((value) => parseInt(value, 16) / 255);
+      const linear = channels.map((value) =>
+        value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4,
+      );
+      const [red, green, blue] = linear;
+      if (red === undefined || green === undefined || blue === undefined)
+        throw new Error('Expected three RGB channels');
+      return red * 0.2126 + green * 0.7152 + blue * 0.0722;
+    };
+    const background = luminance('--color-surface');
+    for (const name of ['--text-color-brand', '--color-text-muted']) {
+      const foreground = luminance(name);
+      const contrast =
+        (Math.max(background, foreground) + 0.05) /
+        (Math.min(background, foreground) + 0.05);
+      assert.ok(contrast >= 4.5, `${name}: ${contrast}`);
+    }
+  });
 
 void test('generated pages never reference local filesystem URLs in resource/link attributes', () => {
   const pages = readdirSync('public', { recursive: true, withFileTypes: true })

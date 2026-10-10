@@ -1,16 +1,18 @@
 # Direct dependency review — 2026-10-10
 
-The remaining requested upgrades and npm migration pass local acceptance. Gatsby 5.16.1 and its configured official plugins remain current. Node types track Node 24 rather than a different runtime major. Run `npm outdated` and `npm explain <package>` to refresh registry and dependency information.
+The direct upgrades and npm migration passed the previous local application checks. **Dependency compatibility/security remediation is not complete:** peer overrides and vulnerable nested packages remain. The [starter comparison](gatsby-starter-comparison.md) now records source ownership, fresh starter/project resolutions, root causes, simplifications and owner decisions. Gatsby 5.16.1 and its configured official plugins remain current. Node types track Node 24 rather than a different runtime major. Run `npm outdated` and `npm explain <package>` to refresh registry and dependency information.
 
 ## Implemented
 
 - Matched Playwright 1.64 packages, TypeScript ESLint 8.71.1, Prettier 3.9.10, Vitest 5.0.3, Vite 8.3.4 / React plugin 6.1.2 and current utilities.
 - TypeScript 7.0.2 native checker alongside the TS6 compiler API required by Gatsby, typed ESLint and source-analysis tools, using [Microsoft's documented aliases](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-6-0). VS Code recommends the native extension; Gatsby continues to own application compilation.
-- i18next 26 / react-i18next 17, using initAsync instead of the removed initImmediate option; Cheerio/remark/unist and js-yaml current exports; strict redirect-parser result validation. PostCSS/nested/preset-env upgrades preserve component ownership and require browser comparison.
+- i18next 26 / react-i18next 17, using initAsync instead of the removed initImmediate option; Cheerio/remark/unist and js-yaml current exports; strict redirect-parser result validation. The later portable foundation replaces broad preset-env transforms with Tailwind 4.3.3 while retaining postcss-nested for CSS Module selectors; component ownership and the existing reset remain.
 - Netlify CLI 27.12.0. Its deploy command now builds by default: explicit `--no-build` preserves uploading the already validated public directory and prepared IndexNow manifest. Authentication and hosted deployment remain external validation.
-- Native Node fs/git import commands replace shelljs/simple-git. Node loadEnvFile replaces dotenv. Remove unused postcss-easy-media-query, redundant js-yaml/shelljs types and @ant-design/compatible. The inactive contact form uses current Ant Design APIs; restoring it remains deferred.
+- Native Node fs/git import commands replace shelljs/simple-git. Node loadEnvFile replaces dotenv. Remove unused postcss-easy-media-query, redundant js-yaml/shelljs types and @ant-design/compatible. The owner subsequently authorized retiring the inactive form: its component/CSS/barrel, form-only translations and Ant Design are now removed; Calendly contact pages remain.
 - Sharp 0.35.5 and a native TypeScript icon command replace the unusable shell icon command. The previous Yarn installation failed a fresh-process load. Clean npm ci resolves the native layout: Sharp 0.35.5 loads libvips 8.18.7, and the icon fixture generates and verifies all 19 PNG sizes. No binary or library-path patch is used.
 - ESLint project resolution is anchored to import.meta.dirname so editor subdirectories resolve the real tsconfig. React.version explicitly configures eslint-plugin-react instead of its incompatible ESLint 10 autodetection path. DOM linting catches obsolete iframe attributes. New fixtures exercise editor cwd, lint-staged rejection, native repository imports and PNG generation.
+
+The portable foundation also removes unused pngjs, the unused runtime ThemeContext and the YAML-to-CSS generator. Tokens are directly editable CSS variables; category slugs still use the same Lodash kebabCase implementation through narrow imports. The lock now has 2,907 entries versus the original 3,040: 164 removed, 31 added for Tailwind and platform variants, no retained version changes. Installation still reports Gatsby-owned peer/deprecation diagnostics and 111 audit findings; this is not warning-free acceptance.
 
 ## npm and Pongo comparison
 
@@ -22,13 +24,15 @@ Replace Yarn resolutions with npm overrides. Normal npm resolution reproduced ER
 
 Normal npm audit fix (without force) updates compatible dependencies, including loader-utils 2.0.4 and shell-quote 1.12.0. The audit decreases from 126 findings (including two critical) to 112: 19 low, 32 moderate, 61 high and zero critical. Remaining affected direct integration chains are Gatsby plugins and Netlify CLI. They are not all application runtime exploits, and the dependency tree is not declared vulnerability-free. npm proposes incompatible Gatsby plugin downgrades for some findings; assess those upstream dependencies separately rather than apply force, blanket overrides or exclusions. Reproduce with npm audit.
 
+The later form retirement removes 70 lock entries without changing retained versions. Its saved audit reports 111 affected entries: 19 low, 31 moderate, 61 high, zero critical, from 29 distinct advisory URLs. Root Sharp/lodash upgrades do not replace Gatsby's nested older copies. The comparison documents ownership/exposure and remediation priorities; passing npm ci is not proof of a supported or secure dependency graph.
+
 ## Validation status
 
-The final npm graph passes clean npm ci, root/NodeNext/browser types, smoke, actual fix/format and uncached lint, all 12 tooling/CLI cases, all 19 component tests, the full suite and all 57 browser cases with unchanged screenshots. The final build passes in 120.08s and preserves the 697-route/feed/sitemap contract. Warm content modification/deletion/restoration and module/global CSS edit/restoration pass, including actual browser styles and restored publication/search output. Exact results and remaining warnings are recorded in todo.md. Hosted CI/deployment are separate pending checks; no live deployment or indexing notification was performed. Keep Gatsby's default JSX runtime and the existing screenshot tolerances.
+Before this research/form retirement, the npm graph passed clean npm ci, root/NodeNext/browser types, smoke, actual fix/format and uncached lint, all 12 tooling/CLI cases, all 19 component tests, the full suite and all 57 browser cases with unchanged screenshots. That build passed in 120.08s and preserved the 697-route/feed/sitemap contract. Warm content modification/deletion/restoration and module/global CSS edit/restoration passed, including browser styles and restored publication/search output. Current form-retirement validation and remaining warnings are recorded separately in todo.md. Hosted CI/deployment are separate pending checks; no live deployment or indexing notification was performed. Keep Gatsby's default JSX runtime and the existing screenshot tolerances.
 
 ## Registry inventory
 
-The manifest now contains 84 direct declarations (39 application/build integrations and 45 development tools/type packages). “At audit” is the original installed version; “Current” is the requested implementation, accepted locally as described above. Removed declarations may remain transitively owned by Gatsby or another active package. Keep Ant Design only for the explicitly deferred form; it is not added to the live contact page. The Yarn-only postinstall-postinstall helper is removed; npm applies patch-package through postinstall.
+The manifest now contains 83 direct declarations (38 application/build integrations and 45 development tools/type packages), following the authorized Ant Design retirement. “At audit” is the original installed version; “Current” is the implementation, with application checks and peer/security limitations separated above. Removed declarations may remain transitively owned by Gatsby or another active package. The Yarn-only postinstall-postinstall helper is removed; npm applies patch-package through postinstall.
 
 | Package                            | At audit    | Current              | Last checked latest    |
 | ---------------------------------- | ----------- | -------------------- | ---------------------- |
@@ -51,7 +55,7 @@ The manifest now contains 84 direct declarations (39 application/build integrati
 | @typescript-eslint/parser          | 8.59.0      | 8.71.1               | 8.71.1                 |
 | @vitejs/plugin-react               | 5.2.0       | 6.1.2                | 6.1.2                  |
 | @weknow/gatsby-remark-twitter      | 0.2.3       | 0.2.3                | 0.2.3                  |
-| antd                               | 4.16.12     | 6.6.5                | 6.6.5                  |
+| antd                               | 4.16.12     | removed              | 6.6.5                  |
 | cheerio                            | 1.0.0-rc.12 | 1.2.0                | 1.2.0                  |
 | disqus-react                       | 1.1.7       | 1.1.7                | 1.1.7                  |
 | dotenv                             | 10.0.0      | removed              | 18.0.6                 |

@@ -1,9 +1,0 @@
-p.elementP {
-  font-size: var(--font-size-body-large);
-  line-height: var(--line-height-summary);
-}
-a.elementA {
-  color: var(--color-brand);
-  font-weight: var(--font-weight-bold);
-  text-decoration: underline;
-}

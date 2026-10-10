@@ -5,7 +5,7 @@ import { Link } from '../Link/index.tsx';
 import { FaCalendar } from 'react-icons/fa';
 import { FaUser } from 'react-icons/fa';
 import { FaTag } from 'react-icons/fa';
-import kebabCase from 'lodash/kebabCase';
+import kebabCase from 'lodash/kebabCase.js';
 
 const Meta = (props: {
   prefix?: string | undefined;
