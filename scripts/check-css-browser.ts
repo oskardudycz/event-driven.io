@@ -5,7 +5,10 @@ import { chromium } from 'playwright';
 
 // Serve the current output through Playwright routes, without a shared preview
 // server or live analytics/widgets. Local Gatsby scripts still hydrate normally.
-export async function checkCssBrowser(expectedColor?: string) {
+export async function checkCssBrowser(
+  expectedColor?: string,
+  mainHeightVh = 80,
+) {
   const browser = await chromium.launch();
   const root = resolve('public');
   const origin = 'http://css-cache.test';
@@ -54,6 +57,16 @@ export async function checkCssBrowser(expectedColor?: string) {
           return getComputedStyle(element).color;
         });
       if (expectedColor) assert.equal(color, expectedColor);
+      const mainHeight = await page.locator('main').evaluate((element) => ({
+        actual: parseFloat(getComputedStyle(element).minHeight),
+        viewport: innerHeight,
+      }));
+      assert.ok(
+        Math.abs(
+          mainHeight.actual - (mainHeight.viewport * mainHeightVh) / 100,
+        ) < 0.1,
+        `Expected main min-height ${mainHeightVh}vh; got ${mainHeight.actual}px`,
+      );
       colors.push(color);
       await context.close();
     }

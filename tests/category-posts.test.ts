@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { categorySlug } from '../src/utils/category-slug.ts';
 import {
   categoriesForLanguage,
   categoryPostsForLanguage,
@@ -14,6 +15,21 @@ const post = (
   id: `${langKey}:${slug}`,
   fields: { slug: `/${slug}/`, langKey, source: 'posts' },
   frontmatter: { categories, useDefaultLangCanonical: placeholder },
+});
+
+void test('category URLs handle punctuation, acronyms, mixed case and accents', () => {
+  const examples = [
+    ['Event-Driven Architecture', 'event-driven-architecture'],
+    ['TypeScript', 'type-script'],
+    ['PostgreSQL', 'postgre-sql'],
+    ['PostgreSql', 'postgre-sql'],
+    ['CQRS', 'cqrs'],
+    ['.NET', 'net'],
+    ['C#', 'c'],
+    ['  Coding Life  ', 'coding-life'],
+    ['Café Patterns', 'cafe-patterns'],
+  ] as const;
+  for (const [name, slug] of examples) assert.equal(categorySlug(name), slug);
 });
 
 void test('category locales share membership even without a placeholder file', () => {

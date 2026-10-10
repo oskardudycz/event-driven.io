@@ -7,7 +7,7 @@ type PagesQuery = {
   searchCovers: { nodes: ArticleNode[] };
   allMarkdownRemark: { edges: ArticleEdge[] };
 };
-import kebabCase from 'lodash/kebabCase.js';
+import { categorySlug as slugForCategory } from '../src/utils/category-slug.ts';
 import analyzer from 'webpack-bundle-analyzer';
 import path from 'node:path';
 import filesystem from 'gatsby-source-filesystem';
@@ -235,7 +235,7 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
               supportedLangKey,
             );
             categoryList.forEach(([category, categoryPosts]) => {
-              const categorySlug = kebabCase(category);
+              const categorySlug = slugForCategory(category);
               const availableLanguages = supportedLanguages.filter((langKey) =>
                 items.some(
                   (item) =>
@@ -244,7 +244,7 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
                     !item.node.frontmatter.useDefaultLangCanonical &&
                     categoriesForNode(item.node).some(
                       (itemCategory) =>
-                        kebabCase(itemCategory) === categorySlug,
+                        slugForCategory(itemCategory) === categorySlug,
                     ),
                 ),
               );

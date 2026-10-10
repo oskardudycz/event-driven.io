@@ -5,7 +5,7 @@ import { Link } from '../Link/index.tsx';
 import { FaCalendar } from 'react-icons/fa';
 import { FaUser } from 'react-icons/fa';
 import { FaTag } from 'react-icons/fa';
-import kebabCase from 'lodash/kebabCase.js';
+import { categorySlug } from '../../utils/category-slug.ts';
 
 const Meta = (props: {
   prefix?: string | undefined;
@@ -16,7 +16,11 @@ const Meta = (props: {
   const { prefix, author: authorName, category, categories = [] } = props;
   const additionalCategories = Array.isArray(categories) ? categories : [];
   const allCategories = Array.from(
-    new Set([category, ...additionalCategories].filter(Boolean)),
+    new Set(
+      [category, ...additionalCategories].filter((value): value is string =>
+        Boolean(value),
+      ),
+    ),
   );
 
   return (
@@ -30,7 +34,7 @@ const Meta = (props: {
       {allCategories.map((categoryName) => (
         <span key={categoryName} className={styles.elementSpan}>
           <FaTag size={18} />
-          <Link to={`/category/${kebabCase(categoryName)}/`}>
+          <Link to={`/category/${categorySlug(categoryName)}/`}>
             {categoryName}
           </Link>
         </span>

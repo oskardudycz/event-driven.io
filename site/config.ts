@@ -10,6 +10,7 @@ import { existsSync } from 'node:fs';
 import { loadEnvFile } from 'node:process';
 import path from 'node:path';
 import config from '../content/meta/config.ts';
+import postcssConfig from '../postcss.config.mjs';
 if (existsSync('.env')) loadEnvFile();
 
 export default {
@@ -27,6 +28,9 @@ export default {
     {
       resolve: 'gatsby-plugin-postcss',
       options: {
+        // Pass the ESM config directly: postcss-loader 7 does not unwrap its
+        // default export during config-file discovery.
+        postcssOptions: { ...postcssConfig(), config: false },
         cssLoaderOptions: {
           modules: {
             // css-loader 5's default MD4 hash is unavailable in Node 24.

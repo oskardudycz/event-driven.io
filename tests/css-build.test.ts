@@ -6,6 +6,24 @@ import * as cheerio from 'cheerio';
 import postcss from 'postcss';
 import postcssConfig from '../postcss.config.mjs';
 
+void test('production CSS contains working layout utilities and no uncompiled directives', () => {
+  const $ = cheerio.load(readFileSync('public/en/talks/index.html', 'utf8'));
+  const root = postcss.parse($('style[data-href]').text());
+  root.walkAtRules((rule) => {
+    assert.ok(
+      !['tailwind', 'source', 'theme', 'apply'].includes(rule.name),
+      `Uncompiled @${rule.name} in production CSS`,
+    );
+  });
+  let grid = false;
+  root.walkRules('.grid', (rule) => {
+    rule.walkDecls('display', (declaration) => {
+      if (declaration.value === 'grid') grid = true;
+    });
+  });
+  assert.ok(grid, 'Production CSS must provide the grid used by video cards');
+});
+
 void test('the styling pipeline emits token utilities and preserves nested module selectors', async () => {
   const input =
     readFileSync('src/theme/tailwind.css', 'utf8') +

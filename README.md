@@ -325,7 +325,7 @@ A guide does not create a category route by itself; at least one canonical artic
 
 Edit component-owned `.module.css` files, `src/theme/global.css` for the shared reset, and `src/theme/tokens.css` for colors, spacing and other design tokens. Tokens are ordinary CSS variables; no generator is needed.
 
-Tailwind 4 runs through Gatsby's PostCSS pipeline. Shared configuration lives in `src/theme/tailwind.css`; it imports the theme and utilities while preserving the existing reset. Use literal utility classes in `.tsx` files, such as `min-h-[80vh]`, `text-accent` or `gap-gutter`. Avoid constructing class names from string fragments: Tailwind scans complete names. Existing component CSS Modules remain supported. Prefer direct CSS variables in modules; utilities do not need to be copied into modules with `@apply`.
+Tailwind 4 runs through Gatsby's PostCSS pipeline. `site/config.ts` passes the plugins from `postcss.config.mjs` directly to the loader: the installed loader does not unwrap ESM default exports during file discovery. Shared styling configuration lives in `src/theme/tailwind.css`; it imports the theme and utilities while preserving the existing reset. Use literal utility classes in `.tsx` files, such as `min-h-[80vh]`, `text-accent` or `gap-gutter`. Avoid constructing class names from string fragments: Tailwind scans complete names. Existing component CSS Modules remain supported. Prefer direct CSS variables in modules; utilities do not need to be copied into modules with `@apply`.
 
 The styling baseline is Safari 16.4+, Chrome 111+ and Firefox 128+. The existing reset is in the `base` cascade layer so utilities can override it deliberately. Unlayered component CSS takes precedence over layered utilities, so remove an old property from its module when deliberately moving that property to a utility. A new reset and broader visual redesign remain separate work.
 
@@ -337,7 +337,7 @@ Use named CSS exports, for example `import * as styles from './Component.module.
 
 After styling changes, run `npm run build`, `npm run test:css`, `npm run test:visual` and `npm run test:cache:css`.
 
-Gatsby 5.16.1 requires the checked-in CSS cache correction in `patches/`. npm applies it automatically during installation; after `--ignore-scripts`, run `npm run postinstall` before building. The cache check covers module and global stylesheet edits/restoration. Upgrade/removal instructions are in [the patch notes](docs/gatsby-css-cache-patch.md).
+Gatsby 5.16.1 requires the checked-in CSS cache correction in `patches/`. npm applies it automatically during installation; after `--ignore-scripts`, run `npm run postinstall` before building. The cache check temporarily edits/restores module CSS, global CSS and a literal Tailwind class, then verifies generated output and computed styles before and after hydration. It rebuilds the restored sources in `finally`; do not run other builds or edit those files concurrently. Upgrade/removal instructions are in [the patch notes](docs/gatsby-css-cache-patch.md).
 
 For a focused menu check, use `npm run test:visual -- --grep 'persistent menu'`. It checks language switching, localized destinations, overflow icons, opening/closing and mobile/desktop resizing. Run the full browser suite before publishing changes.
 
