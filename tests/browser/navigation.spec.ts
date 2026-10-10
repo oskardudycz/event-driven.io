@@ -388,6 +388,47 @@ test('article language switch stays visible before and after scrolling', async (
   await expect(page.locator('h1')).toHaveCount(1);
 });
 
+test('sticky header uses the latest visibility when observer notifications arrive together', async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    window.IntersectionObserver = new Proxy(window.IntersectionObserver, {
+      construct(Observer, argumentsList) {
+        const [callback, options] = argumentsList as ConstructorParameters<
+          typeof IntersectionObserver
+        >;
+        return new Observer((entries, observer) => {
+          const latest = entries.at(-1);
+          if (latest?.target.matches('.sensor') && !latest.isIntersecting) {
+            // The API can queue an earlier visible entry and a later hidden
+            // entry for the same target in one callback.
+            const earlier: IntersectionObserverEntry = {
+              target: latest.target,
+              time: latest.time - 1,
+              rootBounds: latest.rootBounds,
+              boundingClientRect: latest.boundingClientRect,
+              intersectionRect: latest.intersectionRect,
+              intersectionRatio: 1,
+              isIntersecting: true,
+            };
+            callback([earlier, ...entries], observer);
+          } else {
+            callback(entries, observer);
+          }
+        }, options);
+      },
+    });
+  });
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('/pl/');
+  await expectFonts(page);
+  await page.evaluate(() => window.scrollTo(0, 1200));
+  const header = page.locator('header.header');
+  await expect(header).toHaveCSS('position', 'fixed');
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await expect(header).toHaveCSS('position', 'absolute');
+});
+
 for (const observer of ['native', 'unavailable']) {
   test(`desktop header stays visible while scrolling and returns to its original position (${observer})`, async ({
     page,

@@ -1,4 +1,5 @@
 :global(.header).header {
+  --theme-trigger-color: var(--color-text);
   align-items: center;
   justify-content: center;
   background-color: var(--color-surface);
@@ -7,6 +8,7 @@
   position: relative;
   top: 0;
   width: 100%;
+  padding: 0 64px 0 10px;
   align-items: center;
 
   :global(a.logoType) {
@@ -23,6 +25,10 @@
     position: absolute;
     background-color: transparent;
     height: var(--header-height-homepage);
+  }
+
+  &:global(.homepage).homepage:not(:global(.fixed).fixed) {
+    --theme-trigger-color: var(--color-neutral-white);
   }
 }
 
