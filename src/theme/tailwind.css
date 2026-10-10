@@ -1,0 +1,28 @@
+@layer theme, base, components, utilities;
+
+/* Keep the existing global reset; importing preflight.css would change it. */
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities) source(none);
+
+@source '../';
+
+/* Aliases let utilities and component CSS share the existing design tokens. */
+@theme inline {
+  --color-page: var(--color-surface);
+  --color-ink: var(--color-text);
+  --color-muted: var(--color-text-muted);
+  --color-accent: var(--text-color-brand);
+  --color-brand-decoration: var(--color-brand);
+  --color-line: var(--color-border);
+  --spacing-gutter: var(--space-md);
+  --spacing-section: var(--space-lg);
+  --radius-panel: var(--radius-card);
+  --text-summary: var(--font-size-summary);
+  --text-summary--line-height: var(--line-height-summary);
+  --text-heading: var(--font-size-heading);
+  --text-heading--line-height: var(--line-height-heading);
+  --text-caption: var(--font-size-caption);
+  --text-caption--line-height: var(--line-height-summary);
+  --text-body: var(--font-size-body-large);
+  --leading-summary: var(--line-height-summary);
+}

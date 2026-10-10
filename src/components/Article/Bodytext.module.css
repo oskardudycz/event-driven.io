@@ -48,6 +48,10 @@
     overflow: hidden;
     border: 1px solid var(--color-border);
   }
+  :global(img.gatsby-resp-image-image) {
+    /* Imported diagrams can have transparent backgrounds and dark lettering. */
+    background-color: var(--color-image-canvas);
+  }
   :global(code.language-text) {
     text-shadow: none;
     color: inherit;

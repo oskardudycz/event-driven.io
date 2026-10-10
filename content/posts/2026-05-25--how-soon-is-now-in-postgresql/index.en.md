@@ -183,7 +183,7 @@ The fix and the new tests live in [Emmett Pull Request #339](https://github.com/
 
 Uff. That bug was nasty.
 
-![](./2026-05-25-nasty.gif)
+![A cowboy says, “That's all kinds of nasty!”](./2026-05-25-nasty.gif)
 
 Read also:
 - [Rebuilding Event-Driven Read Models in a safe and resilient way](/en/rebuilding_event_driven_read_models/), with the locking design this bug lives inside,

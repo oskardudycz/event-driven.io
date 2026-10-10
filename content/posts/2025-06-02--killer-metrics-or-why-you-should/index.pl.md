@@ -16,7 +16,7 @@ Then boom bada bing, bada boom. Big announcement to all on-premise customers tha
 
 **So, great success?**
 
-![](image-2.gif "borat-nein.gif")
+![Borat gestures sceptically at a performance claim.](image-2.gif "borat-nein.gif")
 
 We didn't have the proper business metrics, so we have to add them.
 
@@ -76,7 +76,7 @@ Probably both you and the business will need to do their homework, math, etc. Bu
 
 And that’s great, as we’re investing in [Removability over Maintainability](/en/removability_over_maintainability/). Thinking about [Residuality, we discussed a week ago](/en/residuality-theory-a-rebellious-take/). You don’t need to maintain what you just removed!
 
-![](2025-06-02-cover.jpg)
+![A man points to his head: “You don't need to maintain what you just removed.”](2025-06-02-cover.jpg)
 
 Still, you can think now:
 

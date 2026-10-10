@@ -5,7 +5,7 @@ cover: 2024-05-04-cover.png
 author: oskar dudycz
 ---
 
-![](2024-05-04-cover.png)
+![A sceptical man looking over his glasses beside the Java logo.](2024-05-04-cover.png)
 
 **I like learning new things. It stimulates my creativity, helps me gain diverse perspectives, and helps me be humble.** When you're a notorious debutant, you learn to appreciate small stuff and simplicity, the [power of ignorance](/en/power_of_ignorance/). It shows that if you're down the rabbit hole, then this works both ways. Not many people could go the same way, but it also takes time to get out of that and embrace the outside world.
 

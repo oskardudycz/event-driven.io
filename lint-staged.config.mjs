@@ -1,4 +1,7 @@
 export default {
-  '*.{js,jsx,mjs,cjs,ts,tsx,mts}': ['eslint --fix --no-warn-ignored --max-warnings 0'],
+  'content/**/*.md': ['node scripts/check-image-alternatives.ts'],
+  '*.{js,jsx,mjs,cjs,ts,tsx,mts}': [
+    'eslint --fix --no-warn-ignored --max-warnings 0',
+  ],
   '*.{json,jsonc,md,yml,yaml,css}': ['prettier --write --ignore-unknown'],
 };

@@ -5,7 +5,7 @@ cover: 2024-07-07-cover.png
 author: oskar dudycz
 ---
 
-![](2024-07-07-cover.png)
+![Pongo: like Mongo, but on PostgreSQL and with strong consistency; flexibility and consistency together.](2024-07-07-cover.png)
 
 **Flexibility or Consistency?** Why not have both? Wouldn't it be great to have MongoDB flexible schema and PostgreSQL consistency?
 

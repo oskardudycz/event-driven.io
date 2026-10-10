@@ -1,5 +1,4 @@
-:global(.item).item,
-:global(.showItem).item {
+:global(.item).item {
   background: transparent;
   transition: all var(--duration-default);
   display: flex;
@@ -17,7 +16,7 @@
   }
 }
 
-:global(.itemList .hideItem) {
+.item.overflowHidden {
   display: none;
 }
 
@@ -35,7 +34,7 @@
     }
 
     :global(a:hover) {
-      color: black;
+      color: var(--color-body);
       background: rgba(255, 255, 255, 0.4);
     }
 
@@ -49,7 +48,7 @@
     }
 
     &:hover :global(svg) {
-      fill: black;
+      fill: var(--color-body);
       opacity: 1;
 
       :global(.hero) & :global(svg) {
@@ -66,10 +65,6 @@
         fill: green;
       }
     }
-  }
-
-  :global(.showItem).item {
-    display: none;
   }
 
   :global(.hiddenItem).hiddenItem {

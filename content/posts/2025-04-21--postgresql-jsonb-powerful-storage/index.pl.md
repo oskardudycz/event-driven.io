@@ -6,7 +6,7 @@ author: oskar dudycz
 useDefaultLangCanonical: true
 ---
 
-![](2025-04-21-cover.png)
+![A JSON customer record beside the PostgreSQL logo, illustrating JSONB storage.](2025-04-21-cover.png)
 
 **Object-oriented or relational? You’ve seen this battle in your projects.** For many years, we tried to fit the business data, which is usually grouped by business use case, into a normalised table structure. Sometimes it fits better, sometimes worse. We learn to cheat it with [Object-Relational Mappers](/en/in_the_defence_of_orms/). They fixed some issues but created others.
 

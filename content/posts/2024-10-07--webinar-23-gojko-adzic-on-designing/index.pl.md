@@ -31,7 +31,7 @@ Still, moving to the Lizard Optimization.
 
 **[Lizard Optimization](https://gojko.net/books/lizard-optimization/) is a technique for improving product development by focusing on long-tail users who seem to follow unpredictable, “lizard-like” logic.** The term comes from the idea that these users often behave unexpectedly, much like a lizard’s erratic movements, which don’t fit typical patterns. Engaging these users can provide fresh insights into your audience and help you refine your product.
 
-![](image-3.png)
+![The cover of Gojko Adzic's book Lizard Optimization.](image-3.png)
 
 Gojko developed this method after managing a software product that experienced rapid growth from November 2021 to November 2022, with a critical user metric increasing over 500 times. This turnaround followed a period of stagnation, and it was driven by an unconventional approach to engaging these unpredictable, “lizard-like” users.
 

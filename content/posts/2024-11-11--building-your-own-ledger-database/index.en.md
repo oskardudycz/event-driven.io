@@ -158,7 +158,7 @@ Given the scale and regulatory requirements, moving to a centralized solution li
 
 ## S3 and DuckDB as Ledger Database
 
-![](2024-11-11-cover.png)
+![A friendship meme replacing ledger database services with Amazon S3 as the preferred foundation.](2024-11-11-cover.png)
 
 I suggested considering Amazon S3 as the storage for audit logs. Here's why:
 

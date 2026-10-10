@@ -6,7 +6,7 @@ author: oskar dudycz
 useDefaultLangCanonical: true
 ---
 
-![](2025-11-03-cover.png)
+![Back to the Future characters beside the DeLorean, illustrating ordering across timelines.](2025-11-03-cover.png)
 
 After the last article on [Dealing with Race Conditions in Event-Driven Architecture with Read Models](/pl/dealing_with_race_conditions_in_eda_using_read_models/), I got such a [question from Ben](https://www.architecture-weekly.com/p/dealing-with-race-conditions-in-event/comment/171420356):
 

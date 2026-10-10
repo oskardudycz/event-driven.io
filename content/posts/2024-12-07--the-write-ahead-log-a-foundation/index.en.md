@@ -46,7 +46,7 @@ In this article, we’ll explore the core principles behind the Write-Ahead Log.
 
 ## **What is a Write-Ahead Log (WAL)?**
 
-![](2024-12-07-cover.jpg)
+![Woody and Buzz Lightyear: “Write-ahead logs and append-only logs, they're everywhere!”](2024-12-07-cover.jpg)
 
 A write-ahead log follows a basic principle: **before applying any changes to the main data store, the system writes the changes to an append-only log.** The log serves as a sequential, persistent record of every operation. If the system crashes midway through applying a change, the WAL can be replayed to restore the system to a consistent state.
 
@@ -155,7 +155,7 @@ When a transaction in PostgreSQL modifies data:
 
 This two-step process—logging first, applying later—ensures that no committed transaction can ever be lost.
 
-![](image-2.png)
+![Concurrent transactions append changes to a write-ahead log; logical decoding turns the log into an ordered change stream.](image-2.png)
 
 Source: https://materialize.com/blog/connecting-materialize-directly-to-postgresql-via-the-replication-stream/
 
@@ -229,7 +229,7 @@ Kafka is built entirely around the concept of logs. In Kafka, the write-ahead lo
 
 -   **Partitions represent physical splits.** Once you set up topics, you must define the partitioning inside them. Each of them is the physical append-only log.
 
-![](image-3.png)
+![A Kafka topic contains partitions, each divided into sequential log segments.](image-3.png)
 
 ### **How It Works**
 
@@ -247,7 +247,7 @@ Kafka repeats the same logical pattern known from previous paragraphs:
 
 **Messages within a partition are strictly ordered.** The offset ensures that consumers process messages in the same order in which they were appended. There’s no guarantee of the ordering between partitions. You can think about partitions as queues to the cashier in the department store. You can only know the order of customers handling withing a queue, but not between them.
 
-![](image-4.png)
+![Kafka guarantees order within a partition, while different partitions contain independent sequences of events.](image-4.png)
 
 Of course, the other rule is that the one you’re standing on will go the slowest. The cashier shift will change, the paper will finish, and someone will forget the PIN of their credit card. You know the drill!
 

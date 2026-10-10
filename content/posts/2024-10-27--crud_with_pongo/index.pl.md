@@ -6,7 +6,7 @@ author: oskar dudycz
 useDefaultLangCanonical: true
 ---
 
-![](2024-10-27-cover.png)
+![A Dalmatian puppy peeks over colourful building blocks.](2024-10-27-cover.png)
 
 **The leitmotif of this blog is the event-driven approach. I truly believe that it's a way to keep our applications closer to business.** By doing so, we can better reflect the business process in our system design and code. And that's great, as it brings multiple benefits: easier evolution, resiliency, and better managed and traced workflows. 
 

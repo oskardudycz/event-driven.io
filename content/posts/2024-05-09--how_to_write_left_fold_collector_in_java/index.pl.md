@@ -6,7 +6,7 @@ author: oskar dudycz
 useDefaultLangCanonical: true
 ---
 
-![](2024-05-09-cover.png)
+![A hand rolling dough into a spiral, illustrating a left fold.](2024-05-09-cover.png)
 
 **[Last week, we covered the latest improvements to Java 22 around pattern matching and records.](/pl/this_is_not_your_uncle_java/)** They enable explicit business logic modelling, making it concise and guarded by the compiler. As usual, I put it into the context of Event Sourcing.
 

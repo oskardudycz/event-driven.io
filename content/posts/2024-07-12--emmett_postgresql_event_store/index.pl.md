@@ -6,7 +6,7 @@ author: oskar dudycz
 useDefaultLangCanonical: true
 ---
 
-![](2024-07-12-cover.png)
+![Doc Brown from Back to the Future beside the PostgreSQL logo.](2024-07-12-cover.png)
 
 Last week, I announced [Pongo](https://github.com/event-driven-io/Pongo) - Mongo, but it was on PostgreSQL. So, the Node.js library allows using PostgreSQL as a document database. 
 

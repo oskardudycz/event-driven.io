@@ -104,7 +104,7 @@ N8n created the [Sustainable Use License](https://docs.n8n.io/sustainable-use-li
 
 We don't want a scenario like that:
 
-![](image-2.png)
+![Modern digital infrastructure balances on a small project maintained by one person since 2003.](image-2.png)
 
 This is not fair to anyone and is highly dangerous to users. From both the service continuity and [security perspectives](https://en.wikipedia.org/wiki/XZ_Utils_backdoor).
 
@@ -130,7 +130,7 @@ Dual license Emmett and Pongo under AGPLv3 and SSPL. Users choose:
 
 This is explicitly pro-user. Those preferring OSI-approved licenses choose AGPLv3. Those wanting clearer terms choose SSPL. Those licences ensure that the core code of Emmett and Pongo remains open.
 
-![](image-3.png)
+![A comparison of AGPLv3 and SSPL obligations for modifications, redistribution and providing software as a service.](image-3.png)
 
 ## Implementation
 

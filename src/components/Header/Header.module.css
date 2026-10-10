@@ -1,12 +1,14 @@
 :global(.header).header {
+  --theme-trigger-color: var(--color-text);
   align-items: center;
   justify-content: center;
-  background-color: var(--color-neutral-white);
+  background-color: var(--color-surface);
   display: flex;
   height: var(--header-height-default);
   position: relative;
   top: 0;
   width: 100%;
+  padding: 0 64px 0 10px;
   align-items: center;
 
   :global(a.logoType) {
@@ -23,6 +25,10 @@
     position: absolute;
     background-color: transparent;
     height: var(--header-height-homepage);
+  }
+
+  &:global(.homepage).homepage:not(:global(.fixed).fixed) {
+    --theme-trigger-color: var(--color-neutral-white);
   }
 }
 
@@ -101,7 +107,7 @@ h2.elementH2 {
 @media screen and (min-width: 1024px) {
   :global(.header).header {
     align-items: center;
-    background-color: var(--color-neutral-white);
+    background-color: var(--color-surface);
     display: flex;
     position: absolute;
     top: 0;
@@ -111,7 +117,7 @@ h2.elementH2 {
 
     &:global(.fixed).fixed {
       height: var(--header-height-fixed);
-      background-color: var(--color-neutral-white);
+      background-color: var(--color-surface);
       left: 0;
       padding: 0 var(--space-md);
       position: fixed;
@@ -154,7 +160,10 @@ h2.elementH2 {
       width: 36px;
     }
 
-    :global(.header).header:global(.homepage).homepage:not(:global(.fixed).fixed) & {
+    :global(.header).header:global(.homepage).homepage:not(
+        :global(.fixed).fixed
+      )
+      & {
       border: none;
     }
   }

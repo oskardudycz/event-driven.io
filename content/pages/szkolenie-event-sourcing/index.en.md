@@ -20,7 +20,7 @@ Event Sourcing requires a new set of practices and confidence in designing, buil
 
 **This practical workshop builds that confidence by introducing Event Sourcing step by step through hands-on exercises.**
 
-![](./workshop.jpg)
+![Participants work through a software model with the trainer at a whiteboard.](./workshop.jpg)
 
 ## What will you learn?
 
@@ -75,7 +75,7 @@ The workshop focuses on practical experience to help you get started quickly.
 
 The sessions will not be recorded. After the workshop, you will receive additional resources grouped by topic.
 
-![](./workshop-online.png)
+![An online Event Sourcing workshop using a shared Miro board to model business processes.](./workshop-online.png)
 
 ## Agenda
 

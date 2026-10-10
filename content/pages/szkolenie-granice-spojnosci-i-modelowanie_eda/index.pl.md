@@ -16,7 +16,7 @@ Zobaczymy również, jak używać AI jako partnera w modelowaniu: nie tylko do g
 
 **Nie będzie slajdów z abstrakcyjnymi przykładami.** Będą kompletne problemy rozwiązywane w grupach i działający kod, na którym sprawdzimy konsekwencje decyzji modelarskich i implementacyjnych. Będziemy pracować na złożonym przykładzie, a nie na uproszczonym z tutoriala, bo w takim nie pojawiają się problemy, o których mówimy.
 
-![](./workshop.jpg)
+![Uczestnicy warsztatu modelowania oprogramowania w sali szkoleniowej.](./workshop.jpg)
 
 **29 i 30 października 2026 r., online, 2000 PLN + VAT.**
 
@@ -64,7 +64,7 @@ Szkolenie jest dla programistek i programistów, tech leadów oraz architektek i
 
 **[![Zapisz się!](./zapisz-sie.png)](https://forms.gle/YxfhZ9wUQetX9iue8)**
 
-![](./workshop-online.png)
+![Warsztat modelowania online: uczestnicy układają polecenia i zdarzenia na wspólnej tablicy Miro.](./workshop-online.png)
 
 ## Agenda
 

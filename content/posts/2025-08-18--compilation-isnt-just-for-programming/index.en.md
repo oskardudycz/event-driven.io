@@ -127,7 +127,7 @@ High-level languages offered an escape, but early compilers were disappointingly
 
 **Modern compilers changed this equation. They don't translate - they analyse and transform.** When you write a for-loop that adds numbers, the compiler might recognise the pattern and replace it with a multiplication. It might notice your loop accesses memory sequentially and generate vector instructions. Or it might determine the result at compile time and replace the entire loop with a constant.
 
-![](2025-08-18-cover.png)
+![A compiler pipeline transforms syntax into an AST, intermediate representations and control flow before generating executable code.](2025-08-18-cover.png)
 
 Each phase transforms the pipeline further from its declarative form into executable code. The analysis phase groups operations and identifies optimisation opportunities. The optimisation phase applies transformations like operation fusion. The code generation phase produces the final executable form tailored to the runtime environment.
 

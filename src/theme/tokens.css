@@ -1,7 +1,10 @@
-/* Generated from theme.yaml by yarn generate-theme-css. */
+/* Shared design tokens. Edit here; CSS Modules and Tailwind use these values. */
 :root {
   --color-surface: #ffffff;
+  --color-image-canvas: #ffffff;
   --color-text: #3e3e3c;
+  --color-body: #000000;
+  --color-link: #666666;
   --color-text-muted: #706e6b;
   --space-xxs: 2px;
   --space-xs: 5px;
@@ -75,4 +78,24 @@
   --color-brand-primary-dark: yellow;
   --space-inset-m: 20px;
   --color-neutral-gray-f: #b0adab;
+  --color-menu-overlay: rgba(255, 255, 255, 0.9);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --color-surface: #14181b;
+  --background-color-alt: #20262c;
+  --color-text: #e5e7eb;
+  --color-body: #e5e7eb;
+  --color-link: #c5c9d0;
+  --color-text-muted: #b1b5bb;
+  --color-date: #a0a8b1;
+  --color-border: #38424a;
+  --color-brand: #bddc84;
+  --color-brand-tint: #bddc8418;
+  --text-color-brand: #bddc84;
+  --blog-h1-hover-color: #bddc84;
+  --icon-color: #bddc84;
+  --color-text-inverse: #14181b;
+  --color-menu-overlay: rgba(20, 24, 27, 0.95);
 }

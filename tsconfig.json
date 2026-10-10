@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "types": ["node", "react", "react-dom"]
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "site/**/*.ts",
+    "content/meta/config.ts",
+    "gatsby-browser.tsx",
+    "gatsby-ssr.tsx",
+    "scripts/**/*.ts",
+    "import/**/*.ts",
+    "plugins/**/*.ts",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "tests/browser/**/*.ts",
+    "playwright.config.ts"
+  ],
+  "exclude": ["node_modules", "public", ".cache", "tests/fixtures"],
+  "extends": "./tsconfig.shared.json"
+}

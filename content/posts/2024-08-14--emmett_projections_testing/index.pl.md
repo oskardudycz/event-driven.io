@@ -6,7 +6,7 @@ author: oskar dudycz
 useDefaultLangCanonical: true
 ---
 
-![](2024-08-14-cover.png)
+![Doc Brown and a dog beside the PostgreSQL logo, illustrating projection testing with Emmett.](2024-08-14-cover.png)
 
 **In the [previous article](/pl/emmett_postgresql_event_store/), I told what happened when [Emmett](https://event-driven-io.github.io/emmett/getting-started.html) and [Pongo](https://event-driven-io.github.io/Pongo/getting-started.html) walked into a bar. In other words, I announced that you can now do Event Sourcing in Node.js on top of PostgreSQL.** You can use Emmett as an event store and Pongo, changing PostgreSQL into a document Mongo-like database. With all the strong consistency benefits and integration happening behind the scenes.
 

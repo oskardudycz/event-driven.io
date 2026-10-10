@@ -5,7 +5,7 @@ cover: 2024-04-12-cover.png
 author: oskar dudycz
 ---
 
-![](2024-04-12-cover.png)
+![A pigeon carrying a message in its beak.](2024-04-12-cover.png)
 
 **I'm writing this article on Friday, and it's about time to have some fun. As this is a programming blog, let's have some fun coding.** Let's do an exercise designing a type-safe in-memory message bus in TypeScript!
 

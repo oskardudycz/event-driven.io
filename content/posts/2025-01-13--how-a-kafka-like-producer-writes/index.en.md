@@ -525,7 +525,7 @@ These features collectively enable Kafka to handle high-throughput, distributed,
 
 ## TLDR on the flow
 
-![](2025-01-13-cover.png)
+![A producer writes a Kafka batch through the broker's replica leader, operating-system page cache and disk; acknowledgement depends on the configured durability guarantees.](2025-01-13-cover.png)
 
 1.  **Producer**: Gathers messages, picks a partition, and forms a record batch in memory. Depending on settings like _batch.size, linger.ms_, it ships that batch to the broker.
 

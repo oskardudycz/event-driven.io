@@ -46,7 +46,7 @@ Duplication in distributed systems is not a bug; it is an expected side effect o
 
 Let’s start with network retries. Suppose an IoT system sends messages with device status updates to a general processing system located in the cloud. It’s common for such scenarios to be temporarily disconnected. Due to a temporary network issue, the broker's acknowledgement doesn’t arrive to the message producer within the expected time frame. The producer is designed to ensure reliability. It caches the message and retries delivery to the broker. As a result, the broker receives the same message twice.
 
-![](2024-11-25-cover.png)
+![Two services separated by a failing network, each writing to its own database.](2024-11-25-cover.png)
 
 **This scenario shows a fundamental trade-off: while retries improve reliability, they also introduce the potential for duplicates.** Without deduplication mechanisms, the same message might be processed multiple times, potentially triggering duplicate actions and/or inconsistent state.
 
@@ -54,7 +54,7 @@ Let’s start with network retries. Suppose an IoT system sends messages with de
 
 Even when a message is successfully delivered, failures during processing can lead to duplicates. For instance, imagine a task queue system where a consumer retrieves and begins processing a message. The consumer crashes before completing the task and sending an acknowledgement to the broker. When the broker doesn’t receive the acknowledgement, it assumes the task wasn’t processed and redelivers the message to another consumer—or the same one after recovery.
 
-![](image-2.png)
+![A message crosses the network but the acknowledgement is lost, so the sender may retry.](image-2.png)
 
 **In this case, the broker fulfils its promise of at-least-once delivery. However, without safeguards, the system risks performing the same operation twice, such as issuing a refund or updating a shared state.**
 
@@ -62,7 +62,7 @@ Even when a message is successfully delivered, failures during processing can le
 
 Messaging systems are internally built to be resilient; they should survive internal failures. While recovering from them, they may be doing retries to ensure that messages are delivered.
 
-![](image-3.png)
+![A failed send leaves the producer unsure whether the receiver processed the message.](image-3.png)
 
 **To do that, they often employ redundancy to ensure fault tolerance.** Message is usually redistributed between multiple nodes. Usually, a single node is used as a leader to orchestrate the message delivery. But what if a leader fails? What if it restarts or another becomes a leader? Even in such cases, messages should be delivered. All the strategies to deal with that can cause duplicate handling.
 
@@ -70,7 +70,7 @@ These examples illustrate that duplication isn’t a bug—it’s a consequence 
 
 **That’s why it’s essential to understand patterns like Outbox and Inbox. I wrote about them longer in [Outbox, Inbox patterns and delivery guarantees explained](/en/outbox_inbox_patterns_and_delivery_guarantees_explained/).** They are tools to get the at-least-once delivery and exact-once processing guarantees.
 
-![](image-4.png)
+![Outbox and inbox records coordinate message delivery between services and deduplicate repeated processing.](image-4.png)
 
 Today, though, we’ll discuss how and if queues can help us handle duplicates to understand how reliable those mechanisms are.
 
