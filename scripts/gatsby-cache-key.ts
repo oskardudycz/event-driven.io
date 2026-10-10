@@ -6,14 +6,14 @@ import path from 'node:path';
 // Never print credentials; only the digest leaves this process.
 const hash = crypto.createHash('sha256');
 hash.update(
-  `gatsby-cache-v3:${process.version}:${process.platform}:${process.arch}`,
+  `gatsby-cache-v4:${process.version}:${process.platform}:${process.arch}`,
 );
 function include(file: string) {
   hash.update(file);
   hash.update(fs.readFileSync(file));
 }
 for (const file of [
-  'yarn.lock',
+  'package-lock.json',
   'package.json',
   'src/package.json',
   'site/package.json',

@@ -107,7 +107,7 @@ test.each(['/en/articles/', '/pl/articles/?page=2#results', '/en?source=blog'])(
     );
     expect($('a').attr('href')).toBe(to);
     expect(routers.internal).toHaveBeenCalledWith(
-      expect.objectContaining({ to, state, innerRef: ref }),
+      expect.objectContaining({ to, state, ref }),
     );
     expect(routers.localized).not.toHaveBeenCalled();
   },

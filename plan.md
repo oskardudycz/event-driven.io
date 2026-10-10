@@ -1,5 +1,13 @@
 # SEO, discoverability, and services plan
 
+## Dependency acceptance and npm migration — 2026-10-10
+
+Finish the current dependency/tooling acceptance and migrate to npm as the next bounded category, before further CSS work. Reproduce the Sharp native-loader failure in a fresh process and compare clean package-manager installations; use the documented installer rather than library-path patches. Preserve current package versions and behavior unless an actual compatibility failure requires a change. Replace Yarn commands, lockfile, cache inputs, hooks, editor settings and manual instructions together. Use npm ci for reproducible installation and preserve patch-package's Gatsby correction. Research any peer-resolution conflict before choosing an explicit compatibility policy; do not silently force installs or rewrite upstream metadata. Validate strict types, editor linting from subdirectories, real fix/format commands, production output, the full suite, unchanged browser screenshots and warm-cache content changes. Record local results separately from hosted CI and deployment.
+
+Local acceptance is complete on 2026-10-10. npm 11.9.0 follows the actual Pongo baseline; one package-lock.json replaces yarn.lock across commands, CI/download caches, Gatsby compatibility keys, hooks and editor tasks. Clean npm ci fixes the demonstrated Sharp/libvips layout without a loader patch. Scoped, documented npm overrides retain tested ESLint/localization versions where peer declarations lag. Native TypeScript 7 checking and the TS6 compiler API coexist through Microsoft's aliases; Vitest's .ts config uses the existing ESM tests scope. All 84 direct declarations are current except Node types intentionally matching Node 24. Compatible audit fixes remove both critical findings; 112 Gatsby/Netlify-chain findings remain for separate upstream review.
+
+The final graph passes clean installation, smoke, root/NodeNext/browser types, actual fix/format and uncached lint, the full suite, all 57 browser cases, the unchanged 697-route/feed/sitemap contract, and content/CSS warm-cache modification/deletion/restoration. Existing screenshots and tolerances remain unchanged. Build timings and remaining diagnostics are recorded in todo.md; hosted CI/deployment are still pending. This supersedes earlier npm deferrals and Yarn-only execution instructions below, which describe historical checkpoints.
+
 ## Complete remaining dependency upgrades — 2026-10-09
 
 Continue the owner-requested latest-package upgrade rather than stop at an inventory. Research and migrate remaining utilities/import APIs, matched browser/test tooling, localization, CSS transforms and manual tools in compatible groups. Test actual behavior before retaining an older version; peer ranges alone are not evidence of failure. Evaluate Microsoft's documented TypeScript 7 checker alongside the TypeScript 6 compiler API required by Gatsby/ESLint and project tools. Preserve reviewed screenshots, routes, content, language selection and the deferred contact page behavior. Record concrete blockers separately from completed upgrades and distinguish local acceptance from hosted CI/deployment.
@@ -54,9 +62,9 @@ The supplied deployment `6ac7e39e32aee76765a22ec6` exposes a navigation regressi
 
 Execute the requested categories in order:
 
-1. Reconcile this strategy and the live checklist. Runtime is Node 24, Gatsby 5.16.1 and Yarn 1; React/React DOM 19.3.0 and ESLint 10.12.0 now pass local build/full-suite/browser/cache acceptance. CSS Modules, root/localized 404 recovery, full lint, image descriptions/enforcement, workshop translation and anti-patterns collision removal are complete. Old checkpoint timings describe their original revisions, not current pending work.
+1. Reconcile this strategy and the live checklist. Runtime is Node 24, Gatsby 5.16.1 and npm 11.9.0; React/React DOM 19.3.0 and ESLint 10.12.0 now pass local build/full-suite/browser/cache acceptance. CSS Modules, root/localized 404 recovery, full lint, image descriptions/enforcement, workshop translation and anti-patterns collision removal are complete. Old checkpoint timings describe their original revisions, not current pending work.
 2. Completed: locale-preserving discovery navigation with SSR/client regressions and the bounded script/Node-test readability pass: replace repeated ad-hoc CLI parsing with Node's built-in parseArgs, share actual Markdown traversal duplication, and use Node test cleanup hooks through a small temporary-directory fixture. Keep existing CLI commands and security checks; no repository-wide module rename or generic testing framework.
-3. Copied Pongo configuration, coordinated TypeScript/ESM migration, React/ESLint upgrades and the full registry inventory now pass local acceptance. Next apply compatible tooling/utility and matched browser-package updates from the dependency review, preserving current content and screenshots.
+3. Copied Pongo configuration, coordinated TypeScript/ESM migration, React/ESLint upgrades and the full registry inventory now pass local acceptance. The remaining package upgrades and npm migration pass local acceptance; hosted CI/deployment and remaining upstream audit findings are tracked separately.
 4. Profile font loading/CLS and select only measured typography-preserving changes.
 5. Validate the latest hosted CI and deployed behavior, then production IndexNow publication/submission and repeated comparable mobile audits. A supplied preview is evidence of a deployment, not proof of every CI check or production publication.
 
@@ -466,7 +474,7 @@ Adopt the Gatsby 5/React 18-compatible plugin through a staged migration, upgrad
 
 Preserve `/en/` and `/pl/` URLs, import/original-slug redirects, actual translation availability, placeholder navigation, canonical/hreflang/sitemap/feed rules, category membership/reading order and Gatsby Head behavior during SSR, hydration and navigation. Avoid running overlapping locale route generators. Require the exact output contract and all browser checks to pass before removing old hooks/providers. Record local results separately from CI and deployed verification.
 
-Both stages use the package comparison and acceptance criteria in `docs/gatsby-search-and-localization-review.md`. Theme variables are implemented. Tailwind, dark mode, Slices, npm migration and layout redesign remain deferred stages.
+Both stages use the package comparison and acceptance criteria in `docs/gatsby-search-and-localization-review.md`. Theme variables are implemented. npm migration is the active 2026-10-10 category. Tailwind, dark mode, Slices and layout redesign remain deferred stages.
 
 ### Deployment verification — 2026-10-05
 

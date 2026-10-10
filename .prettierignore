@@ -7,5 +7,5 @@ report/
 visual-artifacts/
 tests/fixtures/
 temp/
-yarn.lock
+package-lock.json
 .husky/

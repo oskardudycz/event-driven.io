@@ -18,7 +18,7 @@ const { values } = parseArgs({
 });
 if (values.help) {
   console.log(
-    'Usage: yarn audit:console [--url https://event-driven.io/en/open-source-a-relict-a-charity-or/] [--browser firefox|chromium] [--seconds 15] [--output report/browser-console/firefox.json]',
+    'Usage: npm run audit:console -- [--url https://event-driven.io/en/open-source-a-relict-a-charity-or/] [--browser firefox|chromium] [--seconds 15] [--output report/browser-console/firefox.json]',
   );
   process.exit(0);
 }

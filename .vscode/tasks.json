@@ -9,7 +9,7 @@
         "isDefault": true
       },
       "problemMatcher": [],
-      "label": "yarn: typecheck:watch",
+      "label": "npm: typecheck:watch",
       "detail": "tsc --project tsconfig.json --watch",
       "options": {
         "cwd": "${workspaceFolder}"

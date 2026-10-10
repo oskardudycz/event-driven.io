@@ -68,7 +68,7 @@ async function main() {
   });
   if (values.help) {
     console.log(
-      'yarn indexnow:prepare\nyarn indexnow --restore (before deploying, when acknowledgement state is unavailable)\nyarn indexnow [--dry-run] [--state FILE] [--url /en/slug/]\nyarn indexnow --submit (only after production deployment)',
+      'npm run indexnow:prepare\nnpm run indexnow -- --restore (before deploying, when acknowledgement state is unavailable)\nnpm run indexnow -- [--dry-run] [--state FILE] [--url /en/slug/]\nnpm run indexnow -- --submit (only after production deployment)',
     );
     return;
   }

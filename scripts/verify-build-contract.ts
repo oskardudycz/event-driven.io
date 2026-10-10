@@ -14,7 +14,7 @@ const baselinePath = path.resolve(
 
 if (!fs.existsSync(baselinePath)) {
   console.error(
-    'Missing tests/fixtures/build-contract.json. Run yarn update:build-contract.',
+    'Missing tests/fixtures/build-contract.json. Run npm run update:build-contract.',
   );
   process.exit(1);
 }
@@ -29,7 +29,7 @@ if (failures.length > 0) {
   console.error('Build-contract verification failed:\n');
   failures.forEach((failure) => console.error(`- ${failure}`));
   console.error(
-    '\nIf these output changes are intentional, run yarn update:build-contract and review the diff.',
+    '\nIf these output changes are intentional, run npm run update:build-contract and review the diff.',
   );
   process.exit(1);
 }

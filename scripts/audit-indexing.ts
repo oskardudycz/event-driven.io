@@ -14,7 +14,7 @@ const { values } = parseArgs({
 });
 if (values.help) {
   console.log(
-    'Usage: yarn audit:indexing [--base-url https://event-driven.io] [--urls-file urls.json] [--output report/indexing/live.json]\nChecks robots, every sitemap URL, canonicals, reciprocal alternates and real 404s. Optional JSON: an array of reported URL strings. Read-only; sends no indexing requests.',
+    'Usage: npm run audit:indexing -- [--base-url https://event-driven.io] [--urls-file urls.json] [--output report/indexing/live.json]\nChecks robots, every sitemap URL, canonicals, reciprocal alternates and real 404s. Optional JSON: an array of reported URL strings. Read-only; sends no indexing requests.',
   );
   process.exit(0);
 }

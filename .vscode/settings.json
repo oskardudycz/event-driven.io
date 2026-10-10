@@ -39,7 +39,7 @@
   "[typescriptreact]": {
     "editor.formatOnSave": false
   },
-  "npm.packageManager": "yarn",
+  "npm.packageManager": "npm",
   "js/ts.experimental.useTsgo": true,
   "js/ts.tsdk.path": "./node_modules/@typescript/native"
 }

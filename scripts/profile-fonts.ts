@@ -15,7 +15,7 @@ const { values } = parseArgs({
 });
 if (values.help) {
   console.log(
-    'Usage: yarn audit:fonts [--base-url URL] [--output report/fonts] [--runs 3] [--without-polish-preload]',
+    'Usage: npm run audit:fonts -- [--base-url URL] [--output report/fonts] [--runs 3] [--without-polish-preload]',
   );
   process.exit(0);
 }

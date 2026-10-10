@@ -104,7 +104,7 @@ const declarations = Object.entries(properties).map(([name, path]) => {
   return `  --${name}: ${String(value).replace(/;+$/, '')};`;
 });
 const css = await format(
-  `/* Generated from theme.yaml by yarn generate-theme-css. */\n:root {\n${declarations.join('\n')}\n}\n`,
+  `/* Generated from theme.yaml by npm run generate-theme-css. */\n:root {\n${declarations.join('\n')}\n}\n`,
   { ...(await resolveConfig(fileURLToPath(destination))), parser: 'css' },
 );
 if (!existsSync(destination) || readFileSync(destination, 'utf8') !== css) {
