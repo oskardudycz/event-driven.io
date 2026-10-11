@@ -32,7 +32,9 @@ async function chooseTheme(
     'false',
   );
   await themeControl(page, language).click();
-  await themeChoice(page, preference, language).check();
+  await page
+    .getByText(themeLabels[language][preference], { exact: true })
+    .click();
 }
 
 test('shared video cards keep a responsive grid and readable themed borders', async ({
@@ -157,6 +159,35 @@ test('invalid stored preferences are ignored and theme controls fit on mobile', 
 });
 
 for (const language of ['en', 'pl'] as const) {
+  for (const width of [320, 1280]) {
+    test(`${language} visible theme rows select their preference at ${width}px`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.emulateMedia({ colorScheme: 'light' });
+      await page.goto(`/${language}/contact/`);
+      const control = themeControl(page, language);
+
+      await chooseTheme(page, 'dark', language);
+      await expect(themeChoice(page, 'dark', language)).toBeChecked();
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+
+      await control.click();
+      // The whole label is clickable, including its padding outside the radio.
+      await page.getByText(themeLabels[language].light, { exact: true }).click({
+        position: { x: 4, y: 22 },
+      });
+      await expect(themeChoice(page, 'light', language)).toBeChecked();
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+      await expect(control).toBeFocused();
+
+      await control.click();
+      await page.keyboard.press('Shift+Tab');
+      await expect(control).not.toBeFocused();
+      await expect(themeChoice(page, 'light', language)).toBeHidden();
+    });
+  }
+
   for (const width of [320, 390, 1280]) {
     test(`${language} header theme icon supports keyboard and dismissal at ${width}px`, async ({
       page,
