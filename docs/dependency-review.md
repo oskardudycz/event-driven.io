@@ -1,8 +1,33 @@
-# Direct dependency review — 2026-10-10
+# Direct dependency review — 2026-10-11
 
 The direct upgrades and npm migration passed the previous local application checks. **Dependency compatibility/security remediation is not complete:** peer overrides and vulnerable nested packages remain. The [starter comparison](gatsby-starter-comparison.md) now records source ownership, fresh starter/project resolutions, root causes, simplifications and owner decisions. Gatsby 5.16.1 and its configured official plugins remain current. Node types track Node 24 rather than a different runtime major. Run `npm outdated` and `npm explain <package>` to refresh registry and dependency information.
 
 ## Implemented
+
+### Current remediation — 2026-10-11
+
+Test-fixture refactoring is deferred by the owner. Clean npm ci reproduces the Gatsby peer/deprecation warnings and the 111-entry audit baseline. Registry checks confirm Gatsby 5.16.1 and @gatsbyjs/reach-router 2.0.1 are current; the latter still declares React/React DOM 18 only, despite [Gatsby's React 19 announcement](https://www.gatsbyjs.com/docs/reference/release-notes/v5.16/). Gatsby directly installs its old CRA/ESLint stack. Neither chain can be removed by deleting project imports or changing the project lint configuration. Swapping React Router or overriding the entire compiler/lint stack would require maintaining a framework fork; it is not an application cleanup.
+
+Normal npm audit fix and targeted npm update do not replace the vulnerable locked utility copies. The lock also retains nested typescript-estree 8.59.0 beneath parents requiring exactly 8.71.1. Independent manifest resolution removes those stale placements. Its first lock exposed an optional @types/eslint peer placement inconsistency; a second normal npm resolution corrects it and passes npm ci's dry-run validation. Adopt the regenerated lock only after actual clean installation and full acceptance. Keep only two same-major security overrides for pinned owners: plugin-helpers' Lodash and relay-compiler's Immutable. semver and nth-check resolve patched versions naturally.
+
+| Owner                                     | Installed → patched     | Reason / validation                                                                                                                                    |
+| ----------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Gatsby and GraphQL codegen plugin-helpers | lodash 4.17.23 → 4.18.1 | [Template code injection](https://github.com/advisories/GHSA-r5fr-rjxr-66jc) and prototype pollution; schema/codegen/build tests                       |
+| @ardatan/relay-compiler                   | immutable 3.7.6 → 3.8.4 | [Hash-collision denial of service](https://github.com/advisories/GHSA-xvcm-6775-5m9r), list overflow and prototype pollution; GraphQL extraction/build |
+| Locked semver 7.3.5 copies                | 7.3.5 → 7.8.5           | [Regular expression denial of service](https://github.com/advisories/GHSA-c2qf-rxjj-qqgw); actual Netlify CLI commands and build                       |
+| unist-util-select                         | nth-check 2.0.0 → 2.1.1 | [Regular expression denial of service](https://github.com/advisories/GHSA-rp65-9cf3-cjxr); Markdown transforms and generated-output checks             |
+
+These are dependency updates, not patched peer metadata or warning suppression. Remove the two security overrides once their owners publish corrected ranges. Clean npm ci, production builds, CI-mode npm test, lint/format, smoke and Netlify CLI help pass locally; browser acceptance is recorded in todo.md. The regenerated lock has 2,824 entries, versus 2,906 before this remediation. Rehoisting means a same-path version difference is not necessarily an upgrade or downgrade of an owning dependency.
+
+The refreshed installed-tree audit reports **109 affected entries** (19 low, 31 moderate, 59 high; no critical), representing **21 distinct advisory URLs**, down from 111 entries / 29 URLs. Eight advisory URLs disappear and none are added; affected-entry counts also include ancestor packages, so these two metrics differ. npm outdated reports only Node 26 types; retain Node 24 types to match the actual runtime.
+
+Installation is still not warning-free. Peer-warning blocks decrease from five to three: Gatsby's router React DOM peer, and its CRA configuration's TypeScript ESLint plugin/parser peers. Fresh registry metadata exposes 23 deprecation warnings: 22 package/version pairs were already in the old graph, and 20 of those lacked deprecation metadata in the old lock. The additional deprecated object-schema 1.2.1 belongs to Gatsby's nested ESLint stack. Do not remove deprecation metadata to conceal these warnings.
+
+npm ls --all still exits with dependency diagnostics. Besides Gatsby's three conflicts, Netlify's optional unstorage blob driver declares compatibility through @netlify/blobs 10 while the CLI installs 11.1.4. It also reports Sharp's optional WASM fallback against the root 0.35.5 copy on Linux: the lock correctly retains ipx's 0.34.5 WASM package with cpu: wasm32, which is not installed on this native platform. Native image generation and CLI startup pass; that does not establish optional blob-driver compatibility.
+
+Other vulnerable major-version chains remain open; do not run audit fix --force. Current registry latest node-forge 1.4.0, sprintf-js 1.1.3 and braces 3.0.3 remain in advisory ranges; latest alone cannot deliver an audit-clean tree. Gatsby's pinned image/compiler/schema/dev-server chains require upstream updates or separately validated owner upgrades.
+
+Replace layout fontfaceobserver with native document.fonts.load and ordinary React effect cleanup, retaining the ten-second fallback, readiness attributes, contexts and SSR markup. Remove its types and the now-unused generic screen/timer helper. This is portable browser behavior and introduces no Astro/Gatsby compatibility abstraction or typography redesign.
 
 - Matched Playwright 1.64 packages, TypeScript ESLint 8.71.1, Prettier 3.9.10, Vitest 5.0.3, Vite 8.3.4 / React plugin 6.1.2 and current utilities.
 - TypeScript 7.0.2 native checker alongside the TS6 compiler API required by Gatsby, typed ESLint and source-analysis tools, using [Microsoft's documented aliases](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-6-0). VS Code recommends the native extension; Gatsby continues to own application compilation.
@@ -12,7 +37,7 @@ The direct upgrades and npm migration passed the previous local application chec
 - Sharp 0.35.5 and a native TypeScript icon command replace the unusable shell icon command. The previous Yarn installation failed a fresh-process load. Clean npm ci resolves the native layout: Sharp 0.35.5 loads libvips 8.18.7, and the icon fixture generates and verifies all 19 PNG sizes. No binary or library-path patch is used.
 - ESLint project resolution is anchored to import.meta.dirname so editor subdirectories resolve the real tsconfig. React.version explicitly configures eslint-plugin-react instead of its incompatible ESLint 10 autodetection path. DOM linting catches obsolete iframe attributes. New fixtures exercise editor cwd, lint-staged rejection, native repository imports and PNG generation.
 
-The portable foundation also removes unused pngjs, the unused runtime ThemeContext and the YAML-to-CSS generator. Tokens are directly editable CSS variables. Category slugs now use one shared native TypeScript function: all 37 current labels matched the former Lodash output before removal, and representative behavior tests cover ongoing edits. Remove the direct Lodash and type declarations; Gatsby still requires transitive Lodash, so this removes application coupling rather than claiming to eliminate every installed copy. The lock now has 2,906 entries versus the original 3,040: 165 removed, 31 added for Tailwind and platform variants, no retained version changes. There are 81 direct declarations (37 runtime, 44 development). Installation still reports Gatsby-owned peer/deprecation diagnostics and 111 audit findings; this is not warning-free acceptance.
+The portable foundation also removes unused pngjs, the unused runtime ThemeContext and the YAML-to-CSS generator. Tokens are directly editable CSS variables. Category slugs now use one shared native TypeScript function: all 37 current labels matched the former Lodash output before removal, and representative behavior tests cover ongoing edits. Remove the direct Lodash and type declarations; Gatsby still requires transitive Lodash, so this removes application coupling rather than claiming to eliminate every installed copy. At the portable-foundation checkpoint, the lock had 2,906 entries versus the original 3,040: 165 removed, 31 added for Tailwind and platform variants, no retained version changes. That checkpoint had 81 direct declarations (37 runtime, 44 development). Installation reported Gatsby-owned peer/deprecation diagnostics and 111 audit findings; this is not warning-free acceptance.
 
 The PostCSS integration now passes the shared ESM configuration directly through Gatsby's supported `postcssOptions`, with config-file discovery disabled. The installed postcss-loader 7.3.4 discovers `.mjs` but returns its module namespace without unwrapping the default export, silently skipping the plugins. Generated-output coverage caught the unprocessed directives; the corrected production assets contain actual utilities. This follows the [loader's documented inline configuration](https://webpack.js.org/loaders/postcss-loader/#postcssoptions) rather than patching loader internals.
 
@@ -34,7 +59,7 @@ Before this research/form retirement, the npm graph passed clean npm ci, root/No
 
 ## Registry inventory
 
-The manifest now contains 83 direct declarations (38 application/build integrations and 45 development tools/type packages), following the authorized Ant Design retirement. “At audit” is the original installed version; “Current” is the implementation, with application checks and peer/security limitations separated above. Removed declarations may remain transitively owned by Gatsby or another active package. The Yarn-only postinstall-postinstall helper is removed; npm applies patch-package through postinstall.
+The manifest now contains 79 direct declarations (36 application/build integrations and 43 development tools/type packages), after the authorized form retirement, portable foundation and native font-loader cleanup. “At audit” is the original installed version; “Current” is the implementation, with application checks and peer/security limitations separated above. Removed declarations may remain transitively owned by Gatsby or another active package. The Yarn-only postinstall-postinstall helper is removed; npm applies patch-package through postinstall.
 
 | Package                            | At audit    | Current              | Last checked latest    |
 | ---------------------------------- | ----------- | -------------------- | ---------------------- |
@@ -43,9 +68,9 @@ The manifest now contains 83 direct declarations (38 application/build integrati
 | @playwright/browser-chromium       | 1.63.0      | 1.64.0               | 1.64.0                 |
 | @playwright/test                   | 1.63.0      | 1.64.0               | 1.64.0                 |
 | @types/escape-html                 | 1.0.4       | 1.0.4                | 1.0.4                  |
-| @types/fontfaceobserver            | 2.1.3       | 2.1.3                | 2.1.3                  |
+| @types/fontfaceobserver            | 2.1.3       | removed              | 2.1.3                  |
 | @types/js-yaml                     | 4.0.9       | removed              | 4.0.9                  |
-| @types/lodash                      | 4.17.25     | 4.17.26              | 4.17.26                |
+| @types/lodash                      | 4.17.25     | removed              | 4.17.26                |
 | @types/mdast                       | 4.0.4       | 4.0.4                | 4.0.4                  |
 | @types/node                        | 24.19.1     | 24.19.2              | 26.6.5                 |
 | @types/react                       | 18.3.31     | 19.3.0               | 19.3.0                 |
@@ -68,7 +93,7 @@ The manifest now contains 83 direct declarations (38 application/build integrati
 | eslint-plugin-prettier             | 5.5.5       | 5.5.6                | 5.5.6                  |
 | eslint-plugin-react                | 7.37.5      | 7.37.5               | 7.37.5                 |
 | eslint-plugin-react-hooks          | 7.1.1       | 7.1.1                | 7.1.1                  |
-| fontfaceobserver                   | 2.1.0       | 2.3.0                | 2.3.0                  |
+| fontfaceobserver                   | 2.1.0       | removed              | 2.3.0                  |
 | gatsby                             | 5.16.1      | 5.16.1               | 5.16.1                 |
 | gatsby-plugin-catch-links          | 5.16.0      | 5.16.0               | 5.16.0                 |
 | gatsby-plugin-feed                 | 5.16.0      | 5.16.0               | 5.16.0                 |
@@ -98,18 +123,18 @@ The manifest now contains 83 direct declarations (38 application/build integrati
 | i18next                            | 22.5.1      | 26.4.3               | 26.4.3                 |
 | js-yaml                            | 4.1.0       | 5.4.3                | 5.4.3                  |
 | lint-staged                        | 17.6.0      | 17.6.0               | 17.6.0                 |
-| lodash                             | 4.17.21     | 4.18.1               | 4.18.1                 |
+| lodash                             | 4.17.21     | removed              | 4.18.1                 |
 | minisearch                         | 7.2.0       | 7.2.0                | 7.2.0                  |
 | netlify-cli                        | 6.7.1       | 27.12.0              | 27.12.0                |
 | netlify-redirect-parser            | 11.0.2      | 14.4.0               | 14.4.0                 |
 | patch-package                      | 8.0.1       | 8.0.1                | 8.0.1                  |
 | pixelmatch                         | 7.2.0       | 8.0.0                | 8.0.0                  |
 | playwright                         | 1.63.0      | 1.64.0               | 1.64.0                 |
-| pngjs                              | 7.0.0       | 7.0.0                | 7.0.0                  |
+| pngjs                              | 7.0.0       | removed              | 7.0.0                  |
 | postcss                            | 8.3.6       | 8.5.29               | 8.5.29                 |
 | postcss-easy-media-query           | 1.0.0       | removed              | 1.0.0                  |
 | postcss-nested                     | 5.0.6       | 8.0.1                | 8.0.1                  |
-| postcss-preset-env                 | 6.7.0       | 11.6.1               | 11.6.1                 |
+| postcss-preset-env                 | 6.7.0       | removed              | 11.6.1                 |
 | postinstall-postinstall            | 2.1.0       | removed              | 2.1.0                  |
 | prettier                           | 3.8.3       | 3.9.10               | 3.9.10                 |
 | prismjs                            | 1.27.0      | 1.30.0               | 1.30.0                 |

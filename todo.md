@@ -1,6 +1,19 @@
 # SEO, content, and platform progress
 
+## Theme label-click regression — 2026-10-11
+
+- [x] Reproduce the owner's preview failure: radio-circle clicks work, but visible label clicks close the disclosure during blur before selection. The Chromium trace also records a renderer crash on that path; it is not an acceptance pass.
+- [x] Fix outside dismissal without interfering with native label activation: outside pointer, completed Tab navigation and Escape replace arbitrary blur/focus dismissal. All 20 theme cases pass in Chromium and Firefox, including visible label/row clicks, keyboard exit/Escape, both languages and mobile/desktop behavior. The new row case fails against the old local production build. README documents repeatable commands; screenshot tolerances remain unchanged.
+- [ ] Verify hosted CI and the corrected published switcher after publication. The supplied preview reproduces the old defect; local verification does not update it.
+
+Current local acceptance: clean npm ci with patch hook, production builds (130.25s after dependency changes; subsequent warm build 37.41s), full `CI=true npm test`, application/Node/browser types, smoke, lint/format, **82 / 82 Chromium browser cases** and **20 / 20 Firefox theme cases** pass. All four native font-failure cases, Polish glyph checks, navigation and existing screenshots pass. No snapshots or tolerances changed. The first font-failure fixture incorrectly matched requests; the corrected fixture blocks both WOFF2 and WOFF alternatives and the complete 82-case rerun passes. The first post-install build reports slow archive/home queries and Node's transitive punycode warning; the subsequent warm build reports only punycode. Earlier cache edit/deletion/restoration checks remain historical evidence and were not repeated in this follow-up.
+
 ## Portable styling and dependency quick wins — 2026-10-10
+
+- [ ] **Current priority:** reproduce clean npm ci, resolve supported peer/security dependency issues and remove proven redundant integrations. Validate changed dependency chains with types, lint, tests and production/browser checks. Keep remaining upstream blockers explicit.
+- [ ] **Deferred by owner:** revisit TSX lint-policy fixtures and React component testing using standard ESLint/Vitest/React testing tools. Preserve the working CI regression tests until this category is resumed; do not refactor tests during dependency remediation.
+- [x] Refresh compatible vulnerable utilities and apply two owner-scoped same-major security overrides for Immutable and GraphQL-codegen Lodash. Clean installation, production output, full CI-mode tests, Netlify CLI startup and browser checks pass. Audit drops from 111 entries / 29 advisory URLs to **109 entries / 21 URLs**; eight URLs disappear and none are added. Lock entries drop from 2,906 to 2,824. Three Gatsby peer-warning blocks, transitive deprecations and Netlify optional-driver diagnostics remain documented in the dependency review; warning-free/audit-clean acceptance is still open.
+- [x] Replace fontfaceobserver and its types with native font loading; simplify layout effects while preserving typography, readiness/fallback, resize cleanup and hydration. Success/failure, Polish glyphs, navigation and unchanged screenshots pass. The manifest now has 79 direct declarations (36 runtime, 43 development); npm outdated reports only Node 26 types, intentionally retaining Node 24 types for this runtime.
 
 - [x] Fix the reproduced CI-only lint-test failures: iframe and image-alt fixtures use a shared real-file temporary project through unchanged lint configuration. Both forbidden-property and all three missing-alt assertions remain. Focused cases pass with CI unset/enabled; all 12 tooling cases and the full `CI=true npm test` pass locally. Lint/format passes. README documents reproduction commands; hosted CI remains pending.
 
@@ -22,16 +35,16 @@
 - [x] Correct batched sticky-header visibility handling, with a browser fixture that fails before the fix and passes afterward. Retain native observer/fallback scrolling tests; no polling, sleep or relaxed assertion was added.
 - [ ] Confirm hosted CI and deployment for this layout/theme stage. Local success does not establish deployed results.
 
-Current evidence: the header-control production build, all **74 / 74** browser cases (2.5 minutes), full `CI=true npm test` including application/Node/browser types, and lint/format pass locally. The earlier normal-environment full test run passed but missed the CI-sensitive lint fixtures; both are now corrected and verified in both modes. The seven CSS/utility warm-cache phases and clean npm installation were verified during foundation acceptance before the control moved to the header; package declarations/lockfile did not change in this follow-up. Interrupted SIGTERM runs are not acceptance evidence. Existing screenshot PNGs/tolerances are unchanged. Installation still emits Gatsby-chain peer/deprecation warnings and the audit remains at 111 affected entries; the warning-free target is open. Hosted CI/deployment remain pending.
+Earlier header-control checkpoint: the production build, all **74 / 74** browser cases (2.5 minutes), full `CI=true npm test` including application/Node/browser types, and lint/format pass locally. The earlier normal-environment full test run passed but missed the CI-sensitive lint fixtures; both are now corrected and verified in both modes. The seven CSS/utility warm-cache phases and clean npm installation were verified during foundation acceptance before the control moved to the header; package declarations/lockfile did not change in this follow-up. Interrupted SIGTERM runs are not acceptance evidence. Existing screenshot PNGs/tolerances are unchanged. Installation still emits Gatsby-chain peer/deprecation warnings and the audit remains at 111 affected entries; the warning-free target is open. Hosted CI/deployment remain pending.
 
 ## Starter research and authorized form retirement — 2026-10-10
 
 - [x] Download and compare the official minimal/blog Gatsby starters and maintained modern Tailwind references; exclude the archived Gatsby 2 example from recommendations. Record pinned commits, maintenance, manifest/source comparisons, isolated Linux npm resolutions, peer/security causes and all 84 starting dependency dispositions in [gatsby-starter-comparison.md](docs/gatsby-starter-comparison.md).
-- [x] Retire the unused Contact component/barrel/CSS, form-only EN/PL translations and Ant Design, as authorized. Preserve the live Calendly pages and routes. At that checkpoint the lockfile dropped from 3,040 to 2,970 entries without retained version changes. After foundation cleanup and direct Lodash/type removal it contains 2,906 entries; the manifest has 81 direct declarations (37 dependencies, 44 development tools/types).
+- [x] Retire the unused Contact component/barrel/CSS, form-only EN/PL translations and Ant Design, as authorized. Preserve the live Calendly pages and routes. At that checkpoint the lockfile dropped from 3,040 to 2,970 entries without retained version changes. At the foundation checkpoint after direct Lodash/type removal, it contained 2,906 entries; the manifest had 81 direct declarations (37 dependencies, 44 development tools/types).
 - [x] Verify clean npm ci with Gatsby patch hook, strict types and all 19 component cases. Further build/browser results will be recorded below when complete.
 - [x] Validate production output and bilingual contact/navigation behavior after retirement; hosted CI/deployment remain separate.
 - [x] Apply the demonstrated cleanup category: unused pngjs declaration, inert resolver configuration and unused runtime theme provider. Final foundation validation is tracked above.
-- [ ] Resolve project-owned lint/localization peer exceptions and investigate Gatsby's nested dependency/security chains. Current audit: 111 affected entries (19 low, 31 moderate, 61 high; no critical), representing 29 distinct advisory URLs. Fresh starters reproduce some upstream problems; that does not make this graph accepted as clean.
+- [ ] Resolve project-owned lint/localization peer exceptions and investigate Gatsby's nested dependency/security chains. Refreshed audit: 109 affected entries (19 low, 31 moderate, 59 high; no critical), representing 21 distinct advisory URLs. Fresh starters reproduce some upstream problems; that does not make this graph accepted as clean.
 - [x] Record settled choices: Tailwind alongside useful modules, modern browser CSS, CSS variables as editable tokens, and Pongo's integrated formatting rules. Keep share features pending a measured replacement review. Astro remains a later decision.
 
 ## Dependency acceptance and npm migration — 2026-10-10
@@ -42,7 +55,7 @@ Current evidence: the header-control production build, all **74 / 74** browser c
 - [ ] Verify hosted CI/deployment separately after publication.
 - [ ] Remediate the remaining audit chains as tracked in the current research above. The earlier 112-entry audit fell to 111 with form retirement; compatible fixes had removed both critical advisories. Avoid audit-force plugin downgrades.
 
-Last updated: 2026-10-10
+Last updated: 2026-10-11
 
 This is the live checklist for [plan.md](./plan.md). Completed categories are consolidated here; dated research and earlier timings remain in the plan and linked reviews. A local pass, a hosted CI pass and a deployed check are separate evidence.
 

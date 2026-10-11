@@ -71,7 +71,7 @@ Shared content/query types live in `src/types/content.ts`. Keep each page's data
 
 ## Dependency maintenance
 
-Scoped npm overrides retain the tested ESLint and localization versions where upstream peer ranges lag behind. They are listed with their rationale in [the dependency review](docs/dependency-review.md); installations use normal peer resolution without `--force` or `--legacy-peer-deps`.
+Scoped npm overrides retain the tested ESLint/localization versions where upstream peer ranges lag behind and replace pinned vulnerable Lodash/Immutable utilities with patched versions. Their owners, rationale and validation are in [the dependency review](docs/dependency-review.md); installations use normal peer resolution without `--force` or `--legacy-peer-deps`.
 
 Run `npm outdated` to compare installed, wanted and latest registry versions. [The dependency review](docs/dependency-review.md) records tested upgrades and remaining compatibility work. Check imports, Gatsby/PostCSS configuration, scripts and peer requirements before removing a dependency. `npm explain <package>` shows which packages still require it transitively; an unused root declaration can be removed even when Gatsby retains its own dependency. Gatsby supplies its compiler configuration; the project uses TypeScript for smoke/lint parsing and Vitest for component rendering tests, with no direct Babel setup. npm runs patch-package from the postinstall lifecycle to apply the Gatsby CSS cache correction; the Yarn-only postinstall-postinstall helper is removed.
 
@@ -84,13 +84,15 @@ npm run smoke
 npm run lint
 npm run clean
 env -u DEBUG npm run build
-npm run test
+CI=true npm test
 npm run test:visual
 ```
 
 Review both package.json and package-lock.json. Dependency cleanup should pass existing screenshots without regenerating them.
 
 Run `npm audit` to inspect advisories and `npm audit fix --dry-run` to preview compatible fixes. Review the proposed updates before applying them, then repeat installation/build/test checks. Some remaining Gatsby dependencies require upstream changes; the audit's `--force` suggestion can downgrade Gatsby plugins and is not a safe routine update.
+
+Use `npm ls --all` to diagnose invalid or stale transitive resolutions and `npm explain <package>` to find their owners. A successful install alone does not establish a consistent tree. Gatsby's published router and legacy lint dependencies still have incompatible peer declarations; see the dependency review for the remaining upstream limitations. Do not routinely delete the lockfile: any fresh resolution needs its own reviewed lock diff, clean install and full acceptance checks.
 
 ## Tests
 
@@ -340,7 +342,7 @@ The styling baseline is Safari 16.4+, Chrome 111+ and Firefox 128+. The existing
 
 The header's **Theme / Motyw** icon opens light, dark and system choices. System is the default and detects your device's appearance automatically. The icon shows a sun, moon or monitor for the selected preference. Use Enter/Space to open it, Tab to reach the native radio choices, and Escape to close and return focus; clicking outside also closes it. Preference is stored as `color-theme` in local storage. System mode follows OS changes; explicit choices persist across reloads and EN/PL navigation. `src/theme/preference.ts` provides the small document-head initializer so saved preferences apply before React loads. Without JavaScript, the site uses the light stylesheet and theme selection is disabled. Storage failures fall back to system preference without preventing a change on the current page.
 
-Edit light values in `:root` and dark overrides in `:root[data-theme='dark']` in `src/theme/tokens.css`. Transparent article diagrams keep a white canvas for readable labels. Embedded third-party widgets retain their provider's own appearance. Run `npm run test:visual -- theme.spec.ts` for theme behavior, and the full browser suite for shared styling/navigation changes. Theme checks cover saved preferences before React loads, OS changes, blocked storage, synchronization between tabs, and dark home/archive/category/article/search pages in both languages at mobile and desktop widths.
+Edit light values in `:root` and dark overrides in `:root[data-theme='dark']` in `src/theme/tokens.css`. Transparent article diagrams keep a white canvas for readable labels. Embedded third-party widgets retain their provider's own appearance. Run `npm run test:visual -- theme.spec.ts` for theme behavior, and the full browser suite for shared styling/navigation changes. Theme checks click the visible labels and row padding, and cover keyboard dismissal, saved preferences before React loads, OS changes, blocked storage, synchronization between tabs, and dark home/archive/category/article/search pages in both languages at mobile and desktop widths. To repeat these checks in Firefox, run `npm run browsers:install:firefox`, then `npm run test:visual -- theme.spec.ts --browser firefox`.
 
 For a manual appearance review, run `npm run build` and `npm run serve`, then use the header theme icon on the home page, an article, a category and search. Review the dark palette, image canvases and mobile navigation. Switch EN/PL and reload to check persistence; open a second tab to check synchronized selection. Choose **System / Systemowy** and change your OS appearance to check automatic updates. Third-party comments, newsletter and calendar embeds keep their own provider styling.
 

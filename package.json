@@ -82,7 +82,6 @@
   "dependencies": {
     "@weknow/gatsby-remark-twitter": "^0.2.3",
     "disqus-react": "^1.1.7",
-    "fontfaceobserver": "2.3.0",
     "gatsby": "5.16.1",
     "gatsby-plugin-catch-links": "^5.16.0",
     "gatsby-plugin-feed": "^5.16.0",
@@ -127,7 +126,6 @@
     "@playwright/test": "1.64.0",
     "@tailwindcss/postcss": "4.3.3",
     "@types/escape-html": "^1.0.4",
-    "@types/fontfaceobserver": "^2.1.3",
     "@types/mdast": "4.0.4",
     "@types/node": "24.19.2",
     "@types/react": "19.3.0",
@@ -169,6 +167,12 @@
   },
   "overrides": {
     "@types/react": "$@types/react",
+    "@ardatan/relay-compiler": {
+      "immutable": "3.8.4"
+    },
+    "@graphql-codegen/plugin-helpers": {
+      "lodash": "4.18.1"
+    },
     "eslint-plugin-react": {
       "eslint": "$eslint"
     },

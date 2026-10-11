@@ -112,6 +112,47 @@ test('Polish diacritics use the web Open Sans face across weights and italics', 
   }
 });
 
+for (const language of ['en', 'pl']) {
+  for (const failedWeight of [400, 600]) {
+    test(`${language} keeps a usable fallback when font weight ${failedWeight} fails`, async ({
+      page,
+    }) => {
+      await page.route(
+        (url) =>
+          url.pathname.startsWith('/fonts/open-sans/files/') &&
+          (url.pathname.endsWith(`-${failedWeight}.woff2`) ||
+            url.pathname.endsWith(`-${failedWeight}.woff`)),
+        (route) => route.abort(),
+      );
+      await page.goto(`/${language}/training/`);
+      const loadedWeight = failedWeight === 400 ? 600 : 400;
+      await expect(page.locator('html')).toHaveAttribute(
+        `data-font${loadedWeight}`,
+        'loaded',
+      );
+      await page.evaluate(() => document.fonts.ready);
+      await expect(page.locator('html')).not.toHaveAttribute(
+        `data-font${failedWeight}`,
+        'loaded',
+      );
+      await expect(page.locator('body')).toHaveCSS(
+        'font-family',
+        failedWeight === 400 ? /Arial/ : /Open Sans/,
+      );
+      await expect(page.locator('h1')).toHaveCSS(
+        'font-weight',
+        failedWeight === 600 ? '400' : '600',
+      );
+      await expect(page.locator('h1')).toHaveCount(1);
+      await expect(
+        page.getByRole('link', {
+          name: `Change language to ${language === 'en' ? 'pl' : 'en'}`,
+        }),
+      ).toBeVisible();
+    });
+  }
+}
+
 test('approved text colors maintain contrast on actual white surfaces and interaction states', async ({
   page,
 }) => {

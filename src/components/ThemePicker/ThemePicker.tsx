@@ -21,16 +21,29 @@ export default function ThemePicker() {
   const trigger = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const dismissOutside = (event: PointerEvent) => {
+    const dismissOutsidePointer = (event: PointerEvent) => {
       if (
-        event.target instanceof Node &&
         disclosure.current &&
-        !disclosure.current.contains(event.target)
+        !event.composedPath().includes(disclosure.current)
       )
         disclosure.current.open = false;
     };
-    document.addEventListener('pointerdown', dismissOutside);
-    return () => document.removeEventListener('pointerdown', dismissOutside);
+    const dismissAfterTab = (event: KeyboardEvent) => {
+      if (
+        event.key === 'Tab' &&
+        disclosure.current &&
+        !disclosure.current.contains(document.activeElement)
+      )
+        disclosure.current.open = false;
+    };
+    // Label activation can briefly focus an ancestor before its radio input.
+    // Dismiss on outside pointer use or completed Tab navigation, not blur.
+    document.addEventListener('pointerdown', dismissOutsidePointer);
+    document.addEventListener('keyup', dismissAfterTab);
+    return () => {
+      document.removeEventListener('pointerdown', dismissOutsidePointer);
+      document.removeEventListener('keyup', dismissAfterTab);
+    };
   }, []);
 
   useEffect(() => {
@@ -84,10 +97,6 @@ export default function ThemePicker() {
           event.preventDefault();
           close();
         }
-      }}
-      onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget))
-          event.currentTarget.open = false;
       }}
     >
       <summary

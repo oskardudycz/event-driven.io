@@ -2,11 +2,9 @@ import type { ArticleEdge } from '../types/content.ts';
 import '../theme/tokens.css';
 import '../theme/tailwind.css';
 import '../theme/global.css';
-import FontFaceObserver from 'fontfaceobserver';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
 
-import { getScreenWidth, timeoutThrottlerHandler } from '../utils/helpers.ts';
 import Footer from '../components/Footer/index.ts';
 import Header from '../components/Header/index.ts';
 import { ScreenWidthContext, FontLoadedContext } from './contexts';
@@ -16,108 +14,65 @@ type LayoutProps = React.PropsWithChildren<{
   location: { pathname: string };
   data: { pages: { edges: ArticleEdge[] }; footnote: { html: string } };
 }>;
-type LayoutState = {
-  font400loaded: boolean;
-  font600loaded: boolean;
-  screenWidth: number;
-  headerMinimized: boolean;
-};
-class Layout extends React.Component<LayoutProps, LayoutState> {
-  mounted = false;
-  constructor(props: LayoutProps) {
-    super(props);
+function Layout({ children, location, data }: LayoutProps) {
+  const [font400loaded, setFont400Loaded] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(0);
 
-    this.state = {
-      font400loaded: false,
-      font600loaded: false,
-      screenWidth: 0,
-      headerMinimized: false,
+  useEffect(() => {
+    let active = true;
+    const timeout = setTimeout(() => {
+      active = false;
+    }, 10000);
+    const fontLoads = [400, 600].map((weight) =>
+      document.fonts.load(`${weight} 1em "Open Sans"`, 'BESbswy').then(
+        (faces) => {
+          if (!active || faces.length === 0) return;
+          document.documentElement.dataset[`font${weight}`] = 'loaded';
+          if (weight === 400) setFont400Loaded(true);
+        },
+        // Keep the existing fallback fonts when loading fails.
+        () => {},
+      ),
+    );
+    void Promise.all(fontLoads).then(() => clearTimeout(timeout));
+
+    return () => {
+      active = false;
+      clearTimeout(timeout);
+      delete document.documentElement.dataset.font400;
+      delete document.documentElement.dataset.font600;
     };
-  }
+  }, []);
 
-  timeouts: Record<string, ReturnType<typeof setTimeout> | null> = {};
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    const updateWidth = () => setScreenWidth(window.innerWidth);
+    const onResize = () => {
+      if (timeout !== undefined) return;
+      timeout = setTimeout(() => {
+        timeout = undefined;
+        updateWidth();
+      }, 100);
+    };
+    updateWidth();
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      clearTimeout(timeout);
+    };
+  }, []);
 
-  componentDidMount() {
-    this.mounted = true;
-    this.loadFont('font400', 'Open Sans', 400);
-    this.loadFont('font600', 'Open Sans', 600);
-    this.setState({
-      screenWidth: getScreenWidth() || 0,
-    });
-    if (typeof window !== 'undefined') {
-      window.addEventListener('resize', this.resizeThrottler, false);
-    }
-  }
-
-  componentWillUnmount() {
-    this.mounted = false;
-    window.removeEventListener('resize', this.resizeThrottler, false);
-    Object.values(this.timeouts).forEach((timeout) => {
-      if (timeout) clearTimeout(timeout);
-    });
-    this.timeouts = {};
-    delete document.documentElement.dataset.font400;
-    delete document.documentElement.dataset.font600;
-  }
-
-  resizeThrottler = () => {
-    return timeoutThrottlerHandler(
-      this.timeouts,
-      'resize',
-      100,
-      this.resizeHandler,
-    );
-  };
-
-  resizeHandler = () => {
-    this.setState({ screenWidth: getScreenWidth() || 0 });
-  };
-
-  isHomePage = () => {
-    if (this.props.location.pathname === '/') {
-      return true;
-    }
-
-    return false;
-  };
-
-  loadFont = (name: 'font400' | 'font600', family: string, weight: number) => {
-    const font = new FontFaceObserver(family, {
-      weight: weight,
-    });
-
-    font.load(null, 10000).then(
-      () => {
-        if (this.mounted) {
-          document.documentElement.dataset[name] = 'loaded';
-          if (name === 'font400') this.setState({ font400loaded: true });
-          else this.setState({ font600loaded: true });
-        }
-      },
-      // Keep the existing fallback fonts when loading fails.
-      () => {},
-    );
-  };
-
-  render() {
-    const { children } = this.props;
-    const {
-      footnote: { html: footnoteHTML },
-      pages: { edges: pages },
-    } = this.props.data;
-
-    return (
-      <FontLoadedContext.Provider value={this.state.font400loaded}>
-        <ScreenWidthContext.Provider value={this.state.screenWidth}>
-          <React.Fragment>
-            <Header path={this.props.location.pathname} pages={pages} />
-            <main className="min-h-[80vh]">{children}</main>
-            <Footer html={footnoteHTML} />
-          </React.Fragment>
-        </ScreenWidthContext.Provider>
-      </FontLoadedContext.Provider>
-    );
-  }
+  return (
+    <FontLoadedContext.Provider value={font400loaded}>
+      <ScreenWidthContext.Provider value={screenWidth}>
+        <React.Fragment>
+          <Header path={location.pathname} pages={data.pages.edges} />
+          <main className="min-h-[80vh]">{children}</main>
+          <Footer html={data.footnote.html} />
+        </React.Fragment>
+      </ScreenWidthContext.Provider>
+    </FontLoadedContext.Provider>
+  );
 }
 
 export default function LayoutWithData(props: Omit<LayoutProps, 'data'>) {
