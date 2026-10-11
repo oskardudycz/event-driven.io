@@ -27,8 +27,9 @@ void test('production CSS contains working layout utilities and no uncompiled di
 void test('the styling pipeline emits token utilities and preserves nested module selectors', async () => {
   const input =
     readFileSync('src/theme/tailwind.css', 'utf8') +
+    readFileSync('src/theme/tokens.css', 'utf8') +
     `
-    @source inline("text-accent gap-gutter min-h-[80vh]");
+    @source inline("text-accent gap-gutter min-h-[80vh] font-bold font-semibold");
     .menu { :global(.homepage) & { color: var(--text-color-brand); } }
   `;
   const { root } = await postcss(postcssConfig().plugins).process(input, {
@@ -55,6 +56,21 @@ void test('the styling pipeline emits token utilities and preserves nested modul
     declarations.get(':global(.homepage) .menu')?.get('color'),
     'var(--text-color-brand)',
   );
+  // Site tokens must preserve the standard weights of generated utilities.
+  for (const [utility, weight] of [
+    ['bold', '700'],
+    ['semibold', '600'],
+  ]) {
+    let resolvedWeight: string | undefined;
+    root.walkDecls(`--font-weight-${utility}`, (declaration) => {
+      resolvedWeight = declaration.value;
+    });
+    assert.equal(resolvedWeight, weight);
+    assert.equal(
+      declarations.get(`.font-${utility}`)?.get('font-weight'),
+      `var(--font-weight-${utility})`,
+    );
+  }
   // Adding utilities must not introduce a different heading reset.
   for (const selector of declarations.keys()) {
     assert.ok(!selector.split(',').some((part) => part.trim() === 'h1'));

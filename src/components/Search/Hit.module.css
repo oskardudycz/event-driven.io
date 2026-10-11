@@ -39,7 +39,7 @@
 .search-hit h2 {
   margin: 0;
   font-size: 1.25em;
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--weight-emphasis);
   line-height: 1.4;
   overflow-wrap: anywhere;
 }
@@ -72,7 +72,7 @@
 .search-highlight {
   color: var(--text-color-brand);
   background: var(--color-brand-tint);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--weight-emphasis);
   border-radius: 2px;
   box-decoration-break: clone;
 }

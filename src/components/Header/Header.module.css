@@ -1,15 +1,29 @@
+.frame {
+  --header-height: var(--header-height-default);
+  position: relative;
+  height: var(--header-height);
+}
+
+/* Reserve the bar's space when it becomes fixed, without shifting content.
+   Only the homepage places that space over its hero. */
+.overlay {
+  --header-height: var(--header-height-homepage);
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
 :global(.header).header {
   --theme-trigger-color: var(--color-text);
   align-items: center;
   justify-content: center;
   background-color: var(--color-surface);
   display: flex;
-  height: var(--header-height-default);
+  height: var(--header-height);
   position: relative;
   top: 0;
   width: 100%;
   padding: 0 64px 0 10px;
-  align-items: center;
 
   :global(a.logoType) {
     align-items: center;
@@ -22,9 +36,7 @@
   }
 
   &:global(.homepage).homepage {
-    position: absolute;
     background-color: transparent;
-    height: var(--header-height-homepage);
   }
 
   &:global(.homepage).homepage:not(:global(.fixed).fixed) {
@@ -70,21 +82,16 @@ h2.elementH2 {
 :global(.sensor).sensor {
   display: block;
   position: absolute;
-  bottom: 0;
-  z-index: 1;
   left: 0;
   right: 0;
   height: 1px;
-  top: var(--sensor-top);
+  top: 100%;
+  pointer-events: none;
 }
 
 @media screen and (min-width: 600px) {
   :global(.header).header {
     padding: var(--space-inset-l);
-
-    &:global(.homepage).homepage {
-      height: var(--header-height-homepage);
-    }
   }
 }
 
@@ -106,12 +113,6 @@ h2.elementH2 {
 
 @media screen and (min-width: 1024px) {
   :global(.header).header {
-    align-items: center;
-    background-color: var(--color-surface);
-    display: flex;
-    position: absolute;
-    top: 0;
-    width: 100%;
     justify-content: space-between;
     transition: padding 0.5s;
 
@@ -153,8 +154,6 @@ h2.elementH2 {
   }
 
   :global(.logo).logo {
-    margin: var(--space-inline-default);
-
     :global(.fixed).fixed & {
       height: 36px;
       width: 36px;

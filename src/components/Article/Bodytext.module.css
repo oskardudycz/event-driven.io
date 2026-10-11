@@ -36,7 +36,7 @@
     line-height: 1.5;
   }
   :global(a) {
-    font-weight: var(--font-weight-bold);
+    font-weight: var(--weight-emphasis);
     color: var(--text-color-brand);
     text-decoration: underline;
   }

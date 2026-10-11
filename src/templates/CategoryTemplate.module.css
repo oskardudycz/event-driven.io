@@ -8,7 +8,7 @@
   color: var(--color-brand);
   display: flex;
   font-size: var(--font-size-caption);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--weight-emphasis);
   gap: var(--space-sm);
   letter-spacing: 0.08em;
   margin-bottom: var(--space-sm);
@@ -30,7 +30,7 @@
   border-radius: 999px;
   display: inline-block;
   font-size: var(--font-size-caption);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--weight-emphasis);
   margin-top: var(--space-md);
   padding: var(--space-xs) var(--space-sm);
 }

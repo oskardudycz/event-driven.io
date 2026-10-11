@@ -8,7 +8,7 @@ const VideoGallery = ({ videos }: { videos: VideoDetails[] }) => {
 
   return (
     <React.Fragment>
-      <ul className="videoGrid my-section grid list-none gap-section p-0 min-[600px]:grid-cols-2">
+      <ul className="videoGrid my-section grid list-none gap-section p-0 sm:grid-cols-2">
         {videos.map((video) => {
           const url = `https://www.youtube.com/watch?v=${video.VideoId}`;
           return (

@@ -10,7 +10,7 @@ export default defineConfig({
   timeout: 60000,
   forbidOnly: !!process.env.CI,
   updateSnapshots: process.env.UPDATE_VISUAL_SNAPSHOTS === '1' ? 'all' : 'none',
-  snapshotPathTemplate: '{testDir}/../fixtures/visual/{arg}{ext}',
+  snapshotPathTemplate: '{testDir}/../fixtures/visual{/projectName}/{arg}{ext}',
   outputDir: 'visual-artifacts/results',
   reporter: [
     ['list'],
