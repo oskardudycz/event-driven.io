@@ -4,14 +4,13 @@
 }
 @media screen and (min-width: 600px) {
   :global(.article).article {
-    padding: calc(var(--space-default)) calc(var(--space-default) * 2);
+    padding: var(--space-md) var(--space-lg);
     max-width: var(--text-max-width-tablet);
   }
 }
 @media screen and (min-width: 1024px) {
   :global(.article).article {
-    padding: calc(var(--space-default) * 2 + 90px) 0
-      calc(var(--space-default) * 2);
+    padding: 50px 0 var(--space-lg);
     max-width: var(--text-max-width-desktop);
   }
 }

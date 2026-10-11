@@ -34,7 +34,7 @@
   content: counter(reading-order);
   display: flex;
   font-size: var(--font-size-caption);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--weight-emphasis);
   height: 2.25rem;
   justify-content: center;
   left: var(--space-sm);

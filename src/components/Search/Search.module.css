@@ -85,7 +85,7 @@
   background: var(--text-color-brand);
   border-color: var(--text-color-brand);
   color: var(--color-text-inverse);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--weight-emphasis);
 }
 .search .ais-Pagination-list button:disabled {
   color: var(--color-text-muted);

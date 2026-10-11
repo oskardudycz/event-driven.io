@@ -23,7 +23,7 @@ ul.elementUl {
   border-radius: var(--size-radius-small);
   color: var(--text-color-brand);
   display: inline-block;
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--weight-emphasis);
   padding: var(--space-sm) var(--space-md);
 }
 
@@ -59,10 +59,5 @@ blockquote.elementBlockquote {
   }
   :global(.heading).heading {
     max-width: var(--text-max-width-desktop);
-  }
-}
-@media screen and (min-width: 1024px) {
-  :global(.main).main:global(.withHeading).withHeading {
-    padding-top: var(--header-height-default);
   }
 }

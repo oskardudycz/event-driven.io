@@ -22,6 +22,14 @@
   html[data-font600='loaded'] {
     --heading-font-weight: 600;
   }
+  button,
+  input,
+  optgroup,
+  select,
+  textarea,
+  ::file-selector-button {
+    font-family: inherit;
+  }
   h1,
   h2,
   h3 {

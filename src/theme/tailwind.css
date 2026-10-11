@@ -8,6 +8,10 @@
 
 /* Aliases let utilities and component CSS share the existing design tokens. */
 @theme inline {
+  /* Match content CSS and menu measurements, including browser font preferences. */
+  --breakpoint-*: initial;
+  --breakpoint-sm: 600px;
+  --breakpoint-lg: 1024px;
   --color-page: var(--color-surface);
   --color-ink: var(--color-text);
   --color-muted: var(--color-text-muted);

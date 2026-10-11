@@ -140,7 +140,7 @@ h3.elementH3 {
     border: 2px solid yellow;
     border-radius: var(--size-radius-small);
     color: var(--color-neutral-black);
-    font-weight: var(--font-weight-bold);
+    font-weight: var(--weight-emphasis);
     padding: var(--space-sm) var(--space-md);
   }
 
@@ -163,7 +163,7 @@ button.elementButton {
   display: inline-flex;
   gap: var(--space-sm);
   font-size: var(--font-size-caption);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--weight-emphasis);
   justify-content: center;
   padding: 0;
   cursor: pointer;

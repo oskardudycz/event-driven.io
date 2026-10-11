@@ -247,8 +247,8 @@ for (const language of ['en', 'pl']) {
     await expect(page.locator('.hero h2 > span.yellow')).toHaveText(
       language === 'pl' ? 'od artykułów po wideo' : 'from articles to videos',
     );
+    await expectFonts(page);
     await page.evaluate(async () => {
-      await document.fonts.ready;
       const background = getComputedStyle(
         document.querySelector('.hero')!,
       ).backgroundImage;
@@ -426,7 +426,8 @@ test('sticky header uses the latest visibility when observer notifications arriv
   const header = page.locator('header.header');
   await expect(header).toHaveCSS('position', 'fixed');
   await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(header).toHaveCSS('position', 'absolute');
+  await expect(header).toHaveCSS('height', '100px');
+  await expect.poll(async () => (await header.boundingBox())?.y).toBe(0);
 });
 
 for (const observer of ['native', 'unavailable']) {
@@ -449,7 +450,104 @@ for (const observer of ['native', 'unavailable']) {
       await expect(header.locator('a.logoType')).toBeVisible();
       await page.evaluate(() => window.scrollTo(0, 0));
       await expect(header).not.toHaveClass(/\bfixed\b/);
-      await expect(header).toHaveCSS('position', 'absolute');
+      await expect(header).toHaveCSS(
+        'height',
+        path.endsWith('articles/') ? '80px' : '100px',
+      );
+      await expect.poll(async () => (await header.boundingBox())?.y).toBe(0);
     }
+  });
+}
+
+for (const language of ['en', 'pl']) {
+  for (const width of [390, 768, 1280]) {
+    for (const javaScriptEnabled of [false, true]) {
+      test.describe(`${language}, ${width}px, JavaScript ${javaScriptEnabled}`, () => {
+        test.use({ javaScriptEnabled, viewport: { width, height: 900 } });
+
+        test('shared header leaves ordinary content clear and overlays only the hero', async ({
+          page,
+        }) => {
+          for (const route of [
+            'introduction_to_event_sourcing/',
+            'articles/',
+            'category/',
+            'search/',
+            '404.html',
+            '',
+          ]) {
+            await page.goto(`/${language}/${route}`, {
+              waitUntil: 'domcontentloaded',
+            });
+            const header = page.getByRole('banner');
+            const heading = page.locator('main h1');
+            await expect(heading).toHaveCount(1);
+            await expect(header.locator('a.logoType')).toBeVisible();
+            const headerBounds = (await header.boundingBox())!;
+            const headingBounds = (await heading.boundingBox())!;
+            if (route) {
+              expect(headingBounds.y, route).toBeGreaterThanOrEqual(
+                headerBounds.y + headerBounds.height,
+              );
+            } else {
+              expect((await page.locator('.hero').boundingBox())?.y).toBe(0);
+              expect(headingBounds.y).toBeGreaterThan(headerBounds.height);
+            }
+            expect(
+              await page.evaluate(() => document.documentElement.scrollWidth),
+              route,
+            ).toBeLessThanOrEqual(width);
+          }
+        });
+      });
+    }
+  }
+
+  test(`${language} shrinking header does not move content and survives client navigation`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(`/${language}/introduction_to_event_sourcing/`);
+    await expectFonts(page);
+    const heading = page.locator('main h1');
+    const header = page.getByRole('banner');
+    // The page must follow shared header sizing, rather than assume a height.
+    await page.evaluate(() =>
+      document.documentElement.style.setProperty(
+        '--header-height-default',
+        '160px',
+      ),
+    );
+    await expect(header).toHaveCSS('height', '160px');
+    const headerBottom = (await header.boundingBox())!.height;
+    expect((await heading.boundingBox())!.y).toBeGreaterThanOrEqual(
+      headerBottom,
+    );
+    await page.evaluate(() =>
+      document.documentElement.style.removeProperty('--header-height-default'),
+    );
+    await expect(header).toHaveCSS('height', '80px');
+    const documentTop = () =>
+      heading.evaluate(
+        (element) => element.getBoundingClientRect().top + scrollY,
+      );
+    const originalTop = await documentTop();
+    await page.evaluate(() => window.scrollTo(0, 1200));
+    await expect(header).toHaveCSS('height', '50px');
+    await expect.poll(async () => (await header.boundingBox())?.y).toBe(0);
+    expect(await documentTop()).toBe(originalTop);
+
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await expect(header).toHaveCSS('height', '80px');
+    expect(await documentTop()).toBe(originalTop);
+    await header.locator('a.logoType').click();
+    await expect(page).toHaveURL(`/${language}/`);
+    await expect(header).toHaveCSS('height', '100px');
+    expect((await page.locator('.hero').boundingBox())?.y).toBe(0);
+    await page.locator(`a[href="/${language}/articles/"]`).first().click();
+    await expect(page).toHaveURL(`/${language}/articles/`);
+    await expect(header).toHaveCSS('height', '80px');
+    expect((await heading.boundingBox())!.y).toBeGreaterThanOrEqual(80);
+    await expect(page.locator('html')).toHaveAttribute('lang', language);
   });
 }

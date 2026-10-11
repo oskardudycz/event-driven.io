@@ -18,7 +18,7 @@ const Blog = (props: {
   return (
     <React.Fragment>
       <div
-        className={`main ${styles.main}${compactTop ? ` compactTop ${styles.compactTop}` : ''}${heading ? ` withHeading ${styles.withHeading}` : ''}`}
+        className={`main ${styles.main}${compactTop ? ` compactTop ${styles.compactTop}` : ''}`}
       >
         {heading && <h1 className={`heading ${styles.heading}`}>{heading}</h1>}
         <ul className={styles.elementUl}>

@@ -139,6 +139,12 @@ for (const language of ['en', 'pl']) {
         'font-family',
         failedWeight === 400 ? /Arial/ : /Open Sans/,
       );
+      for (const control of await page.locator('button, input').all()) {
+        await expect(control).toHaveCSS(
+          'font-family',
+          failedWeight === 400 ? /Arial/ : /Open Sans/,
+        );
+      }
       await expect(page.locator('h1')).toHaveCSS(
         'font-weight',
         failedWeight === 600 ? '400' : '600',
@@ -454,13 +460,14 @@ for (const language of ['en', 'pl']) {
           article.evaluate((el) => {
             const css = getComputedStyle(el);
             return {
-              top: css.paddingTop,
+              contentTop:
+                el.getBoundingClientRect().top + parseFloat(css.paddingTop),
               left: css.paddingLeft,
               maxWidth: css.maxWidth,
             };
           });
         expect(await dimensions()).toMatchObject({
-          top: '20px',
+          contentTop: 100,
           left: '20px',
         });
         const paragraph = page.locator('.bodytext > p').first();
@@ -470,7 +477,7 @@ for (const language of ['en', 'pl']) {
           height: 900,
         });
         await expect.poll(dimensions).toMatchObject({
-          top: '20px',
+          contentTop: 100,
           left: '40px',
           maxWidth: '650px',
         });
@@ -479,7 +486,7 @@ for (const language of ['en', 'pl']) {
           height: 900,
         });
         await expect.poll(dimensions).toMatchObject({
-          top: '130px',
+          contentTop: 130,
           left: '0px',
           maxWidth: '850px',
         });

@@ -51,6 +51,10 @@ test('shared video cards keep a responsive grid and readable themed borders', as
     );
   expect(await columns()).toBe(1);
   await expect(grid.locator('li').first()).toHaveCSS('border-top-width', '1px');
+  await page.setViewportSize({ width: 599, height: 900 });
+  await expect.poll(columns).toBe(1);
+  await page.setViewportSize({ width: 600, height: 900 });
+  await expect.poll(columns).toBe(2);
   await page.setViewportSize({ width: 1024, height: 900 });
   await expect.poll(columns).toBe(2);
   await chooseTheme(page, 'dark');

@@ -20,6 +20,7 @@ const Header = ({ pages, path }: { pages: ArticleEdge[]; path: string }) => {
   const [fixed, setFixed] = useState(false);
   const sensorRef = useRef<HTMLDivElement>(null);
   const { lang } = usePageContext();
+  const homepage = path === `/${lang}/` || path === `/${lang}`;
   const filteredPages = pages.filter((p) => p.node.fields.langKey === lang);
 
   useEffect(() => {
@@ -50,25 +51,13 @@ const Header = ({ pages, path }: { pages: ArticleEdge[]; path: string }) => {
     );
     observer.observe(sensor);
     return () => observer.disconnect();
-  }, []);
-
-  const getHeaderSize = () => {
-    const fixedText = fixed ? `fixed ${styles.fixed}` : '';
-
-    const homePages = [`/${lang}`]; //, `/${lang}/newsletter-pl`];
-
-    const homepage = homePages.some(
-      (page) => path === `${page}/` || path === `${page}`,
-    )
-      ? `homepage ${styles.homepage}`
-      : '';
-
-    return `${fixedText} ${homepage}`;
-  };
+  }, [homepage]);
 
   return (
-    <React.Fragment>
-      <header className={`header ${styles.header} ${getHeaderSize()}`}>
+    <div className={`${styles.frame} ${homepage ? styles.overlay : ''}`}>
+      <header
+        className={`header ${styles.header} ${homepage ? `homepage ${styles.homepage}` : ''} ${fixed ? `fixed ${styles.fixed}` : ''}`}
+      >
         <Link to="/" className={'logoType'}>
           <div className={`logo ${styles.logo}`}>
             <img
@@ -107,17 +96,10 @@ const Header = ({ pages, path }: { pages: ArticleEdge[]; path: string }) => {
       </header>
       <div
         ref={sensorRef}
-        style={
-          {
-            '--sensor-top':
-              path === `/${lang}/`
-                ? 'var(--header-height-homepage)'
-                : 'var(--header-height-default)',
-          } as React.CSSProperties
-        }
+        aria-hidden="true"
         className={`sensor ${styles.sensor}`}
       />
-    </React.Fragment>
+    </div>
   );
 };
 

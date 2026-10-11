@@ -91,7 +91,7 @@ export default function ThemePicker() {
   return (
     <details
       ref={disclosure}
-      className="absolute top-1/2 right-2.5 z-20 -translate-y-1/2 min-[1024px]:relative min-[1024px]:top-auto min-[1024px]:right-auto min-[1024px]:ml-2.5 min-[1024px]:shrink-0 min-[1024px]:translate-y-0"
+      className="absolute top-1/2 right-2.5 z-20 -translate-y-1/2 lg:relative lg:top-auto lg:right-auto lg:ml-2.5 lg:shrink-0 lg:translate-y-0"
       onKeyDown={(event) => {
         if (event.key === 'Escape') {
           event.preventDefault();

@@ -50,7 +50,7 @@ test('category index hydrates once and starts at the top', async ({ page }) => {
   });
   expect(response?.status()).toBe(200);
   await expect(page.locator('.categoryGrid section').first()).toBeVisible();
-  await page.evaluate(() => document.fonts.ready);
+  await expectFonts(page);
   await expect(page).toHaveScreenshot('category-desktop.png');
   await expect(page.locator('h1')).toHaveCount(1);
   await expect(page.locator('footer')).toHaveCount(1);
