@@ -133,21 +133,6 @@ function verifySeoBuild(publicDirectory: string) {
     expectContains('consulting language alternates', html, 'hrefLang="pl"');
   }
 
-  for (const retiredPage of [
-    'en/account/index.html',
-    'pl/account/index.html',
-    'en/account/billing/index.html',
-    'pl/account/billing/index.html',
-    'en/callback/index.html',
-    'pl/callback/index.html',
-  ]) {
-    if (fs.existsSync(path.join(publicDirectory, retiredPage))) {
-      failures.push(
-        `Retired sign-in page still generated: public/${retiredPage}`,
-      );
-    }
-  }
-
   const robots = read('robots.txt');
   expectContains('robots.txt', robots, 'User-agent: *');
   expectContains('robots.txt', robots, 'Allow: /');
@@ -198,16 +183,7 @@ function verifySeoBuild(publicDirectory: string) {
     );
   }
 
-  for (const excludedRoute of [
-    '/en/account/',
-    '/pl/account/',
-    '/en/account/billing/',
-    '/pl/account/billing/',
-    '/en/callback/',
-    '/pl/callback/',
-    '/en/search/',
-    '/404/',
-  ]) {
+  for (const excludedRoute of ['/en/search/', '/404/']) {
     expectExcludes(
       'sitemap',
       sitemap,

@@ -19,18 +19,6 @@ test('article archive hydrates once and displays its real cover image', async ({
   await expectImageLoaded(firstCover, 200);
   await expect(firstCover).toHaveCSS('opacity', '1');
   await expectFonts(page);
-  if (test.info().config.updateSnapshots !== 'none') {
-    // Archive content changes require an explicit, reviewed first-card expectation.
-    expect(
-      process.env.ARCHIVE_SNAPSHOT_SLUG,
-      'Set ARCHIVE_SNAPSHOT_SLUG to the reviewed newest article slug',
-    ).toBeTruthy();
-    await expect(page.locator('.main li a.link').first()).toHaveAttribute(
-      'href',
-      `/en/${process.env.ARCHIVE_SNAPSHOT_SLUG}/`,
-    );
-  }
-  await expect(page).toHaveScreenshot('articles-desktop.png');
   await expect(page.locator('h1')).toHaveCount(1);
   expect(
     await page
@@ -38,6 +26,22 @@ test('article archive hydrates once and displays its real cover image', async ({
       .evaluate((heading) => heading.getBoundingClientRect().top),
   ).toBeGreaterThanOrEqual(80);
   await expect(page.locator('footer')).toHaveCount(1);
+});
+
+test('representative archive card retains its reviewed appearance', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/en/articles/');
+  // Select a specimen by identity, independently of new posts or its list position.
+  const card = page.locator('.main li').filter({
+    has: page.locator('a.link[href="/en/open-source-a-relict-a-charity-or/"]'),
+  });
+  await card.scrollIntoViewIfNeeded();
+  await expectImageLoaded(card.locator('img[data-main-image]'), 200);
+  await expect(card.locator('img[data-main-image]')).toHaveCSS('opacity', '1');
+  await expectFonts(page);
+  await expect(card).toHaveScreenshot('archive-card-desktop.png');
 });
 
 test('category index hydrates once and starts at the top', async ({ page }) => {
@@ -51,12 +55,31 @@ test('category index hydrates once and starts at the top', async ({ page }) => {
   expect(response?.status()).toBe(200);
   await expect(page.locator('.categoryGrid section').first()).toBeVisible();
   await expectFonts(page);
-  await expect(page).toHaveScreenshot('category-desktop.png');
   await expect(page.locator('h1')).toHaveCount(1);
   await expect(page.locator('footer')).toHaveCount(1);
-  expect(await page.locator('.categoryGrid section').count()).toBeGreaterThan(
-    2,
+  const cards = page.locator('.categoryGrid section');
+  expect(await cards.count()).toBeGreaterThan(0);
+  const boxes = await cards.evaluateAll((elements) =>
+    elements.map((element) => {
+      const { x, y, width, height } = element.getBoundingClientRect();
+      return { x, y, width, height };
+    }),
   );
+  expect(new Set(boxes.map((box) => box.x)).size).toBeGreaterThan(1);
+  for (const box of boxes) {
+    expect(box.width).toBeGreaterThan(0);
+    expect(box.height).toBeGreaterThanOrEqual(44);
+    expect(box.x).toBeGreaterThanOrEqual(0);
+    expect(box.x + box.width).toBeLessThanOrEqual(1440);
+  }
+  for (let index = 1; index < boxes.length; index++) {
+    const previous = boxes[index - 1]!;
+    const current = boxes[index]!;
+    expect(current.y).toBeGreaterThanOrEqual(previous.y);
+    if (current.y === previous.y)
+      expect(current.x).toBeGreaterThanOrEqual(previous.x + previous.width);
+    else expect(current.y).toBeGreaterThanOrEqual(previous.y + previous.height);
+  }
   expect(await page.evaluate(() => window.scrollY)).toBeLessThan(5);
 });
 

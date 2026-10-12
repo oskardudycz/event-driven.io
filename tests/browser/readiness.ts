@@ -2,6 +2,7 @@ import { expect, type Locator, type Page } from '@playwright/test';
 
 export async function expectFonts(page: Page) {
   await expect(page.locator('body')).toHaveCSS('font-family', /Open Sans/);
+  await expect(page.locator('html')).toHaveAttribute('data-font600', 'loaded');
   await page.evaluate(() => document.fonts.ready);
 }
 

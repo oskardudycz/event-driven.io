@@ -4,6 +4,16 @@ Last updated: 2026-10-12. Strategy and settled decisions live here; [todo.md](to
 
 ## Current baseline
 
+### Immediate priority: publication-safe regression tests
+
+Follow [the test review](docs/test-review.md) before further styling work. Separate source-driven publication checks from stable representative visual comparisons. New articles must pass without refreshing newest-article screenshots. Preserve hydration, locale, cover, CSS, sticky/mobile navigation, theme, SEO and security regressions. Replace historical wording/count/import-manifest guards with current-source checks or synthetic fixtures. Preserve screenshot tolerances and review intentional reference changes. Validate a fresh production build; older `public` output does not certify current source. Record local and hosted results separately.
+
+For text edits, use Gatsby development refresh and run production validation once after editing. The named-card/accepted-biography references are an intermediate boundary: move their visual coverage to controlled component data so arbitrary wording changes do not require new PNGs. Keep current-content and real Gatsby integration checks independent; do not skip browser coverage wholesale for content commits or introduce production test routes.
+
+The owner requests an automated feedback/publishing workflow rather than manual screenshot repair. Use Playwright's documented gallery/mount fixture with the existing Vite/React dependencies. Separate framework routing/image adapters from portable author/archive/search presentation, and use controlled author/card/reading-list/search examples for visual comparisons. Retain real-page source/image/hydration/locale checks. Serve this gallery only in development/tests; run it before the production build in CI. Review the new controlled reference captures explicitly, then ordinary editorial changes require no reference updates. Existing GitHub Actions already validates, deploys previews and publishes main automatically; document that path rather than adding a second publisher.
+
+Provide short npm commands for content preview/checks and individually reviewed reference updates. Keep search outside the overflowable links, adjacent to appearance, with matching 20px icons and 44px targets on desktop and mobile. Verify localized destinations, SSR, sticky states and expanded navigation without changing screenshot tolerances.
+
 Gatsby 5.16.1, React 19.3.0, Node 24 and npm 11.9 use one lockfile, TypeScript/native ECMAScript modules and Pongo-aligned integrated ESLint/Prettier/editor/staging tools. Keep documented Gatsby module-loader boundaries and meaningful application/Node/browser types. Project-owned Babel configuration, styled-jsx, direct Bluebird/Lodash, unused pngjs, the YAML theme generator, Algolia and the inactive Ant Design contact form are retired. Calendly contact pages remain.
 
 Tailwind 4 runs through Gatsby/PostCSS without Preflight. Global reset/fonts/theme tokens belong to the shared layout; useful CSS Modules remain component-owned. Directly editable CSS variables support light/dark/system with a header control, system detection, persistence and first-paint initialization. Native font loading supports Polish glyphs and readable failure fallbacks. The actual label-click dismissal defect is fixed and tested in Chromium and Firefox; hosted verification is separate.

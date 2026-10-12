@@ -24,6 +24,21 @@
   padding: 0;
   position: relative;
   width: 100%;
+  min-width: 0;
+}
+
+.searchLink {
+  color: var(--theme-trigger-color);
+
+  &:hover {
+    color: var(--theme-trigger-color);
+    background: var(--color-brand-tint);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+  }
 }
 
 @media screen and (max-width: 1023px) {

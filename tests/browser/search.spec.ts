@@ -1,3 +1,4 @@
+import { publishedContent } from '../helpers/published-content.ts';
 import { test, expect } from './fixtures';
 import { expectFonts, expectImageLoaded } from './readiness';
 
@@ -111,7 +112,9 @@ for (const language of ['en', 'pl']) {
       height: 844,
     });
     await expect(result.locator('.search-hit-meta')).toContainText(
-      '2022-03-16',
+      publishedContent('posts').find(
+        (post) => post.route === `/${language}/introduction_to_event_sourcing/`,
+      )!.date,
     );
     if (language === 'pl')
       await expect(result.locator('.search-hit-meta')).toContainText(

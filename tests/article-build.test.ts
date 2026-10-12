@@ -1,8 +1,9 @@
 import type { BuildPageData } from './helpers/build-output.ts';
 import type { ArticleNode, Frontmatter } from '../src/types/content.ts';
 import { readFrontmatter } from './helpers/frontmatter.ts';
+import { publishedContent } from './helpers/published-content.ts';
+import { categorySlug } from '../src/utils/category-slug.ts';
 import categoryGuides from '../data/category-guides.json' with { type: 'json' };
-import buildContractFixture from './fixtures/build-contract.json' with { type: 'json' };
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -112,11 +113,18 @@ void test('published articles have localized metadata, blog cross-links and work
 
 void test('category pages render configured reading order, excerpts and local covers', () => {
   const guides = categoryGuides;
-  const routes = new Set(buildContractFixture.routes);
+  const sourcePosts = publishedContent('posts');
   for (const guide of guides) {
-    // Some guides are reserved for categories that have no articles in this locale yet.
-    // The established route contract determines which pages must be present.
-    if (!routes.has(`/${guide.language}/category/${guide.slug}/`)) continue;
+    // A locale has a category route when it has canonical content in that topic.
+    const active = sourcePosts.some(
+      ({ language, metadata }) =>
+        language === guide.language &&
+        !metadata.useDefaultLangCanonical &&
+        [metadata.category, ...(metadata.categories || [])].some(
+          (category) => category && categorySlug(category) === guide.slug,
+        ),
+    );
+    if (!active) continue;
     const $ = cheerio.load(
       fs.readFileSync(
         path.join(

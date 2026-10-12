@@ -1,10 +1,7 @@
 import type { Actions } from 'gatsby';
 import type { ArticleEdge } from '../src/types/content.ts';
-import { readFrontmatter } from './helpers/frontmatter.ts';
+import type { Frontmatter } from '../src/types/content.ts';
 import netlifyRedirects from 'gatsby-plugin-netlify/create-redirects.js';
-import archiveAudit from '../import/architecture-weekly-audit.json' with { type: 'json' };
-import missingPosts from '../import/architecture-weekly-missing.json' with { type: 'json' };
-import eventStorePosts from '../import/eventstore-posts.json' with { type: 'json' };
 import { temporaryDirectory } from './helpers/temporary-directory.ts';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
@@ -12,70 +9,35 @@ import path from 'node:path';
 import { test } from 'node:test';
 const writeRedirects = netlifyRedirects.default;
 
-void test('imported bare paths redirect permanently to English before the catch-all', async (t) => {
+void test('opted-in aliases redirect once to English, excluding self aliases and unconfigured posts', async (t) => {
   const { createPages, onPreBuild } = await import('../site/node.ts');
   const directory = temporaryDirectory(t, 'article-redirects-');
-  const root = path.resolve(import.meta.dirname, '../content/posts');
-  const names = await fs.readdir(root);
-  const archive = archiveAudit.posts.filter(
-    (post) => post.status === 'existing',
-  );
-  const entries: { directory?: string; slug?: string; url: string }[] = [
-    ...archive,
-    ...missingPosts,
-    ...eventStorePosts,
-  ];
-  const nodes: ArticleEdge[] = [];
-  const expected = [];
-  for (const entry of entries) {
-    const slug =
-      entry.directory?.split('--')[1] ||
-      entry.slug ||
-      entry.url.replace(/\/$/, '').split('/').pop();
-    const name =
-      entry.directory || names.find((name) => name.endsWith(`--${slug}`));
-    assert(name, `Missing imported article: ${slug}`);
-    expected.push(`/${slug}/ /en/${slug}/ 301`);
-    for (const lang of ['en', 'pl']) {
-      const markdown = await fs.readFile(
-        path.join(root, name, `index.${lang}.md`),
-        'utf8',
-      );
-      const frontmatter = readFrontmatter(markdown.split('---')[1]);
-      assert.equal(
-        frontmatter.redirectFrom,
-        lang === 'en' ? `/${slug}/` : undefined,
-      );
-      if (lang === 'en') {
-        for (const alias of frontmatter.redirectAliases || [])
-          expected.push(`${alias} /en/${slug}/ 301`);
-        const sourceSlug = entry.url.replace(/\/$/, '').split('/').pop();
-        assert(
-          [
-            frontmatter.redirectFrom,
-            ...(frontmatter.redirectAliases || []),
-          ].includes(`/${sourceSlug}/`),
-        );
-      }
-      // This test concerns redirects; related content is verified by the SEO tests.
-      frontmatter.related = [];
-      nodes.push({
-        node: {
-          id: `${lang}-${slug}`,
-          frontmatter,
-          fields: { slug: `/${slug}/`, langKey: lang, source: 'posts' },
-        },
-      });
-    }
+  function article(
+    language: string,
+    slug: string,
+    aliases: Partial<Frontmatter> = {},
+  ): ArticleEdge {
+    return {
+      node: {
+        id: `${language}-${slug}`,
+        frontmatter: { title: `Article ${slug}`, related: [], ...aliases },
+        fields: { slug: `/${slug}/`, langKey: language, source: 'posts' },
+      },
+    };
   }
-  // Existing posts that do not opt in should not get new redirects.
-  nodes.push({
-    node: {
-      id: 'existing',
-      frontmatter: { title: 'Existing post' },
-      fields: { slug: '/existing/', langKey: 'en', source: 'posts' },
-    },
-  });
+  const nodes = [
+    article('en', 'imported', {
+      redirectFrom: '/imported/',
+      redirectAliases: ['/original-title/', '/imported/', '/en/imported/'],
+    }),
+    // Polish copies must not steal the English alias, even if metadata includes it.
+    article('pl', 'imported', { redirectFrom: '/imported/' }),
+    article('en', 'existing'),
+  ];
+  const expected = [
+    '/imported/ /en/imported/ 301',
+    '/original-title/ /en/imported/ 301',
+  ];
   const redirects: Parameters<Actions['createRedirect']>[0][] = [];
   const pages: Parameters<Actions['createPage']>[0][] = [];
   const actions = {
@@ -87,8 +49,7 @@ void test('imported bare paths redirect permanently to English before the catch-
   await createPages(
     {
       actions,
-      graphql: (query: string) => {
-        assert.match(query, /redirectFrom/);
+      graphql: () => {
         // Cover resolution is verified by the generated search-index tests.
         return Promise.resolve({
           data: {
