@@ -13,7 +13,7 @@ const Hero = (props: { scrollToContent: () => void }) => {
 
   return (
     <section
-      className={`hero grid items-center px-gutter py-section sm:px-section ${styles.hero}`}
+      className={`hero grid items-start px-gutter py-section sm:px-section ${styles.hero}`}
     >
       <div className="grid items-center">
         <div
