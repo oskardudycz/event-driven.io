@@ -1,3 +1,19 @@
 .trigger::-webkit-details-marker {
   display: none;
 }
+
+.choices {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  margin-bottom: var(--space-xs);
+}
+
+@media (min-width: 1024px) {
+  .choices {
+    top: 100%;
+    bottom: auto;
+    margin-top: var(--space-xs);
+    margin-bottom: 0;
+  }
+}

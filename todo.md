@@ -4,6 +4,8 @@ Last updated: 2026-10-12. Current strategy is in [plan.md](plan.md); manual comm
 
 ## Current change: hero positioning and navigation disclosure
 
+- [ ] Correct left-aligned mobile branding and move the single theme control into the lower navigation on mobile; retain desktop header placement. Keep mobile navigation available and reserve its space.
+- [ ] Fix the two reported SSR heading/artwork collisions. Reproduced exactly with CI's Liberation Sans fallback through temporary fontconfig; the local DejaVu fallback wraps earlier and hides the problem. Keep assertions intact. Review the two outdated homepage screenshot references separately.
 - [ ] Complete the requested proportions review: consistent hero top inset, measured header control spacing/sizing, overflow calculation and dropdown hover contrast. Verify sticky-header hit testing as hero actions pass behind it. Keep original artwork scale and screenshot tolerances; no reference updates without explicit review.
 - [x] Correct the rejected 3:2 composition: the original transparent artwork now keeps a 772×722 display size and moves to the right gutter instead of shrinking with a percentage column. A native shared grid area uses its transparent space; copy starts at the top. One original tile background, Open Sans, existing wording/actions and the compact dark header remain.
 - [x] Measure fallback/Open Sans prose in EN/PL at 1280×1000. The standard 36rem `max-w-xl` clears the artwork in both; larger measures overlap with fallback fonts. Keep the heading independently wide. Use a font-relative content-size query for artwork fit; small/enlarged-text layouts show tiles alone.

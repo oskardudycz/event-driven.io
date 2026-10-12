@@ -18,6 +18,7 @@ import { FaSearch } from 'react-icons/fa';
 import { FaEnvelope } from 'react-icons/fa';
 import { FaTag } from 'react-icons/fa';
 import LanguagePicker from '../LanguagePicker/index.tsx';
+import ThemePicker from '../ThemePicker/ThemePicker.tsx';
 
 import Item from './Item.tsx';
 import BlueskyIcon from './BlueskyIcon.tsx';
@@ -254,6 +255,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
           )}
 
           <LanguagePicker />
+          <ThemePicker />
         </nav>
       </React.Fragment>
     );

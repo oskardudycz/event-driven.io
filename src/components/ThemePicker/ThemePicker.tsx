@@ -91,10 +91,11 @@ export default function ThemePicker() {
   return (
     <details
       ref={disclosure}
-      className="absolute top-1/2 right-2.5 z-20 -translate-y-1/2 lg:relative lg:top-auto lg:right-auto lg:ml-2.5 lg:shrink-0 lg:translate-y-0"
+      className="relative shrink-0"
       onKeyDown={(event) => {
         if (event.key === 'Escape') {
           event.preventDefault();
+          event.stopPropagation();
           close();
         }
       }}
@@ -114,7 +115,7 @@ export default function ThemePicker() {
       </summary>
       <fieldset
         disabled={preference === null}
-        className="absolute top-full right-0 mt-1 w-40 rounded-panel border border-solid border-line bg-page p-2 text-caption text-ink shadow-lg"
+        className={`${styles.choices} w-40 rounded-panel border border-solid border-line bg-page p-2 text-caption text-ink shadow-lg`}
       >
         <legend className="sr-only">{t('appearance.label')}</legend>
         {choices.map(({ value, Icon: ChoiceIcon }) => (

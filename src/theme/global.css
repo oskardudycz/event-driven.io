@@ -16,6 +16,12 @@
     background: var(--color-surface);
     color: var(--color-body);
   }
+  @media (max-width: 1023px) {
+    body {
+      /* The mobile navigation is fixed; keep the page's final controls clear. */
+      padding-bottom: 50px;
+    }
+  }
   html[data-font400='loaded'] body {
     font-family: 'Open Sans', sans-serif;
   }

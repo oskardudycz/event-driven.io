@@ -22,7 +22,7 @@ async function expectCenteredInside(element: Locator, container: Locator) {
 }
 
 for (const language of ['en', 'pl']) {
-  for (const width of [320, 390, 768, 1280]) {
+  for (const width of [320, 390, 768, 978, 1280]) {
     test(`${language} header portrait fits and stays centered at ${width}px`, async ({
       page,
     }) => {
@@ -36,6 +36,11 @@ for (const language of ['en', 'pl']) {
         await expectImageLoaded(image);
         await page.evaluate(() => window.scrollTo(0, 0));
         await expect(header).not.toHaveClass(/\bfixed\b/);
+        if (path === `/${language}/`) {
+          const brand = (await header.locator('a.logoType').boundingBox())!;
+          const heading = (await page.locator('.hero h1').boundingBox())!;
+          expect(brand.x).toBeCloseTo(heading.x, 0);
+        }
 
         for (const scroll of [0, 600]) {
           await page.evaluate((offset) => window.scrollTo(0, offset), scroll);

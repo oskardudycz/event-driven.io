@@ -19,6 +19,14 @@ The 44px controls are a usability choice, not a claim that WCAG requires 44px ev
 
 [CSS stacking contexts](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Positioned_layout/Stacking_context) explain why another positioned layer can overpaint the header or disclosure. A fixed header's existence and bounding rectangle alone do not prove it is in front. Browser tests therefore check `elementFromPoint` where hero actions intersect the bar and Playwright's native click actionability for the disclosure links. The [W3C disclosure navigation pattern](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/) continues to guide keyboard behavior and ordinary link semantics.
 
+## CI fallback and mobile follow-up
+
+The owner's CI report contains two real SSR artwork overlaps and two outdated homepage screenshot comparisons. Local `fc-match Arial` resolves to DejaVu Sans, while CI's Arial-compatible fallback is Liberation Sans. Downloading upstream Liberation Sans into `/tmp` and using a temporary `FONTCONFIG_FILE` reproduces both English 1280px failures exactly, without changing application code or assertions. With that font, the 56rem heading reaches the diagonal; a 50rem limit clears all text and controls in EN/PL. The 50rem limit is component-owned, measured artwork fit, rather than a new global design token. Open Sans retains the intended two-line English heading; the fallback may wrap to three lines. This remains preferable to obscured text.
+
+The owner requested left-aligned mobile branding and explicitly selected moving the single theme control into the lower navigation. Its choices open upward on mobile and downward on desktop. The lower navigation is now available from first paint; the shared layout reserves 50px so final page controls can scroll clear of it. Expanded mobile navigation gives its scrollable links a full row above the language/theme controls, with viewport-bounded height. The theme panel is outside that scroll container. Escape closes the active theme disclosure and restores its trigger without also closing the enclosing mobile navigation.
+
+Tests cover collapsed and expanded lower navigation at 320px and 978px: the entire theme panel must fit the viewport above its trigger, every label must receive clicks, and selecting dark mode must update the page. Header checks compare the brand's left edge with the homepage heading, including the reported intermediate-width layout.
+
 ## Repeatable verification
 
 Build first with `npm run build`, then run `npm run test:visual -- hero.spec.ts navigation-disclosure.spec.ts navigation.spec.ts header-avatar.spec.ts theme.spec.ts`. Add `--browser firefox` for Firefox; `browser-fonts.spec.ts --browser firefox` checks enlarged browser fonts. The full `npm run test:visual` remains the visual gate. Intentional homepage differences must be reviewed before its references change; neither tolerance nor snapshots are updated automatically.
