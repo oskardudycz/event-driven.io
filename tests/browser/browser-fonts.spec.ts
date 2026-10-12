@@ -33,3 +33,34 @@ test('header navigation and theme control share their desktop threshold with lar
     })
     .toBeGreaterThanOrEqual(0);
 });
+
+test('homepage copy and artwork stay separate with larger browser fonts in both languages', async ({
+  page,
+  browserName,
+}) => {
+  test.skip(
+    browserName !== 'firefox',
+    'Firefox exposes browser font preferences through launch options.',
+  );
+  for (const language of ['en', 'pl']) {
+    await page.goto(`/${language}/`);
+    await expectFonts(page);
+    await expect(page.locator('body')).toHaveCSS('font-size', '24px');
+    const hero = page.locator('.hero');
+    const artwork = (await hero.locator('img[data-main-image]').boundingBox())!;
+    for (const element of await hero.locator('h1, p, nav, button').all()) {
+      const copy = (await element.boundingBox())!;
+      expect(copy.x + copy.width).toBeLessThanOrEqual(artwork.x);
+    }
+    const header = page.getByRole('banner');
+    const headerBounds = (await header.boundingBox())!;
+    const title = (await header.locator('a.logoType').boundingBox())!;
+    expect(title.y).toBeGreaterThanOrEqual(headerBounds.y);
+    expect(title.y + title.height).toBeLessThanOrEqual(
+      headerBounds.y + headerBounds.height,
+    );
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth),
+    ).toBe(1100);
+  }
+});

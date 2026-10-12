@@ -1,141 +1,33 @@
-:global(.hero).hero {
-  background: var(--hero-background);
-  background-image: var(--hero-mobile-image);
+.hero {
+  background-color: var(--hero-background);
+  background-image:
+    linear-gradient(rgb(0 0 0 / 63%), rgb(0 0 0 / 63%)),
+    url('../../images/png/hero-tiles.webp');
   background-size: cover;
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  min-height: 100vh;
-  padding: var(--space-inset-l);
-  padding-top: var(--header-height-homepage);
+  color: var(--color-neutral-white);
+  min-height: 100svh;
+  padding-top: calc(var(--header-height-homepage) + var(--space-lg));
 }
 
-h1.elementH1 {
-  text-align: left;
-  text-transform: uppercase;
-  font-size: var(--hero-h1-size);
-  font-size: calc(var(--hero-h1-size) * 0.9);
-  margin: var(--space-stack-lg);
-  margin-bottom: var(--space-md);
-  color: var(--hero-h1-color);
-  line-height: var(--hero-h1-line-height);
-  line-height: 1.2;
-  &::before {
-    display: table;
-    content: '';
-    margin-bottom: -0.27em;
-  }
-  &::after {
-    display: table;
-    content: '';
-    margin-top: -0.21em;
-  }
-
-  :global(strong) {
-    position: relative;
-
-    &::after,
-    &::before {
-      content: '›';
-      color: var(--text-color-attention);
-      margin: 0 var(--space-xs) 0 0;
-      text-shadow: 0 0 var(--space-sm) var(--color-neutral-gray-k);
-    }
-    &::after {
-      content: '‹';
-      margin: 0 0 0 var(--space-xs);
-    }
-  }
+.underline {
+  text-decoration-color: var(--color-brand-primary-dark);
 }
 
-h1.elementH1 > u.elementU {
-  text-decoration-color: yellow;
+.intro {
+  max-width: 65ch;
 }
 
-h2.elementH2 {
-  text-align: left;
-  font-size: var(--hero-h2-size);
-  margin: var(--space-stack-lg);
-  margin-top: var(--space-sm);
-  margin-bottom: var(--space-md);
-  color: var(--hero-h2-color);
-  line-height: var(--hero-h2-line-height);
-  &::before {
-    display: table;
-    content: '';
-    margin-bottom: -0.22em;
-  }
-  &::after {
-    display: table;
-    content: '';
-    margin-top: -0.16em;
-  }
-
-  :global(strong) {
-    position: relative;
-
-    &::after,
-    &::before {
-      content: '›';
-      color: var(--text-color-attention);
-      margin: 0 var(--space-xs) 0 0;
-      text-shadow: 0 0 var(--space-sm) var(--color-neutral-gray-k);
-    }
-    &::after {
-      content: '‹';
-      margin: 0 0 0 var(--space-xs);
-    }
-  }
+.yellow {
+  color: var(--color-brand-primary-dark);
 }
 
-h3.elementH3 {
-  text-align: left;
-  font-weight: 400;
-  font-size: var(--hero-h3-size);
-  margin: var(--space-stack-lg);
-  margin-top: var(--space-sm);
-  color: var(--hero-h3-color);
-  line-height: var(--hero-h3-line-height);
-  line-height: 1.8;
-  &::before {
-    display: table;
-    content: '';
-    margin-bottom: -0.57em;
-  }
-  &::after {
-    display: table;
-    content: '';
-    margin-top: -0.51em;
-  }
-
-  :global(strong) {
-    position: relative;
-
-    &::after,
-    &::before {
-      content: '›';
-      color: var(--text-color-attention);
-      margin: 0 var(--space-xs) 0 0;
-      text-shadow: 0 0 var(--space-sm) var(--color-neutral-gray-k);
-    }
-    &::after {
-      content: '‹';
-      margin: 0 0 0 var(--space-xs);
-    }
-  }
-}
-
-:global(.yellow).yellow {
-  color: yellow !important;
-}
-
-:global(.services).services {
+.services {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-sm);
-  margin: 0 0 var(--space-lg);
+  margin: 0;
 
-  :global(a) {
+  a {
     background: yellow;
     border: 2px solid yellow;
     border-radius: var(--size-radius-small);
@@ -144,18 +36,18 @@ h3.elementH3 {
     padding: var(--space-sm) var(--space-md);
   }
 
-  :global(a:last-child) {
+  a:last-child {
     background: transparent;
     color: var(--color-neutral-white);
   }
 
-  :global(a:hover),
-  :global(a:focus) {
+  a:hover,
+  a:focus {
     text-decoration: underline;
   }
 }
 
-button.elementButton {
+.elementButton {
   align-items: center;
   background: transparent;
   border: 0;
@@ -175,12 +67,12 @@ button.elementButton {
   }
 }
 
-button.elementButton:hover :global(.articlesLabel).articlesLabel,
-button.elementButton:focus :global(.articlesLabel).articlesLabel {
+.elementButton:hover .articlesLabel,
+.elementButton:focus .articlesLabel {
   text-decoration: underline;
 }
 
-:global(.arrowCircle).arrowCircle {
+.arrowCircle {
   align-items: center;
   background: yellow;
   border-radius: 50%;
@@ -189,7 +81,7 @@ button.elementButton:focus :global(.articlesLabel).articlesLabel {
   justify-content: center;
   width: var(--space-lg);
 
-  :global(svg) {
+  svg {
     fill: var(--color-neutral-black);
     animation-duration: var(--time-duration-long);
     animation-name: buttonIconMove;
@@ -209,66 +101,8 @@ button.elementButton:focus :global(.articlesLabel).articlesLabel {
   }
 }
 
-@media screen and (min-width: 600px) {
-  :global(.hero).hero {
-    background-image: var(--hero-tablet-image);
-  }
-
-  h1.elementH1 {
-    max-width: 95%;
-    line-height: 1.5;
-    margin-bottom: var(--space-lg);
-    font-size: calc(var(--hero-h1-size) * 1.3);
-  }
-
-  h2.elementH2 {
-    max-width: 95%;
-    margin-top: 30px;
-    margin-bottom: var(--space-lg);
-    font-size: calc(var(--hero-h2-size) * 1.3);
-  }
-
-  h3.elementH3 {
-    max-width: 95%;
-    margin-top: 30px;
-    font-size: calc(var(--hero-h3-size) * 1.3);
-  }
-
-  button.elementButton {
-    font-size: var(--font-size-body-large);
-  }
-}
-
-@media screen and (min-width: 1024px) {
-  h1.elementH1 {
-    max-width: 80%;
-    line-height: 1.5;
-    margin-bottom: var(--space-lg);
-    font-size: calc(var(--hero-h1-size) * 1.5);
-  }
-
-  h2.elementH2 {
-    max-width: 80%;
-    margin-top: 30px;
-    margin-bottom: var(--space-lg);
-    font-size: calc(var(--hero-h2-size) * 1.5);
-  }
-
-  h3.elementH3 {
-    max-width: 80%;
-    margin-top: 30px;
-    font-size: calc(var(--hero-h3-size) * 1.5);
-  }
-
-  button.elementButton {
-    font-size: var(--font-size-body-large);
-  }
-}
-
-/* Keep enough room for the copy beside the speaker. Narrow or tall windows
-   use the tile-only composition rather than cropping the subject away. */
-@media screen and (min-width: 1280px) and (min-aspect-ratio: 8/5) {
-  :global(.hero).hero {
-    background-image: var(--hero-desktop-image);
+@media (prefers-reduced-motion: reduce) {
+  .arrowCircle svg {
+    animation: none;
   }
 }

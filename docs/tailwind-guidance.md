@@ -1,6 +1,6 @@
 # Tailwind styling guidance
 
-Reviewed 2026-10-11 against the official sources below. These are repository rules for styling work. The rejected utility conversion has been reverted. The owner's subsequent request to continue authorizes the revised responsibility-based plan, starting with the shared shell.
+Reviewed 2026-10-11, with responsive hero/header research added on 2026-10-12 against the official sources below. These are repository rules for styling work. The rejected utility conversion has been reverted. The owner's subsequent request to continue authorizes the revised responsibility-based plan, starting with the shared shell.
 
 ## Goal and boundaries
 
@@ -29,6 +29,57 @@ The first revised group keeps a stable header frame in normal document flow. Its
 Utilities use two named breakpoints: sm at 600px and lg at 1024px. Reset the default breakpoint namespace before defining these two, keeping a single unit system aligned with existing module rules and menu measurements. Mixing Tailwind's default rem thresholds with pixel-based header/menu rules would change their relative behavior when a visitor changes their browser's default font size. Remaining module media rules stay with their owners until their content-pattern group is simplified. The legacy emphasis token is --weight-emphasis, preserving its 600 weight without overriding Tailwind's standard font-bold (700). Pipeline tests check the standard bold/semibold weights, and browser checks cover the gallery threshold and header/content geometry.
 
 These choices remove page/header coupling and repeated literal variants. They are foundations for the content-pattern work, not a claim that replacing CSS Modules with utility lists is itself an improvement.
+
+## Responsive hero and header research
+
+Reviewed 2026-10-12 after reproducing the reader's crop on production at 1280×1000. The agreed behavior is: retain a meaningfully visible face/upper body wherever the photo can sit beside readable copy; use tiles alone where the photo would interfere. A tall window is not, by itself, a reason to hide the photo. Keep one coherent tile pattern. Restore an independently dark homepage header and reduce its oversized presentation.
+
+### Observed causes and rejected experiments
+
+`src/images/png/hero-background.png` is a 3840×2160 flattened composition containing the tiles, yellow shape, speaker and a dark strip along its top. The current hero uses that artwork as a covering background; its height also follows viewport height and content. CSS `cover` preserves the image's ratio and crops the excess. With left alignment, the speaker on the right can fall outside the visible area. This is standard [background-size behavior](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/background-size), rather than a Gatsby extraction or hydration defect.
+
+The following attempts were rejected and are not accepted fixes:
+
+- Hiding the photo based on a guessed viewport aspect ratio: this removed it from a desktop layout where it could remain visible.
+- Combining a contained full composition with a second covering tile crop: the differently scaled tile patterns produced visible seams.
+- Shifting the flattened background while narrowing headings to percentages: the 1280×1000 capture still put white body copy over the yellow shape. Moving the face into view did not establish readable copy.
+- Leaving the homepage header transparent: its apparent contrast depended on the artwork's baked-in dark strip, which moves when the background crop changes.
+
+Unaccepted hero positioning/crop experiments and the unfinished screenshot test were removed. No visual reference was updated. The production defect remains open; earlier shared-shell acceptance does not certify this follow-up.
+
+### Supported implementation direction
+
+Use real layout areas for the copy and photo. [Tailwind's responsive guidance](https://tailwindcss.com/docs/responsive-design) demonstrates mobile-first stacked/side-by-side layouts; its [grid utilities](https://tailwindcss.com/docs/grid-template-columns) define columns and gaps directly. Prefer a small set such as `grid items-center gap-8 lg:grid-cols-2` on the actual container, with ordinary semantic children. This is an illustrative structure, not a final breakpoint or an instruction to force equal columns if the content does not fit.
+
+Make the background texture independent of the photo before implementing that structure. Both Paint.NET sources were inspected; `assets/hero-background-right.pdn` contains separate tile, yellow-shape and speaker layers matching the deployed artwork. Native-resolution exports and reproduction details are recorded in [hero-exports.md](../assets/hero-exports.md). The original sources and flattened PNG remain intact. Do not simulate transparency with another opaque rectangle or invent a replacement portrait.
+
+Gatsby [documents StaticImage for a fixed index-page hero and GatsbyImage for prop-driven images](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/). Use the existing plugin rather than adding a background-image package. Give the photo its own intrinsic dimensions and use `objectFit="contain"` where the complete subject must remain visible. Gatsby defaults to `cover`, so this choice must be explicit. Use [documented art direction](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#withartdirection) or native [picture/source selection](https://developer.mozilla.org/en-US/docs/Web/HTML/Guides/Responsive_images) only when actual alternate image compositions are required.
+
+Keep the copy inside its own column so it cannot paint over the photo or yellow shape. Let content determine the hero's height. Choose the photo visibility breakpoint from both languages' measured fit, including enlarged text, rather than guessing from a single screenshot. [Container queries](https://tailwindcss.com/docs/responsive-design#container-queries) are available if the component must respond to its parent's width; they are optional, not an automatic addition. Do not introduce ResizeObserver-based crop calculations.
+
+The shared header must own its surface, spacing and portrait alignment. Its dark homepage surface must work with any hero image and in SSR. The implementation uses the ordinary 80px header frame and 44px avatar on the homepage; the hero's near-black color also supplies the header surface, independent of image pixels. Preserve the existing themed sticky state and mobile navigation. Browser geometry, responsive captures and visual review must verify this change.
+
+The first implementation's centered 1280px equal-column composition was rejected. Production measurements at 1910×930 show the concrete regression: the H1 shifted from x=40 to x=315, its width fell from 1464px to 620px, and it grew from two lines to four. The cropped texture changed the image ratio and therefore enlarged the tiles. Geometry tests passed but did not establish a good design. Do not treat non-overlap as visual acceptance.
+
+The owner then authorized a justified responsive redesign. Use the available full-width frame with a 3:2 copy/artwork grid, instead of squeezing the entire composition into an article-width container. Give the H1, supporting lead and ordinary introduction a standard type/spacing hierarchy; the introduction is a paragraph, not a third-level heading. Keep body reading length independent of the display heading: [GOV.UK's layout guidance](https://design-system.service.gov.uk/styles/layout/) recommends narrow-screen-first composition and approximately 75 characters per line. This informs the prose measure, not an instruction to copy GOV.UK's visual design or cap the entire hero to its page width. Tailwind's standard type sizes and flex/grid/gap utilities express these ordinary responsibilities directly. Preserve Open Sans, the existing wording, the primary training/secondary consulting actions and the original photo.
+
+Export the uninterrupted tile canvas at its original 3840×2160 ratio so its covering behavior matches the original artwork. The photo remains a contained transparent image in its own column, independent of background sizing. Narrow layouts show tiles alone; desktop height never hides the photo. Keep imagery, prose measure and distinctive button animation in the owning CSS Module; remove duplicate heading declarations, negative line-box pseudo-elements and font-size multipliers. The obsolete three crop queries and background props are removed.
+
+Validate compact CSS viewports and enlarged text separately. [W3C's Reflow guidance](https://www.w3.org/WAI/WCAG21/Understanding/reflow) explains why content should wrap within narrow CSS viewports, including those produced by zoom. A small viewport test is evidence for reflow; it is not a claim that native browser zoom or all WCAG requirements were tested. No new visual references are accepted until the revised composition has been reviewed.
+
+The revised build exposed a Polish fallback-font defect at 320px before Open Sans loaded: the long uppercase heading expanded its flex item and made the document 356px wide. Use Tailwind's documented [overflow wrapping](https://tailwindcss.com/docs/overflow-wrap) on the copy container. `wrap-anywhere` lets intrinsic flex sizing account for emergency word breaks; normal word boundaries remain preferred. Do not clip the overflow or shrink the entire page to conceal it. Test both languages with web-font requests blocked as well as with JavaScript enabled/disabled.
+
+### Tailwind and CSS ownership
+
+Use standard utilities for grid/flex, gap, alignment, sizing and visibility where they make the source simpler. Use existing theme roles and named breakpoints. Keep the tile background/artwork styling, complex sticky transitions and typography rules in their owning CSS Modules when clearer. Tailwind [explicitly supports custom CSS](https://tailwindcss.com/docs/adding-custom-styles); keeping a focused module is idiomatic. Neither a utility-only rewrite nor a new component framework is required. Keep Gatsby image/data plumbing outside portable layout markup for a future Astro migration.
+
+### Acceptance before calling this fixed
+
+Review EN/PL captures at 320/390px mobile, 768×1024 tablet, 1024px desktop boundaries, 1280×1000 (the reproduced defect), 1440×900 and 1920×1080; include short windows, 200% zoom and enlarged browser fonts. Check the face and upper body, copy/photo separation, one coherent tile pattern, header contrast/height and avatar containment. Check initial HTML, hydration, scrolling, sticky return, both themes and language navigation.
+
+Use native Playwright assertions for element containment/non-overlap and screenshot comparisons for the actual composition. Review intentional new layout references explicitly; preserve existing tolerances and do not add missing references automatically. Run build, project tests, lint/format and browser checks sequentially. Keep diagnostic screenshots under ignored `visual-artifacts/`, not as accepted fixtures. Record local, hosted and production evidence separately.
+
+Wait for the destination heading after Gatsby client navigation before measuring it; a changed URL does not establish that its new content is rendered. Use [Playwright's web-first assertions](https://playwright.dev/docs/test-assertions) rather than sleeps or a non-null assertion on an immediate bounding box. For cross-browser typography checks, compare exact browser-resolved CSS values: the Firefox diagnostic reports `17.5938px` for both the existing article type and an isolated literal `17.6px` declaration, while Chromium reports `17.6px` for both. A plain CSS reference preserves the intended size and exact comparison without widening tolerances or changing application styles.
 
 ## Rules for implementation
 

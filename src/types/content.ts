@@ -76,9 +76,6 @@ export type PageData = {
   authornote: { html: string };
   relatedPosts: { edges: ArticleEdge[] };
   site: { siteMetadata: { facebook: { appId?: string } } };
-  bgDesktop: { resize: { src: string } };
-  bgTablet: { resize: { src: string } };
-  bgMobile: { resize: { src: string } };
   allVideosJson: { edges: { node: VideoDetails }[] };
 };
 export type SitePageProps<Fields extends keyof PageData> = PageProps<

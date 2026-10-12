@@ -8,9 +8,7 @@ import Hero from '../components/Hero/index.ts';
 import { createHead } from '../components/Seo/index.ts';
 import { useTranslation } from 'react-i18next';
 
-export default function IndexPage({
-  data,
-}: SitePageProps<'posts' | 'bgDesktop' | 'bgTablet' | 'bgMobile' | 'site'>) {
+export default function IndexPage({ data }: SitePageProps<'posts' | 'site'>) {
   const { t } = useTranslation();
   const separator = useRef<HTMLElement>(null);
   const scrollToContent = () => {
@@ -18,26 +16,11 @@ export default function IndexPage({
   };
   const {
     posts: { edges: posts = [] },
-    bgDesktop: {
-      resize: { src: desktop },
-    },
-    bgTablet: {
-      resize: { src: tablet },
-    },
-    bgMobile: {
-      resize: { src: mobile },
-    },
   } = data;
-
-  const backgrounds = {
-    desktop,
-    tablet,
-    mobile,
-  };
 
   return (
     <React.Fragment>
-      <Hero scrollToContent={scrollToContent} backgrounds={backgrounds} />
+      <Hero scrollToContent={scrollToContent} />
 
       <section
         className={`latestArticles ${styles.latestArticles}`}
@@ -102,36 +85,7 @@ export const query = graphql`
         }
       }
     }
-    bgDesktop: imageSharp(original: { src: { regex: "/hero-background/" } }) {
-      resize(width: 1200, quality: 80, cropFocus: CENTER, toFormat: WEBP) {
-        src
-      }
-    }
-    bgTablet: imageSharp(original: { src: { regex: "/hero-background/" } }) {
-      resize(
-        width: 800
-        height: 1100
-        quality: 80
-        cropFocus: WEST
-        toFormat: WEBP
-      ) {
-        src
-      }
-    }
-    bgMobile: imageSharp(original: { src: { regex: "/hero-background/" } }) {
-      resize(
-        width: 450
-        height: 850
-        quality: 80
-        cropFocus: CENTER
-        toFormat: WEBP
-      ) {
-        src
-      }
-    }
   }
 `;
-
-//hero-background
 
 export const Head = createHead();
