@@ -3,7 +3,7 @@ import type { BuildPageData } from '../helpers/build-output.ts';
 import { test, expect } from './fixtures';
 import { expectFonts, expectImageLoaded } from './readiness';
 
-test('author biography retains its reviewed portrait, typography and layout', async ({
+test('author biography renders a readable note and loaded portrait', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -14,9 +14,12 @@ test('author biography retains its reviewed portrait, typography and layout', as
   const portrait = author.locator('img');
   await expectImageLoaded(portrait);
   await expect(portrait).toHaveAttribute('alt', /\S/);
-  await expect(author).toHaveScreenshot('article-footer-desktop.png', {
-    animations: 'disabled',
-  });
+  const note = author.locator('.note');
+  await expect(note).toHaveCSS('font-family', '"Open Sans", sans-serif');
+  const avatarBox = (await author.locator('.avatar').boundingBox())!;
+  const noteBox = (await note.boundingBox())!;
+  expect(noteBox.x).toBeGreaterThanOrEqual(avatarBox.x + avatarBox.width);
+  expect(noteBox.width).toBeGreaterThan(0);
 });
 
 test('related articles and publication navigation remain usable', async ({
@@ -73,9 +76,7 @@ test('related articles and publication navigation remain usable', async ({
       window.scrollY;
     window.scrollTo(0, top - 100);
   });
-  await expect(page).toHaveScreenshot('article-related-desktop.png', {
-    animations: 'disabled',
-  });
+
   expect(await furtherReading.locator('a').count()).toBeGreaterThan(0);
   expect(
     await furtherReading.locator('a').first().getAttribute('href'),
@@ -134,9 +135,6 @@ test('curated article links fit on a narrow screen', async ({ page }) => {
       document.querySelector('.related')!.getBoundingClientRect().top +
       window.scrollY;
     window.scrollTo(0, top - 80);
-  });
-  await expect(page).toHaveScreenshot('article-related-mobile.png', {
-    animations: 'disabled',
   });
 });
 

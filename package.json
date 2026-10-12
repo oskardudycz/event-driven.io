@@ -18,7 +18,6 @@
     "browsers:install:firefox": "playwright install firefox",
     "audit:performance": "node ./scripts/audit-performance.ts",
     "test:visual:update": "UPDATE_VISUAL_SNAPSHOTS=1 playwright test",
-    "test:visual:update:archive": "UPDATE_VISUAL_SNAPSHOTS=1 playwright test archives.spec.ts --grep 'representative archive card'",
     "smoke": "node ./scripts/smoke.ts",
     "verify:build-contract": "node ./scripts/verify-build-contract.ts",
     "update:build-contract": "node ./scripts/update-build-contract.ts",
@@ -82,9 +81,13 @@
     "typecheck:watch": "tsc --project tsconfig.json --watch",
     "dev": "gatsby develop",
     "check:content": "npm run check:images",
-    "verify:publication": "npm run build && npm test && npm run test:visual",
-    "test:visual:update:author": "UPDATE_VISUAL_SNAPSHOTS=1 playwright test articles.spec.ts --grep 'author biography retains'",
-    "test:visual:report": "playwright show-report visual-artifacts/report"
+    "verify:publication": "npm run check:edit && npm run build && npm test && npm run test:visual",
+    "test:visual:report": "playwright show-report visual-artifacts/report",
+    "dev:components": "vite --config tests/gallery/vite.config.ts",
+    "test:components:browser": "playwright test --config tests/component-browser/playwright.config.ts",
+    "test:components:review": "playwright show-report visual-artifacts/components/report",
+    "test:components:update": "UPDATE_VISUAL_SNAPSHOTS=1 playwright test --config tests/component-browser/playwright.config.ts",
+    "check:edit": "npm run check:content && npm run test:components && npm run test:components:browser"
   },
   "dependencies": {
     "@weknow/gatsby-remark-twitter": "^0.2.3",

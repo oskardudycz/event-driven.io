@@ -12,10 +12,19 @@ async function expectMatchingActions(search: Locator, theme: Locator) {
     await expect(control.locator('svg')).toHaveCSS('width', '20px');
     await expect(control.locator('svg')).toHaveCSS('height', '20px');
   }
-  const searchBox = (await search.boundingBox())!;
-  const themeBox = (await theme.boundingBox())!;
-  expect(themeBox.y).toBe(searchBox.y);
-  expect(themeBox.x - searchBox.x - searchBox.width).toBe(10);
+  await expect
+    .poll(async () => {
+      const [searchBox, themeBox] = await Promise.all([
+        search.boundingBox(),
+        theme.boundingBox(),
+      ]);
+      if (!searchBox || !themeBox) return null;
+      return {
+        verticalOffset: themeBox.y - searchBox.y,
+        gap: themeBox.x - searchBox.x - searchBox.width,
+      };
+    })
+    .toEqual({ verticalOffset: 0, gap: 10 });
 }
 
 for (const javaScriptEnabled of [false, true]) {

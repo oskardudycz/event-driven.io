@@ -86,10 +86,7 @@ for (const language of ['en', 'pl']) {
         () => document.documentElement.scrollWidth <= window.innerWidth,
       ),
     ).toBe(true);
-    if (language === 'en')
-      await expect(result).toHaveScreenshot('search-card-en-mobile.png', {
-        animations: 'disabled',
-      });
+
     await result.locator('a').focus();
     await expect(result.locator('a')).toHaveCSS('outline-style', 'solid');
     await page.setViewportSize({
@@ -103,10 +100,7 @@ for (const language of ['en', 'pl']) {
           Math.round(element.getBoundingClientRect().width),
         ),
     ).toBe(180);
-    if (language === 'en')
-      await expect(result).toHaveScreenshot('search-card-en-desktop.png', {
-        animations: 'disabled',
-      });
+
     await page.setViewportSize({
       width: 390,
       height: 844,

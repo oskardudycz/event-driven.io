@@ -1,0 +1,17 @@
+/* Test context only. Component styles stay imported by their real owners. */
+.specimens {
+  max-width: var(--text-max-width-desktop);
+  margin: 0 auto;
+  padding: 20px;
+}
+.specimens > section {
+  margin-bottom: 60px;
+}
+.archive {
+  list-style: none;
+}
+.archive img {
+  display: block;
+  width: 100%;
+  height: auto;
+}

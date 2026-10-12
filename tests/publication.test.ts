@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import * as cheerio from 'cheerio';
@@ -58,7 +58,7 @@ for (const language of ['en', 'pl']) {
       const source = cover.attr('src') || cover.attr('data-src');
       assert.ok(source?.startsWith('/static/'), post.route);
       assert.ok(
-        readBuild(decodeURI(source!)).length,
+        statSync(join('public', decodeURI(source!))).size > 0,
         `Missing cover: ${post.route}`,
       );
     });

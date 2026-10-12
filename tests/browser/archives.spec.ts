@@ -28,22 +28,6 @@ test('article archive hydrates once and displays its real cover image', async ({
   await expect(page.locator('footer')).toHaveCount(1);
 });
 
-test('representative archive card retains its reviewed appearance', async ({
-  page,
-}) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/en/articles/');
-  // Select a specimen by identity, independently of new posts or its list position.
-  const card = page.locator('.main li').filter({
-    has: page.locator('a.link[href="/en/open-source-a-relict-a-charity-or/"]'),
-  });
-  await card.scrollIntoViewIfNeeded();
-  await expectImageLoaded(card.locator('img[data-main-image]'), 200);
-  await expect(card.locator('img[data-main-image]')).toHaveCSS('opacity', '1');
-  await expectFonts(page);
-  await expect(card).toHaveScreenshot('archive-card-desktop.png');
-});
-
 test('category index hydrates once and starts at the top', async ({ page }) => {
   await page.setViewportSize({
     width: 1440,
