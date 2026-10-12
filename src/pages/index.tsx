@@ -112,7 +112,7 @@ export const query = graphql`
         width: 800
         height: 1100
         quality: 80
-        cropFocus: CENTER
+        cropFocus: WEST
         toFormat: WEBP
       ) {
         src

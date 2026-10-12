@@ -240,10 +240,6 @@ button.elementButton:focus :global(.articlesLabel).articlesLabel {
 }
 
 @media screen and (min-width: 1024px) {
-  :global(.hero).hero {
-    background-image: var(--hero-desktop-image);
-  }
-
   h1.elementH1 {
     max-width: 80%;
     line-height: 1.5;
@@ -266,5 +262,13 @@ button.elementButton:focus :global(.articlesLabel).articlesLabel {
 
   button.elementButton {
     font-size: var(--font-size-body-large);
+  }
+}
+
+/* Keep enough room for the copy beside the speaker. Narrow or tall windows
+   use the tile-only composition rather than cropping the subject away. */
+@media screen and (min-width: 1280px) and (min-aspect-ratio: 8/5) {
+  :global(.hero).hero {
+    background-image: var(--hero-desktop-image);
   }
 }
