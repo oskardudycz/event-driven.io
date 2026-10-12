@@ -1,9 +1,16 @@
 import * as styles from './Expand.module.css';
 import { FaAngleDown } from 'react-icons/fa';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
-const Expand = (props: { onClick: () => void; open: boolean }) => {
-  const { onClick, open } = props;
+const Expand = (props: {
+  onClick: () => void;
+  open: boolean;
+  ref: React.Ref<HTMLButtonElement>;
+  controls: string;
+}) => {
+  const { onClick, open, ref, controls } = props;
+  const { t } = useTranslation();
 
   return (
     <React.Fragment>
@@ -11,8 +18,10 @@ const Expand = (props: { onClick: () => void; open: boolean }) => {
         className={`more ${styles.more}`}
         type="button"
         onClick={onClick}
-        aria-label="expand"
+        ref={ref}
+        aria-label={t('menu.more')}
         aria-expanded={open}
+        aria-controls={controls}
       >
         <FaAngleDown size={30} />
       </button>

@@ -1,4 +1,5 @@
 .hero {
+  container: hero / inline-size;
   background-color: var(--hero-background);
   background-image:
     linear-gradient(rgb(0 0 0 / 63%), rgb(0 0 0 / 63%)),
@@ -9,12 +10,30 @@
   padding-top: calc(var(--header-height-homepage) + var(--space-lg));
 }
 
-.underline {
-  text-decoration-color: var(--color-brand-primary-dark);
+.copy,
+.artwork {
+  grid-area: 1 / 1;
 }
 
-.intro {
-  max-width: 65ch;
+.copy {
+  align-self: start;
+}
+
+.artwork {
+  display: none;
+  justify-self: end;
+  align-self: end;
+}
+
+/* Fit the original-scale artwork beside the prose, including enlarged fonts. */
+@container hero (min-width: 75em) {
+  .artwork {
+    display: block;
+  }
+}
+
+.underline {
+  text-decoration-color: var(--color-brand-primary-dark);
 }
 
 .yellow {

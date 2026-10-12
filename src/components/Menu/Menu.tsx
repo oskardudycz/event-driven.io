@@ -38,6 +38,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
   resizeObserver?: ResizeObserver;
   itemList = React.createRef<HTMLUListElement>();
   container = React.createRef<HTMLElement>();
+  expandButton = React.createRef<HTMLButtonElement>();
   containerWidth = 0;
 
   state: MenuState = { open: false, hiddenIndexes: [], measuring: false };
@@ -62,17 +63,48 @@ class Menu extends React.Component<MenuProps, MenuState> {
       ...pages,
       { to: '/contact/', label: 'menu.contact', icon: FaEnvelope },
       { to: '/talks/', label: 'menu.talks', icon: FaMicrophone },
-      { to: '/search/', icon: FaSearch },
-      { to: config.socialLinks.linkedin.url, icon: FaLinkedin },
-      { to: config.socialLinks.github.url, icon: FaGithub },
-      { to: config.socialLinks.mastodon.url, icon: FaMastodon },
-      { to: config.socialLinks.bluesky.url, icon: BlueskyIcon },
-      { to: config.socialLinks.youtube.url, icon: FaYoutube },
-      { to: config.socialLinks.rss.url, icon: FaRss },
+      { to: '/search/', label: 'menu.search', icon: FaSearch, iconOnly: true },
+      {
+        to: config.socialLinks.linkedin.url,
+        label: 'LinkedIn',
+        icon: FaLinkedin,
+        iconOnly: true,
+      },
+      {
+        to: config.socialLinks.github.url,
+        label: 'GitHub',
+        icon: FaGithub,
+        iconOnly: true,
+      },
+      {
+        to: config.socialLinks.mastodon.url,
+        label: 'Mastodon',
+        icon: FaMastodon,
+        iconOnly: true,
+      },
+      {
+        to: config.socialLinks.bluesky.url,
+        label: 'Bluesky',
+        icon: BlueskyIcon,
+        iconOnly: true,
+      },
+      {
+        to: config.socialLinks.youtube.url,
+        label: 'YouTube',
+        icon: FaYoutube,
+        iconOnly: true,
+      },
+      {
+        to: config.socialLinks.rss.url,
+        label: 'RSS',
+        icon: FaRss,
+        iconOnly: true,
+      },
     ];
   }
 
   componentDidMount() {
+    document.addEventListener('pointerdown', this.handleOutsidePointer);
     if (typeof ResizeObserver !== 'undefined') {
       this.resizeObserver = new ResizeObserver(([entry]) => {
         if (!entry) return;
@@ -92,6 +124,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
 
   componentWillUnmount() {
     this.resizeObserver?.disconnect();
+    document.removeEventListener('pointerdown', this.handleOutsidePointer);
   }
 
   componentDidUpdate(prevProps: MenuProps) {
@@ -135,6 +168,30 @@ class Menu extends React.Component<MenuProps, MenuState> {
     this.setState((prevState) => ({ open: !prevState.open }));
   };
 
+  handleOutsidePointer = (event: PointerEvent) => {
+    if (
+      this.state.open &&
+      event.target instanceof Node &&
+      !this.container.current?.contains(event.target)
+    ) {
+      this.setState({ open: false });
+    }
+  };
+
+  handleBlur = (event: React.FocusEvent<HTMLElement>) => {
+    if (!event.currentTarget.contains(event.relatedTarget)) {
+      this.setState({ open: false });
+    }
+  };
+
+  handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
+    if (event.key === 'Escape' && this.state.open) {
+      event.preventDefault();
+      this.setState({ open: false });
+      this.expandButton.current?.focus();
+    }
+  };
+
   render() {
     const { screenWidth } = this.props;
     const { open, hiddenIndexes } = this.state;
@@ -146,8 +203,14 @@ class Menu extends React.Component<MenuProps, MenuState> {
           className={`menu ${styles.menu} ${open ? `open ${styles.open}` : ''}`}
           rel="js-menu"
           ref={this.container}
+          onBlur={this.handleBlur}
+          onKeyDown={this.handleKeyDown}
         >
-          <ul className={`itemList ${styles.itemList}`} ref={this.itemList}>
+          <ul
+            id="navigation-links"
+            className={`itemList ${styles.itemList}`}
+            ref={this.itemList}
+          >
             {items.map((item, i) => (
               <Item
                 item={item}
@@ -159,10 +222,21 @@ class Menu extends React.Component<MenuProps, MenuState> {
             ))}
           </ul>
           {hiddenIndexes.length > 0 && (
-            <Expand onClick={this.toggleMenu} open={open} />
+            <Expand
+              onClick={this.toggleMenu}
+              open={open}
+              ref={this.expandButton}
+              controls={
+                screenWidth >= 1024 ? 'navigation-overflow' : 'navigation-links'
+              }
+            />
           )}
-          {open && screenWidth >= 1024 && (
-            <ul className={`hiddenItemList ${styles.hiddenItemList}`}>
+          {screenWidth >= 1024 && (
+            <ul
+              id="navigation-overflow"
+              className={`hiddenItemList ${styles.hiddenItemList}`}
+              hidden={!open}
+            >
               {hiddenIndexes.map((index) => {
                 const item = items[index];
                 return item ? (

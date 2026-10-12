@@ -9,7 +9,7 @@ declare global {
 }
 
 import { test, expect } from './fixtures';
-import { expectFonts } from './readiness';
+import { expectFonts, expectImageLoaded } from './readiness';
 
 for (const width of [390, 1280]) {
   test.describe(`menu at ${width}px`, () => {
@@ -31,7 +31,7 @@ for (const width of [390, 1280]) {
       );
       const menu = page.locator('nav.menu');
       const expand = menu.getByRole('button', {
-        name: 'expand',
+        name: /More links|Więcej linków/,
       });
       await expand.waitFor();
       await expand.click();
@@ -125,7 +125,7 @@ test('desktop menu adapts to container resizing without a viewport resize', asyn
     header.style.width = '800px';
   });
   await expect(consulting).not.toBeVisible();
-  await menu.getByRole('button', { name: 'expand' }).click();
+  await menu.getByRole('button', { name: /More links|Więcej linków/ }).click();
   await expect(
     menu.locator('.hiddenItemList a[href="/pl/consulting/"]'),
   ).toBeVisible();
@@ -248,6 +248,9 @@ for (const language of ['en', 'pl']) {
       language === 'pl' ? 'od artykułów po wideo' : 'from articles to videos',
     );
     await expectFonts(page);
+    const portrait = page.locator('.hero img[data-main-image]');
+    await expectImageLoaded(portrait);
+    await expect(portrait).toHaveCSS('opacity', '1');
     await page.evaluate(async () => {
       const background = getComputedStyle(
         document.querySelector('.hero')!,
@@ -335,7 +338,7 @@ test('layout keeps fonts, sticky header and mobile navigation after resizing', a
     height: 844,
   });
   const expand = page.getByRole('button', {
-    name: 'expand',
+    name: /More links|Więcej linków/,
   });
   await expand.waitFor({
     state: 'visible',

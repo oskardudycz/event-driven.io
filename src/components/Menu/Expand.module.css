@@ -1,5 +1,11 @@
 :global(.more).more {
   cursor: pointer;
+  color: var(--color-text);
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
 }
 
 @media screen and (max-width: 1023px) {
@@ -17,9 +23,7 @@
     z-index: 1;
     transform: translateX(-50%);
 
-    &:focus {
-      outline: none;
-
+    &:focus-visible {
       :global(svg) {
         fill: var(--color-brand);
       }
@@ -54,11 +58,6 @@
     padding: 0;
     z-index: 1;
 
-    &:focus,
-    &:hover {
-      outline: none;
-    }
-
     :global(svg) {
       transition: all var(--duration-default);
     }
@@ -69,6 +68,15 @@
 
       &:hover {
         background-color: rgba(255, 255, 255, 0.4);
+      }
+    }
+
+    :global(.homepage):not(:global(.fixed)) & {
+      color: var(--color-neutral-white);
+
+      &[aria-expanded='true'] {
+        background-color: var(--hero-background);
+        border-color: var(--color-border);
       }
     }
 

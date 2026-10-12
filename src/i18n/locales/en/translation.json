@@ -13,7 +13,9 @@
     "contact": "Contact",
     "talks": "Talks",
     "training": "Training",
-    "about": "About"
+    "about": "About",
+    "search": "Search",
+    "more": "More links"
   },
   "hero": {
     "h1": "Are you looking for practical knowledge <linebreak /> about <architecture>software architecture?</architecture>",
