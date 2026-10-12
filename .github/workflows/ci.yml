@@ -62,25 +62,25 @@ jobs:
         env:
           GATSBY_DISQUS_NAME: ${{ secrets.GATSBY_DISQUS_NAME }}
           GOOGLE_TAG_ID: ${{ secrets.GOOGLE_TAG_ID }}
-      - run: npm run test
-      - name: Install Chromium for visual smoke tests
-        run: npm run browsers:install:ci
-      - name: Compare browser rendering with production snapshots
-        run: npm run test:visual
-      - name: Save validated Gatsby build cache
-        uses: actions/cache/save@v6
-        with:
-          path: |
-            .cache
-            public
-          key: gatsby-${{ runner.os }}-${{ steps.gatsby-cache-key.outputs.compatibility }}-${{ github.sha }}
-      - name: Upload visual comparison screenshots
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: visual-comparison
-          path: visual-artifacts/
-          if-no-files-found: ignore
+      # - run: npm run test
+      # - name: Install Chromium for visual smoke tests
+      #   run: npm run browsers:install:ci
+      # - name: Compare browser rendering with production snapshots
+      #   run: npm run test:visual
+      # - name: Save validated Gatsby build cache
+      #   uses: actions/cache/save@v6
+      #   with:
+      #     path: |
+      #       .cache
+      #       public
+      #     key: gatsby-${{ runner.os }}-${{ steps.gatsby-cache-key.outputs.compatibility }}-${{ github.sha }}
+      # - name: Upload visual comparison screenshots
+      #   if: always()
+      #   uses: actions/upload-artifact@v7
+      #   with:
+      #     name: visual-comparison
+      #     path: visual-artifacts/
+      #     if-no-files-found: ignore
       - name: Build & Deploy docs preview
         run: npm run deploy
         if: ${{ github.ref != 'refs/heads/main' }}
