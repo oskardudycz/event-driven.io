@@ -3,6 +3,7 @@ import assert from 'assert';
 import fs from 'fs';
 import path from 'path';
 import {
+  buildContractAdditions,
   collectBuildContract,
   compareBuildContracts,
 } from '../scripts/build-contract.ts';
@@ -26,4 +27,7 @@ assert.deepStrictEqual(
     .join('\n')}`,
 );
 
+buildContractAdditions(expected, actual).forEach((addition) =>
+  console.log(`New since the build-contract baseline: ${addition}`),
+);
 console.log(`PASS generated build contract (${actual.pageCount} routes)`);

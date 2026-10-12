@@ -62,45 +62,45 @@ jobs:
         env:
           GATSBY_DISQUS_NAME: ${{ secrets.GATSBY_DISQUS_NAME }}
           GOOGLE_TAG_ID: ${{ secrets.GOOGLE_TAG_ID }}
-      # - run: npm run test
-      # - name: Install Chromium for visual smoke tests
-      #   run: npm run browsers:install:ci
-      # - name: Compare browser rendering with production snapshots
-      #   run: npm run test:visual
-      # - name: Save validated Gatsby build cache
-      #   uses: actions/cache/save@v6
-      #   with:
-      #     path: |
-      #       .cache
-      #       public
-      #     key: gatsby-${{ runner.os }}-${{ steps.gatsby-cache-key.outputs.compatibility }}-${{ github.sha }}
-      # - name: Upload visual comparison screenshots
-      #   if: always()
-      #   uses: actions/upload-artifact@v7
-      #   with:
-      #     name: visual-comparison
-      #     path: visual-artifacts/
-      #     if-no-files-found: ignore
+      - run: npm run test
+      - name: Install Chromium for visual smoke tests
+        run: npm run browsers:install:ci
+      - name: Compare browser rendering with production snapshots
+        run: npm run test:visual
+      - name: Save validated Gatsby build cache
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            .cache
+            public
+          key: gatsby-${{ runner.os }}-${{ steps.gatsby-cache-key.outputs.compatibility }}-${{ github.sha }}
+      - name: Upload visual comparison screenshots
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: visual-comparison
+          path: visual-artifacts/
+          if-no-files-found: ignore
       - name: Build & Deploy docs preview
         run: npm run deploy
         if: ${{ github.ref != 'refs/heads/main' }}
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-      # - name: Restore last acknowledged production IndexNow state
-      #   if: ${{ github.ref == 'refs/heads/main' }}
-      #   uses: actions/cache/restore@v6
-      #   with:
-      #     path: .indexnow/submitted.json
-      #     key: indexnow-v1-${{ hashFiles('data/indexnow.json') }}-${{ github.run_id }}-${{ github.run_attempt }}
-      #     restore-keys: |
-      #       indexnow-v1-${{ hashFiles('data/indexnow.json') }}-
-      # - name: Recover previous production baseline if the cache expired
-      #   if: ${{ github.ref == 'refs/heads/main' }}
-      #   run: npm run indexnow -- --restore
-      # - name: Prepare IndexNow content manifest
-      #   run: npm run indexnow:prepare
-      #   if: ${{ github.ref == 'refs/heads/main' }}
+      - name: Restore last acknowledged production IndexNow state
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: actions/cache/restore@v6
+        with:
+          path: .indexnow/submitted.json
+          key: indexnow-v1-${{ hashFiles('data/indexnow.json') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            indexnow-v1-${{ hashFiles('data/indexnow.json') }}-
+      - name: Recover previous production baseline if the cache expired
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: npm run indexnow -- --restore
+      - name: Prepare IndexNow content manifest
+        run: npm run indexnow:prepare
+        if: ${{ github.ref == 'refs/heads/main' }}
       # deploy
       - name: Build & Deploy docs
         run: npm run deploy:prod
@@ -108,12 +108,12 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-      # - name: Notify IndexNow after successful production deployment
-      #   if: ${{ github.ref == 'refs/heads/main' }}
-      #   run: npm run indexnow -- --submit
-      # - name: Save acknowledged production IndexNow state
-      #   if: ${{ github.ref == 'refs/heads/main' }}
-      #   uses: actions/cache/save@v6
-      #   with:
-      #     path: .indexnow/submitted.json
-      #     key: indexnow-v1-${{ hashFiles('data/indexnow.json') }}-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Notify IndexNow after successful production deployment
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: npm run indexnow -- --submit
+      - name: Save acknowledged production IndexNow state
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: actions/cache/save@v6
+        with:
+          path: .indexnow/submitted.json
+          key: indexnow-v1-${{ hashFiles('data/indexnow.json') }}-${{ github.run_id }}-${{ github.run_attempt }}

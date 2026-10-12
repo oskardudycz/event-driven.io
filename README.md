@@ -112,7 +112,7 @@ The second command isolates the lint-staged, editor linting, JSX and CLI checks.
 | `npm run typecheck`                                             | Strict application, Node tooling, importer and test types without emitting files             |
 | `npm run smoke`                                                 | Source syntax, configuration and GraphQL queries                                             |
 | `npm run test:seo` / `npm run verify-seo`                       | Generated headings, metadata, schema, sitemap and security headers                           |
-| `npm run test:build-contract` / `npm run verify:build-contract` | Exact routes, redirects, sitemap URLs and feed identities                                    |
+| `npm run test:build-contract` / `npm run verify:build-contract` | No missing routes, redirects, sitemap URLs or feed identities                                |
 | `npm run test:indexing`                                         | Canonical destinations, reciprocal language alternates, fallback markers and Netlify routing |
 | `npm run test:404`                                              | Root/localized error HTML, recovery links and native 404 rules                               |
 | `npm run test:substack`                                         | Import conversion, assets, code languages and link safety                                    |
@@ -372,7 +372,7 @@ For a focused menu check, use `npm run test:visual -- --grep 'persistent menu'`.
 
 ## Updating fixtures
 
-For intentional route/feed changes, run `npm run verify:build-contract`, inspect the exact differences, then use `npm run update:build-contract`. Review `tests/fixtures/build-contract.json` and rerun `npm run test:build-contract`. Do not update the fixture to accept unexplained missing routes.
+The build contract fails when a route, redirect, sitemap URL or feed entry from `tests/fixtures/build-contract.json` is missing. New pages, such as a published article, pass and are listed as additions. For intentional removals, run `npm run verify:build-contract`, inspect the exact differences, then use `npm run update:build-contract`. Run the update occasionally to protect newly published pages too. Review `tests/fixtures/build-contract.json` and rerun `npm run test:build-contract`. Do not update the fixture to accept unexplained missing routes.
 
 After publishing a new first article, run `npm run test:visual` and inspect the expected, actual and diff images in the Playwright report. If only the intended archive content changed:
 

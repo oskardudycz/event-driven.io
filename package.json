@@ -12,7 +12,7 @@
     "verify-seo": "node ./scripts/verify-seo-build.ts",
     "test": "npm run typecheck && npm run test:seo && npm run test:build-contract && npm run test:substack && npm run test:video && npm run test:redirects && npm run test:articles && npm run test:categories && npm run test:performance && npm run test:tooling && npm run test:search && npm run test:localization && npm run test:css && npm run test:404 && npm run test:indexing && npm run test:components && npm run test:indexnow && npm run test:images && npm run test:browser-types && npm run test:render-mermaid",
     "test:seo": "node ./tests/seo-build.test.ts",
-    "test:build-contract": "node ./tests/build-contract.test.ts",
+    "test:build-contract": "node --test --test-isolation=none tests/build-contract-comparison.test.ts && node ./tests/build-contract.test.ts",
     "test:visual": "playwright test",
     "audit:console": "node scripts/audit-console.ts",
     "browsers:install:firefox": "playwright install firefox",

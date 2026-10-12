@@ -2,6 +2,7 @@ import type { BuildContract } from './build-contract.ts';
 import fs from 'fs';
 import path from 'path';
 import {
+  buildContractAdditions,
   collectBuildContract,
   compareBuildContracts,
 } from './build-contract.ts';
@@ -25,11 +26,15 @@ const expected = JSON.parse(
 const actual = collectBuildContract(publicDirectory);
 const failures = compareBuildContracts(expected, actual);
 
+buildContractAdditions(expected, actual).forEach((addition) =>
+  console.log(`New since the build-contract baseline: ${addition}`),
+);
+
 if (failures.length > 0) {
   console.error('Build-contract verification failed:\n');
   failures.forEach((failure) => console.error(`- ${failure}`));
   console.error(
-    '\nIf these output changes are intentional, run npm run update:build-contract and review the diff.',
+    '\nIf these removals are intentional, run npm run update:build-contract and review the diff.',
   );
   process.exit(1);
 }

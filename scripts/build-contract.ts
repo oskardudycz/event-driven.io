@@ -98,21 +98,43 @@ function collectBuildContract(publicDirectory: string) {
   };
 }
 
-function compareValues(
-  label: string,
-  expected: string[],
-  actual: string[],
-  failures: string[],
-) {
-  const expectedSet = new Set(expected);
-  const actualSet = new Set(actual);
-  const missing = expected.filter((value) => !actualSet.has(value));
-  const unexpected = actual.filter((value) => !expectedSet.has(value));
+type ComparedValues = { label: string; expected: string[]; actual: string[] };
 
-  if (missing.length > 0)
-    failures.push(`${label} missing: ${missing.join(', ')}`);
-  if (unexpected.length > 0)
-    failures.push(`${label} added: ${unexpected.join(', ')}`);
+function comparedValues(
+  expected: BuildContract,
+  actual: BuildContract,
+): ComparedValues[] {
+  const feedFiles = uniqueSorted([
+    ...Object.keys(expected.feedEntries),
+    ...Object.keys(actual.feedEntries),
+  ]);
+  return [
+    { label: 'Routes', expected: expected.routes, actual: actual.routes },
+    {
+      label: 'Redirects',
+      expected: expected.redirects,
+      actual: actual.redirects,
+    },
+    {
+      label: 'Sitemap URLs',
+      expected: expected.sitemapUrls,
+      actual: actual.sitemapUrls,
+    },
+    ...feedFiles.map((feedFile) => ({
+      label: `${feedFile} entries`,
+      expected: expected.feedEntries[feedFile] || [],
+      actual: actual.feedEntries[feedFile] || [],
+    })),
+  ];
+}
+
+function absentFrom(values: string[], reference: string[]) {
+  const referenceSet = new Set(reference);
+  return values.filter((value) => !referenceSet.has(value));
+}
+
+function describeValues(label: string, change: string, values: string[]) {
+  return values.length > 0 ? [`${label} ${change}: ${values.join(', ')}`] : [];
 }
 
 function compareBuildContracts(expected: BuildContract, actual: BuildContract) {
@@ -123,35 +145,31 @@ function compareBuildContracts(expected: BuildContract, actual: BuildContract) {
       `Build-contract schema changed from ${expected.schemaVersion} to ${actual.schemaVersion}`,
     );
   }
-  if (expected.pageCount !== actual.pageCount) {
+
+  for (const values of comparedValues(expected, actual)) {
     failures.push(
-      `Generated page count changed from ${expected.pageCount} to ${actual.pageCount}`,
-    );
-  }
-
-  compareValues('Routes', expected.routes, actual.routes, failures);
-  compareValues('Redirects', expected.redirects, actual.redirects, failures);
-  compareValues(
-    'Sitemap URLs',
-    expected.sitemapUrls,
-    actual.sitemapUrls,
-    failures,
-  );
-
-  const feedFiles = uniqueSorted([
-    ...Object.keys(expected.feedEntries),
-    ...Object.keys(actual.feedEntries),
-  ]);
-  for (const feedFile of feedFiles) {
-    compareValues(
-      `${feedFile} entries`,
-      expected.feedEntries[feedFile] || [],
-      actual.feedEntries[feedFile] || [],
-      failures,
+      ...describeValues(
+        values.label,
+        'missing',
+        absentFrom(values.expected, values.actual),
+      ),
     );
   }
 
   return failures;
 }
 
-export { collectBuildContract, compareBuildContracts };
+function buildContractAdditions(
+  expected: BuildContract,
+  actual: BuildContract,
+) {
+  return comparedValues(expected, actual).flatMap((values) =>
+    describeValues(
+      values.label,
+      'added',
+      absentFrom(values.actual, values.expected),
+    ),
+  );
+}
+
+export { buildContractAdditions, collectBuildContract, compareBuildContracts };
