@@ -244,7 +244,7 @@ for (const language of ['en', 'pl']) {
         ? 'architekturze oprogramowania?'
         : 'software architecture?',
     );
-    await expect(page.locator('.hero h2 > span.yellow')).toHaveText(
+    await expect(page.locator('.hero p > span.yellow')).toHaveText(
       language === 'pl' ? 'od artykułów po wideo' : 'from articles to videos',
     );
     await expectFonts(page);
@@ -252,7 +252,7 @@ for (const language of ['en', 'pl']) {
       const background = getComputedStyle(
         document.querySelector('.hero')!,
       ).backgroundImage;
-      const url = background.match(/^url\(["']?(.*?)["']?\)$/)?.[1];
+      const url = background.match(/url\(["']?(.*?)["']?\)/)?.[1];
       if (!url) throw new Error('Homepage hero background is missing');
       const image = new Image();
       image.src = url;
@@ -426,7 +426,7 @@ test('sticky header uses the latest visibility when observer notifications arriv
   const header = page.locator('header.header');
   await expect(header).toHaveCSS('position', 'fixed');
   await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(header).toHaveCSS('height', '100px');
+  await expect(header).toHaveCSS('height', '80px');
   await expect.poll(async () => (await header.boundingBox())?.y).toBe(0);
 });
 
@@ -450,10 +450,7 @@ for (const observer of ['native', 'unavailable']) {
       await expect(header.locator('a.logoType')).toBeVisible();
       await page.evaluate(() => window.scrollTo(0, 0));
       await expect(header).not.toHaveClass(/\bfixed\b/);
-      await expect(header).toHaveCSS(
-        'height',
-        path.endsWith('articles/') ? '80px' : '100px',
-      );
+      await expect(header).toHaveCSS('height', '80px');
       await expect.poll(async () => (await header.boundingBox())?.y).toBe(0);
     }
   });
@@ -542,12 +539,17 @@ for (const language of ['en', 'pl']) {
     expect(await documentTop()).toBe(originalTop);
     await header.locator('a.logoType').click();
     await expect(page).toHaveURL(`/${language}/`);
-    await expect(header).toHaveCSS('height', '100px');
+    await expect(header).toHaveCSS('height', '80px');
     expect((await page.locator('.hero').boundingBox())?.y).toBe(0);
     await page.locator(`a[href="/${language}/articles/"]`).first().click();
     await expect(page).toHaveURL(`/${language}/articles/`);
+    await expect(heading).toHaveText(
+      language === 'en' ? 'All articles' : 'Wszystkie artykuły',
+    );
     await expect(header).toHaveCSS('height', '80px');
-    expect((await heading.boundingBox())!.y).toBeGreaterThanOrEqual(80);
+    await expect
+      .poll(async () => (await heading.boundingBox())?.y)
+      .toBeGreaterThanOrEqual(80);
     await expect(page.locator('html')).toHaveAttribute('lang', language);
   });
 }

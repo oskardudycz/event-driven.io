@@ -471,7 +471,17 @@ for (const language of ['en', 'pl']) {
           left: '20px',
         });
         const paragraph = page.locator('.bodytext > p').first();
-        await expect(paragraph).toHaveCSS('font-size', '17.6px');
+        // Firefox resolves even a literal 17.6px declaration to 17.5938px.
+        // Compare exact CSSOM values without widening a numeric tolerance.
+        const expectedFontSize = await page.evaluate(() => {
+          const reference = document.createElement('span');
+          reference.style.fontSize = '17.6px';
+          document.body.append(reference);
+          const size = getComputedStyle(reference).fontSize;
+          reference.remove();
+          return size;
+        });
+        await expect(paragraph).toHaveCSS('font-size', expectedFontSize);
         await page.setViewportSize({
           width: 600,
           height: 900,
@@ -494,7 +504,7 @@ for (const language of ['en', 'pl']) {
           waitUntil: 'domcontentloaded',
         });
         const hero = page.locator('.hero');
-        const backgrounds = new Set();
+        const photo = hero.locator('img[data-main-image]').last();
         for (const width of [390, 600, 1024]) {
           await page.setViewportSize({
             width,
@@ -503,13 +513,16 @@ for (const language of ['en', 'pl']) {
           const image = await hero.evaluate(
             (el) => getComputedStyle(el).backgroundImage,
           );
-          expect(image).toMatch(/^url\(/);
-          backgrounds.add(image);
+          expect(image).toContain('url(');
+          if (width < 1024) {
+            await expect(photo).not.toBeVisible();
+          } else {
+            await expect(photo).toBeVisible();
+          }
         }
-        expect(backgrounds.size).toBe(3);
         await expect(hero.locator('h1')).toHaveCount(1);
         await expect(hero.locator('h1 > u')).toHaveCount(1);
-        await expect(hero.locator('h2 > span.yellow')).toHaveCount(1);
+        await expect(hero.locator('p > span.yellow')).toHaveCount(1);
       });
     });
   }

@@ -36,7 +36,7 @@
   }
 
   &:global(.homepage).homepage {
-    background-color: transparent;
+    background-color: var(--hero-background);
   }
 
   &:global(.homepage).homepage:not(:global(.fixed).fixed) {
@@ -68,11 +68,6 @@ h2.elementH2 {
   width: 44px;
   transition: all 0.5s;
 
-  :global(.homepage).homepage & {
-    height: 60px;
-    width: 60px;
-  }
-
   img.elementImg {
     width: 100%;
     height: auto;
@@ -91,7 +86,7 @@ h2.elementH2 {
 
 @media screen and (min-width: 600px) {
   :global(.header).header {
-    padding: var(--space-inset-l);
+    padding: 0 var(--space-inset-l);
   }
 }
 
