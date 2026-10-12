@@ -121,6 +121,11 @@ for (const language of ['en', 'pl']) {
       await button.click();
       await menu.getByRole('link', { name: /Change language/ }).focus();
       await page.keyboard.press('Tab');
+      await expect(
+        menu.getByRole('link', { name: /^(Search|Szukaj)$/ }),
+      ).toBeFocused();
+      await expect(panel).toBeVisible();
+      await page.keyboard.press('Tab');
       await expect(menu.locator('summary')).toBeFocused();
       await expect(panel).toBeVisible();
       await page.keyboard.press('Tab');

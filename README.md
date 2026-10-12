@@ -378,41 +378,51 @@ For a focused menu check, use `npm run test:visual -- --grep 'persistent menu'`.
 
 ## Editing articles and biographies
 
-For normal article or biography editing, use the development server:
+Keep the development server running while editing Markdown. Gatsby automatically refreshes content; no production build or reference update is needed after each edit.
 
 ```sh
 npm run dev
 # Open http://localhost:8000/en/ or http://localhost:8000/pl/.
 ```
 
-Keep it running while editing Markdown; Gatsby automatically refreshes changed content. This does not require a production build or snapshot update for each edit. `npm run check:content` checks source image alternatives without building; lint-staged also checks changed Markdown at commit time. `npm run test:components` runs isolated component checks without a Gatsby build. Generated-output checks (`npm test`) and production browser checks need a completed current production build; run those once when validating the finished change, or let CI perform them. The development preview does not replace deployment validation.
+For quick automated checks without a Gatsby build:
 
-| Command                              | When to use it                                                                    |
-| ------------------------------------ | --------------------------------------------------------------------------------- |
-| `npm run dev`                        | Preview edits continuously at localhost:8000; no production build                 |
-| `npm run check:content`              | Check image descriptions directly from source; no production build                |
-| `npm run verify:publication`         | Build current source, run the project tests, then browser tests automatically     |
-| `npm run test:visual:report`         | Open expected/actual/diff images and retained failure traces                      |
-| `npm run test:visual:update:archive` | Update only the representative archive card after reviewing an intentional change |
-| `npm run test:visual:update:author`  | Update only the author biography after reviewing an intentional change            |
+```sh
+npm run check:edit
+```
 
-`verify:publication` stops at the first failure and never updates references. It is the full local publication check, not a command to run after every keystroke.
+This checks source image descriptions, isolated React behavior and browser rendering of controlled English/Polish author, archive, related and search examples. It starts/stops the component gallery automatically. The pre-commit hook also checks image descriptions in staged Markdown. Actual current article content, generated links, SEO and Gatsby hydration are verified after the production build in CI.
+
+| Command                          | Purpose                                                                                                     |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `npm run dev`                    | Live article/bio preview at localhost:8000                                                                  |
+| `npm run check:content`          | Source image-description checks only; no build                                                              |
+| `npm run check:edit`             | Fast source/component/browser checks; no Gatsby build                                                       |
+| `npm run dev:components`         | Live component/style preview at localhost:9001                                                              |
+| `npm run test:components:review` | Open the component comparison report and failure traces                                                     |
+| `npm run test:visual:report`     | Open the production browser report and traces                                                               |
+| `npm run verify:publication`     | Automatically run quick checks, build, project tests and production browsers, stopping at the first failure |
+
+To preview the controlled components, start `dev:components`, then open `http://127.0.0.1:9001/?story=Editorial/English` or `?story=Editorial/Polish`. These are test examples, not production pages. CSS and component edits refresh immediately. Their fixed text/cover keeps visual comparisons independent of editorial changes; real Gatsby cover loading and routing have separate production-page checks.
+
+For normal publishing, edit/import → preview locally → commit/push the PR → inspect its Netlify preview → merge. GitHub Actions runs quick checks before the build, then all project/production browser checks. It deploys the preview after passing validation; merging to main automatically publishes production and notifies IndexNow. No manual snapshot-update or deploy command is required for article/bio wording changes. Superseded PR runs are cancelled; production runs stay sequential. This requires the existing repository Netlify credentials. `verify:publication` reproduces the validation locally without publishing; it is optional during editing and never updates references.
+
+Static production output still needs a build. CI caches npm downloads and compatible Gatsby outputs, but there is no promise of instant production builds. Do not validate new source against old `public` output. Do not edit content or run competing builds during production/cache validation.
 
 ## Updating fixtures
 
-The build contract fails when a route, redirect, sitemap URL or feed entry from `tests/fixtures/build-contract.json` is missing. New pages, such as a published article, pass and are listed as additions. For intentional removals, run `npm run verify:build-contract`, inspect the exact differences, then use `npm run update:build-contract`. Run the update occasionally to protect newly published pages too. Review `tests/fixtures/build-contract.json` and rerun `npm run test:build-contract`. Do not update the fixture to accept unexplained missing routes.
+Editorial text and newly added articles need no visual-reference update. Current-source publication tests check all articles and biographies against generated output; layout screenshots use controlled component props. Homepage references still protect the actual homepage composition. The existing 3% tolerance is unchanged. See [the test assessment](docs/test-review.md) and [testing guidance](docs/testing-guidance.md).
 
-After adding or importing an article, build current source before testing:
+For an intentional component styling change, run the checks, inspect actual/expected/diff images in `npm run test:components:review`, and review the change before updating its references:
 
-```bash
-npm run verify:publication
+```sh
+npm run test:components:update -- --grep 'en editorial components at 1440px'
+npm run test:components:browser
 ```
 
-New posts require no screenshot updates. `test:articles` checks all source articles against generated pages, archive order/metadata/covers, search, RSS, canonical discovery and redirects. Visual archive coverage uses a named representative card, independently of newest-post ordering. Category layout checks use current cards rather than frozen counts. Do not test a new source revision against older `public` output.
+That example updates only the reviewed English desktop author/archive/related/search captures. Omit `--grep` only when all component references were reviewed. Normal checks never update missing or changed references. Reference updates remain a last resort for intentional visual changes, not part of ordinary publication.
 
-If intentionally editing the representative Open Source article or author biography, run `npm run test:visual:report`, inspect the expected/actual/diff images and review the visual change before updating its reference. Use `npm run test:visual:update:archive` for the reviewed representative card or `npm run test:visual:update:author` for the reviewed author region, then rerun `npm run test:visual`. Other article text edits and new articles need no reference update. These two representative regions still include their actual wording; controlled component specimens are planned to remove that remaining coupling. `test:visual:update` updates all selected baselines and should be reserved for reviewed changes. The comparison tolerance remains 3%. The [test assessment](docs/test-review.md) explains coverage and reference choices.
-
-For an explicitly reviewed homepage change, limit the update to its English/Polish captures:
+For an explicitly reviewed homepage change, update only its English/Polish captures:
 
 ```sh
 npm run test:visual:update -- navigation.spec.ts --grep 'homepage renders one complete hero'
@@ -420,7 +430,9 @@ npm run test:visual:update -- navigation.spec.ts --grep 'homepage renders one co
 npm run test:visual
 ```
 
-Review the four changed homepage PNGs; archive/category references should remain unchanged. Keep the 3% tolerance and investigate unexplained differences before updating any fixture.
+Review the four changed homepage PNGs and keep unrelated references unchanged. Investigate unexplained differences before updating any fixture.
+
+The historical build contract fails when a protected route, redirect, sitemap URL or feed entry disappears. New articles pass automatically and are listed as additions. For intentional removals, run `npm run verify:build-contract`, inspect the exact differences, then use `npm run update:build-contract` and review `tests/fixtures/build-contract.json`. Run the update occasionally to protect newly published URLs too. Do not update it to accept unexplained missing routes.
 
 ## Audits
 

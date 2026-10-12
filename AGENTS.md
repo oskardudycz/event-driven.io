@@ -1,5 +1,7 @@
 # Repository guidance
 
+- Before changing tests, publication workflows or visual references, read [docs/testing-guidance.md](docs/testing-guidance.md). Keep editorial text separate from controlled visual examples; retain current-source publication and real Gatsby integration checks.
+
 - Fix demonstrated root causes using documented Gatsby, React and CSS mechanisms. Never hide a problem with blanket imports, unrelated coupling, warning suppression, relaxed assertions or automatic snapshot updates; research the supported approach and verify it before calling the issue fixed.
 - Keep each component's CSS Module with its owning component. Global reset, fonts and theme tokens belong to the shared layout. Do not import every component stylesheet into page or application entry points to control extraction order.
 - Before changing Tailwind styling, read [docs/tailwind-guidance.md](docs/tailwind-guidance.md). Simplify layout and responsive rules before choosing utilities; a property-for-property CSS Module conversion is not an acceptable improvement. Do not hide complicated utility strings in constants, aliases or @apply. Use the shared design scale, semantic HTML and real components where responsibilities or repeated markup justify them; retain scoped CSS where it communicates the behavior more clearly.
