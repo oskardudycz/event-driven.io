@@ -163,6 +163,39 @@ test('invalid stored preferences are ignored and theme controls fit on mobile', 
 });
 
 for (const language of ['en', 'pl'] as const) {
+  for (const width of [320, 978]) {
+    test(`${language} mobile theme choices open above collapsed and expanded navigation at ${width}px`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 740 });
+      await page.goto(`/${language}/`);
+      const menu = page.locator('nav.menu');
+      const trigger = themeControl(page, language);
+      await expect(trigger).toHaveAttribute('aria-disabled', 'false');
+      await expect(trigger).toBeInViewport();
+      const more = menu.getByRole('button', {
+        name: /More links|Więcej linków/,
+      });
+      for (const expanded of [false, true]) {
+        if (expanded) await more.click();
+        await trigger.click();
+        const choices = menu.locator('fieldset');
+        await expect(choices).toBeInViewport({ ratio: 1 });
+        const panel = (await choices.boundingBox())!;
+        const bar = (await trigger.boundingBox())!;
+        expect(panel.y + panel.height).toBeLessThanOrEqual(bar.y);
+        for (const label of await choices.locator('label').all())
+          await label.click({ trial: true });
+        await page.keyboard.press('Escape');
+        await expect(choices).toBeHidden();
+        await expect(trigger).toBeFocused();
+        await expect(more).toHaveAttribute('aria-expanded', String(expanded));
+      }
+      await chooseTheme(page, 'dark', language);
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+    });
+  }
+
   for (const width of [320, 1280]) {
     test(`${language} visible theme rows select their preference at ${width}px`, async ({
       page,
@@ -193,7 +226,7 @@ for (const language of ['en', 'pl'] as const) {
   }
 
   for (const width of [320, 390, 1280]) {
-    test(`${language} header theme icon supports keyboard and dismissal at ${width}px`, async ({
+    test(`${language} navigation theme icon supports keyboard and dismissal at ${width}px`, async ({
       page,
     }) => {
       await page.setViewportSize({ width, height: 900 });
@@ -209,10 +242,20 @@ for (const language of ['en', 'pl'] as const) {
       ).toBeVisible();
       const bounds = await control.boundingBox();
       const logo = await header.locator('a.logoType').boundingBox();
-      expect(bounds && logo && bounds.x >= logo.x + logo.width).toBe(true);
+      if (width >= 1024) {
+        expect(bounds && logo && bounds.x >= logo.x + logo.width).toBe(true);
+      } else {
+        expect(bounds!.y).toBeGreaterThanOrEqual(850);
+      }
       await control.focus();
       await page.keyboard.press('Enter');
       await expect(themeChoice(page, 'light', language)).toBeVisible();
+      if (width < 1024) {
+        const choices = page.locator('nav.menu fieldset');
+        const panel = (await choices.boundingBox())!;
+        expect(panel.y).toBeGreaterThanOrEqual(0);
+        expect(panel.y + panel.height).toBeLessThanOrEqual(bounds!.y);
+      }
       await page.keyboard.press('Tab');
       await expect(themeChoice(page, 'system', language)).toBeFocused();
       await page.keyboard.press('Escape');

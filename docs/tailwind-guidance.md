@@ -65,6 +65,8 @@ The owner authorized a justified responsive redesign, but rejected the subsequen
 
 The prose uses Tailwind’s standard `max-w-xl` (36rem), independently of the wider heading. Measured at 1280×1000 in both languages, 38–42rem still overlaps the artwork with the SSR fallback font; 36rem clears both fallback and Open Sans text without changing the photo scale. Copy starts at the composition’s top, rather than being vertically centered beside the diagonal shape. [GOV.UK layout guidance](https://design-system.service.gov.uk/styles/layout/) informs readable prose length, not an article-width cap on the whole hero. Use a component size query with a font-relative fit threshold if measurements show that enlarged browser fonts need more room. This concerns artwork fit only; shared header/menu breakpoints remain aligned at 1024px. Do not add JavaScript crop calculations or guessed aspect-ratio hiding.
 
+The subsequent CI reproduction found that Liberation Sans lets the English first line reach the diagonal where local DejaVu wraps earlier. The component now caps the heading at a measured 50rem, separately from the 36rem prose measure; see [the proportion review](hero-proportions-review.md#ci-fallback-and-mobile-follow-up). Do not infer fallback safety from one operating system.
+
 Keep the uninterrupted tile canvas at its original 3840×2160 ratio, with one background. Preserve Open Sans, wording, training/consulting actions, header geometry and the original person/yellow shape. Visibility must follow measured readable fit. The previous version's local verification is historical evidence, not acceptance of this correction.
 
 ### Navigation disclosure

@@ -20,6 +20,12 @@
   display: none;
 }
 
+@media screen and (max-width: 1023px) {
+  .item {
+    flex-shrink: 0;
+  }
+}
+
 @media screen and (min-width: 1024px) {
   :global(.item).item {
     :global(a) {

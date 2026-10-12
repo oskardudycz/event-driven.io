@@ -6,7 +6,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ScreenWidthContext, FontLoadedContext } from '../../layouts/contexts';
 import config from '../../../content/meta/config.ts';
 import Menu from '../Menu/index.ts';
-import ThemePicker from '../ThemePicker/ThemePicker.tsx';
 
 import { withPrefix } from 'gatsby';
 
@@ -92,7 +91,6 @@ const Header = ({ pages, path }: { pages: ArticleEdge[]; path: string }) => {
             </ScreenWidthContext.Consumer>
           )}
         </FontLoadedContext.Consumer>
-        <ThemePicker />
       </header>
       <div
         ref={sensorRef}

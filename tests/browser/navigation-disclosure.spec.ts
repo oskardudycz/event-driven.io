@@ -1,6 +1,27 @@
 import { test, expect } from './fixtures.ts';
 import { expectFonts } from './readiness.ts';
 
+test.describe('mobile navigation without JavaScript', () => {
+  test.use({ javaScriptEnabled: false });
+  for (const language of ['en', 'pl']) {
+    for (const width of [320, 978]) {
+      test(`${language} links stay in the lower bar and navigate at ${width}px`, async ({
+        page,
+      }) => {
+        await page.setViewportSize({ width, height: 740 });
+        await page.goto(`/${language}/`, { waitUntil: 'domcontentloaded' });
+        const menu = page.locator('nav.menu');
+        const bar = (await menu.boundingBox())!;
+        const links = (await menu.locator('.itemList').boundingBox())!;
+        expect(links.y).toBeGreaterThanOrEqual(bar.y);
+        expect(links.y + links.height).toBeLessThanOrEqual(740);
+        await menu.locator(`a[href="/${language}/articles/"]`).click();
+        await expect(page).toHaveURL(`/${language}/articles/`);
+      });
+    }
+  }
+});
+
 for (const language of ['en', 'pl']) {
   for (const width of [1024, 1280]) {
     test(`${language} overflow navigation is readable and keyboard accessible at ${width}px`, async ({
@@ -99,6 +120,9 @@ for (const language of ['en', 'pl']) {
 
       await button.click();
       await menu.getByRole('link', { name: /Change language/ }).focus();
+      await page.keyboard.press('Tab');
+      await expect(menu.locator('summary')).toBeFocused();
+      await expect(panel).toBeVisible();
       await page.keyboard.press('Tab');
       await expect(panel).not.toBeVisible();
 

@@ -14,16 +14,15 @@
 }
 
 :global(.header).header {
-  --theme-trigger-color: var(--color-text);
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   background-color: var(--color-surface);
   display: flex;
   height: var(--header-height);
   position: relative;
   top: 0;
   width: 100%;
-  padding: 0 64px 0 10px;
+  padding: 0 var(--space-md);
 
   :global(a.logoType) {
     align-items: center;
@@ -37,10 +36,6 @@
 
   &:global(.homepage).homepage {
     background-color: var(--hero-background);
-  }
-
-  &:global(.homepage).homepage:not(:global(.fixed).fixed) {
-    --theme-trigger-color: var(--color-neutral-white);
   }
 }
 

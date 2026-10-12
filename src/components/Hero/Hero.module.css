@@ -27,6 +27,11 @@
 
 /* Fit the original-scale artwork beside the prose, including enlarged fonts. */
 @container hero (min-width: 75em) {
+  .heading {
+    /* Clear the diagonal even when Arial-compatible fallback text wraps later. */
+    max-width: 50rem;
+  }
+
   .artwork {
     display: block;
   }

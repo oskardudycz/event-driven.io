@@ -19,7 +19,9 @@ const Hero = (props: { scrollToContent: () => void }) => {
         <div
           className={`flex min-w-0 flex-col items-start gap-8 wrap-anywhere ${styles.copy}`}
         >
-          <h1 className="m-0 max-w-4xl text-3xl font-semibold uppercase leading-tight lg:text-4xl">
+          <h1
+            className={`${styles.heading} m-0 max-w-4xl text-3xl font-semibold uppercase leading-tight lg:text-4xl`}
+          >
             <Trans
               i18nKey="hero.h1"
               components={{
