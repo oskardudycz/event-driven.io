@@ -31,6 +31,8 @@ The production Firefox images were reviewed against the local correction before 
 
 ## Repeating the checks
 
+Final local verification completed on 2026-10-12: production build, full CI-mode npm test, lint/format and smoke pass. Chromium passes 100 cases with one Firefox-only skip. The selected Firefox group passes all 53 cases, and its four separate font-failure cases also pass. Hosted CI and deployment of this revision remain unverified.
+
 ```bash
 npm run build
 npm run test
