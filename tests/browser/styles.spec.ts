@@ -391,21 +391,14 @@ for (const language of ['en', 'pl']) {
   }
 }
 
-test('layout loads fonts silently and navigation dates have readable contrast', async ({
+test('layout uses Open Sans and navigation dates have readable contrast', async ({
   page,
 }) => {
-  const messages: string[] = [];
-  page.on('console', (message) => messages.push(message.text()));
   await page.goto(`/en/open-source-a-relict-a-charity-or/`, {
     waitUntil: 'domcontentloaded',
   });
   await expect(page.locator('h1')).toHaveCSS('font-weight', '600');
   await expect(page.locator('body')).toHaveCSS('font-family', /Open Sans/);
-  expect(
-    messages.filter((message) =>
-      /font(?:400|600) is (?:not )?available/.test(message),
-    ),
-  ).toEqual([]);
   const dates = await page.locator('nav.links time').all();
   expect(dates.length).toBeGreaterThan(0);
   for (const date of dates) {

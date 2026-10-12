@@ -1,28 +1,34 @@
+import { readFileSync } from 'node:fs';
+import type { BuildPageData } from '../helpers/build-output.ts';
 import { test, expect } from './fixtures';
 import { expectFonts, expectImageLoaded } from './readiness';
 
-test('article footer shows the author bio and links to further reading', async ({
+test('author biography retains its reviewed portrait, typography and layout', async ({
   page,
 }) => {
-  await page.setViewportSize({
-    width: 1440,
-    height: 900,
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/en/vertical-slices-and-dependencies/');
+  const author = page.locator('.author');
+  await expectFonts(page);
+  await expect(author.locator('.note')).not.toBeEmpty();
+  const portrait = author.locator('img');
+  await expectImageLoaded(portrait);
+  await expect(portrait).toHaveAttribute('alt', /\S/);
+  await expect(author).toHaveScreenshot('article-footer-desktop.png', {
+    animations: 'disabled',
   });
+});
+
+test('related articles and publication navigation remain usable', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
   const response = await page.goto('/en/vertical-slices-and-dependencies/', {
     waitUntil: 'domcontentloaded',
   });
   expect(response?.status()).toBe(200);
-  const author = page.locator('.author');
-  await author.waitFor({
-    state: 'visible',
-  });
   await expectFonts(page);
   await expect(page.locator('.related h2')).toHaveCSS('font-weight', '600');
-  await page.evaluate(() => document.fonts.ready);
-  const bio = await author.locator('.note').innerText();
-  expect(bio).toContain('Oskar Dudycz is an independent software architect');
-  expect(bio).not.toContain('Through my window');
-  expect(bio.length).toBeLessThan(500);
   const furtherReading = page.locator('.author + .links');
   await expect(
     page.locator('article footer > .substack + .related'),
@@ -40,14 +46,23 @@ test('article footer shows the author bio and links to further reading', async (
   expect(spacing.border).toBe('0px');
   expect(spacing.gap).toBeGreaterThanOrEqual(0);
   expect(spacing.gap).toBeLessThanOrEqual(30);
+  const data = JSON.parse(
+    readFileSync(
+      'public/page-data/en/vertical-slices-and-dependencies/page-data.json',
+      'utf8',
+    ),
+  ) as BuildPageData;
+  const expectedLinks = data.result.pageContext.relatedIds.map((id) => {
+    const post = data.result.data.relatedPosts.edges.find(
+      ({ node }) => node.id === id,
+    )!.node;
+    return `/${post.fields.langKey}${post.fields.slug}`;
+  });
   expect(
     await page
       .locator('.related a')
       .evaluateAll((links) => links.map((link) => link.getAttribute('href'))),
-  ).toEqual([
-    '/en/how_to_slice_the_codebase_effectively/',
-    '/en/vertical_slices_in_practice/',
-  ]);
+  ).toEqual(expectedLinks);
   const firstCover = page.locator('.related img').first();
   await expect(firstCover).toHaveAttribute('alt', '');
   await page.locator('.related').scrollIntoViewIfNeeded();
@@ -73,9 +88,6 @@ test('article footer shows the author bio and links to further reading', async (
   const relatedLink = page.locator('.related a').first();
   await relatedLink.focus();
   await expect(relatedLink).toHaveCSS('outline-style', 'solid');
-  await expect(author).toHaveScreenshot('article-footer-desktop.png', {
-    animations: 'disabled',
-  });
 });
 
 test('articles without curated recommendations do not show a related block', async ({

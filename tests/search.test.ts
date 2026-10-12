@@ -127,7 +127,7 @@ for (const lang of ['en', 'pl'] as const) {
       readFileSync(join('public', manifest[lang]), 'utf8'),
     );
     const results = searchIndex(index, 'event sourcing');
-    assert.ok(results.length > 10);
+    assert.ok(results.length > 0, 'Expected matching indexed articles');
     assert.equal(
       new Set(results.map((result) => result.id)).size,
       results.length,

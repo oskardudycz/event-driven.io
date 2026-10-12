@@ -2,7 +2,21 @@
 
 Last updated: 2026-10-12. Current strategy is in [plan.md](plan.md); manual commands/importing/category ordering/browser reports/snapshot review are in [README.md](README.md). Local, hosted CI and deployed results are separate evidence.
 
-## Current change: hero positioning and navigation disclosure
+## Current change: publication-safe regression tests
+
+- [ ] Provide simple content-preview/check and reviewed-reference commands; document which require a build and which update files.
+- [ ] Keep search visible next to appearance on desktop/mobile with matching icons/targets; verify locale, SSR, expanded and sticky states.
+
+- [x] Investigate both reported CI screenshots and compare current source with local output. The archive reference pins the former newest post; the author reference pins the biography edited in the same content commit. Local `public` is stale.
+- [x] Research Playwright, Testing Library, Gatsby, Astro and VitePress patterns; record suite assessment and decisions in [test-review.md](docs/test-review.md) before implementation.
+- [ ] Add current-source publication completeness and discovery checks, retaining historical URL protection.
+- [ ] Replace volatile archive/category screenshots, historical prose/count guards and import-manifest routing tests with representative visual/behavioral/source checks and synthetic fixtures.
+- [ ] Prepare any changed visual references for owner review; preserve tolerances and use native Playwright updates only after acceptance.
+- [ ] Rebuild current source and run project, browser, lint and smoke checks sequentially. Record hosted CI separately.
+- [ ] Move author/card visual specimens to controlled component data, preserving actual Gatsby image/hydration checks, so edits to their own wording also need no PNG changes. Named-card selection solves new-post insertion; it does not yet solve every editorial change. Use development refresh for fast text previews; manual commands are in README.
+- [ ] Implement the documented Playwright component gallery with existing Vite dependencies; cover author/archive/related/search presentation independently of editorial wording. Retain real-page behavior and review controlled visual references. Run fast component checks before CI's production build and document the existing automated preview/main publication path.
+
+## Previous change: hero positioning and navigation disclosure
 
 - [x] Left-align mobile branding and move the single theme control into the lower navigation on mobile; retain desktop header placement. Its choices open upward, outside the expanded link row's scroll container. Keep navigation available from first paint and reserve its space. Fix the unmeasured SSR link list spilling outside the bar: use a single scrollable row when collapsed. All four EN/PL no-JavaScript navigation cases pass at 320px/978px.
 - [x] Fix the two reported SSR heading/artwork collisions. Reproduced exactly with CI's Liberation Sans fallback through temporary fontconfig; the local DejaVu fallback wraps earlier and hides the problem. A measured 50rem heading limit applies where artwork is shown. All 42 hero cases pass in the full Chromium run with the CI fallback; assertions remain intact.

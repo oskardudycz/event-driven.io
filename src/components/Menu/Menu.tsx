@@ -1,6 +1,8 @@
 import type { ArticleEdge } from '../../types/content.ts';
 import * as styles from './Menu.module.css';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link } from '../Link/index.tsx';
 
 import {
   FaBookOpen,
@@ -64,7 +66,6 @@ class Menu extends React.Component<MenuProps, MenuState> {
       ...pages,
       { to: '/contact/', label: 'menu.contact', icon: FaEnvelope },
       { to: '/talks/', label: 'menu.talks', icon: FaMicrophone },
-      { to: '/search/', label: 'menu.search', icon: FaSearch, iconOnly: true },
       {
         to: config.socialLinks.linkedin.url,
         label: 'LinkedIn',
@@ -255,11 +256,25 @@ class Menu extends React.Component<MenuProps, MenuState> {
           )}
 
           <LanguagePicker />
+          <SearchLink />
           <ThemePicker />
         </nav>
       </React.Fragment>
     );
   }
+}
+
+function SearchLink() {
+  const { t } = useTranslation();
+  return (
+    <Link
+      to="/search/"
+      aria-label={t('menu.search')}
+      className={`${styles.searchLink} flex size-11 shrink-0 items-center justify-center rounded-panel`}
+    >
+      <FaSearch size={20} aria-hidden="true" />
+    </Link>
+  );
 }
 
 export default Menu;

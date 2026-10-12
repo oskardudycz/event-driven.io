@@ -376,18 +376,41 @@ Gatsby 5.16.1 requires the checked-in CSS cache correction in `patches/`. npm ap
 
 For a focused menu check, use `npm run test:visual -- --grep 'persistent menu'`. It checks language switching, localized destinations, overflow icons, opening/closing and mobile/desktop resizing. Run the full browser suite before publishing changes.
 
+## Editing articles and biographies
+
+For normal article or biography editing, use the development server:
+
+```sh
+npm run dev
+# Open http://localhost:8000/en/ or http://localhost:8000/pl/.
+```
+
+Keep it running while editing Markdown; Gatsby automatically refreshes changed content. This does not require a production build or snapshot update for each edit. `npm run check:content` checks source image alternatives without building; lint-staged also checks changed Markdown at commit time. `npm run test:components` runs isolated component checks without a Gatsby build. Generated-output checks (`npm test`) and production browser checks need a completed current production build; run those once when validating the finished change, or let CI perform them. The development preview does not replace deployment validation.
+
+| Command                              | When to use it                                                                    |
+| ------------------------------------ | --------------------------------------------------------------------------------- |
+| `npm run dev`                        | Preview edits continuously at localhost:8000; no production build                 |
+| `npm run check:content`              | Check image descriptions directly from source; no production build                |
+| `npm run verify:publication`         | Build current source, run the project tests, then browser tests automatically     |
+| `npm run test:visual:report`         | Open expected/actual/diff images and retained failure traces                      |
+| `npm run test:visual:update:archive` | Update only the representative archive card after reviewing an intentional change |
+| `npm run test:visual:update:author`  | Update only the author biography after reviewing an intentional change            |
+
+`verify:publication` stops at the first failure and never updates references. It is the full local publication check, not a command to run after every keystroke.
+
 ## Updating fixtures
 
 The build contract fails when a route, redirect, sitemap URL or feed entry from `tests/fixtures/build-contract.json` is missing. New pages, such as a published article, pass and are listed as additions. For intentional removals, run `npm run verify:build-contract`, inspect the exact differences, then use `npm run update:build-contract`. Run the update occasionally to protect newly published pages too. Review `tests/fixtures/build-contract.json` and rerun `npm run test:build-contract`. Do not update the fixture to accept unexplained missing routes.
 
-After publishing a new first article, run `npm run test:visual` and inspect the expected, actual and diff images in the Playwright report. If only the intended archive content changed:
+After adding or importing an article, build current source before testing:
 
 ```bash
-ARCHIVE_SNAPSHOT_SLUG=reviewed-newest-article-slug npm run test:visual:update:archive
-npm run test:visual
+npm run verify:publication
 ```
 
-The command verifies the first card's exact slug and updates only the archive screenshot in `tests/fixtures/visual/`. Review the PNG diff before committing. `test:visual:update` updates all visual baselines and should be reserved for a reviewed design change. The comparison tolerance remains 3%.
+New posts require no screenshot updates. `test:articles` checks all source articles against generated pages, archive order/metadata/covers, search, RSS, canonical discovery and redirects. Visual archive coverage uses a named representative card, independently of newest-post ordering. Category layout checks use current cards rather than frozen counts. Do not test a new source revision against older `public` output.
+
+If intentionally editing the representative Open Source article or author biography, run `npm run test:visual:report`, inspect the expected/actual/diff images and review the visual change before updating its reference. Use `npm run test:visual:update:archive` for the reviewed representative card or `npm run test:visual:update:author` for the reviewed author region, then rerun `npm run test:visual`. Other article text edits and new articles need no reference update. These two representative regions still include their actual wording; controlled component specimens are planned to remove that remaining coupling. `test:visual:update` updates all selected baselines and should be reserved for reviewed changes. The comparison tolerance remains 3%. The [test assessment](docs/test-review.md) explains coverage and reference choices.
 
 For an explicitly reviewed homepage change, limit the update to its English/Polish captures:
 
