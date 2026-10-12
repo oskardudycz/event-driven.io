@@ -28,6 +28,12 @@ Before continuing to content patterns, finish the hero and navigation correction
 
 The desktop overflow panel also needs an opaque surface, readable names for icon links, coherent link hit areas, focus styling and keyboard dismissal. Follow W3C's disclosure navigation pattern with ordinary links and a disclosure button, not application menu roles. Anchor the panel to its trigger area instead of separate fixed offsets for homepage/sticky states. Keep the existing mobile navigation and locale destinations. New visual references require owner acceptance; hosted CI/deployment remain separate.
 
+### Proportion and spacing follow-up
+
+The owner requests a proportion review and reports hero actions covering the sticky header. Measure the current build before changing layout: verify actual hit testing while actions cross the header, not just its fixed position. The previous unnecessary positioned copy layer has already been removed; retain that root-cause correction rather than escalating header z-index. Make the hero's top inset consistent instead of vertically centering shorter copy in a viewport-sized section. Keep the original artwork scale, readable prose measure and reading-column width.
+
+Unify disclosure/language/theme controls around 44px targets, 20px icons and the existing 10px spacing token. Let flex gap own separation; calculate overflow from measured list/button widths instead of a guessed reserved width. Verify both languages, sticky/initial states, mobile navigation, keyboard access and hover contrast. Record the measured review and local evidence before requesting visual-reference approval.
+
 Planned execution order, grouped by responsibility:
 
 1. **Shell and design-scale foundations — verified locally.** Ordinary headers reserve their own space; the homepage retains its overlay and sticky/shrink interactions. Pages stop compensating for header height. Named breakpoint units align with existing CSS/menu measurements, and emphasis tokens no longer collide with Tailwind weights. Reading widths, spacing and the reset remain stable for this structural group. Native controls now inherit the page's Open Sans family as requested, retaining component sizes/weights and loading-failure fallbacks. Both Firefox screenshot failures are resolved through comparison with the unchanged build and reviewed production references. Post-fix project and browser checks pass; hosted checks remain separate.

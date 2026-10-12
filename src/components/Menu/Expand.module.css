@@ -46,9 +46,8 @@
     flex-shrink: 0;
     flex-grow: 0;
     width: 44px;
-    height: 38px;
+    height: 44px;
     background: transparent;
-    margin-left: 10px;
     border-radius: var(--size-radius-small);
     border: 1px solid var(--color-border);
     display: flex;
@@ -96,7 +95,6 @@
 
     :global(.fixed) & {
       border: 1px solid var(--color-border);
-      height: 30px;
     }
   }
 }

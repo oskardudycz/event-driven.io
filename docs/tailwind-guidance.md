@@ -104,6 +104,8 @@ For example, an article container should need to express centering, reading widt
 
 ## Execution groups and acceptance
 
+The [homepage proportion review](hero-proportions-review.md) records the measured spacing decisions. Prefer one consistent top inset to viewport-dependent vertical centering. Related header controls use consistent targets and flex gap; overflow measurements must account for their actual dimensions. Validate hover contrast on the real surface and header hit testing where content scrolls beneath it, not just CSS positioning or bounding rectangles.
+
 Start with the shell and design scale together. Inspect article, archive, homepage, category, search and 404 layouts to find all header compensation. Compare proposed desktop/mobile arrangements, including the homepage overlay, before expanding the conversion. The owner accepts a close, well-designed result; preserve typography and interactions, and explicitly review intentional geometry changes.
 
 Next, migrate shared content patterns together: reading/search cards, metadata/author information and article navigation. Use consistent layouts and states across their consumers. Preserve reading order, localized destinations, covers, sharing features and accessible labels.

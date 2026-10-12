@@ -52,6 +52,9 @@ for (const language of ['en', 'pl']) {
           expect(heading.y).toBeGreaterThanOrEqual(
             headerBounds.y + headerBounds.height,
           );
+          const topInset = heading.y - headerBounds.y - headerBounds.height;
+          expect(topInset).toBeGreaterThanOrEqual(24);
+          expect(topInset).toBeLessThanOrEqual(48);
 
           // Gatsby also renders a noscript fallback when JavaScript is disabled.
           const portrait = hero.locator('img[data-main-image]').last();

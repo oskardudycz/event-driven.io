@@ -72,7 +72,7 @@
       padding: var(--space-xs) var(--space-sm);
 
       &:hover {
-        background: var(--color-menu-overlay);
+        background: var(--color-brand-tint);
         text-decoration: underline;
       }
 

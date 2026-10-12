@@ -18,7 +18,7 @@ const LanguagePicker = () => {
 
   return (
     <React.Fragment>
-      <div className={'language-selector-container'}>
+      <div className={`language-selector-container ${styles.container}`}>
         {languagesToSwitch.map((supportedLang) => (
           <Link
             aria-label={`Change language to ${supportedLang}`}

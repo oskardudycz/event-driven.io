@@ -119,7 +119,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
       if (this.container.current)
         this.resizeObserver.observe(this.container.current);
     }
-    if (this.props.screenWidth > 0) this.measureOverflow();
+    if (this.props.screenWidth > 0) this.setState({ measuring: true });
   }
 
   componentWillUnmount() {
@@ -150,16 +150,23 @@ class Menu extends React.Component<MenuProps, MenuState> {
   measureOverflow = () => {
     const list = this.itemList.current;
     if (!list) return;
-    const reservedWidth = this.props.screenWidth >= 1024 ? 60 : 0;
     const widths = Array.from(
       list.children,
       (item) => (item as HTMLElement).offsetWidth,
     );
+    let availableWidth = list.clientWidth;
+    const button = this.expandButton.current;
+    const container = this.container.current;
+    if (this.props.screenWidth >= 1024 && button && container) {
+      // The measuring render shows the trigger. Reclaim its space only when
+      // every link fits without a disclosure; otherwise use the actual list.
+      const gap = Number.parseFloat(getComputedStyle(container).columnGap) || 0;
+      const widthWithoutButton = availableWidth + button.offsetWidth + gap;
+      const totalWidth = widths.reduce((total, width) => total + width, 0);
+      if (totalWidth <= widthWithoutButton) availableWidth = widthWithoutButton;
+    }
     this.setState({
-      hiddenIndexes: getOverflowedIndexes(
-        widths,
-        list.offsetWidth - reservedWidth,
-      ),
+      hiddenIndexes: getOverflowedIndexes(widths, availableWidth),
       measuring: false,
     });
   };
@@ -194,7 +201,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
 
   render() {
     const { screenWidth } = this.props;
-    const { open, hiddenIndexes } = this.state;
+    const { open, hiddenIndexes, measuring } = this.state;
     const items = this.items;
 
     return (
@@ -221,7 +228,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
               />
             ))}
           </ul>
-          {hiddenIndexes.length > 0 && (
+          {(hiddenIndexes.length > 0 || (measuring && screenWidth >= 1024)) && (
             <Expand
               onClick={this.toggleMenu}
               open={open}

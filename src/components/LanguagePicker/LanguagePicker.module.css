@@ -1,3 +1,12 @@
+.container {
+  display: flex;
+  flex-shrink: 0;
+}
+
 :global(.langSelector).langSelector {
-  margin-right: 10px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
 }

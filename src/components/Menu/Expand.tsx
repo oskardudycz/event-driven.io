@@ -23,7 +23,7 @@ const Expand = (props: {
         aria-expanded={open}
         aria-controls={controls}
       >
-        <FaAngleDown size={30} />
+        <FaAngleDown size={20} />
       </button>
     </React.Fragment>
   );
