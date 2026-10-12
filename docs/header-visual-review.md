@@ -2,6 +2,8 @@
 
 Reviewed locally on 2026-10-11. The owner authorized https://event-driven.io as the visual baseline and requested consistent Open Sans for interface text. Hosted CI and deployment of the local changes are still pending.
 
+The homepage references described here were superseded on 2026-10-12 by the owner-approved responsive composition. See [the proportions review](hero-proportions-review.md) for the current references and verification. This document retains the earlier production comparison as historical evidence.
+
 ## What caused the two failures
 
 Both Firefox homepage tests were comparing against historical Chromium production screenshots from September. Those references also predate the current menu and theme control. The unchanged Git version `74a1705` reproduces both failures: 39,854 differing pixels for English and 47,048 for Polish, exceeding the existing 3% limit.

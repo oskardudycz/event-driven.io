@@ -26,13 +26,15 @@ test('header navigation and theme control share their desktop threshold with lar
   const theme = header.getByLabel('Theme', { exact: true });
   await expect(theme).toHaveAttribute('aria-disabled', 'false');
   await expect(theme).toBeInViewport();
+  const language = menu.getByRole('link', { name: 'Change language to pl' });
   await expect
     .poll(async () => {
-      const menuBounds = (await menu.boundingBox())!;
+      const languageBounds = (await language.boundingBox())!;
       const themeBounds = (await theme.boundingBox())!;
-      return themeBounds.x - (menuBounds.x + menuBounds.width);
+      return themeBounds.x - (languageBounds.x + languageBounds.width);
     })
     .toBeGreaterThanOrEqual(0);
+  await theme.click({ trial: true });
 });
 
 test('homepage copy and artwork stay separate with larger browser fonts in both languages', async ({

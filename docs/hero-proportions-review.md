@@ -1,6 +1,6 @@
 # Homepage proportions and spacing review
 
-Reviewed 2026-10-12 against the owner's initial/open-menu/sticky screenshots and the generated local Gatsby site. This is a spacing correction to the current composition. Original artwork pixels and scale, Open Sans, copy, routes and reading-column width remain unchanged. Visual references still require explicit review.
+Reviewed 2026-10-12 against the owner's initial/open-menu/sticky screenshots and the generated local Gatsby site. This is a spacing correction to the current composition. Original artwork pixels and scale, Open Sans, copy, routes and reading-column width remain unchanged. The owner explicitly accepted the revised homepage references on 2026-10-12.
 
 ## Findings and decisions
 
@@ -27,8 +27,14 @@ The owner requested left-aligned mobile branding and explicitly selected moving 
 
 Tests cover collapsed and expanded lower navigation at 320px and 978px: the entire theme panel must fit the viewport above its trigger, every label must receive clicks, and selecting dark mode must update the page. Header checks compare the brand's left edge with the homepage heading, including the reported intermediate-width layout.
 
+Moving the bar into first-paint view also exposed an existing SSR defect: at 390px, its unmeasured wrapping link list was 192px high inside a 50px bar. The collapsed list now uses a native single horizontal row with scrolling, so links remain available without JavaScript; the expanded list wraps and scrolls vertically in its separate row. No-JavaScript tests verify containment and follow the Articles link in EN/PL at 320px and 978px.
+
+The owner explicitly accepted the desktop EN/PL, narrow layout and upward-opening mobile theme captures on 2026-10-12, authorizing the homepage reference updates. Update only those homepage references through Playwright's native snapshot command; retain all other fixtures and the 3% tolerance. Hosted CI/deployment remain separate checks.
+
 ## Repeatable verification
 
 Build first with `npm run build`, then run `npm run test:visual -- hero.spec.ts navigation-disclosure.spec.ts navigation.spec.ts header-avatar.spec.ts theme.spec.ts`. Add `--browser firefox` for Firefox; `browser-fonts.spec.ts --browser firefox` checks enlarged browser fonts. The full `npm run test:visual` remains the visual gate. Intentional homepage differences must be reviewed before its references change; neither tolerance nor snapshots are updated automatically.
 
 The disclosure suite checks named, actionable links, keyboard dismissal, viewport fit, hover contrast, separate control targets and sticky-header crossings in English and Polish. The hero suite covers SSR/hydration, original-scale image fit, actual painted-pixel separation, fallback fonts and mobile/short/tall viewports. Local results and remaining review/hosted checks are recorded in [todo.md](../todo.md).
+
+Final local verification on 2026-10-12: production build (25.73s), full `CI=true npm test`, ESLint/Prettier and smoke pass. The complete Chromium gate passes 168 cases with two Firefox-only skips. The selected Firefox group passes 117 cases initially; its remaining enlarged-font test assumed the theme control was outside navigation. After replacing that assumption with real language/theme target separation and native click actionability, both enlarged-font cases pass on rerun. Only the four approved homepage references changed. Hosted CI and deployment remain unverified.
