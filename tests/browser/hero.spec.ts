@@ -1,5 +1,6 @@
 import { test, expect } from './fixtures.ts';
 import { expectFonts, expectImageLoaded } from './readiness.ts';
+import { expectArtworkClearOfCopy } from './hero-geometry.ts';
 
 const viewports = [
   { width: 320, height: 740 },
@@ -8,6 +9,7 @@ const viewports = [
   { width: 640, height: 450 },
   { width: 768, height: 1024 },
   { width: 1024, height: 600 },
+  { width: 1280, height: 720 },
   { width: 1280, height: 1000 },
   { width: 1440, height: 900 },
   { width: 1920, height: 1080 },
@@ -53,7 +55,7 @@ for (const language of ['en', 'pl']) {
 
           // Gatsby also renders a noscript fallback when JavaScript is disabled.
           const portrait = hero.locator('img[data-main-image]').last();
-          if (viewport.width < 1024) {
+          if (viewport.width < 1280) {
             await expect(portrait).not.toBeVisible();
           } else {
             await expectImageLoaded(portrait);
@@ -65,13 +67,7 @@ for (const language of ['en', 'pl']) {
             expect(photo.y + photo.height).toBeLessThanOrEqual(
               bounds.y + bounds.height,
             );
-            // All copy and controls must stay outside the photo/yellow artwork.
-            for (const element of await hero
-              .locator('h1, p, nav, button')
-              .all()) {
-              const copy = (await element.boundingBox())!;
-              expect(copy.x + copy.width).toBeLessThanOrEqual(photo.x);
-            }
+            await expectArtworkClearOfCopy(hero, portrait);
             const ratio = await portrait.evaluate(
               (image: HTMLImageElement) =>
                 image.naturalWidth / image.naturalHeight,
@@ -85,4 +81,24 @@ for (const language of ['en', 'pl']) {
       }
     });
   }
+}
+
+for (const language of ['en', 'pl']) {
+  test(`${language} artwork keeps its scale when the desktop becomes narrower`, async ({
+    page,
+  }) => {
+    await page.goto(`/${language}/`);
+    await expectFonts(page);
+    const portrait = page.locator('.hero img[data-main-image]');
+    let originalSize: { width: number; height: number } | undefined;
+    for (const width of [1920, 1440, 1280]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await expect(portrait).toBeVisible();
+      const bounds = (await portrait.boundingBox())!;
+      const size = { width: bounds.width, height: bounds.height };
+      originalSize ??= size;
+      expect(size).toEqual(originalSize);
+      expect(bounds.x + bounds.width).toBe(width - 40);
+    }
+  });
 }

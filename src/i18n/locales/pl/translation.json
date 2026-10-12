@@ -13,7 +13,9 @@
     "contact": "Kontakt",
     "talks": "Wystąpienia",
     "training": "Szkolenia",
-    "about": "O mnie"
+    "about": "O mnie",
+    "search": "Szukaj",
+    "more": "Więcej linków"
   },
   "hero": {
     "h1": "Szukasz praktycznej wiedzy <linebreak /> o <architecture>architekturze oprogramowania?</architecture>",

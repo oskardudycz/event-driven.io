@@ -50,32 +50,40 @@
     &:hover :global(svg) {
       fill: var(--color-body);
       opacity: 1;
-
-      :global(.hero) & :global(svg) {
-        fill: green;
-      }
     }
 
     :global(.homepage):not(:global(.fixed)) &:hover :global(svg) {
       fill: var(--color-brand-primary-dark);
 
       opacity: 1;
-
-      :global(.hero) & :global(svg) {
-        fill: green;
-      }
     }
   }
 
   :global(.hiddenItem).hiddenItem {
     text-align: left;
-    padding: var(--space-xs);
 
-    & :global(a.inHiddenItem) {
-      color: var(--color-text);
+    a {
+      align-items: center;
+      border-radius: var(--size-radius-small);
+      color: inherit;
+      display: flex;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-sm);
+
       &:hover {
-        color: var(--text-color-brand);
+        background: var(--color-menu-overlay);
+        text-decoration: underline;
       }
+
+      &:focus-visible {
+        outline: 2px solid currentColor;
+        outline-offset: -2px;
+      }
+    }
+
+    svg {
+      flex-shrink: 0;
     }
   }
 }

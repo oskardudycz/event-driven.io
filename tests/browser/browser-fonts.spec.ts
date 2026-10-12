@@ -1,5 +1,6 @@
 import { test, expect } from './fixtures';
 import { expectFonts } from './readiness';
+import { expectArtworkClearOfCopy } from './hero-geometry.ts';
 
 // Browser preferences are worker options, so this case has its own test file.
 test.use({
@@ -47,11 +48,8 @@ test('homepage copy and artwork stay separate with larger browser fonts in both 
     await expectFonts(page);
     await expect(page.locator('body')).toHaveCSS('font-size', '24px');
     const hero = page.locator('.hero');
-    const artwork = (await hero.locator('img[data-main-image]').boundingBox())!;
-    for (const element of await hero.locator('h1, p, nav, button').all()) {
-      const copy = (await element.boundingBox())!;
-      expect(copy.x + copy.width).toBeLessThanOrEqual(artwork.x);
-    }
+    // This width cannot fit the original-scale artwork beside enlarged prose.
+    await expect(hero.locator('img[data-main-image]')).not.toBeVisible();
     const header = page.getByRole('banner');
     const headerBounds = (await header.boundingBox())!;
     const title = (await header.locator('a.logoType').boundingBox())!;
@@ -62,5 +60,10 @@ test('homepage copy and artwork stay separate with larger browser fonts in both 
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth),
     ).toBe(1100);
+    await page.setViewportSize({ width: 1920, height: 1080 });
+    const portrait = hero.locator('img[data-main-image]');
+    await expect(portrait).toBeVisible();
+    await expectArtworkClearOfCopy(hero, portrait);
+    await page.setViewportSize({ width: 1100, height: 900 });
   }
 });

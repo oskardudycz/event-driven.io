@@ -15,8 +15,10 @@ const Hero = (props: { scrollToContent: () => void }) => {
     <section
       className={`hero grid items-center px-gutter py-section sm:px-section ${styles.hero}`}
     >
-      <div className="grid items-center gap-10 lg:grid-cols-5">
-        <div className="flex min-w-0 flex-col items-start gap-8 wrap-anywhere lg:col-span-3">
+      <div className="grid items-center">
+        <div
+          className={`flex min-w-0 flex-col items-start gap-8 wrap-anywhere ${styles.copy}`}
+        >
           <h1 className="m-0 max-w-4xl text-3xl font-semibold uppercase leading-tight lg:text-4xl">
             <Trans
               i18nKey="hero.h1"
@@ -34,9 +36,7 @@ const Hero = (props: { scrollToContent: () => void }) => {
               }}
             />
           </p>
-          <p
-            className={`m-0 text-base leading-relaxed lg:text-lg ${styles.intro}`}
-          >
+          <p className="m-0 max-w-xl text-base leading-relaxed lg:text-lg">
             {t('hero.introExperience')}
             <br />
             {t('hero.introTraining')}
@@ -73,16 +73,16 @@ const Hero = (props: { scrollToContent: () => void }) => {
             </span>
           </button>
         </div>
-        <div className="hidden lg:col-span-2 lg:block" aria-hidden="true">
+        <div className={styles.artwork} aria-hidden="true">
           <StaticImage
             src="../../images/png/hero-speaker.png"
             alt=""
-            width={760}
+            layout="fixed"
+            width={772}
             quality={90}
             placeholder="none"
             objectFit="contain"
             loading="eager"
-            className="w-full"
           />
         </div>
       </div>

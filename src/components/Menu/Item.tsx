@@ -1,7 +1,8 @@
 import type { IconType } from 'react-icons';
 export type MenuItem = {
   to: string;
-  label?: string;
+  label: string;
+  iconOnly?: boolean;
   icon?: IconType | undefined;
 };
 import * as styles from './Item.module.css';
@@ -16,7 +17,7 @@ const Item = (props: {
   hiddenItem?: boolean;
 }) => {
   const {
-    item: { label, to, icon: Icon },
+    item: { label, to, icon: Icon, iconOnly },
     onClick,
     overflowHidden = false,
   } = props;
@@ -37,8 +38,10 @@ const Item = (props: {
           className={'hiddenItem' in props ? 'inHiddenItem' : ''}
           onClick={onClick}
           data-slug={to}
+          aria-label={iconOnly ? t(label) : undefined}
         >
-          {Icon && <Icon />} {label && t(label)}
+          {Icon && <Icon aria-hidden="true" />}
+          {(!iconOnly || props.hiddenItem) && t(label)}
         </Link>
       </li>
     </React.Fragment>

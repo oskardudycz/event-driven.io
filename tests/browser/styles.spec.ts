@@ -505,7 +505,7 @@ for (const language of ['en', 'pl']) {
         });
         const hero = page.locator('.hero');
         const photo = hero.locator('img[data-main-image]').last();
-        for (const width of [390, 600, 1024]) {
+        for (const width of [390, 600, 1024, 1280]) {
           await page.setViewportSize({
             width,
             height: 900,
@@ -514,7 +514,7 @@ for (const language of ['en', 'pl']) {
             (el) => getComputedStyle(el).backgroundImage,
           );
           expect(image).toContain('url(');
-          if (width < 1024) {
+          if (width < 1280) {
             await expect(photo).not.toBeVisible();
           } else {
             await expect(photo).toBeVisible();
