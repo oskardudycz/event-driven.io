@@ -356,11 +356,11 @@ Tailwind 4 runs through Gatsby's PostCSS pipeline. `site/config.ts` passes the p
 
 The styling baseline is Safari 16.4+, Chrome 111+ and Firefox 128+. The existing reset is in the `base` cascade layer so utilities can override it deliberately. Unlayered component CSS takes precedence over layered utilities, so remove an old property from its module when deliberately moving that property to a utility. A new reset and broader visual redesign remain separate work.
 
-The header's **Theme / Motyw** icon opens light, dark and system choices. System is the default and detects your device's appearance automatically. The icon shows a sun, moon or monitor for the selected preference. Use Enter/Space to open it, Tab to reach the native radio choices, and Escape to close and return focus; clicking outside also closes it. Preference is stored as `color-theme` in local storage. System mode follows OS changes; explicit choices persist across reloads and EN/PL navigation. `src/theme/preference.ts` provides the small document-head initializer so saved preferences apply before React loads. Without JavaScript, the site uses the light stylesheet and theme selection is disabled. Storage failures fall back to system preference without preventing a change on the current page.
+The **Theme / Motyw** icon opens light, dark and system choices. It lives in the header on desktop and the lower navigation on mobile; mobile choices open above the bar, including when the navigation is expanded. System is the default and detects your device's appearance automatically. The icon shows a sun, moon or monitor for the selected preference. Use Enter/Space to open it, Tab to reach the native radio choices, and Escape to close and return focus; clicking outside also closes it. Preference is stored as `color-theme` in local storage. System mode follows OS changes; explicit choices persist across reloads and EN/PL navigation. `src/theme/preference.ts` provides the small document-head initializer so saved preferences apply before React loads. Without JavaScript, the site uses the light stylesheet and theme selection is disabled. Storage failures fall back to system preference without preventing a change on the current page.
 
 Edit light values in `:root` and dark overrides in `:root[data-theme='dark']` in `src/theme/tokens.css`. Transparent article diagrams keep a white canvas for readable labels. Embedded third-party widgets retain their provider's own appearance. Run `npm run test:visual -- theme.spec.ts` for theme behavior, and the full browser suite for shared styling/navigation changes. Theme checks click the visible labels and row padding, and cover keyboard dismissal, saved preferences before React loads, OS changes, blocked storage, synchronization between tabs, and dark home/archive/category/article/search pages in both languages at mobile and desktop widths. To repeat these checks in Firefox, run `npm run browsers:install:firefox`, then `npm run test:visual -- theme.spec.ts --browser firefox`.
 
-For a manual appearance review, run `npm run build` and `npm run serve`, then use the header theme icon on the home page, an article, a category and search. Review the dark palette, image canvases and mobile navigation. Switch EN/PL and reload to check persistence; open a second tab to check synchronized selection. Choose **System / Systemowy** and change your OS appearance to check automatic updates. Third-party comments, newsletter and calendar embeds keep their own provider styling.
+For a manual appearance review, run `npm run build` and `npm run serve`, then use the theme icon in the desktop header or lower mobile navigation on the home page, an article, a category and search. Review the dark palette, image canvases and mobile navigation. Switch EN/PL and reload to check persistence; open a second tab to check synchronized selection. Choose **System / Systemowy** and change your OS appearance to check automatic updates. Third-party comments, newsletter and calendar embeds keep their own provider styling.
 
 Use named CSS exports, for example `import * as styles from './Component.module.css'` and `className={styles.container}`. Dashed local selectors are exported in camel case. Keep Gatsby data/routing adapters separate from reusable presentation components where needed; the reading-list view accepts a link renderer and owns its stylesheet.
 
@@ -388,6 +388,16 @@ npm run test:visual
 ```
 
 The command verifies the first card's exact slug and updates only the archive screenshot in `tests/fixtures/visual/`. Review the PNG diff before committing. `test:visual:update` updates all visual baselines and should be reserved for a reviewed design change. The comparison tolerance remains 3%.
+
+For an explicitly reviewed homepage change, limit the update to its English/Polish captures:
+
+```sh
+npm run test:visual:update -- navigation.spec.ts --grep 'homepage renders one complete hero'
+npm run test:visual:update -- navigation.spec.ts --grep 'homepage renders one complete hero' --browser firefox
+npm run test:visual
+```
+
+Review the four changed homepage PNGs; archive/category references should remain unchanged. Keep the 3% tolerance and investigate unexplained differences before updating any fixture.
 
 ## Audits
 
