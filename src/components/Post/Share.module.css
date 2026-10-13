@@ -8,11 +8,6 @@
 :global(.links).links {
   display: flex;
   flex-direction: row;
-
-  :global(.SocialMediaShareButton) {
-    margin: 0 0.8em;
-    cursor: pointer;
-  }
 }
 
 :global(.label).label {

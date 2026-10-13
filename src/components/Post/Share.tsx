@@ -4,11 +4,10 @@ import React from 'react';
 import {
   FacebookShareButton,
   LinkedinShareButton,
-  TwitterShareButton,
-  FacebookShareCount,
-  FacebookIcon,
-  TwitterIcon,
-  LinkedinIcon,
+  XShareButton,
+  FacebookLegacyIcon,
+  XLegacyIcon,
+  LinkedinLegacyIcon,
 } from 'react-share';
 
 import config from '../../../content/meta/config.ts';
@@ -24,34 +23,20 @@ const PostShare = (props: { post: ArticleNode }) => {
   const url = config.siteUrl + config.pathPrefix + '/' + langKey + slug;
 
   const iconSize = 36;
-  const filter = (count: number) => (count > 0 ? count : '');
 
   return (
     <React.Fragment>
       <div className={`share ${styles.share}`}>
         <span className={`label ${styles.label}`}>SHARE</span>
         <div className={`links ${styles.links}`}>
-          <TwitterShareButton
-            url={url}
-            title={title}
-            aria-label="Twitter share"
-          >
-            <TwitterIcon round size={iconSize} />
-          </TwitterShareButton>
+          <XShareButton url={url} text={title} aria-label="X share">
+            <XLegacyIcon round size={iconSize} />
+          </XShareButton>
           <FacebookShareButton url={url} aria-label="Facebook share">
-            <FacebookIcon round size={iconSize} />
-            <FacebookShareCount url={url}>
-              {(count: number) => (
-                <div className={'share-count'}>{filter(count)}</div>
-              )}
-            </FacebookShareCount>
+            <FacebookLegacyIcon round size={iconSize} />
           </FacebookShareButton>
-          <LinkedinShareButton
-            url={url}
-            title={title}
-            aria-label="LinkedIn share"
-          >
-            <LinkedinIcon round size={iconSize} />
+          <LinkedinShareButton url={url} aria-label="LinkedIn share">
+            <LinkedinLegacyIcon round size={iconSize} />
           </LinkedinShareButton>
         </div>
       </div>

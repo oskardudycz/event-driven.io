@@ -79,14 +79,6 @@ export default {
         ],
       },
     },
-    `gatsby-transformer-json`,
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: `data`,
-        path: `${path.resolve(import.meta.dirname, '..')}/data/`,
-      },
-    },
     {
       resolve: `gatsby-source-filesystem`,
       options: {

@@ -586,7 +586,7 @@ async function importPost(entry: ImportEntry, options: ImportOptions = {}) {
         `---\n${yaml.dump(frontmatter, { lineWidth: -1 })}---\n\n${converted.markdown}\n`,
       );
     }
-    // .txt avoids gatsby-transformer-json treating source URLs as GraphQL fields.
+    // Provenance is plain text metadata, separate from renderable article content.
     const provenance = new URL(sourceLocation(source).base).pathname.startsWith(
       '/p/',
     )
