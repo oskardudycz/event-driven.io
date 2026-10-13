@@ -5,6 +5,11 @@
 [build.environment]
 NPM_VERSION = "11.9.0"
 
+# Gatsby already emits canonical directory URLs. Preserve authored links,
+# including external index.html destinations, after IndexNow fingerprinting.
+[build.processing.html]
+pretty_urls = false
+
 # Query-specific legacy category aliases precede the final error rewrites.
 # Literal query values let Netlify decode both + and %20 correctly.
 

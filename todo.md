@@ -119,3 +119,10 @@ The first post-install build reported slow home/archive queries and transitive p
 ## Deferred decisions
 
 TSX test-framework/lint-fixture refactoring, new contact form, Giscus/custom guest comments, analytics changes, broad redesign, Slices/DSG and Astro migration remain separate decisions. Keep existing comments/sharing and static generation. Font metric/fallback changes need measurement and review if appearance changes. Contact pages currently use Calendly; the inactive form and Ant Design are retired.
+
+## IndexNow correction evidence (2026-10-13)
+
+- [x] Fetched live failing page and production manifest; reproduced mismatch against existing local generated HTML. Only the external SharpSerializer link differs among fingerprint fields; the local hash matches the published manifest.
+- [x] Disabled Netlify Pretty URLs HTML rewriting using the documented configuration. Kept strict fingerprint/deletion checks and pending-state behavior.
+- [x] Local `npm run test:indexnow`: 11/11 passed (about 2 seconds). Installed Netlify configuration resolver validates production `pretty_urls = false` offline. No Gatsby/component styling changes or new build claimed.
+- [ ] Deploy this configuration, confirm the external link retains `/index.html`, and verify the production Notify IndexNow step succeeds. Hosted CI and the corrected deployment have not been run locally.

@@ -125,3 +125,7 @@ Reposting is not automatically harmful, but publishing identical full articles i
 ## Supporting reviews
 
 [Gatsby standards](docs/gatsby-5-review.md), [CSS research](docs/gatsby-css-review.md), [CSS cache correction](docs/gatsby-css-cache-patch.md), [search/localization](docs/gatsby-search-and-localization-review.md), [PageSpeed/provider decisions](docs/pagespeed-review.md), [indexing](docs/google-indexing-review.md). The documented cache patch stays until an upstream Gatsby release passes edit/restoration regressions. Do not reintroduce stylesheet import-order workarounds.
+
+## IndexNow production link rewrite correction (2026-10-13)
+
+The reported Polish socket article's published manifest fingerprint matches local generated HTML (`b2dc693e…`), while live HTML hashes to `fa585649…`. Comparing every fingerprint field isolates one external link: Netlify changes `http://www.sharpserializer.com/en/index.html` to `http://www.sharpserializer.com/en/`. Preserve generated/authored destinations with `[build.processing.html] pretty_urls = false`; Gatsby already generates directory URLs. Keep strict page verification and acknowledgement safeguards. Netlify documents this setting and its precedence over the UI at https://docs.netlify.com/build/configure-builds/file-based-configuration/#post-processing. A fresh deployment must verify the hosted correction; local configuration validation cannot certify Netlify processing.
