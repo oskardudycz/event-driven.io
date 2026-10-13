@@ -5,6 +5,9 @@
 @import 'tailwindcss/utilities.css' layer(utilities) source(none);
 
 @source '../';
+/* Colocated test fixtures must not generate production utilities. */
+@source not '../**/*.test.*';
+@source not '../**/*.spec.*';
 
 /* Aliases let utilities and component CSS share the existing design tokens. */
 @theme inline {

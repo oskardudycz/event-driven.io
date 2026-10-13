@@ -1,6 +1,7 @@
 # Repository guidance
 
 - Before changing tests, publication workflows or visual references, read [docs/testing-guidance.md](docs/testing-guidance.md), including the [Vitest/Playwright responsibilities and Astro compatibility](docs/testing-guidance.md#using-vitest-and-playwright-together). Use Vitest projects for logic/generated output/components and Playwright Test for full-site E2E. Keep editorial text separate from controlled visual examples; retain current-source publication and real Gatsby integration checks.
+- Colocate component/module tests beside the code they exercise; do not duplicate their hierarchy under `tests/`. Keep whole-site/generated checks and cross-feature matrices in feature folders under `tests/`. Identify unit/integration/generated/browser/E2E execution with filename suffixes and runner projects, rather than a primary technical folder split. Separate shared fixtures or cross-feature test matrices only when attaching them to one feature would be artificial.
 
 - Fix demonstrated root causes using documented Gatsby, React and CSS mechanisms. Never hide a problem with blanket imports, unrelated coupling, warning suppression, relaxed assertions or automatic snapshot updates; research the supported approach and verify it before calling the issue fixed.
 - Keep each component's CSS Module with its owning component. Global reset, fonts and theme tokens belong to the shared layout. Do not import every component stylesheet into page or application entry points to control extraction order.

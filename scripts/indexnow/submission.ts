@@ -20,6 +20,7 @@ type NotificationOptions = {
   urls?: string[];
   request?: typeof fetch;
   save?: (_manifest: Manifest) => Promise<void>;
+  wait?: (_milliseconds: number) => Promise<void>;
 };
 
 function urlsToNotify(options: NotificationOptions): string[] {
@@ -91,32 +92,90 @@ async function verifyChangedPages(
   }
 }
 
+function retryDelay(response: Response | undefined, attempt: number): number {
+  const header = response?.headers.get('retry-after');
+  if (header) {
+    const seconds = Number(header);
+    const milliseconds = Number.isFinite(seconds)
+      ? seconds * 1000
+      : Date.parse(header) - Date.now();
+    if (Number.isFinite(milliseconds)) return Math.max(0, milliseconds);
+  }
+  return 5000 * 2 ** attempt;
+}
+
+async function submitBatch(
+  batch: string[],
+  key: string,
+  request: typeof fetch,
+  wait: NonNullable<NotificationOptions['wait']>,
+) {
+  const maxAttempts = 4;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    let response: Response | undefined;
+    let failure = new Error('IndexNow request failed; state was not advanced.');
+    try {
+      response = await request(endpoint, {
+        method: 'POST',
+        redirect: 'error',
+        signal: AbortSignal.timeout(30000),
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify({
+          host: new URL(origin).host,
+          key,
+          keyLocation: `${origin}/${key}.txt`,
+          urlList: batch,
+        }),
+      });
+    } catch (cause) {
+      failure = new Error('IndexNow request failed; state was not advanced.', {
+        cause,
+      });
+    }
+    if (response) {
+      await response.body?.cancel();
+      if (acceptedStatuses.includes(response.status)) {
+        console.log(
+          `IndexNow received ${batch.length} URLs (HTTP ${response.status}); indexing is not guaranteed.`,
+        );
+        return;
+      }
+      const diagnostic =
+        response.status === 403
+          ? ` IndexNow could not validate the key; check crawler access to ${origin}/${key}.txt.`
+          : '';
+      failure = new Error(
+        `IndexNow returned HTTP ${response.status}; state was not advanced.${diagnostic}`,
+      );
+      const retryable =
+        response.status === 403 ||
+        response.status === 429 ||
+        response.status >= 500;
+      if (!retryable) throw failure;
+    }
+    if (attempt === maxAttempts - 1) throw failure;
+    const delay = retryDelay(response, attempt);
+    // Leave longer server-requested waits pending for a later workflow run.
+    if (delay > 60000) throw failure;
+    console.log(
+      `IndexNow attempt ${attempt + 1}/${maxAttempts} failed${response ? ` (HTTP ${response.status})` : ''}; retrying in ${delay}ms.`,
+    );
+    await wait(delay);
+  }
+}
+
 async function submitBatches(
   urls: string[],
   key: string,
   request: typeof fetch,
+  wait: NonNullable<NotificationOptions['wait']>,
 ) {
   for (let offset = 0; offset < urls.length; offset += batchSize) {
-    const batch = urls.slice(offset, offset + batchSize);
-    const response = await request(endpoint, {
-      method: 'POST',
-      redirect: 'error',
-      signal: AbortSignal.timeout(30000),
-      headers: { 'Content-Type': 'application/json; charset=utf-8' },
-      body: JSON.stringify({
-        host: new URL(origin).host,
-        key,
-        keyLocation: `${origin}/${key}.txt`,
-        urlList: batch,
-      }),
-    });
-    await response.body?.cancel();
-    if (!acceptedStatuses.includes(response.status))
-      throw new Error(
-        `IndexNow returned HTTP ${response.status}; state was not advanced. Retry later.`,
-      );
-    console.log(
-      `IndexNow received ${batch.length} URLs (HTTP ${response.status}); indexing is not guaranteed.`,
+    await submitBatch(
+      urls.slice(offset, offset + batchSize),
+      key,
+      request,
+      wait,
     );
   }
 }
@@ -147,7 +206,14 @@ export async function notify(options: NotificationOptions): Promise<string[]> {
 
   await verifyDeployment(current, key, request);
   await verifyChangedPages(current, urls, request);
-  await submitBatches(urls, key, request);
+  await submitBatches(
+    urls,
+    key,
+    request,
+    options.wait ??
+      ((milliseconds) =>
+        new Promise((resolve) => setTimeout(resolve, milliseconds))),
+  );
 
   // One-off submissions must not acknowledge other pending content changes.
   if (!options.urls) await options.save?.(current);

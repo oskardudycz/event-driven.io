@@ -29,17 +29,11 @@
   "debug.javascript.terminalOptions": {
     "nodeVersionHint": 24
   },
-  "nodejs-testing.include": ["./tests/*.test.ts"],
-  "nodejs-testing.extensions": [
-    {
-      "extensions": ["ts"],
-      "filePatterns": ["**/*.test.ts"]
-    }
-  ],
   "[typescriptreact]": {
     "editor.formatOnSave": false
   },
   "npm.packageManager": "npm",
   "js/ts.experimental.useTsgo": true,
-  "js/ts.tsdk.path": "./node_modules/@typescript/native"
+  "js/ts.tsdk.path": "./node_modules/@typescript/native",
+  "vitest.rootConfig": "tests/vitest.config.ts"
 }

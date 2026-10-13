@@ -1,15 +1,13 @@
 import { copyFileSync, mkdirSync, symlinkSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import type { TestContext } from 'node:test';
 import { ESLint } from 'eslint';
 import { temporaryDirectory } from './temporary-directory.ts';
 
 export async function lintTsxFixtures(
-  context: Pick<TestContext, 'after'>,
   sources: Record<string, string>,
 ): Promise<ESLint.LintResult[]> {
   const root = resolve('.');
-  const directory = temporaryDirectory(context, 'gatsby-jsx-lint-');
+  const directory = temporaryDirectory('gatsby-jsx-lint-');
   for (const file of [
     'eslint.config.mjs',
     '.prettierrc.json',

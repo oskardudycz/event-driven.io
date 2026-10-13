@@ -36,7 +36,15 @@ function build(label: string) {
   }
   const result = spawnSync(
     process.execPath,
-    ['--test', '--test-isolation=none', 'tests/css-build.test.ts'],
+    [
+      'node_modules/vitest/vitest.mjs',
+      'run',
+      '--config',
+      'tests/vitest.config.ts',
+      '--project',
+      'generated',
+      'tests/theme/extraction.generated.test.ts',
+    ],
     {
       stdio: 'inherit',
     },

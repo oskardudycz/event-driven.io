@@ -25,7 +25,7 @@ CI uses the corresponding repository secrets. Search uses local MiniSearch index
 ## Development and production checks
 
 ```bash
-npm run develop
+npm run dev
 ```
 
 For a production check:
@@ -35,14 +35,13 @@ npm run typecheck
 npm run smoke
 npm run lint
 env -u DEBUG npm run build
-npm run test
-npm run test:visual
+npm test
 ```
 
 Playwright starts and stops the local production server automatically; it can also reuse a running local server. Set `VISUAL_BASE_URL` to test a deployment preview:
 
 ```bash
-VISUAL_BASE_URL=https://your-preview.netlify.app npm run test:visual
+VISUAL_BASE_URL=https://your-preview.netlify.app npm run test:e2e
 ```
 
 `build` generates `llms.txt`, feeds, sitemaps and search indexes. Theme tokens are edited directly in CSS. Tests that inspect generated output require a completed production build. Do not edit content or run another Gatsby process during a build or cache check. To rebuild from an empty cache, run `npm run clean` before `npm run build`. Do this when changing React or Gatsby's JSX runtime so previously compiled runtime artifacts cannot affect verification.
@@ -57,15 +56,15 @@ NODE_OPTIONS=--trace-warnings env -u DEBUG npm run build
 
 Application components, pages, layouts and Gatsby browser/SSR hooks use `.tsx`; plain browser modules use `.ts`. Node scripts, importers, tests, local remark plugins and build implementations use native ESM `.ts`. Run scripts with Node 24 directly; no ts-node, tsx loader or Babel registration is needed. Use erasable TypeScript syntax (types/interfaces, not runtime enums or parameter properties) and explicit file extensions in Node imports. Gatsby owns JSX compilation and uses its default runtime for Head API compatibility; Vitest uses the automatic JSX runtime.
 
-Gatsby 5 discovers native ESM configuration and Node hooks through `gatsby-config.mjs` and `gatsby-node.mjs`. Those entry points export the typed implementation from `site/*.ts`. ESLint, lint-staged and PostCSS retain their standard `.mjs` configuration entry points. The root package deliberately has no `type: module`: Gatsby still emits CommonJS SSR bundles into `.cache`. Source package scopes (`src`, `content/meta`, `site`, `scripts`, `import`, `tests` and the local plugins) declare `type: module` for `.ts` modules without changing Gatsby-generated files. Gatsby owns application compilation; `npm run typecheck` separately checks all application, tooling and test TypeScript without emitting files. Browser/Vite code uses bundler resolution in `tsconfig.json`; native Node code also passes NodeNext resolution in `tsconfig.node.json`, which catches missing runtime extensions and incompatible module imports. Both run in CI before the build and as part of `npm run test`.
+Gatsby 5 discovers native ESM configuration and Node hooks through `gatsby-config.mjs` and `gatsby-node.mjs`. Those entry points export the typed implementation from `site/*.ts`. ESLint, lint-staged and PostCSS retain their standard `.mjs` configuration entry points. The root package deliberately has no `type: module`: Gatsby still emits CommonJS SSR bundles into `.cache`. Source package scopes (`src`, `content/meta`, `site`, `scripts`, `import`, `tests` and the local plugins) declare `type: module` for `.ts` modules without changing Gatsby-generated files. Gatsby owns application compilation; `npm run typecheck` separately checks all application, tooling and test TypeScript without emitting files. Browser/Vite code uses bundler resolution in `tsconfig.json`; native Node code also passes NodeNext resolution in `tsconfig.node.json`, which catches missing runtime extensions and incompatible module imports. Both run in CI before the build; type checking is separate from transformed test execution.
 
 The tooling configuration starts from Pongo: `tsconfig.shared.json`, `.prettierrc.json` and `.editorconfig` are copied; ESLint retains its general recommended/type-checked/Prettier/type-only-import configuration. Gatsby overrides add browser/JSX support, no-emit checking and this repository's source/output locations. React hooks and image accessibility checks are enabled for site code; Pongo's database/Cloudflare rules do not apply here. The copied strict optional-property and indexed-access checks remain enabled. Browser and native Node configurations extend the same shared settings.
 
 The native TypeScript 7 checker supplies `tsc`; the `typescript` import is Microsoft's TS6 compatibility alias for Gatsby, ESLint and compiler-API tools. Install the recommended TypeScript native VS Code extension to use the matching editor service. Do not point the editor at the compatibility package's missing tsserver.
 
-VS Code settings, extension recommendations, tasks and the component-test debugger also start from Pongo, with root paths, Node 24 and npm. TypeScript formatting runs through ESLint's Prettier integration; imports are organized on save. `npm run typecheck:watch` runs the editor's watch task. Select the component or Node test debugger for the current test file. `npm run fix` applies formatting and lint fixes manually; lint-staged checks staged code and article image descriptions.
+VS Code settings, extension recommendations, tasks and the component-test debugger also start from Pongo, with root paths, Node 24 and npm. TypeScript formatting runs through ESLint's Prettier integration; imports are organized on save. `npm run typecheck:watch` runs the editor's watch task. Select “Debug Current Vitest File” for any Node/React Vitest test. Use the Playwright extension or `--debug` for full-site tests. `npm run fix` applies formatting and lint fixes manually; lint-staged checks staged code and article image descriptions.
 
-ESLint anchors its project path to the configuration directory, so opening `src` or a component folder in the editor does not change tsconfig resolution. Vitest's TypeScript configuration lives in the ESM `tests` scope; `npm run test:components` and the debugger select it explicitly.
+ESLint anchors its project path to the configuration directory, so opening `src` or a component folder in the editor does not change tsconfig resolution. Vitest's TypeScript configuration lives in the ESM `tests` scope; group commands and the debugger select it explicitly.
 
 Shared content/query types live in `src/types/content.ts`. Keep each page's data type limited to its query. Use published dependency types where available; the narrow declarations in `src/types/vendors.d.ts` cover untyped integrations.
 
@@ -85,7 +84,6 @@ npm run lint
 npm run clean
 env -u DEBUG npm run build
 CI=true npm test
-npm run test:visual
 ```
 
 Review both package.json and package-lock.json. Dependency cleanup should pass existing screenshots without regenerating them.
@@ -96,63 +94,65 @@ Use `npm ls --all` to diagnose invalid or stale transitive resolutions and `npm 
 
 ## Tests
 
-`npm run test` runs all non-browser suites below. Browser tests run separately.
+Tests live beside their owning components/modules. Cross-feature and generated-site checks stay under `tests/`, organized by feature. For example, `src/search/` contains search logic tests; `tests/search/` contains generated-index and website search checks; `src/components/Menu/` contains navigation checks. Test type is a filename suffix, not the primary folder hierarchy. Shared browser fixtures and the controlled cross-component gallery have their own supporting directories.
 
-To reproduce GitHub Actions' CI-dependent tooling behavior locally, run:
+| Command                  | Build needed? | Scope                                                                                                              |
+| ------------------------ | ------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `npm run test:unit`      | No            | Pure logic and injected security/protocol behavior (`*.unit.test.ts`)                                              |
+| `npm run test:int`       | No            | Node/React integration (`*.int.test.ts/tsx`), then real Chromium component checks                                  |
+| `npm run test:browser`   | No            | Controlled React presentation/interaction (`*.browser.test.tsx`) via Vitest and Playwright                         |
+| `npm run test:generated` | Yes           | Current-source publication, metadata, discovery, assets and redirects (`*.generated.test.ts`)                      |
+| `npm run test:e2e`       | Yes           | Full-site Playwright Test: SSR, hydration, routing, responsive behavior and homepage screenshots (`*.e2e.spec.ts`) |
+| `npm test`               | Yes           | All four groups in order: unit → integration/components → generated → E2E                                          |
+| `npm run test:watch`     | No            | Live Vitest reruns for unit, integration and component browser projects                                            |
+| `npm run typecheck`      | No            | Strict application, tooling and all test types; separate from test execution                                       |
+| `npm run smoke`          | No            | Source syntax, configuration and GraphQL queries                                                                   |
+
+`npm run check:edit` adds source image checks to the two no-build groups. For the full local publication gate use `npm run verify:publication`: smoke/lint/types, quick checks, one build, generated-output checks and production E2E. CI runs the same boundaries without repeating the quick suites after the build. Ordinary text edits use `npm run dev` and live feedback; they do not require a production build or screenshot updates.
+
+Use feature/path filters rather than a command for every test file. `test:file` is the raw Vitest entry point; specify projects when a filter might include generated output:
 
 ```bash
-CI=true npm test
-CI=true npm run test:tooling
+npm run test:unit -- search
+npm run test:int -- import
+npm run test:file -- --project integration tooling
+CI=true npm run test:file -- --project integration tooling
+npm run test:file -- --project integration .int.test.tsx
+npm run test:generated -- seo
+npm run test:browser -- -t 'pl editorial'
+npm run test:watch -- search
+npm run test:e2e -- search.e2e.spec.ts
 ```
 
-The second command isolates the lint-staged, editor linting, JSX and CLI checks.
+For quick real-site interactions without a production build, run `npm run test:e2e:dev`. It starts Gatsby development on port 8001 and runs the existing `@dev` theme/storage/keyboard/locale cases. If `npm run dev -- -H 127.0.0.1 -p 8001` is already running, it reuses that server locally for Fast Refresh and repeat checks. CI mode proves fresh startup and uses Gatsby’s explicit query-on-demand-in-CI setting so it retains normal development semantics. Stop development before building or validating `public`: Gatsby dev/build share generated directories. Development checks do not replace the final production gate.
 
-| Command                                                         | Checks                                                                                       |
-| --------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `npm run typecheck`                                             | Strict application, Node tooling, importer and test types without emitting files             |
-| `npm run smoke`                                                 | Source syntax, configuration and GraphQL queries                                             |
-| `npm run test:seo` / `npm run verify-seo`                       | Generated headings, metadata, schema, sitemap and security headers                           |
-| `npm run test:build-contract` / `npm run verify:build-contract` | No missing routes, redirects, sitemap URLs or feed identities                                |
-| `npm run test:indexing`                                         | Canonical destinations, reciprocal language alternates, fallback markers and Netlify routing |
-| `npm run test:404`                                              | Root/localized error HTML, recovery links and native 404 rules                               |
-| `npm run test:substack`                                         | Import conversion, assets, code languages and link safety                                    |
-| `npm run test:articles`                                         | All published articles: metadata, video markup, language links and related cards             |
-| `npm run test:video`                                            | YouTube conversion, player parameters and referrer headers                                   |
-| `npm run test:redirects`                                        | Imported article aliases and generated redirects                                             |
-| `npm run test:categories`                                       | Category membership, locale parity and reading order                                         |
-| `npm run test:performance`                                      | Image priority/lazy loading, local fonts, newsletter and menu regressions                    |
-| `npm run test:search`                                           | Local search data, fallback languages and safe result rendering                              |
-| `npm run test:localization`                                     | Translation resources, routing and canonical-language policy                                 |
-| `npm run test:css`                                              | Generated CSS assets and stale inline styles                                                 |
-| `npm run test:tooling`                                          | Lint, formatting, editor configuration and audit CLI validation                              |
-| `npm run test:components`                                       | Link/reading-list routing, safe search markup and SEO timestamp rendering                    |
-| `npm run test:images`                                           | Markdown descriptions, import alternatives and all generated image/link alternatives         |
-| `npm run test:indexnow`                                         | Production URL validation, content diffs, dry runs, submissions and failure-safe state       |
-| `npm run test:visual`                                           | Browser hydration, navigation, search, mobile layouts and screenshots                        |
+Vitest owns its native browser server and React cleanup; Playwright Test owns the full-site server, visitor contexts, reports and traces. Both use Playwright Chromium from the same locked installation. Full-site tests remain separate because Vitest Browser Mode is component testing, not a replacement for website E2E. See [testing guidance](docs/testing-guidance.md#using-vitest-and-playwright-together) for the researched Astro-compatible boundary.
+
+Local measurements for the testing refactor (2026-10-13): unit checks were about 2s, controlled Chromium component checks about 6s, and the eight development interactions took 15.8s with a running server. Cold managed Gatsby development needed 91s to reach HTTP readiness; the complete cold dev check took 1.8m. Initial content-graph/webpack work still costs time. Use the component gallery/Vitest watch for the smallest feedback loop, and reuse Gatsby development while editing site content.
 
 Internal discovery links (archive, related cards, category reading lists and search) preserve the current interface language when that article route exists. An untranslated `/pl/` copy can still declare its English original as canonical; canonical metadata does not change the navigation destination. Search labels the actual content language. When there is no route in the selected language, links use the available version.
 
 Cache checks temporarily modify/delete/restore existing source files and rebuild. Stop development/preview servers and pause content edits first. Wait for the checks to finish before staging, committing or deploying, so temporary edits/deletions are not included:
 
 ```bash
-env -u DEBUG npm run test:cache
-env -u DEBUG npm run test:cache:css
+env -u DEBUG npm run verify:cache
+env -u DEBUG npm run verify:cache:css
 npm run test
 ```
 
 Run browser checks against the restored build afterward. Cache logs are saved in temporary directories printed by each command.
 
-To check search refresh in development, start `npm run develop -- -H 127.0.0.1 -p 8001`, then run `npm run test:search:dev` in another terminal. This check also temporarily modifies and restores an article. Set `DEV_SEARCH_BASE_URL` to use another address. Reload the search page after its index changes.
+To check search refresh in development, start `npm run dev -- -H 127.0.0.1 -p 8001`, then run `npm run verify:search:dev` in another terminal. This check also temporarily modifies and restores an article. Set `DEV_SEARCH_BASE_URL` to use another address. Reload the search page after its index changes.
 
 ### Browser test commands and helpers
 
-Browser tests live in `tests/browser/*.spec.ts` and run with Playwright Test. React component tests use Vitest. `npm run test:browser-types` checks the browser tests and configuration with TypeScript; it is also part of `npm run test`.
+Full-site tests live beside their features as `tests/**/*.e2e.spec.ts` and run with Playwright Test. All other suites use the named Vitest projects in `tests/vitest.config.ts`. `npm run typecheck` includes both runners and their configurations.
 
 ```bash
-npm run test:visual -- --list
-npm run test:visual -- search.spec.ts
-npm run test:visual -- --grep 'persistent menu'
-npm run test:visual -- --debug --grep 'article language switch'
+npm run test:e2e -- --list
+npm run test:e2e -- search.e2e.spec.ts
+npm run test:e2e -- --grep 'persistent menu'
+npm run test:e2e -- --debug --grep 'article language switch'
 npm exec -- playwright show-report visual-artifacts/report
 ```
 
@@ -178,7 +178,7 @@ Import a URL, a batch manifest or a saved HTML page:
 ```bash
 npm run import-articles -- https://www.architecture-weekly.com/p/post-slug --category 'Software Architecture'
 npm run import-articles -- https://kurrentdb.kurrent.io/blog/post-slug/ --category 'Event Sourcing'
-npm run import-articles -- --manifest import/substack-posts.json
+npm run import-articles -- --manifest import-substack-posts.json
 npm run import-articles -- --manifest import/eventstore-posts.json
 npm run import-articles -- https://www.architecture-weekly.com/p/post-slug --html saved-page.html
 ```
@@ -217,7 +217,7 @@ Existing posts are never overwritten. A failed batch retains earlier successful 
 
 ```bash
 npm run normalize:youtube
-npm run test:substack
+npm run test:file -- import-substack
 env -u DEBUG npm run build
 npm run test
 ```
@@ -252,7 +252,7 @@ Use `![](./separator.png)` for that image. Raw HTML images require an explicit `
 
 ```bash
 npm run check:images
-npm run test:images
+npm run test:file -- images
 ```
 
 The source check runs before production builds and on staged Markdown. The generated-output test checks every HTML page for missing alt attributes and unnamed image-only links. Automated checks cannot judge whether a description is accurate: inspect new diagrams and their text alternatives manually, and check images with a screen reader when reviewing content.
@@ -307,7 +307,7 @@ Check or convert existing Markdown:
 ```bash
 npm run normalize:youtube
 npm run normalize:youtube -- --write
-npm run test:video
+npm run test:file -- video import/youtube
 ```
 
 Future article imports perform the same normalization automatically.
@@ -326,7 +326,7 @@ Keep the Mermaid sources in the article folder, as `.mmd` files whose names star
 npm run render-diagrams content/posts/2026-10-12--connection-pooler-modes-advisory-locks
 ```
 
-The script finds every `.mmd` file in the folder (skipping `node_modules`), uses the folder's date prefix and the file's number to name the output, and renders it with [Mermaid CLI](https://github.com/mermaid-js/mermaid-cli) through `npx`, at 3x scale on a white background. The CLI version is pinned in [render-mermaid.ts](scripts/render-mermaid.ts), and the theme and fonts are in [mermaid-config.json](scripts/mermaid-config.json). The first run downloads Mermaid CLI and its headless Chromium, so it takes a while. Rerun the command after changing a diagram, and commit both the `.mmd` source and the PNG. `npm run test:render-mermaid` checks the file discovery and naming.
+The script finds every `.mmd` file in the folder (skipping `node_modules`), uses the folder's date prefix and the file's number to name the output, and renders it with [Mermaid CLI](https://github.com/mermaid-js/mermaid-cli) through `npx`, at 3x scale on a white background. The CLI version is pinned in [render-mermaid.ts](scripts/render-mermaid.ts), and the theme and fonts are in [mermaid-config.json](scripts/mermaid-config.json). The first run downloads Mermaid CLI and its headless Chromium, so it takes a while. Rerun the command after changing a diagram, and commit both the `.mmd` source and the PNG. `npm run test:file -- render-mermaid` checks the file discovery and naming.
 
 ### Category reading order
 
@@ -346,7 +346,7 @@ Edit `data/category-guides.json`:
 
 `recommended` controls the numbered order. Use article slugs without dates, locale prefixes or surrounding slashes. Each article must belong to the category through `category` or `categories` on its canonical version. Remaining articles follow by date; an empty array uses chronological order only. English and Polish guides are independent. Missing/out-of-category recommendations are ignored, so inspect the resulting category page after editing.
 
-A guide does not create a category route by itself; at least one canonical article in that language must belong to the category. Run `npm run build`, `npm run test:categories` and inspect `/en/category/event-sourcing/` and `/pl/category/event-sourcing/`.
+A guide does not create a category route by itself; at least one canonical article in that language must belong to the category. Run `npm run build`, `npm run test:file -- site/categories` and inspect `/en/category/event-sourcing/` and `/pl/category/event-sourcing/`.
 
 ### Styles
 
@@ -358,23 +358,23 @@ The styling baseline is Safari 16.4+, Chrome 111+ and Firefox 128+. The existing
 
 The **Theme / Motyw** icon opens light, dark and system choices. It lives in the header on desktop and the lower navigation on mobile; mobile choices open above the bar, including when the navigation is expanded. System is the default and detects your device's appearance automatically. The icon shows a sun, moon or monitor for the selected preference. Use Enter/Space to open it, Tab to reach the native radio choices, and Escape to close and return focus; clicking outside also closes it. Preference is stored as `color-theme` in local storage. System mode follows OS changes; explicit choices persist across reloads and EN/PL navigation. `src/theme/preference.ts` provides the small document-head initializer so saved preferences apply before React loads. Without JavaScript, the site uses the light stylesheet and theme selection is disabled. Storage failures fall back to system preference without preventing a change on the current page.
 
-Edit light values in `:root` and dark overrides in `:root[data-theme='dark']` in `src/theme/tokens.css`. Transparent article diagrams keep a white canvas for readable labels. Embedded third-party widgets retain their provider's own appearance. Run `npm run test:visual -- theme.spec.ts` for theme behavior, and the full browser suite for shared styling/navigation changes. Theme checks click the visible labels and row padding, and cover keyboard dismissal, saved preferences before React loads, OS changes, blocked storage, synchronization between tabs, and dark home/archive/category/article/search pages in both languages at mobile and desktop widths. To repeat these checks in Firefox, run `npm run browsers:install:firefox`, then `npm run test:visual -- theme.spec.ts --browser firefox`.
+Edit light values in `:root` and dark overrides in `:root[data-theme='dark']` in `src/theme/tokens.css`. Transparent article diagrams keep a white canvas for readable labels. Embedded third-party widgets retain their provider's own appearance. Run `npm run test:e2e -- theme.e2e.spec.ts` for theme behavior, and the full browser suite for shared styling/navigation changes. Theme checks click the visible labels and row padding, and cover keyboard dismissal, saved preferences before React loads, OS changes, blocked storage, synchronization between tabs, and dark home/archive/category/article/search pages in both languages at mobile and desktop widths. To repeat these checks in Firefox, run `npm run browsers:install:firefox`, then `npm run test:e2e -- theme.e2e.spec.ts --browser firefox`.
 
 For a manual appearance review, run `npm run build` and `npm run serve`, then use the theme icon in the desktop header or lower mobile navigation on the home page, an article, a category and search. Review the dark palette, image canvases and mobile navigation. Switch EN/PL and reload to check persistence; open a second tab to check synchronized selection. Choose **System / Systemowy** and change your OS appearance to check automatic updates. Third-party comments, newsletter and calendar embeds keep their own provider styling.
 
 Use named CSS exports, for example `import * as styles from './Component.module.css'` and `className={styles.container}`. Dashed local selectors are exported in camel case. Keep Gatsby data/routing adapters separate from reusable presentation components where needed; the reading-list view accepts a link renderer and owns its stylesheet.
 
-After styling changes, run `npm run build`, `npm run test:css`, `npm run test:visual` and `npm run test:cache:css`.
+After styling changes, run `npm run build`, `npm run test:generated -- theme`, `npm run test:e2e` and `npm run verify:cache:css`.
 
-For shared header changes, run `npm run test:visual -- navigation.spec.ts theme.spec.ts fonts.spec.ts`. These checks cover content staying in place when the header shrinks, changed header-height tokens, the homepage overlay, EN/PL client navigation, responsive layouts and server-rendered pages without JavaScript. Repeat in Firefox with `npm run test:visual -- navigation.spec.ts theme.spec.ts browser-fonts.spec.ts fonts.spec.ts --browser firefox`, including both homepage comparisons and a larger browser-default-font check. Default Chromium references keep their existing paths; Firefox homepage references use `tests/fixtures/visual/firefox/`. Missing browser references fail normally. The [header visual review](docs/header-visual-review.md) records their production provenance and measured differences. Named Tailwind breakpoints are defined in `src/theme/tailwind.css`; keep their units and thresholds aligned with module media rules and the menu measurements.
+For shared header changes, run `npm run test:e2e -- navigation.e2e.spec.ts theme.e2e.spec.ts fonts.e2e.spec.ts`. These checks cover content staying in place when the header shrinks, changed header-height tokens, the homepage overlay, EN/PL client navigation, responsive layouts and server-rendered pages without JavaScript. Repeat in Firefox with `npm run test:e2e -- navigation.e2e.spec.ts theme.e2e.spec.ts browser-fonts.e2e.spec.ts fonts.e2e.spec.ts --browser firefox`, including both homepage comparisons and a larger browser-default-font check. Default Chromium references keep their existing paths; Firefox homepage references use `tests/fixtures/visual/firefox/`. Missing browser references fail normally. The [header visual review](docs/header-visual-review.md) records their production provenance and measured differences. Named Tailwind breakpoints are defined in `src/theme/tailwind.css`; keep their units and thresholds aligned with module media rules and the menu measurements.
 
-Run `npm run test:visual -- hero.spec.ts navigation-disclosure.spec.ts` for hero reflow/retained artwork size and dropdown labels, hover contrast, separate control targets, keyboard dismissal and sticky-header hit testing. The theme control lives in the desktop header navigation and the lower mobile bar; `npm run test:visual -- theme.spec.ts header-avatar.spec.ts` checks left-aligned branding and upward-opening mobile theme choices with collapsed and expanded navigation. Add `--browser firefox` to repeat in Firefox; `browser-fonts.spec.ts --browser firefox` also checks enlarged browser fonts. Hero tests inspect visible image pixels against text and controls, including JavaScript-disabled pages. Original artwork export details are in [hero-exports.md](assets/hero-exports.md). Intentional homepage changes still require reviewing captures before updating references; diagnostic test selections do not replace the full visual gate.
+Run `npm run test:e2e -- hero.e2e.spec.ts navigation-disclosure.e2e.spec.ts` for hero reflow/retained artwork size and dropdown labels, hover contrast, separate control targets, keyboard dismissal and sticky-header hit testing. The theme control lives in the desktop header navigation and the lower mobile bar; `npm run test:e2e -- theme.e2e.spec.ts header-avatar.e2e.spec.ts` checks left-aligned branding and upward-opening mobile theme choices with collapsed and expanded navigation. Add `--browser firefox` to repeat in Firefox; `browser-fonts.e2e.spec.ts --browser firefox` also checks enlarged browser fonts. Hero tests inspect visible image pixels against text and controls, including JavaScript-disabled pages. Original artwork export details are in [hero-exports.md](assets/hero-exports.md). Intentional homepage changes still require reviewing captures before updating references; diagnostic test selections do not replace the full visual gate.
 
-Native buttons and form fields inherit the page font family in `src/theme/global.css`, so interface text uses Open Sans once loaded. Component sizes/weights remain local. Run `npm run test:visual -- fonts.spec.ts` for EN/PL mobile/desktop checks and `npm run test:visual -- styles.spec.ts --grep 'usable fallback'` to verify controls remain readable when either font weight fails. Append `--browser firefox` to repeat these cases in Firefox.
+Native buttons and form fields inherit the page font family in `src/theme/global.css`, so interface text uses Open Sans once loaded. Component sizes/weights remain local. Run `npm run test:e2e -- fonts.e2e.spec.ts` for EN/PL mobile/desktop checks and `npm run test:e2e -- styles.e2e.spec.ts --grep 'usable fallback'` to verify controls remain readable when either font weight fails. Append `--browser firefox` to repeat these cases in Firefox.
 
 Gatsby 5.16.1 requires the checked-in CSS cache correction in `patches/`. npm applies it automatically during installation; after `--ignore-scripts`, run `npm run postinstall` before building. The cache check temporarily edits/restores module CSS, global CSS and a literal Tailwind class, then verifies generated output and computed styles before and after hydration. It rebuilds the restored sources in `finally`; do not run other builds or edit those files concurrently. Upgrade/removal instructions are in [the patch notes](docs/gatsby-css-cache-patch.md).
 
-For a focused menu check, use `npm run test:visual -- --grep 'persistent menu'`. It checks language switching, localized destinations, overflow icons, opening/closing and mobile/desktop resizing. Run the full browser suite before publishing changes.
+For a focused menu check, use `npm run test:e2e -- --grep 'persistent menu'`. It checks language switching, localized destinations, overflow icons, opening/closing and mobile/desktop resizing. Run the full browser suite before publishing changes.
 
 ## Editing articles and biographies
 
@@ -393,15 +393,15 @@ npm run check:edit
 
 This checks source image descriptions, isolated React behavior and browser rendering of controlled English/Polish author, archive, related and search examples. It starts/stops the component gallery automatically. The pre-commit hook also checks image descriptions in staged Markdown. Actual current article content, generated links, SEO and Gatsby hydration are verified after the production build in CI.
 
-| Command                          | Purpose                                                                                                     |
-| -------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `npm run dev`                    | Live article/bio preview at localhost:8000                                                                  |
-| `npm run check:content`          | Source image-description checks only; no build                                                              |
-| `npm run check:edit`             | Fast source/component/browser checks; no Gatsby build                                                       |
-| `npm run dev:components`         | Live component/style preview at localhost:9001                                                              |
-| `npm run test:components:review` | Open the component comparison report and failure traces                                                     |
-| `npm run test:visual:report`     | Open the production browser report and traces                                                               |
-| `npm run verify:publication`     | Automatically run quick checks, build, project tests and production browsers, stopping at the first failure |
+| Command                      | Purpose                                                                                                  |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `npm run dev`                | Live article/bio preview at localhost:8000                                                               |
+| `npm run check:content`      | Source image-description checks only; no build                                                           |
+| `npm run check:edit`         | Source, unit, integration and component browser checks; no Gatsby build                                  |
+| `npm run dev:components`     | Live component/style preview at localhost:9001                                                           |
+| `npm run test:browser`       | Compare controlled components; failure paths and traces are printed in the terminal                      |
+| `npm run test:e2e:report`    | Open the production browser report and traces                                                            |
+| `npm run verify:publication` | Run smoke/lint/types, quick checks, one build, generated output and production browsers; stop on failure |
 
 To preview the controlled components, start `dev:components`, then open `http://127.0.0.1:9001/?story=Editorial/English` or `?story=Editorial/Polish`. These are test examples, not production pages. CSS and component edits refresh immediately. Their fixed text/cover keeps visual comparisons independent of editorial changes; real Gatsby cover loading and routing have separate production-page checks.
 
@@ -413,21 +413,21 @@ Static production output still needs a build. CI caches npm downloads and compat
 
 Editorial text and newly added articles need no visual-reference update. Current-source publication tests check all articles and biographies against generated output; layout screenshots use controlled component props. Homepage references still protect the actual homepage composition. The existing 3% tolerance is unchanged. See [the test assessment](docs/test-review.md) and [testing guidance](docs/testing-guidance.md).
 
-For an intentional component styling change, run the checks, inspect actual/expected/diff images in `npm run test:components:review`, and review the change before updating its references:
+For an intentional component styling change, run `npm run test:browser` and inspect the reported reference/actual/diff PNG paths under `visual-artifacts/components/`. Open a failure trace with `npx playwright show-trace <trace.zip>`. Review the visual change before using Vitest’s native targeted update:
 
 ```sh
-npm run test:components:update -- --grep 'en editorial components at 1440px'
-npm run test:components:browser
+npm run test:browser -- --update=all -t 'en editorial components at 1440px'
+npm run test:browser
 ```
 
-That example updates only the reviewed English desktop author/archive/related/search captures. Omit `--grep` only when all component references were reviewed. Normal checks never update missing or changed references. Reference updates remain a last resort for intentional visual changes, not part of ordinary publication.
+That example updates only the reviewed English desktop author/archive/related/search captures. Omit `-t` only when all component references were reviewed. Normal checks never update missing or changed references. Reference updates remain a last resort for intentional visual changes, not part of ordinary publication.
 
 For an explicitly reviewed homepage change, update only its English/Polish captures:
 
 ```sh
-npm run test:visual:update -- navigation.spec.ts --grep 'homepage renders one complete hero'
-npm run test:visual:update -- navigation.spec.ts --grep 'homepage renders one complete hero' --browser firefox
-npm run test:visual
+npm run test:e2e:update -- navigation.e2e.spec.ts --grep 'homepage renders one complete hero'
+npm run test:e2e:update -- navigation.e2e.spec.ts --grep 'homepage renders one complete hero' --browser firefox
+npm run test:e2e
 ```
 
 Review the four changed homepage PNGs and keep unrelated references unchanged. Investigate unexplained differences before updating any fixture.
@@ -460,8 +460,8 @@ Blocked-vendor results are diagnostic and do not represent the normal page.
 
 ```bash
 npm run generate-llms
-npm run test:indexing
-npm run test:404
+npm run test:file -- seo/indexing
+npm run test:generated -- site/routing
 npm run audit:indexing -- --base-url https://event-driven.io --output report/indexing/production.json
 ```
 

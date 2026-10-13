@@ -10,13 +10,17 @@
     "import/**/*.ts",
     "plugins/**/*.ts",
     "tests/**/*.ts",
-    "src/types/**/*.d.ts"
+    "src/types/**/*.d.ts",
+    "src/**/*.unit.test.ts"
   ],
   "exclude": [
     "node_modules",
     "public",
     ".cache",
     "tests/fixtures",
-    "tests/browser"
+    "tests/**/*.e2e.spec.ts",
+    "tests/**/*.browser.test.tsx",
+    "tests/helpers/browser",
+    "tests/gallery"
   ]
 }
