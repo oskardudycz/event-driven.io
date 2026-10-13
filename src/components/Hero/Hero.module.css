@@ -25,8 +25,8 @@
   align-self: end;
 }
 
-/* Fit the original-scale artwork beside the prose, including enlarged fonts. */
-@container hero (min-width: 75em) {
+/* Measured EN/PL fit, including fallback fonts; side gutters are outside this width. */
+@container hero (min-width: 73em) {
   .heading {
     /* Clear the diagonal even when Arial-compatible fallback text wraps later. */
     max-width: 50rem;
