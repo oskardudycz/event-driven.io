@@ -1,6 +1,6 @@
 # Site modernization plan
 
-Last updated: 2026-10-12. Strategy and settled decisions live here; [todo.md](todo.md) records current implementation and verification. Commands and manual workflows belong in [README.md](README.md). Superseded runtime sequences and duplicated acceptance histories have been consolidated.
+Last updated: 2026-10-13. Strategy and settled decisions live here; [todo.md](todo.md) records current implementation and verification. Commands and manual workflows belong in [README.md](README.md). Superseded runtime sequences and duplicated acceptance histories have been consolidated.
 
 ## Current baseline
 
@@ -10,7 +10,7 @@ Keep the current runners and file locations during the navigation CI repair. Fir
 
 Then group tests by feature and execution boundary, migrate Node tests to named Vitest projects and consolidate/sort npm scripts around a few group commands. Use Vitest's native lifecycle/fixtures rather than a compatibility wrapper for `node:test`. Keep representative SSR/security assertions and generated-output checks. Move controlled React browser examples to Vitest with its Playwright provider and documented React renderer, verifying cleanup, fonts, isolation and screenshot parity before retiring the current gallery test harness. This component migration is planned, not implemented.
 
-Playwright remains required. Vitest documents Browser Mode as complementary to dedicated E2E runners, not a replacement. The recommendation is Playwright Test for real Gatsby navigation/SSR/hydration, with native fixtures, traces and screenshot assertions, and Vitest for logic/generated output/React components. The earlier request for every test to use the Vitest runner needs this supported-boundary distinction resolved before converting full-site tests; do not manufacture compliance by launching another runner from a Vitest test or rebuilding Playwright Test's infrastructure.
+The owner accepted the two-runner boundary on 2026-10-13: retain Playwright Test for real-site navigation/SSR/hydration, with native fixtures, traces and screenshot assertions; use Vitest projects for logic/generated output/React components, with Playwright as the component browser provider. Follow [the combined testing guide](docs/testing-guidance.md#using-vitest-and-playwright-together), linked from AGENTS.md, for discovery, configuration inheritance, per-file versus per-test isolation, cleanup, CI lifecycle and screenshot parity. Astro's official testing guide and Starlight's actual scripts support the same unit/component versus website E2E division. Keep portable component and public behavior contracts for future Astro work; its compiler/container setup and preview server would replace framework-specific adapters. This is a settled strategy, not a completed runner or Astro migration.
 
 Add a small, reusable development-mode browser group for quick feedback using Gatsby Fast Refresh and Playwright's supported `webServer` lifecycle. Select client interactions that work in both modes; retain production-only SSR/no-JavaScript, extraction, generated metadata, sitemap/feed and image-output gates. Reuse behavioral cases through tags/projects rather than duplicate tests or dispatch by historical filenames. Do not run development generation concurrently with production-output checks against the same `.cache`/`public` directories.
 
@@ -129,3 +129,7 @@ Reposting is not automatically harmful, but publishing identical full articles i
 ## IndexNow production link rewrite correction (2026-10-13)
 
 The reported Polish socket article's published manifest fingerprint matches local generated HTML (`b2dc693e…`), while live HTML hashes to `fa585649…`. Comparing every fingerprint field isolates one external link: Netlify changes `http://www.sharpserializer.com/en/index.html` to `http://www.sharpserializer.com/en/`. Preserve generated/authored destinations with `[build.processing.html] pretty_urls = false`; Gatsby already generates directory URLs. Keep strict page verification and acknowledgement safeguards. Netlify documents this setting and its precedence over the UI at https://docs.netlify.com/build/configure-builds/file-based-configuration/#post-processing. A fresh deployment must verify the hosted correction; local configuration validation cannot certify Netlify processing.
+
+## Hero visibility follow-up (2026-10-13)
+
+Correct the premature photo disappearance at the reported 1264px CSS viewport by lowering the measured component-content threshold from 75em to 73em. Preserve original image scale, right-gutter movement, copy and header composition. Check EN/PL SSR/hydration, default/CI fallback fonts, short/tall screens, exact threshold, enlarged Firefox fonts and locale navigation against fresh Gatsby output. Keep screenshot references/tolerances unchanged; record local results separately from hosted CI/deployment in todo.md.

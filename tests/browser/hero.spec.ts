@@ -9,6 +9,11 @@ const viewports = [
   { width: 640, height: 450 },
   { width: 768, height: 1024 },
   { width: 1024, height: 600 },
+  { width: 1247, height: 900 },
+  { width: 1248, height: 720 },
+  // Reported screenshot dimensions.
+  { width: 1264, height: 679 },
+  { width: 1264, height: 1000 },
   { width: 1280, height: 720 },
   { width: 1280, height: 1000 },
   { width: 1440, height: 900 },
@@ -58,7 +63,7 @@ for (const language of ['en', 'pl']) {
 
           // Gatsby also renders a noscript fallback when JavaScript is disabled.
           const portrait = hero.locator('img[data-main-image]').last();
-          if (viewport.width < 1280) {
+          if (viewport.width < 1248) {
             await expect(portrait).not.toBeVisible();
           } else {
             await expectImageLoaded(portrait);
@@ -94,7 +99,7 @@ for (const language of ['en', 'pl']) {
     await expectFonts(page);
     const portrait = page.locator('.hero img[data-main-image]');
     let originalSize: { width: number; height: number } | undefined;
-    for (const width of [1920, 1440, 1280]) {
+    for (const width of [1920, 1440, 1280, 1264, 1248]) {
       await page.setViewportSize({ width, height: 1000 });
       await expect(portrait).toBeVisible();
       const bounds = (await portrait.boundingBox())!;
