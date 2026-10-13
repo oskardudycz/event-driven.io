@@ -76,7 +76,6 @@ export type PageData = {
   authornote: { html: string };
   relatedPosts: { edges: ArticleEdge[] };
   site: { siteMetadata: { facebook: { appId?: string } } };
-  allVideosJson: { edges: { node: VideoDetails }[] };
 };
 export type SitePageProps<Fields extends keyof PageData> = PageProps<
   Pick<PageData, Fields>,

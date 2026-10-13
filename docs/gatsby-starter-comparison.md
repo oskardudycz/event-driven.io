@@ -254,6 +254,8 @@ Run these commands in the probe, not the application checkout. npm audit returns
 
 ## 11. Complete direct-dependency disposition
 
+The table below is the original research inventory. The [2026-10-13 cleanup and current version inventory](dependency-review.md#current-cleanup--2026-10-13) supersede completed decisions and old test paths: FontFaceObserver, direct Lodash, Ant Design and the JSON transformer are removed; current tests are colocated. The 80 remaining declarations were rechecked against imports, configuration, commands and compiler/type consumers. Sharing uses current react-share 6 after the owner approved retiring counts; localization, tweets, the retirement worker and hosting remain active.
+
 The version inventory remains in [dependency-review.md](dependency-review.md). The table below covers all 84 declarations reviewed at the starting commit, including the now-removed Ant Design. “Keep” means an identified current owner, not a claim that its full transitive graph is secure or compatible.
 
 | Declaration                        | Demonstrated owner / use                                                            | Disposition                                                                                                                             |

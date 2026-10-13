@@ -1,12 +1,41 @@
-# Direct dependency review — 2026-10-11
+# Direct dependency review — 2026-10-13
 
 The direct upgrades and npm migration passed the previous local application checks. **Dependency compatibility/security remediation is not complete:** peer overrides and vulnerable nested packages remain. The [starter comparison](gatsby-starter-comparison.md) now records source ownership, fresh starter/project resolutions, root causes, simplifications and owner decisions. Gatsby 5.16.1 and its configured official plugins remain current. Node types track Node 24 rather than a different runtime major. Run `npm outdated` and `npm explain <package>` to refresh registry and dependency information.
+
+## Current cleanup — 2026-10-13
+
+Registry inspection reports patch releases for TypeScript ESLint, Vitest/provider, i18next and PostCSS; Node 26 types remain inappropriate for the actual Node 24 runtime. react-share 6 is current and supports React 18/19 but removes share counts. The owner approved upgrading and removing the Facebook counter, preserving the same provider buttons and icons. See [upstream releases](https://github.com/nygardk/react-share/releases).
+
+The only JSON GraphQL consumer is the talks page. Use Gatsby's documented [direct JSON import](https://www.gatsbyjs.com/docs/how-to/sourcing-data/sourcing-from-json-or-yaml/) and numeric `Order` sorting, then remove `gatsby-transformer-json`, its data filesystem source and the unused page-data type/query. Locale resources remain sourced by their own integration. Validate rendered videos against current source, without freezing counts or wording.
+
+Keep active integrations instead of treating their age as proof they are unused: tweets exist in articles; the [documented retirement worker](https://www.gatsbyjs.com/docs/how-to/performance/add-offline-support-with-a-service-worker/) must remain available to returning clients; catch-links owns Markdown client navigation; JSON locales are owned by the localization plugin, not the removed transformer. Bundle-analyzer has no bundled types, so its type package remains needed. CLI-only packages, compiler API types and ESLint recommended-config peers also have consumers even without source imports.
+
+The layout plugin is a supported persistent wrapper and deliberately runs before localization. Gatsby composes wrappers in plugin order, leaving the translated layout inside the localization provider and the site's page context outside both. Moving Layout into the last site hook would put it outside the localization provider. Keep this integration rather than clone providers or reorder rendered elements. See [Gatsby layout guidance](https://www.gatsbyjs.com/docs/how-to/routing/layout-components/) and [browser hooks](https://www.gatsbyjs.com/docs/reference/config-files/gatsby-browser/#wrapPageElement).
+
+TypeScript's TS6 compiler API plus TS7 native checker follow [Microsoft's documented side-by-side setup](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-6-0); changing aliases would break API consumers rather than modernize them. Gatsby, its official plugins, the active third-party integrations and the remaining tooling have no newer stable releases at this registry checkpoint unless listed above. The clean lock has 2,834 entries versus 2,835 before this pass, with 80 direct declarations versus 81. Removing the Facebook counter removes the JSONP package and its private Debug/MS chain; Vitest's newer Estree Walker moves three older consumers to their correctly nested v2 copies. Normal npm resolution also picks compatible patch releases in Gatsby/Netlify's existing ranges. No new compatibility overrides, peer metadata patches, forced resolution or ignored scripts are introduced.
+
+A first normal install/update hit stale Vitest 5.0.3 exact peers while requesting 5.0.4. An isolated manifest resolution followed by a second ordinary npm lock resolution produced matching 5.0.4 packages and removed temporary extraneous optional placements. The resulting lock passes actual `npm ci`, including patch-package and Husky. This is a lock refresh, not an instruction to bypass peer validation or delete the lock for ordinary installs.
+
+Current installation still emits the same three Gatsby peer-warning blocks and 23 deprecated package/version pairs. `npm ls --all` still diagnoses the React DOM router peer, Gatsby's CRA TypeScript ESLint plugin/parser peers, the Netlify optional blob driver and Sharp's optional WASM placement. The existing compatibility overrides are unchanged: current React/accessibility lint plugins still declare ESLint through 9, and the localization plugin still declares React 18/i18next 22/react-i18next 12. Local behavior checks establish our tested combination, not upstream support. The existing GraphQL utility security overrides remain necessary because their owners still pin older ranges.
+
+| Remaining warning group                                                                                                                                                             | Demonstrated owner                                                 | Disposition                                                                                                                         |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Old Babel proposal plugins, Babel ESLint, ESLint 7, humanwhocodes packages, Partytown, Babel Lodash transform, Glob/Inflight, Rimraf, Stable, String Similarity, UUID and Yurnalist | Gatsby's compiler, router, lint and development graph              | Keep framework-owned dependencies; replacing these internals requires an upstream release or framework migration, not root aliases. |
+| prebuild-install                                                                                                                                                                    | Gatsby and official image/manifest integrations' older Sharp chain | Root Sharp 0.35 is already current; replacing a nested native-image major needs upstream validation.                                |
+| core-js 2                                                                                                                                                                           | Active @weknow/gatsby-remark-twitter → Babel runtime               | Preserve authored tweet embeds; no maintained equivalent was established in this pass.                                              |
+| lodash.get                                                                                                                                                                          | gatsby-plugin-netlify                                              | Preserve current header/redirect generation; do not replace hosting behavior silently.                                              |
+| node-domexception                                                                                                                                                                   | netlify-cli                                                        | Keep the supported current deploy CLI; no equivalent upload workflow change is needed here.                                         |
+| whatwg-encoding                                                                                                                                                                     | Current Cheerio HTML parsing chain                                 | Keep the current parser used by import/security and generated-output checks; upstream replacement is required.                      |
+
+The react-share migration uses the documented v6 X `text` prop and current endpoint; LinkedIn no longer accepts the legacy title option. Round provider icons use v6's supported LegacyIcon exports to retain the existing button geometry; X replaces the discontinued Twitter logo. The dead `.SocialMediaShareButton` styling did not match the installed library's class names and is removed. Native browser tests verify actual clicked sharing destinations and encoded title/localized URL in both locales. Generated-output tests independently compare both talks pages against current JSON metadata and editorial order.
+
+Validation so far: clean install, ESLint/Prettier, both TypeScript projects, smoke, 30 unit and 78 integration/component cases pass. Production/generated/E2E results remain pending until completed; hosted CI/deployment are unverified.
 
 ## Implemented
 
 ### Current remediation — 2026-10-11
 
-Test-fixture refactoring is deferred by the owner. Clean npm ci reproduces the Gatsby peer/deprecation warnings and the 111-entry audit baseline. Registry checks confirm Gatsby 5.16.1 and @gatsbyjs/reach-router 2.0.1 are current; the latter still declares React/React DOM 18 only, despite [Gatsby's React 19 announcement](https://www.gatsbyjs.com/docs/reference/release-notes/v5.16/). Gatsby directly installs its old CRA/ESLint stack. Neither chain can be removed by deleting project imports or changing the project lint configuration. Swapping React Router or overriding the entire compiler/lint stack would require maintaining a framework fork; it is not an application cleanup.
+Test-fixture refactoring is now complete; its latest validation is recorded in todo.md. Clean npm ci reproduces the Gatsby peer/deprecation warnings and the 111-entry audit baseline. Registry checks confirm Gatsby 5.16.1 and @gatsbyjs/reach-router 2.0.1 are current; the latter still declares React/React DOM 18 only, despite [Gatsby's React 19 announcement](https://www.gatsbyjs.com/docs/reference/release-notes/v5.16/). Gatsby directly installs its old CRA/ESLint stack. Neither chain can be removed by deleting project imports or changing the project lint configuration. Swapping React Router or overriding the entire compiler/lint stack would require maintaining a framework fork; it is not an application cleanup.
 
 Normal npm audit fix and targeted npm update do not replace the vulnerable locked utility copies. The lock also retains nested typescript-estree 8.59.0 beneath parents requiring exactly 8.71.1. Independent manifest resolution removes those stale placements. Its first lock exposed an optional @types/eslint peer placement inconsistency; a second normal npm resolution corrects it and passes npm ci's dry-run validation. Adopt the regenerated lock only after actual clean installation and full acceptance. Keep only two same-major security overrides for pinned owners: plugin-helpers' Lodash and relay-compiler's Immutable. semver and nth-check resolve patched versions naturally.
 
@@ -27,7 +56,7 @@ npm ls --all still exits with dependency diagnostics. Besides Gatsby's three con
 
 Other vulnerable major-version chains remain open; do not run audit fix --force. Current registry latest node-forge 1.4.0, sprintf-js 1.1.3 and braces 3.0.3 remain in advisory ranges; latest alone cannot deliver an audit-clean tree. Gatsby's pinned image/compiler/schema/dev-server chains require upstream updates or separately validated owner upgrades.
 
-Replace layout fontfaceobserver with native document.fonts.load and ordinary React effect cleanup, retaining the ten-second fallback, readiness attributes, contexts and SSR markup. Remove its types and the now-unused generic screen/timer helper. This is portable browser behavior and introduces no Astro/Gatsby compatibility abstraction or typography redesign.
+Layout fontfaceobserver has been replaced with native document.fonts.load and ordinary React effect cleanup, retaining the ten-second fallback, readiness attributes, contexts and SSR markup. Its types and the unused generic screen/timer helper are removed. This is portable browser behavior and introduces no Astro/Gatsby compatibility abstraction or typography redesign.
 
 - Matched Playwright 1.64 packages, TypeScript ESLint 8.71.1, Prettier 3.9.10, Vitest 5.0.3, Vite 8.3.4 / React plugin 6.1.2 and current utilities.
 - TypeScript 7.0.2 native checker alongside the TS6 compiler API required by Gatsby, typed ESLint and source-analysis tools, using [Microsoft's documented aliases](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-6-0). VS Code recommends the native extension; Gatsby continues to own application compilation.
@@ -59,100 +88,104 @@ Before this research/form retirement, the npm graph passed clean npm ci, root/No
 
 ## Registry inventory
 
-The manifest now contains 79 direct declarations (36 application/build integrations and 43 development tools/type packages), after the authorized form retirement, portable foundation and native font-loader cleanup. “At audit” is the original installed version; “Current” is the implementation, with application checks and peer/security limitations separated above. Removed declarations may remain transitively owned by Gatsby or another active package. The Yarn-only postinstall-postinstall helper is removed; npm applies patch-package through postinstall.
+The current manifest contains 80 direct declarations (35 application/build integrations and 45 development tools/type packages). The registry was checked on 2026-10-13. “At audit” records the earlier starting inventory; current choices and verification are above. Removed declarations can remain transitively owned by an active package. npm applies the required Gatsby cache patch through postinstall.
 
-| Package                            | At audit    | Current              | Last checked latest    |
-| ---------------------------------- | ----------- | -------------------- | ---------------------- |
-| @ant-design/compatible             | 1.0.8       | removed              | 5.1.5                  |
-| @eslint/js                         | 9.39.5      | 10.0.1               | 10.0.1                 |
-| @playwright/browser-chromium       | 1.63.0      | 1.64.0               | 1.64.0                 |
-| @playwright/test                   | 1.63.0      | 1.64.0               | 1.64.0                 |
-| @types/escape-html                 | 1.0.4       | 1.0.4                | 1.0.4                  |
-| @types/fontfaceobserver            | 2.1.3       | removed              | 2.1.3                  |
-| @types/js-yaml                     | 4.0.9       | removed              | 4.0.9                  |
-| @types/lodash                      | 4.17.25     | removed              | 4.17.26                |
-| @types/mdast                       | 4.0.4       | 4.0.4                | 4.0.4                  |
-| @types/node                        | 24.19.1     | 24.19.2              | 26.6.5                 |
-| @types/react                       | 18.3.31     | 19.3.0               | 19.3.0                 |
-| @types/react-dom                   | 18.3.7      | 19.3.0               | 19.3.0                 |
-| @types/shelljs                     | 0.10.0      | removed              | 0.10.0                 |
-| @types/turndown                    | 5.0.6       | 5.0.6                | 5.0.6                  |
-| @types/webpack-bundle-analyzer     | 4.7.0       | 4.7.0                | 4.7.0                  |
-| @typescript-eslint/eslint-plugin   | 8.59.0      | 8.71.1               | 8.71.1                 |
-| @typescript-eslint/parser          | 8.59.0      | 8.71.1               | 8.71.1                 |
-| @vitejs/plugin-react               | 5.2.0       | 6.1.2                | 6.1.2                  |
-| @weknow/gatsby-remark-twitter      | 0.2.3       | 0.2.3                | 0.2.3                  |
-| antd                               | 4.16.12     | removed              | 6.6.5                  |
-| cheerio                            | 1.0.0-rc.12 | 1.2.0                | 1.2.0                  |
-| disqus-react                       | 1.1.7       | 1.1.7                | 1.1.7                  |
-| dotenv                             | 10.0.0      | removed              | 18.0.6                 |
-| escape-html                        | 1.0.3       | 1.0.3                | 1.0.3                  |
-| eslint                             | 9.39.5      | 10.12.0              | 10.12.0                |
-| eslint-config-prettier             | 10.1.8      | 10.1.8               | 10.1.8                 |
-| eslint-plugin-jsx-a11y             | 6.10.2      | 6.10.2               | 6.10.2                 |
-| eslint-plugin-prettier             | 5.5.5       | 5.5.6                | 5.5.6                  |
-| eslint-plugin-react                | 7.37.5      | 7.37.5               | 7.37.5                 |
-| eslint-plugin-react-hooks          | 7.1.1       | 7.1.1                | 7.1.1                  |
-| fontfaceobserver                   | 2.1.0       | removed              | 2.3.0                  |
-| gatsby                             | 5.16.1      | 5.16.1               | 5.16.1                 |
-| gatsby-plugin-catch-links          | 5.16.0      | 5.16.0               | 5.16.0                 |
-| gatsby-plugin-feed                 | 5.16.0      | 5.16.0               | 5.16.0                 |
-| gatsby-plugin-google-tagmanager    | 5.16.0      | 5.16.0               | 5.16.0                 |
-| gatsby-plugin-image                | 3.16.0      | 3.16.0               | 3.16.0                 |
-| gatsby-plugin-layout               | 4.16.0      | 4.16.0               | 4.16.0                 |
-| gatsby-plugin-manifest             | 5.16.0      | 5.16.0               | 5.16.0                 |
-| gatsby-plugin-netlify              | 5.1.1       | 5.1.1                | 5.1.1                  |
-| gatsby-plugin-postcss              | 6.16.0      | 6.16.0               | 6.16.0                 |
-| gatsby-plugin-react-i18next        | 3.0.1       | 3.0.1                | 3.0.1                  |
-| gatsby-plugin-remove-serviceworker | 1.0.0       | 1.0.0                | 1.0.0                  |
-| gatsby-plugin-sharp                | 5.16.0      | 5.16.0               | 5.16.0                 |
-| gatsby-plugin-sitemap              | 6.16.0      | 6.16.0               | 6.16.0                 |
-| gatsby-remark-autolink-headers     | 6.16.0      | 6.16.0               | 6.16.0                 |
-| gatsby-remark-copy-linked-files    | 6.16.0      | 6.16.0               | 6.16.0                 |
-| gatsby-remark-embed-video          | 3.2.1       | 3.2.1                | 3.2.1                  |
-| gatsby-remark-images               | 7.16.0      | 7.16.0               | 7.16.0                 |
-| gatsby-remark-prismjs              | 7.16.0      | 7.16.0               | 7.16.0                 |
-| gatsby-remark-responsive-iframe    | 6.16.0      | 6.16.0               | 6.16.0                 |
-| gatsby-remark-smartypants          | 6.16.0      | 6.16.0               | 6.16.0                 |
-| gatsby-source-filesystem           | 5.16.0      | 5.16.0               | 5.16.0                 |
-| gatsby-transformer-json            | 5.16.0      | 5.16.0               | 5.16.0                 |
-| gatsby-transformer-remark          | 6.16.0      | 6.16.0               | 6.16.0                 |
-| gatsby-transformer-sharp           | 5.16.0      | 5.16.0               | 5.16.0                 |
-| globals                            | 17.5.0      | 17.13.0              | 17.13.0                |
-| husky                              | 9.1.7       | 9.1.7                | 9.1.7                  |
-| i18next                            | 22.5.1      | 26.4.3               | 26.4.3                 |
-| js-yaml                            | 4.1.0       | 5.4.3                | 5.4.3                  |
-| lint-staged                        | 17.6.0      | 17.6.0               | 17.6.0                 |
-| lodash                             | 4.17.21     | removed              | 4.18.1                 |
-| minisearch                         | 7.2.0       | 7.2.0                | 7.2.0                  |
-| netlify-cli                        | 6.7.1       | 27.12.0              | 27.12.0                |
-| netlify-redirect-parser            | 11.0.2      | 14.4.0               | 14.4.0                 |
-| patch-package                      | 8.0.1       | 8.0.1                | 8.0.1                  |
-| pixelmatch                         | 7.2.0       | 8.0.0                | 8.0.0                  |
-| playwright                         | 1.63.0      | 1.64.0               | 1.64.0                 |
-| pngjs                              | 7.0.0       | removed              | 7.0.0                  |
-| postcss                            | 8.3.6       | 8.5.29               | 8.5.29                 |
-| postcss-easy-media-query           | 1.0.0       | removed              | 1.0.0                  |
-| postcss-nested                     | 5.0.6       | 8.0.1                | 8.0.1                  |
-| postcss-preset-env                 | 6.7.0       | removed              | 11.6.1                 |
-| postinstall-postinstall            | 2.1.0       | removed              | 2.1.0                  |
-| prettier                           | 3.8.3       | 3.9.10               | 3.9.10                 |
-| prismjs                            | 1.27.0      | 1.30.0               | 1.30.0                 |
-| react                              | 18.3.1      | 19.3.0               | 19.3.0                 |
-| react-dom                          | 18.3.1      | 19.3.0               | 19.3.0                 |
-| react-i18next                      | 12.3.1      | 17.0.16              | 17.0.16                |
-| react-icons                        | 4.2.0       | 5.7.0                | 5.7.0                  |
-| react-share                        | 5.3.0       | 5.3.0                | 5.3.0                  |
-| react-visibility-sensor            | 5.1.1       | removed              | 5.1.1                  |
-| remark                             | 13.0.0      | 15.0.1               | 15.0.1                 |
-| sharp                              | 0.32.6      | 0.35.5               | 0.35.5                 |
-| shelljs                            | 0.8.5       | removed              | 0.10.0                 |
-| simple-git                         | 3.3.0       | removed              | 4.0.2                  |
-| turndown                           | 7.2.4       | 7.2.4                | 7.2.4                  |
-| turndown-plugin-gfm                | 1.0.2       | 1.0.2                | 1.0.2                  |
-| typescript                         | 6.0.3       | TS6 API alias        | 7.0.2 (native checker) |
-| unist-util-visit                   | 2.0.3       | 5.1.0                | 5.1.0                  |
-| vite                               | 7.3.6       | 8.3.4                | 8.3.4                  |
-| vitest                             | 5.0.1       | 5.0.3                | 5.0.3                  |
-| webpack-bundle-analyzer            | 4.4.2       | 5.4.0                | 5.4.0                  |
-| @typescript/native                 | —           | npm:typescript@7.0.2 | 7.0.2                  |
+| Package                            | At audit    | Current                           | Last checked latest               |
+| ---------------------------------- | ----------- | --------------------------------- | --------------------------------- |
+| @ant-design/compatible             | 1.0.8       | removed                           | 5.1.5                             |
+| @eslint/js                         | 9.39.5      | 10.0.1                            | 10.0.1                            |
+| @playwright/browser-chromium       | 1.63.0      | 1.64.0                            | 1.64.0                            |
+| @playwright/test                   | 1.63.0      | 1.64.0                            | 1.64.0                            |
+| @types/escape-html                 | 1.0.4       | 1.0.4                             | 1.0.4                             |
+| @types/fontfaceobserver            | 2.1.3       | removed                           | 2.1.3                             |
+| @types/js-yaml                     | 4.0.9       | removed                           | 4.0.9                             |
+| @types/lodash                      | 4.17.25     | removed                           | 4.17.26                           |
+| @types/mdast                       | 4.0.4       | 4.0.4                             | 4.0.4                             |
+| @types/node                        | 24.19.1     | 24.19.2                           | 26.6.5                            |
+| @types/react                       | 18.3.31     | 19.3.0                            | 19.3.0                            |
+| @types/react-dom                   | 18.3.7      | 19.3.0                            | 19.3.0                            |
+| @types/shelljs                     | 0.10.0      | removed                           | 0.10.0                            |
+| @types/turndown                    | 5.0.6       | 5.0.6                             | 5.0.6                             |
+| @types/webpack-bundle-analyzer     | 4.7.0       | 4.7.0                             | 4.7.0                             |
+| @typescript-eslint/eslint-plugin   | 8.59.0      | 8.71.2                            | 8.71.2                            |
+| @typescript-eslint/parser          | 8.59.0      | 8.71.2                            | 8.71.2                            |
+| @vitejs/plugin-react               | 5.2.0       | 6.1.2                             | 6.1.2                             |
+| @weknow/gatsby-remark-twitter      | 0.2.3       | 0.2.3                             | 0.2.3                             |
+| antd                               | 4.16.12     | removed                           | 6.6.5                             |
+| cheerio                            | 1.0.0-rc.12 | 1.2.0                             | 1.2.0                             |
+| disqus-react                       | 1.1.7       | 1.1.7                             | 1.1.7                             |
+| dotenv                             | 10.0.0      | removed                           | 18.0.6                            |
+| escape-html                        | 1.0.3       | 1.0.3                             | 1.0.3                             |
+| eslint                             | 9.39.5      | 10.12.0                           | 10.12.0                           |
+| eslint-config-prettier             | 10.1.8      | 10.1.8                            | 10.1.8                            |
+| eslint-plugin-jsx-a11y             | 6.10.2      | 6.10.2                            | 6.10.2                            |
+| eslint-plugin-prettier             | 5.5.5       | 5.5.6                             | 5.5.6                             |
+| eslint-plugin-react                | 7.37.5      | 7.37.5                            | 7.37.5                            |
+| eslint-plugin-react-hooks          | 7.1.1       | 7.1.1                             | 7.1.1                             |
+| fontfaceobserver                   | 2.1.0       | removed                           | 2.3.0                             |
+| gatsby                             | 5.16.1      | 5.16.1                            | 5.16.1                            |
+| gatsby-plugin-catch-links          | 5.16.0      | 5.16.0                            | 5.16.0                            |
+| gatsby-plugin-feed                 | 5.16.0      | 5.16.0                            | 5.16.0                            |
+| gatsby-plugin-google-tagmanager    | 5.16.0      | 5.16.0                            | 5.16.0                            |
+| gatsby-plugin-image                | 3.16.0      | 3.16.0                            | 3.16.0                            |
+| gatsby-plugin-layout               | 4.16.0      | 4.16.0                            | 4.16.0                            |
+| gatsby-plugin-manifest             | 5.16.0      | 5.16.0                            | 5.16.0                            |
+| gatsby-plugin-netlify              | 5.1.1       | 5.1.1                             | 5.1.1                             |
+| gatsby-plugin-postcss              | 6.16.0      | 6.16.0                            | 6.16.0                            |
+| gatsby-plugin-react-i18next        | 3.0.1       | 3.0.1                             | 3.0.1                             |
+| gatsby-plugin-remove-serviceworker | 1.0.0       | 1.0.0                             | 1.0.0                             |
+| gatsby-plugin-sharp                | 5.16.0      | 5.16.0                            | 5.16.0                            |
+| gatsby-plugin-sitemap              | 6.16.0      | 6.16.0                            | 6.16.0                            |
+| gatsby-remark-autolink-headers     | 6.16.0      | 6.16.0                            | 6.16.0                            |
+| gatsby-remark-copy-linked-files    | 6.16.0      | 6.16.0                            | 6.16.0                            |
+| gatsby-remark-embed-video          | 3.2.1       | 3.2.1                             | 3.2.1                             |
+| gatsby-remark-images               | 7.16.0      | 7.16.0                            | 7.16.0                            |
+| gatsby-remark-prismjs              | 7.16.0      | 7.16.0                            | 7.16.0                            |
+| gatsby-remark-responsive-iframe    | 6.16.0      | 6.16.0                            | 6.16.0                            |
+| gatsby-remark-smartypants          | 6.16.0      | 6.16.0                            | 6.16.0                            |
+| gatsby-source-filesystem           | 5.16.0      | 5.16.0                            | 5.16.0                            |
+| gatsby-transformer-json            | 5.16.0      | removed                           | 5.16.0                            |
+| gatsby-transformer-remark          | 6.16.0      | 6.16.0                            | 6.16.0                            |
+| gatsby-transformer-sharp           | 5.16.0      | 5.16.0                            | 5.16.0                            |
+| globals                            | 17.5.0      | 17.13.0                           | 17.13.0                           |
+| husky                              | 9.1.7       | 9.1.7                             | 9.1.7                             |
+| i18next                            | 22.5.1      | 26.4.4                            | 26.4.4                            |
+| js-yaml                            | 4.1.0       | 5.4.3                             | 5.4.3                             |
+| lint-staged                        | 17.6.0      | 17.6.0                            | 17.6.0                            |
+| lodash                             | 4.17.21     | removed                           | 4.18.1                            |
+| minisearch                         | 7.2.0       | 7.2.0                             | 7.2.0                             |
+| netlify-cli                        | 6.7.1       | 27.12.0                           | 27.12.0                           |
+| netlify-redirect-parser            | 11.0.2      | 14.4.0                            | 14.4.0                            |
+| patch-package                      | 8.0.1       | 8.0.1                             | 8.0.1                             |
+| pixelmatch                         | 7.2.0       | 8.0.0                             | 8.0.0                             |
+| playwright                         | 1.63.0      | 1.64.0                            | 1.64.0                            |
+| pngjs                              | 7.0.0       | removed                           | 7.0.0                             |
+| postcss                            | 8.3.6       | 8.5.30                            | 8.5.30                            |
+| postcss-easy-media-query           | 1.0.0       | removed                           | 1.0.0                             |
+| postcss-nested                     | 5.0.6       | 8.0.1                             | 8.0.1                             |
+| postcss-preset-env                 | 6.7.0       | removed                           | 11.6.1                            |
+| postinstall-postinstall            | 2.1.0       | removed                           | 2.1.0                             |
+| prettier                           | 3.8.3       | 3.9.10                            | 3.9.10                            |
+| prismjs                            | 1.27.0      | 1.30.0                            | 1.30.0                            |
+| react                              | 18.3.1      | 19.3.0                            | 19.3.0                            |
+| react-dom                          | 18.3.1      | 19.3.0                            | 19.3.0                            |
+| react-i18next                      | 12.3.1      | 17.0.16                           | 17.0.16                           |
+| react-icons                        | 4.2.0       | 5.7.0                             | 5.7.0                             |
+| react-share                        | 5.3.0       | 6.1.0                             | 6.1.0                             |
+| react-visibility-sensor            | 5.1.1       | removed                           | 5.1.1                             |
+| remark                             | 13.0.0      | 15.0.1                            | 15.0.1                            |
+| sharp                              | 0.32.6      | 0.35.5                            | 0.35.5                            |
+| shelljs                            | 0.8.5       | removed                           | 0.10.0                            |
+| simple-git                         | 3.3.0       | removed                           | 4.0.2                             |
+| turndown                           | 7.2.4       | 7.2.4                             | 7.2.4                             |
+| turndown-plugin-gfm                | 1.0.2       | 1.0.2                             | 1.0.2                             |
+| typescript                         | 6.0.3       | npm:@typescript/typescript6@6.0.2 | npm:@typescript/typescript6@6.0.2 |
+| unist-util-visit                   | 2.0.3       | 5.1.0                             | 5.1.0                             |
+| vite                               | 7.3.6       | 8.3.4                             | 8.3.4                             |
+| vitest                             | 5.0.1       | 5.0.4                             | 5.0.4                             |
+| webpack-bundle-analyzer            | 4.4.2       | 5.4.0                             | 5.4.0                             |
+| @typescript/native                 | —           | npm:typescript@7.0.2              | npm:typescript@7.0.2              |
+| @tailwindcss/postcss               | —           | 4.3.3                             | 4.3.3                             |
+| @vitest/browser-playwright         | —           | 5.0.4                             | 5.0.4                             |
+| tailwindcss                        | —           | 4.3.3                             | 4.3.3                             |
+| vitest-browser-react               | —           | 2.3.0                             | 2.3.0                             |

@@ -86,6 +86,9 @@ The first post-install build reported slow home/archive queries and transitive p
 
 ## Next: systemic dependency cleanup
 
+- [ ] 2026-10-13 pass: remove talks-only JSON transformation using documented direct imports; upgrade available compatible patches and react-share 6 (owner approved removing Facebook counts). Check all video metadata/order, sharing, localization and unchanged visual references.
+- [ ] Refresh every direct package decision, compatibility exception and exact install-warning owner; record clean-install and full production evidence separately from hosted CI.
+
 - [ ] Finish keep/remove/replace decisions for direct packages/custom integrations from existing research, then apply supported simplifications. Modern conventions and fewer obsolete mechanisms are the objective, not audit counts.
 - [ ] Reassess existing compatibility exceptions and identify exact Gatsby/Netlify owners for npm ci warnings. Do not suppress warnings, patch peer metadata or add speculative transitive overrides.
 - [ ] Validate clean installation, development and production behavior after changes. Current test-refactor checkpoint: 81 direct declarations and 2,835 lock entries; locked installation, development selection and full production validation pass. Existing Gatsby peer/deprecation and Netlify optional-driver owners remain tracked; this does not complete the pending dependency simplifications. Two validated security overrides already exist; details remain in the review.
