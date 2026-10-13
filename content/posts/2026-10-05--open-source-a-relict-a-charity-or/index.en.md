@@ -10,6 +10,9 @@ related:
   - how_to_start_with_open_source
   - why-open-source-isnt-always-fair
   - a_few_notes_on_running_open_source_project
+  - revolution_now
+  - i_am_no_longer_marten_maintainer
+  - webinar-21-michael-drogalis-building
 ---
 
 ![Collection of vintage items on shelves and floor - Free Photo on Unsplash](2026-10-05-cover.jpg "Collection of vintage items on shelves and floor - Free Photo on Unsplash")

@@ -5,6 +5,8 @@ tags:
 cover: 2026-01-05-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true
+related:
+  - connection-pooler-modes-advisory-locks
 ---
 
 ![cover](2026-01-05-cover.png)

@@ -5,6 +5,8 @@ tags:
 cover: 2024-12-23-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true
+related:
+  - connection-pooler-modes-advisory-locks
 ---
 
 **Was your data ever mysteriously overwritten? No? Think again. Have you noticed conflicting updates to the same data?** Still nope? Lucky you! I had cases when my data changed, and it looked like Marty was travelling back to the future. Once it was correct, then it was wrong, then correct again. Most of the time, twin services were writing to the sample place.

@@ -8,6 +8,8 @@ redirectFrom: /rebuilding_read_models_skipping_events/
 redirectAliases:
   - /on-rebuilding-read-models-dead-letter/
   - /en/on-rebuilding-read-models-dead-letter/
+related:
+  - connection-pooler-modes-advisory-locks
 ---
 
 ![cover](2026-01-19-cover.png)

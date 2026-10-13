@@ -41,6 +41,7 @@ for (const file of [
   'src/utils/tag-posts.ts',
   'src/utils/tag-slug.ts',
   'src/utils/tag-redirects.ts',
+  'src/utils/learning-paths.ts',
   'content/meta/config.ts',
 ])
   include(file);

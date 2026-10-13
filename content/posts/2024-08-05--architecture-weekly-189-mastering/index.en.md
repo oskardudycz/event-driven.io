@@ -5,6 +5,8 @@ tags:
 cover: 2024-08-05-cover.png
 author: oskar dudycz
 redirectFrom: /architecture-weekly-189-mastering/
+related:
+  - connection-pooler-modes-advisory-locks
 ---
 
 Welcome to the new week!

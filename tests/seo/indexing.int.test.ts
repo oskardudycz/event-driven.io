@@ -88,6 +88,7 @@ test('published page/post collisions fail instead of silently changing the route
             Promise.resolve({
               data: {
                 searchCovers: { nodes: [] },
+                learningPaths: { nodes: [] },
                 allMarkdownRemark: { edges: [node('posts'), node('pages')] },
               },
             }),
