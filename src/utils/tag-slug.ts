@@ -1,6 +1,6 @@
-// Category routes and their links must use the same word boundaries.
-export function categorySlug(category: string): string {
-  return category
+// Tag routes and their links must use the same word boundaries.
+export function tagSlug(tag: string): string {
+  return tag
     .normalize('NFKD')
     .replace(/\p{M}/gu, '')
     .replace(/([a-z\d])([A-Z])/g, '$1-$2')

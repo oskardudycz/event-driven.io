@@ -1,6 +1,7 @@
 ---
 title: 'The Write-Ahead Log: A Foundation for Reliability in Databases and Distributed systems'
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-12-07-cover.jpg
 author: oskar dudycz
 redirectFrom: /the-write-ahead-log-a-foundation/

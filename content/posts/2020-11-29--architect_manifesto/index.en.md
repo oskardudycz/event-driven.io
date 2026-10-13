@@ -1,6 +1,7 @@
 ---
 title: Architect Manifesto
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2020-11-29-cover.png
 author: oskar dudycz
 ---

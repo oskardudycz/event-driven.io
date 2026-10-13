@@ -1,6 +1,7 @@
 ---
 title: In the defence of Object-Relational Mappers
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2023-10-22-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

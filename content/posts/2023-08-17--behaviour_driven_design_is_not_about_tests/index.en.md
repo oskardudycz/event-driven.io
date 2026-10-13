@@ -1,6 +1,7 @@
 ---
 title: Behaviour-Driven Design is more than tests
-category: "Testing"
+tags:
+  - Testing
 cover: 2023-08-17-cover.png
 author: oskar dudycz
 ---

@@ -1,6 +1,7 @@
 ---
 title: 'Don''t Oversell Ideas: Trunk-Based Development Edition'
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-10-21-cover.png
 author: oskar dudycz
 redirectFrom: /dont-oversell-ideas-trunk-based-development/

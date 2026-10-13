@@ -1,6 +1,7 @@
 ---
 title: Making your system observability predictable
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-09-23-cover.png
 author: oskar dudycz
 redirectFrom: /making-your-system-observability/

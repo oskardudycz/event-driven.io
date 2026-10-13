@@ -1,6 +1,7 @@
 ---
 title: Cierpienia niemłodego bloggera – czyli próbuję napisać tekst o wczytywaniu komponentów w Knockout.JS na podstawie konwencji nazewniczej. Wymyślając przy okazji najdłuższy wpis w historii tego bloga. Doh! -_-
-category: "Java Script"
+tags:
+  - JavaScript
 cover: 2015-12-07-cover.png
 author: oskar dudycz
 disqusId: 10 http://oskar-dudycz.pl/2015/12/07/cierpienia-niemodego-bloggera-czyli/

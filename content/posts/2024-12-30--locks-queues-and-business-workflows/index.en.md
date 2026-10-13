@@ -1,6 +1,7 @@
 ---
 title: Locks, Queues and business workflows processing
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-12-30-cover.png
 author: oskar dudycz
 redirectFrom: /locks-queues-and-business-workflows/

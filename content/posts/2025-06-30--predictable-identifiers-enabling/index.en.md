@@ -1,6 +1,7 @@
 ---
 title: 'Predictable Identifiers: Enabling True Module Autonomy in Distributed Systems'
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-06-30-cover.png
 author: oskar dudycz
 redirectFrom: /predictable-identifiers-enabling/

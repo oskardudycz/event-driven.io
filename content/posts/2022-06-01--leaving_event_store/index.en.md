@@ -1,6 +1,7 @@
 ---
 title: Why I'm leaving Event Store and getting ready for the next episode
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2022-06-01-cover.png
 author: oskar dudycz
 ---

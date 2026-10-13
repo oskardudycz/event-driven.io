@@ -45,8 +45,7 @@ export const query = graphql`
           }
           frontmatter {
             title
-            category
-            categories
+            tags
             author
             useDefaultLangCanonical
             cover {

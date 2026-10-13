@@ -1,6 +1,7 @@
 ---
 title: Announcing Strictland - new contract testing library for message compatibility
-category: "Testing"
+tags:
+  - Testing
 cover: 2026-06-15-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

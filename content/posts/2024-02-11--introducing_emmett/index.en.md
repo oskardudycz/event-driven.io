@@ -1,6 +1,7 @@
 ---
 title: Announcing Emmett! Take your event-driven applications back to the future!
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2024-02-11-cover.png
 author: oskar dudycz
 ---

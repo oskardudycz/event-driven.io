@@ -1,6 +1,7 @@
 ---
 title: Błąd "Cannot update a parent row a foreign key constraint fails" przy pobieraniu rekordów w NHibernate
-category: ".NET"
+tags:
+  - .NET
 cover: 2011-10-06-cover.png
 author: oskar dudycz
 disqusId: 32 http://oskar-dudycz.pl/2011/10/06/bad-cannot-update-przy-pobieraniu/

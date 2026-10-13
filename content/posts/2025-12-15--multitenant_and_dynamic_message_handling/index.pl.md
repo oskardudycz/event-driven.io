@@ -1,6 +1,7 @@
 ---
 title: Multi-tenancy and dynamic messaging workload distribution
-category: "Event-Driven Architecture"
+tags:
+  - Event-Driven Architecture
 cover: 2025-12-15-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

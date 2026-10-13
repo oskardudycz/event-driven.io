@@ -1,6 +1,7 @@
 ---
 title: Publishing read model changes from Marten
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2023-04-23-cover.png
 author: oskar dudycz
 ---

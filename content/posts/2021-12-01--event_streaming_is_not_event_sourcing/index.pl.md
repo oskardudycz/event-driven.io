@@ -1,6 +1,7 @@
 ---
 title: Event Streaming is not Event Sourcing!
-category: "CQRS"
+tags:
+  - CQRS
 cover: 2021-12-01-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

@@ -50,14 +50,14 @@ query = { category = "Event-Driven Architecture" }
 
 [[redirects]]
 from = "/en/category/"
-to = "/en/category/postgres/"
+to = "/en/category/postgre-sql/"
 status = 301
 force = true
 query = { category = "Postgres" }
 
 [[redirects]]
 from = "/en/category/"
-to = "/en/category/software-architecture/"
+to = "/en/category/architecture/"
 status = 301
 force = true
 query = { category = "Software Architecture" }
@@ -134,14 +134,14 @@ query = { category = "Event-Driven Architecture" }
 
 [[redirects]]
 from = "/pl/category/"
-to = "/en/category/postgres/"
+to = "/en/category/postgre-sql/"
 status = 301
 force = true
 query = { category = "Postgres" }
 
 [[redirects]]
 from = "/pl/category/"
-to = "/en/category/software-architecture/"
+to = "/en/category/architecture/"
 status = 301
 force = true
 query = { category = "Software Architecture" }

@@ -1,6 +1,7 @@
 ---
 title: Requiem for a 10x Engineer Dream
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-08-11-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

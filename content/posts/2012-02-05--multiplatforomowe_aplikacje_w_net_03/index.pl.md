@@ -1,6 +1,7 @@
 ---
 title: Multiplatforomowe aplikacje w .NET, Silverlight i Windows Phone Cz.3 – Konfiguracja komunikacji socketami
-category: ".NET"
+tags:
+  - .NET
 cover: 2012-02-05-cover.png
 author: oskar dudycz
 disqusId: 22 http://oskar-dudycz.pl/2012/02/05/multiplatforomowe-aplikacje-w-net_05/

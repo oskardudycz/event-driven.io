@@ -1,6 +1,7 @@
 ---
 title: Scrum i Team Foundation Server cz.2 – Instalacja TFS
-category: ".NET"
+tags:
+  - .NET
 cover: 2011-11-11-cover.png
 author: oskar dudycz
 disqusId: 29 http://oskar-dudycz.pl/2011/11/11/scrum-i-team-foundation-server-cz2/

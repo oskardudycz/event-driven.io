@@ -20,7 +20,7 @@ const node = (
   fields: { slug: `/${slug}/`, langKey, source: 'posts', prefix: '2026-10-05' },
   frontmatter: {
     title,
-    category: 'Event Sourcing',
+    tags: ['Event Sourcing', 'Distributed Tracing'],
     useDefaultLangCanonical: placeholder,
   },
   rawMarkdownBody: content,
@@ -62,6 +62,8 @@ test('canonical locale selection, Polish diacritics, identifiers, prefix/fuzzy m
   ])
     assert.ok(index.search(query).length, query);
   assert.equal(index.search('bogusplaceholder').length, 0);
+  assert.equal(docs[0]?.tags, 'Event Sourcing · Distributed Tracing');
+  assert.equal(index.search('tracing').length, 2, 'every tag is searchable');
   const malicious = '<img src=x onerror=alert(1)> appendToStream';
   assert.equal(
     highlightParts(malicious, ['appendtostream'])

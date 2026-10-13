@@ -1,6 +1,7 @@
 ---
 title: Scrum i Team Foundation Server cz.3 – Wystawiamy się na zewnątrz
-category: ".NET"
+tags:
+  - .NET
 cover: 2011-11-16-cover.png
 author: oskar dudycz
 disqusId: 28 http://oskar-dudycz.pl/2011/11/16/scrum-i-team-foundation-server-cz3/

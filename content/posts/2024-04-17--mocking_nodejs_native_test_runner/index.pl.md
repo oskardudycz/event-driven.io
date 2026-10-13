@@ -1,6 +1,7 @@
 ---
 title: Mocking the native Node.js Test Runner
-category: "Testing"
+tags:
+  - Testing
 cover: 2024-04-17-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

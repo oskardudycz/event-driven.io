@@ -1,6 +1,7 @@
 ---
 title: "Sharing is (not always) caring. PgBouncer pooling modes in practice"
-category: 'Software Architecture'
+tags:
+  - Architecture
 cover: 2026-10-12-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

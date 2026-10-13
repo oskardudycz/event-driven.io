@@ -1,6 +1,7 @@
 ---
 title: Using strongly-typed identifiers with Marten
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2022-01-19-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

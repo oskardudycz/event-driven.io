@@ -1,6 +1,7 @@
 ---
 title: Is the audit log a proper architecture driver for Event Sourcing?
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2023-05-20-cover.png
 author: oskar dudycz
 ---

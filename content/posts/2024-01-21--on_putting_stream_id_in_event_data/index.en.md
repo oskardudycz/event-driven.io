@@ -1,6 +1,7 @@
 ---
 title: Stream ids, event types prefixes and other event data you might not want to slice off
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2024-01-21-cover.png
 author: oskar dudycz
 ---

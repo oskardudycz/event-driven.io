@@ -1,6 +1,7 @@
 ---
 title: How to write a left-fold streams collector in Java
-category: "Java"
+tags:
+  - Java
 cover: 2024-05-09-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

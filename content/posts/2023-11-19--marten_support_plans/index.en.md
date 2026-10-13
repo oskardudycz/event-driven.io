@@ -1,6 +1,7 @@
 ---
 title: We introduced support plans for Marten
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2023-11-19-cover.png
 author: oskar dudycz
 ---

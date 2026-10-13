@@ -1,6 +1,7 @@
 ---
 title: How to build MongoDB Event Store
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2025-01-10-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

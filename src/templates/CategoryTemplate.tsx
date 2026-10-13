@@ -10,6 +10,7 @@ import Headline from '../components/Article/Headline.tsx';
 import List from '../components/List/index.ts';
 import { useTranslation } from 'react-i18next';
 import { createHead } from '../components/Seo/index.ts';
+import { tagLabel } from '../utils/tag-label.ts';
 
 const CategoryTemplate = (props: SitePageProps<'posts'>) => {
   const { t } = useTranslation();
@@ -17,8 +18,9 @@ const CategoryTemplate = (props: SitePageProps<'posts'>) => {
     data: {
       posts: { edges },
     },
-    pageContext: { category, categoryDescription, recommendedSlugs = [] },
+    pageContext: { tag = '', tagDescription, recommendedSlugs = [] },
   } = props;
+  const label = tagLabel(t, tag);
   const totalCount = edges.length;
   const slugKey = (edge: ArticleEdge) =>
     edge.node.fields.slug.replace(/^\/+|\/+$/g, '');
@@ -34,29 +36,26 @@ const CategoryTemplate = (props: SitePageProps<'posts'>) => {
       <Article>
         <header className={`categoryHeader ${styles.categoryHeader}`}>
           <p className={`eyebrow ${styles.eyebrow}` + ' ' + styles.elementP}>
-            <FaTag /> {t('categories.topic')}
+            <FaTag /> {t('tags.topic')}
           </p>
-          <Headline title={category} />
+          <Headline title={label} />
           <p
             className={
               `description ${styles.description}` + ' ' + styles.elementP
             }
           >
-            {categoryDescription ||
-              t('categories.defaultDescription', { category })}
+            {tagDescription || t('tags.defaultDescription', { tag: label })}
           </p>
           <p className={`meta ${styles.meta}` + ' ' + styles.elementP}>
-            {t('categories.articleCount', { count: totalCount })}
+            {t('tags.articleCount', { count: totalCount })}
           </p>
         </header>
         {recommended.length > 0 && (
           <section className={`articleSection ${styles.articleSection}`}>
             <div className={`sectionHeader ${styles.sectionHeader}`}>
-              <h2 className={styles.elementH2}>
-                {t('categories.recommended')}
-              </h2>
+              <h2 className={styles.elementH2}>{t('tags.recommended')}</h2>
               <p className={styles.elementP}>
-                {t('categories.recommendedDescription')}
+                {t('tags.recommendedDescription')}
               </p>
             </div>
             <List edges={recommended} ordered showImages />
@@ -69,8 +68,8 @@ const CategoryTemplate = (props: SitePageProps<'posts'>) => {
             <div className={`sectionHeader ${styles.sectionHeader}`}>
               <h2 className={styles.elementH2}>
                 {recommended.length > 0
-                  ? t('categories.moreArticles')
-                  : t('categories.articles')}
+                  ? t('tags.moreArticles')
+                  : t('tags.articles')}
               </h2>
             </div>
             <List edges={remaining} showImages />
@@ -84,12 +83,12 @@ const CategoryTemplate = (props: SitePageProps<'posts'>) => {
 export default CategoryTemplate;
 
 export const query = graphql`
-  query CategoryPosts($categoryPostIds: [String!]!, $language: String!) {
+  query TagPosts($tagPostIds: [String!]!, $language: String!) {
     locales: allLocale(filter: { language: { in: [$language, "en"] } }) {
       ...TranslationResources
     }
     posts: allMarkdownRemark(
-      filter: { id: { in: $categoryPostIds } }
+      filter: { id: { in: $tagPostIds } }
       sort: { fields: { prefix: DESC } }
     ) {
       edges {
@@ -123,10 +122,13 @@ export const query = graphql`
   }
 `;
 
-export const Head = createHead(({ pageContext, t }) => ({
-  title: t('categories.seoTitle', { category: pageContext.category }),
-  description:
-    pageContext.categoryDescription ||
-    t('categories.defaultDescription', { category: pageContext.category }),
-  schemaType: 'CollectionPage',
-}));
+export const Head = createHead(({ pageContext, t }) => {
+  const label = tagLabel(t, pageContext.tag || '');
+  return {
+    title: t('tags.seoTitle', { tag: label }),
+    description:
+      pageContext.tagDescription ||
+      t('tags.defaultDescription', { tag: label }),
+    schemaType: 'CollectionPage',
+  };
+});

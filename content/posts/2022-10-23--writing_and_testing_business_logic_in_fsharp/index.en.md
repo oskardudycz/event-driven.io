@@ -1,6 +1,7 @@
 ---
 title: Writing and testing business logic in F#
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2022-10-23-cover.jpg
 author: oskar dudycz
 ---

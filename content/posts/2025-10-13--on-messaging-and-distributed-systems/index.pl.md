@@ -1,6 +1,7 @@
 ---
 title: On Messaging and Distributed Systems with Ian Cooper
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-10-13-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

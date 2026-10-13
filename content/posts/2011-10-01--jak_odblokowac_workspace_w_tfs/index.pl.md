@@ -1,6 +1,7 @@
 ---
 title: Jak odblokować workspace w TFS
-category: ".NET"
+tags:
+  - .NET
 cover: 2011-10-01-cover.png
 author: oskar dudycz
 disqusId: 33 http://oskar-dudycz.pl/2011/10/01/jak-odblokowac-workspace-w-tfs/

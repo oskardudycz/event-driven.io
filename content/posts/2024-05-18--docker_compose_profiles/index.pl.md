@@ -1,6 +1,7 @@
 ---
 title: Docker Compose Profiles, one the most useful and underrated features
-category: "DevOps"
+tags:
+  - DevOps
 cover: 2024-05-18-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

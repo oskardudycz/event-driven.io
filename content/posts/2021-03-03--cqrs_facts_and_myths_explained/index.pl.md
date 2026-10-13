@@ -1,6 +1,7 @@
 ---
 title: CQRS facts and myths explained
-category: "CQRS"
+tags:
+  - CQRS
 cover: 2021-03-03-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

@@ -1,6 +1,7 @@
 ---
 title: Moja nierelacja z WROC#
-category: "Coding life"
+tags:
+  - Coding Life
 cover: 2016-03-16-cover.jpg
 author: oskar dudycz
 disqusId: 216 http://oskar-dudycz.pl/?p=216

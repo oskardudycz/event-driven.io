@@ -1,6 +1,7 @@
 ---
 title: A simple trick for idempotency handling in the Elastic Search read model
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2022-01-26-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

@@ -1,6 +1,7 @@
 ---
 title: 'Residuality Theory: A Rebellious Take on Building Systems That Actually Survive'
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-05-26-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

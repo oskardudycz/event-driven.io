@@ -1,6 +1,7 @@
 ---
 title: Consumers, projectors, reactors and all that messaging jazz in Emmett
-category: "Event-Driven Architecture"
+tags:
+  - Event-Driven Architecture
 cover: 2025-12-01-cover.jpg
 author: oskar dudycz
 redirectFrom: /consumers_processors_in_emmett/

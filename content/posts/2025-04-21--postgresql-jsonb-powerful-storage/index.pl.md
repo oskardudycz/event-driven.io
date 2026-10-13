@@ -1,6 +1,7 @@
 ---
 title: PostgreSQL JSONB - Powerful Storage for Semi-Structured Data
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-04-21-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

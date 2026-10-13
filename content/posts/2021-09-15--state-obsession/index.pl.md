@@ -1,6 +1,7 @@
 ---
 title: Anti-patterns in event modelling - State Obsession
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2021-09-15-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

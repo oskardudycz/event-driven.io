@@ -1,6 +1,7 @@
 ---
 title: Jak z kilku dllek zrobić jedną, czyli modularność przy pomocy ILMerge
-category: ".NET"
+tags:
+  - .NET
 cover: 2012-04-15-cover.png
 author: oskar dudycz
 disqusId: 20 http://oskar-dudycz.pl/2012/04/15/jak-z-kilku-dllek-zrobic-jedna-czyli/

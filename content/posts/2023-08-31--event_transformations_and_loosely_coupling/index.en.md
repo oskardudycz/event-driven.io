@@ -1,6 +1,7 @@
 ---
 title: Event transformations, a tool to keep our processes loosely coupled
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2023-08-31-cover.png
 author: oskar dudycz
 ---

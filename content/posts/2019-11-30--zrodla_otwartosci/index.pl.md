@@ -1,6 +1,7 @@
 ---
 title: Źródła otwartości
-category: "Community"
+tags:
+  - Community
 cover: 2019-11-30-cover.png
 author: oskar dudycz
 disqusId: 331 http://oskar-dudycz.pl/?p=331

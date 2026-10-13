@@ -1,6 +1,7 @@
 ---
 title: Bring me problems, not solutions!
-category: "Agile"
+tags:
+  - Agile
 cover: 2021-01-06-cover.jpg
 author: oskar dudycz
 ---

@@ -1,6 +1,7 @@
 ---
 title: Don't be like Ebenezer Scrooge. A few words about workaholism
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2022-12-29-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical : true

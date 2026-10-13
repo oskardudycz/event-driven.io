@@ -1,6 +1,7 @@
 ---
 title: Monolith-First - are you sure?
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-04-14-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

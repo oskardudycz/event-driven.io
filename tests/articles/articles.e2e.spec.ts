@@ -1,10 +1,11 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import type { BuildPageData } from '../helpers/build-output.ts';
 import { test, expect } from '../helpers/browser/fixtures.ts';
 import {
   expectFonts,
   expectImageLoaded,
 } from '../helpers/browser/readiness.ts';
+import { tagSlug } from '../../src/utils/tag-slug.ts';
 
 test('author biography renders a readable note and loaded portrait', async ({
   page,
@@ -223,4 +224,45 @@ test('separate English and Polish pages keep their locale while following recipr
     await expect(page.locator('html')).toHaveAttribute('lang', other);
     await expect(page.locator('footer.footer')).toHaveCount(1);
   }
+});
+
+function polishArticleWithTranslatedTag() {
+  const translation = JSON.parse(
+    readFileSync('src/i18n/locales/pl/translation.json', 'utf8'),
+  ) as { tags: { labels: Record<string, string> } };
+  const labels = Object.entries(translation.tags.labels);
+  for (const entry of readdirSync('public/page-data/pl', {
+    withFileTypes: true,
+  })) {
+    const file = `public/page-data/pl/${entry.name}/page-data.json`;
+    if (!entry.isDirectory() || !existsSync(file)) continue;
+    const { path, result } = JSON.parse(
+      readFileSync(file, 'utf8'),
+    ) as BuildPageData;
+    const tags = result.data.post?.frontmatter.tags || [];
+    const translated = labels.find(([slug]) =>
+      tags.some((tag) => tagSlug(tag) === slug),
+    );
+    if (translated) return { path, slug: translated[0], label: translated[1] };
+  }
+  throw new Error('Expected a Polish article with a translated tag');
+}
+
+test('tag labels follow the interface language while tag URLs stay shared', async ({
+  page,
+}) => {
+  const { path, slug, label } = polishArticleWithTranslatedTag();
+  await page.goto(path, { waitUntil: 'domcontentloaded' });
+  await expect(
+    page.locator(`header .meta a[href="/pl/category/${slug}/"]`),
+  ).toHaveText(label);
+  await page.getByRole('link', { name: 'Change language to en' }).click();
+  const englishPath = path.replace(/^\/pl\//, '/en/');
+  await page.waitForURL(`**${englishPath}`);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  const englishTag = page.locator(
+    `header .meta a[href="/en/category/${slug}/"]`,
+  );
+  await expect(englishTag).toBeVisible();
+  await expect(englishTag).not.toHaveText(label);
 });

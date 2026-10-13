@@ -1,6 +1,7 @@
 ---
 title: Metallica skończyła się na Kill ‘Em All, a ja idę w Open Source'y
-category: "Coding life"
+tags:
+  - Coding Life
 cover: 2017-01-06-cover.jpg
 author: oskar dudycz
 disqusId: 231 http://oskar-dudycz.pl/?p=231

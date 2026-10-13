@@ -1,6 +1,7 @@
 ---
 title: Using event metadata in event-driven projections
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2024-08-25-cover.png
 author: oskar dudycz
 ---

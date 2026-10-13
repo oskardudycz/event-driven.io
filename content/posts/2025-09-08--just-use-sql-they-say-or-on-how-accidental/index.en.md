@@ -1,6 +1,7 @@
 ---
 title: Just use SQL they say... Or how accidental complexity piles on
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-09-08-cover.jpg
 author: oskar dudycz
 redirectFrom: /just-use-sql-they-say-or-on-how-accidental/

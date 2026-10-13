@@ -1,6 +1,7 @@
 ---
 title: Architecture Weekly is 5 years old! 🎉
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-12-29-cover.jpg
 author: oskar dudycz
 redirectFrom: /architecture-weekly-is-5-years-old/

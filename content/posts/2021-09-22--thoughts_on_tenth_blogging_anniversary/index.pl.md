@@ -1,6 +1,7 @@
 ---
 title: 10 notes on the 10th blogging anniversary
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2021-09-22-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical : true

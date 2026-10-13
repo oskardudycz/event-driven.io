@@ -1,6 +1,7 @@
 ---
 title: Keeping our overachieving freak on a leash
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2024-03-01-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

@@ -1,6 +1,7 @@
 ---
 title: Outbox, Inbox patterns and delivery guarantees explained
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2020-12-30-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

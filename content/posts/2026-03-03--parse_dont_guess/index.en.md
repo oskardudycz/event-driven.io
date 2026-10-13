@@ -1,6 +1,7 @@
 ---
 title: Parse, Don't Guess
-category: "Software Architecture"
+tags:
+  - Architecture
 cover: 2026-03-03-cover.png
 author: oskar dudycz
 redirectFrom: /parse_dont_guess/

@@ -1,6 +1,7 @@
 ---
 title: Keep your streams short! Temporal modeling for fast reads and optimal data retention
-category: Event Sourcing
+tags:
+  - Event Sourcing
 cover: 2021-12-09-cover.png
 author: oskar dudycz
 redirectFrom: /keep-your-streams-short-temporal-modelling-for-fast-reads-and-optimal-data-retention/

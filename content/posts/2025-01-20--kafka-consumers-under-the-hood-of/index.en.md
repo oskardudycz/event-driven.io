@@ -1,6 +1,7 @@
 ---
 title: 'Kafka Consumers: Under the Hood of Message Processing'
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-01-20-cover.png
 author: oskar dudycz
 redirectFrom: /kafka-consumers-under-the-hood-of/

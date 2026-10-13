@@ -1,6 +1,7 @@
 ---
 title: How to validate business logic
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2023-01-15-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical : true

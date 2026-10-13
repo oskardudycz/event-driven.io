@@ -1,6 +1,7 @@
 ---
 title: Ensuring uniqueness in Marten event store
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2023-03-24-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

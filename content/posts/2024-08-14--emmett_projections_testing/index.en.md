@@ -1,6 +1,7 @@
 ---
 title: Writing and testing event-driven projections with Emmett, Pongo and PostgreSQL
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2024-08-14-cover.png
 author: oskar dudycz
 ---

@@ -1,6 +1,7 @@
 ---
 title: Structural Typing in TypeScript
-category: "TypeScript"
+tags:
+  - TypeScript
 cover: 2021-06-09-cover.png
 author: oskar dudycz
 ---

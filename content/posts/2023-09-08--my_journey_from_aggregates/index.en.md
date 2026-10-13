@@ -1,6 +1,7 @@
 ---
 title: My journey from Aggregates to Functional Composition
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2023-09-08-cover.png
 author: oskar dudycz
 ---

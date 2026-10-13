@@ -1,6 +1,7 @@
 ---
 title: What really grind my gears – IIIIIIIIIIIIIIIIF!
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2015-10-31-cover.png
 author: oskar dudycz
 disqusId: 11 http://oskar-dudycz.pl/2015/10/31/what-really-grind-my-gears-1/

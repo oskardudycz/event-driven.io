@@ -1,9 +1,9 @@
 ---
 title: Event-driven distributed processes by example
-category: "Event Sourcing"
-categories:
+tags:
+  - Event Sourcing
   - Event-Driven Architecture
-  - Software Architecture
+  - Architecture
 cover: 2022-07-13-cover.png
 author: oskar dudycz
 ---

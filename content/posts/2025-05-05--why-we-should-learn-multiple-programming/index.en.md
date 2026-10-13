@@ -1,6 +1,7 @@
 ---
 title: Why We Should Learn Multiple Programming Languages
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-05-05-cover.jpg
 author: oskar dudycz
 redirectFrom: /why-we-should-learn-multiple-programming/

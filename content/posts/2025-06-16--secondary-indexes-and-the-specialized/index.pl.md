@@ -1,6 +1,7 @@
 ---
 title: Secondary Indexes and the Specialized Storage Dilemma
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-06-16-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

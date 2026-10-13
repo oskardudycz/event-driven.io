@@ -1,6 +1,7 @@
 ---
 title: Scrum i Team Foundation Server cz.4 – Tworzymy projekt
-category: ".NET"
+tags:
+  - .NET
 cover: 2011-11-22-cover.png
 author: oskar dudycz
 disqusId: 27 http://oskar-dudycz.pl/2011/11/22/scrum-i-team-foundation-server-cz4/

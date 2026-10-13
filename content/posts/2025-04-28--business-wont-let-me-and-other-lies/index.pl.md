@@ -1,6 +1,7 @@
 ---
 title: Business Won't Let Me and other lies we tell to ourselves
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-04-28-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

@@ -1,6 +1,7 @@
 ---
 title: Mastering Database Connection Pooling
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-08-05-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

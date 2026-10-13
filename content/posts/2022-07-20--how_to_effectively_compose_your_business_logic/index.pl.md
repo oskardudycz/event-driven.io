@@ -1,6 +1,7 @@
 ---
 title: How to effectively compose your business logic
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2022-07-20-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

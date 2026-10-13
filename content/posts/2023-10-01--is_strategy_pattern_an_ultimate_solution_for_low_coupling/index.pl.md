@@ -1,6 +1,7 @@
 ---
 title: Is the Strategy Pattern an ultimate solution for low coupling?
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2023-10-01-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

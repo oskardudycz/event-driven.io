@@ -1,6 +1,7 @@
 ---
 title: How to scale out Marten
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2023-07-30-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

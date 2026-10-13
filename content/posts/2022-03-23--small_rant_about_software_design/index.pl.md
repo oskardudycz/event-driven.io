@@ -1,6 +1,7 @@
 ---
 title: Small rant about the Software Design
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2022-03-23-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

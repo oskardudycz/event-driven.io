@@ -1,6 +1,7 @@
 ---
 title: How to get started with Open Source?
-category: "Open Source"
+tags:
+  - Open Source
 cover: 2020-03-31-cover.png
 author: oskar dudycz
 related:

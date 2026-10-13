@@ -34,7 +34,7 @@ const Post = (props: {
     post: {
       html,
       fields: { prefix, slug, originalSlug },
-      frontmatter: { title, summary, author, category, categories, disqusId },
+      frontmatter: { title, summary, author, tags, disqusId },
     },
     authornote,
     related,
@@ -52,12 +52,7 @@ const Post = (props: {
       <header>
         <Headline title={title} />
         <Summary>{summary}</Summary>
-        <Meta
-          prefix={prefix}
-          author={author}
-          category={category}
-          categories={categories}
-        />
+        <Meta prefix={prefix} author={author} tags={tags} />
       </header>
       <Bodytext html={html} className={styles.body} />
       <footer>

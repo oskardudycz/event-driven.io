@@ -1,6 +1,7 @@
 ---
 title: Show me the money! Practically navigating the Cloud Costs Complexity
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-09-09-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

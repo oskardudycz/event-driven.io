@@ -1,6 +1,7 @@
 ---
 title: Memoization, a useful pattern for quick optimization
-category: "Design Patterns"
+tags:
+  - Design Patterns
 cover: 2020-05-05-cover.png
 author: oskar dudycz
 ---

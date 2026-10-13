@@ -1,6 +1,7 @@
 ---
 title: Whole Architecture Weekly content is free now!
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-03-17-cover.jpg
 author: oskar dudycz
 redirectFrom: /whole-architecture-weekly-content/

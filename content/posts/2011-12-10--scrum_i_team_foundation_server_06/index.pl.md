@@ -1,6 +1,7 @@
 ---
 title: Scrum i Team Foundation Server cz.6
-category: ".NET"
+tags:
+  - .NET
 cover: 2011-12-10-cover.png
 author: oskar dudycz
 disqusId: 25 http://oskar-dudycz.pl/2011/12/10/scrum-i-team-foundation-server-cz6/

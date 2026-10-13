@@ -1,6 +1,7 @@
 ---
 title: Dive a bit deeper, look a bit wider
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2022-09-28-cover.jpg
 author: oskar dudycz
 ---

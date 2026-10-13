@@ -1,6 +1,7 @@
 ---
 title: 15 tips on how to run meetings effectively
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2022-02-23-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

@@ -1,7 +1,8 @@
 ---
 title: Open Source, a relic, a charity or still the thing?
 publishedAt: '2026-10-05T14:58:57+00:00'
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2026-10-05-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

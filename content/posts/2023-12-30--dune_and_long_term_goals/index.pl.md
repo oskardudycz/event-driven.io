@@ -1,6 +1,7 @@
 ---
 title: What Dune can tell us about setting our goals
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2023-12-30-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

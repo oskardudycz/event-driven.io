@@ -1,6 +1,7 @@
 ---
 title: Sociological aspects of Microservices
-category: "Microservices"
+tags:
+  - Microservices
 cover: 2021-01-20-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

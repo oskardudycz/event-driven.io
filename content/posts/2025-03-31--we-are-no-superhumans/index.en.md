@@ -1,6 +1,7 @@
 ---
 title: We are no superhumans
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-03-31-cover.jpg
 author: oskar dudycz
 redirectFrom: /we-are-no-superhumans/

@@ -1,6 +1,7 @@
 ---
 title: Throw, Result, or neither?
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2026-07-20-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

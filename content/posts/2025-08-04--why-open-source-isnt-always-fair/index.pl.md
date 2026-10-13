@@ -1,6 +1,7 @@
 ---
 title: Why Open Source Isn't Always Fair. Dual licenses explained
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-08-04-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

@@ -1,6 +1,7 @@
 ---
 title: On rebuilding read models, Dead-Letter Queues and Why Letting Go is Sometimes the Answer
-category: "Event-Driven Architecture"
+tags:
+  - Event-Driven Architecture
 cover: 2026-01-19-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

@@ -1,6 +1,7 @@
 ---
 title: 'Deduplication in Distributed Systems: Myths, Realities, and Practical Solutions'
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-11-25-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

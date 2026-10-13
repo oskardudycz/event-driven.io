@@ -1,6 +1,7 @@
 ---
 title: Setting up NGINX load balancer for .NET WebApi
-category: "DevOps"
+tags:
+  - DevOps
 cover: 2024-06-16-cover.png
 author: oskar dudycz
 ---

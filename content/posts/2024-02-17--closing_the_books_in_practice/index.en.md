@@ -1,6 +1,7 @@
 ---
 title: Implementing Closing the Books pattern
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2024-02-17-cover.png
 author: oskar dudycz
 ---

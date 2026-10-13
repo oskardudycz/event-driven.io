@@ -1,6 +1,7 @@
 ---
 title: Dealing with Eventual Consistency and Idempotency in MongoDB projections
-category: "API"
+tags:
+  - API
 cover: 2021-11-10-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

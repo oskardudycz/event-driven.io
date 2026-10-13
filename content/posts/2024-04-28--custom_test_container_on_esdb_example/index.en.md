@@ -1,6 +1,7 @@
 ---
 title: How to configure a custom Test Container on the EventStoreDB example
-category: "Testing"
+tags:
+  - Testing
 cover: 2024-04-28-cover.png
 author: oskar dudycz
 ---

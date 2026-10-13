@@ -1,6 +1,7 @@
 ---
 title: Ogooreck, a sneaky testing library in BDD style
-category: "Testing"
+tags:
+  - Testing
 cover: 2022-06-15-cover.png
 author: oskar dudycz
 ---

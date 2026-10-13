@@ -1,6 +1,7 @@
 ---
 title: Architecture Weekly became the Substack Bestseller!
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2023-09-17-cover.png
 author: oskar dudycz
 ---

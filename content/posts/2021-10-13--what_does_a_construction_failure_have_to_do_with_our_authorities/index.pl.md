@@ -1,6 +1,7 @@
 ---
 title: What does a construction failure have to do with our authorities?
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2021-10-13-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

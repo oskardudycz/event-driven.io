@@ -1,6 +1,7 @@
 ---
 title: How to design software architecture pragmatically
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2023-10-06-cover.png
 author: oskar dudycz
 ---

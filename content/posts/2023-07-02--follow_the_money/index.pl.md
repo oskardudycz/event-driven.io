@@ -1,6 +1,7 @@
 ---
 title: Follow the money to get a better design
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2023-07-02-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

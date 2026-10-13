@@ -1,6 +1,7 @@
 ---
 title: 'Distributed Locking: A Practical Guide'
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-12-23-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

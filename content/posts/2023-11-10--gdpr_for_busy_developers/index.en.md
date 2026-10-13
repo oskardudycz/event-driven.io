@@ -1,6 +1,7 @@
 ---
 title: GDPR for busy developers
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2023-11-10-cover.png
 author: oskar dudycz
 ---

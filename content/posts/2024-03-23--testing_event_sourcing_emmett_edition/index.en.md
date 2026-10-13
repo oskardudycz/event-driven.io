@@ -1,6 +1,7 @@
 ---
 title: Testing Event Sourcing, Emmett edition
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2024-04-23-hexagon.png
 author: oskar dudycz
 ---

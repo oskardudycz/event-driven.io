@@ -1,6 +1,7 @@
 ---
 title: Anti-patterns in event modelling - Passive-Aggressive Events
-category: "Software Architecture"
+tags:
+  - Event Sourcing
 cover: 2026-04-13-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

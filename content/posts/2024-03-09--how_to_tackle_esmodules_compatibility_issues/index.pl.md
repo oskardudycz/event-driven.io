@@ -1,6 +1,7 @@
 ---
 title: How to tackle compatibility issues in ECMA Script modules (and in general)
-category: "TypeScript"
+tags:
+  - TypeScript
 cover: 2024-03-09-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

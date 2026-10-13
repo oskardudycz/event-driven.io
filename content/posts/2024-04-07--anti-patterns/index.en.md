@@ -1,6 +1,7 @@
 ---
 title: Event modelling anti-patterns explained
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2024-04-07-kafka.png
 author: oskar dudycz
 ---

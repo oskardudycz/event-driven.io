@@ -565,7 +565,7 @@ async function importPost(entry: ImportEntry, options: ImportOptions = {}) {
       const frontmatter = {
         title: post.title,
         ...(post.publishedAt ? { publishedAt: post.publishedAt } : {}),
-        category: entry.category || 'Software Architecture',
+        tags: entry.tags?.length ? entry.tags : ['Architecture'],
         ...(converted.cover ? { cover: converted.cover } : {}),
         author: 'oskar dudycz',
         ...(converted.decorativeImages.length
@@ -629,14 +629,14 @@ async function main() {
     allowPositionals: true,
     options: {
       manifest: { type: 'string' },
-      category: { type: 'string' },
+      tag: { type: 'string', multiple: true },
       html: { type: 'string' },
       help: { type: 'boolean', short: 'h' },
     },
   });
   if (values.help || (!values.manifest && !positionals.length)) {
     console.log(
-      "Usage: npm run import-articles -- URL [URL...] [--category 'Event Sourcing']\n       npm run import-articles -- --manifest import/eventstore-posts.json\n       npm run import-articles -- URL --html saved-page.html\nSupports Substack, Kurrent/EventStore and dated Wayback captures. Creates identical English and Polish articles with local images. Existing posts are never overwritten.",
+      "Usage: npm run import-articles -- URL [URL...] [--tag 'Event Sourcing' [--tag CQRS]]\n       npm run import-articles -- --manifest import/eventstore-posts.json\n       npm run import-articles -- URL --html saved-page.html\nSupports Substack, Kurrent/EventStore and dated Wayback captures. Creates identical English and Polish articles with local images. Existing posts are never overwritten.",
     );
     if (!values.help) process.exitCode = 1;
     return;
@@ -651,14 +651,14 @@ async function main() {
   entries.push(
     ...positionals.map((url) => ({
       url,
-      ...(values.category ? { category: values.category } : {}),
+      ...(values.tag ? { tags: values.tag } : {}),
     })),
   );
   const html = values.html ? await fs.readFile(values.html, 'utf8') : undefined;
   const links = buildArticleLinks(postsDirectory, entries);
   for (const entry of entries)
     await importPost(
-      { ...entry, ...(values.category ? { category: values.category } : {}) },
+      { ...entry, ...(values.tag ? { tags: values.tag } : {}) },
       { ...(html !== undefined ? { html } : {}), links },
     );
 }

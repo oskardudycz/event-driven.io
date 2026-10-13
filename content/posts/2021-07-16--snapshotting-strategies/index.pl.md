@@ -1,6 +1,7 @@
 ---
 title: Snapshotting Strategies
-category: Event Sourcing
+tags:
+  - Event Sourcing
 cover: 2021-07-16-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

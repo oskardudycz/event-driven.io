@@ -1,6 +1,7 @@
 ---
 title: Why Partial<Type> is an extremely useful TypeScript feature? 
-category: "TypeScript"
+tags:
+  - TypeScript
 cover: 2021-02-24-cover.png
 author: oskar dudycz
 ---

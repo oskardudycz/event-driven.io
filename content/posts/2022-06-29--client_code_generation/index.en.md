@@ -1,6 +1,7 @@
 ---
 title: Should you generate the client code from the API?
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2022-06-29-cover.png
 author: oskar dudycz
 ---

@@ -1,6 +1,7 @@
 ---
 title: Let's build event store in one hour!
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2023-01-08-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical : true

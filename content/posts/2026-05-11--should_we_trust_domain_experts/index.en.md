@@ -1,6 +1,7 @@
 ---
 title: Don't overestimate domain expertise
-category: "Software Architecture"
+tags:
+  - Architecture
 cover: 2026-05-11-cover.png
 author: oskar dudycz
 redirectFrom: /should_we_trust_domain_experts/

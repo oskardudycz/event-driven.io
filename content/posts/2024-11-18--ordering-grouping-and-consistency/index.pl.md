@@ -1,6 +1,7 @@
 ---
 title: Ordering, Grouping and Consistency in Messaging systems
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-11-18-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

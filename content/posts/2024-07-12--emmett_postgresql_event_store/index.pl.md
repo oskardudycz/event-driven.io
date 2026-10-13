@@ -1,6 +1,7 @@
 ---
 title: Event Sourcing on PostgreSQL in Node.js just became possible with Emmett
-category: "PostgreSql"
+tags:
+  - PostgreSQL
 cover: 2024-07-12-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

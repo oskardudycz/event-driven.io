@@ -1,6 +1,7 @@
 ---
 title: Never Lose Data Again - Event Sourcing to the Rescue!
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2022-11-06-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical : true

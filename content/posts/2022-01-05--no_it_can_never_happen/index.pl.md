@@ -1,6 +1,7 @@
 ---
 title: No, it can never happen!
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2022-01-05-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

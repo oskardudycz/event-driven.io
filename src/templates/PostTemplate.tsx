@@ -97,8 +97,7 @@ export const postQuery = graphql`
         description
         summary
         author
-        category
-        categories
+        tags
         publishedAt
         disqusId
         useDefaultLangCanonical

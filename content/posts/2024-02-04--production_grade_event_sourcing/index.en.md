@@ -1,6 +1,7 @@
 ---
 title:  Production-Grade Event Sourcing Workshop - Modelling, DevOps, Process 
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2024-02-04-cover.png
 author: oskar dudycz
 ---

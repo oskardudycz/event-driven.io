@@ -1,6 +1,7 @@
 ---
 title: How to build a simple event pipeline
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2022-04-27-cover.png
 author: oskar dudycz
 ---

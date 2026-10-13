@@ -1,6 +1,7 @@
 ---
 title: Internal and external events, or how to design event-driven API
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2023-10-15-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

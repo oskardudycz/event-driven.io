@@ -1,6 +1,7 @@
 ---
 title: Is keeping dates in UTC really the best solution?
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2022-07-06-cover.png
 author: oskar dudycz
 ---

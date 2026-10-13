@@ -1,6 +1,7 @@
 ---
 title: Interactive Rubber Ducking with GenAI
-category: "Software Architecture"
+tags:
+  - Architecture
 cover: 2026-03-16-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

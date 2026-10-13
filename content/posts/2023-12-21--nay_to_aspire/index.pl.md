@@ -1,6 +1,7 @@
 ---
 title: Why I won't use .NET Aspire for now
-category: ".NET"
+tags:
+  - .NET
 cover: 2023-12-21-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

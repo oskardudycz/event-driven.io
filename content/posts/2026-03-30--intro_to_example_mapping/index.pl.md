@@ -1,6 +1,7 @@
 ---
 title: The one where Oskar explains Example Mapping
-category: "Software Architecture"
+tags:
+  - Architecture
 cover: 2026-03-30-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

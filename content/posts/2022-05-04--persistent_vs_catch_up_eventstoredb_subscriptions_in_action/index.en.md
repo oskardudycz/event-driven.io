@@ -1,6 +1,7 @@
 ---
 title: Persistent vs catch-up, EventStoreDB subscriptions in action
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2022-05-04-cover.png
 author: oskar dudycz
 ---

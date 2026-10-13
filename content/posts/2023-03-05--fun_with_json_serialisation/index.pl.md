@@ -1,6 +1,7 @@
 ---
 title: Fun with serial JSON
-category: "JavaScript"
+tags:
+  - JavaScript
 cover: 2023-03-05-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

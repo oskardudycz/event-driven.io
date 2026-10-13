@@ -1,6 +1,7 @@
 ---
 title: The risk of ignoring risks
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2022-04-06-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

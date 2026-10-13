@@ -1,6 +1,7 @@
 ---
 title: Don't let Event-Driven Architecture buzzwords fool you
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2023-02-26-cover.png
 author: oskar dudycz
 ---

@@ -36,7 +36,7 @@ test('known legacy category queries use literal query conditions, with 404 fallb
       (rule) =>
         rule.from === '/pl/category/' && rule.query.category === 'Postgres',
     )?.to,
-    '/en/category/postgres/',
+    '/en/category/postgre-sql/',
   );
   assert.deepEqual(
     redirects

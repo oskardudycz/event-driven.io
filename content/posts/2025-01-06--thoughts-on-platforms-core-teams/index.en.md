@@ -1,6 +1,7 @@
 ---
 title: Thoughts on Platforms, Core Teams, DORA Report and all that jazz
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-01-06-cover.png
 author: oskar dudycz
 redirectFrom: /thoughts-on-platforms-core-teams/

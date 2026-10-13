@@ -1,6 +1,7 @@
 ---
 title: Borys had the best dribbling
-category: "Agile"
+tags:
+  - Agile
 cover: 2015-01-31-cover.png
 author: oskar dudycz
 redirectFrom: /borys_najlepiej_dryblowal/

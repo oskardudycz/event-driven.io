@@ -1,6 +1,7 @@
 ---
 title: Should you record multiple events from business logic?
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2024-01-14-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

@@ -1,6 +1,7 @@
 ---
 title: On getting the meaningful discussions, and why that's important
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-12-16-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

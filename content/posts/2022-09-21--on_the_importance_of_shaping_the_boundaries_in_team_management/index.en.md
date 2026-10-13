@@ -1,6 +1,7 @@
 ---
 title: On the importance of setting boundaries in team management
-category: "Management"
+tags:
+  - Management
 cover: 2022-09-21-cover.jpg
 author: oskar dudycz
 ---

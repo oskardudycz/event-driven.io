@@ -1,7 +1,7 @@
 export type ImportEntry = {
   url: string;
   slug?: string;
-  category?: string;
+  tags?: string[];
   codeLanguage?: string;
   imageAlts?: Record<string, unknown>;
   youtubeVideo?: string;

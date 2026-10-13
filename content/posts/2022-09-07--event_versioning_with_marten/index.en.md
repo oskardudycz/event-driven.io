@@ -1,6 +1,7 @@
 ---
 title: Event Versioning with Marten
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2022-09-07-cover.jpg
 author: oskar dudycz
 ---

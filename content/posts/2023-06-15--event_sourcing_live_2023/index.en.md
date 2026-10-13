@@ -1,6 +1,7 @@
 ---
 title: Recap of Event Sourcing Live 2023
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2023-06-15-08.jpg
 author: oskar dudycz
 ---

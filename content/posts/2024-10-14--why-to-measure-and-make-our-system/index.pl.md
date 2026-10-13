@@ -1,6 +1,7 @@
 ---
 title: Why to measure and make our system observable? How to reason on chaotic world
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-10-14-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

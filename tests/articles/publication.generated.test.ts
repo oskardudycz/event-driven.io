@@ -9,8 +9,18 @@ import { visit } from 'unist-util-visit';
 import { loadIndex } from '../../src/search/runtime.ts';
 import { builtRedirects } from '../helpers/redirects.ts';
 import { publishedContent } from '../helpers/published-content.ts';
+import i18next from 'i18next';
+import en from '../../src/i18n/locales/en/translation.json' with { type: 'json' };
+import pl from '../../src/i18n/locales/pl/translation.json' with { type: 'json' };
+import { tagLabel } from '../../src/utils/tag-label.ts';
+import { tagSlug } from '../../src/utils/tag-slug.ts';
 
 const posts = publishedContent('posts');
+const translations = i18next.createInstance();
+await translations.init({
+  resources: { en: { translation: en }, pl: { translation: pl } },
+  fallbackLng: 'en',
+});
 const readBuild = (file: string) => readFileSync(join('public', file), 'utf8');
 
 test('every source article is published with its current title, locale and canonical', () => {
@@ -28,6 +38,33 @@ test('every source article is published with its current title, locale and canon
     assert.equal(
       $('link[rel=canonical]').attr('href'),
       `https://event-driven.io${canonical}`,
+      post.route,
+    );
+  }
+});
+
+test('every article links its localized tags and declares the primary tag as its section', () => {
+  for (const post of posts) {
+    const tags = post.metadata.tags || [];
+    const t = translations.getFixedT(post.language);
+    const $ = cheerio.load(readBuild(`${post.route}index.html`));
+    assert.deepEqual(
+      $('header .meta a')
+        .map((_, link) => `${$(link).attr('href')} ${$(link).text().trim()}`)
+        .get(),
+      tags.map(
+        (tag) =>
+          `/${post.language}/category/${tagSlug(tag)}/ ${tagLabel(t, tag)}`,
+      ),
+      post.route,
+    );
+    const schema = JSON.parse($('#page-schema').text()) as {
+      articleSection?: string;
+    };
+    assert.equal(schema.articleSection, tags[0], post.route);
+    assert.equal(
+      $('meta[property="article:section"]').attr('content'),
+      tags[0],
       post.route,
     );
   }
@@ -52,6 +89,17 @@ for (const language of ['en', 'pl']) {
         post.route,
       );
       assert.ok(card.find('.meta').text().includes(post.date), post.route);
+      assert.deepEqual(
+        card
+          .find('.meta span')
+          .slice(2)
+          .map((_, tag) => $(tag).text().trim())
+          .get(),
+        (post.metadata.tags || []).map((tag) =>
+          tagLabel(translations.getFixedT(language), tag),
+        ),
+        post.route,
+      );
       const cover = card.find('img[data-main-image]');
       assert.equal(cover.length, 1, post.route);
       assert.equal(cover.attr('alt'), post.metadata.title, post.route);

@@ -6,14 +6,14 @@ export type SearchDocument = {
   path: string;
   langKey: string;
   source: string;
-  category: string;
+  tags: string;
   date: string;
   content: string;
   cover?: IGatsbyImageData | null;
 };
-export type SearchHit = Omit<SearchDocument, 'id' | 'date' | 'category'> &
+export type SearchHit = Omit<SearchDocument, 'id' | 'date' | 'tags'> &
   Partial<Pick<SearchDocument, 'id' | 'date'>> & {
-    category?: string | string[];
+    tags?: string | string[];
     terms: string[];
   };
 export type IndexedSearchResult = Pick<

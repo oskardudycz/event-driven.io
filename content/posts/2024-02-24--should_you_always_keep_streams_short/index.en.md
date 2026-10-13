@@ -1,6 +1,7 @@
 ---
 title: Should you always keep streams short in Event Sourcing?
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2024-02-24-cover.png
 author: oskar dudycz
 ---

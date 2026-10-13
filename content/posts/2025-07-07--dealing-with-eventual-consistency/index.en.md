@@ -1,6 +1,7 @@
 ---
 title: Dealing with Eventual Consistency, and Causal Consistency using Predictable Identifiers
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-07-07-cover.webp
 author: oskar dudycz
 redirectFrom: /dealing-with-eventual-consistency/

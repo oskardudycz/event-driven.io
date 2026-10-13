@@ -1,6 +1,7 @@
 ---
 title: When Agile is not enough
-category: "Agile"
+tags:
+  - Agile
 cover: 2021-06-02-cover.png
 author: oskar dudycz
 ---

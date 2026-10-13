@@ -1,6 +1,7 @@
 ---
 title: A few notes on running open source project after Marten v6 release
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2023-05-13-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

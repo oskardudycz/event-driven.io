@@ -1,6 +1,7 @@
 ---
 title: Stacking the bricks in the software development process
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2023-01-29-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical : true

@@ -1,6 +1,7 @@
 ---
 title: Vertical Slices in practice
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2023-07-09-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

@@ -1,6 +1,7 @@
 ---
 title: 'The Order of Things: Why You Can''t Have Both Speed and Ordering in Distributed Systems'
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-07-14-cover.png
 author: oskar dudycz
 redirectFrom: /the-order-of-things-why-you-cant/

@@ -7,7 +7,7 @@ type ArchiveCardProps = {
   title: string;
   date: string;
   author?: string | undefined;
-  categories: string[];
+  tags: string[];
   excerpt: string;
   cover: ReactNode;
   renderLink?: (
@@ -23,7 +23,7 @@ export default function ArchiveCard({
   title,
   date,
   author,
-  categories,
+  tags,
   excerpt,
   cover,
   renderLink = anchor,
@@ -47,9 +47,9 @@ export default function ArchiveCard({
                 <span className={styles.elementSpan}>
                   <FaUser size={18} /> {author}
                 </span>
-                {categories.map((categoryName) => (
-                  <span key={categoryName} className={styles.elementSpan}>
-                    <FaTag size={18} /> {categoryName}
+                {tags.map((tag) => (
+                  <span key={tag} className={styles.elementSpan}>
+                    <FaTag size={18} /> {tag}
                   </span>
                 ))}
               </p>

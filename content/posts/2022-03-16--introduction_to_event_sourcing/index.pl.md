@@ -1,6 +1,7 @@
 ---
 title: Introduction to Event Sourcing - Self Paced Kit
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2022-03-16-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

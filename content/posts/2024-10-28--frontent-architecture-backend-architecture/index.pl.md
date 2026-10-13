@@ -1,6 +1,7 @@
 ---
 title: Frontent Architecture, Backend Architecture or just Architecture? With Tomasz Ducin
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-10-28-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

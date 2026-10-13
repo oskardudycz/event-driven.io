@@ -1,6 +1,7 @@
 ---
 title: What onion has to do with Clean Code?
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2022-05-18-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

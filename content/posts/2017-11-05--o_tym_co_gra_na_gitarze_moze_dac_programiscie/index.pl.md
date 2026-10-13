@@ -1,6 +1,7 @@
 ---
 title: O tym, co gra na gitarze może dać programiście
-category: "Coding life"
+tags:
+  - Coding Life
 cover: 2017-11-05-cover.jpg
 author: oskar dudycz
 disqusId: 291 http://oskar-dudycz.pl/?p=291

@@ -1,6 +1,7 @@
 ---
 title: Using S3 but not the way you expected. S3 as strongly consistent event store
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-09-02-cover.png
 author: oskar dudycz
 redirectFrom: /using-s3-but-not-the-way-you-expected/

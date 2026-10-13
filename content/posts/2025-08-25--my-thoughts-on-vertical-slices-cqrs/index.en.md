@@ -1,6 +1,7 @@
 ---
 title: My thoughts on Vertical Slices, CQRS, Semantic Diffusion and other fancy words
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-08-25-cover.png
 author: oskar dudycz
 redirectFrom: /my-thoughts-on-vertical-slices-cqrs/

@@ -1,6 +1,7 @@
 ---
 title: Pongo gets strongly-typed client, migrations, and command line tooling
-category: "TypeScript"
+tags:
+  - TypeScript
 cover: 2024-09-13-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

@@ -1,6 +1,7 @@
 ---
 title: Borys najlepiej dryblował
-category: "Agile"
+tags:
+  - Agile
 cover: 2015-01-31-cover.png
 author: oskar dudycz
 disqusId: 15 http://oskar-dudycz.pl/2015/01/31/borys-najlepiej-dryblowa/

@@ -1,6 +1,7 @@
 ---
 title: Let's take care of ourselves! Thoughts on compatibility
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2021-07-07-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

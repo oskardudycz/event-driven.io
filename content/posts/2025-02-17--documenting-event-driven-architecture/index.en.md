@@ -1,6 +1,7 @@
 ---
 title: Documenting Event-Driven Architecture with EventCatalog and David Boyne
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-02-17-cover.png
 author: oskar dudycz
 redirectFrom: /documenting-event-driven-architecture/

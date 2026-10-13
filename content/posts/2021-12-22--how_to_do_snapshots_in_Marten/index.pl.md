@@ -1,6 +1,7 @@
 ---
 title: How to do snapshots in Marten?
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2021-12-22-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true
