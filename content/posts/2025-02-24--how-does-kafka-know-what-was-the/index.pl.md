@@ -1,6 +1,7 @@
 ---
 title: How does Kafka know what was the last message it processed? Deep dive into Offset Tracking
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-02-24-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

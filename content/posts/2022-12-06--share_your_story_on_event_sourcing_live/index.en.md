@@ -1,6 +1,7 @@
 ---
 title: Share your story on Event Sourcing Live 2023
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2022-12-06-cover.jpg
 author: oskar dudycz
 ---

@@ -1,6 +1,7 @@
 ---
 title: Join my Event Sourcing workshops at Techorama and DDD Europe and speed up your journey!
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2024-03-17-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

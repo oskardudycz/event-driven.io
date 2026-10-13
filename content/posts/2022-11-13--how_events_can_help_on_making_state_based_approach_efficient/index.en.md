@@ -1,6 +1,7 @@
 ---
 title: How events can help in making the state-based approach efficient
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2022-11-13-cover.jpg
 author: oskar dudycz
 ---

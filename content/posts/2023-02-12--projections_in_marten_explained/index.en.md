@@ -1,6 +1,7 @@
 ---
 title: Event-driven projections in Marten explained
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2023-02-12-cover.jpg
 author: oskar dudycz
 ---

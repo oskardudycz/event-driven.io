@@ -1,6 +1,7 @@
 ---
 title: How to deal with privacy and GDPR in Event-Driven systems
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2023-11-26-cover.png
 author: oskar dudycz
 ---

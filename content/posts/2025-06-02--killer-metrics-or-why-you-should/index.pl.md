@@ -1,6 +1,7 @@
 ---
 title: Killer metrics, or why you should know upfront when to remove the new feature
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-06-02-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

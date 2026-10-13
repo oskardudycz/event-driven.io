@@ -1,6 +1,7 @@
 ---
 title: Women in IT
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2023-10-27-cover.png
 author: oskar dudycz
 ---

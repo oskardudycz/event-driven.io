@@ -59,7 +59,7 @@ test('imports full article and local assets in both languages, preserving embeds
     return Promise.resolve(new Response(url === source ? html : png));
   };
   const directory = await importPost(
-    { url: source, category: 'Event Sourcing' },
+    { url: source, tags: ['Event Sourcing', 'CQRS'] },
     { output, download },
   );
   const english = await fs.readFile(
@@ -78,6 +78,8 @@ test('imports full article and local assets in both languages, preserving embeds
   assert.equal(readFrontmatter(enMeta).cover, '2026-09-07-cover.png');
   assert.equal(readFrontmatter(enMeta).redirectFrom, '/example/');
   assert.equal(readFrontmatter(plMeta).redirectFrom, undefined);
+  assert.deepEqual(readFrontmatter(enMeta).tags, ['Event Sourcing', 'CQRS']);
+  assert.deepEqual(readFrontmatter(plMeta).tags, ['Event Sourcing', 'CQRS']);
   assert.deepEqual(fetched, [source, image]); // cover and body reuse one download
   assert.deepEqual(
     await fs.readFile(path.join(directory, '2026-09-07-cover.png')),
@@ -195,6 +197,9 @@ test('Wayback extraction uses publication date and excludes archived site chrome
   };
   assert.equal(metadata.originalUrl, 'https://www.eventstore.com/blog/example');
   assert.match(markdown, /redirectFrom: \/example\//);
+  assert.deepEqual(readFrontmatter(markdown.split('---')[1]).tags, [
+    'Architecture',
+  ]);
 });
 
 test('custom import slugs also receive a bare-path redirect', async () => {

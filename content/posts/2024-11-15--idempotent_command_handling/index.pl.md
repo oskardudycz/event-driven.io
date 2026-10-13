@@ -1,6 +1,7 @@
 ---
 title: Idempotent Command Handling
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2024-11-15-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

@@ -1,6 +1,7 @@
 ---
 title: Union types in C#
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2022-07-27-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

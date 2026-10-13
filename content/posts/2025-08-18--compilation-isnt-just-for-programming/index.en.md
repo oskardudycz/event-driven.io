@@ -1,6 +1,7 @@
 ---
 title: Compilers Aren't Just for Programming Languages
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-08-18-cover.png
 author: oskar dudycz
 redirectFrom: /compilation-isnt-just-for-programming/

@@ -1,6 +1,7 @@
 ---
 title: Why are senior devs afraid to code?
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2020-05-19-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

@@ -1,6 +1,7 @@
 ---
 title: The magic is that there is no magic. Or how to understand design patterns.
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2022-12-18-cover.jpg
 author: oskar dudycz
 ---

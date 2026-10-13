@@ -1,6 +1,7 @@
 ---
 title: What do the British writer and his fence have to do with Software Architecture?
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2022-08-17-cover.png
 author: oskar dudycz
 ---

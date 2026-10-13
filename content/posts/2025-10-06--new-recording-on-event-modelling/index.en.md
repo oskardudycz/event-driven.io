@@ -1,6 +1,7 @@
 ---
 title: New Recording on Event modelling anti-patterns from DDDEU
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-10-06-cover.jpg
 author: oskar dudycz
 redirectFrom: /new-recording-on-event-modelling/

@@ -1,6 +1,7 @@
 ---
 title: You can fork a package, but can you own it?
-category: "Software Architecture"
+tags:
+  - Architecture
 cover: 2026-06-08-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

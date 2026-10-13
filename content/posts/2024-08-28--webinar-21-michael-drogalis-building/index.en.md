@@ -1,6 +1,7 @@
 ---
 title: 'Webinar #21 - Michael Drogalis: Building the product on your own terms'
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-08-28-cover.png
 author: oskar dudycz
 redirectFrom: /webinar-21-michael-drogalis-building/

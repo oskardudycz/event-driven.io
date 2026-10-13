@@ -2,7 +2,9 @@ import type { BuildPageData } from '../helpers/build-output.ts';
 import type { ArticleNode, Frontmatter } from '../../src/types/content.ts';
 import { readFrontmatter } from '../helpers/frontmatter.ts';
 import { publishedContent } from '../helpers/published-content.ts';
-import { categorySlug } from '../../src/utils/category-slug.ts';
+import { tagSlug } from '../../src/utils/tag-slug.ts';
+import { mergedTags } from '../../src/utils/tag-redirects.ts';
+import { collectBuildContract } from '../../scripts/build-contract.ts';
 import categoryGuides from '../../data/category-guides.json' with { type: 'json' };
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -111,18 +113,16 @@ test('published articles have localized metadata, blog cross-links and working v
   }
 });
 
-test('category pages render configured reading order, excerpts and local covers', () => {
+test('tag pages render configured reading order, excerpts and local covers', () => {
   const guides = categoryGuides;
   const sourcePosts = publishedContent('posts');
   for (const guide of guides) {
-    // A locale has a category route when it has canonical content in that topic.
+    // A locale has a tag route when it has canonical content in that topic.
     const active = sourcePosts.some(
       ({ language, metadata }) =>
         language === guide.language &&
         !metadata.useDefaultLangCanonical &&
-        [metadata.category, ...(metadata.categories || [])].some(
-          (category) => category && categorySlug(category) === guide.slug,
-        ),
+        (metadata.tags || []).some((tag) => tagSlug(tag) === guide.slug),
     );
     if (!active) continue;
     const $ = cheerio.load(
@@ -182,6 +182,37 @@ test('category pages render configured reading order, excerpts and local covers'
   }
 });
 
+test('every canonical tag has a page in its language and merged tag URLs redirect to a generated tag page', () => {
+  const sourcePosts = publishedContent('posts');
+  const routes = new Set(collectBuildContract(publicRoot).routes);
+  const redirects = new Set(collectBuildContract(publicRoot).redirects);
+  for (const { language, metadata, route } of sourcePosts) {
+    if (metadata.useDefaultLangCanonical) continue;
+    for (const tag of metadata.tags || [])
+      assert(
+        routes.has(`/${language}/category/${tagSlug(tag)}/`),
+        `Missing tag page for ${route}: ${tag}`,
+      );
+  }
+  for (const [former, canonical] of Object.entries(mergedTags)) {
+    const formerSlug = tagSlug(former);
+    const canonicalSlug = tagSlug(canonical);
+    if (formerSlug === canonicalSlug) continue;
+    for (const language of ['en', 'pl']) {
+      const fromPath = `/${language}/category/${formerSlug}/`;
+      assert(!routes.has(fromPath), `Merged tag still has a page: ${fromPath}`);
+      const toPath = [language, 'en']
+        .map((candidate) => `/${candidate}/category/${canonicalSlug}/`)
+        .find((candidate) => routes.has(candidate));
+      assert(toPath, `Missing canonical tag page: ${canonical}`);
+      assert(
+        redirects.has(`${fromPath} ${toPath} 301`),
+        `Missing merged tag redirect ${fromPath} -> ${toPath}`,
+      );
+    }
+  }
+});
+
 test('article navigation includes existing placeholder languages without advertising duplicate translations', () => {
   for (const { route, language } of articles) {
     const $ = cheerio.load(
@@ -197,7 +228,7 @@ test('article navigation includes existing placeholder languages without adverti
   }
 });
 
-test('Event Sourcing category languages share all articles and curated reading order', () => {
+test('Event Sourcing tag languages share all articles and curated reading order', () => {
   const expected = new Map<
     string,
     { language: string; metadata: Frontmatter }[]
@@ -223,9 +254,7 @@ test('Event Sourcing category languages share all articles and curated reading o
       !versions.some(
         ({ metadata }) =>
           !metadata.useDefaultLangCanonical &&
-          [metadata.category, ...(metadata.categories || [])].includes(
-            'Event Sourcing',
-          ),
+          (metadata.tags || []).includes('Event Sourcing'),
       )
     )
       continue;
@@ -249,7 +278,7 @@ test('Event Sourcing category languages share all articles and curated reading o
     assert.equal(
       cards.length,
       expected.size,
-      `${language}: missing category articles`,
+      `${language}: missing tag articles`,
     );
     assert.equal(
       new Set(cards.map((_, card) => $(card).attr('href')!.split('/')[2]).get())
@@ -277,7 +306,7 @@ test('Event Sourcing category languages share all articles and curated reading o
       );
       assert(
         fs.existsSync(path.join(publicRoot, href, 'index.html')),
-        `Broken category link ${href}`,
+        `Broken tag link ${href}`,
       );
     });
     assert.deepEqual(
@@ -301,7 +330,7 @@ test('Event Sourcing category languages share all articles and curated reading o
       index(`a[href="/${language}/category/event-sourcing/"] strong`)
         .text()
         .includes(String(expected.size)),
-      'Index count differs from category detail',
+      'Index count differs from tag detail',
     );
   }
 });

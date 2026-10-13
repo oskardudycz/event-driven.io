@@ -41,7 +41,7 @@
   },
   {
     "language": "en",
-    "slug": "software-architecture",
+    "slug": "architecture",
     "description": "Pragmatic modelling and architecture guidance: understand the problem, expose assumptions, draw useful boundaries, and keep ownership explicit.",
     "recommended": [
       "intro_to_example_mapping",
@@ -80,7 +80,7 @@
   },
   {
     "language": "pl",
-    "slug": "software-architecture",
+    "slug": "architecture",
     "description": "Pragmatyczne materiały o modelowaniu, podejmowaniu decyzji i projektowaniu architektury oprogramowania.",
     "recommended": []
   }

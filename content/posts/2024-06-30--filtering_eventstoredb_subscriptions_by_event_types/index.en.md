@@ -1,6 +1,7 @@
 ---
 title: Filtering EventStoreDB subscriptions by event types
-category: "DevOps"
+tags:
+  - DevOps
 cover: 2024-06-30-cover.png
 author: oskar dudycz
 ---

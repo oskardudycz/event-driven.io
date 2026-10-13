@@ -1,6 +1,7 @@
 ---
 title: Hints on getting to speak at conferences
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-05-12-cover.jpg
 author: oskar dudycz
 redirectFrom: /hints-on-getting-to-speak-at-conferences/

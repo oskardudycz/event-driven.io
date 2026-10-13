@@ -1,6 +1,7 @@
 ---
 title: 'Start Alone, Then Together: Why Software Modelling Needs Solitary Brainstorming'
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-06-23-cover.png
 author: oskar dudycz
 redirectFrom: /start-alone-then-together-why-software/

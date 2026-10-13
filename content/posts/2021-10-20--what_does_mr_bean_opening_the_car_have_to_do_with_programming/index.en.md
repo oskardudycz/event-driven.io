@@ -1,6 +1,7 @@
 ---
 title: What does Mr Bean opening the car have to do with programming?
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2021-10-20-cover.png
 author: oskar dudycz
 ---

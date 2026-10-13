@@ -1,6 +1,7 @@
 ---
 title: How to build and push Docker image with GitHub actions?
-category: "DevOps"
+tags:
+  - DevOps
 cover: 2021-08-11-cover.png
 author: oskar dudycz
 ---

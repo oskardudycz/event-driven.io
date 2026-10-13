@@ -1,6 +1,7 @@
 ---
 title: What texting your Ex has to do with Event-Driven Design?
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2021-01-27-cover.png
 author: oskar dudycz
 ---

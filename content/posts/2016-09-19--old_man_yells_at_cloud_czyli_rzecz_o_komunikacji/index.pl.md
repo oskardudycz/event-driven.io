@@ -1,6 +1,7 @@
 ---
 title: Old man yells at cloud, czyli rzecz o komunikacji
-category: "Coding life"
+tags:
+  - Coding Life
 cover: 2016-09-19-cover.jpg
 author: oskar dudycz
 disqusId: 216 http://oskar-dudycz.pl/?p=216

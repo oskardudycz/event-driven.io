@@ -1,6 +1,7 @@
 ---
 title: Building your own Ledger Database
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-11-11-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

@@ -8,6 +8,10 @@ Preserve authored alpha on page images. Remove the white image canvas from share
 
 ## Current baseline
 
+### Tags and learning paths (in progress)
+
+The [learning-paths spec](docs/learning-paths/spec.md) runs in phases. Phase 2 is implemented locally: articles carry one `tags` list (first tag primary) instead of `category`/`categories`, merged values follow the [approved mapping](docs/learning-paths/tag-mapping.md) and their old tag URLs redirect permanently. Frontmatter stores English tag names; `tags.labels` in the locale translations supplies display labels with an English fallback. Routes stay `/{lang}/category/` and `/{lang}/category/{slug}/` until the separately approved route phase; `data/category-guides.json` is renamed with the learning-path data in phase 3. Hosted CI and deployment are unverified.
+
 ### Feature-based tests and runner responsibilities
 
 The [runner and helper research](docs/test-review.md#runner-and-helper-research) compares Pongo/Emmett-style test organization with Vitest Browser Mode, React helpers, Astro and Playwright conventions. Tests now live beside their owning components/modules; shared and whole-site matrices stay in feature folders under `tests/`; execution type is a filename suffix, not the primary directory hierarchy. Support directories are appropriate for shared browser fixtures and controlled cross-component matrices. Named Vitest projects select unit, integration, browser-component and generated-output suites. Group commands replace per-file scripts; type checking stays separate.
@@ -94,20 +98,20 @@ Local implementation and full validation are complete: locked installation, smok
 
 ## Editorial discovery rules
 
-Recommended category order is controlled by the ordered recommended slugs in data/category-guides.json. Related articles require explicit related frontmatter and valid published targets; there is no broad category fallback. Chronological earlier/later navigation is separate. Use genuine translations for editorial clarity without forcing visitors from Polish routes to English.
+Recommended tag order is controlled by the ordered recommended slugs in data/category-guides.json. Related articles require explicit related frontmatter and valid published targets; there is no broad tag fallback. Chronological earlier/later navigation is separate. Use genuine translations for editorial clarity without forcing visitors from Polish routes to English.
 
 ## Content frontmatter conventions
 
-Use one primary topic and add genuinely useful secondary topics. Avoid assigning every broadly related topic.
+List the primary topic first and add only genuinely useful secondary topics. Avoid assigning every broadly related topic. Use the English tag name in both language versions.
 
 ```yaml
 title: A concrete, descriptive article title
 description: A concise search description explaining what the reader will learn.
 summary: A direct visible answer to what the article is about and who it helps.
-category: Event Sourcing
-categories:
+tags:
+  - Event Sourcing
   - CQRS
-  - Software Architecture
+  - Architecture
 ```
 
 The `description` is primarily metadata and may appear as a search or social snippet. The `summary` is shown to readers below the title. Search engines may still choose a different excerpt when it better matches a query.

@@ -21,8 +21,7 @@ export type Frontmatter = {
   title: string;
   description?: string;
   summary?: string;
-  category?: string;
-  categories?: string[];
+  tags?: string[];
   cover?: ImageFile;
   author?: string;
   publishedAt?: string;
@@ -61,8 +60,8 @@ export type SitePageContext = {
   originalPath?: string;
   availableLanguages?: string[];
   canonicalLanguages?: string[];
-  category?: string;
-  categoryDescription?: string;
+  tag?: string;
+  tagDescription?: string;
   recommendedSlugs?: string[];
   next?: ArticleNode;
   prev?: ArticleNode;

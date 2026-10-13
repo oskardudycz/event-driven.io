@@ -1,6 +1,7 @@
 ---
 title: Sneaky Code Bites Back
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-09-22-cover.jpg
 author: oskar dudycz
 redirectFrom: /sneaky-code-bites-back/

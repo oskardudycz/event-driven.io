@@ -43,7 +43,7 @@ function Editorial({ language }: { language: 'en' | 'pl' }) {
             title={example.title}
             date="2026-01-15"
             author="Example author"
-            categories={['Event Sourcing', 'Software Architecture']}
+            tags={['Event Sourcing', 'Software Architecture']}
             excerpt={example.excerpt}
             cover={
               <img src={cover} alt={example.title} width="840" height="378" />
@@ -83,7 +83,7 @@ function Editorial({ language }: { language: 'en' | 'pl' }) {
             content: example.excerpt,
             date: '2026-01-15',
             source: 'posts',
-            category: 'Event Sourcing',
+            tags: 'Event Sourcing',
             langKey: 'en',
             terms: ['event'],
           }}

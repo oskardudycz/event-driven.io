@@ -1,6 +1,7 @@
 ---
 title: 'Architecture Weekly #190 - Queuing, Backpressure, Single Writer and other useful patterns for managing concurrency'
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-08-12-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

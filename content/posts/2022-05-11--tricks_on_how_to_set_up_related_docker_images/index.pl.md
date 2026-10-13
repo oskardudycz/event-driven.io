@@ -1,6 +1,7 @@
 ---
 title: A few tricks on how to set up related Docker images with docker-compose
-category: "DevOps"
+tags:
+  - DevOps
 cover: 2022-05-11-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

@@ -1,6 +1,7 @@
 ---
 title: Vibing, Harness and OODA loop
-category: "Software Architecture"
+tags:
+  - Architecture
 cover: 2026-04-26-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

@@ -1,6 +1,7 @@
 ---
 title: 'Webinar #23 - Gojko Adzic on designing product development experiments with Lizard Optimization'
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-10-07-cover.png
 author: oskar dudycz
 redirectFrom: /webinar-23-gojko-adzic-on-designing/

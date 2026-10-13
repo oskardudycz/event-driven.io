@@ -1,6 +1,7 @@
 ---
 title: On mashing up modelling techniques for fun and profit
-category: "Software Architecture"
+tags:
+  - Architecture
 cover: 2026-05-18-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

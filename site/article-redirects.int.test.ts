@@ -92,3 +92,60 @@ test('opted-in aliases redirect once to English, excluding self aliases and unco
   }
   assert(!lines.some((line) => line.startsWith('/existing/ ')));
 });
+
+test('merged tag URLs redirect permanently to created canonical tag pages', async () => {
+  const { createPages } = await import('./node.ts');
+  const article = (
+    language: string,
+    slug: string,
+    tags: string[],
+  ): ArticleEdge => ({
+    node: {
+      id: `${language}-${slug}`,
+      frontmatter: { title: `Article ${slug}`, related: [], tags },
+      fields: { slug: `/${slug}/`, langKey: language, source: 'posts' },
+    },
+  });
+  const nodes = [
+    article('en', 'boundaries', ['Architecture', 'Testing']),
+    article('pl', 'polish-testing', ['Testing']),
+  ];
+  const redirects: Parameters<Actions['createRedirect']>[0][] = [];
+  const pages: Parameters<Actions['createPage']>[0][] = [];
+  await createPages(
+    {
+      actions: {
+        createPage: (page: Parameters<Actions['createPage']>[0]) =>
+          pages.push(page),
+        createRedirect: (redirect: Parameters<Actions['createRedirect']>[0]) =>
+          redirects.push(redirect),
+      },
+      graphql: () =>
+        Promise.resolve({
+          data: {
+            allMarkdownRemark: { edges: nodes },
+            searchCovers: { nodes: [] },
+          },
+        }),
+    } as unknown as Parameters<typeof createPages>[0],
+    { plugins: [] },
+    () => {},
+  );
+  const tagRedirects = redirects.filter(({ fromPath }) =>
+    fromPath.includes('/category/'),
+  );
+  assert.deepEqual(
+    tagRedirects.map(({ fromPath, toPath }) => `${fromPath} ${toPath}`).sort(),
+    [
+      '/en/category/software-architecture/ /en/category/architecture/',
+      '/en/category/tests/ /en/category/testing/',
+      '/pl/category/software-architecture/ /en/category/architecture/',
+      '/pl/category/tests/ /pl/category/testing/',
+    ],
+  );
+  for (const redirect of tagRedirects) {
+    assert.equal(redirect.isPermanent, true);
+    assert.equal(redirect.statusCode, 301);
+    assert(pages.some((page) => page.path === redirect.toPath));
+  }
+});

@@ -1,6 +1,7 @@
 ---
 title: Computer says no! Why we might have an issue with Artificial Intelligence soon
-category: "Artificial Intelligence"
+tags:
+  - Artificial Intelligence
 cover: 2021-08-25-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

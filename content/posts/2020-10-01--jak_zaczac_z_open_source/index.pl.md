@@ -1,6 +1,7 @@
 ---
 title: Jak zacząć z Open Source?
-category: "Open Source"
+tags:
+  - Open Source
 cover: 2020-10-01-cover.png
 author: oskar dudycz
 disqusId: 1154 https://oskar-dudycz.pl/?p=1154

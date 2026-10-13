@@ -1,6 +1,7 @@
 ---
 title: Checkpointing the message processing
-category: "Event-Driven Architecture"
+tags:
+  - Event-Driven Architecture
 cover: 2025-12-08-cover.png
 author: oskar dudycz
 redirectFrom: /checkpointing_message_processing/

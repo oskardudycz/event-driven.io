@@ -3,28 +3,23 @@ import type { ArticleNode } from '../../types/content.ts';
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import { Link } from '../Link/index.tsx';
 import ArchiveCard from './ArchiveCard.tsx';
+import { useTranslation } from 'react-i18next';
+import { tagLabel } from '../../utils/tag-label.ts';
 
 export default function Item({ post }: { post: ArticleNode }) {
+  const { t } = useTranslation();
   const {
     excerpt = '',
     fields: { slug, prefix = '' },
-    frontmatter: { title = '', category, categories = [], author, cover },
+    frontmatter: { title = '', tags = [], author, cover },
   } = post;
-  const additionalCategories = Array.isArray(categories) ? categories : [];
-  const categoryNames = Array.from(
-    new Set(
-      [category, ...additionalCategories].filter(
-        (categoryName): categoryName is string => Boolean(categoryName),
-      ),
-    ),
-  );
   return (
     <ArchiveCard
       href={slug}
       title={title}
       date={prefix}
       author={author}
-      categories={categoryNames}
+      tags={tags.map((tag) => tagLabel(t, tag))}
       excerpt={excerpt}
       cover={
         <GatsbyImage

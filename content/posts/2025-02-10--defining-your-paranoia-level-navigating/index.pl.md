@@ -1,6 +1,7 @@
 ---
 title: 'Defining Your Paranoia Level: Navigating Change Without the Overkill'
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-02-10-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

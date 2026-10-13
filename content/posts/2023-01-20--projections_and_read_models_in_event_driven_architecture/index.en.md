@@ -2,8 +2,8 @@
 title: Guide to Projections and Read Models in Event-Driven Architecture
 description: "Learn how projections turn event streams into useful read models, including rebuilds, idempotency, and eventual consistency."
 summary: "This guide explains how to design, build, and safely rebuild projections and read models from event streams, with practical guidance for idempotency and eventual consistency."
-category: "Event Sourcing"
-categories:
+tags:
+  - Event Sourcing
   - Event-Driven Architecture
   - CQRS
 cover: 2023-01-20-cover.jpg

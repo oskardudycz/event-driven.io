@@ -1,6 +1,7 @@
 ---
 title: Let's build the worst Event Sourcing system!
-category: ".NET"
+tags:
+  - .NET
 cover: 2024-06-01-cover.png
 author: oskar dudycz
 ---

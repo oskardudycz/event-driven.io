@@ -1,6 +1,7 @@
 ---
 title: Why you should batch message processing and how to do it with .NET AsyncEnumerable
-category: ".NET"
+tags:
+  - .NET
 cover: 2024-05-24-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

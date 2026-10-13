@@ -1,6 +1,7 @@
 ---
 title: 'Understanding Kafka''s Consumer Protocol: A Deep Dive into How Consumers Talk to Brokers'
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-01-27-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

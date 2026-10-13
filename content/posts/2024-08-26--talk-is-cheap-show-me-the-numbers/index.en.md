@@ -1,6 +1,7 @@
 ---
 title: 'Architecture Weekly #192 - Talk is cheap, show me the numbers! Benchmarking and beyond!'
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-08-26-cover.png
 author: oskar dudycz
 redirectFrom: /talk-is-cheap-show-me-the-numbers/

@@ -1,6 +1,7 @@
 ---
 title: Can command return a value?
-category: "CQRS"
+tags:
+  - CQRS
 cover: 2021-03-10-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

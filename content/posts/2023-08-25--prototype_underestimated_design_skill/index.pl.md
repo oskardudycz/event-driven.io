@@ -1,6 +1,7 @@
 ---
 title: Prototyping, an underestimated design skill
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2023-08-25-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

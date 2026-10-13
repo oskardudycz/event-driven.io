@@ -1,6 +1,7 @@
 ---
 title: “I'm not interested in politics” is not actual anymore
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2022-02-30-cover.png
 author: oskar dudycz
 ---

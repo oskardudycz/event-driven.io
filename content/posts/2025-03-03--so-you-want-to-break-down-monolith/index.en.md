@@ -1,6 +1,7 @@
 ---
 title: So you want to break down monolith? Read that first.
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-03-03-cover.jpg
 author: oskar dudycz
 redirectFrom: /so-you-want-to-break-down-monolith/

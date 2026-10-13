@@ -1,6 +1,7 @@
 ---
 title: Projecting Marten events to Elasticsearch
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2023-03-18-cover.png
 author: oskar dudycz
 ---

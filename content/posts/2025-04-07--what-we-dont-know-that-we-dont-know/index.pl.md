@@ -1,6 +1,7 @@
 ---
 title: What we don't know that we don't know
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-04-07-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

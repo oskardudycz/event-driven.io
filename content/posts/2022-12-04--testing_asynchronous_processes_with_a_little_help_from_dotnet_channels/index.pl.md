@@ -1,6 +1,7 @@
 ---
 title: Testing asynchronous processes with a little help from .NET Channels
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2022-12-04-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical : true

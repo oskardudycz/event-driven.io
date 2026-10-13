@@ -1,6 +1,7 @@
 ---
 title: What if I told you that Relational Databases are in fact Event Stores?
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2021-02-03-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

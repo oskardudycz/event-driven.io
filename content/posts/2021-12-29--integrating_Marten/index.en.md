@@ -1,6 +1,7 @@
 ---
 title: Integrating Marten with other systems
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2021-12-29-cover.png
 author: oskar dudycz
 ---

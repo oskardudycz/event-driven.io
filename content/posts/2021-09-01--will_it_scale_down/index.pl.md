@@ -1,6 +1,7 @@
 ---
 title: Will it scale... down?
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2021-09-01-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

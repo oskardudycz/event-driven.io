@@ -1,6 +1,7 @@
 ---
 title: How to get the current entity state from events?
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2021-06-30-cover.png
 author: oskar dudycz
 ---

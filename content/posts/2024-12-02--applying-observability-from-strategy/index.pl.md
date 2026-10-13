@@ -1,6 +1,7 @@
 ---
 title: 'Applying Observability: From Strategy to Practice with Hazel Weakly'
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-12-02-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

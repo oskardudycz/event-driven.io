@@ -176,8 +176,8 @@ Installation configures Husky. The pre-commit hook runs `npm run lint-staged` ag
 Import a URL, a batch manifest or a saved HTML page:
 
 ```bash
-npm run import-articles -- https://www.architecture-weekly.com/p/post-slug --category 'Software Architecture'
-npm run import-articles -- https://kurrentdb.kurrent.io/blog/post-slug/ --category 'Event Sourcing'
+npm run import-articles -- https://www.architecture-weekly.com/p/post-slug --tag Architecture
+npm run import-articles -- https://kurrentdb.kurrent.io/blog/post-slug/ --tag 'Event Sourcing' --tag CQRS
 npm run import-articles -- --manifest import-substack-posts.json
 npm run import-articles -- --manifest import/eventstore-posts.json
 npm run import-articles -- https://www.architecture-weekly.com/p/post-slug --html saved-page.html
@@ -191,7 +191,7 @@ Manifest format:
 [
   {
     "url": "https://www.architecture-weekly.com/p/source-slug",
-    "category": "Event Sourcing",
+    "tags": ["Event Sourcing", "CQRS"],
     "slug": "optional-custom-slug",
     "codeLanguage": "typescript",
     "youtubeVideo": "sQbkUl7-z_U",
@@ -207,7 +207,7 @@ Manifest format:
 
 The importer retains source alt text. If a body image has no description, add an `imageAlts` override keyed by its source URL (the original image URL reported in the error, or the CDN URL). An explicit empty string marks a decorative image and records its local filename in `decorativeImages` frontmatter. Missing descriptions fail the import and remove its temporary directory; no guessed descriptions are added.
 
-Only `url` is required. The default category is `Software Architecture`. `slug` overrides the source slug. `codeLanguage` overrides plain-text code labels. `youtubeVideo` adds a recording when absent; `recordingEmbeds` replaces mapped recording cards/thumbnails. Video IDs must contain 11 characters.
+Only `url` is required. `tags` defaults to `["Architecture"]`; the first tag is the primary one. `slug` overrides the source slug. `codeLanguage` overrides plain-text code labels. `youtubeVideo` adds a recording when absent; `recordingEmbeds` replaces mapped recording cards/thumbnails. Video IDs must contain 11 characters.
 
 Imports create `content/posts/YYYY-MM-DD--slug/index.en.md` and `index.pl.md`, download images into that directory and record provenance in `article-source.txt` or `substack-source.txt`. Both files initially have the same body; the Polish file uses `useDefaultLangCanonical: true`. Translate the body and image descriptions, then remove that flag.
 
@@ -328,9 +328,19 @@ npm run render-diagrams content/posts/2026-10-12--connection-pooler-modes-adviso
 
 The script finds every `.mmd` file in the folder (skipping `node_modules`), uses the folder's date prefix and the file's number to name the output, and renders it with [Mermaid CLI](https://github.com/mermaid-js/mermaid-cli) through `npx`, at 3x scale on a white background. The CLI version is pinned in [render-mermaid.ts](scripts/render-mermaid.ts), and the theme and fonts are in [mermaid-config.json](scripts/mermaid-config.json). The first run downloads Mermaid CLI and its headless Chromium, so it takes a while. Rerun the command after changing a diagram, and commit both the `.mmd` source and the PNG. `npm run test:file -- render-mermaid` checks the file discovery and naming.
 
-### Category reading order
+### Tags and reading order
 
-Edit `data/category-guides.json`:
+Articles list their topics in `tags` frontmatter. The first tag is the primary one: it is shown first and used for `article:section`. Use the English tag name in both language versions; tag URLs come from that name, so they are identical in English and Polish. To show a Polish name, add it under `tags.labels`, keyed by the tag's URL slug, in `src/i18n/locales/pl/translation.json`. Tags without a translation show their English name.
+
+```yaml
+tags:
+  - Event Sourcing
+  - CQRS
+```
+
+When merging tags, add the former value to `mergedTags` in `src/utils/tag-redirects.ts`; its old tag URL then redirects to the merged tag page.
+
+To set a tag page's description and numbered reading order, edit `data/category-guides.json`:
 
 ```json
 {
@@ -344,9 +354,9 @@ Edit `data/category-guides.json`:
 }
 ```
 
-`recommended` controls the numbered order. Use article slugs without dates, locale prefixes or surrounding slashes. Each article must belong to the category through `category` or `categories` on its canonical version. Remaining articles follow by date; an empty array uses chronological order only. English and Polish guides are independent. Missing/out-of-category recommendations are ignored, so inspect the resulting category page after editing.
+`recommended` controls the numbered order. Use article slugs without dates, locale prefixes or surrounding slashes. Each article must have the tag in `tags` on its canonical version. Remaining articles follow by date; an empty array uses chronological order only. English and Polish guides are independent. Missing or untagged recommendations are ignored, so inspect the resulting tag page after editing.
 
-A guide does not create a category route by itself; at least one canonical article in that language must belong to the category. Run `npm run build`, `npm run test:file -- site/categories` and inspect `/en/category/event-sourcing/` and `/pl/category/event-sourcing/`.
+A guide does not create a tag route by itself; at least one canonical article in that language must have the tag. Run `npm run build`, `npm run test:file -- tests/articles/rendering.generated.test.ts` and inspect `/en/category/event-sourcing/` and `/pl/category/event-sourcing/`.
 
 ### Styles
 

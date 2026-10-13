@@ -1,6 +1,7 @@
 ---
 title: Pongo behind the scenes
-category: "TypeScript"
+tags:
+  - TypeScript
 cover: 2024-10-11-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

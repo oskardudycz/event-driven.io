@@ -1,6 +1,7 @@
 ---
 title: Running a regular SQL on Pongo documents
-category: "TypeScript"
+tags:
+  - TypeScript
 cover: 2024-10-15-cover.png
 author: oskar dudycz
 ---

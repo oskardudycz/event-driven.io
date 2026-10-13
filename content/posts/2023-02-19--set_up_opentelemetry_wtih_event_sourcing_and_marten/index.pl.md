@@ -1,6 +1,7 @@
 ---
 title: Set up OpenTelemetry with Event Sourcing and Marten
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2023-02-19-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical : true

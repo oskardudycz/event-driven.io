@@ -1,6 +1,7 @@
 ---
 title: Inauguracja
-category: ".NET"
+tags:
+  - .NET
 cover: 2011-09-21-cover.png
 author: oskar dudycz
 disqusId: 35 http://oskar-dudycz.pl/2011/09/21/witam-jest-to-moj-pierwszy-wpis-na/

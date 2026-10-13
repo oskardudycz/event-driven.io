@@ -1,6 +1,7 @@
 ---
 title: 'TypeScript Migrates to Go: What''s Really Behind That 10x Performance Claim?'
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-03-24-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

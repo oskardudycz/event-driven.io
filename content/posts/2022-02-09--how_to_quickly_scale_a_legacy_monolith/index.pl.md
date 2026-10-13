@@ -1,6 +1,7 @@
 ---
 title: How to quickly scale a legacy monolith?
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2022-02-09-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

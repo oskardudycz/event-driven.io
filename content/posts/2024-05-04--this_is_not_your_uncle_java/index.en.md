@@ -1,6 +1,7 @@
 ---
 title: This is not your uncle's Java! Modelling with Java 22 records pattern matching in practice
-category: "Java"
+tags:
+  - Java
 cover: 2024-05-04-cover.png
 author: oskar dudycz
 ---

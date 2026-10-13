@@ -1,6 +1,7 @@
 ---
 title: Simple patterns for events schema versioning
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2021-12-08-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

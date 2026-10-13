@@ -1,6 +1,7 @@
 ---
 title: How to get all messages through Postgres logical replication
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2022-11-20-cover.jpg
 author: oskar dudycz
 ---

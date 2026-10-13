@@ -38,14 +38,9 @@ export default function SearchResult({
     lang === 'pl'
       ? { posts: 'Artykuł', pages: 'Strona', 'newsletter-pl': 'Newsletter' }
       : { posts: 'Article', pages: 'Page', 'newsletter-pl': 'Newsletter' };
-  const categories = Array.isArray(hit.category)
-    ? hit.category
-    : hit.category
-      ? [hit.category]
-      : [];
   const details = [
     sourceLabels[hit.source] || hit.source,
-    ...categories,
+    ...[hit.tags ?? []].flat(),
   ].filter(Boolean);
 
   return (

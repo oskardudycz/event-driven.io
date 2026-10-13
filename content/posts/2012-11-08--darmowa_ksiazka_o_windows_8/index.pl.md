@@ -1,6 +1,7 @@
 ---
 title: Prezent od Microsoft – Darmowa książka o programowaniu w Windows 8
-category: "Windows"
+tags:
+  - Windows
 cover: 2012-11-08-cover.png
 author: oskar dudycz
 disqusId: 18 http://oskar-dudycz.pl/2012/11/08/prezent-od-microsoft-darmowa-ksiazka-o/

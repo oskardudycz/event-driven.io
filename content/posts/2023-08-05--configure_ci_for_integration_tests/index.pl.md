@@ -1,6 +1,7 @@
 ---
 title: A simple way to configure integration tests pipeline
-category: "DevOps"
+tags:
+  - DevOps
 cover: 2023-08-05-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

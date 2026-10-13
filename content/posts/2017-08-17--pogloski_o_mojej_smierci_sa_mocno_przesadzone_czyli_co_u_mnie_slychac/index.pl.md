@@ -1,6 +1,7 @@
 ---
 title: Pogłoski o mojej śmierci są mocno przesadzone, czyli co u mnie słychać
-category: "Coding life"
+tags:
+  - Coding Life
 cover: 2017-08-17-cover.jpg
 author: oskar dudycz
 disqusId: 283 http://oskar-dudycz.pl/?p=283

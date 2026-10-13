@@ -1,6 +1,7 @@
 ---
 title: Combining the To-Do List and the Passage Of Time patterns for resilient business workflows
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2024-06-07-cover.png
 author: oskar dudycz
 ---

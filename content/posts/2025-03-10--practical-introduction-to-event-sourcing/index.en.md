@@ -1,6 +1,7 @@
 ---
 title: Practical Introduction to Event Sourcing with Emmett
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-03-10-cover.png
 author: oskar dudycz
 redirectFrom: /practical-introduction-to-event-sourcing/

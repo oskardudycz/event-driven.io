@@ -1,6 +1,7 @@
 ---
 title: How to handle multiple commands in the same transaction
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2023-03-12-cover.png
 author: oskar dudycz
 ---

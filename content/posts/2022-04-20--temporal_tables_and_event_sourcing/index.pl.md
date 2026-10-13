@@ -1,6 +1,7 @@
 ---
 title: Are Temporal Tables an alternative to Event Sourcing?
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2022-04-20-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

@@ -1,6 +1,7 @@
 ---
 title: Fixing bugs in Event Sourcing is hard, for real?
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2026-07-27-cover.png
 author: oskar dudycz
 redirectFrom: /fixing-bugs-in-event-sourcing-is-hard/

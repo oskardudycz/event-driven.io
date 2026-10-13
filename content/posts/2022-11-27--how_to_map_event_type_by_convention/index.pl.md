@@ -1,6 +1,7 @@
 ---
 title: Mapping event type by convention
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2022-11-27-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical : true

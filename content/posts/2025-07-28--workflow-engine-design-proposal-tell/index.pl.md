@@ -1,6 +1,7 @@
 ---
 title: Workflow Engine design proposal, tell me your thoughts
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-07-28-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

@@ -1,6 +1,7 @@
 ---
 title: Ciekawostki - Equals
-category: ".NET"
+tags:
+  - .NET
 cover: 2011-10-17-cover.png
 author: oskar dudycz
 disqusId: 31 http://oskar-dudycz.pl/2011/10/17/ciekawostki-cz-1/

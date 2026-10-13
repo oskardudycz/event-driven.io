@@ -72,13 +72,7 @@ export function searchDocuments(
         path: `/${routeLanguage}${fields.slug}`,
         langKey: fields.langKey,
         source: fields.source || '',
-        category: [
-          ...new Set(
-            [frontmatter.category, ...(frontmatter.categories || [])].filter(
-              Boolean,
-            ),
-          ),
-        ].join(' · '),
+        tags: [...new Set(frontmatter.tags || [])].join(' · '),
         date: /^\d{4}-\d{2}-\d{2}$/.test(fields.prefix || '')
           ? fields.prefix || ''
           : '',

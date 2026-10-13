@@ -35,7 +35,7 @@
     "allTitle": "All articles",
     "allIntro": "Browse the complete archive, from the newest article back to the earliest posts."
   },
-  "categories": {
+  "tags": {
     "title": "Recommended reading by topic",
     "intro": "Choose a topic to follow a recommended learning path or browse all related articles.",
     "topic": "Topic",
@@ -45,8 +45,8 @@
     "articles": "Articles",
     "articleCount": "{{count}} article",
     "articleCount_plural": "{{count}} articles",
-    "defaultDescription": "Practical articles about {{category}}.",
-    "seoTitle": "{{category}} articles and learning path",
+    "defaultDescription": "Practical articles about {{tag}}.",
+    "seoTitle": "{{tag}} articles and learning path",
     "seoTitleAll": "Software architecture topics and reading paths",
     "seoDescription": "Recommended reading paths and practical articles about Event Sourcing, CQRS, event-driven architecture, and software design."
   },

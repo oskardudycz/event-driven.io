@@ -1,6 +1,7 @@
 ---
 title: Push-based Outbox Pattern with Postgres Logical Replication
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2022-10-13-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical : true

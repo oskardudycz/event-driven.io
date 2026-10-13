@@ -1,6 +1,7 @@
 ---
 title: On swimming, learning and my journey to being the last one
-category: "Motivational BS"
+tags:
+  - Motivational BS
 cover: 2026-07-13-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

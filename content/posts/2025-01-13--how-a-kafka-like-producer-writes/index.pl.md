@@ -1,6 +1,7 @@
 ---
 title: How Kafka Producer Works internally
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-01-13-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

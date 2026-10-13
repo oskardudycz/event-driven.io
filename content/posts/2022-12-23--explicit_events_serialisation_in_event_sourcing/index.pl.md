@@ -1,6 +1,7 @@
 ---
 title: Explicit events serialisation in Event Sourcing
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2022-12-23-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical : true

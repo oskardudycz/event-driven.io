@@ -1,6 +1,7 @@
 ---
 title: How to set up a test matrix in XUnit?
-category: "Tests"
+tags:
+  - Testing
 cover: 2021-02-21-cover.png
 author: oskar dudycz
 ---

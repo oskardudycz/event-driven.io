@@ -1,6 +1,7 @@
 ---
 title: How to ensure uniqueness in Event Sourcing
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2022-03-09-cover.png
 author: oskar dudycz
 ---

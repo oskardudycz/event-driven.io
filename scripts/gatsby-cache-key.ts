@@ -38,8 +38,9 @@ for (const file of [
   'src/theme/tokens.css',
   'src/theme/tailwind.css',
   'scripts/build-search-index.ts',
-  'src/utils/category-posts.ts',
-  'src/utils/category-slug.ts',
+  'src/utils/tag-posts.ts',
+  'src/utils/tag-slug.ts',
+  'src/utils/tag-redirects.ts',
   'content/meta/config.ts',
 ])
   include(file);

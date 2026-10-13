@@ -1,6 +1,7 @@
 ---
 title: Requeuing Roulette in Event-Driven Architecture and Messaging
-category: "Event-Driven Architecture"
+tags:
+  - Event-Driven Architecture
 cover: 2025-11-17-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

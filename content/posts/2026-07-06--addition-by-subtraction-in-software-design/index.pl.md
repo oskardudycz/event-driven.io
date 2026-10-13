@@ -1,6 +1,7 @@
 ---
 title: Addition by subtraction in Software Design
-category: "Software Architecture"
+tags:
+  - Architecture
 cover: 2026-07-06-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

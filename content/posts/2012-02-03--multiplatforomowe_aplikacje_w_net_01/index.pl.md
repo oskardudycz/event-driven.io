@@ -1,6 +1,7 @@
 ---
 title: Multiplatforomowe aplikacje w .NET, Silverlight i Windows Phone Cz.1 – Współdzielenie klas
-category: ".NET"
+tags:
+  - .NET
 cover: 2012-02-03-cover.png
 author: oskar dudycz
 disqusId: 24 http://oskar-dudycz.pl/2012/02/05/wspodzielenie-klas-w-net-silverlight-i/

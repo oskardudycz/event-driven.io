@@ -1,6 +1,7 @@
 ---
 title: Postgres Superpowers in Practice
-category: "Postgres"
+tags:
+  - PostgreSQL
 cover: 2023-04-15-cover.png
 author: oskar dudycz
 ---

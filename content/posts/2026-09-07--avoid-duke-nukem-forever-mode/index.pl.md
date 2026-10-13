@@ -1,6 +1,7 @@
 ---
 title: Avoid Duke Nukem Forever Mode
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2026-09-07-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

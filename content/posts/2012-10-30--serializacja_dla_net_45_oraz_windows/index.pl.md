@@ -1,6 +1,7 @@
 ---
 title: Serializacja dla .NET 4.5 oraz Windows Runtime przy pomocy Sharpserializer
-category: ".NET"
+tags:
+  - .NET
 cover: 2012-10-30-cover.png
 author: oskar dudycz
 disqusId: 19 http://oskar-dudycz.pl/2012/10/30/serializacja-dla-net-45-oraz-windows/

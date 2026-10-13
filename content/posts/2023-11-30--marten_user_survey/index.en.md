@@ -1,6 +1,7 @@
 ---
 title: Are you Marten or Wolverine user? Tell us more!
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2023-11-30-cover.png
 author: oskar dudycz
 ---

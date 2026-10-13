@@ -1,6 +1,7 @@
 ---
 title: 'Webinar #22 - On Performance Testing with Jarosław Pałka'
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-09-30-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

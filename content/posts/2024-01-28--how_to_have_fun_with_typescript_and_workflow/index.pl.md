@@ -1,6 +1,7 @@
 ---
 title: How TypeScript can help in modelling business workflows
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2024-01-28-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

@@ -1,6 +1,7 @@
 ---
 title: We all wanted to be Netflix, who do we want to be next?
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2026-09-14-cover.jpg
 author: oskar dudycz
 redirectFrom: /we-all-wanted-to-be-netflix-who-do/

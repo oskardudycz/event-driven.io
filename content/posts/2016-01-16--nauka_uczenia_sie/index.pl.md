@@ -1,6 +1,7 @@
 ---
 title: Nauka uczenia (się)
-category: "Coding life"
+tags:
+  - Coding Life
 cover: 2016-01-16-cover.png
 author: oskar dudycz
 disqusId: 9 http://oskar-dudycz.pl/2016/01/06/nauka-uczenia-sie/

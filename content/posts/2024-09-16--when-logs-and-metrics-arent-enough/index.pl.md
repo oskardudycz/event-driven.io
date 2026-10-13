@@ -1,6 +1,7 @@
 ---
 title: 'When Logs and metrics are not enough: Discovering Modern Observability'
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-09-16-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

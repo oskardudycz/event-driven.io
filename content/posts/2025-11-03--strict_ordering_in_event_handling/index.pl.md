@@ -1,6 +1,7 @@
 ---
 title: Handling Events Coming in an Unknown Order
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2025-11-03-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

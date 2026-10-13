@@ -1,6 +1,7 @@
 ---
 title: Mężczyzna w IT
-category: "Community"
+tags:
+  - Community
 cover: 2018-08-18-cover.png
 author: oskar dudycz
 disqusId: 323 http://oskar-dudycz.pl/?p=323

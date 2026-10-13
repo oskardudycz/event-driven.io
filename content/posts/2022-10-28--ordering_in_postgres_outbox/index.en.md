@@ -1,6 +1,7 @@
 ---
 title:  How Postgres sequences issues can impact your messaging guarantees
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2022-10-28-08.png
 author: oskar dudycz
 ---

@@ -1,6 +1,7 @@
 ---
 title: Snapshots in Event Sourcing
-category: Event Sourcing
+tags:
+  - Event Sourcing
 cover: 2021-05-20-cover.png
 author: oskar dudycz
 redirectFrom: /snapshots-in-event-sourcing/

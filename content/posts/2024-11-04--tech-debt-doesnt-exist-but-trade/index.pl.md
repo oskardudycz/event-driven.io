@@ -1,6 +1,7 @@
 ---
 title: Tech Debt doesn't exist, but trade-offs do
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-11-04-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

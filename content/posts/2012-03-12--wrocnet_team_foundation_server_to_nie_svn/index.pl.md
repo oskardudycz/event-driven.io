@@ -1,6 +1,7 @@
 ---
 title: WrocNet – Team Foundation Server to nie SVN – Materiały
-category: ".NET"
+tags:
+  - .NET
 cover: 2012-03-12-cover.png
 author: oskar dudycz
 disqusId: 21 http://oskar-dudycz.pl/2012/03/23/wrocnet-team-foundation-server-to-nie/

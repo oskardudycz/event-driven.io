@@ -1,6 +1,7 @@
 ---
 title: Refleksyjnie plus pierwszy w historii Vlog – Podstawy programowania w Office 2013
-category: "Office"
+tags:
+  - Office
 cover: 2014-05-31-cover.png
 author: oskar dudycz
 disqusId: 17 http://oskar-dudycz.pl/2014/05/31/refleksyjnie-plus-pierwszy-w-historii-vlog/

@@ -1,6 +1,7 @@
 ---
 title: A few notes on migrating storage library
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2023-12-07-cover.png
 author: oskar dudycz
 ---

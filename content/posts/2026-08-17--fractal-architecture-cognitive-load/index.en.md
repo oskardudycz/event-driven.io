@@ -1,6 +1,7 @@
 ---
 title: Fractal Architecture, Cognitive Load, Vertical Slices and other terms that do(n't) fit your head
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2026-08-17-cover.jpg
 author: oskar dudycz
 redirectFrom: /fractal-architecture-cognitive-load/

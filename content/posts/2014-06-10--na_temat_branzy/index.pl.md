@@ -1,6 +1,7 @@
 ---
 title: Na temat branży
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2014-06-10-cover.png
 author: oskar dudycz
 disqusId: 16 http://oskar-dudycz.pl/2014/06/10/na-temat-branzy/

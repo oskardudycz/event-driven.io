@@ -1,6 +1,7 @@
 ---
 title: How to automatically setup pgAdmin with a Docker database
-category: "DevOps"
+tags:
+  - DevOps
 cover: 2024-06-21-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

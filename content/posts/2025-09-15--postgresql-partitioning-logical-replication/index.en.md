@@ -1,6 +1,7 @@
 ---
 title: PostgreSQL partitioning, logical replication and other Q&A about PostgreSQL Superpowers
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-09-15-cover.jpg
 author: oskar dudycz
 redirectFrom: /postgresql-partitioning-logical-replication/

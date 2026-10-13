@@ -35,7 +35,7 @@
     "allTitle": "Wszystkie artykuły",
     "allIntro": "Przejrzyj pełne archiwum — od najnowszego artykułu aż po najstarsze wpisy."
   },
-  "categories": {
+  "tags": {
     "title": "Polecana kolejność czytania według tematów",
     "intro": "Wybierz temat, aby przejść polecaną ścieżkę nauki albo zobaczyć wszystkie powiązane artykuły.",
     "topic": "Temat",
@@ -46,10 +46,13 @@
     "articleCount_0": "{{count}} artykuł",
     "articleCount_1": "{{count}} artykuły",
     "articleCount_2": "{{count}} artykułów",
-    "defaultDescription": "Praktyczne artykuły na temat {{category}}.",
-    "seoTitle": "{{category}} — artykuły i ścieżka nauki",
+    "defaultDescription": "Praktyczne artykuły na temat {{tag}}.",
+    "seoTitle": "{{tag}} — artykuły i ścieżka nauki",
     "seoTitleAll": "Tematy i ścieżki nauki architektury oprogramowania",
-    "seoDescription": "Polecane ścieżki czytania i praktyczne artykuły o Event Sourcingu, CQRS-ie, architekturze opartej na zdarzeniach i projektowaniu oprogramowania."
+    "seoDescription": "Polecane ścieżki czytania i praktyczne artykuły o Event Sourcingu, CQRS-ie, architekturze opartej na zdarzeniach i projektowaniu oprogramowania.",
+    "labels": {
+      "design-patterns": "Wzorce projektowe"
+    }
   },
   "talks": {
     "title": "Wystąpienia i nagrania",

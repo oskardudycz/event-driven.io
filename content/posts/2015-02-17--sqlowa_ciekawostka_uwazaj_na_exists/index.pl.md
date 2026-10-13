@@ -1,6 +1,7 @@
 ---
 title: SQLowa ciekawostka – Uważaj na Exists kolego
-category: "MSSQL"
+tags:
+  - MSSQL
 cover: 2015-02-17-cover.png
 author: oskar dudycz
 disqusId: 13 http://oskar-dudycz.pl/2015/02/17/sqlowa-ciekawostka-1-uwazaj-na-exists/

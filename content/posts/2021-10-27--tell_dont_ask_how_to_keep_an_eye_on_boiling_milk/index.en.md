@@ -1,6 +1,7 @@
 ---
 title: Tell, don't ask! Or, how to keep an eye on boiling milk
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2021-10-27-cover.png
 author: oskar dudycz
 ---

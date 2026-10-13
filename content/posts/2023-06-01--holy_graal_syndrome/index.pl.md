@@ -1,6 +1,7 @@
 ---
 title: The Holy Grail syndrome
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2023-06-01-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

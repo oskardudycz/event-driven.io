@@ -1,6 +1,7 @@
 ---
 title: Hitchhiker's Guide To Moving From Relational Data To Events
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2023-12-15-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

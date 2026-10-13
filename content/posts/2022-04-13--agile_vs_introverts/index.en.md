@@ -1,6 +1,7 @@
 ---
 title: Agile vs Introverts
-category: "Agile"
+tags:
+  - Agile
 cover: 2022-04-13-cover.png
 author: oskar dudycz
 ---

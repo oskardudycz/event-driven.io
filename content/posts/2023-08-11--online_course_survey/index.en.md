@@ -1,6 +1,7 @@
 ---
 title: Could you help me by filling a short survey about an online course?
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2023-08-11-cover.png
 author: oskar dudycz
 ---

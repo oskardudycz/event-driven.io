@@ -1,6 +1,7 @@
 ---
 title: Should a programmer's creativity be shown in code formatting?
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2022-01-12-cover.png
 author: oskar dudycz
 ---

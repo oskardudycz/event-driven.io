@@ -1,6 +1,7 @@
 ---
 title: Explicit validation in C# just got simpler!
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2023-02-05-cover.jpg
 author: oskar dudycz
 ---

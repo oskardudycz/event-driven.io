@@ -1,28 +1,20 @@
 import type { Frontmatter } from '../types/content.ts';
-type CategorizedPost = {
+type TaggedPost = {
   fields: { slug: string; langKey: string; source?: string };
-  frontmatter: Pick<
-    Frontmatter,
-    'category' | 'categories' | 'useDefaultLangCanonical'
-  >;
+  frontmatter: Pick<Frontmatter, 'tags' | 'useDefaultLangCanonical'>;
 };
-import { categorySlug as slugForCategory } from './category-slug.ts';
+import { tagSlug as slugForTag } from './tag-slug.ts';
 
-export const categoriesForPost = (node: Pick<CategorizedPost, 'frontmatter'>) =>
+export const tagsForPost = (node: Pick<TaggedPost, 'frontmatter'>) =>
   Array.from(
-    new Set(
-      [
-        node.frontmatter.category,
-        ...(node.frontmatter.categories || []),
-      ].filter((category): category is string => Boolean(category)),
-    ),
+    new Set((node.frontmatter.tags || []).filter((tag) => Boolean(tag))),
   );
 
-// Category membership belongs to the article, while a card's language belongs
+// Tag membership belongs to the article, while a card's language belongs
 // to the available locale route. Placeholder copies do not define topics.
-export function categoryPostsForLanguage<T extends CategorizedPost>(
+export function tagPostsForLanguage<T extends TaggedPost>(
   nodes: T[],
-  categorySlug: string,
+  tagSlug: string,
   language: string,
   defaultLanguage = 'en',
 ): T[] {
@@ -32,9 +24,7 @@ export function categoryPostsForLanguage<T extends CategorizedPost>(
       .filter(
         (node) =>
           !node.frontmatter.useDefaultLangCanonical &&
-          categoriesForPost(node).some(
-            (category) => slugForCategory(category) === categorySlug,
-          ),
+          tagsForPost(node).some((tag) => slugForTag(tag) === tagSlug),
       )
       .map((node) => node.fields.slug),
   );
@@ -59,13 +49,13 @@ export function categoryPostsForLanguage<T extends CategorizedPost>(
   });
 }
 
-// Keep established category routes: a locale needs a canonical article in the
+// Keep established tag routes: a locale needs a canonical article in the
 // topic. Within each route, expose the same shared set of unique article slugs.
-export function categoriesForLanguage<T extends CategorizedPost>(
+export function tagsForLanguage<T extends TaggedPost>(
   nodes: T[],
   language: string,
 ): [string, T[]][] {
-  const categories = new Set<string>();
+  const tags = new Set<string>();
   nodes
     .filter(
       (node) =>
@@ -73,11 +63,9 @@ export function categoriesForLanguage<T extends CategorizedPost>(
         node.fields.langKey === language &&
         !node.frontmatter.useDefaultLangCanonical,
     )
-    .forEach((node) =>
-      categoriesForPost(node).forEach((category) => categories.add(category)),
-    );
-  return [...categories].map((category) => [
-    category,
-    categoryPostsForLanguage(nodes, slugForCategory(category), language),
+    .forEach((node) => tagsForPost(node).forEach((tag) => tags.add(tag)));
+  return [...tags].map((tag) => [
+    tag,
+    tagPostsForLanguage(nodes, slugForTag(tag), language),
   ]);
 }

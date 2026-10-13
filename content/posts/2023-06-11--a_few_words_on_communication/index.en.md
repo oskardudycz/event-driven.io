@@ -1,6 +1,7 @@
 ---
 title: A few words on communication
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2023-06-11-cover.png
 author: oskar dudycz
 ---

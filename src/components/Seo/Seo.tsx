@@ -105,6 +105,7 @@ const Seo = (props: SeoProps) => {
   const postTitle = frontmatter.title;
   const postDescription = frontmatter.description;
   const postCover = frontmatter.cover || {};
+  const primaryTag = frontmatter.tags?.[0];
   const postSlug = fields.slug || '';
 
   const pageTitle = suppliedTitle || postTitle;
@@ -178,20 +179,7 @@ const Seo = (props: SeoProps) => {
             '@type': 'WebPage',
             '@id': canonicalUrl,
           },
-          ...([frontmatter.category, ...(frontmatter.categories || [])].filter(
-            Boolean,
-          ).length
-            ? {
-                articleSection: Array.from(
-                  new Set(
-                    [
-                      frontmatter.category,
-                      ...(frontmatter.categories || []),
-                    ].filter(Boolean),
-                  ),
-                ),
-              }
-            : {}),
+          ...(primaryTag ? { articleSection: primaryTag } : {}),
           author: person,
           publisher: person,
         }
@@ -228,8 +216,8 @@ const Seo = (props: SeoProps) => {
     ...(isArticle && fields.prefix
       ? [{ property: 'article:published_time', content: published }]
       : []),
-    ...(isArticle && frontmatter.category
-      ? [{ property: 'article:section', content: frontmatter.category }]
+    ...(isArticle && primaryTag
+      ? [{ property: 'article:section', content: primaryTag }]
       : []),
     ...(facebook.appId
       ? [{ property: 'fb:app_id', content: facebook.appId }]

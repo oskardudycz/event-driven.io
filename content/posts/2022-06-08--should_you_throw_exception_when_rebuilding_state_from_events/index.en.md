@@ -1,6 +1,7 @@
 ---
 title: Should you throw an exception when rebuilding the state from events?
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2022-06-08-cover.png
 author: oskar dudycz
 ---

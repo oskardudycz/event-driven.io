@@ -1,6 +1,7 @@
 ---
 title: Englishman in New York, czyli jak .NETowiec może uwić sobie gniazdko w świecie MSSQL
-category: "MSSQL"
+tags:
+  - MSSQL
 cover: 2015-03-29-cover.png
 author: oskar dudycz
 disqusId: 12 http://oskar-dudycz.pl/2015/03/29/englishman-in-new-york-czyli-jak/

@@ -1,6 +1,7 @@
 ---
 title: Is It Production Ready?
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2024-08-19-cover.png
 author: oskar dudycz
 redirectFrom: /architecture-weekly-191-is-it-production/

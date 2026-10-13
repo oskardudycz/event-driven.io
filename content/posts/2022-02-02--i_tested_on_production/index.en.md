@@ -1,6 +1,7 @@
 ---
 title: I tested it on production and I'm not ashamed of it
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2022-02-02-cover.png
 author: oskar dudycz
 ---

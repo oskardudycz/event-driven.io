@@ -1,6 +1,7 @@
 ---
 title: It doesn't have to be toxic at work
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2022-09-14-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical : true

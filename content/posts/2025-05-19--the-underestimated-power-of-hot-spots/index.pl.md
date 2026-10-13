@@ -1,6 +1,7 @@
 ---
 title: The Underestimated Power of Hot Spots and Notes in EventStorming
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-05-19-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

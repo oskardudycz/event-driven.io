@@ -1,6 +1,7 @@
 ---
 title: Twelve things I learned about Java during my last code review
-category: "Coding Life"
+tags:
+  - Coding Life
 cover: 2022-03-30-cover.png
 author: oskar dudycz
 ---

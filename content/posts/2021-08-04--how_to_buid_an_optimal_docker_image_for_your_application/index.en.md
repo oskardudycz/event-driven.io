@@ -1,6 +1,7 @@
 ---
 title: How to build an optimal Docker image for your application?
-category: "DevOps"
+tags:
+  - DevOps
 cover: 2021-08-04-cover.png
 author: oskar dudycz
 ---

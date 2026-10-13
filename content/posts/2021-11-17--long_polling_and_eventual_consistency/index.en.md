@@ -1,6 +1,7 @@
 ---
 title: Long-polling, how to make our async API synchronous
-category: "API"
+tags:
+  - API
 cover: 2021-11-17-cover.png
 author: oskar dudycz
 ---

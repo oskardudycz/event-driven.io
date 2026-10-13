@@ -1,6 +1,7 @@
 ---
 title: The End of Coding? Wrong Question
-category: "Software Architecture"
+tags:
+  - Architecture
 cover: 2026-03-09-cover.png
 author: oskar dudycz
 redirectFrom: /the_end_of_coding_wrong_question/

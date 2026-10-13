@@ -1,6 +1,7 @@
 ---
 title: Pongo - Mongo but on Postgres and with strong consistency benefits
-category: "PostgreSql"
+tags:
+  - PostgreSQL
 cover: 2024-07-07-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

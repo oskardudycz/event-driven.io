@@ -1,6 +1,7 @@
 ---
 title: 'React Query: A solution for Frontend State Management challenges? With Tomasz Ducin'
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-02-03-cover.png
 author: oskar dudycz
 redirectFrom: /react-query-a-solution-for-frontend/

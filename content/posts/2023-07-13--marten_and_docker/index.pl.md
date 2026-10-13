@@ -1,6 +1,7 @@
 ---
 title: How to create a Docker image for the Marten application
-category: "DevOps"
+tags:
+  - DevOps
 cover: 2023-07-13-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

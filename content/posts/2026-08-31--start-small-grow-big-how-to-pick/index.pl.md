@@ -1,6 +1,7 @@
 ---
 title: 'Start Small, Grow Big: how to pick the first feature for Event Sourcing'
-category: Event Sourcing
+tags:
+  - Event Sourcing
 cover: 2026-08-31-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

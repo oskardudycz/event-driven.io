@@ -1,6 +1,7 @@
 ---
 title: Vertical slices, their ownership and external dependencies
-category: "Software Architecture"
+tags:
+  - Architecture
 cover: 2026-08-10-cover.png
 author: oskar dudycz
 related:

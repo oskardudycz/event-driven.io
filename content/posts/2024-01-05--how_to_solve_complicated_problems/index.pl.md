@@ -1,6 +1,7 @@
 ---
 title: Not all issues are complex, some are complicated. Here's how to deal with them
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2024-01-05-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

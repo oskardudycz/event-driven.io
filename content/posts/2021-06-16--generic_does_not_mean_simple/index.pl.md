@@ -1,6 +1,7 @@
 ---
 title: Generic does not mean Simple
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2021-06-16-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

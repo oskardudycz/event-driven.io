@@ -82,7 +82,7 @@ const readEntries = (source: string, type: string) => {
         type,
         language,
         title: frontmatter.title || '',
-        category: frontmatter.category || 'Other',
+        primaryTag: frontmatter.tags?.[0] || 'Other',
         description: summarize(body, frontmatter.description),
         url: `${siteUrl}/${language}/${slug}/`,
         date: type === 'article' ? directoryName.split('--')[0] || '' : '',

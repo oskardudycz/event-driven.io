@@ -1,6 +1,7 @@
 ---
 title: Scrum i Team Foundation Server cz.5 – Continuous Integration
-category: ".NET"
+tags:
+  - .NET
 cover: 2011-11-30-cover.png
 author: oskar dudycz
 disqusId: 26 http://oskar-dudycz.pl/2011/11/30/scrum-i-team-foundation-server-cz5/

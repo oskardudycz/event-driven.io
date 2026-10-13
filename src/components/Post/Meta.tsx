@@ -5,23 +5,17 @@ import { Link } from '../Link/index.tsx';
 import { FaCalendar } from 'react-icons/fa';
 import { FaUser } from 'react-icons/fa';
 import { FaTag } from 'react-icons/fa';
-import { categorySlug } from '../../utils/category-slug.ts';
+import { useTranslation } from 'react-i18next';
+import { tagSlug } from '../../utils/tag-slug.ts';
+import { tagLabel } from '../../utils/tag-label.ts';
 
 const Meta = (props: {
   prefix?: string | undefined;
   author?: string | undefined;
-  category?: string | undefined;
-  categories?: string[] | undefined;
+  tags?: string[] | undefined;
 }) => {
-  const { prefix, author: authorName, category, categories = [] } = props;
-  const additionalCategories = Array.isArray(categories) ? categories : [];
-  const allCategories = Array.from(
-    new Set(
-      [category, ...additionalCategories].filter((value): value is string =>
-        Boolean(value),
-      ),
-    ),
-  );
+  const { t } = useTranslation();
+  const { prefix, author: authorName, tags = [] } = props;
 
   return (
     <p className={`meta ${styles.meta}`}>
@@ -31,12 +25,10 @@ const Meta = (props: {
       <span className={styles.elementSpan}>
         <FaUser size={18} /> {authorName}
       </span>
-      {allCategories.map((categoryName) => (
-        <span key={categoryName} className={styles.elementSpan}>
+      {tags.map((tag) => (
+        <span key={tag} className={styles.elementSpan}>
           <FaTag size={18} />
-          <Link to={`/category/${categorySlug(categoryName)}/`}>
-            {categoryName}
-          </Link>
+          <Link to={`/category/${tagSlug(tag)}/`}>{tagLabel(t, tag)}</Link>
         </span>
       ))}
     </p>

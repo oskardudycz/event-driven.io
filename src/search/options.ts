@@ -5,13 +5,13 @@ export const normalizeTerm = (term: string) =>
 export const tokenize = (text: string) =>
   text.split(/[^\p{L}\p{N}_]+/u).filter(Boolean);
 export const indexOptions: Options<SearchDocument> = {
-  fields: ['title', 'category', 'content'],
+  fields: ['title', 'tags', 'content'],
   storeFields: [
     'title',
     'path',
     'langKey',
     'source',
-    'category',
+    'tags',
     'date',
     'content',
     'cover',
@@ -19,7 +19,7 @@ export const indexOptions: Options<SearchDocument> = {
   processTerm: normalizeTerm,
   tokenize,
   searchOptions: {
-    boost: { title: 6, category: 3 },
+    boost: { title: 6, tags: 3 },
     prefix: true,
     fuzzy: (term) => (term.length >= 5 ? 0.2 : false),
     combineWith: 'AND',

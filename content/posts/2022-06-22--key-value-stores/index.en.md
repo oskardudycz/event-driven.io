@@ -1,6 +1,7 @@
 ---
 title: Unobvious things you need to know about key-value stores
-category: "Databases"
+tags:
+  - Databases
 cover: 2022-06-22-cover.png
 author: oskar dudycz
 ---

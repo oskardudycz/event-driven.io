@@ -1,6 +1,7 @@
 ---
 title: Why are we afraid of our decisions?
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2022-08-10-cover.png
 author: oskar dudycz
 ---

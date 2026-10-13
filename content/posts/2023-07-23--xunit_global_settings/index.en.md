@@ -1,6 +1,7 @@
 ---
 title: How to set global setting for XUnit tests
-category: "Tests"
+tags:
+  - Testing
 cover: 2023-07-23-cover.png
 author: oskar dudycz
 ---

@@ -1,6 +1,7 @@
 ---
 title: Immutable Value Objects are simpler and more useful than you think!
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2022-02-16-cover.png
 author: oskar dudycz
 ---

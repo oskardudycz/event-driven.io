@@ -1,6 +1,7 @@
 ---
 title: Do we still need the QA role?
-category: Software Architecture
+tags:
+  - Architecture
 cover: 2025-06-09-cover.jpg
 author: oskar dudycz
 redirectFrom: /do-we-still-need-the-qa-role/

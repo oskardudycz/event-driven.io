@@ -1,6 +1,7 @@
 ---
 title: Bootstrapping CRUD with Pongo
-category: "TypeScript"
+tags:
+  - TypeScript
 cover: 2024-10-27-cover.png
 author: oskar dudycz
 ---

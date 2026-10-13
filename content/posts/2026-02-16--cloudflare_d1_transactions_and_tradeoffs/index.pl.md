@@ -1,6 +1,7 @@
 ---
 title: How I cheated on transactions. Or how to make tradeoffs based on my Cloudflare D1 support
-category: "Software Architecture"
+tags:
+  - Architecture
 cover: 2026-02-16-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

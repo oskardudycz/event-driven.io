@@ -1,6 +1,7 @@
 ---
 title: Slim your aggregates with Event Sourcing!
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2022-08-31-cover.jpg
 author: oskar dudycz
 ---

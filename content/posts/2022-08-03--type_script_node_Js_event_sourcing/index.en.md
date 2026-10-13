@@ -1,6 +1,7 @@
 ---
 title: Straightforward Event Sourcing with TypeScript and NodeJS
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2022-08-03-cover.png
 author: oskar dudycz
 ---

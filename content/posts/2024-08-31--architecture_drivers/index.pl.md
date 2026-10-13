@@ -1,6 +1,7 @@
 ---
 title: My Architecture Drivers
-category: "Architecture"
+tags:
+  - Architecture
 cover: 2024-08-31-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

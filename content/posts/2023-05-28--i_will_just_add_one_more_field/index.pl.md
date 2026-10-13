@@ -1,6 +1,7 @@
 ---
 title: Anti-patterns in event modelling - I'll just add one more field
-category: "Event Sourcing"
+tags:
+  - Event Sourcing
 cover: 2023-05-28-cover.png
 author: oskar dudycz
 useDefaultLangCanonical : true

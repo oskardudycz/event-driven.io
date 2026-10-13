@@ -3,7 +3,8 @@ import * as styles from './category.module.css';
 import { FaTag } from 'react-icons/fa';
 import React from 'react';
 import { graphql } from 'gatsby';
-import { categorySlug } from '../utils/category-slug.ts';
+import { tagSlug } from '../utils/tag-slug.ts';
+import { tagLabel } from '../utils/tag-label.ts';
 import { useTranslation } from 'react-i18next';
 
 import { usePageContext } from '../i18n/page-context.ts';
@@ -12,7 +13,7 @@ import Headline from '../components/Article/Headline.tsx';
 import { Link } from '../components/Link/index.tsx';
 import { createHead } from '../components/Seo/index.ts';
 import categoryGuides from '../../data/category-guides.json';
-import { categoriesForLanguage } from '../utils/category-posts.ts';
+import { tagsForLanguage } from '../utils/tag-posts.ts';
 
 const CategoryPage = (props: SitePageProps<'posts'>) => {
   const { t } = useTranslation();
@@ -24,9 +25,9 @@ const CategoryPage = (props: SitePageProps<'posts'>) => {
   } = props;
 
   const guides = categoryGuides.filter((guide) => guide.language === lang);
-  const guideFor = (category: string) =>
-    guides.find((guide) => guide.slug === categorySlug(category));
-  const categoryList = categoriesForLanguage(
+  const guideFor = (tag: string) =>
+    guides.find((guide) => guide.slug === tagSlug(tag));
+  const tagList = tagsForLanguage(
     posts.map(({ node }) => node),
     lang,
   ).sort(([left], [right]) => {
@@ -41,28 +42,29 @@ const CategoryPage = (props: SitePageProps<'posts'>) => {
     <React.Fragment>
       <Article>
         <header>
-          <Headline title={t('categories.title')} />
+          <Headline title={t('tags.title')} />
           <p className={`intro ${styles.intro}` + ' ' + styles.elementP}>
-            {t('categories.intro')}
+            {t('tags.intro')}
           </p>
         </header>
         <div className={`categoryGrid ${styles.categoryGrid}`}>
-          {categoryList.map(([category, categoryPosts]) => {
-            const guide = guideFor(category);
+          {tagList.map(([tag, tagPosts]) => {
+            const guide = guideFor(tag);
+            const label = tagLabel(t, tag);
             return (
-              <section key={category} className={styles.elementSection}>
-                <Link to={`/category/${categorySlug(category)}/`}>
+              <section key={tag} className={styles.elementSection}>
+                <Link to={`/category/${tagSlug(tag)}/`}>
                   <h2 className={styles.elementH2}>
-                    <FaTag /> {category}
+                    <FaTag /> {label}
                   </h2>
                   <p className={styles.elementP}>
                     {guide
                       ? guide.description
-                      : t('categories.defaultDescription', { category })}
+                      : t('tags.defaultDescription', { tag: label })}
                   </p>
                   <strong className={styles.elementStrong}>
-                    {t('categories.articleCount', {
-                      count: categoryPosts.length,
+                    {t('tags.articleCount', {
+                      count: tagPosts.length,
                     })}{' '}
                     →
                   </strong>
@@ -98,8 +100,7 @@ export const query = graphql`
             source
           }
           frontmatter {
-            category
-            categories
+            tags
             useDefaultLangCanonical
           }
         }
@@ -109,7 +110,7 @@ export const query = graphql`
 `;
 
 export const Head = createHead(({ t }) => ({
-  title: t('categories.seoTitleAll'),
-  description: t('categories.seoDescription'),
+  title: t('tags.seoTitleAll'),
+  description: t('tags.seoDescription'),
   schemaType: 'CollectionPage',
 }));

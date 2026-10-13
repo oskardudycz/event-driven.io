@@ -1,6 +1,7 @@
 ---
 title: Wielokrotny join we FluentNHibernate
-category: ".NET"
+tags:
+  - .NET
 cover: 2011-09-22-cover.png
 author: oskar dudycz
 disqusId: 34 http://oskar-dudycz.pl/2011/09/22/wielokrotny-join-we-fluentnhibernate/

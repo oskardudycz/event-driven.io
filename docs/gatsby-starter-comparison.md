@@ -202,7 +202,7 @@ Astro migration remains a later decision. For this site it would replace GraphQL
 
 ### What the type packages mean
 
-An `@types/...` package describes another package's API to TypeScript. Type-only imports and ambient declarations are erased when producing browser JavaScript; that does **not** mean the described library is unused. The review initially found Lodash category-URL generation in four build/browser consumers. That narrow use is now replaced by `src/utils/category-slug.ts`, with unchanged current mappings; direct Lodash/types are removed. Turndown remains active in import/import-substack.ts to convert fetched HTML into Markdown, with its GFM plugin preserving tables and other Markdown features. The importer runs in Node; its dependencies do not need to be shipped to readers. Types are retained for active APIs.
+An `@types/...` package describes another package's API to TypeScript. Type-only imports and ambient declarations are erased when producing browser JavaScript; that does **not** mean the described library is unused. The review initially found Lodash category-URL generation in four build/browser consumers. That narrow use is now replaced by `src/utils/tag-slug.ts`, with unchanged current mappings; direct Lodash/types are removed. Turndown remains active in import/import-substack.ts to convert fetched HTML into Markdown, with its GFM plugin preserving tables and other Markdown features. The importer runs in Node; its dependencies do not need to be shipped to readers. Types are retained for active APIs.
 
 ### Sharing alternatives
 
