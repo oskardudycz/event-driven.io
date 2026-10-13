@@ -26,7 +26,7 @@
 }
 
 /* Measured EN/PL fit, including fallback fonts; side gutters are outside this width. */
-@container hero (min-width: 73em) {
+@container hero (min-width: 74em) {
   .heading {
     /* Clear the diagonal even when Arial-compatible fallback text wraps later. */
     max-width: 50rem;
@@ -34,6 +34,13 @@
 
   .artwork {
     display: block;
+  }
+}
+
+/* The wider Polish fallback subheading needs to wrap before the diagonal. */
+@container hero (74em <= width < 75em) {
+  .subheading {
+    max-width: 44rem;
   }
 }
 

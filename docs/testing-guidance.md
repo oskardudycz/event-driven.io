@@ -4,7 +4,7 @@ Read this before changing regression tests or visual references. Commands for ev
 
 ## Editorial changes must remain routine
 
-Use `npm run dev` while editing articles or biographies. Gatsby refreshes changed Markdown; do not rebuild production output after every wording edit. `npm run check:edit` checks source image alternatives, isolated React behavior and controlled browser examples without a Gatsby build. Keep the browser examples open with `npm run dev:components` for immediate CSS/component feedback.
+Use `npm run dev` while editing articles or biographies. Gatsby refreshes changed Markdown; do not rebuild production output after every wording edit. `npm run check:edit` checks source image alternatives, unit, integration and controlled browser examples without a Gatsby build. Keep the browser examples open with `npm run dev:components` for immediate CSS/component feedback.
 
 GitHub Actions already builds, validates and publishes: pull requests receive a Netlify preview after passing checks; merges to main publish production and then notify IndexNow. Keep that one publication path. Production static output still requires a build. Do not bypass tests for content commits, deploy stale `public`, automatically approve screenshots or replace the publisher with another script.
 
@@ -16,18 +16,17 @@ GitHub Actions already builds, validates and publishes: pull requests receive a 
 
 The author/archive/search components separate framework adapters from their portable presentation. Follow that boundary when useful; do not mock the UI under test or introduce a generic component framework solely for testing.
 
-## Component gallery
+## Feature organization and component examples
 
-The existing Vite/React dependencies serve `tests/gallery/`; Playwright's built-in `mount` fixture calls the gallery's `window.mount`/`window.unmount` contract. No additional component-testing package is needed. The gallery is outside Gatsby's page sources and is never a production route.
+Component/module tests are colocated with their owners. Whole-site/generated checks and cross-feature matrices remain under `tests/`. Execution type is a suffix, not the folder hierarchy: `*.unit.test.ts`, `*.int.test.ts/tsx`, `*.browser.test.tsx`, `*.generated.test.ts`, and `*.e2e.spec.ts`. Colocate tests with their owning component/module; keep shared or cross-feature matrices under feature folders in `tests/`. Do not create a duplicate component hierarchy under `tests/`. Use a dedicated support folder when it would be artificial to attach cross-feature fixtures or presentation matrices to a single component. The owner requested this Pongo/Emmett-style organization on 2026-10-13.
 
-- `tests/gallery/editorial.story.tsx` owns fixed scenarios.
-- `tests/gallery/gallery.tsx` owns mounting and the shared font/theme setup.
-- `tests/component-browser/editorial.spec.ts` owns assertions and focused component screenshots.
-- `tests/component-browser/playwright.config.ts` owns the local gallery server and component report/reference paths.
+`tests/vitest.config.ts` defines disjoint `unit`, `integration`, `browser` and `generated` projects. Integration and browser checks require no Gatsby build. Generated checks and Playwright E2E run after one production build. `npm test` runs all groups; `check:edit` runs source/unit/integration/browser only. CI does not repeat the quick groups after building. Native `sequence.groupOrder` runs the projects in unit → integration → browser → generated order, with file parallelism disabled to bound build-output parsing and browser/linters. This also makes `test:int -- <feature>` filter both integration projects in one Vitest invocation. Use project and feature filters, not one script per test file; working commands are in README. See [Vitest project ordering](https://vitest.dev/config/sequence#sequence-grouporder).
 
-Nested Playwright configurations must set `webServer.cwd` to the package directory that owns the startup command. Playwright otherwise starts the server in the configuration directory; npm can resolve a different nested package there. Validate server/configuration changes with `CI=true npm run check:edit` and port 9001 free: CI disables server reuse and exercises startup and cleanup. A passing run against an already-running gallery does not verify its startup command.
+Controlled presentation uses the documented `@vitest/browser-playwright` provider and `vitest-browser-react` renderer. `tests/editorial/presentation.browser.test.tsx` renders `tests/gallery/editorial.story.tsx` directly. `tests/helpers/browser/component-setup.ts` loads only the real shared global CSS/fonts and resets document appearance; the renderer owns React cleanup. Component CSS stays imported by each component. No global `window.mount`, custom test renderer or Gatsby test route remains. `dev:components` retains a manual Vite gallery for live previews; it is not the test server.
 
-Use this documented gallery mechanism rather than mutating live page DOM, rewriting generated page-data, masking text or creating production test pages. CSS Modules remain with their owning components; importing shared global CSS in the gallery mirrors the real application entry. Do not gather component styles into a global test stylesheet.
+The native screenshot assertion reads the existing accepted `tests/fixtures/visual/components/` PNGs through its documented path resolver. Pixel threshold stays 0.2 and maximum mismatch ratio stays 0.03. The root Vitest config sets `update: 'none'`, including missing references. Use `--update=all -t <reviewed case>` only after explicit review. Failure captures/diffs and native Playwright traces stay under `visual-artifacts/components/`; website artifacts remain under `visual-artifacts/results/` and `report/`.
+
+Playwright Test's full-site `webServer` has an explicit repository `cwd`; reuse is local only. Vitest owns a separate native browser server and requires no gallery startup command. Validate runner/config changes with `CI=true npm run check:edit` and cold server startup, not just an existing preview. Never run Gatsby dev and production generation against the same generated directories concurrently.
 
 ## Reference review and useful assertions
 
@@ -39,17 +38,17 @@ Run build, project tests and browsers sequentially. Record actual local timings/
 
 ## Runner and helper direction
 
-The [runner research](test-review.md#runner-and-helper-research) and plan distinguish the current implementation from the proposed refactor. Playwright remains the browser engine. Use named Vitest projects for logic, generated output and controlled React browser tests; use the documented Playwright provider and React renderer for that browser project. React Testing Library is a supported alternative, not another required dependency alongside the renderer.
+The [runner research](test-review.md#runner-and-helper-research) records the reasons for this split. Playwright remains the browser engine. Use named Vitest projects for logic, generated output and controlled React browser tests; use the documented Playwright provider and React renderer for that browser project. React Testing Library is a supported alternative, not another required dependency alongside the renderer.
 
 For full-site navigation, SSR, hydration, browser-context isolation and production screenshots, retain Playwright Test. The owner accepted this division on 2026-10-13. Do not navigate Vitest's orchestrator page to the website, recreate Playwright Test's reporting/context/screenshot lifecycle, or wrap its CLI in a Vitest test to claim a single runner.
 
-Group tests by feature inside execution boundaries, with shared helpers only for actual repeated setup. Prefer native `test.extend`, lifecycle cleanup, role/label locators and retrying assertions. Geometry reads are instantaneous, unlike Playwright's auto-waiting clicks: poll exact observable layout conditions during transitions rather than add sleeps, disable animations globally or allow larger errors. A URL change alone does not establish completed client rendering.
+Group tests by feature, identifying execution boundaries with filename suffixes, with shared helpers only for actual repeated setup. Prefer native `test.extend`, lifecycle cleanup, role/label locators and retrying assertions. Geometry reads are instantaneous, unlike Playwright's auto-waiting clicks: poll exact observable layout conditions during transitions rather than add sleeps, disable animations globally or allow larger errors. A URL change alone does not establish completed client rendering.
 
-Development-mode browser checks provide quick client-interaction feedback through Fast Refresh. They do not certify production HTML or bundle extraction. Keep production generation/tests separate, and avoid simultaneous dev/build processes sharing Gatsby's generated directories. Consolidate commands around groups and documented filtering instead of creating a script for every test file.
+The `test:e2e:dev` command selects existing `@dev` client-interaction cases through the same native Playwright config/server lifecycle. It provides quick feedback through Fast Refresh. They do not certify production HTML or bundle extraction. Keep production generation/tests separate, and avoid simultaneous dev/build processes sharing Gatsby's generated directories. Consolidate commands around groups and documented filtering instead of creating a script for every test file.
 
 ## Using Vitest and Playwright together
 
-This is the agreed refactoring target, researched on 2026-10-13. Current commands and the existing gallery above remain valid until the migration is implemented and verified. The two runners have separate configuration and lifecycle; share representative data and small domain helpers, not a wrapper around their test APIs.
+This division was researched and implemented on 2026-10-13. Current commands and feature/suffix conventions are above; validation results and remaining work are in todo.md. The two runners have separate configuration and lifecycle; share representative data and small domain helpers, not a wrapper around their test APIs.
 
 | Boundary                                      | Runner and setup                                                                 | What it establishes                                                                                      |
 | --------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
@@ -61,7 +60,7 @@ This is the agreed refactoring target, researched on 2026-10-13. Current command
 
 ### Configuration and helpers
 
-- Give Vitest projects explicit names and disjoint include patterns. Restrict discovery to owned test directories: article code snippets, Playwright specs and generated files must not become Vitest tests. Use `--project` and feature/path filters. Root plugins/options are not automatically inherited by every project; use documented `extends`/shared configuration deliberately. Node projects must not load browser-only setup.
+- Give Vitest projects explicit names and disjoint include patterns. Restrict discovery to owned test directories: article code snippets, Playwright specs and generated files must not become Vitest tests. Use `--project` and feature/path filters. Configure project-specific plugins/options explicitly. The installed Vitest 5 inherits root options for inline projects; keep Node and browser settings at the appropriate boundary. Node projects must not load browser-only setup.
 - Keep the Vitest provider version compatible with Vitest and resolve one compatible Playwright installation for both runners. Use the lockfile's Playwright CLI to install browsers in CI. Browser Mode owns its Vite test server; it does not need the Gatsby server or the old gallery mount bridge. Keep a manual gallery only if it remains useful for previewing scenarios.
 - Use the React renderer's asynchronous `render`, role/label locators and automatic unmount cleanup. Await `expect.element` assertions in Browser Mode; use Playwright Test's `await expect(locator)` in E2E. Preserve explicit React SSR tests where server markup is the contract. React Testing Library remains an alternative, not an additional mandatory stack. [Vitest React helpers](https://vitest.dev/api/browser/react), [projects](https://vitest.dev/guide/projects).
 - Vitest's provider creates a context per file and shares its page between that file's tests. Reset owned storage keys, document language/theme and installed listeners/mocks in native hooks/fixtures; React unmount does not reset browser storage. Do not run state-mutating component cases concurrently in the same page. Keep independent visitor/locale tests in Playwright Test's per-test contexts. [Provider isolation](https://vitest.dev/config/browser/playwright).
@@ -73,7 +72,7 @@ Keep quick source/unit/component checks before production generation. Build once
 
 Use Playwright's `webServer`, `baseURL` and explicit package `cwd`; reuse servers only locally. CI must prove cold startup and cleanup. A dev-mode project may select shared client-interaction cases, while production-only checks stay outside it. [Server lifecycle](https://playwright.dev/docs/test-webserver).
 
-When moving controlled screenshots, explicitly map the current pixelmatch color threshold `0.2` and mismatch ratio `0.03` to Vitest's `threshold` and `allowedMismatchedPixelRatio`. Verify viewport, device scale, fonts, image readiness, clipping, animation policy and browser/environment naming against accepted captures before retiring the old runner. Vitest's native assertion is `toMatchScreenshot`; its options are not Playwright's `toHaveScreenshot` options. Keep normal runs from creating missing references; validate that behavior during migration. No masking editorial text, loosened tolerances or automatic updates. [Vitest visual testing](https://vitest.dev/guide/browser/visual-regression-testing).
+Controlled screenshots map the current pixelmatch color threshold `0.2` and mismatch ratio `0.03` to Vitest's `threshold` and `allowedMismatchedPixelRatio`. Keep verifying viewport, device scale, fonts, image readiness, clipping, animation policy and browser/environment naming against accepted captures before retiring the old runner. Vitest's native assertion is `toMatchScreenshot`; its options are not Playwright's `toHaveScreenshot` options. Keep normal runs from creating missing references; validate that behavior during migration. No masking editorial text, loosened tolerances or automatic updates. [Vitest visual testing](https://vitest.dev/guide/browser/visual-regression-testing).
 
 ### Astro compatibility
 
@@ -92,3 +91,11 @@ The [Starlight package](https://github.com/withastro/starlight/blob/main/package
 - [Gatsby Fast Refresh](https://www.gatsbyjs.com/docs/reference/local-development/fast-refresh/): use the development feedback loop rather than repeated production builds while editing.
 - [Vitest projects](https://vitest.dev/guide/projects), [test fixtures](https://vitest.dev/guide/test-context), [React browser renderer](https://vitest.dev/api/browser/react) and [E2E boundary](https://vitest.dev/guide/browser/why): supported grouping, lifecycle and component/E2E responsibilities.
 - [Playwright retrying assertions](https://playwright.dev/docs/test-assertions) and [development servers](https://playwright.dev/docs/test-webserver): native synchronization and server lifecycle.
+
+Node integration tests use `deps.interopDefault: false` to preserve native Node behavior for Gatsby’s CommonJS plugin exports; React browser tests retain bundler semantics. This is Vitest’s [documented dependency setting](https://vitest.dev/config/deps#deps-interopdefault), not a plugin-export monkeypatch. Vitest 5 distinguishes exact `toHaveTextContent` from substring/regex `toMatchTextContent`; preserve the original assertion meaning when migrating helpers.
+
+### Development and CI environment parity
+
+Gatsby 5.16.1 normally queries development pages on demand, but disables this when it detects CI. This is explicit in Gatsby’s [initialization source](https://github.com/gatsbyjs/gatsby/blob/master/packages/gatsby/src/services/initialize.ts). Cold `CI=true` development checks originally tried to evaluate roughly 700 pages and exceeded the existing 180-second server startup limit. The development-only `webServer.env` now sets Gatsby’s supported `GATSBY_ENABLE_QUERY_ON_DEMAND_IN_CI=1`, retaining normal development semantics under CI. The global CI flag, test assertions and startup limit remain intact. Production build/generated/E2E validation still covers the whole site. Do not apply this setting to production or unset CI to disguise a lifecycle difference.
+
+Keep test files out of Gatsby’s `src/pages` route discovery: tests spanning generated routes belong in the site matrices under `tests/`. Native Vitest discovery explicitly lists owned application/tooling directories, and Playwright selects only owned component/full-site specs, excluding content examples and generated output. Tailwind excludes colocated `*.test.*`/`*.spec.*` through documented source patterns so fixture strings cannot change production CSS.

@@ -30,7 +30,9 @@ const Hero = (props: { scrollToContent: () => void }) => {
               }}
             />
           </h1>
-          <p className="m-0 text-xl font-semibold leading-snug lg:text-2xl">
+          <p
+            className={`${styles.subheading} m-0 text-xl font-semibold leading-snug lg:text-2xl`}
+          >
             <Trans
               i18nKey="hero.h2"
               components={{

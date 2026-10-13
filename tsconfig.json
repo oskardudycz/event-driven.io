@@ -18,9 +18,7 @@
     "import/**/*.ts",
     "plugins/**/*.ts",
     "tests/**/*.ts",
-    "tests/**/*.tsx",
-    "tests/browser/**/*.ts",
-    "playwright.config.ts"
+    "tests/**/*.tsx"
   ],
   "exclude": ["node_modules", "public", ".cache", "tests/fixtures"],
   "extends": "./tsconfig.shared.json"
