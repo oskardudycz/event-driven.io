@@ -9,6 +9,8 @@ redirectAliases:
   - /en/rebuilding_read_models_safely/
   - /rebuilding-event-driven-read-models/
   - /en/rebuilding-event-driven-read-models/
+related:
+  - connection-pooler-modes-advisory-locks
 ---
 
 ![cover](2026-01-05-cover.png)

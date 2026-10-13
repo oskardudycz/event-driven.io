@@ -55,6 +55,7 @@ test('opted-in aliases redirect once to English, excluding self aliases and unco
           data: {
             allMarkdownRemark: { edges: nodes },
             searchCovers: { nodes: [] },
+            learningPaths: { nodes: [] },
           },
         });
       },
@@ -125,6 +126,7 @@ test('merged tag URLs redirect permanently to created canonical tag pages', asyn
           data: {
             allMarkdownRemark: { edges: nodes },
             searchCovers: { nodes: [] },
+            learningPaths: { nodes: [] },
           },
         }),
     } as unknown as Parameters<typeof createPages>[0],

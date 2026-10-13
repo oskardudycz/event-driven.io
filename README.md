@@ -358,6 +358,23 @@ To set a tag page's description and numbered reading order, edit `data/category-
 
 A guide does not create a tag route by itself; at least one canonical article in that language must have the tag. Run `npm run build`, `npm run test:file -- tests/articles/rendering.generated.test.ts` and inspect `/en/category/event-sourcing/` and `/pl/category/event-sourcing/`.
 
+### Learning paths
+
+A learning path is an ordered list of articles, independent of tags. Each path has a folder in `content/paths/`, named `NN--slug`, where `NN` sets the paths' order; it holds `index.en.md` and `index.pl.md`:
+
+```markdown
+---
+title: Event Sourcing foundations
+articles:
+  - how_to_get_the_current_entity_state_in_event_sourcing
+  - should_you_throw_exception_when_rebuilding_state_from_events
+---
+
+Optional introduction in Markdown.
+```
+
+`articles` uses article slugs without dates, locale prefixes or slashes. Both language files list the same articles in the same order; a Polish path links to the English article when there is no Polish version. An unknown slug or a mismatch between the two files fails the build. Run `npm run test:int -- learning-paths` to check the paths without building. Paths are not published yet: they have no pages, menu entry or search entries.
+
 ### Styles
 
 Edit component-owned `.module.css` files, `src/theme/global.css` for the shared reset, and `src/theme/tokens.css` for colors, spacing and other design tokens. Tokens are ordinary CSS variables; no generator is needed.

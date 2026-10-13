@@ -4,6 +4,8 @@ tags:
   - Architecture
 cover: 2021-09-08-cover.png
 author: oskar dudycz
+related:
+  - vertical-slices-and-dependencies
 ---
 
 ![cover](2021-09-08-cover.png)

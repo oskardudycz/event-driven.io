@@ -6,9 +6,14 @@ type BuildArticle = Node & ArticleNode;
 type PagesQuery = {
   searchCovers: { nodes: ArticleNode[] };
   allMarkdownRemark: { edges: ArticleEdge[] };
+  learningPaths: { nodes: LearningPathNode[] };
 };
 import { tagSlug as slugForTag } from '../src/utils/tag-slug.ts';
 import { mergedTagRedirects } from '../src/utils/tag-redirects.ts';
+import {
+  learningPathProblems,
+  type LearningPathNode,
+} from '../src/utils/learning-paths.ts';
 import analyzer from 'webpack-bundle-analyzer';
 import path from 'node:path';
 import filesystem from 'gatsby-source-filesystem';
@@ -44,7 +49,16 @@ export const onCreateNode: NonNullable<GatsbyNode['onCreateNode']> = ({
 
     const langKey = langFileNamePart ? langFileNamePart[2] : 'en';
 
-    if (source !== 'parts') {
+    if (source === 'paths') {
+      createNodeField({
+        node,
+        name: 'pathSlug',
+        value: slug
+          .substring(shortSlugStart)
+          .replace(`/index.${langKey}/`, '')
+          .toLowerCase(),
+      });
+    } else if (source !== 'parts') {
       const originalSlug =
         `${separtorIndex ? '/' : ''}${slug.substring(shortSlugStart)}`.replace(
           `/index.${langKey}/`,
@@ -151,6 +165,21 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
               }
             }
           }
+          learningPaths: allMarkdownRemark(
+            filter: { fields: { source: { eq: "paths" } } }
+          ) {
+            nodes {
+              fields {
+                pathSlug
+                prefix
+                langKey
+              }
+              frontmatter {
+                title
+                articles
+              }
+            }
+          }
         }
       `,
         )
@@ -178,6 +207,15 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
               throw new Error(`Multiple published documents claim ${route}`);
             paths.add(route);
           }
+          const pathProblems = learningPathProblems(
+            result.data.learningPaths.nodes,
+            items.map(({ node }) => node),
+            defaultLanguage,
+          );
+          if (pathProblems.length)
+            throw new Error(
+              `Invalid learning paths:\n${pathProblems.join('\n')}`,
+            );
           const availableLanguagesFor = (node: ArticleNode) =>
             items
               .filter(
@@ -766,6 +804,7 @@ export const createSchemaCustomization: NonNullable<
       summary: String
       tags: [String]
       related: [String]
+      articles: [String]
       cover: File @fileByRelativePath
       author: String
       disqusId: String
@@ -781,6 +820,7 @@ export const createSchemaCustomization: NonNullable<
       prefix: String
       source: String
       langKey: String
+      pathSlug: String
     }
   `);
 };

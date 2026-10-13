@@ -116,6 +116,13 @@ export default {
       },
     },
     {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `paths`,
+        path: `${path.resolve(import.meta.dirname, '..')}/content/paths/`,
+      },
+    },
+    {
       resolve: `gatsby-transformer-remark`,
       options: {
         plugins: [

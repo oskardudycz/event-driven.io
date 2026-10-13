@@ -5,6 +5,8 @@ tags:
 cover: 2024-08-05-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true
+related:
+  - connection-pooler-modes-advisory-locks
 ---
 
 Welcome to the new week!
