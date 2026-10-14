@@ -52,6 +52,10 @@ Szkolenie jest dla programistek i programistów, tech leadów oraz architektek i
 
 **To nie jest szkolenie dla Ciebie**, jeśli szukasz wykładu z definicjami DDD albo przeglądu narzędzi.
 
+Zobacz też więcej, w krótkim nagraniu, gdzie więcej opowiedzieliśmy o tym czy warto i o czym to szkolenie będzie:
+
+`youtube: https://www.youtube.com/watch?v=z1I_oKQkjc0`
+
 ## Zasady gry
 
 **Zapomnij o książkowych granicach agregatów i definicjach.** Granice spójności wyznaczymy od zera, zaczynając od wymagań i patrząc na cykl życia, upływ czasu, wydajność, skalowalność, poprawność i czytelność kodu.

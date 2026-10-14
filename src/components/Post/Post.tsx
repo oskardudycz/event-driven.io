@@ -1,5 +1,6 @@
 import type { ArticleNode, ArticleEdge } from '../../types/content.ts';
 import React from 'react';
+import * as styles from './Post.module.css';
 import 'prismjs/themes/prism-okaidia.css';
 
 import asyncComponent from '../AsyncComponent/index.ts';
@@ -58,7 +59,7 @@ const Post = (props: {
           categories={categories}
         />
       </header>
-      <Bodytext html={html} />
+      <Bodytext html={html} className={styles.body} />
       <footer>
         <Substack />
         <Related posts={related} />

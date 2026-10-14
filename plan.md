@@ -1,6 +1,10 @@
 # Site modernization plan
 
-Last updated: 2026-10-13. Strategy and settled decisions live here; [todo.md](todo.md) records current implementation and verification. Commands and manual workflows belong in [README.md](README.md). Superseded runtime sequences and duplicated acceptance histories have been consolidated.
+Last updated: 2026-10-14. Strategy and settled decisions live here; [todo.md](todo.md) records current implementation and verification. Commands and manual workflows belong in [README.md](README.md). Superseded runtime sequences and duplicated acceptance histories have been consolidated.
+
+## Training artwork transparency
+
+Preserve authored alpha on page images. Remove the white image canvas from shared body formatting and keep the existing article-diagram canvas in the owning Post CSS Module. Use Gatsby's documented `disableBgImageOnAlpha` option to prevent blurred placeholders showing through transparent artwork; retain responsive images, original artwork, registration links and layout. No transparency flags or CSS variable overrides are needed. Verify actual corner pixels in light/dark, EN/PL, mobile/desktop and SSR/hydrated production pages, alongside the existing article canvas and locale-navigation checks. Local warm Markdown output retained old image options, so validate with a one-time clean production build; the existing hosted cache compatibility hash already includes `site/config.ts`.
 
 ## Current baseline
 

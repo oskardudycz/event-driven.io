@@ -52,6 +52,10 @@ The workshop is for developers, tech leads and architects who design business lo
 
 **This workshop isn't for you** if you're looking for a lecture on DDD definitions or a tour of tools.
 
+See more in the short video where we discussed whether it's worth joing the workshop, and what you'll get from it.
+
+`youtube: https://www.youtube.com/watch?v=z1I_oKQkjc0`
+
 ## How it works
 
 **Forget textbook aggregate boundaries and definitions.** We'll draw consistency boundaries from scratch, starting with requirements and looking at lifecycle, the passage of time, performance, scalability, correctness and code readability.

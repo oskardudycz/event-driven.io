@@ -146,6 +146,8 @@ export default {
               maxWidth: 800,
               withWebp: { quality: 80 },
               backgroundColor: 'transparent',
+              // Blurred placeholders bleed through the final image's clear pixels.
+              disableBgImageOnAlpha: true,
               wrapperStyle: 'height: auto',
               quality: 80,
             },
