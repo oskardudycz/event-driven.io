@@ -18,7 +18,7 @@ import {
 } from 'react-icons/fa';
 import { FaSearch } from 'react-icons/fa';
 import { FaEnvelope } from 'react-icons/fa';
-import { FaTag } from 'react-icons/fa';
+import { FaRoute } from 'react-icons/fa';
 import LanguagePicker from '../LanguagePicker/index.tsx';
 import ThemePicker from '../ThemePicker/ThemePicker.tsx';
 
@@ -62,7 +62,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
     return [
       { to: '/', label: 'Start', icon: FaHome },
       { to: '/articles/', label: 'menu.articles', icon: FaBookOpen },
-      { to: '/category/', label: 'menu.categories', icon: FaTag },
+      { to: '/guides/', label: 'menu.guides', icon: FaRoute },
       ...pages,
       { to: '/contact/', label: 'menu.contact', icon: FaEnvelope },
       { to: '/talks/', label: 'menu.talks', icon: FaMicrophone },

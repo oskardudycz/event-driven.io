@@ -8,7 +8,7 @@
   },
   "menu": {
     "articles": "Artykuły",
-    "categories": "Kategorie",
+    "guides": "Przewodniki",
     "consulting": "Konsulting",
     "contact": "Kontakt",
     "talks": "Wystąpienia",
@@ -36,23 +36,36 @@
     "allIntro": "Przejrzyj pełne archiwum — od najnowszego artykułu aż po najstarsze wpisy."
   },
   "tags": {
-    "title": "Polecana kolejność czytania według tematów",
-    "intro": "Wybierz temat, aby przejść polecaną ścieżkę nauki albo zobaczyć wszystkie powiązane artykuły.",
-    "topic": "Temat",
-    "recommended": "Polecana kolejność czytania",
-    "recommendedDescription": "Czytaj w tej kolejności, aby przejść od podstaw do praktycznych kompromisów i problemów produkcyjnych.",
-    "moreArticles": "Więcej artykułów",
-    "articles": "Artykuły",
-    "articleCount_0": "{{count}} artykuł",
-    "articleCount_1": "{{count}} artykuły",
-    "articleCount_2": "{{count}} artykułów",
+    "articleCount_one": "{{count}} artykuł",
+    "articleCount_few": "{{count}} artykuły",
+    "articleCount_many": "{{count}} artykułów",
+    "articleCount_other": "{{count}} artykułu",
     "defaultDescription": "Praktyczne artykuły na temat {{tag}}.",
-    "seoTitle": "{{tag}} — artykuły i ścieżka nauki",
-    "seoTitleAll": "Tematy i ścieżki nauki architektury oprogramowania",
-    "seoDescription": "Polecane ścieżki czytania i praktyczne artykuły o Event Sourcingu, CQRS-ie, architekturze opartej na zdarzeniach i projektowaniu oprogramowania.",
+    "seoTitle": "{{tag}} — artykuły",
+    "browse": "Przeglądaj artykuły według tagów",
+    "metaLabel": "Tagi:",
+    "descriptions": {
+      "event-sourcing": "Artykuły o podstawach i praktycznym zastosowaniu Event Sourcingu, modelowaniu zdarzeń, projekcjach, testowaniu oraz utrzymaniu systemów na produkcji.",
+      "event-driven-architecture": "Materiały o procesach rozproszonych, komunikacji asynchronicznej, gwarancjach dostarczania, kolejności i idempotencji.",
+      "cqrs": "Praktyczne materiały o CQRS, komendach, modelach odczytu i kompromisach związanych ze spójnością danych.",
+      "architecture": "Pragmatyczne materiały o modelowaniu, podejmowaniu decyzji i projektowaniu architektury oprogramowania."
+    },
     "labels": {
       "design-patterns": "Wzorce projektowe"
     }
+  },
+  "guides": {
+    "title": "Przewodniki",
+    "description": "Ścieżki czytania o Event Sourcingu, architekturze opartej na zdarzeniach, CQRS i przetwarzaniu wiadomości. Każdy przewodnik podaje artykuły w polecanej kolejności.",
+    "guide": "Przewodnik",
+    "articleCount_one": "{{count}} artykuł",
+    "articleCount_few": "{{count}} artykuły",
+    "articleCount_many": "{{count}} artykułów",
+    "articleCount_other": "{{count}} artykułu",
+    "step": "krok {{step}} z {{total}}",
+    "next": "Dalej",
+    "inGuides": "Przewodniki z tym artykułem",
+    "metaLabel": "Przewodniki:"
   },
   "talks": {
     "title": "Wystąpienia i nagrania",

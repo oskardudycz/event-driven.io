@@ -16,7 +16,6 @@ export function tagPostsForLanguage<T extends TaggedPost>(
   nodes: T[],
   tagSlug: string,
   language: string,
-  defaultLanguage = 'en',
 ): T[] {
   const posts = nodes.filter((node) => node.fields.source === 'posts');
   const members = new Set(
@@ -28,44 +27,53 @@ export function tagPostsForLanguage<T extends TaggedPost>(
       )
       .map((node) => node.fields.slug),
   );
-  const translations = new Map<string, T[]>();
-  for (const post of posts) {
-    if (!members.has(post.fields.slug)) continue;
-    const versions = translations.get(post.fields.slug) || [];
-    versions.push(post);
-    translations.set(post.fields.slug, versions);
-  }
-  return [...members].map((slug) => {
-    const versions = translations.get(slug)!;
-    return (
-      versions.find((node) => node.fields.langKey === language) ||
-      versions.find(
-        (node) =>
-          node.fields.langKey === defaultLanguage &&
-          !node.frontmatter.useDefaultLangCanonical,
-      ) ||
-      versions.find((node) => !node.frontmatter.useDefaultLangCanonical)!
-    );
-  });
+  return posts.filter(
+    (node) => node.fields.langKey === language && members.has(node.fields.slug),
+  );
 }
 
-// Keep established tag routes: a locale needs a canonical article in the
-// topic. Within each route, expose the same shared set of unique article slugs.
+// A language has a tag page when one of the tag's articles has a route in
+// it, including an English copy published under the Polish route.
 export function tagsForLanguage<T extends TaggedPost>(
   nodes: T[],
   language: string,
 ): [string, T[]][] {
+  const posts = nodes.filter((node) => node.fields.source === 'posts');
+  const routes = new Set(
+    posts
+      .filter((node) => node.fields.langKey === language)
+      .map((node) => node.fields.slug),
+  );
   const tags = new Set<string>();
-  nodes
+  posts
     .filter(
       (node) =>
-        node.fields.source === 'posts' &&
-        node.fields.langKey === language &&
-        !node.frontmatter.useDefaultLangCanonical,
+        !node.frontmatter.useDefaultLangCanonical &&
+        routes.has(node.fields.slug),
     )
     .forEach((node) => tagsForPost(node).forEach((tag) => tags.add(tag)));
   return [...tags].map((tag) => [
     tag,
     tagPostsForLanguage(nodes, slugForTag(tag), language),
   ]);
+}
+
+export type TagChip = { slug: string; label: string; count: number };
+
+export function tagChips<T extends TaggedPost>(
+  nodes: T[],
+  language: string,
+  label: (tag: string) => string,
+): TagChip[] {
+  return tagsForLanguage(nodes, language)
+    .map(([tag, posts]) => ({
+      slug: slugForTag(tag),
+      label: label(tag),
+      count: posts.length,
+    }))
+    .sort(
+      (left, right) =>
+        right.count - left.count ||
+        left.label.localeCompare(right.label, language),
+    );
 }

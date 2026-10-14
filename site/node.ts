@@ -9,16 +9,19 @@ type PagesQuery = {
   learningPaths: { nodes: LearningPathNode[] };
 };
 import { tagSlug as slugForTag } from '../src/utils/tag-slug.ts';
-import { mergedTagRedirects } from '../src/utils/tag-redirects.ts';
+import { legacyTagRedirects } from '../src/utils/tag-redirects.ts';
+import { tagDestination, tagRoute } from '../src/utils/tag-routes.ts';
 import {
+  guidePath,
+  guideSteps,
   learningPathProblems,
+  pathArticle,
   type LearningPathNode,
 } from '../src/utils/learning-paths.ts';
 import analyzer from 'webpack-bundle-analyzer';
 import path from 'node:path';
 import filesystem from 'gatsby-source-filesystem';
 import { DEFAULT_OPTIONS_BASE as DEFAULT_OPTIONS } from '../src/i18n/settings.ts';
-import categoryGuides from '../data/category-guides.json' with { type: 'json' };
 
 const { BundleAnalyzerPlugin } = analyzer;
 const { createFilePath } = filesystem;
@@ -98,7 +101,9 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
   return new Promise<void>((resolve, reject) => {
     const postTemplate = path.resolve('./src/templates/PostTemplate.tsx');
     const pageTemplate = path.resolve('./src/templates/PageTemplate.tsx');
-    const tagTemplate = path.resolve('./src/templates/CategoryTemplate.tsx');
+    const tagTemplate = path.resolve('./src/templates/TagTemplate.tsx');
+    const guidesTemplate = path.resolve('./src/templates/GuidesTemplate.tsx');
+    const guideTemplate = path.resolve('./src/templates/GuideTemplate.tsx');
     const { supportedLanguages, defaultLanguage } = DEFAULT_OPTIONS;
 
     // // Create index pages for all supported languages
@@ -119,7 +124,7 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
         {
           searchCovers: allMarkdownRemark(
             filter: {
-              fields: { source: { in: ["posts", "pages", "newsletter-pl"] }, slug: { ne: null } }
+              fields: { source: { in: ["posts", "pages", "newsletter-pl", "paths"] } }
               frontmatter: { useDefaultLangCanonical: { ne: true } }
             }
           ) {
@@ -177,6 +182,11 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
               frontmatter {
                 title
                 articles
+                icon
+                description
+                cover {
+                  id
+                }
               }
             }
           }
@@ -200,15 +210,22 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
           );
           scheduleDevelopmentSearch({ getNodesByType, reporter });
           const items = result.data.allMarkdownRemark.edges;
+          const learningPaths = result.data.learningPaths.nodes;
+          const articleNodes = items.map(({ node }) => node);
           const paths = new Set();
-          for (const { node } of items) {
-            const route = `/${node.fields.langKey}${node.fields.slug}`;
+          for (const route of [
+            ...items.map(
+              ({ node }) => `/${node.fields.langKey}${node.fields.slug}`,
+            ),
+            ...supportedLanguages.map((langKey) => `/${langKey}/guides/`),
+            ...learningPaths.map(guidePath),
+          ]) {
             if (paths.has(route))
               throw new Error(`Multiple published documents claim ${route}`);
             paths.add(route);
           }
           const pathProblems = learningPathProblems(
-            result.data.learningPaths.nodes,
+            learningPaths,
             items.map(({ node }) => node),
             defaultLanguage,
           );
@@ -265,48 +282,45 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
             });
           };
 
-          const tagRoutes = new Set<string>();
-          supportedLanguages.forEach((supportedLangKey) => {
-            const tagList = tagsForLanguage(
-              items.map(({ node }) => node),
-              supportedLangKey,
-            );
-            tagList.forEach(([tag, tagPosts]) => {
-              const tagSlug = slugForTag(tag);
-              const availableLanguages = supportedLanguages.filter((langKey) =>
-                items.some(
-                  (item) =>
-                    item.node.fields.source === 'posts' &&
-                    item.node.fields.langKey === langKey &&
-                    !item.node.frontmatter.useDefaultLangCanonical &&
-                    tagsForNode(item.node).some(
-                      (itemTag) => slugForTag(itemTag) === tagSlug,
-                    ),
+          const tagPages = supportedLanguages.flatMap((language) =>
+            tagsForLanguage(articleNodes, language).map(([tag, tagPosts]) => ({
+              language,
+              tag,
+              slug: slugForTag(tag),
+              tagPosts,
+            })),
+          );
+          const tagRoutes = new Set(
+            tagPages.map(({ language, slug }) => tagRoute(language, slug)),
+          );
+          tagPages.forEach(({ language, tag, slug, tagPosts }) =>
+            createPage({
+              path: tagRoute(language, slug),
+              component: tagTemplate,
+              context: {
+                tag,
+                lang: language,
+                langKey: language,
+                originalPath: `/articles/tag/${slug}/`,
+                availableLanguages: supportedLanguages.filter((candidate) =>
+                  tagRoutes.has(tagRoute(candidate, slug)),
                 ),
-              );
-              const guide = categoryGuides.find(
-                (item) =>
-                  item.language === supportedLangKey && item.slug === tagSlug,
-              );
-              const tagPath = `/${supportedLangKey}/category/${tagSlug}/`;
-              tagRoutes.add(tagPath);
+                tagPostIds: tagPosts.map((node) => node.id),
+              },
+            }),
+          );
+          const tagLinksFor = (node: ArticleNode) =>
+            tagsForNode(node).map((tag) => ({
+              tag,
+              path: tagDestination(
+                tagRoutes,
+                node.fields.langKey,
+                slugForTag(tag),
+                defaultLanguage,
+              ),
+            }));
 
-              createPage({
-                path: tagPath,
-                component: tagTemplate,
-                context: {
-                  tag,
-                  lang: supportedLangKey,
-                  langKey: supportedLangKey,
-                  originalPath: `/category/${tagSlug}/`,
-                  availableLanguages,
-                  tagPostIds: tagPosts.map((node) => node.id),
-                  tagDescription: guide ? guide.description : undefined,
-                  recommendedSlugs: guide ? guide.recommended : [],
-                },
-              });
-            });
-
+          supportedLanguages.forEach((supportedLangKey) => {
             // Create posts
             const posts = items.filter(
               (item) =>
@@ -355,6 +369,14 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
                   availableLanguages: availableLanguagesFor(node),
                   canonicalLanguages: canonicalLanguagesFor(node),
                   relatedIds: relatedFor(node),
+                  tagLinks: tagLinksFor(node),
+                  guides: guideSteps(
+                    learningPaths,
+                    articleNodes,
+                    slug.replace(/^\/|\/$/g, ''),
+                    langKey,
+                    defaultLanguage,
+                  ),
                   excludeFromSitemap: Boolean(
                     node.frontmatter.useDefaultLangCanonical,
                   ),
@@ -402,8 +424,8 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
             });
           });
 
-          mergedTagRedirects(
-            tagRoutes,
+          legacyTagRedirects(
+            tagPages,
             supportedLanguages,
             defaultLanguage,
           ).forEach(({ fromPath, toPath }) =>
@@ -440,6 +462,45 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
                 excludeFromSitemap: Boolean(
                   node.frontmatter.useDefaultLangCanonical,
                 ),
+              },
+            });
+          });
+
+          // Guides: an index per language and a page per learning path.
+          supportedLanguages.forEach((langKey) =>
+            createPage({
+              path: `/${langKey}/guides/`,
+              component: guidesTemplate,
+              context: {
+                lang: langKey,
+                langKey,
+                originalPath: '/guides/',
+                availableLanguages: supportedLanguages,
+              },
+            }),
+          );
+          learningPaths.forEach((learningPath) => {
+            const { pathSlug, langKey } = learningPath.fields;
+            const articleIds = (learningPath.frontmatter.articles || []).map(
+              (slug) =>
+                pathArticle(articleNodes, slug, langKey, defaultLanguage)?.id,
+            );
+            createPage({
+              path: guidePath(learningPath),
+              component: guideTemplate,
+              context: {
+                lang: langKey,
+                langKey,
+                pathSlug,
+                originalPath: `/guides/${pathSlug}/`,
+                availableLanguages: supportedLanguages.filter((language) =>
+                  learningPaths.some(
+                    ({ fields }) =>
+                      fields.pathSlug === pathSlug &&
+                      fields.langKey === language,
+                  ),
+                ),
+                articleIds,
               },
             });
           });
@@ -777,6 +838,33 @@ function createRedirectsToOldPosts(
   });
 }
 
+// Bare guide URLs, and the former category index they replace, follow the
+// visitor's language like the localized pages created by onCreatePage.
+function createGuidesRedirects(
+  isEnvDevelopment: boolean,
+  createRedirect: (redirect: CreateRedirectArgs) => void,
+) {
+  const { supportedLanguages, defaultLanguage } = DEFAULT_OPTIONS;
+  for (const fromPath of ['/guides/', '/category/']) {
+    for (const lang of supportedLanguages)
+      createRedirect({
+        fromPath,
+        toPath: `/${lang}/guides/`,
+        conditions: { language: lang },
+        isPermanent: false,
+        redirectInBrowser: isEnvDevelopment,
+        statusCode: 301,
+      });
+    createRedirect({
+      fromPath,
+      toPath: `/${defaultLanguage}/guides/`,
+      isPermanent: false,
+      redirectInBrowser: isEnvDevelopment,
+      statusCode: 301,
+    });
+  }
+}
+
 export const onPreBuild: NonNullable<GatsbyNode['onPreBuild']> = ({
   actions: { createRedirect },
 }) => {
@@ -784,6 +872,7 @@ export const onPreBuild: NonNullable<GatsbyNode['onPreBuild']> = ({
   // These redirects are global. Register them once instead of once for every page handled by
   // onCreatePage.
   createRedirectsToOldPosts(isEnvDevelopment, createRedirect);
+  createGuidesRedirects(isEnvDevelopment, createRedirect);
 
   // Hosting-specific query redirects and final 404 rewrites live together in
   // netlify.toml, after Gatsby's editorial aliases. See the routing regressions.

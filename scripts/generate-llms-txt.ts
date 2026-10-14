@@ -65,7 +65,7 @@ const slugFromDirectory = (directoryName: string) =>
     .replace(/^\/+|\/+$/g, '')
     .toLowerCase();
 
-const readEntries = (source: string, type: string) => {
+const readEntries = (source: string, type: string, routePrefix = '') => {
   const sourceRoot = path.join(contentRoot, source);
   if (!fs.existsSync(sourceRoot)) return [];
 
@@ -84,7 +84,7 @@ const readEntries = (source: string, type: string) => {
         title: frontmatter.title || '',
         primaryTag: frontmatter.tags?.[0] || 'Other',
         description: summarize(body, frontmatter.description),
-        url: `${siteUrl}/${language}/${slug}/`,
+        url: `${siteUrl}/${language}${routePrefix}/${slug}/`,
         date: type === 'article' ? directoryName.split('--')[0] || '' : '',
         canonical: !frontmatter.useDefaultLangCanonical,
         excluded: ['success'].includes(slug),
@@ -111,6 +111,7 @@ const pages = readEntries('pages', 'page');
 const articles = readEntries('posts', 'article').sort((left, right) =>
   right.date.localeCompare(left.date),
 );
+const guides = readEntries('paths', 'guide', '/guides');
 
 const servicePages = pages.filter((entry) =>
   /training|szkolenie|workshop|consult/i.test(`${entry.url} ${entry.title}`),
@@ -144,11 +145,11 @@ const corePages = [
   },
 ];
 
-const byLanguage = (language: string) =>
-  articles.filter((entry) => entry.language === language);
+const byLanguage = (language: string, entries = articles) =>
+  entries.filter((entry) => entry.language === language);
 
 const destinations = new Set();
-for (const entry of [...corePages, ...pages, ...articles]) {
+for (const entry of [...corePages, ...pages, ...guides, ...articles]) {
   if (destinations.has(entry.url))
     throw new Error(`Duplicate llms.txt destination: ${entry.url}`);
   destinations.add(entry.url);
@@ -164,6 +165,8 @@ const output = [
   formatSection('Start and contact', corePages),
   formatSection('Consulting, training, and workshops', servicePages),
   formatSection('Other key pages', otherPages),
+  formatSection('English guides', byLanguage('en', guides)),
+  formatSection('Polish guides', byLanguage('pl', guides)),
   formatSection('English articles', byLanguage('en')),
   formatSection('Polish articles', byLanguage('pl')),
   '## Feeds and discovery',
@@ -176,7 +179,7 @@ const output = [
 fs.writeFileSync(outputPath, output, 'utf8');
 
 console.log(
-  `Generated ${path.relative(projectRoot, outputPath)} with ${pages.length} pages and ${
-    articles.length
-  } articles.`,
+  `Generated ${path.relative(projectRoot, outputPath)} with ${pages.length} pages, ${
+    guides.length
+  } guides and ${articles.length} articles.`,
 );

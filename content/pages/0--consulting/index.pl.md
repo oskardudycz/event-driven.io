@@ -81,7 +81,7 @@ Od ponad 18 lat tworzę oprogramowanie bliskie biznesowi jako programista, lider
 
 Podchodzę do architektury pragmatycznie. Event Sourcing, komunikacja asynchroniczna i systemy rozproszone są narzędziami, a nie celami. Tak samo chętnie zakwestionuję niepotrzebnie złożoną architekturę, jak pomogę wdrożyć tę, która ma uzasadnienie.
 
-Przeczytaj więcej [o moim doświadczeniu](/pl/about/), przejrzyj [artykuły według tematów](/pl/category/) albo zobacz [wystąpienia i nagrania](/pl/talks/).
+Przeczytaj więcej [o moim doświadczeniu](/pl/about/), przejrzyj [artykuły według tematów](/pl/guides/) albo zobacz [wystąpienia i nagrania](/pl/talks/).
 
 ## Porozmawiajmy o Twoim problemie
 

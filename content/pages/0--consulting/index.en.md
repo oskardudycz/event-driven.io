@@ -81,7 +81,7 @@ I have spent more than 18 years building software close to the business as a dev
 
 My approach is deliberately pragmatic. Event Sourcing, messaging, and distributed systems are tools—not goals. I will challenge an unnecessary architecture as readily as I will help implement a useful one.
 
-You can read more [about my background](/en/about/), browse my [articles by topic](/en/category/), or watch my [conference talks and videos](/en/talks/).
+You can read more [about my background](/en/about/), browse my [articles by topic](/en/guides/), or watch my [conference talks and videos](/en/talks/).
 
 ## Let's discuss your problem
 

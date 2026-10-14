@@ -1,18 +1,30 @@
-import type { ArticleFields, Frontmatter } from '../types/content.ts';
+import type {
+  ArticleFields,
+  Frontmatter,
+  GuideStep,
+} from '../types/content.ts';
 
 export type LearningPathNode = {
   fields: { pathSlug: string; langKey: string; prefix?: string };
-  frontmatter: { title: string; articles?: string[] };
+  frontmatter: {
+    title: string;
+    articles?: string[];
+    icon?: string;
+    description?: string;
+    // A file name in Markdown; Gatsby resolves it to a File node or null.
+    cover?: string | { id: string } | null;
+  };
 };
 
 type PathArticle = {
+  id?: string;
   fields: Pick<ArticleFields, 'slug' | 'langKey' | 'source'>;
-  frontmatter: Pick<Frontmatter, 'useDefaultLangCanonical'>;
+  frontmatter: Pick<Frontmatter, 'title' | 'useDefaultLangCanonical'>;
 };
 
 // Same resolution as an article's `related` entries: the path's language
 // first, then the canonical English article.
-function pathArticle(
+export function pathArticle(
   posts: PathArticle[],
   slug: string,
   language: string,
@@ -45,6 +57,16 @@ function unknownArticles(
       (slug) =>
         `Learning path "${pathSlug}" (${langKey}) lists unknown article "${slug}"`,
     );
+}
+
+function missingDetails(path: LearningPathNode) {
+  const { pathSlug, langKey } = path.fields;
+  const { icon, description, cover } = path.frontmatter;
+  return Object.entries({ icon, description, cover })
+    .filter(
+      ([, value]) => !value || (typeof value === 'string' && !value.trim()),
+    )
+    .map(([name]) => `Learning path "${pathSlug}" (${langKey}) has no ${name}`);
 }
 
 function sameArticles(left: LearningPathNode, right: LearningPathNode) {
@@ -82,6 +104,58 @@ export function learningPathProblems(
 ): string[] {
   return [
     ...paths.flatMap((path) => unknownArticles(path, posts, defaultLanguage)),
+    ...paths.flatMap(missingDetails),
     ...translationMismatches(paths, defaultLanguage),
   ];
+}
+
+export const guidePath = (path: LearningPathNode) =>
+  `/${path.fields.langKey}/guides/${path.fields.pathSlug}/`;
+
+function nextArticle(
+  posts: PathArticle[],
+  slug: string | undefined,
+  language: string,
+  defaultLanguage: string,
+) {
+  if (!slug) return undefined;
+  const article = pathArticle(posts, slug, language, defaultLanguage);
+  if (!article) return undefined;
+  return {
+    title: article.frontmatter.title,
+    path: `/${article.fields.langKey}${article.fields.slug}`,
+  };
+}
+
+// One step for every guide in the reader's language that lists the article.
+export function guideSteps(
+  paths: LearningPathNode[],
+  posts: PathArticle[],
+  slug: string,
+  language: string,
+  defaultLanguage = 'en',
+): GuideStep[] {
+  return paths
+    .filter((path) => path.fields.langKey === language)
+    .filter((path) => (path.frontmatter.articles || []).includes(slug))
+    .sort((left, right) =>
+      (left.fields.prefix || '').localeCompare(right.fields.prefix || ''),
+    )
+    .map((path) => {
+      const articles = path.frontmatter.articles || [];
+      const index = articles.indexOf(slug);
+      const next = nextArticle(
+        posts,
+        articles[index + 1],
+        language,
+        defaultLanguage,
+      );
+      return {
+        title: path.frontmatter.title,
+        path: guidePath(path),
+        step: index + 1,
+        total: articles.length,
+        ...(next ? { next } : {}),
+      };
+    });
 }

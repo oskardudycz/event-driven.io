@@ -194,7 +194,7 @@ test('approved text colors maintain contrast on actual white surfaces and intera
   expect(await colors(link)).toEqual(expected);
   await link.focus();
   expect(await colors(link)).toEqual(expected);
-  expect(await colors(page.locator('footer li').first())).toEqual({
+  expect(await colors(page.locator('footer.footer li').first())).toEqual({
     color: 'rgb(112, 110, 107)',
     background: 'rgb(255, 255, 255)',
   });
@@ -369,7 +369,7 @@ for (const language of ['en', 'pl']) {
           'transform',
           'none',
         );
-        await page.goto(`/${language}/category/event-sourcing/`, {
+        await page.goto(`/${language}/guides/event-sourcing-foundations/`, {
           waitUntil: 'domcontentloaded',
         });
         const ordered = page.locator('ol.ordered');

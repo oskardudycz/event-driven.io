@@ -36,8 +36,20 @@ export default function SearchResult({
 }) {
   const sourceLabels: Record<string, string> =
     lang === 'pl'
-      ? { posts: 'Artykuł', pages: 'Strona', 'newsletter-pl': 'Newsletter' }
-      : { posts: 'Article', pages: 'Page', 'newsletter-pl': 'Newsletter' };
+      ? {
+          posts: 'Artykuł',
+          pages: 'Strona',
+          'newsletter-pl': 'Newsletter',
+          paths: 'Przewodnik',
+          tags: 'Tag',
+        }
+      : {
+          posts: 'Article',
+          pages: 'Page',
+          'newsletter-pl': 'Newsletter',
+          paths: 'Guide',
+          tags: 'Tag',
+        };
   const details = [
     sourceLabels[hit.source] || hit.source,
     ...[hit.tags ?? []].flat(),

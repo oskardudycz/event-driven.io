@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'vitest';
 import * as cheerio from 'cheerio';
@@ -43,19 +43,25 @@ test('every source article is published with its current title, locale and canon
   }
 });
 
-test('every article links its localized tags and declares the primary tag as its section', () => {
+test('every article links its localized tags to the tag page of its language, or the English one, and declares the primary tag as its section', () => {
   for (const post of posts) {
     const tags = post.metadata.tags || [];
     const t = translations.getFixedT(post.language);
     const $ = cheerio.load(readBuild(`${post.route}index.html`));
+    const tagsLabel = $('header .meta [role=group] > [id]').filter(
+      (_, label) => $(label).text() === t('tags.metaLabel'),
+    );
     assert.deepEqual(
-      $('header .meta a')
+      $(`[aria-labelledby="${tagsLabel.attr('id')}"] a`)
         .map((_, link) => `${$(link).attr('href')} ${$(link).text().trim()}`)
         .get(),
-      tags.map(
-        (tag) =>
-          `/${post.language}/category/${tagSlug(tag)}/ ${tagLabel(t, tag)}`,
-      ),
+      tags.map((tag) => {
+        const own = `/${post.language}/articles/tag/${tagSlug(tag)}/`;
+        const route = existsSync(join('public', own, 'index.html'))
+          ? own
+          : `/en/articles/tag/${tagSlug(tag)}/`;
+        return `${route} ${tagLabel(t, tag)}`;
+      }),
       post.route,
     );
     const schema = JSON.parse($('#page-schema').text()) as {

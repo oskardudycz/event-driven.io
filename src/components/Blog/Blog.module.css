@@ -13,6 +13,10 @@ ul.elementUl {
   margin: var(--space-lg) auto 0;
 }
 
+div.intro {
+  margin: var(--space-md) auto 0;
+}
+
 :global(.summary).summary {
   margin: 0 auto var(--space-xl);
   max-width: var(--text-max-width-desktop);
@@ -49,7 +53,8 @@ blockquote.elementBlockquote {
   ul.elementUl {
     max-width: var(--text-max-width-tablet);
   }
-  :global(.heading).heading {
+  :global(.heading).heading,
+  div.intro {
     max-width: var(--text-max-width-tablet);
   }
 }
@@ -57,7 +62,8 @@ blockquote.elementBlockquote {
   ul.elementUl {
     max-width: var(--text-max-width-desktop);
   }
-  :global(.heading).heading {
+  :global(.heading).heading,
+  div.intro {
     max-width: var(--text-max-width-desktop);
   }
 }

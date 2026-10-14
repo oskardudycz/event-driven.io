@@ -15,181 +15,192 @@ pretty_urls = false
 
 [[redirects]]
 from = "/en/category/"
-to = "/en/category/databases/"
+to = "/en/articles/tag/databases/"
 status = 301
 force = true
 query = { category = "Databases" }
 
 [[redirects]]
 from = "/en/category/"
-to = "/en/category/tools/"
+to = "/en/articles/tag/tools/"
 status = 301
 force = true
 query = { category = "Tools" }
 
 [[redirects]]
 from = "/en/category/"
-to = "/en/category/event-sourcing/"
+to = "/en/articles/tag/event-sourcing/"
 status = 301
 force = true
 query = { category = "Event Sourcing" }
 
 [[redirects]]
 from = "/en/category/"
-to = "/en/category/open-source/"
+to = "/en/articles/tag/open-source/"
 status = 301
 force = true
 query = { category = "Open Source" }
 
 [[redirects]]
 from = "/en/category/"
-to = "/en/category/event-driven-architecture/"
+to = "/en/articles/tag/event-driven-architecture/"
 status = 301
 force = true
 query = { category = "Event-Driven Architecture" }
 
 [[redirects]]
 from = "/en/category/"
-to = "/en/category/postgre-sql/"
+to = "/en/articles/tag/postgre-sql/"
 status = 301
 force = true
 query = { category = "Postgres" }
 
 [[redirects]]
 from = "/en/category/"
-to = "/en/category/architecture/"
+to = "/en/articles/tag/architecture/"
 status = 301
 force = true
 query = { category = "Software Architecture" }
 
 [[redirects]]
 from = "/en/category/"
-to = "/pl/category/community/"
+to = "/pl/articles/tag/community/"
 status = 301
 force = true
 query = { category = "Community" }
 
 [[redirects]]
 from = "/en/category/"
-to = "/en/category/api/"
+to = "/en/articles/tag/api/"
 status = 301
 force = true
 query = { category = "API" }
 
 [[redirects]]
 from = "/en/category/"
-to = "/en/category/architecture/"
+to = "/en/articles/tag/architecture/"
 status = 301
 force = true
 query = { category = "Architecture" }
 
 [[redirects]]
 from = "/en/category/"
-to = "/en/category/postgre-sql/"
+to = "/en/articles/tag/postgre-sql/"
 status = 301
 force = true
 query = { category = "PostgreSql" }
 
 [[redirects]]
 from = "/en/category/"
-to = "/en/category/postgre-sql/"
+to = "/en/articles/tag/postgre-sql/"
 status = 301
 force = true
 query = { category = "PostgreSQL" }
 
 [[redirects]]
 from = "/pl/category/"
-to = "/en/category/databases/"
+to = "/pl/articles/tag/databases/"
 status = 301
 force = true
 query = { category = "Databases" }
 
 [[redirects]]
 from = "/pl/category/"
-to = "/en/category/tools/"
+to = "/pl/articles/tag/tools/"
 status = 301
 force = true
 query = { category = "Tools" }
 
 [[redirects]]
 from = "/pl/category/"
-to = "/pl/category/event-sourcing/"
+to = "/pl/articles/tag/event-sourcing/"
 status = 301
 force = true
 query = { category = "Event Sourcing" }
 
 [[redirects]]
 from = "/pl/category/"
-to = "/pl/category/open-source/"
+to = "/pl/articles/tag/open-source/"
 status = 301
 force = true
 query = { category = "Open Source" }
 
 [[redirects]]
 from = "/pl/category/"
-to = "/en/category/event-driven-architecture/"
+to = "/pl/articles/tag/event-driven-architecture/"
 status = 301
 force = true
 query = { category = "Event-Driven Architecture" }
 
 [[redirects]]
 from = "/pl/category/"
-to = "/en/category/postgre-sql/"
+to = "/pl/articles/tag/postgre-sql/"
 status = 301
 force = true
 query = { category = "Postgres" }
 
 [[redirects]]
 from = "/pl/category/"
-to = "/en/category/architecture/"
+to = "/pl/articles/tag/architecture/"
 status = 301
 force = true
 query = { category = "Software Architecture" }
 
 [[redirects]]
 from = "/pl/category/"
-to = "/pl/category/community/"
+to = "/pl/articles/tag/community/"
 status = 301
 force = true
 query = { category = "Community" }
 
 [[redirects]]
 from = "/pl/category/"
-to = "/en/category/api/"
+to = "/pl/articles/tag/api/"
 status = 301
 force = true
 query = { category = "API" }
 
 [[redirects]]
 from = "/pl/category/"
-to = "/en/category/architecture/"
+to = "/pl/articles/tag/architecture/"
 status = 301
 force = true
 query = { category = "Architecture" }
 
 [[redirects]]
 from = "/pl/category/"
-to = "/en/category/postgre-sql/"
+to = "/pl/articles/tag/postgre-sql/"
 status = 301
 force = true
 query = { category = "PostgreSql" }
 
 [[redirects]]
 from = "/pl/category/"
-to = "/en/category/postgre-sql/"
+to = "/pl/articles/tag/postgre-sql/"
 status = 301
 force = true
 query = { category = "PostgreSQL" }
+
+# The former category indexes follow the query aliases above.
+[[redirects]]
+from = "/en/category/"
+to = "/en/guides/"
+status = 301
+
+[[redirects]]
+from = "/pl/category/"
+to = "/pl/guides/"
+status = 301
 
 [[redirects]]
 from = "/pl/category/cloud/"
-to = "/en/category/cloud/"
+to = "/pl/articles/tag/cloud/"
 status = 301
 
 # The old Polish topic contained English placeholders only.
 [[redirects]]
 from = "/pl/category/architecture/"
-to = "/en/category/architecture/"
+to = "/pl/articles/tag/architecture/"
 status = 301
 
 [[redirects]]

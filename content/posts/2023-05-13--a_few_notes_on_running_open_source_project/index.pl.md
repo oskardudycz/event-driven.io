@@ -103,7 +103,7 @@ If you're clear and proactive, it's much easier to build trust and get feedback.
 
 **I hope those insights were interesting to you.** OSS _work_ is a long-term game. 
 
-If you'd like to start your own project, check: [How to get started with Open Source?](/pl/how_to_start_with_open_source/).
+If you'd like to start your own project, check: [How to get started with Open Source?](/pl/jak_zaczac_z_open_source/).
 
 Cheers!
 

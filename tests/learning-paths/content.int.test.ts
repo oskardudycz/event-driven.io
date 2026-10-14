@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'vitest';
 import * as yaml from 'js-yaml';
@@ -63,4 +63,20 @@ test('learning path articles resolve to posts and match across languages', () =>
     languages.map((language) => readPath(directory, language)),
   );
   assert.deepEqual(learningPathProblems(paths, posts), []);
+});
+
+test('every learning path has an icon, a description and a cover file of its own', () => {
+  for (const directory of directories)
+    for (const language of languages) {
+      const { frontmatter } = readPath(directory, language);
+      const label = `${directory} (${language})`;
+      assert.match(frontmatter.icon || '', /\p{Extended_Pictographic}/u, label);
+      assert.ok(frontmatter.description?.trim(), `${label} has no description`);
+      const { cover } = frontmatter;
+      assert.ok(typeof cover === 'string', `${label} has no cover`);
+      assert.ok(
+        existsSync(join(root, directory, cover)),
+        `${label} cover ${cover} is missing`,
+      );
+    }
 });

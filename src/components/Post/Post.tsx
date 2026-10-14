@@ -1,4 +1,9 @@
-import type { ArticleNode, ArticleEdge } from '../../types/content.ts';
+import type {
+  ArticleNode,
+  ArticleEdge,
+  GuideStep,
+  TagLink,
+} from '../../types/content.ts';
 import React from 'react';
 import * as styles from './Post.module.css';
 import 'prismjs/themes/prism-okaidia.css';
@@ -12,6 +17,7 @@ import Substack from './Substack.tsx';
 import NextPrev from './NextPrev.tsx';
 import Summary from '../Article/Summary.tsx';
 import Related from './Related.tsx';
+import GuideSteps from './GuideSteps.tsx';
 import { DiscussionEmbed } from 'disqus-react';
 
 const Share = asyncComponent(() =>
@@ -26,6 +32,8 @@ const Post = (props: {
   post: ArticleNode;
   authornote: string;
   related?: ArticleEdge[] | undefined;
+  guides?: GuideStep[] | undefined;
+  tagLinks?: TagLink[] | undefined;
   next?: ArticleNode | undefined;
   prev?: ArticleNode | undefined;
 }) => {
@@ -34,10 +42,12 @@ const Post = (props: {
     post: {
       html,
       fields: { prefix, slug, originalSlug },
-      frontmatter: { title, summary, author, tags, disqusId },
+      frontmatter: { title, summary, author, disqusId },
     },
     authornote,
     related,
+    guides,
+    tagLinks,
     next: nextPost,
     prev: prevPost,
   } = props;
@@ -52,11 +62,12 @@ const Post = (props: {
       <header>
         <Headline title={title} />
         <Summary>{summary}</Summary>
-        <Meta prefix={prefix} author={author} tags={tags} />
+        <Meta prefix={prefix} author={author} tags={tagLinks} guides={guides} />
       </header>
       <Bodytext html={html} className={styles.body} />
       <footer>
         <Substack />
+        <GuideSteps guides={guides} />
         <Related posts={related} />
         <Share post={post} />
         <Author note={authornote} />

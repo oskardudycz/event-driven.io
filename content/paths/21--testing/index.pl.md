@@ -1,5 +1,8 @@
 ---
 title: Testowanie
+icon: 🧪
+description: "How to test business logic, projections and asynchronous processes in event-driven systems, with examples in .NET, Emmett and Testcontainers."
+cover: 2022-10-07-cover.jpg
 articles:
   - testing_event_sourcing
   - testing_event_driven_projections
