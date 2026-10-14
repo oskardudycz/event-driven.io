@@ -1,5 +1,6 @@
 # Repository guidance
 
+- For visual and branding work, start with [DESIGN.md](DESIGN.md). It links the implementation and process; distinguish proposed choices from accepted changes and retain the existing testing responsibilities.
 - Before changing tests, publication workflows or visual references, read [docs/testing-guidance.md](docs/testing-guidance.md), including the [Vitest/Playwright responsibilities and Astro compatibility](docs/testing-guidance.md#using-vitest-and-playwright-together). Use Vitest projects for logic/generated output/components and Playwright Test for full-site E2E. Keep editorial text separate from controlled visual examples; retain current-source publication and real Gatsby integration checks.
 - Colocate component/module tests beside the code they exercise; do not duplicate their hierarchy under `tests/`. Keep whole-site/generated checks and cross-feature matrices in feature folders under `tests/`. Identify unit/integration/generated/browser/E2E execution with filename suffixes and runner projects, rather than a primary technical folder split. Separate shared fixtures or cross-feature test matrices only when attaching them to one feature would be artificial.
 

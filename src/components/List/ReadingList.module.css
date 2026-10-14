@@ -27,7 +27,7 @@
 }
 .ordered li::before {
   align-items: center;
-  background: var(--color-brand);
+  background: var(--text-color-brand);
   border: 3px solid var(--color-surface);
   border-radius: 50%;
   color: var(--color-text-inverse);
@@ -86,8 +86,7 @@
   margin: 0 0 var(--space-sm);
 }
 .readingCardContent small {
-  color: var(--color-text);
-  opacity: 0.7;
+  color: var(--color-text-muted);
   display: block;
   margin-bottom: var(--space-sm);
 }

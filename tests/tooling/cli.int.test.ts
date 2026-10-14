@@ -113,12 +113,22 @@ test('icon generation writes the requested PNG sizes without a remote CLI', asyn
   );
   assert.equal(result.status, 0, result.stderr);
   const icons = readdirSync(output);
-  assert.equal(icons.length, 19);
-  for (const file of icons) {
+  assert.ok(icons.includes('favicon.ico'));
+  for (const file of icons.filter((name) => name.endsWith('.png'))) {
     const size = Number(file.match(/-(\d+)x\d+\.png$/)?.[1]);
     const metadata = await sharp(join(output, file)).metadata();
     assert.equal(metadata.format, 'png');
     assert.equal(metadata.width, size);
     assert.equal(metadata.height, size);
   }
+  const favicon = readFileSync(join(output, 'favicon.ico'));
+  assert.equal(favicon.readUInt16LE(2), 1);
+  assert.equal(favicon.readUInt16LE(4), 1);
+  const imageOffset = favicon.readUInt32LE(18);
+  const imageLength = favicon.readUInt32LE(14);
+  const image = await sharp(
+    favicon.subarray(imageOffset, imageOffset + imageLength),
+  ).metadata();
+  assert.equal(image.width, favicon[6]);
+  assert.equal(image.height, favicon[7]);
 });
