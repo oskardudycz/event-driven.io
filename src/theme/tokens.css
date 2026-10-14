@@ -16,6 +16,7 @@
   --line-height-summary: 1.4;
   --color-date: #969492;
   --color-border: #ecebea;
+  --color-control-border: #8c8986;
   --color-attention: orange;
   --color-brand: #709425;
   --color-brand-tint: #70942518;
@@ -82,6 +83,7 @@
   --color-text-muted: #b1b5bb;
   --color-date: #a0a8b1;
   --color-border: #38424a;
+  --color-control-border: #b0adab;
   --color-brand: #bddc84;
   --color-brand-tint: #bddc8418;
   --text-color-brand: #bddc84;
