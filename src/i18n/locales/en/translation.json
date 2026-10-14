@@ -8,7 +8,7 @@
   },
   "menu": {
     "articles": "Articles",
-    "categories": "Categories",
+    "guides": "Guides",
     "consulting": "Consulting",
     "contact": "Contact",
     "talks": "Talks",
@@ -36,19 +36,29 @@
     "allIntro": "Browse the complete archive, from the newest article back to the earliest posts."
   },
   "tags": {
-    "title": "Recommended reading by topic",
-    "intro": "Choose a topic to follow a recommended learning path or browse all related articles.",
-    "topic": "Topic",
-    "recommended": "Recommended reading order",
-    "recommendedDescription": "Read these in order to move from the foundations to practical trade-offs and production concerns.",
-    "moreArticles": "More articles",
-    "articles": "Articles",
-    "articleCount": "{{count}} article",
-    "articleCount_plural": "{{count}} articles",
+    "articleCount_one": "{{count}} article",
+    "articleCount_other": "{{count}} articles",
     "defaultDescription": "Practical articles about {{tag}}.",
-    "seoTitle": "{{tag}} articles and learning path",
-    "seoTitleAll": "Software architecture topics and reading paths",
-    "seoDescription": "Recommended reading paths and practical articles about Event Sourcing, CQRS, event-driven architecture, and software design."
+    "seoTitle": "{{tag}} articles",
+    "browse": "Browse articles by tag",
+    "metaLabel": "Tags:",
+    "descriptions": {
+      "event-sourcing": "Start with the fundamentals, then move through modelling, business logic, projections, testing, evolution, and the situations where Event Sourcing is the wrong choice.",
+      "event-driven-architecture": "A practical path through distributed processes, delivery guarantees, idempotency, ordering, concurrency, and rebuilding read models safely.",
+      "cqrs": "Learn what CQRS is without the usual ceremony, then see commands, read models, and consistency trade-offs in practical examples.",
+      "architecture": "Pragmatic modelling and architecture guidance: understand the problem, expose assumptions, draw useful boundaries, and keep ownership explicit."
+    }
+  },
+  "guides": {
+    "title": "Guides",
+    "description": "Reading paths through Event Sourcing, event-driven architecture, CQRS and messaging. Each guide lists articles in a recommended order.",
+    "guide": "Guide",
+    "articleCount_one": "{{count}} article",
+    "articleCount_other": "{{count}} articles",
+    "step": "step {{step}} of {{total}}",
+    "next": "Next",
+    "inGuides": "Guides with this article",
+    "metaLabel": "Guides:"
   },
   "talks": {
     "title": "Talks and videos",

@@ -10,7 +10,9 @@ Preserve authored alpha on page images. Remove the white image canvas from share
 
 ### Tags and learning paths (in progress)
 
-The [learning-paths spec](docs/learning-paths/spec.md) runs in phases. Phase 2 is implemented locally: articles carry one `tags` list (first tag primary) instead of `category`/`categories`, merged values follow the [approved mapping](docs/learning-paths/tag-mapping.md) and their old tag URLs redirect permanently. Frontmatter stores English tag names; `tags.labels` in the locale translations supplies display labels with an English fallback. Routes stay `/{lang}/category/` and `/{lang}/category/{slug}/` until the separately approved route phase; `data/category-guides.json` is renamed with the learning-path data in phase 3. Hosted CI and deployment are unverified.
+The [learning-paths spec](docs/learning-paths/spec.md) runs in phases. Phase 2 is implemented locally: articles carry one `tags` list (first tag primary) instead of `category`/`categories`, merged values follow the [approved mapping](docs/learning-paths/tag-mapping.md) and their old tag URLs redirect permanently. Frontmatter stores English tag names; `tags.labels` in the locale translations supplies display labels with an English fallback. Hosted CI and deployment are unverified.
+
+Guides (step 1 of the learning-paths phase) are implemented locally: each path in `content/paths` is published at `/{lang}/guides/{slug}/` with an index at `/{lang}/guides/`, linked from the menu, search and llms.txt, and articles show their step in each guide. Polish guides are self-canonical even while their descriptions are English (Oskar's decision). Tag pages (step 2) are implemented locally: `/{lang}/articles/tag/{slug}/` lists every article with the tag that has a route in that language, English copies on Polish routes included; the archive links to them with tag chips; tag descriptions live in `tags.descriptions`. Former category URLs redirect permanently in one hop to the tag pages, and the category indexes to the guides. The SEO audit (step 3) of the local build found no canonical, hreflang, sitemap, structured-data, llms.txt or redirect defects; the indexing and SEO build verifiers now cover guides and tag pages. Step 4 (local): the article header lists tags and guides in labelled rows, the footer guide box underlines its links and keeps a gap above Share on mobile, and a generated test fails on internal links to redirect sources or `/category/`; all stale links it found were fixed with Oskar's approval. Open owner decisions are listed in todo.md: long guide descriptions, generic tag descriptions, English-only Polish guide descriptions and the slow-query warnings caused by computed excerpts.
 
 ### Feature-based tests and runner responsibilities
 
@@ -98,7 +100,7 @@ Local implementation and full validation are complete: locked installation, smok
 
 ## Editorial discovery rules
 
-Recommended tag order is controlled by the ordered recommended slugs in data/category-guides.json. Related articles require explicit related frontmatter and valid published targets; there is no broad tag fallback. Chronological earlier/later navigation is separate. Use genuine translations for editorial clarity without forcing visitors from Polish routes to English.
+Tag pages list articles newest first; recommended reading order belongs to the guides. Related articles require explicit related frontmatter and valid published targets; there is no broad tag fallback. Chronological earlier/later navigation is separate. Use genuine translations for editorial clarity without forcing visitors from Polish routes to English.
 
 ## Content frontmatter conventions
 

@@ -294,7 +294,7 @@ for (const language of ['en', 'pl'] as const) {
       for (const route of [
         '',
         'articles/',
-        'category/event-sourcing/',
+        'articles/tag/event-sourcing/',
         'introduction_to_event_sourcing/',
         'search/',
       ]) {

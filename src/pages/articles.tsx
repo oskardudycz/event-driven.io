@@ -4,19 +4,28 @@ import { graphql } from 'gatsby';
 import { useTranslation } from 'react-i18next';
 
 import Blog from '../components/Blog/index.ts';
+import TagChips from '../components/Blog/TagChips.tsx';
 import { createHead } from '../components/Seo/index.ts';
+import { usePageContext } from '../i18n/page-context.ts';
+import { tagChips } from '../utils/tag-posts.ts';
+import { tagLabel } from '../utils/tag-label.ts';
 
-const ArticlesPage = (props: SitePageProps<'posts' | 'site'>) => {
+const ArticlesPage = (props: SitePageProps<'posts' | 'tagged' | 'site'>) => {
   const { t } = useTranslation();
+  const { lang } = usePageContext();
   const {
     data: {
       posts: { edges: posts },
+      tagged,
     },
   } = props;
+  const chips = tagChips(tagged.nodes, lang, (tag) => tagLabel(t, tag));
 
   return (
     <React.Fragment>
-      <Blog posts={posts} compactTop heading={t('blog.allTitle')} />
+      <Blog posts={posts} compactTop heading={t('blog.allTitle')}>
+        <TagChips language={lang} chips={chips} />
+      </Blog>
     </React.Fragment>
   );
 };
@@ -60,6 +69,19 @@ export const query = graphql`
               }
             }
           }
+        }
+      }
+    }
+    tagged: allMarkdownRemark(filter: { fields: { source: { eq: "posts" } } }) {
+      nodes {
+        fields {
+          slug
+          langKey
+          source
+        }
+        frontmatter {
+          tags
+          useDefaultLangCanonical
         }
       }
     }

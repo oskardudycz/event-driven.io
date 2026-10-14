@@ -148,7 +148,7 @@ To nie jest dobry pomysł. To tak jak próbować otworzyć nóż sprężynowy ni
 
 Ja zwykle staram się przeczytać porcję blogów, książek, zaimplementować sobie samemu proof of concept. Jeśli się po nich okaże, że ma szansę to pomóc mojemu projektowi, albo wprowadzenie tej zmiany nie będzie dużym kosztem , a w przyszłości może zaowocować np. łatwiejszym jego utrzymaniem to też rozważam jego użycie.
 
-Tak jak pisałem w innym wpisie – [często wymyślam sobie projekty, których potem nie kończę](/2015/01/31/borys-najlepiej-dryblowa/). Zwykle wymyślam je, bo zainspirowała mnie jakaś technologia, dla której znalazłem świetne (w moim mniemaniu) zastosowanie. To smutne, że te projekty się nie udają, ale fajne, że uczę się dużo nowych rzeczy, które potem przydają mi się w kolejnych projektach.
+Tak jak pisałem w innym wpisie – [często wymyślam sobie projekty, których potem nie kończę](/pl/borys_najlepiej_dryblowal/). Zwykle wymyślam je, bo zainspirowała mnie jakaś technologia, dla której znalazłem świetne (w moim mniemaniu) zastosowanie. To smutne, że te projekty się nie udają, ale fajne, że uczę się dużo nowych rzeczy, które potem przydają mi się w kolejnych projektach.
 
 Jak szukam książek? To akurat proste. Szukam na Amazon.com. Wpisuję słowo kluczowe, które mnie interesuje i patrzę na opinię. Prawie zawsze zgadzam ze średnią ocen i opinii, które tam są zamieszczane. Warto szukać książek z jak największą liczbą ocen, jak najnowszych, czytać kilka opinii, zarówno tych negatywnych jak i pozytywnych. No ale to wiecie. Co potem? Często kupuję książkę i czytam ją na Kindle. 100zł na dobrą książkę raz na jakiś czas to wg mnie dobra inwestycja.
 

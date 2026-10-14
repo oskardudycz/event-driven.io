@@ -34,7 +34,7 @@ I shared that with my friends. As I used the GitHub release function, it appeare
 
 **What options? At some point [I set up GitHub Sponsors](https://github.com/sponsors/oskardudycz) with the idea to make my Open Source _"work"_ more sustainable.** I wanted to give them something more as a gratitude for their support. Of course, not gonna lie, also as a hook to attract more of them. That idea was to do monthly webinars. I decided, why not have both and build the community for the people who want something more in their career?
 
-Some of them already were asking me for recommendations, comments and help. A lot of questions repeated. Some of the answers were a basis for the [articles on my blog](https://event-driven.io), but I wanted to have it more interactive. 
+Some of them already were asking me for recommendations, comments and help. A lot of questions repeated. Some of the answers were a basis for the [articles on my blog](/en/), but I wanted to have it more interactive. 
 
 I've set up a Discord channel.
 

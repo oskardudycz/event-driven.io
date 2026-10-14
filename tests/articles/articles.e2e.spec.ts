@@ -38,21 +38,27 @@ test('related articles and publication navigation remain usable', async ({
   await expect(page.locator('.related h2')).toHaveCSS('font-weight', '600');
   const furtherReading = page.locator('.author + .links');
   await expect(
-    page.locator('article footer > .substack + .related'),
+    page.locator('article footer > .substack + .guideSteps + .related'),
   ).toHaveCount(1);
   const spacing = await page.evaluate(() => {
     const iframe = document.querySelector('.substack iframe')!;
+    const guides = document.querySelector('.guideSteps')!;
     const related = document.querySelector('.related')!;
     return {
-      gap:
+      gaps: [
+        guides.getBoundingClientRect().top -
+          iframe.getBoundingClientRect().bottom,
         related.getBoundingClientRect().top -
-        iframe.getBoundingClientRect().bottom,
+          guides.getBoundingClientRect().bottom,
+      ],
       border: getComputedStyle(related).borderTopWidth,
     };
   });
   expect(spacing.border).toBe('0px');
-  expect(spacing.gap).toBeGreaterThanOrEqual(0);
-  expect(spacing.gap).toBeLessThanOrEqual(30);
+  for (const gap of spacing.gaps) {
+    expect(gap).toBeGreaterThanOrEqual(0);
+    expect(gap).toBeLessThanOrEqual(30);
+  }
   const data = JSON.parse(
     readFileSync(
       'public/page-data/en/vertical-slices-and-dependencies/page-data.json',
@@ -248,21 +254,120 @@ function polishArticleWithTranslatedTag() {
   throw new Error('Expected a Polish article with a translated tag');
 }
 
-test('tag labels follow the interface language while tag URLs stay shared', async ({
+test('tag labels follow the interface language and link to the tag page of that language', async ({
   page,
 }) => {
   const { path, slug, label } = polishArticleWithTranslatedTag();
   await page.goto(path, { waitUntil: 'domcontentloaded' });
   await expect(
-    page.locator(`header .meta a[href="/pl/category/${slug}/"]`),
+    page.locator(`header .meta a[href="/pl/articles/tag/${slug}/"]`),
   ).toHaveText(label);
   await page.getByRole('link', { name: 'Change language to en' }).click();
   const englishPath = path.replace(/^\/pl\//, '/en/');
   await page.waitForURL(`**${englishPath}`);
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   const englishTag = page.locator(
-    `header .meta a[href="/en/category/${slug}/"]`,
+    `header .meta a[href="/en/articles/tag/${slug}/"]`,
   );
   await expect(englishTag).toBeVisible();
   await expect(englishTag).not.toHaveText(label);
 });
+
+for (const language of ['en', 'pl']) {
+  for (const width of [390, 1280]) {
+    test(`${language} article tag opens its tag page at ${width}px`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(`/${language}/introduction_to_event_sourcing/`, {
+        waitUntil: 'domcontentloaded',
+      });
+      const tag = page
+        .locator('header .meta')
+        .getByRole('link', { name: 'Event Sourcing', exact: true });
+      await expect(tag).toBeVisible();
+      await tag.click();
+      await page.waitForURL(`**/${language}/articles/tag/event-sourcing/`);
+      await expect(page.locator('html')).toHaveAttribute('lang', language);
+      await expect(
+        page.getByRole('heading', { level: 1, name: 'Event Sourcing' }),
+      ).toBeVisible();
+      await expect(
+        page.locator(
+          `li > a.link[href="/${language}/introduction_to_event_sourcing/"]`,
+        ),
+      ).toHaveCount(1);
+    });
+  }
+}
+
+const metaLabels: Record<string, { tags: string; guides: string }> = {
+  en: { tags: 'Tags:', guides: 'Guides:' },
+  pl: { tags: 'Tagi:', guides: 'Przewodniki:' },
+};
+
+for (const language of ['en', 'pl']) {
+  for (const width of [390, 1440]) {
+    test(`${language} article header lists its tags and guides with links to existing pages at ${width}px`, async ({
+      page,
+    }) => {
+      const route = `/${language}/idempotent_command_handling/`;
+      const { pageContext } = (
+        JSON.parse(
+          readFileSync(`public/page-data${route}page-data.json`, 'utf8'),
+        ) as BuildPageData
+      ).result;
+      const tagLinks = (pageContext.tagLinks || []).filter(({ path }) => path);
+      const guides = pageContext.guides || [];
+      expect(guides.length).toBeGreaterThan(0);
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(route, { waitUntil: 'domcontentloaded' });
+      const header = page.locator('article header');
+      const tags = header.getByRole('group', {
+        name: metaLabels[language]!.tags,
+      });
+      const guideGroup = header.getByRole('group', {
+        name: metaLabels[language]!.guides,
+      });
+      const label = tags.getByText(metaLabels[language]!.tags, {
+        exact: true,
+      });
+      await expect(label).toHaveCSS('font-weight', '600');
+      await expect(label).toHaveCSS(
+        'color',
+        await page
+          .locator('body')
+          .evaluate((body) => getComputedStyle(body).color),
+      );
+      await expect(tags.getByRole('link')).toHaveCount(tagLinks.length);
+      await expect(guideGroup.getByRole('link')).toHaveText(
+        guides.map(({ title, step, total }) => `${title} (${step}/${total})`),
+      );
+      const destinations = [
+        ...tagLinks.map(({ path }) => path!),
+        ...guides.map(({ path }) => path),
+      ];
+      expect(
+        await header
+          .getByRole('group')
+          .getByRole('link')
+          .evaluateAll((links) =>
+            links.map((link) => link.getAttribute('href')),
+          ),
+      ).toEqual(destinations);
+      for (const destination of destinations) {
+        const response = await page.request.get(destination, {
+          maxRedirects: 0,
+        });
+        expect(response.status(), destination).toBe(200);
+      }
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth),
+      ).toBeLessThanOrEqual(width);
+      await guideGroup.getByRole('link').first().click();
+      await page.waitForURL(`**${guides[0]!.path}`);
+      await expect(page.locator('html')).toHaveAttribute('lang', language);
+      await expect(page.locator('main h1')).toContainText(guides[0]!.title);
+    });
+  }
+}

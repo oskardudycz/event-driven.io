@@ -340,23 +340,17 @@ tags:
 
 When merging tags, add the former value to `mergedTags` in `src/utils/tag-redirects.ts`; its old tag URL then redirects to the merged tag page.
 
-To set a tag page's description and numbered reading order, edit `data/category-guides.json`:
+Each tag has a page at `/{en,pl}/articles/tag/{slug}/` listing its articles, newest first. A language has the page when at least one of the tag's articles has a route in that language, including an English copy published under `/pl/`. Article tag links point to the page in the article's language, or to the English page when there is no Polish one. `/{en,pl}/articles/` links to every tag page of its language, most used first.
+
+To describe a tag, add a sentence under `tags.descriptions`, keyed by the tag's URL slug, in `src/i18n/locales/{en,pl}/translation.json`. It is shown below the heading and used as the page's meta description. A language without a description uses `tags.defaultDescription`; descriptions do not fall back to the other language.
 
 ```json
-{
-  "language": "en",
-  "slug": "event-sourcing",
-  "description": "Learn Event Sourcing from the fundamentals to production.",
-  "recommended": [
-    "introduction_to_event_sourcing",
-    "projections_and_read_models_in_event_driven_architecture"
-  ]
+"descriptions": {
+  "event-sourcing": "Learn Event Sourcing from the fundamentals to production."
 }
 ```
 
-`recommended` controls the numbered order. Use article slugs without dates, locale prefixes or surrounding slashes. Each article must have the tag in `tags` on its canonical version. Remaining articles follow by date; an empty array uses chronological order only. English and Polish guides are independent. Missing or untagged recommendations are ignored, so inspect the resulting tag page after editing.
-
-A guide does not create a tag route by itself; at least one canonical article in that language must have the tag. Run `npm run build`, `npm run test:file -- tests/articles/rendering.generated.test.ts` and inspect `/en/category/event-sourcing/` and `/pl/category/event-sourcing/`.
+Former `/category/` URLs redirect permanently to the tag pages, and `/{en,pl}/category/` to the guides. Run `npm run build`, `npm run test:file -- tests/articles/tags.generated.test.ts` and inspect `/en/articles/tag/event-sourcing/` and `/pl/articles/tag/event-sourcing/`.
 
 ### Learning paths
 
@@ -385,7 +379,7 @@ The styling baseline is Safari 16.4+, Chrome 111+ and Firefox 128+. The existing
 
 The **Theme / Motyw** icon opens light, dark and system choices. It lives in the header on desktop and the lower navigation on mobile; mobile choices open above the bar, including when the navigation is expanded. System is the default and detects your device's appearance automatically. The icon shows a sun, moon or monitor for the selected preference. Use Enter/Space to open it, Tab to reach the native radio choices, and Escape to close and return focus; clicking outside also closes it. Preference is stored as `color-theme` in local storage. System mode follows OS changes; explicit choices persist across reloads and EN/PL navigation. `src/theme/preference.ts` provides the small document-head initializer so saved preferences apply before React loads. Without JavaScript, the site uses the light stylesheet and theme selection is disabled. Storage failures fall back to system preference without preventing a change on the current page.
 
-Edit light values in `:root` and dark overrides in `:root[data-theme='dark']` in `src/theme/tokens.css`. Transparent article diagrams keep a white canvas for readable labels. Embedded third-party widgets retain their provider's own appearance. Run `npm run test:e2e -- theme.e2e.spec.ts` for theme behavior, and the full browser suite for shared styling/navigation changes. Theme checks click the visible labels and row padding, and cover keyboard dismissal, saved preferences before React loads, OS changes, blocked storage, synchronization between tabs, and dark home/archive/category/article/search pages in both languages at mobile and desktop widths. To repeat these checks in Firefox, run `npm run browsers:install:firefox`, then `npm run test:e2e -- theme.e2e.spec.ts --browser firefox`.
+Edit light values in `:root` and dark overrides in `:root[data-theme='dark']` in `src/theme/tokens.css`. Transparent article diagrams keep a white canvas for readable labels. Embedded third-party widgets retain their provider's own appearance. Run `npm run test:e2e -- theme.e2e.spec.ts` for theme behavior, and the full browser suite for shared styling/navigation changes. Theme checks click the visible labels and row padding, and cover keyboard dismissal, saved preferences before React loads, OS changes, blocked storage, synchronization between tabs, and dark home/archive/tag/article/search pages in both languages at mobile and desktop widths. To repeat these checks in Firefox, run `npm run browsers:install:firefox`, then `npm run test:e2e -- theme.e2e.spec.ts --browser firefox`.
 
 For a manual appearance review, run `npm run build` and `npm run serve`, then use the theme icon in the desktop header or lower mobile navigation on the home page, an article, a category and search. Review the dark palette, image canvases and mobile navigation. Switch EN/PL and reload to check persistence; open a second tab to check synchronized selection. Choose **System / Systemowy** and change your OS appearance to check automatic updates. Third-party comments, newsletter and calendar embeds keep their own provider styling.
 

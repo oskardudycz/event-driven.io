@@ -1,5 +1,8 @@
 ---
 title: Obsługa logiki biznesowej
+icon: 🧠
+description: "Ways to structure and compose business logic: slim aggregates, functional composition, idempotent command handling, validation and error handling. Examples in C#, F# and Java."
+cover: 2022-08-31-cover.jpg
 articles:
   - slim_your_entities_with_event_sourcing
   - how_to_effectively_compose_your_business_logic

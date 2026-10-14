@@ -15,6 +15,7 @@ export type ArticleFields = {
   langKey: string;
   source?: string;
   originalSlug?: string;
+  pathSlug?: string;
 };
 
 export type Frontmatter = {
@@ -30,6 +31,7 @@ export type Frontmatter = {
   redirectFrom?: string;
   redirectAliases?: string[];
   related?: string[];
+  articles?: string[];
   menuTitle?: string;
   icon?: string;
 };
@@ -44,6 +46,19 @@ export type ArticleNode = {
   internal?: { content?: string };
 };
 export type ArticleEdge = { node: ArticleNode };
+export type GuideNode = {
+  html?: string;
+  fields: { pathSlug: string; langKey: string; source?: string };
+  frontmatter: Frontmatter;
+};
+export type GuideStep = {
+  title: string;
+  path: string;
+  step: number;
+  total: number;
+  next?: { title: string; path: string };
+};
+export type TagLink = { tag: string; path?: string };
 export type VideoDetails = {
   VideoId: string;
   Title: string;
@@ -61,12 +76,14 @@ export type SitePageContext = {
   availableLanguages?: string[];
   canonicalLanguages?: string[];
   tag?: string;
-  tagDescription?: string;
-  recommendedSlugs?: string[];
+  tagLinks?: TagLink[];
   next?: ArticleNode;
   prev?: ArticleNode;
   relatedPostIds?: string[];
   relatedIds?: string[];
+  guides?: GuideStep[];
+  pathSlug?: string;
+  articleIds?: string[];
 };
 export type PageData = {
   posts: { edges: ArticleEdge[] };
@@ -74,6 +91,10 @@ export type PageData = {
   page: ArticleNode;
   authornote: { html: string };
   relatedPosts: { edges: ArticleEdge[] };
+  guide: GuideNode;
+  guides: { nodes: GuideNode[] };
+  articles: { edges: ArticleEdge[] };
+  tagged: { nodes: ArticleNode[] };
   site: { siteMetadata: { facebook: { appId?: string } } };
 };
 export type SitePageProps<Fields extends keyof PageData> = PageProps<

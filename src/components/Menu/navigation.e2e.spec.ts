@@ -474,7 +474,7 @@ for (const language of ['en', 'pl']) {
           for (const route of [
             'introduction_to_event_sourcing/',
             'articles/',
-            'category/',
+            'articles/tag/event-sourcing/',
             'search/',
             '404.html',
             '',

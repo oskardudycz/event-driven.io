@@ -53,11 +53,19 @@ function verifySeoBuild(publicDirectory: string) {
     'https://event-driven.io/pl/consulting/',
     'Service',
   );
-  verifyPage(
-    'en/category/event-sourcing/index.html',
-    'https://event-driven.io/en/category/event-sourcing/',
-    'CollectionPage',
-  );
+  for (const route of [
+    'en/articles/tag/event-sourcing/',
+    'pl/articles/tag/event-sourcing/',
+    'en/guides/',
+    'pl/guides/',
+    'en/guides/event-sourcing-foundations/',
+    'pl/guides/event-sourcing-foundations/',
+  ])
+    verifyPage(
+      `${route}index.html`,
+      `https://event-driven.io/${route}`,
+      'CollectionPage',
+    );
   verifyPage(
     'en/introduction_to_event_sourcing/index.html',
     'https://event-driven.io/en/introduction_to_event_sourcing/',
@@ -172,7 +180,12 @@ function verifySeoBuild(publicDirectory: string) {
     '/pl/consulting/',
     '/en/articles/',
     '/pl/articles/',
-    '/en/category/event-sourcing/',
+    '/en/articles/tag/event-sourcing/',
+    '/pl/articles/tag/event-sourcing/',
+    '/en/guides/',
+    '/pl/guides/',
+    '/en/guides/event-sourcing-foundations/',
+    '/pl/guides/event-sourcing-foundations/',
     '/en/introduction_to_event_sourcing/',
     '/en/talks/',
   ]) {

@@ -7,6 +7,7 @@ type Redirect = {
   status: number;
   force?: boolean;
   query: Record<string, string>;
+  conditions: { Language?: string[] };
 };
 
 function parsedRedirect(value: unknown): Redirect {
@@ -32,4 +33,36 @@ export async function builtRedirects(): Promise<Redirect[]> {
   });
   assert.deepEqual(errors, []);
   return redirects.map(parsedRedirect);
+}
+
+const matchesPath = (from: string, path: string) =>
+  from.endsWith('/*') ? path.startsWith(from.slice(0, -1)) : from === path;
+
+const matchesQuery = (
+  ruleQuery: Record<string, string>,
+  query: Record<string, string>,
+) =>
+  Object.keys(ruleQuery).length === 0 ||
+  (Object.keys(ruleQuery).length === Object.keys(query).length &&
+    Object.entries(ruleQuery).every(([key, value]) => query[key] === value));
+
+// Netlify applies the first rule that matches, reading _redirects before
+// netlify.toml. A rule without query parameters matches any query string.
+export function firstRedirect(
+  rules: Redirect[],
+  path: string,
+  request: {
+    query?: Record<string, string>;
+    language?: string | undefined;
+  } = {},
+): Redirect | undefined {
+  const { query = {}, language } = request;
+  return rules.find(
+    (rule) =>
+      matchesPath(rule.from, path) &&
+      matchesQuery(rule.query, query) &&
+      (!rule.conditions.Language ||
+        (language !== undefined &&
+          rule.conditions.Language.includes(language))),
+  );
 }

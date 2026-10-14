@@ -1,5 +1,8 @@
 ---
 title: Distributed processes
+icon: 🧩
+description: "How to coordinate business processes across modules and services with sagas, process managers, consumers and checkpointing. Covers multi-tenancy, race conditions, events arriving out of order and modelling workflows."
+cover: 2021-02-10-cover.png
 articles:
   - saga_process_manager_distributed_transactions
   - event_driven_distributed_processes_by_example

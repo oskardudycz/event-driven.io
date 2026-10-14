@@ -1,6 +1,8 @@
 import { tagSlug } from './tag-slug.ts';
+import { tagDestination, tagRoute } from './tag-routes.ts';
 
 export type TagRedirect = { fromPath: string; toPath: string };
+export type TagPage = { language: string; slug: string };
 
 // Approved merges: each former value now belongs to its canonical tag.
 export const mergedTags: Record<string, string> = {
@@ -14,7 +16,7 @@ export const mergedTags: Record<string, string> = {
   'Software Architecture': 'Architecture',
 };
 
-const tagRoute = (language: string, slug: string) =>
+const legacyTagRoute = (language: string, slug: string) =>
   `/${language}/category/${slug}/`;
 
 function mergedSlugs(): [string, string][] {
@@ -27,20 +29,26 @@ function mergedSlugs(): [string, string][] {
   return [...slugs];
 }
 
-// A language without the canonical tag page falls back to the default
-// language, as the legacy Polish topic redirects already do.
-export function mergedTagRedirects(
-  tagRoutes: Set<string>,
+// Former category URLs, including merged tags, lead to the tag page in one hop.
+// A language without the tag page falls back to the default language, as the
+// legacy Polish topic redirects already do.
+export function legacyTagRedirects(
+  tagPages: TagPage[],
   languages: string[],
   defaultLanguage: string,
 ): TagRedirect[] {
+  const routes = new Set(
+    tagPages.map(({ language, slug }) => tagRoute(language, slug)),
+  );
+  const legacySlugs = new Map<string, string>([
+    ...tagPages.map(({ slug }): [string, string] => [slug, slug]),
+    ...mergedSlugs(),
+  ]);
   return languages.flatMap((language) =>
-    mergedSlugs().flatMap(([formerSlug, canonicalSlug]) => {
-      const toPath = [language, defaultLanguage]
-        .map((candidate) => tagRoute(candidate, canonicalSlug))
-        .find((route) => tagRoutes.has(route));
+    [...legacySlugs].flatMap(([legacySlug, slug]) => {
+      const toPath = tagDestination(routes, language, slug, defaultLanguage);
       return toPath
-        ? [{ fromPath: tagRoute(language, formerSlug), toPath }]
+        ? [{ fromPath: legacyTagRoute(language, legacySlug), toPath }]
         : [];
     }),
   );

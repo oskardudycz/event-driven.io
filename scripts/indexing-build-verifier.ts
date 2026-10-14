@@ -22,6 +22,8 @@ export function verifyIndexingBuild(directory: string): string[] {
     {
       canonical: string | undefined;
       noIndex: boolean;
+      language: string | undefined;
+      mains: number;
       alternates: Map<string, string>;
     }
   >();
@@ -50,6 +52,8 @@ export function verifyIndexingBuild(directory: string): string[] {
     pages.set(route, {
       canonical: canonicals.attr('href'),
       noIndex,
+      language: $('html').attr('lang'),
+      mains: $('main').length,
       alternates,
     });
   }
@@ -72,8 +76,20 @@ export function verifyIndexingBuild(directory: string): string[] {
   for (const [route, page] of pages) {
     if (!page.noIndex && page.canonical)
       destination(page.canonical, `${route} canonical`);
+    if (
+      !page.noIndex &&
+      page.canonical === `${siteOrigin}${route}` &&
+      page.mains !== 1
+    )
+      failures.push(`${route}: expected one <main>, found ${page.mains}`);
+    if (page.alternates.size && !page.alternates.has('x-default'))
+      failures.push(`${route}: alternates without x-default`);
     for (const [language, href] of page.alternates) {
       const target = destination(href, `${route} alternate ${language}`);
+      if (language !== 'x-default' && target && target.language !== language)
+        failures.push(
+          `${route}: alternate ${language} leads to a page in ${target.language}`,
+        );
       if (language !== 'x-default' && target)
         for (const [otherLanguage, otherHref] of page.alternates)
           if (target.alternates.get(otherLanguage) !== otherHref)

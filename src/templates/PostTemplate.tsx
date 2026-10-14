@@ -18,7 +18,7 @@ const PostTemplate = (
       relatedPosts,
       authornote: { html: authorNote },
     },
-    pageContext: { next, prev, relatedIds = [] },
+    pageContext: { next, prev, relatedIds = [], guides, tagLinks },
   } = props;
 
   return (
@@ -29,6 +29,8 @@ const PostTemplate = (
           next={next}
           prev={prev}
           authornote={authorNote}
+          guides={guides}
+          tagLinks={tagLinks}
           related={relatedIds
             .map((id) => relatedPosts.edges.find(({ node }) => node.id === id))
             .filter((edge): edge is ArticleEdge => Boolean(edge))}

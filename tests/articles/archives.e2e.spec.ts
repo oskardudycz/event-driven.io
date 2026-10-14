@@ -31,44 +31,43 @@ test('article archive hydrates once and displays its real cover image', async ({
   await expect(page.locator('footer')).toHaveCount(1);
 });
 
-test('category index hydrates once and starts at the top', async ({ page }) => {
-  await page.setViewportSize({
-    width: 1440,
-    height: 900,
-  });
-  const response = await page.goto('/en/category/', {
-    waitUntil: 'domcontentloaded',
-  });
-  expect(response?.status()).toBe(200);
-  await expect(page.locator('.categoryGrid section').first()).toBeVisible();
-  await expectFonts(page);
-  await expect(page.locator('h1')).toHaveCount(1);
-  await expect(page.locator('footer')).toHaveCount(1);
-  const cards = page.locator('.categoryGrid section');
-  expect(await cards.count()).toBeGreaterThan(0);
-  const boxes = await cards.evaluateAll((elements) =>
-    elements.map((element) => {
-      const { x, y, width, height } = element.getBoundingClientRect();
-      return { x, y, width, height };
-    }),
-  );
-  expect(new Set(boxes.map((box) => box.x)).size).toBeGreaterThan(1);
-  for (const box of boxes) {
-    expect(box.width).toBeGreaterThan(0);
-    expect(box.height).toBeGreaterThanOrEqual(44);
-    expect(box.x).toBeGreaterThanOrEqual(0);
-    expect(box.x + box.width).toBeLessThanOrEqual(1440);
+const browseLabels: Record<string, string> = {
+  en: 'Browse articles by tag',
+  pl: 'Przeglądaj artykuły według tagów',
+};
+
+for (const [language, browse] of Object.entries(browseLabels)) {
+  for (const width of [390, 1280]) {
+    test(`${language} archive tag chips open the tag page at ${width}px`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(`/${language}/articles/`, {
+        waitUntil: 'domcontentloaded',
+      });
+      const chip = page
+        .getByRole('navigation', { name: browse })
+        .getByRole('link', { name: 'Event Sourcing', exact: true });
+      await expect(chip).toBeVisible();
+      await chip.click();
+      await page.waitForURL(`**/${language}/articles/tag/event-sourcing/`);
+      await expect(
+        page.getByRole('heading', { level: 1, name: 'Event Sourcing' }),
+      ).toBeVisible();
+      await expect(page.locator('html')).toHaveAttribute('lang', language);
+      await expect(page.locator('main')).toHaveCount(1);
+      await expect(page.locator('h1')).toHaveCount(1);
+      await expect(page.locator('li > a.link').first()).toHaveAttribute(
+        'href',
+        new RegExp(`^/${language}/`),
+      );
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth),
+      ).toBeLessThanOrEqual(width);
+      expect(await page.evaluate(() => window.scrollY)).toBeLessThan(5);
+    });
   }
-  for (let index = 1; index < boxes.length; index++) {
-    const previous = boxes[index - 1]!;
-    const current = boxes[index]!;
-    expect(current.y).toBeGreaterThanOrEqual(previous.y);
-    if (current.y === previous.y)
-      expect(current.x).toBeGreaterThanOrEqual(previous.x + previous.width);
-    else expect(current.y).toBeGreaterThanOrEqual(previous.y + previous.height);
-  }
-  expect(await page.evaluate(() => window.scrollY)).toBeLessThan(5);
-});
+}
 
 test('client-side archive navigation keeps a single page at the top', async ({
   page,
@@ -92,38 +91,29 @@ test('client-side archive navigation keeps a single page at the top', async ({
   await expect(page.locator('footer')).toHaveCount(1);
 });
 
-test('Event Sourcing keeps shared membership and reading order when switching to Polish', async ({
+test('a tag page switches to the same tag in Polish and keeps Polish article links', async ({
   page,
 }) => {
   await page.setViewportSize({
     width: 1440,
     height: 900,
   });
-  await page.goto('/en/category/event-sourcing/');
-  const cards = page.locator('a.readingCard');
-  const orderedCards = page.locator('ol.ordered a.readingCard');
-  const slugs = (await articleSlugs(cards)).sort();
-  const readingOrder = await articleSlugs(orderedCards);
+  await page.goto('/en/articles/tag/event-sourcing/');
+  const cards = page.locator('li > a.link');
+  expect(await articleSlugs(cards)).toContain('introduction_to_event_sourcing');
   await page
     .getByRole('link', {
       name: 'Change language to pl',
     })
     .click();
-  await page.waitForURL('**/pl/category/event-sourcing/');
+  await page.waitForURL('**/pl/articles/tag/event-sourcing/');
   await expect(page.locator('html')).toHaveAttribute('lang', 'pl');
-  await page
-    .getByRole('heading', {
-      name: 'Polecana kolejność czytania',
-      exact: true,
-    })
-    .waitFor();
-  expect((await articleSlugs(cards)).sort()).toEqual(slugs);
-  expect(await articleSlugs(orderedCards)).toEqual(readingOrder);
-  expect(readingOrder.length).toBeGreaterThan(0);
-  expect(new Set(readingOrder).size).toBe(readingOrder.length);
-  const recommendation = page.locator('ol.ordered a.readingCard').first();
-  const target = await recommendation.getAttribute('href');
-  await recommendation.click();
+  await expect(page.getByText(/^\d+ artykuł(y|ów|u)?$/)).toBeVisible();
+  expect(await articleSlugs(cards)).toContain('introduction_to_event_sourcing');
+  const card = cards.first();
+  const target = await card.getAttribute('href');
+  expect(target).toMatch(/^\/pl\//);
+  await card.click();
   await page.waitForURL(`**${target}`);
   await expect(page.locator('html')).toHaveAttribute('lang', 'pl');
   await expect(page.locator('h1')).toHaveCount(1);

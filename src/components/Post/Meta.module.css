@@ -1,6 +1,6 @@
 :global(.meta).meta {
   display: flex;
-  flex-flow: row wrap;
+  flex-direction: column;
   font-size: 0.8em;
   margin: var(--space-md) 0;
   background: transparent;
@@ -9,11 +9,22 @@
     fill: var(--icon-color);
     margin: var(--space-inline-xs);
   }
+  .row {
+    display: flex;
+    flex-flow: row wrap;
+  }
   span.elementSpan {
     align-items: center;
     display: flex;
     text-transform: uppercase;
     margin: var(--space-xs) var(--space-sm) var(--space-xs) 0;
+  }
+  span.label {
+    font-weight: var(--weight-emphasis);
+  }
+  .separator {
+    margin-left: var(--space-sm);
+    color: var(--color-link);
   }
 }
 @media screen and (min-width: 600px) {

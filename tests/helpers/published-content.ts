@@ -42,3 +42,46 @@ export function publishedContent(
   }
   return posts;
 }
+
+export type PublishedGuide = {
+  route: string;
+  slug: string;
+  language: string;
+  directory: string;
+  metadata: Frontmatter & {
+    icon: string;
+    description: string;
+    cover: string;
+    articles: string[];
+  };
+};
+
+// Guides in folder order, read from the authoring directory.
+export function publishedGuides(): PublishedGuide[] {
+  const root = join(import.meta.dirname, '../../content/paths');
+  return readdirSync(root, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .sort()
+    .flatMap((directory) =>
+      ['en', 'pl'].map((language) => {
+        const slug = directory.split('--').slice(1).join('--');
+        const markdown = readFileSync(
+          join(root, directory, `index.${language}.md`),
+          'utf8',
+        );
+        const frontmatter = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(
+          markdown,
+        );
+        return {
+          route: `/${language}/guides/${slug}/`,
+          slug,
+          language,
+          directory,
+          metadata: readFrontmatter(
+            frontmatter?.[1],
+          ) as PublishedGuide['metadata'],
+        };
+      }),
+    );
+}

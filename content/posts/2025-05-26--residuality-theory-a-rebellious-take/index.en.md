@@ -11,7 +11,7 @@ redirectFrom: /residuality-theory-a-rebellious-take/
 
 `youtube: [Embedded video](https://www.youtube.com/watch?rel=0&autoplay=0&showinfo=0&enablejsapi=0&v=0wcUG2EV-7E)`
 
-For years, I've advocated for proper risk analysis. I wrote about it in ["The Risk of Ignoring Risks"](/en/risk_of_ignoring_risks/)—how we need to think upfront about finding risks for our solutions, probability assessments, and mitigation plans. I still believe in all of that. But Barry's Residuality Theory added a dimension I hadn't considered.
+For years, I've advocated for proper risk analysis. I wrote about it in ["The Risk of Ignoring Risks"](/en/the_risk_of_ignoring_risks/)—how we need to think upfront about finding risks for our solutions, probability assessments, and mitigation plans. I still believe in all of that. But Barry's Residuality Theory added a dimension I hadn't considered.
 
 **Taking risks is okay as long as we're prepared for them.** In the article mentioned, I explained the [risk register](https://en.wikipedia.org/wiki/Risk_register), a tool that can be helpful for analysing risks. It is a simple table where we write down all risks associated with our solution.
 

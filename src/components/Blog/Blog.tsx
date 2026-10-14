@@ -11,8 +11,9 @@ const Blog = (props: {
   browseAllPath?: string;
   compactTop?: boolean;
   heading?: string;
+  children?: React.ReactNode;
 }) => {
-  const { posts, browseAllPath, compactTop, heading } = props;
+  const { posts, browseAllPath, compactTop, heading, children } = props;
   const { t } = useTranslation();
 
   return (
@@ -21,6 +22,7 @@ const Blog = (props: {
         className={`main ${styles.main}${compactTop ? ` compactTop ${styles.compactTop}` : ''}`}
       >
         {heading && <h1 className={`heading ${styles.heading}`}>{heading}</h1>}
+        {children && <div className={styles.intro}>{children}</div>}
         <ul className={styles.elementUl}>
           {posts.map((post) => {
             const {

@@ -11,7 +11,7 @@ useDefaultLangCanonical : true
 
 **Continuing an effort to explain DevOps scenarios, today I'd like to show you a simple way to set up integration tests that I'm using in my sample repositories and Marten.**
 
-**What are my assumptions?** It has to be straightforward, so anyone can run it easily (including me, I'm a simple guy). I wrote why it's important in [How to get started with Open Source?](/pl/how_to_start_with_open_source/). It has to be stable and allow easy change or add new configuration without much additional code. Also, I like to play with different stacks and technologies. I want easy and repeatable patterns when I play with new technology. It must also run in GitHub Actions, as this is my current Continuous Integration (_CI_) runner. That's essential, as those machines are underprovisioned and that puts limits.
+**What are my assumptions?** It has to be straightforward, so anyone can run it easily (including me, I'm a simple guy). I wrote why it's important in [How to get started with Open Source?](/pl/jak_zaczac_z_open_source/). It has to be stable and allow easy change or add new configuration without much additional code. Also, I like to play with different stacks and technologies. I want easy and repeatable patterns when I play with new technology. It must also run in GitHub Actions, as this is my current Continuous Integration (_CI_) runner. That's essential, as those machines are underprovisioned and that puts limits.
 
 **I'm running many of my tests as integration ones, as I'd like to trust that what I'm testing will actually work.** You can read a longer explanation of my attitude in [I tested it on production, and I'm not ashamed of it](/pl/i_tested_on_production/). Still, this post is not about why but how.
 

@@ -43,7 +43,7 @@ const render = async (language: string, element: React.ReactElement) => {
   );
 };
 
-test('article tags link to language-neutral routes with localized labels', async () => {
+test('article tags link to their tag pages with localized labels', async () => {
   for (const [language, label] of [
     ['pl', 'Wzorce projektowe'],
     ['en', 'Design Patterns'],
@@ -53,15 +53,33 @@ test('article tags link to language-neutral routes with localized labels', async
       <Meta
         prefix="2021-02-10"
         author="Author"
-        tags={['Design Patterns', 'CQRS']}
+        tags={[
+          {
+            tag: 'Design Patterns',
+            path: `/${language}/articles/tag/design-patterns/`,
+          },
+          { tag: 'CQRS', path: '/en/articles/tag/cqrs/' },
+        ]}
       />,
     );
     expect(
       $('a')
         .map((_, link) => `${$(link).attr('href')} ${$(link).text()}`)
         .get(),
-    ).toEqual([`/category/design-patterns/ ${label}`, '/category/cqrs/ CQRS']);
+    ).toEqual([
+      `/${language}/articles/tag/design-patterns/ ${label}`,
+      '/en/articles/tag/cqrs/ CQRS',
+    ]);
   }
+});
+
+test('a tag without a page is shown without a link', async () => {
+  const $ = await render(
+    'en',
+    <Meta prefix="2021-02-10" author="Author" tags={[{ tag: 'Orphan' }]} />,
+  );
+  expect($('a').length).toBe(0);
+  expect($('.meta span').last().text().trim()).toBe('Orphan');
 });
 
 test('archive cards show every tag with its localized label', async () => {

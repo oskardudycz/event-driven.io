@@ -139,10 +139,14 @@ test('merged tag URLs redirect permanently to created canonical tag pages', asyn
   assert.deepEqual(
     tagRedirects.map(({ fromPath, toPath }) => `${fromPath} ${toPath}`).sort(),
     [
-      '/en/category/software-architecture/ /en/category/architecture/',
-      '/en/category/tests/ /en/category/testing/',
-      '/pl/category/software-architecture/ /en/category/architecture/',
-      '/pl/category/tests/ /pl/category/testing/',
+      '/en/category/architecture/ /en/articles/tag/architecture/',
+      '/en/category/software-architecture/ /en/articles/tag/architecture/',
+      '/en/category/testing/ /en/articles/tag/testing/',
+      '/en/category/tests/ /en/articles/tag/testing/',
+      '/pl/category/architecture/ /en/articles/tag/architecture/',
+      '/pl/category/software-architecture/ /en/articles/tag/architecture/',
+      '/pl/category/testing/ /pl/articles/tag/testing/',
+      '/pl/category/tests/ /pl/articles/tag/testing/',
     ],
   );
   for (const redirect of tagRedirects) {

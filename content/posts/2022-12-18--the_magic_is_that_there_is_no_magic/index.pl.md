@@ -29,7 +29,7 @@ Yet, to learn patterns, you need isolated examples to practice and understand th
 
 Going straight into other people's code won't teach you to use patterns correctly, as you'll see tradeoffs already applied. It'll be hard to understand if they were applied on purpose or unintentionally.
 
-[Before you play solos on guitar, you need to learn scales, chords and rhythm.](/pl/how_playing_on_guitar_helps_in_being_better_developer/)
+[Before you play solos on guitar, you need to learn scales, chords and rhythm.](/pl/o_tym_co_gra_na_gitarze_moze_dac_programiscie/)
 
 The same is with architecture. You need to learn basic patterns and then analyse how to join them together.
 

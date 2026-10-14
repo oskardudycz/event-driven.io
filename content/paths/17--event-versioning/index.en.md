@@ -1,5 +1,8 @@
 ---
 title: Event versioning
+icon: 🏷️
+description: "How to evolve event schemas without breaking consumers: versioning patterns, mapping event types, explicit serialisation and contract testing."
+cover: 2020-12-23-cover.png
 articles:
   - how_to_do_event_versioning
   - simple_events_versioning_patterns

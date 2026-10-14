@@ -29,6 +29,72 @@ Oskar Dudycz is an independent software architect, consultant, trainer, conferen
 - [Hi! My name is Oskar Dudycz](https://event-driven.io/en/about/): Oskar Dudycz is an independent software architect, consultant, trainer, speaker, and open-source maintainer specialising in Event Sourcing and event-driven systems.
 - [Cześć! Nazywam się Oskar Dudycz](https://event-driven.io/pl/about/): Oskar Dudycz jest niezależnym architektem oprogramowania, konsultantem, trenerem i twórcą open source specjalizującym się w Event Sourcingu i systemach zdarzeniowych.
 
+## English guides
+
+- [Event Driven Architecture](https://event-driven.io/en/guides/event-driven-architecture/): What event-driven architecture is once you strip away the buzzwords. How events give teams and modules autonomy, and how predictable identifiers help with eventual and causal consistency.
+- [Events and commands](https://event-driven.io/en/guides/events-and-commands/): The difference between a command and an event, and why it matters when you design messages.
+- [Events on the inside, events on the outside](https://event-driven.io/en/guides/events-on-the-inside-events-on-the-outside/): How internal and external events differ, how to design an event-driven API, and how much data an event should carry.
+- [CQRS](https://event-driven.io/en/guides/cqrs/): What CQRS is and what it isn't, and how it relates to vertical slices. Covers whether commands can return values, generic versus simple code, slicing the codebase, and a practical .NET example.
+- [Handling business logic](https://event-driven.io/en/guides/handling-business-logic/): Ways to structure and compose business logic: slim aggregates, functional composition, idempotent command handling, validation and error handling. Examples in C#, F# and Java.
+- [Optimistic concurrency](https://event-driven.io/en/guides/optimistic-concurrency/): How optimistic concurrency protects your data from conflicting updates, and how to expose it in an HTTP API with the ETag header.
+- [Distributed processes](https://event-driven.io/en/guides/distributed-processes/): How to coordinate business processes across modules and services with sagas, process managers, consumers and checkpointing. Covers multi-tenancy, race conditions, events arriving out of order and modelling workflows.
+- [Read models and Projections](https://event-driven.io/en/guides/read-models-and-projections/): How projections turn events into read models, and how to scale, test and rebuild them safely. Includes examples with Emmett, Marten, Elasticsearch and EventStoreDB subscriptions.
+- [Modelling with events](https://event-driven.io/en/guides/modelling-with-events/): Techniques for discovering and modelling business processes with events, from EventStorming hot spots to mixing modelling methods, plus the common traps to avoid.
+- [Documenting EDA](https://event-driven.io/en/guides/documenting-eda/): How to document an event-driven architecture so others can find and understand your events, using EventCatalog as an example.
+- [Anti-patterns](https://event-driven.io/en/guides/anti-patterns/): Common mistakes in event modelling, such as clickbait events, property sourcing, state obsession and passive-aggressive events, and what to do instead.
+- [Handling errors in event streams](https://event-driven.io/en/guides/handling-errors-in-event-streams/): What to do when wrong or unexpected events land in your streams: compensating, correcting past data, fixing bugs and deduplicating messages.
+- [Event Sourcing foundations](https://event-driven.io/en/guides/event-sourcing-foundations/): The basics of Event Sourcing: how to rebuild state from events, when it pays off and when it doesn't, and how to start with it in an existing system.
+- [How to store events in Event Sourcing](https://event-driven.io/en/guides/how-to-store-events-in-event-sourcing/): How event stores work under the hood and how to build one on top of a relational database, a key-value store or S3. Covers stream positions, checkpoints and the write-ahead log.
+- [Short living streams](https://event-driven.io/en/guides/short-living-streams/): Why streams should usually stay short, and how the Closing the Books pattern keeps them that way.
+- [Uniqueness in Event Sourcing](https://event-driven.io/en/guides/uniqueness-in-event-sourcing/): How to enforce unique values, like a user's email, when you use Event Sourcing, with a Marten example.
+- [Event versioning](https://event-driven.io/en/guides/event-versioning/): How to evolve event schemas without breaking consumers: versioning patterns, mapping event types, explicit serialisation and contract testing.
+- [GDPR](https://event-driven.io/en/guides/gdpr/): How to handle personal data and GDPR requirements in event-driven and event-sourced systems.
+- [Event Sourcing is not Event Streaming](https://event-driven.io/en/guides/event-sourcing-is-not-event-streaming/): Why Event Sourcing and event streaming are different tools, and what goes wrong when you mix them up.
+- [Business rules](https://event-driven.io/en/guides/business-rules/): Why business rules need measurable outcomes, and why you should know upfront when to remove a new feature.
+- [Testing](https://event-driven.io/en/guides/testing/): How to test business logic, projections and asynchronous processes in event-driven systems, with examples in .NET, Emmett and Testcontainers.
+- [Architecture](https://event-driven.io/en/guides/architecture/): How to approach the architect's role: start from problems instead of solutions, keep the code structure simple, and keep documentation useful without a maintenance burden.
+- [Monolith vs Microservices](https://event-driven.io/en/guides/monolith-vs-microservices/): What to consider before breaking down a monolith or starting with microservices, and how team structure affects where you draw the boundaries.
+- [Messaging foundations](https://event-driven.io/en/guides/messaging-foundations/): Core messaging patterns for managing concurrency: queuing, backpressure and the single writer.
+- [Delivery guarantees, outbox and inbox patterns](https://event-driven.io/en/guides/delivery-guarantees-outbox-and-inbox-patterns/): What delivery guarantees mean in practice, and how the Outbox and Inbox patterns make messaging reliable. Includes Postgres-based outbox implementations and the trade-off between speed and ordering.
+- [Eventual Consistency](https://event-driven.io/en/guides/eventual-consistency/): How to deal with eventual consistency in projections and APIs, including idempotent updates and long-polling.
+- [Events Ordering](https://event-driven.io/en/guides/events-ordering/): How to handle events that arrive out of order, race conditions and requeuing, and how ordering, grouping and consistency relate in messaging systems.
+- [Idempotency](https://event-driven.io/en/guides/idempotency/): How to make command and message handling idempotent, and what deduplication can and can't guarantee.
+- [Observability, Auditability and tracing](https://event-driven.io/en/guides/observability-auditability-and-tracing/): Why logs and metrics aren't enough, and how to make your system observable and auditable, with an OpenTelemetry example for Event Sourcing.
+- [Kafka](https://event-driven.io/en/guides/kafka/): How a Kafka producer works internally.
+
+## Polish guides
+
+- [Architektura oparta na zdarzeniach](https://event-driven.io/pl/guides/event-driven-architecture/): What event-driven architecture is once you strip away the buzzwords. How events give teams and modules autonomy, and how predictable identifiers help with eventual and causal consistency.
+- [Zdarzenia i komendy](https://event-driven.io/pl/guides/events-and-commands/): The difference between a command and an event, and why it matters when you design messages.
+- [Zdarzenia wewnętrzne i zewnętrzne](https://event-driven.io/pl/guides/events-on-the-inside-events-on-the-outside/): How internal and external events differ, how to design an event-driven API, and how much data an event should carry.
+- [CQRS](https://event-driven.io/pl/guides/cqrs/): What CQRS is and what it isn't, and how it relates to vertical slices. Covers whether commands can return values, generic versus simple code, slicing the codebase, and a practical .NET example.
+- [Obsługa logiki biznesowej](https://event-driven.io/pl/guides/handling-business-logic/): Ways to structure and compose business logic: slim aggregates, functional composition, idempotent command handling, validation and error handling. Examples in C#, F# and Java.
+- [Optymistyczna współbieżność](https://event-driven.io/pl/guides/optimistic-concurrency/): How optimistic concurrency protects your data from conflicting updates, and how to expose it in an HTTP API with the ETag header.
+- [Procesy rozproszone](https://event-driven.io/pl/guides/distributed-processes/): How to coordinate business processes across modules and services with sagas, process managers, consumers and checkpointing. Covers multi-tenancy, race conditions, events arriving out of order and modelling workflows.
+- [Modele odczytu i projekcje](https://event-driven.io/pl/guides/read-models-and-projections/): How projections turn events into read models, and how to scale, test and rebuild them safely. Includes examples with Emmett, Marten, Elasticsearch and EventStoreDB subscriptions.
+- [Modelowanie za pomocą zdarzeń](https://event-driven.io/pl/guides/modelling-with-events/): Techniques for discovering and modelling business processes with events, from EventStorming hot spots to mixing modelling methods, plus the common traps to avoid.
+- [Dokumentowanie EDA](https://event-driven.io/pl/guides/documenting-eda/): How to document an event-driven architecture so others can find and understand your events, using EventCatalog as an example.
+- [Antywzorce](https://event-driven.io/pl/guides/anti-patterns/): Common mistakes in event modelling, such as clickbait events, property sourcing, state obsession and passive-aggressive events, and what to do instead.
+- [Obsługa błędów w strumieniach zdarzeń](https://event-driven.io/pl/guides/handling-errors-in-event-streams/): What to do when wrong or unexpected events land in your streams: compensating, correcting past data, fixing bugs and deduplicating messages.
+- [Podstawy Event Sourcingu](https://event-driven.io/pl/guides/event-sourcing-foundations/): The basics of Event Sourcing: how to rebuild state from events, when it pays off and when it doesn't, and how to start with it in an existing system.
+- [Jak przechowywać zdarzenia w Event Sourcingu](https://event-driven.io/pl/guides/how-to-store-events-in-event-sourcing/): How event stores work under the hood and how to build one on top of a relational database, a key-value store or S3. Covers stream positions, checkpoints and the write-ahead log.
+- [Krótko żyjące strumienie](https://event-driven.io/pl/guides/short-living-streams/): Why streams should usually stay short, and how the Closing the Books pattern keeps them that way.
+- [Unikalność w Event Sourcingu](https://event-driven.io/pl/guides/uniqueness-in-event-sourcing/): How to enforce unique values, like a user's email, when you use Event Sourcing, with a Marten example.
+- [Wersjonowanie zdarzeń](https://event-driven.io/pl/guides/event-versioning/): How to evolve event schemas without breaking consumers: versioning patterns, mapping event types, explicit serialisation and contract testing.
+- [RODO](https://event-driven.io/pl/guides/gdpr/): How to handle personal data and GDPR requirements in event-driven and event-sourced systems.
+- [Event Sourcing to nie Event Streaming](https://event-driven.io/pl/guides/event-sourcing-is-not-event-streaming/): Why Event Sourcing and event streaming are different tools, and what goes wrong when you mix them up.
+- [Reguły biznesowe](https://event-driven.io/pl/guides/business-rules/): Why business rules need measurable outcomes, and why you should know upfront when to remove a new feature.
+- [Testowanie](https://event-driven.io/pl/guides/testing/): How to test business logic, projections and asynchronous processes in event-driven systems, with examples in .NET, Emmett and Testcontainers.
+- [Architektura](https://event-driven.io/pl/guides/architecture/): How to approach the architect's role: start from problems instead of solutions, keep the code structure simple, and keep documentation useful without a maintenance burden.
+- [Monolit a mikroserwisy](https://event-driven.io/pl/guides/monolith-vs-microservices/): What to consider before breaking down a monolith or starting with microservices, and how team structure affects where you draw the boundaries.
+- [Podstawy przetwarzania wiadomości](https://event-driven.io/pl/guides/messaging-foundations/): Core messaging patterns for managing concurrency: queuing, backpressure and the single writer.
+- [Gwarancje dostarczenia, wzorce outbox i inbox](https://event-driven.io/pl/guides/delivery-guarantees-outbox-and-inbox-patterns/): What delivery guarantees mean in practice, and how the Outbox and Inbox patterns make messaging reliable. Includes Postgres-based outbox implementations and the trade-off between speed and ordering.
+- [Spójność ostateczna](https://event-driven.io/pl/guides/eventual-consistency/): How to deal with eventual consistency in projections and APIs, including idempotent updates and long-polling.
+- [Kolejność zdarzeń](https://event-driven.io/pl/guides/events-ordering/): How to handle events that arrive out of order, race conditions and requeuing, and how ordering, grouping and consistency relate in messaging systems.
+- [Idempotentność](https://event-driven.io/pl/guides/idempotency/): How to make command and message handling idempotent, and what deduplication can and can't guarantee.
+- [Obserwowalność, audytowalność i śledzenie](https://event-driven.io/pl/guides/observability-auditability-and-tracing/): Why logs and metrics aren't enough, and how to make your system observable and auditable, with an OpenTelemetry example for Event Sourcing.
+- [Kafka](https://event-driven.io/pl/guides/kafka/): How a Kafka producer works internally.
+
 ## English articles
 
 - [Sharing is (not always) caring. PgBouncer pooling modes in practice](https://event-driven.io/en/connection-pooler-modes-advisory-locks/): The sad thing about programming is that eventually we reach production; the closer we get, the nastier things get. Some people start asking, Will it scale?, and some even run performance and load tests.…
