@@ -25,8 +25,8 @@
   outline-offset: 4px;
 }
 .links a.primary {
-  background: var(--color-action);
-  color: var(--color-on-action);
+  background: var(--text-color-brand);
+  color: var(--color-text-inverse);
   border-radius: var(--size-radius-small);
   padding: var(--space-sm) var(--space-md);
   text-decoration: none;

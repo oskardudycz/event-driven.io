@@ -1,6 +1,10 @@
-# Current branding correction (2026-10-15)
+# Current change: complete CI repair (2026-10-16)
 
-Implement the owner-authorised direction: the authored hero yellow #ffd800 for primary fills, numbered steps and decorative emphasis; orange underlined links (#ad5500 on light surfaces and #ffb45c on dark surfaces), with yellow links retained on the always-dark hero. Keep neutral supporting icons and contrast-safe focus. Retain photography, artwork, typography, routes and the full biography. Unify hero text/action-group gaps at 20px and compact control gaps at 10px. Review real hover/focus/selected states across themes, locales and sizes. Earlier palette checkpoints below are history, not current recommendations.
+The owner explicitly confirms CI repair remains required. Keep the production-matching consulting button and main palette. Repair the demonstrated reading-list and search-control contrast failures and the rollback of the mobile homepage surface using existing variables. Verify the current source, production build, generated output and full E2E suite. Preserve assertions and screenshot thresholds; explicitly review any intentional reference change before updating it. The owner approved the two production homepage captures; only those references are updated. Production build, generated checks, full functional E2E and the subsequent normal homepage comparison pass locally. Hosted verification remains pending publication of this working tree. Separate local results from hosted CI and deployment.
+
+# Current colour restoration (2026-10-15)
+
+Owner requests restoring main’s colour values while retaining shared variables. Restore green brand/text/icon roles, yellow hero controls and orange attention accents. Retain layout, content, routing and the inline guide-icon fix. Withdraw the experimental replacement palettes; restore main’s existing colour references without generating snapshots.
 
 # Site modernization plan
 

@@ -1,5 +1,7 @@
 .hero {
-  --color-link: var(--color-action);
+  --color-link: var(--color-highlight);
+  --color-action: var(--color-highlight);
+  --color-on-action: var(--color-neutral-black);
   display: grid;
   container: hero / inline-size;
   background-color: var(--hero-background);
@@ -71,6 +73,10 @@
   }
 }
 
+.subheading :global(span) {
+  color: var(--color-highlight);
+}
+
 .subheading a {
   color: var(--color-link);
   text-decoration: underline;
@@ -137,6 +143,10 @@
 
 /* The wider Polish fallback subheading needs to wrap before the diagonal. */
 @container hero (74em <= width < 75em) {
+  .services {
+    /* At the fit boundary, keep padded controls beside the 772px portrait. */
+    max-width: calc(100cqw - 772px - var(--space-md));
+  }
   .subheading {
     max-width: 44rem;
   }
@@ -166,11 +176,6 @@
 
   a:last-child {
     background: transparent;
-    border-color: transparent;
-    padding-right: 0;
-    padding-left: 0;
-    text-decoration: underline;
-    text-underline-offset: 3px;
     color: var(--color-neutral-white);
   }
 

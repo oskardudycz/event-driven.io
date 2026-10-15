@@ -2,6 +2,7 @@
   background: transparent;
   transition: all var(--duration-default);
   display: flex;
+  flex-shrink: 0;
   align-items: center;
 
   :global(a) {
@@ -19,12 +20,6 @@
 
 .item.overflowHidden {
   display: none;
-}
-
-@media screen and (max-width: 1023px) {
-  .item {
-    flex-shrink: 0;
-  }
 }
 
 @media screen and (min-width: 1024px) {
@@ -46,7 +41,7 @@
     }
 
     :global(.homepage):not(:global(.fixed)) & :global(a:hover) {
-      color: var(--color-neutral-white);
+      color: var(--color-highlight);
     }
 
     :global(svg) {
@@ -59,7 +54,7 @@
     }
 
     :global(.homepage):not(:global(.fixed)) &:hover :global(svg) {
-      fill: var(--color-neutral-white);
+      fill: var(--color-highlight);
 
       opacity: 1;
     }

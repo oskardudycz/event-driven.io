@@ -1,6 +1,35 @@
 # Site implementation and verification
 
-Last updated: 2026-10-15. Current strategy is in [plan.md](plan.md); manual commands/importing/tag reading order/browser reports/snapshot review are in [README.md](README.md). Local, hosted CI and deployed results are separate evidence.
+Last updated: 2026-10-16. Current strategy is in [plan.md](plan.md); manual commands/importing/tag reading order/browser reports/snapshot review are in [README.md](README.md). Local, hosted CI and deployed results are separate evidence.
+
+## CI repair resumed (2026-10-16)
+
+- [x] Owner explicitly confirms fixing CI is required. Resume the demonstrated repairs while preserving the outlined consulting button, shared variables and the main palette. Prior failed run: https://github.com/oskardudycz/event-driven.io/actions/runs/38786509734 (four ReadingList light-mode cases). Current owner-pushed run: https://github.com/oskardudycz/event-driven.io/actions/runs/38865095383 at cefd9ec.
+- [x] Reapply scoped black number labels and opaque muted dates; use the existing muted neutral for light search-control borders and retain the dark border. Restore the independently dark mobile homepage menu and its context variables. These failures were reproduced earlier without relaxing tests.
+- [x] Current CI source step passes: 52 unit and 159 integration/component tests (40.18s); content alternatives, full types/lint and smoke pass. Production repair build passes in 35.94s; all 68 generated checks pass (118.27s).
+- [x] Initial full production probe: 253 passed / 13 failed / 2 existing skips (8.9m). Three real Polish fallback-font control/artwork collisions at 1264px, two real dark desktop hover contrast failures (3.7901:1), and two intentional homepage reference differences. Six generated-file/route failures came from running the workspace tests against an isolated server with different local public data; correct the verification cwd rather than weaken those assertions.
+- [x] Preserve the fixed portrait and button padding. At the existing 74–75em fit boundary, reserve the portrait's 772px width plus the shared gutter for service-control flow. Keep natural menu item widths so disclosure measures unwrapped labels, removing the redundant mobile-only shrink rule. Add observable unwrapped-label coverage to existing header-control cases. Replace white hover overlays with the existing main-palette tint.
+- [x] Final repair build passes (34.72s); all 68 generated checks pass again (115.61s). Twelve targeted responsive/control checks pass, including all reproduced Polish fallback collisions and unwrapped header labels. Current types and full lint pass.
+- [x] Full production E2E from the matching isolated directory: 264 passed / 2 existing skips / 2 failed (8.4m). The only failures are the EN/PL homepage reference differences. All contrast, SSR/hydration, navigation, publication, guide and search checks pass. Keep the original 3% screenshot threshold. Copy native results/log to visual-artifacts/ci-repair-production-report/ and reviewed captures/diffs to visual-artifacts/ci-repair-homepage-review/.
+- [x] Owner explicitly approved both current production homepage captures. Update only `home-en-desktop.png` and `home-pl-desktop.png`; both are byte-identical to the reviewed images. Targeted production verification without update mode passes both homepage tests (2/2). Together with the full run above, all 266 runnable E2E cases pass; two existing skips remain. No assertions, screenshot tolerances, component references or workflows changed.
+- [ ] Verify hosted CI after these local fixes are committed and pushed. Hosted run 38865095383 tested the preceding cefd9ec source and failed; it does not include these working-tree fixes. Development port 8000 and production review port 9010 remain available. Existing CSS extraction-order and inherited NO_COLOR/FORCE_COLOR warnings remain unsuppressed.
+
+## Consulting button only (2026-10-16)
+
+- [x] Check production in Chromium: yellow 2px border, 10px/20px padding, transparent background, no resting underline. Remove only the secondary action's transparent-border, zero-horizontal-padding and permanent-underline overrides.
+- [x] Twelve actual-preview checks pass across EN/PL, light/dark and 390/1280/1440px: matching border/padding, equal service-action height, hover, keyboard focus and hit testing.
+- [x] Initially misinterpret the clarification as button-only scope and revert the CI repairs. That narrowing was incorrect; CI repair remains required and is resumed above. Earlier passing checks applied to the discarded checkpoint, not the button-only source.
+- [x] Button-only production build passes in the isolated copy (626.42s, 773 pages). All eight built-button checks pass across EN/PL, 390/1440px, initial HTML/no JavaScript and hydration: yellow 2px border, 10px/20px padding, no resting underline and underlined hover. Existing CSS extraction-order warnings remain unsuppressed. The initial broader build was stopped before changing the snapshot; no full CI/deployed pass is claimed. Port 8000 remains running.
+
+## Main palette restoration (2026-10-15)
+
+- [x] Correct the rollback's consulting-action regression: restore its transparent border, retaining the existing underlined secondary-link treatment and padding. The palette rollback had exposed a yellow border around the unpadded link.
+- [x] Owner withdraws the replacement palette and requests main’s colour values with variables retained. Restore green accents and brand text, main link colours, yellow hero controls and orange attention accents. Keep the added semantic variables mapped to main values, layout changes and the inline guide-icon fix.
+- [x] Restore main’s twelve existing colour-only component references rather than generating snapshots. Restore corresponding exact colour expectations, preserving independent navigation/hydration coverage.
+- [x] Mark replacement proposals withdrawn and align DESIGN.md/branding guidance with the restored implementation. Development preview remains running on port 8000.
+- [x] Verify the live Gatsby preview in Chromium: all 70 original main token values match in light and dark mode; the added semantic variables remain defined and hero actions resolve to main's yellow. Whitespace checks pass. This is a focused rollback check, not a full production or hosted pass.
+- [x] Remove the accidentally reintroduced legacy hero token name; retain the established highlight role and alias icon/hover/attention roles to their shared palette values. Main colours stay unchanged.
+- [ ] Production/hosted validation and any new branding proposal remain outside this colour rollback.
 
 ## Applied branding and concise design guide for review (2026-10-15)
 
