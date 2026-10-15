@@ -10,3 +10,9 @@ articles:
   - how_to_update_past_data_in_event_sourcing
   - deduplication-in-distributed-systems
 ---
+
+Sooner or later a wrong event gets recorded: a bug calculated the wrong price, a user did something nobody expected, or a message arrived twice. In a system that keeps history, you don't erase the mistake. You record what corrects it, the way a bank posts a correcting entry instead of editing last month's statement. You'll learn how to do that so the data ends up right and you can still see what happened.
+
+The first two articles are short and explain the mindset: you can't unsend a message, and the "impossible" case will happen. The next two show how to fix bugs and change past data in practice, using hotel examples. The last explains why duplicate messages appear and where you can filter them out.
+
+Read them in order.

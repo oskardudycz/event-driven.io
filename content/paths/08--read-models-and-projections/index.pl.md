@@ -1,7 +1,7 @@
 ---
 title: Modele odczytu i projekcje
 icon: 📊
-description: "Jak projekcje budują read modele ze zdarzeń oraz jak je przebudowywać, skalować i testować, na przykładach z Martenem, Emmettem, EventStoreDB i Elasticsearchem."
+description: "Ze zdarzeń trudno odczytać bieżący stan. Zobaczysz, jak budować z nich read modele dla ekranów i raportów i jak dbać, żeby pokazywały poprawne dane."
 cover: 2023-01-20-cover.jpg
 articles:
   - projections_and_read_models_in_event_driven_architecture
@@ -17,3 +17,9 @@ articles:
   - projecting_from_marten_to_elasticsearch
   - publishing_read_model_changes_from_marten
 ---
+
+Zdarzenia mówią, co się stało, ale ekran potrzebuje bieżącego stanu w kształcie, który łatwo odczytać: listy otwartych zamówień, salda klienta. Taki widok, czyli read model, buduje projekcja, która nakłada zdarzenia jedno po drugim. Zrozumiesz, jak projektować projekcje, jak przebudować read model, gdy zmienia się jego logika, i jak zachować poprawność, gdy zdarzenia przychodzą dwa razy albo z opóźnieniem.
+
+Pierwszy artykuł omawia podstawy. Dwa kolejne pokazują, jak bezpiecznie przebudować read model, gdy system dalej działa, i co zrobić z przypadkami, których nie da się od razu naprawić. Potem są krótsze teksty o skalowaniu, zagnieżdżonych danych, testowaniu, metadanych i transformacji zdarzeń. Ostatnie cztery korzystają z konkretnych narzędzi, EventStoreDB i Martena, łącznie z wysyłaniem danych do Elasticsearcha.
+
+Trzy pierwsze czytaj po kolei. Resztę wybieraj według problemu, który masz.

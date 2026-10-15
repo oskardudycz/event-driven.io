@@ -55,6 +55,7 @@ export type PublishedGuide = {
     cover: string;
     articles: string[];
   };
+  body: string;
 };
 
 // Guides in folder order, read from the authoring directory.
@@ -82,6 +83,7 @@ export function publishedGuides(): PublishedGuide[] {
           metadata: readFrontmatter(
             frontmatter?.[1],
           ) as PublishedGuide['metadata'],
+          body: markdown.slice(frontmatter?.[0].length ?? 0),
         };
       }),
     );
@@ -110,4 +112,17 @@ export function publishedTagFile(
     description: metadata.description?.trim() ?? '',
     body: markdown.slice(frontmatter?.[0].length ?? 0),
   };
+}
+
+export const plainQuotes = (text: string) =>
+  text.replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, ' ').trim();
+
+// Paragraphs of a Markdown intro as rendered text, so tests can compare them with the page.
+export function introParagraphs(markdown: string): string[] {
+  return markdown
+    .trim()
+    .split(/\n\s*\n/)
+    .map((paragraph) =>
+      plainQuotes(paragraph.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')),
+    );
 }

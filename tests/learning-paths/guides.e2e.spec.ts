@@ -5,7 +5,11 @@ import {
   expectFonts,
   expectImageLoaded,
 } from '../helpers/browser/readiness.ts';
-import { publishedGuides } from '../helpers/published-content.ts';
+import {
+  introParagraphs,
+  plainQuotes,
+  publishedGuides,
+} from '../helpers/published-content.ts';
 
 const guides = publishedGuides();
 const labels: Record<string, { menu: string; next: string; box: string }> = {
@@ -89,6 +93,30 @@ for (const language of ['en', 'pl']) {
     await page.waitForURL(`**${localGuides[3]!.route}`);
     await expect(page.locator('main h1')).toHaveText(
       `${localGuides[3]!.metadata.icon} ${localGuides[3]!.metadata.title}`,
+    );
+  });
+
+  test(`${language} guide page shows its intro above the numbered articles`, async ({
+    page,
+  }) => {
+    const guide = localGuides.find(({ slug }) => slug === 'cqrs')!;
+    await page.setViewportSize({ width: 390, height: 900 });
+    await page.goto(guide.route, { waitUntil: 'domcontentloaded' });
+    const paragraphs = page.locator('main .bodytext p');
+    await expect(paragraphs).toHaveCount(introParagraphs(guide.body).length);
+    expect((await paragraphs.allTextContents()).map(plainQuotes)).toEqual(
+      introParagraphs(guide.body),
+    );
+    const introBottom = await page
+      .locator('main .bodytext')
+      .evaluate((element) => element.getBoundingClientRect().bottom);
+    const listTop = await page
+      .locator('main ol.ordered')
+      .evaluate((element) => element.getBoundingClientRect().top);
+    expect(introBottom).toBeLessThanOrEqual(listTop);
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+      'content',
+      guide.metadata.description,
     );
   });
 

@@ -12,6 +12,6 @@ articles:
 
 Event-driven architecture builds a system around things that happen. A module records a fact, like "order placed", and other modules react to it, instead of one module calling all the others. You'll understand what that gives you, what it asks of you, and how it lets teams work more independently.
 
-The first article cuts through the buzzwords. It separates designing the flow from the plumbing that delivers messages and from the tools, and explains why you decide them in that order. The second shows how events make the dependencies between modules, and between the teams behind them, visible. The last two are hands-on. One shows a payment module that serves many parts of the system without knowing about any of them. The other lets users keep working while their files upload, accepting that the data is briefly out of sync. That trade-off is called eventual consistency.
+The first article separates designing the flow from the plumbing that delivers messages and from the tools, and explains why you decide them in that order. The second shows how events make the dependencies between modules visible. The third shows a payment module that serves many parts of the system without knowing about any of them. The fourth shows how users can keep working while their files upload, accepting that the data is briefly out of sync. That trade-off is called eventual consistency.
 
 Read them in order. The first two are short; the last two are longer and include code.

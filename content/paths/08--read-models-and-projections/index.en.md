@@ -17,3 +17,9 @@ articles:
   - projecting_from_marten_to_elasticsearch
   - publishing_read_model_changes_from_marten
 ---
+
+Events tell you what happened, but a screen needs the current state in a shape that's quick to read: a list of open orders, a customer's balance. A projection builds that view, called a read model, by applying events one by one. You'll understand how to design projections, how to rebuild a read model when its logic changes, and how to keep it correct when events arrive twice or late.
+
+The first article covers the basics. The next two show how to rebuild read models safely while the system keeps running, and what to do with cases you can't fix on the spot. Then come shorter pieces on scaling, nested data, testing, event metadata and transforming events. The last four use specific tools, EventStoreDB and Marten, including sending data to Elasticsearch.
+
+Read the first three in order. Pick the rest by the problem you have.
