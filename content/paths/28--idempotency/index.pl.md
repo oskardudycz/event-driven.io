@@ -1,7 +1,7 @@
 ---
 title: Idempotentność
 icon: ♻️
-description: "How to make command and message handling idempotent, and what deduplication can and can't guarantee."
+description: "Jak zapewnić idempotentną obsługę komend, skąd biorą się zduplikowane wiadomości i gdzie można je odfiltrować oraz jak idempotentnie aktualizować projekcje."
 cover: 2024-11-15-cover.png
 articles:
   - idempotent_command_handling

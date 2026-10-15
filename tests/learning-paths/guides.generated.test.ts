@@ -62,7 +62,7 @@ test('every guide is published in both languages with its articles in order and 
       `${metadata.icon} ${metadata.title}`,
       route,
     );
-    assert.ok($('main').text().includes(metadata.description), route);
+    assert.ok($('main .bodytext').text().trim(), `${route}: no intro`);
     assert.equal(
       $('meta[name=description]').attr('content'),
       metadata.description,

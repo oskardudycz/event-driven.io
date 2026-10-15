@@ -1,7 +1,7 @@
 ---
 title: Obsługa błędów w strumieniach zdarzeń
 icon: 🩹
-description: "What to do when wrong or unexpected events land in your streams: compensating, correcting past data, fixing bugs and deduplicating messages."
+description: "Jak obsługiwać błędne lub nieoczekiwane zdarzenia: zdarzenia kompensujące, korekta danych z przeszłości, poprawianie bugów w Event Sourcingu i deduplikacja."
 cover: 2021-01-27-cover.png
 articles:
   - what_texting_ex_has_to_do_with_event_driven_design

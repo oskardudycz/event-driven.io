@@ -40,23 +40,17 @@
     "articleCount_few": "{{count}} artykuły",
     "articleCount_many": "{{count}} artykułów",
     "articleCount_other": "{{count}} artykułu",
-    "defaultDescription": "Praktyczne artykuły na temat {{tag}}.",
+    "defaultDescription": "Artykuły z tagiem {{tag}} na Event-Driven.io, od najnowszych do najstarszych.",
     "seoTitle": "{{tag}} — artykuły",
     "browse": "Przeglądaj artykuły według tagów",
     "metaLabel": "Tagi:",
-    "descriptions": {
-      "event-sourcing": "Artykuły o podstawach i praktycznym zastosowaniu Event Sourcingu, modelowaniu zdarzeń, projekcjach, testowaniu oraz utrzymaniu systemów na produkcji.",
-      "event-driven-architecture": "Materiały o procesach rozproszonych, komunikacji asynchronicznej, gwarancjach dostarczania, kolejności i idempotencji.",
-      "cqrs": "Praktyczne materiały o CQRS, komendach, modelach odczytu i kompromisach związanych ze spójnością danych.",
-      "architecture": "Pragmatyczne materiały o modelowaniu, podejmowaniu decyzji i projektowaniu architektury oprogramowania."
-    },
     "labels": {
       "design-patterns": "Wzorce projektowe"
     }
   },
   "guides": {
     "title": "Przewodniki",
-    "description": "Ścieżki czytania o Event Sourcingu, architekturze opartej na zdarzeniach, CQRS i przetwarzaniu wiadomości. Każdy przewodnik podaje artykuły w polecanej kolejności.",
+    "description": "Artykuły o Event Sourcingu, architekturze opartej na zdarzeniach, CQRS i komunikacji, pogrupowane w przewodniki tematyczne z sugerowaną kolejnością czytania.",
     "guide": "Przewodnik",
     "articleCount_one": "{{count}} artykuł",
     "articleCount_few": "{{count}} artykuły",

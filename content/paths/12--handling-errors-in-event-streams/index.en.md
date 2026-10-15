@@ -1,7 +1,7 @@
 ---
 title: Handling errors in event streams
 icon: 🩹
-description: "What to do when wrong or unexpected events land in your streams: compensating, correcting past data, fixing bugs and deduplicating messages."
+description: "Wrong events will end up in your system, and you can't just delete them. You'll learn how to fix mistakes and bugs without losing history or trust in your data."
 cover: 2021-01-27-cover.png
 articles:
   - what_texting_ex_has_to_do_with_event_driven_design

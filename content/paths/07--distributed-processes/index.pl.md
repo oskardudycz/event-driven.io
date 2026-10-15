@@ -1,7 +1,7 @@
 ---
 title: Procesy rozproszone
 icon: 🧩
-description: "How to coordinate business processes across modules and services with sagas, process managers, consumers and checkpointing. Covers multi-tenancy, race conditions, events arriving out of order and modelling workflows."
+description: "Jak koordynować pracę między usługami za pomocą sagi, process managera i workflow oraz jak radzić sobie z checkpointami, kolejnością i race conditions."
 cover: 2021-02-10-cover.png
 articles:
   - saga_process_manager_distributed_transactions

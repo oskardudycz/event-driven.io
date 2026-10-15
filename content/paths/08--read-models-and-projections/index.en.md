@@ -1,7 +1,7 @@
 ---
 title: Read models and Projections
 icon: 📊
-description: "How projections turn events into read models, and how to scale, test and rebuild them safely. Includes examples with Emmett, Marten, Elasticsearch and EventStoreDB subscriptions."
+description: "Events are great for recording changes but awkward to query. You'll learn how to turn them into read models for your screens and reports, and keep them correct."
 cover: 2023-01-20-cover.jpg
 articles:
   - projections_and_read_models_in_event_driven_architecture

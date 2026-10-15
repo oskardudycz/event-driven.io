@@ -1,7 +1,7 @@
 ---
 title: Modele odczytu i projekcje
 icon: 📊
-description: "How projections turn events into read models, and how to scale, test and rebuild them safely. Includes examples with Emmett, Marten, Elasticsearch and EventStoreDB subscriptions."
+description: "Jak projekcje budują read modele ze zdarzeń oraz jak je przebudowywać, skalować i testować, na przykładach z Martenem, Emmettem, EventStoreDB i Elasticsearchem."
 cover: 2023-01-20-cover.jpg
 articles:
   - projections_and_read_models_in_event_driven_architecture

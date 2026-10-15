@@ -1,7 +1,7 @@
 ---
 title: Idempotency
 icon: ♻️
-description: "How to make command and message handling idempotent, and what deduplication can and can't guarantee."
+description: "In distributed systems, the same message will arrive more than once. You'll learn how to handle duplicates without corrupting your data."
 cover: 2024-11-15-cover.png
 articles:
   - idempotent_command_handling

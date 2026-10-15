@@ -1,7 +1,7 @@
 ---
 title: Modelling with events
 icon: 🗺️
-description: "Techniques for discovering and modelling business processes with events, from EventStorming hot spots to mixing modelling methods, plus the common traps to avoid."
+description: "How to understand a business process well enough to build it, using EventStorming and other modelling techniques to find events, rules and open questions."
 cover: 2024-04-07-kafka.png
 articles:
   - anti-patterns

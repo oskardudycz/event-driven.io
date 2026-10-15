@@ -14,6 +14,7 @@ import { collectBuildContract } from '../../scripts/build-contract.ts';
 import { builtRedirects, firstRedirect } from '../helpers/redirects.ts';
 import {
   publishedContent,
+  publishedTagFile,
   type PublishedDocument,
 } from '../helpers/published-content.ts';
 
@@ -105,8 +106,11 @@ test('every tag page lists its articles newest first with its heading, descripti
     assert.equal($('main').length, 1, route);
     assert.equal($('h1').length, 1, route);
     assert.equal($('h1').text().trim(), tagLabel(t, tag), route);
-    const description = tagDescription(t, tag);
-    assert.ok($('main').text().includes(description), route);
+    const tagFile = publishedTagFile(slug, language);
+    const description = tagDescription(t, tag, tagFile?.description);
+    if (tagFile?.body.trim())
+      assert.equal($('main .bodytext').length, 1, `${route}: intro`);
+    else assert.ok($('main').text().includes(description), route);
     assert.equal($('meta[name=description]').attr('content'), description);
     assert.ok(
       $('main').text().includes(countLabel(listed.length, language)),
@@ -167,6 +171,38 @@ test('tag pages are in the sitemap and no category URL is published', () => {
     [...routes].filter((route) => route.includes('/category/')),
     [],
   );
+});
+
+const searchPaths = (language: string) => {
+  const manifest = JSON.parse(
+    readBuild('search-index/manifest.json'),
+  ) as Record<string, string>;
+  const index = JSON.parse(readBuild(manifest[language]!)) as {
+    storedFields: Record<string, { path: string }>;
+  };
+  return new Set(Object.values(index.storedFields).map(({ path }) => path));
+};
+
+test('tag files publish no page, sitemap entry or search document of their own', () => {
+  const sitemap = new Set(collectBuildContract('public').sitemapUrls);
+  const documents = new Set(
+    [...posts, ...publishedContent('pages')].map(({ route }) => route),
+  );
+  for (const language of languages) {
+    const searchable = searchPaths(language);
+    for (const { slug } of tagPages.filter(
+      (tagPage) => tagPage.language === language,
+    )) {
+      const route = `/${language}/${slug}/`;
+      if (documents.has(route)) continue;
+      assert.ok(!routes.has(route), `Tag file published: ${route}`);
+      assert.ok(
+        !sitemap.has(`${origin}${route}`),
+        `Tag file in sitemap: ${route}`,
+      );
+      assert.ok(!searchable.has(route), `Tag file searchable: ${route}`);
+    }
+  }
 });
 
 test('every former category URL redirects permanently, in one hop, to a built page', async () => {

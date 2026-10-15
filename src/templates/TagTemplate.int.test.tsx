@@ -31,16 +31,21 @@ vi.mock('gatsby-plugin-image', () => ({
 
 import TagTemplate, { Head } from './TagTemplate.tsx';
 
-const renderHead = (pageContext: Record<string, unknown>) =>
+const renderHead = (pageContext: Record<string, unknown>, data = {}) =>
   load(
     renderToStaticMarkup(
-      <>
-        {Head({ data: {}, pageContext } as unknown as HeadProps<never, never>)}
-      </>,
+      <>{Head({ data, pageContext } as unknown as HeadProps<never, never>)}</>,
     ),
   );
 
-const renderPage = async (language: string, tag: string, count: number) => {
+type TagContent = { html: string; frontmatter: { description: string } };
+
+const renderPage = async (
+  language: string,
+  tag: string,
+  count: number,
+  tagContent: TagContent | null = null,
+) => {
   const i18n = i18next.createInstance();
   await i18n.init({
     resources: { en: { translation: en }, pl: { translation: pl } },
@@ -63,9 +68,9 @@ const renderPage = async (language: string, tag: string, count: number) => {
       <I18nextProvider i18n={i18n}>
         <TagTemplate
           {...({
-            data: { posts: { edges } },
+            data: { posts: { edges }, tagContent },
             pageContext: { tag, lang: language },
-          } as unknown as SitePageProps<'posts'>)}
+          } as unknown as SitePageProps<'posts' | 'tagContent'>)}
         />
       </I18nextProvider>,
     ),
@@ -114,31 +119,37 @@ test('a tag page in one language advertises no alternates', () => {
 });
 
 test.each([
-  ['en', 'CQRS articles - Event-Driven.io', en.tags.descriptions.cqrs],
-  ['pl', 'CQRS — artykuły - Event-Driven.io', pl.tags.descriptions.cqrs],
+  ['en', 'CQRS articles - Event-Driven.io', 'CQRS in English.'],
+  ['pl', 'CQRS — artykuły - Event-Driven.io', 'CQRS po polsku.'],
 ])(
-  '%s tag page title and description use the tag translations',
+  '%s tag page title uses the tag translations and its description the tag file',
   (language, title, description) => {
-    const $ = renderHead({
-      lang: language,
-      tag: 'CQRS',
-      originalPath: '/articles/tag/cqrs/',
-      availableLanguages: ['en', 'pl'],
-    });
+    const $ = renderHead(
+      {
+        lang: language,
+        tag: 'CQRS',
+        originalPath: '/articles/tag/cqrs/',
+        availableLanguages: ['en', 'pl'],
+      },
+      { tagContent: { html: '<p>Intro</p>', frontmatter: { description } } },
+    );
     expect($('title').text()).toBe(title);
     expect($('meta[name=description]').attr('content')).toBe(description);
   },
 );
 
-test('an undescribed tag uses the localized default description', () => {
-  const $ = renderHead({
-    lang: 'pl',
-    tag: 'Design Patterns',
-    originalPath: '/articles/tag/design-patterns/',
-    availableLanguages: ['en', 'pl'],
-  });
+test('a tag without a file uses the localized default description', () => {
+  const $ = renderHead(
+    {
+      lang: 'pl',
+      tag: 'Caching',
+      originalPath: '/articles/tag/caching/',
+      availableLanguages: ['en', 'pl'],
+    },
+    { tagContent: null },
+  );
   expect($('meta[name=description]').attr('content')).toBe(
-    'Praktyczne artykuły na temat Wzorce projektowe.',
+    'Artykuły z tagiem Caching na Event-Driven.io, od najnowszych do najstarszych.',
   );
 });
 
@@ -161,3 +172,42 @@ test.each([
     expect($('ol').length).toBe(0);
   },
 );
+
+test.each([
+  ['en', 'Practical CQRS articles.', '<p>CQRS separates <em>reads</em>.</p>'],
+  [
+    'pl',
+    'Praktyczne artykuły o CQRS.',
+    '<p>CQRS rozdziela <em>odczyty</em>.</p>',
+  ],
+])(
+  '%s tag page shows the Markdown intro of its tag file instead of the description',
+  async (language, description, html) => {
+    const $ = await renderPage(language, 'CQRS', 2, {
+      html,
+      frontmatter: { description },
+    });
+    expect($('.main .bodytext').html()).toBe(html);
+    expect($('.main').text()).not.toContain(description);
+    expect($('.main').text()).toContain(
+      language === 'pl' ? '2 artykuły' : '2 articles',
+    );
+  },
+);
+
+test('a tag page without a tag file shows the default description and no intro', async () => {
+  const $ = await renderPage('en', 'Caching', 1);
+  expect($('.main .bodytext').length).toBe(0);
+  expect($('.main').text()).toContain(
+    en.tags.defaultDescription.replace('{{tag}}', 'Caching'),
+  );
+});
+
+test('a tag file without an intro shows its own description', async () => {
+  const $ = await renderPage('en', 'CQRS', 1, {
+    html: '',
+    frontmatter: { description: 'Practical CQRS articles.' },
+  });
+  expect($('.main .bodytext').length).toBe(0);
+  expect($('.main .text-summary').text()).toBe('Practical CQRS articles.');
+});

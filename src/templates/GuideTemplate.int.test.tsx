@@ -1,4 +1,5 @@
 import type { HeadProps } from 'gatsby';
+import type { SitePageProps } from '../types/content.ts';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { load } from 'cheerio';
@@ -16,8 +17,10 @@ vi.mock('gatsby-plugin-react-i18next', () => ({
   ),
 }));
 
-import { Head as GuideHead } from './GuideTemplate.tsx';
+import GuideTemplate, { Head as GuideHead } from './GuideTemplate.tsx';
 import { Head as GuidesHead } from './GuidesTemplate.tsx';
+import en from '../i18n/locales/en/translation.json';
+import pl from '../i18n/locales/pl/translation.json';
 
 const renderHead = (
   Head: (props: HeadProps<never, never>) => React.ReactNode,
@@ -87,8 +90,8 @@ test.each(['en', 'pl'])(
 );
 
 test.each([
-  ['en', 'Guides - Event-Driven.io', /^Reading paths through/],
-  ['pl', 'Przewodniki - Event-Driven.io', /^Ścieżki czytania/],
+  ['en', 'Guides - Event-Driven.io', en.guides.description],
+  ['pl', 'Przewodniki - Event-Driven.io', pl.guides.description],
 ])(
   '%s guide index has a translated title and description',
   (language, title, description) => {
@@ -102,7 +105,7 @@ test.each([
       },
     );
     expect($('title').text()).toBe(title);
-    expect($('meta[name=description]').attr('content')).toMatch(description);
+    expect($('meta[name=description]').attr('content')).toBe(description);
     expect($('link[rel=canonical]').attr('href')).toBe(
       `https://event-driven.io/${language}/guides/`,
     );
@@ -112,3 +115,32 @@ test.each([
     expect(schema($)['@type']).toBe('CollectionPage');
   },
 );
+
+test('guide page shows its Markdown intro instead of the short description', () => {
+  const $ = load(
+    renderToStaticMarkup(
+      <GuideTemplate
+        {...({
+          data: {
+            guide: {
+              html: '<p>CQRS separates <em>reads</em> from writes.</p>',
+              fields: { pathSlug: 'cqrs', langKey: 'en', source: 'paths' },
+              frontmatter: {
+                title: 'CQRS',
+                icon: '🔀',
+                description: 'What CQRS is and what it is not.',
+              },
+            },
+            articles: { edges: [] },
+          },
+          pageContext: { lang: 'en', articleIds: [] },
+        } as unknown as SitePageProps<'guide' | 'articles'>)}
+      />,
+    ),
+  );
+  expect($('h1').text()).toBe('🔀 CQRS');
+  expect($('.bodytext').html()).toBe(
+    '<p>CQRS separates <em>reads</em> from writes.</p>',
+  );
+  expect($.root().text()).not.toContain('What CQRS is and what it is not.');
+});

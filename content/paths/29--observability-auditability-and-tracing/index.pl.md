@@ -1,7 +1,7 @@
 ---
 title: Obserwowalność, audytowalność i śledzenie
 icon: 🔭
-description: "Why logs and metrics aren't enough, and how to make your system observable and auditable, with an OpenTelemetry example for Event Sourcing."
+description: "Dlaczego logi i metryki nie wystarczą do diagnozowania systemu, jak pomagają trace'y i spany, jak testować instrumentację i jak używać OpenTelemetry z Martenem."
 cover: 2024-09-16-cover.jpg
 articles:
   - when-logs-and-metrics-arent-enough

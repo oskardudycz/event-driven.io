@@ -1,7 +1,7 @@
 ---
 title: Antywzorce
 icon: 🚫
-description: "Common mistakes in event modelling, such as clickbait events, property sourcing, state obsession and passive-aggressive events, and what to do instead."
+description: "Antywzorce w modelowaniu zdarzeń, takie jak Clickbait Event, Property Sourcing, State Obsession i Passive-Aggressive Events, oraz jak nazywać komendy."
 cover: 2024-04-07-kafka.png
 articles:
   - anti-patterns

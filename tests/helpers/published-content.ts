@@ -1,5 +1,6 @@
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import * as yaml from 'js-yaml';
 import type { Frontmatter } from '../../src/types/content.ts';
 import { readFrontmatter } from './frontmatter.ts';
 
@@ -84,4 +85,29 @@ export function publishedGuides(): PublishedGuide[] {
         };
       }),
     );
+}
+
+export type PublishedTagFile = { description: string; body: string };
+
+// A tag page's intro, read from the authoring directory.
+export function publishedTagFile(
+  slug: string,
+  language: string,
+): PublishedTagFile | undefined {
+  const file = join(
+    import.meta.dirname,
+    '../../content/tags',
+    slug,
+    `index.${language}.md`,
+  );
+  if (!existsSync(file)) return undefined;
+  const markdown = readFileSync(file, 'utf8');
+  const frontmatter = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(markdown);
+  const metadata = (yaml.load(frontmatter?.[1] ?? '') ?? {}) as {
+    description?: string;
+  };
+  return {
+    description: metadata.description?.trim() ?? '',
+    body: markdown.slice(frontmatter?.[0].length ?? 0),
+  };
 }

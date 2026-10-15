@@ -1,7 +1,7 @@
 ---
 title: Anti-patterns
 icon: 🚫
-description: "Common mistakes in event modelling, such as clickbait events, property sourcing, state obsession and passive-aggressive events, and what to do instead."
+description: "Event designs that look fine at first and cause trouble later. You'll learn to spot the common mistakes, why they hurt, and what to do instead."
 cover: 2024-04-07-kafka.png
 articles:
   - anti-patterns

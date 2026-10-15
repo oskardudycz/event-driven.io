@@ -13,7 +13,7 @@ const GuideTemplate = (props: SitePageProps<'guide' | 'articles'>) => {
     data: { guide, articles },
     pageContext: { articleIds = [] },
   } = props;
-  const { title, description, icon } = guide.frontmatter;
+  const { title, icon } = guide.frontmatter;
   const orderedArticles = articleIds
     .map((id) => articles.edges.find(({ node }) => node.id === id))
     .filter((edge): edge is ArticleEdge => Boolean(edge));
@@ -25,7 +25,6 @@ const GuideTemplate = (props: SitePageProps<'guide' | 'articles'>) => {
           <Headline>
             <span aria-hidden="true">{icon}</span> {title}
           </Headline>
-          <p className="mt-gutter text-summary">{description}</p>
         </header>
         {guide.html && <Bodytext html={guide.html} />}
         <List edges={orderedArticles} ordered showImages />

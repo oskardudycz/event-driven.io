@@ -239,23 +239,19 @@ test('tag chips list the tags of a language by article count, then label', () =>
   );
 });
 
-test('tag descriptions use the language’s own text or the default description', async () => {
+test('tag descriptions use the tag file’s description or the language’s default description', async () => {
   const i18n = i18next.createInstance();
   await i18n.init({
     resources: {
       en: {
         translation: {
-          tags: {
-            defaultDescription: 'Practical articles about {{tag}}.',
-            descriptions: { cqrs: 'CQRS in English.', testing: 'Tests.' },
-          },
+          tags: { defaultDescription: 'Practical articles about {{tag}}.' },
         },
       },
       pl: {
         translation: {
           tags: {
             defaultDescription: 'Praktyczne artykuły na temat {{tag}}.',
-            descriptions: { cqrs: 'CQRS po polsku.' },
             labels: { 'design-patterns': 'Wzorce projektowe' },
           },
         },
@@ -266,14 +262,20 @@ test('tag descriptions use the language’s own text or the default description'
   });
   const polish = i18n.getFixedT('pl');
   const english = i18n.getFixedT('en');
-  assert.equal(tagDescription(english, 'CQRS'), 'CQRS in English.');
-  assert.equal(tagDescription(polish, 'CQRS'), 'CQRS po polsku.');
+  assert.equal(
+    tagDescription(english, 'CQRS', 'CQRS in English.'),
+    'CQRS in English.',
+  );
+  assert.equal(
+    tagDescription(polish, 'CQRS', 'CQRS po polsku.'),
+    'CQRS po polsku.',
+  );
   assert.equal(
     tagDescription(polish, 'Testing'),
     'Praktyczne artykuły na temat Testing.',
   );
   assert.equal(
-    tagDescription(polish, 'Design Patterns'),
+    tagDescription(polish, 'Design Patterns', ''),
     'Praktyczne artykuły na temat Wzorce projektowe.',
   );
   assert.equal(
