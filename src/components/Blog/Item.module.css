@@ -177,7 +177,7 @@ p.elementP {
       }
       :global(.arrow) {
         opacity: 1;
-        stroke: var(--icon-color);
+        stroke: var(--color-attention);
         transform: translateX(0);
       }
     }
@@ -186,8 +186,8 @@ p.elementP {
     }
     :global(.arrow) {
       display: inline-block;
-      fill: var(--icon-color);
-      stroke: var(--icon-color);
+      fill: var(--color-attention);
+      stroke: var(--color-attention);
       stroke-width: 40;
       stroke-linecap: round;
       opacity: 0;

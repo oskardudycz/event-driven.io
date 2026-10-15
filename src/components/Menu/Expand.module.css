@@ -23,10 +23,16 @@
     z-index: 1;
     transform: translateX(-50%);
 
+    &:focus-visible {
+      :global(svg) {
+        fill: var(--color-brand);
+      }
+    }
+
     :global(svg) {
       transition: all 0.5s;
       transform: rotateZ(180deg);
-      fill: currentColor;
+      fill: var(--color-attention);
     }
 
     :global(.open) & :global(svg) {

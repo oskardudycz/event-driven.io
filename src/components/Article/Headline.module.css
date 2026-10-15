@@ -6,7 +6,7 @@ h1.elementH1 {
 
   :global(svg) {
     height: 0.75em;
-    fill: var(--icon-color);
+    fill: var(--color-brand);
   }
 }
 

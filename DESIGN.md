@@ -8,7 +8,7 @@ Keep event-driven.io recognisable, readable and easy to evolve. Use a small warm
 
 ## Current recommendations
 
-- **Colours:** use the authored hero yellow (`#ffd800`) for primary fills, numbered steps and decorative emphasis. Use orange underlined text links (`#ad5500` on light surfaces, `#ffb45c` on dark surfaces). The always-dark hero keeps yellow links coordinated with its artwork. Orange links and yellow primary fills have distinct, consistent roles across themes. Keep supporting icons neutral. Give every filled action an explicit black label; use contrasting keyboard focus rather than a faint yellow outline on white. Preserve the mark, photography and editorial diagram colours. See the [palette roles and measurements](docs/branding-guide.md#current-review-direction).
+- **Colours:** retain main’s palette: green brand accents (`#709425` / `#bddc84`), darker green light-mode brand text (`#55701c`), yellow hero controls and emphasis, and orange attention accents. Keep the shared variables and component styling structure. The experimental orange, gold and charcoal replacements have been withdrawn at the owner’s request. See [current palette roles](docs/branding-guide.md#current-palette).
 - **Hierarchy:** use one consistent primary control treatment across pages. Keep ordinary navigation, metadata and supporting icons quiet. Give secondary actions less emphasis. Avoid colouring every icon, heading and border just because a brand token exists.
 - **Readability:** choose text and fill shades separately. Bright fills need a verified label colour; light-mode links need enough darkness. Keep prose links underlined, visible keyboard focus and explicit selected states. Colour must not carry meaning alone. Check both themes, including composited highlights and forced colours.
 - **Typography and spacing:** retain Open Sans and the shared type/spacing scale. Use 20px between hero heading, lead, biography paragraphs and action groups, with 10px within compact control groups; use the existing 40px scale for section separation. Let headings wrap naturally; decorative icons belong beside their titles. Avoid manual line breaks and one-off margins as layout fixes.
@@ -16,7 +16,7 @@ Keep event-driven.io recognisable, readable and easy to evolve. Use a small warm
 - **Guides and articles:** review the guide overview, numbered reading lists, article guide-step links and tag chips alongside the homepage. Keep descriptions and metadata readable and mostly neutral. Editorial covers and diagram notation may contain their own colours; do not recolour them to enforce a UI palette.
 - **Images and identity:** preserve natural photography and authored transparency. Keep the existing geometric mark close to its current form. After the palette decision, create a sharper vector master and a repeatable cover/social-card template if needed; retain approved assets until replacements are reviewed.
 
-The owner requested applying this direction for review. It is implemented locally, with final visual acceptance pending. Its presence in code does not establish approval. Review the combined result before changing the direction or updating screenshot references.
+The owner requested restoring main’s colour values while retaining variables. Layout and guide-icon fixes remain separate from the withdrawn palette experiments. Review any future branding proposal as a complete composition before applying it.
 
 ## Sources of truth
 

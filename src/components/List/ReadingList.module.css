@@ -20,6 +20,7 @@
   position: relative;
 }
 .ordered {
+  --color-on-action: var(--color-neutral-black);
   counter-reset: reading-order;
 }
 .ordered li {
@@ -27,7 +28,7 @@
 }
 .ordered li::before {
   align-items: center;
-  background: var(--color-action);
+  background: var(--color-brand);
   border: 3px solid var(--color-surface);
   border-radius: 50%;
   color: var(--color-on-action);

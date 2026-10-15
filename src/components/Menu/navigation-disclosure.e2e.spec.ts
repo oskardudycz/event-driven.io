@@ -184,6 +184,24 @@ for (const language of ['en', 'pl']) {
           await expect(header).toHaveCSS('height', '50px');
         }
         await expect(async () => {
+          const wrappedLabels = await header
+            .locator('.itemList .item a:visible')
+            .evaluateAll((links) => {
+              const wrapped: string[] = [];
+              for (const link of links) {
+                for (const node of link.childNodes) {
+                  if (node.nodeType !== Node.TEXT_NODE) continue;
+                  if (!node.textContent?.trim()) continue;
+                  const range = document.createRange();
+                  range.selectNodeContents(node);
+                  if (range.getClientRects().length > 1) {
+                    wrapped.push(node.textContent.trim());
+                  }
+                }
+              }
+              return wrapped;
+            });
+          expect(wrappedLabels).toEqual([]);
           const controls = [];
           if (await more.isVisible()) controls.push(more);
           controls.push(languageLink, theme);

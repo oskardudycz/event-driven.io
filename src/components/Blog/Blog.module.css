@@ -23,10 +23,9 @@ div.intro {
   text-align: center;
 }
 :global(.summary).summary :global(a) {
-  background: var(--color-action);
-  border: 2px solid var(--color-action);
+  border: 2px solid var(--color-brand);
   border-radius: var(--size-radius-small);
-  color: var(--color-on-action);
+  color: var(--text-color-brand);
   display: inline-block;
   font-weight: var(--weight-emphasis);
   padding: var(--space-sm) var(--space-md);
