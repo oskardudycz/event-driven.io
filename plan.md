@@ -1,3 +1,7 @@
+# Current branding correction (2026-10-15)
+
+Implement the owner-authorised direction: the authored hero yellow #ffd800 for primary fills, numbered steps and decorative emphasis; orange underlined links (#ad5500 on light surfaces and #ffb45c on dark surfaces), with yellow links retained on the always-dark hero. Keep neutral supporting icons and contrast-safe focus. Retain photography, artwork, typography, routes and the full biography. Unify hero text/action-group gaps at 20px and compact control gaps at 10px. Review real hover/focus/selected states across themes, locales and sizes. Earlier palette checkpoints below are history, not current recommendations.
+
 # Site modernization plan
 
 Last updated: 2026-10-14. Strategy and settled decisions live here; [todo.md](todo.md) records current implementation and verification. Commands and manual workflows belong in [README.md](README.md). Superseded runtime sequences and duplicated acceptance histories have been consolidated.

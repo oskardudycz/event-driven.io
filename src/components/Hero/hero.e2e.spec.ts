@@ -106,7 +106,7 @@ for (const language of ['en', 'pl']) {
             headerBounds.y + headerBounds.height,
           );
           const topInset = heading.y - headerBounds.y - headerBounds.height;
-          expect(topInset).toBeGreaterThanOrEqual(24);
+          expect(topInset).toBeGreaterThanOrEqual(20);
           const services = (await hero.getByRole('navigation').boundingBox())!;
           const articleCue = (await hero.getByRole('button').boundingBox())!;
           expect(articleCue.x).toBe(heading.x);
@@ -117,7 +117,7 @@ for (const language of ['en', 'pl']) {
             articleCue.y - services.y - services.height,
           ).toBeLessThanOrEqual(24);
           expect(articleCue.y + articleCue.height).toBeLessThanOrEqual(
-            heroBounds.y + heroBounds.height - 24,
+            heroBounds.y + heroBounds.height - 20,
           );
 
           // Gatsby also renders a noscript fallback when JavaScript is disabled.

@@ -27,9 +27,7 @@ for (const language of ['en', 'pl']) {
       const highlight = page.elementLocator(
         screen.container.querySelector('.search-highlight')!,
       );
-      await expect
-        .element(highlight)
-        .toHaveStyle({ color: 'rgb(146, 64, 14)' });
+      await expect.element(highlight).toHaveStyle({ color: 'rgb(173, 85, 0)' });
       const searchLink = screen
         .getByRole('region', { name: 'Search', exact: true })
         .getByRole('link');

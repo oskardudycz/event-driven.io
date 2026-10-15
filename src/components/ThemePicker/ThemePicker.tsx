@@ -109,7 +109,7 @@ export default function ThemePicker() {
         onClick={(event) => {
           if (preference === null) event.preventDefault();
         }}
-        className={`${styles.trigger} flex size-11 cursor-pointer list-none items-center justify-center rounded-panel text-[color:var(--theme-trigger-color)] hover:bg-[var(--color-brand-tint)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent`}
+        className={`${styles.trigger} flex size-11 cursor-pointer list-none items-center justify-center rounded-panel text-[color:var(--theme-trigger-color)] hover:bg-[var(--color-brand-tint)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--theme-trigger-color)]`}
       >
         <Icon aria-hidden="true" size={20} />
       </summary>

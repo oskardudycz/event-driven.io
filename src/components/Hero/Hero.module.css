@@ -9,7 +9,8 @@
   background-size: cover;
   color: var(--color-neutral-white);
   min-height: 100svh;
-  padding: calc(var(--header-height-homepage) + 24px) var(--space-md) 90px;
+  padding: calc(var(--header-height-homepage) + var(--space-md)) var(--space-md)
+    calc(50px + var(--space-lg));
 }
 
 .copy,
@@ -33,7 +34,7 @@
 
 .introduction {
   display: grid;
-  gap: 12px;
+  gap: var(--space-md);
 }
 
 .heading {
@@ -57,7 +58,7 @@
 
 .biography {
   display: grid;
-  gap: var(--space-sm);
+  gap: var(--space-md);
   font-size: 1rem;
   line-height: 1.5;
 
@@ -85,7 +86,7 @@
 
 @media (min-width: 1024px) {
   .hero {
-    padding-bottom: 24px;
+    padding-bottom: var(--space-md);
   }
   .heading {
     font-size: 2.25rem;
