@@ -1,4 +1,5 @@
 .hero {
+  --color-link: var(--color-action);
   display: grid;
   container: hero / inline-size;
   background-color: var(--hero-background);
@@ -43,7 +44,7 @@
   text-transform: uppercase;
 
   :global(u) {
-    text-decoration-color: var(--color-brand-primary-dark);
+    text-decoration-color: var(--color-highlight);
   }
 }
 
@@ -64,19 +65,15 @@
     margin: 0;
   }
   a {
-    color: var(--color-brand-primary-dark);
+    color: var(--color-link);
     text-decoration: underline;
   }
 }
 
 .subheading a {
-  color: inherit;
+  color: var(--color-link);
   text-decoration: underline;
   text-underline-offset: 3px;
-}
-
-.subheading :global(.yellow) {
-  color: var(--color-brand-primary-dark);
 }
 
 @media (min-width: 600px) {
@@ -152,10 +149,10 @@
   margin: 0;
 
   a {
-    background: yellow;
-    border: 2px solid yellow;
+    background: var(--color-action);
+    border: 2px solid var(--color-action);
     border-radius: var(--size-radius-small);
-    color: var(--color-neutral-black);
+    color: var(--color-on-action);
     font-weight: var(--weight-emphasis);
     display: inline-flex;
     align-items: center;
@@ -179,6 +176,11 @@
   a:hover,
   a:focus {
     text-decoration: underline;
+  }
+
+  a:focus-visible {
+    outline: 2px solid var(--color-neutral-white);
+    outline-offset: 3px;
   }
 }
 
@@ -210,7 +212,7 @@
 
 .arrowCircle {
   align-items: center;
-  background: yellow;
+  background: var(--color-action);
   border-radius: 50%;
   display: inline-flex;
   height: var(--space-lg);
@@ -218,7 +220,7 @@
   width: var(--space-lg);
 
   svg {
-    fill: var(--color-neutral-black);
+    fill: var(--color-on-action);
     animation-duration: var(--time-duration-long);
     animation-name: buttonIconMove;
     animation-iteration-count: infinite;

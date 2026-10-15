@@ -426,6 +426,10 @@ This checks source image descriptions, isolated React behavior and browser rende
 
 To preview the controlled components, start `dev:components`, then open `http://127.0.0.1:9001/?story=Editorial/English` or `?story=Editorial/Polish`. These are test examples, not production pages. CSS and component edits refresh immediately. Their fixed text/cover keeps visual comparisons independent of editorial changes; real Gatsby cover loading and routing have separate production-page checks.
 
+### Guide heading review
+
+The component gallery includes `?story=Guides/English&theme=light` and `?story=Guides/Polish&theme=dark` for the real heading and numbered reading-card components. These use controlled content and native images/anchors, not the Gatsby guide adapter. Review the icon alignment and current palette alongside the existing hero/editorial examples.
+
 Hero design review uses `?story=Hero/English` or `?story=Hero/Polish`, with optional `&theme=dark`. These examples render the actual HeroView and its owned styles, with current UI translations and original portrait. The gallery header is preview context; it does not reproduce production navigation. The website keeps the full biography, Gatsby image loading and routing; verify those through the site tests. Hero examples are review material, not automatically accepted screenshot references.
 
 For normal publishing, edit/import → preview locally → commit/push the PR → inspect its Netlify preview → merge. GitHub Actions runs quick checks before the build, then all project/production browser checks. It deploys the preview after passing validation; merging to main automatically publishes production and notifies IndexNow. No manual snapshot-update or deploy command is required for article/bio wording changes. Superseded PR runs are cancelled; production runs stay sequential. This requires the existing repository Netlify credentials. `verify:publication` reproduces the validation locally without publishing; it is optional during editing and never updates references.

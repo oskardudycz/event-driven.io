@@ -22,7 +22,7 @@ export default function Hero({
         <Trans
           i18nKey="hero.h2"
           components={{
-            formats: <span className="yellow" />,
+            formats: <span />,
             articles: <Link to="/articles/" />,
             videos: <Link to="/talks/" />,
           }}

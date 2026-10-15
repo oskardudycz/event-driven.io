@@ -14,7 +14,7 @@
   }
 
   svg {
-    fill: var(--color-attention);
+    fill: var(--icon-color);
     width: var(--space-md);
     height: var(--space-md);
     flex-shrink: 0;

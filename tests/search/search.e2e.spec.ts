@@ -98,10 +98,10 @@ for (const language of ['en', 'pl']) {
         color: getComputedStyle(mark).color,
         background: getComputedStyle(mark).backgroundColor,
       }));
-    expect(colors.color).toBe('rgb(194, 65, 12)');
-    expect(colors.background).toBe('rgba(194, 65, 12, 0.047)');
+    expect(colors.color).toBe('rgb(146, 64, 14)');
+    expect(colors.background).toBe('rgba(255, 159, 67, 0.08)');
     await result.locator('a').hover();
-    await expect(result.locator('h2')).toHaveCSS('color', 'rgb(194, 65, 12)');
+    await expect(result.locator('h2')).toHaveCSS('color', 'rgb(146, 64, 14)');
     expect(
       await result
         .locator('.search-hit-cover')

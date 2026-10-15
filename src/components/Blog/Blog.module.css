@@ -23,12 +23,22 @@ div.intro {
   text-align: center;
 }
 :global(.summary).summary :global(a) {
-  border: 2px solid var(--color-brand);
+  background: var(--color-action);
+  border: 2px solid var(--color-action);
   border-radius: var(--size-radius-small);
-  color: var(--text-color-brand);
+  color: var(--color-on-action);
   display: inline-block;
   font-weight: var(--weight-emphasis);
   padding: var(--space-sm) var(--space-md);
+}
+
+:global(.summary).summary :global(a:hover) {
+  text-decoration: underline;
+}
+
+:global(.summary).summary :global(a:focus-visible) {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 3px;
 }
 
 :global(.compactTop).compactTop ul.elementUl {

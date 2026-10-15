@@ -18,8 +18,11 @@
   --color-border: #ecebea;
   --color-control-border: #8c8986;
   --color-attention: var(--color-brand);
-  --color-brand: #c2410c;
-  --color-brand-tint: #c2410c0c;
+  --color-brand: #92400e;
+  --color-action: #ff9f43;
+  --color-on-action: #000000;
+  --color-highlight: #ffd84d;
+  --color-brand-tint: #ff9f4314;
   --color-text-inverse: #ffffff;
   --space-default: 20px;
   --space-stack-md: 0 0 20px 0;
@@ -52,7 +55,7 @@
   --space-inset-s: 10px;
   --blog-h1-line-height: 1.1;
   --blog-h1-size: 1.7em;
-  --icon-color: var(--color-brand);
+  --icon-color: var(--color-text-muted);
   --space-inline-xs: 0 5px 0 0;
   --blog-h1-hover-color: var(--color-brand);
   --color-neutral-white: #ffffff;
@@ -67,7 +70,6 @@
   --color-neutral-gray-k: #2b2826;
   --color-neutral-black: #000000;
   --space-inset-xs: 5px;
-  --color-brand-primary-dark: yellow;
   --space-inset-m: 20px;
   --color-neutral-gray-f: #b0adab;
   --color-menu-overlay: rgba(255, 255, 255, 0.9);
@@ -83,8 +85,8 @@
   --color-date: #a0a8b1;
   --color-border: #38424a;
   --color-control-border: #b0adab;
-  --color-brand: #fb923c;
-  --color-brand-tint: #fb923c18;
+  --color-brand: var(--color-action);
+  --color-brand-tint: #ff9f4318;
   --color-text-inverse: #14181b;
   --color-menu-overlay: rgba(20, 24, 27, 0.95);
 }
