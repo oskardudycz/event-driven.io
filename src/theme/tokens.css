@@ -19,10 +19,10 @@
   --color-control-border: #8c8986;
   --color-attention: var(--color-brand);
   --color-brand: #92400e;
-  --color-action: #ff9f43;
+  --color-action: var(--color-highlight);
   --color-on-action: #000000;
   --color-highlight: #ffd84d;
-  --color-brand-tint: #ff9f4314;
+  --color-brand-tint: #ffd84d14;
   --color-text-inverse: #ffffff;
   --space-default: 20px;
   --space-stack-md: 0 0 20px 0;
@@ -86,7 +86,7 @@
   --color-border: #38424a;
   --color-control-border: #b0adab;
   --color-brand: var(--color-action);
-  --color-brand-tint: #ff9f4318;
+  --color-brand-tint: #ffd84d18;
   --color-text-inverse: #14181b;
   --color-menu-overlay: rgba(20, 24, 27, 0.95);
 }
