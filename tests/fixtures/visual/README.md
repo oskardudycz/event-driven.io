@@ -2,6 +2,8 @@
 
 The English/Polish homepage files in this directory and `firefox/` are reviewed local Gatsby build captures from 2026-10-12, using Playwright 1.64.0 on Linux at 1440×900. The owner explicitly accepted the revised homepage composition and authorized updating these four references. The 3% tolerance remains unchanged. The current composition and acceptance are documented in [the proportions review](../../../docs/hero-proportions-review.md). Earlier production Firefox reference provenance remains in [the header visual review](../../../docs/header-visual-review.md).
 
+The owner authorised the orange palette on 2026-10-14. Twelve controlled author/archive/search references were manually reviewed against actual/diff captures and regenerated using Vitest's explicit native update. Related-card references and all homepage references remain unchanged. Component differences are confined to links, metadata icons and highlights (0.079–1.487% differing pixels); dimensions, content, fonts, artwork and the 3% tolerance are unchanged. Evidence is recorded in [the branding guide](../../../docs/branding-guide.md#orange-palette-implementation) and todo.md.
+
 The unnamed default Chromium run keeps the existing paths in this directory. `--browser firefox` uses `firefox/` through Playwright's native optional project-name template. Explicitly named browser runs require their own reviewed images; normal tests fail on missing references.
 
 The homepage references originated as production captures on 2026-09-24 and were subsequently reviewed for intentional layout changes. Live archive/author/related/search captures were retired on 2026-10-12 because editorial changes altered their pixels without demonstrating layout regressions.

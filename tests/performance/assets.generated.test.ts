@@ -209,7 +209,9 @@ for (const theme of ['light', 'dark'])
         tokens.set(declaration.prop, declaration.value);
     });
     const luminance = (name: string) => {
-      const color = tokens.get(name);
+      let color = tokens.get(name);
+      const reference = color?.match(/^var\((--[\w-]+)\)$/);
+      if (reference) color = tokens.get(reference[1]!);
       assert.ok(color && /^#[a-f0-9]{3}(?:[a-f0-9]{3})?$/i.test(color), name);
       const hex = color.slice(1);
       const expanded =

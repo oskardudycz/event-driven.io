@@ -29,7 +29,7 @@ for (const language of ['en', 'pl']) {
       );
       await expect
         .element(highlight)
-        .toHaveStyle({ color: 'rgb(85, 112, 28)' });
+        .toHaveStyle({ color: 'rgb(194, 65, 12)' });
       const searchLink = screen
         .getByRole('region', { name: 'Search', exact: true })
         .getByRole('link');

@@ -1,6 +1,6 @@
 :global(.more).more {
   cursor: pointer;
-  color: var(--color-text);
+  color: var(--theme-trigger-color, var(--color-text));
 
   &:focus-visible {
     outline: 2px solid currentColor;
@@ -10,8 +10,8 @@
 
 @media screen and (max-width: 1023px) {
   :global(.more).more {
-    background: var(--color-surface);
-    border: 1px solid var(--color-brand);
+    background: var(--menu-surface, var(--color-surface));
+    border: 1px solid var(--menu-border, var(--color-border));
     border-radius: var(--size-radius-small) var(--size-radius-small) 0 0;
     border-bottom: none;
     position: absolute;
@@ -23,16 +23,10 @@
     z-index: 1;
     transform: translateX(-50%);
 
-    &:focus-visible {
-      :global(svg) {
-        fill: var(--color-brand);
-      }
-    }
-
     :global(svg) {
       transition: all 0.5s;
       transform: rotateZ(180deg);
-      fill: var(--color-attention);
+      fill: currentColor;
     }
 
     :global(.open) & :global(svg) {
