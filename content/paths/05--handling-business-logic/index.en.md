@@ -20,6 +20,6 @@ articles:
 
 Business logic often ends up spread across large classes, mixed with state handling and database code. Then it's hard to see what the code decides, and harder to test it. You'll learn another way: describe the possible states and requests as explicit types, and write each decision as a small function that takes a request and the current state and returns what happened.
 
-Many examples use the same shopping cart, so you can compare styles. Start with the first article: it takes a classic aggregate, a class holding data and rules together, and slims it down step by step. Others cover handling the same request arriving twice, saving two related changes in one transaction, validating input, and reporting failures: throw, return an error value, or record the failure as a fact. One shows the approach also works with a regular database.
+Many examples use the same shopping cart, so you can compare styles. Start with the first article: it takes a classic aggregate, a class holding data and rules together, and slims it down step by step. Others cover handling the same request arriving twice, saving two related changes in one transaction, validating input, and reporting failures: throw, return an error value, or record the failure as a fact.
 
 Code is in C#, F#, Java and TypeScript. Pick your language; the ideas carry over.

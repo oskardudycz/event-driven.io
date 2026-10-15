@@ -20,6 +20,6 @@ articles:
 
 Logika biznesowa często rozlewa się po dużych klasach, wymieszana z obsługą stanu i kodem bazy danych. Trudno wtedy zobaczyć, jakie decyzje podejmuje kod, a jeszcze trudniej go przetestować. Nauczysz się innego podejścia: możliwe stany i żądania opisujesz jawnymi typami, a każdą decyzję zapisujesz jako małą funkcję, która przyjmuje żądanie i bieżący stan, a zwraca to, co się wydarzyło.
 
-Wiele przykładów korzysta z tego samego koszyka zakupowego, więc łatwo porównać style. Zacznij od pierwszego artykułu: krok po kroku odchudza klasyczny agregat, czyli klasę trzymającą razem dane i reguły. Pozostałe dotyczą tego, co zrobić, gdy to samo żądanie przyjdzie dwa razy, jak zapisać dwie powiązane zmiany w jednej transakcji, jak walidować dane wejściowe i jak zgłaszać niepowodzenia: rzucić wyjątek, zwrócić błąd czy zapisać je jako fakt. Jeden pokazuje, że to podejście działa też ze zwykłą bazą danych.
+Wiele przykładów korzysta z tego samego koszyka zakupowego, więc łatwo porównać style. Zacznij od pierwszego artykułu: krok po kroku odchudza klasyczny agregat, czyli klasę trzymającą razem dane i reguły. Pozostałe dotyczą tego, co zrobić, gdy to samo żądanie przyjdzie dwa razy, jak zapisać dwie powiązane zmiany w jednej transakcji, jak walidować dane wejściowe i jak zgłaszać niepowodzenia: rzucić wyjątek, zwrócić błąd czy zapisać je jako fakt.
 
 Kod jest w C#, F#, Javie i TypeScripcie. Wybierz swój język, idee przenoszą się na pozostałe.

@@ -1,7 +1,7 @@
 ---
 title: Podstawy przetwarzania wiadomości
 icon: 📬
-description: "Kolejka, backpressure i single writer działają tak samo w kodzie, jak i w architekturze. Zobaczysz je na przykładzie connection poola, a potem w SQS i Kafce."
+description: "Gdy dzieje się za dużo naraz, system zwalnia albo przestaje działać. Zobaczysz, jak kolejka i backpressure pozwalają zapanować nad równoległą pracą."
 cover: 2024-08-12-cover.png
 articles:
   - architecture-weekly-190-queuing-backpressure

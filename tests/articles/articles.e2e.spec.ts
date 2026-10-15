@@ -6,6 +6,11 @@ import {
   expectImageLoaded,
 } from '../helpers/browser/readiness.ts';
 import { tagSlug } from '../../src/utils/tag-slug.ts';
+import {
+  introParagraphs,
+  plainQuotes,
+  publishedTagFile,
+} from '../helpers/published-content.ts';
 
 test('author biography renders a readable note and loaded portrait', async ({
   page,
@@ -299,6 +304,27 @@ for (const language of ['en', 'pl']) {
       ).toHaveCount(1);
     });
   }
+}
+
+for (const language of ['en', 'pl']) {
+  test(`${language} tag page shows its intro and uses its own description`, async ({
+    page,
+  }) => {
+    const tagFile = publishedTagFile('event-sourcing', language)!;
+    await page.setViewportSize({ width: 390, height: 900 });
+    await page.goto(`/${language}/articles/tag/event-sourcing/`, {
+      waitUntil: 'domcontentloaded',
+    });
+    const paragraphs = page.locator('main .bodytext p');
+    await expect(paragraphs).toHaveCount(introParagraphs(tagFile.body).length);
+    expect((await paragraphs.allTextContents()).map(plainQuotes)).toEqual(
+      introParagraphs(tagFile.body),
+    );
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+      'content',
+      tagFile.description,
+    );
+  });
 }
 
 const metaLabels: Record<string, { tags: string; guides: string }> = {
