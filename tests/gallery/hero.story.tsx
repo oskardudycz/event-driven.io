@@ -42,7 +42,7 @@ export function HeroExample({ language }: { language: 'en' | 'pl' }) {
             i18n={translation}
             i18nKey="hero.h2"
             components={{
-              formats: <span className="yellow" />,
+              formats: <span />,
               articles: <a href={`/${language}/articles/`} />,
               videos: <a href={`/${language}/talks/`} />,
             }}

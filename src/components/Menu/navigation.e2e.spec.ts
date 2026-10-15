@@ -247,7 +247,7 @@ for (const language of ['en', 'pl']) {
         ? 'architekturze oprogramowania?'
         : 'software architecture?',
     );
-    await expect(page.locator('.hero p > span.yellow')).toHaveText(
+    await expect(page.locator('.hero p > span')).toHaveText(
       language === 'pl' ? 'od artykułów po wideo' : 'from articles to videos',
     );
     await expectFonts(page);

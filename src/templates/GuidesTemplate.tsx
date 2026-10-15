@@ -48,7 +48,7 @@ const GuidesTemplate = (props: SitePageProps<'guides'>) => {
                     <span className="leading-summary">
                       {frontmatter.description}
                     </span>
-                    <strong className="mt-auto text-accent">
+                    <strong className="mt-auto text-ink">
                       {t('guides.articleCount', {
                         count: frontmatter.articles?.length || 0,
                       })}{' '}

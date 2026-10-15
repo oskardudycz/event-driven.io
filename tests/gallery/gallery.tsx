@@ -6,6 +6,7 @@ import '../../src/theme/global.css';
 import './gallery.css';
 import { English, Polish } from './editorial.story.tsx';
 import { HeroExample } from './hero.story.tsx';
+import { GuideExample } from './guide.story.tsx';
 
 // Manual preview only. Tests render the same scenarios through vitest-browser-react.
 const parameters = new URL(location.href).searchParams;
@@ -22,6 +23,8 @@ for (const weight of [400, 600]) {
 let example;
 if (story.startsWith('Hero/')) {
   example = <HeroExample language={polish ? 'pl' : 'en'} />;
+} else if (story.startsWith('Guides/')) {
+  example = <GuideExample language={polish ? 'pl' : 'en'} />;
 } else if (polish) {
   example = <Polish />;
 } else {

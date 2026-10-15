@@ -75,16 +75,18 @@
   padding: var(--space-xs) var(--space-sm);
   cursor: pointer;
 }
-.search .ais-Pagination-list button:hover:not(:disabled),
+.search
+  .ais-Pagination-list
+  button:hover:not(:disabled):not([aria-current='page']),
 .search .ais-SearchBox-reset:hover,
 .search-message button:hover {
   background: var(--color-brand-tint);
   border-color: var(--color-brand);
 }
 .search .ais-Pagination-list button[aria-current='page'] {
-  background: var(--text-color-brand);
-  border-color: var(--text-color-brand);
-  color: var(--color-text-inverse);
+  background: var(--color-action);
+  border-color: var(--color-action);
+  color: var(--color-on-action);
   font-weight: var(--weight-emphasis);
 }
 .search .ais-Pagination-list button:disabled {
