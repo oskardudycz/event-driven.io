@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="430" viewBox="0 0 960 430" role="img" aria-labelledby="title description">
-  <title id="title">Local review: warm orange actions, readable links and yellow emphasis</title>
-  <desc id="description">Two illustrative reading cards show the locally applied review palette on white and charcoal surfaces, with readable links and the same warm orange button with black text. Warm yellow supplies supporting emphasis. Final acceptance is pending. This is not a production screenshot.</desc>
+  <title id="title">Local review: yellow actions and readable amber links</title>
+  <desc id="description">Two illustrative reading cards show the locally applied review palette on white and charcoal surfaces, with readable links and the same warm yellow button with black text. Warm yellow supplies supporting emphasis. Final acceptance is pending. This is not a production screenshot.</desc>
   <rect width="960" height="430" fill="#ecebea"/>
   <g font-family="Arial, sans-serif">
     <rect x="16" y="16" width="456" height="398" rx="10" fill="#ffffff"/>
@@ -17,16 +17,16 @@
       <text x="40" y="137" fill="#000000">Clear explanations of event-driven architecture.</text>
       <text x="512" y="137" fill="#e5e7eb">Clear explanations of event-driven architecture.</text>
       <text x="40" y="173" fill="#92400e" text-decoration="underline">Explore the architecture guides</text>
-      <text x="512" y="173" fill="#ff9f43" text-decoration="underline">Explore the architecture guides</text>
+      <text x="512" y="173" fill="#ffd84d" text-decoration="underline">Explore the architecture guides</text>
     </g>
-    <rect x="40" y="201" width="210" height="44" rx="5" fill="#ff9f43"/>
-    <rect x="512" y="201" width="210" height="44" rx="5" fill="#ff9f43"/>
+    <rect x="40" y="201" width="210" height="44" rx="5" fill="#ffd84d"/>
+    <rect x="512" y="201" width="210" height="44" rx="5" fill="#ffd84d"/>
     <text x="62" y="229" fill="#000000" font-size="16" font-weight="bold">Explore workshops</text>
     <text x="534" y="229" fill="#000000" font-size="16" font-weight="bold">Explore workshops</text>
     <text x="40" y="276" fill="#706e6b" font-size="14">Link / white: 7.09:1</text>
-    <text x="512" y="276" fill="#b1b5bb" font-size="14">Link / charcoal: 8.75:1 · verified colour pair</text>
-    <text x="40" y="293" fill="#706e6b" font-size="12">ACTION · warmer fill, black text · 10.29:1</text>
-    <text x="512" y="293" fill="#b1b5bb" font-size="12">ACTION · same fill and text · 10.29:1</text>
+    <text x="512" y="276" fill="#b1b5bb" font-size="14">Link / charcoal: 12.91:1 · verified colour pair</text>
+    <text x="40" y="293" fill="#706e6b" font-size="12">ACTION · warmer fill, black text · 15.18:1</text>
+    <text x="512" y="293" fill="#b1b5bb" font-size="12">ACTION · same fill and text · 15.18:1</text>
     <rect x="40" y="300" width="408" height="88" rx="5" fill="#0c0c0c"/>
     <rect x="512" y="300" width="408" height="88" rx="5" fill="#0c0c0c"/>
     <text x="58" y="329" fill="#ffffff" font-size="14">SUPPORTING EMPHASIS · WARM YELLOW</text>

@@ -4,13 +4,13 @@ Updated 2026-10-15. This is the colour rationale and implementation reference. S
 
 ## Current review direction
 
-The owner requested applying the branding for review. The local implementation uses **warm orange for primary actions, warm yellow for emphasis, and neutral reading surfaces**. It retains the orange/yellow geometric mark, natural photography and authored hero artwork. This is implemented for review, not final visual acceptance or a deployed result.
+The owner requested applying the branding for review. The local implementation uses **warm yellow for primary actions and emphasis, deep amber light-mode links, and neutral reading surfaces**. It retains the orange/yellow geometric mark, natural photography and authored hero artwork. This is implemented for review, not final visual acceptance or a deployed result.
 
 Orange connects to events: Brandolini's [original EventStorming article](https://ziobrando.blogspot.com/2013/11/introducing-event-storming.html) explicitly assigns orange sticky notes to domain events. The article is historical, while the [current official resources](https://www.eventstorming.com/resources/) still feature his orange-stickies presentations. That supports a brand association without prescribing an exact hex code or importing diagram notation into every UI element.
 
-The warmer orange and yellow relate to the mark's existing yellow/amber/orange faces. They replace the UI's fluorescent yellow and redder orange combination. They are exploration values chosen in relation to the artwork, not exact sampled master colours. Yellow remains available in the interface as well as imagery; it is not restricted to the logo. The owner remains open to changing either hue after seeing the combined result.
+The yellow-led interface anchors controls to the existing gold hero artwork. The owner challenged the orange buttons beside that artwork; that orange-led version has been withdrawn from the active review. Warm yellow and deep amber are review values, not exact sampled master colours. Yellow remains available in the interface as well as imagery; it is not restricted to the logo. The owner remains open to changing either hue after seeing the combined result.
 
-![Applied local review palette: readable links and a shared warm action fill](colour-palette-proposal.svg)
+![Local yellow-led review palette: readable links and a shared yellow action fill](colour-palette-proposal.svg)
 
 ## Implemented roles
 
@@ -22,14 +22,14 @@ The source of truth is [tokens.css](../src/theme/tokens.css). Components own the
 | Alternate surface   | `#fafaf9` | `#20262c` | Cards, hover surfaces and grouped content.                                  |
 | Body text           | `#000000` | `#e5e7eb` | Reading copy.                                                               |
 | Muted text/icons    | `#706e6b` | `#b1b5bb` | Dates, metadata and supporting icons.                                       |
-| Link/focus accent   | `#92400e` | `#ff9f43` | Readable links and focus outlines on themed surfaces.                       |
-| Primary action fill | `#ff9f43` | `#ff9f43` | Hero actions, article-browse action and selected pagination.                |
+| Link/focus accent   | `#92400e` | `#ffd84d` | Readable links and focus outlines on themed surfaces.                       |
+| Primary action fill | `#ffd84d` | `#ffd84d` | Hero actions, article-browse action and selected pagination.                |
 | Text/icon on action | `#000000` | `#000000` | Explicit pairing with the action fill, also used by numbered guide markers. |
 | Yellow emphasis     | `#ffd84d` | `#ffd84d` | Hero heading emphasis; available for coordinated brand accents.             |
 
-The hero stays dark in either theme. Its underlined links use the warm orange action shade on that dark surface. The lead sentence is otherwise neutral; it does not colour a whole phrase merely because it contains links. The authored yellow photo shape is unchanged. Ordinary navigation remains neutral, including hover labels/icons; focus and interaction states remain visible.
+The hero stays dark in either theme. Its underlined links use the warm yellow action shade on that dark surface. The lead sentence is otherwise neutral; it does not colour a whole phrase merely because it contains links. The authored yellow photo shape is unchanged. Ordinary navigation remains neutral, including hover labels/icons; focus and interaction states remain visible.
 
-Guide counts and metadata are quiet. Numbered reading steps use black on warm orange. Editorial covers, diagram notation, status colours and syntax highlighting have their own meaning and are not forced into the UI palette.
+Guide counts and metadata are quiet. Numbered reading steps use black on warm yellow. Editorial covers, diagram notation, status colours and syntax highlighting have their own meaning and are not forced into the UI palette.
 
 ## Proportions and visual hierarchy
 
@@ -73,7 +73,7 @@ Neither theme is universally best for every reader or situation. A [controlled p
 
 ## Review alternatives and next improvements
 
-The local warm-orange/yellow version is the current review candidate. A yellow-led version with dark amber links is also viable and preserves more of the existing hero emphasis. An orange-only identity would require a deliberate review of the mark/artwork; accessibility does not demand dropping yellow. Choose between these through whole-page comparison rather than assuming one hue is scientifically correct.
+The yellow-led version with deep amber links is the current review candidate. The orange-led version was challenged for competing with the hero artwork; its passing contrast measurements did not justify that composition. An orange-only identity would require a deliberate review of the mark/artwork; accessibility does not demand dropping yellow. Choose between these through whole-page comparison rather than assuming one hue is scientifically correct.
 
 Use the existing gallery for immediate review. `Hero/English`, `Hero/Polish`, `Guides/English`, `Guides/Polish` and the editorial examples share production presentation components and styles. Guide examples use controlled content; gallery previews do not certify Gatsby routing, SSR, image processing or real navigation. Keep the existing [testing responsibilities](testing-guidance.md) and review intentional screenshots before changing references.
 

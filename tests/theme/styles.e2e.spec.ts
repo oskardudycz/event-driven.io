@@ -388,7 +388,7 @@ for (const language of ['en', 'pl']) {
                   getComputedStyle(element, '::before').backgroundColor,
               ),
           )
-          .toBe('rgb(255, 159, 67)');
+          .toBe('rgb(255, 216, 77)');
       });
     });
   }
