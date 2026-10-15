@@ -186,7 +186,7 @@ test('approved text colors maintain contrast on actual white surfaces and intera
       };
     });
   const expected = {
-    color: 'rgb(146, 64, 14)',
+    color: 'rgb(173, 85, 0)',
     background: 'rgb(255, 255, 255)',
   };
   expect(await colors(link)).toEqual(expected);
@@ -237,7 +237,7 @@ for (const [language, javaScriptEnabled] of [
       };
       if (language === 'en')
         expect(await summary.evaluate(values)).toMatchObject({
-          color: 'rgb(62, 62, 60)',
+          color: 'rgb(173, 85, 0)',
           size: '21.6px',
           lineHeight: '30.24px',
           bottom: '40px',
@@ -388,7 +388,7 @@ for (const language of ['en', 'pl']) {
                   getComputedStyle(element, '::before').backgroundColor,
               ),
           )
-          .toBe('rgb(255, 216, 77)');
+          .toBe('rgb(255, 216, 0)');
       });
     });
   }

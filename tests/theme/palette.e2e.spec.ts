@@ -54,7 +54,7 @@ for (const language of ['en', 'pl']) {
         page,
       }) => {
         const accent =
-          theme === 'light' ? 'rgb(146, 64, 14)' : 'rgb(255, 216, 77)';
+          theme === 'light' ? 'rgb(173, 85, 0)' : 'rgb(255, 180, 92)';
         await page.setViewportSize({ width, height: 900 });
         await page.addInitScript(
           (preference) => localStorage.setItem('color-theme', preference),
@@ -109,13 +109,13 @@ for (const language of ['en', 'pl']) {
         await expect(selected).toBeVisible();
         await expect(selected).toHaveCSS(
           'background-color',
-          'rgb(255, 216, 77)',
+          'rgb(255, 216, 0)',
         );
         await expectTextContrast(selected);
         await selected.hover();
         await expect(selected).toHaveCSS(
           'background-color',
-          'rgb(255, 216, 77)',
+          'rgb(255, 216, 0)',
         );
         await expectTextContrast(selected);
         await selected.focus();

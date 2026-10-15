@@ -330,7 +330,7 @@ for (const language of ['en', 'pl'] as const) {
           );
           await expect(result.locator('mark').first()).toHaveCSS(
             'color',
-            'rgb(255, 216, 77)',
+            'rgb(255, 180, 92)',
           );
         }
         expect(

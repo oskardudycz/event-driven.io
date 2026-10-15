@@ -1,80 +1,68 @@
 # Brand palette and accessibility
 
-Updated 2026-10-15. This is the colour rationale and implementation reference. Start with [DESIGN.md](../DESIGN.md) for current recommendations and the change process. Verification and history belong in [todo.md](../todo.md).
+Start with [DESIGN.md](../DESIGN.md) for the design process, implementation sources and priorities. This guide describes the applied review version. Local checks and implementation history belong in [todo.md](../todo.md); visual acceptance and deployment are separate.
 
 ## Current review direction
 
-The owner requested applying the branding for review. The local implementation uses **warm yellow for primary actions and emphasis, deep amber light-mode links, and neutral reading surfaces**. It retains the orange/yellow geometric mark, natural photography and authored hero artwork. This is implemented for review, not final visual acceptance or a deployed result.
+Use the existing geometric identity, natural photography and authored yellow hero shape as the anchor. The shape's uncomposited colour is **#ffd800**, with its existing 174/255 opacity. Use that same yellow for interface fills and emphasis. Preserve the authored opacity; a translucent shape over dark tiles will look darker than an opaque button.
 
-Orange connects to events: Brandolini's [original EventStorming article](https://ziobrando.blogspot.com/2013/11/introducing-event-storming.html) explicitly assigns orange sticky notes to domain events. The article is historical, while the [current official resources](https://www.eventstorming.com/resources/) still feature his orange-stickies presentations. That supports a brand association without prescribing an exact hex code or importing diagram notation into every UI element.
+Keep the reading surfaces neutral. Text links use an orange family in both themes: #ad5500 on light surfaces and #ffb45c on dark surfaces. The always-dark hero retains underlined yellow links coordinated with its authored shape. Orange provides visible link emphasis beside neutral reading text; yellow identifies primary fills and decorative emphasis. The result keeps the same primary action colour in both themes while changing text foregrounds to suit their surface. Contrast measurements establish legibility, not visual quality; inspect the complete pages and interaction states together.
 
-The yellow-led interface anchors controls to the existing gold hero artwork. The owner challenged the orange buttons beside that artwork; that orange-led version has been withdrawn from the active review. Warm yellow and deep amber are review values, not exact sampled master colours. Yellow remains available in the interface as well as imagery; it is not restricted to the logo. The owner remains open to changing either hue after seeing the combined result.
+Orange has a meaningful EventStorming association: Brandolini's [original article](https://ziobrando.blogspot.com/2013/11/introducing-event-storming.html) assigns orange sticky notes to domain events, and the [official resources](https://www.eventstorming.com/resources/) retain that association. It does not prescribe a website palette. Preserve orange in existing assets and authored diagrams; the applied review uses that association for links while retaining yellow controls and artwork. Evaluate those roles together rather than treating a contrast score as visual acceptance.
 
-![Local yellow-led review palette: readable links and a shared yellow action fill](colour-palette-proposal.svg)
+![Applied review palette: hero yellow fills and readable orange links in both themes](colour-palette-proposal.svg)
 
 ## Implemented roles
 
-The source of truth is [tokens.css](../src/theme/tokens.css). Components own their scoped uses.
+The source of truth is [tokens.css](../src/theme/tokens.css). Components own their scoped uses. Existing text aliases resolve to the readable link role; decoration and action fills use the yellow brand role.
 
-| Role                | Light     | Dark      | Use                                                                         |
-| ------------------- | --------- | --------- | --------------------------------------------------------------------------- |
-| Page                | `#ffffff` | `#14181b` | Neutral reading surface.                                                    |
-| Alternate surface   | `#fafaf9` | `#20262c` | Cards, hover surfaces and grouped content.                                  |
-| Body text           | `#000000` | `#e5e7eb` | Reading copy.                                                               |
-| Muted text/icons    | `#706e6b` | `#b1b5bb` | Dates, metadata and supporting icons.                                       |
-| Link/focus accent   | `#92400e` | `#ffd84d` | Readable links and focus outlines on themed surfaces.                       |
-| Primary action fill | `#ffd84d` | `#ffd84d` | Hero actions, article-browse action and selected pagination.                |
-| Text/icon on action | `#000000` | `#000000` | Explicit pairing with the action fill, also used by numbered guide markers. |
-| Yellow emphasis     | `#ffd84d` | `#ffd84d` | Hero heading emphasis; available for coordinated brand accents.             |
+| Role                      | Light     | Dark      | Use                                                                                 |
+| ------------------------- | --------- | --------- | ----------------------------------------------------------------------------------- |
+| Page                      | `#ffffff` | `#14181b` | Neutral reading surface.                                                            |
+| Alternate surface         | `#fafaf9` | `#20262c` | Cards, hover surfaces and grouped content.                                          |
+| Body text                 | `#000000` | `#e5e7eb` | Reading copy.                                                                       |
+| Muted text/icons          | `#706e6b` | `#b1b5bb` | Metadata and supporting icons.                                                      |
+| Text links                | `#ad5500` | `#ffb45c` | Underlined prose links; readable control text.                                      |
+| Primary fill/emphasis     | `#ffd800` | `#ffd800` | Primary actions, selected pagination, reading-order markers and decorative accents. |
+| Text/icon on primary fill | `#000000` | `#000000` | Explicit readable label pairing.                                                    |
+| Keyboard focus            | `#ad5500` | `#ffb45c` | Contrasting outlines on themed surfaces. The dark hero/header use white focus.      |
 
-The hero stays dark in either theme. Its underlined links use the warm yellow action shade on that dark surface. The lead sentence is otherwise neutral; it does not colour a whole phrase merely because it contains links. The authored yellow photo shape is unchanged. Ordinary navigation remains neutral, including hover labels/icons; focus and interaction states remain visible.
+The hero remains dark in either theme. Its articles, videos and Emmett links remain yellow and underlined. Secondary actions have less emphasis than the filled primary action. Ordinary navigation, guide counts and metadata stay neutral. Card hover borders may use yellow decoratively; keyboard focus has its own contrasting outline.
 
-Guide counts and metadata are quiet. Numbered reading steps use black on warm yellow. Editorial covers, diagram notation, status colours and syntax highlighting have their own meaning and are not forced into the UI palette.
+Use a visible underline for prose links, an underline on action hover, and an outline on keyboard focus. Selected pagination retains its yellow fill and black label during hover and focus. Do not introduce a permanent contrasting button border merely to compensate for a bright fill.
 
-## Proportions and visual hierarchy
+## Proportions, spacing and imagery
 
-Use one dominant action treatment and a supporting emphasis colour. Neutral surfaces and readable text should carry the page. Judge the result by whether readers can find the main action and follow the content, not by how many elements can be made orange.
+Use one dominant interface accent with neutral reading surfaces and supporting content. Keep the strongest emphasis on actions and meaningful reading-order markers rather than every icon or heading. Editorial covers, diagram notation, status colours and syntax highlighting retain their own meaning.
 
-Two related brand hues plus neutrals are sufficient for this comparison. That is a project recommendation, not a universal colour-count standard. [USWDS](https://designsystem.digital.gov/design-tokens/color/overview/) distinguishes families, shades and project role tokens; [Material](https://m3.material.io/styles/color/the-color-system) assigns emphasis according to purpose. Readable shades and foreground/fill pairs do not need to be separate brand identities. Keep the existing small token system rather than adopting either framework's complete palette.
+This small palette is a project recommendation, not a universal colour-count standard. [USWDS](https://designsystem.digital.gov/design-tokens/color/overview/) distinguishes colour families, shades and role tokens; [Material](https://m3.material.io/styles/color/the-color-system) assigns emphasis by purpose. [USWDS theme guidance](https://designsystem.digital.gov/design-tokens/color/theme-tokens/) offers 60/30/10 for non-base colour families, excluding the predominant neutral base. Treat that as a heuristic, not a demand to colour most of a reading page.
 
-[USWDS theme guidance](https://designsystem.digital.gov/design-tokens/color/theme-tokens/) offers 60/30/10 for non-base colour families, explicitly excluding the predominant neutral base. Treat that as a heuristic, not a WCAG rule or a demand to make 60% of a reading page orange. A hero, guide overview and article naturally have different balances.
+Use the shared spacing scale. In the hero, heading, lead, biography paragraphs and action groups have 20px gaps. Compact controls use 10px gaps; larger sections use the existing 40px scale. Keep the full biography and the full-screen desktop hero. Allow scrolling on short phones rather than hiding content or shrinking text to force a fit. Preserve Open Sans, the portrait scale and the single tile background. Asset details belong in [hero exports](../assets/hero-exports.md); responsive layout constraints belong in [Tailwind guidance](tailwind-guidance.md#responsive-hero-and-header-research).
 
-Review the homepage, guide overview, numbered guide, article with guide-step links, tag chips and search together. Include light/dark, EN/PL and mobile/desktop. A swatch or passing contrast score cannot establish visual cohesion. Preserve the shared type/spacing scale and review the [hero composition](hero-proportions-review.md) separately from colour.
+Review homepage, guide overview, numbered guide, article prose, guide-step links, tags and search together in light/dark, EN/PL and mobile/desktop. Include normal, hover, focus and selected states. The existing gallery uses real presentation components with controlled content; actual Gatsby pages establish routing, assets and hydration. An isolated SVG is a colour specimen, not an interactive review or a production screenshot.
 
-## Verified colour pairs
+## Measured colour pairs
 
-These are local sRGB calculations, not blanket component certification. [WCAG contrast](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html) requires 4.5:1 for normal text and 3:1 for qualifying large text. Test actual hover, focus, selected and composited states as well.
+These are local sRGB calculations, not blanket component certification. [WCAG contrast](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html) requires 4.5:1 for normal text and 3:1 for qualifying large text. Check composited backgrounds and every interaction state as well.
 
-| Pair                                                      | Contrast | Interpretation                                  |
-| --------------------------------------------------------- | -------: | ----------------------------------------------- |
-| Black on warm orange `#ff9f43`                            |  10.29:1 | Action labels and reading-order numbers.        |
-| White on warm orange `#ff9f43`                            |   2.04:1 | Unsuitable for normal text.                     |
-| Black on warm yellow `#ffd84d`                            |  15.18:1 | Suitable if yellow is used for a labelled fill. |
-| White on warm yellow `#ffd84d`                            |   1.38:1 | Unsuitable for normal text.                     |
-| Deep amber `#92400e` on white                             |   7.09:1 | Underlined light-theme links.                   |
-| Warm orange `#ff9f43` on dark page `#14181b`              |   8.75:1 | Dark-theme links.                               |
-| Warm orange `#ff9f43` on alternate dark surface `#20262c` |   7.49:1 | Dark hover/raised-surface links.                |
+| Pair                                                       | Contrast | Interpretation                    |
+| ---------------------------------------------------------- | -------: | --------------------------------- |
+| Black on hero yellow `#ffd800`                             |  15.07:1 | Action labels and numbered steps. |
+| Orange `#ad5500` on white                                  |   5.15:1 | Light-theme text links.           |
+| Orange `#ad5500` on alternate light surface `#fafaf9`      |   4.93:1 | Light hover/raised-surface text.  |
+| Light orange `#ffb45c` on dark page `#14181b`              |  10.15:1 | Dark-theme links.                 |
+| Light orange `#ffb45c` on alternate dark surface `#20262c` |   8.68:1 | Dark hover/raised-surface links.  |
 
-Bright orange has more contrast against white than bright yellow, but neither bright candidate is suitable as small text on white. Both work well with black labels. Separating link shades from action fills preserves readability and permits the same button colour in both themes.
+Yellow text on white is unsuitable. Bright fill contrast against a page and label contrast against a fill are separate questions. [WCAG non-text contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html) explains why a labelled button does not always require a contrasting boundary. Essential control boundaries, stand-alone icons and keyboard focus still need their own checks.
 
-A fill's contrast against the page is different from its label's contrast against the fill. [WCAG non-text contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html) explains why a labelled button need not acquire an unwanted outline merely because its fill is below 3:1 against white. Focus and any boundary needed to identify a control still require their own checks. Do not use a low-contrast bright fill as an essential stand-alone icon on white.
+## Colour vision and themes
 
-## Colour vision and accessibility
+Do not encode meaning through orange versus yellow alone. Preserve prose underlines, labelled controls, numbering, visible keyboard focus and programmatic selected states, following [WCAG Use of Color](https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html).
 
-Do not encode meaning through orange versus yellow alone. Preserve prose underlines, labelled controls, numbering, visible keyboard focus and programmatic selected states. This follows [WCAG Use of Color](https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html).
+Review protanopia, deuteranopia, tritanopia, grayscale and forced colours. [Chromium's vision-deficiency emulation](https://developer.chrome.com/docs/chromium/cvd) is diagnostic, not certification or a substitute for reader feedback. Preserve EventStorming labels/legends. Avoid global image inversion or forced-colour overrides; search highlights use system Mark/MarkText in forced-colour mode.
 
-Review protanopia, deuteranopia, tritanopia, grayscale and forced colours. [Chromium's vision-deficiency emulation](https://developer.chrome.com/docs/chromium/cvd) is a diagnostic aid, not certification or a substitute for reader feedback. Preserve EventStorming labels/legends and authored diagram colours. Avoid global forced-colour overrides or image inversion.
+Retain light, dark and system preferences, the first-paint initializer and the persistent reader override. Neither theme suits every reader or situation. A [controlled proofreading study](https://pubmed.ncbi.nlm.nih.gov/25135324/) favoured dark text on a light background; it does not establish universal preference or long-term health effects. Test both themes independently.
 
-## Light and dark mode
+## Next improvements
 
-Retain light, dark and system preferences, the first-paint initializer and the reader's persistent override. Keep the current reading surfaces. Change foreground shades where the surface requires it; identical brand identity does not require identical text colours on white and charcoal.
-
-Neither theme is universally best for every reader or situation. A [controlled proofreading study](https://pubmed.ncbi.nlm.nih.gov/25135324/) favoured dark text on a light background; it does not establish universal preference or long-term health effects. Keep both modes usable and test them independently.
-
-## Review alternatives and next improvements
-
-The yellow-led version with deep amber links is the current review candidate. The orange-led version was challenged for competing with the hero artwork; its passing contrast measurements did not justify that composition. An orange-only identity would require a deliberate review of the mark/artwork; accessibility does not demand dropping yellow. Choose between these through whole-page comparison rather than assuming one hue is scientifically correct.
-
-Use the existing gallery for immediate review. `Hero/English`, `Hero/Polish`, `Guides/English`, `Guides/Polish` and the editorial examples share production presentation components and styles. Guide examples use controlled content; gallery previews do not certify Gatsby routing, SSR, image processing or real navigation. Keep the existing [testing responsibilities](testing-guidance.md) and review intentional screenshots before changing references.
-
-After the palette is accepted, a sharper vector master of the existing geometric mark and a repeatable cover/social-card template are useful next steps. Preserve Open Sans and natural photography while establishing those examples. Storybook, Figma and Astro remain separate decisions under [DESIGN.md](../DESIGN.md); none is required to finish this review.
+After reviewing this applied version, improve the vector master of the existing mark and establish a repeatable cover/social-card template where useful. Preserve approved assets until replacements are reviewed. Keep one component catalogue; Storybook, Figma and Astro remain separate incremental decisions under [DESIGN.md](../DESIGN.md). None is required to make the current palette and spacing coherent.
