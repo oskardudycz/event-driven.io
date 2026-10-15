@@ -1,7 +1,7 @@
 :global(.menu).menu {
   --theme-trigger-color: var(--color-text);
   align-items: center;
-  background: var(--color-surface);
+  background: var(--menu-surface, var(--color-surface));
   bottom: 0;
   display: flex;
   flex-grow: 1;
@@ -42,6 +42,12 @@
 }
 
 @media screen and (max-width: 1023px) {
+  :global(.homepage) :global(.menu).menu {
+    --theme-trigger-color: var(--color-neutral-white);
+    --menu-surface: var(--hero-background);
+    --menu-border: var(--color-neutral-gray-k);
+  }
+
   .itemList {
     overflow-x: auto;
     scrollbar-width: thin;
@@ -55,7 +61,7 @@
       right: var(--space-md);
       top: 0;
       height: 1px;
-      background: var(--color-brand);
+      background: var(--menu-border, var(--color-border));
     }
 
     &:global(.open).open {

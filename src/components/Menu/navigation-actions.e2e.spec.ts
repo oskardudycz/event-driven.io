@@ -29,7 +29,7 @@ async function expectMatchingActions(search: Locator, theme: Locator) {
 
 for (const javaScriptEnabled of [false, true]) {
   test.describe(`persistent navigation actions, JavaScript ${javaScriptEnabled}`, () => {
-    test.use({ javaScriptEnabled });
+    test.use({ javaScriptEnabled, colorScheme: 'light' });
     for (const language of ['en', 'pl']) {
       for (const width of [320, 1280]) {
         test(`${language} search stays beside appearance at ${width}px`, async ({
@@ -39,6 +39,13 @@ for (const javaScriptEnabled of [false, true]) {
           await page.goto(`/${language}/`, { waitUntil: 'domcontentloaded' });
           if (javaScriptEnabled) await expectFonts(page);
           const menu = page.locator('nav.menu');
+          if (width < 1024) {
+            await expect(menu).toHaveCSS('background-color', 'rgb(12, 12, 12)');
+            await expect(menu.locator('.item a').first()).toHaveCSS(
+              'color',
+              'rgb(255, 255, 255)',
+            );
+          }
           const search = menu.getByRole('link', {
             name: language === 'pl' ? 'Szukaj' : 'Search',
             exact: true,
@@ -68,6 +75,12 @@ for (const javaScriptEnabled of [false, true]) {
           await expect(page.locator('h1')).toHaveText(
             language === 'pl' ? 'Szukaj' : 'Search',
           );
+          if (width < 1024) {
+            await expect(menu).toHaveCSS(
+              'background-color',
+              'rgb(255, 255, 255)',
+            );
+          }
         });
       }
     }

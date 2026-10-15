@@ -186,7 +186,7 @@ test('approved text colors maintain contrast on actual white surfaces and intera
       };
     });
   const expected = {
-    color: 'rgb(85, 112, 28)',
+    color: 'rgb(194, 65, 12)',
     background: 'rgb(255, 255, 255)',
   };
   expect(await colors(link)).toEqual(expected);
@@ -323,7 +323,7 @@ for (const language of ['en', 'pl']) {
         expect(await navigation.locator('a').count()).toBeGreaterThan(0);
         await expect(navigation.locator('svg').first()).toHaveCSS(
           'fill',
-          'rgb(255, 165, 0)',
+          'rgb(194, 65, 12)',
         );
         expect(await grid.evaluate(style)).toMatchObject({
           columns: 1,
@@ -388,7 +388,7 @@ for (const language of ['en', 'pl']) {
                   getComputedStyle(element, '::before').backgroundColor,
               ),
           )
-          .toBe('rgb(85, 112, 28)');
+          .toBe('rgb(194, 65, 12)');
       });
     });
   }

@@ -76,6 +76,12 @@
   border-radius: 2px;
   box-decoration-break: clone;
 }
+@media (forced-colors: active) {
+  .search-highlight {
+    color: MarkText;
+    background: Mark;
+  }
+}
 @media (max-width: 599px) {
   .search-hit-link {
     padding: var(--space-sm);

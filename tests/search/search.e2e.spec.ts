@@ -6,6 +6,31 @@ import {
 } from '../helpers/browser/readiness.ts';
 
 for (const language of ['en', 'pl']) {
+  test(`${language} keeps a query typed before React hydration`, async ({
+    page,
+  }) => {
+    let releaseScripts!: () => void;
+    const scriptsReady = new Promise<void>((resolve) => {
+      releaseScripts = resolve;
+    });
+    await page.route('**/*.js', async (route) => {
+      await scriptsReady;
+      await route.fallback();
+    });
+    try {
+      await page.goto(`/${language}/search/`, { waitUntil: 'commit' });
+      const input = page.getByRole('searchbox', {
+        name: language === 'pl' ? 'Szukaj' : 'Search',
+      });
+      await input.fill('event sourcing');
+      releaseScripts();
+      await expect(page.locator('.search-hit').first()).toBeVisible();
+      await expect(input).toHaveValue('event sourcing');
+    } finally {
+      releaseScripts();
+    }
+  });
+
   test(`${language} searches local content with lazy indexes, fallback links and pagination`, async ({
     page,
   }) => {
@@ -73,10 +98,10 @@ for (const language of ['en', 'pl']) {
         color: getComputedStyle(mark).color,
         background: getComputedStyle(mark).backgroundColor,
       }));
-    expect(colors.color).toBe('rgb(85, 112, 28)');
-    expect(colors.background).toBe('rgba(112, 148, 37, 0.094)');
+    expect(colors.color).toBe('rgb(194, 65, 12)');
+    expect(colors.background).toBe('rgba(194, 65, 12, 0.047)');
     await result.locator('a').hover();
-    await expect(result.locator('h2')).toHaveCSS('color', 'rgb(85, 112, 28)');
+    await expect(result.locator('h2')).toHaveCSS('color', 'rgb(194, 65, 12)');
     expect(
       await result
         .locator('.search-hit-cover')

@@ -1,30 +1,32 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="430" viewBox="0 0 960 430" role="img" aria-labelledby="title description">
-  <title id="title">Orange accent proposal for light and dark mode</title>
-  <desc id="description">Two illustrative reading cards retain the current white and charcoal surfaces. Burnt orange links and buttons serve light mode; lighter orange links and buttons serve dark mode. Yellow remains the hero accent. This is a proposal, not a production screenshot.</desc>
+  <title id="title">Proposed refinement: stronger light links and a shared warm button fill</title>
+  <desc id="description">Two illustrative reading cards retain the current white and charcoal surfaces. The light card proposes darker orange links for stronger contrast. Both cards propose the same brighter orange button with black text. These refinements are not implemented. The dark link colour and yellow hero accent remain unchanged. This is not a production screenshot.</desc>
   <rect width="960" height="430" fill="#ecebea"/>
   <g font-family="Arial, sans-serif">
     <rect x="16" y="16" width="456" height="398" rx="10" fill="#ffffff"/>
     <rect x="488" y="16" width="456" height="398" rx="10" fill="#14181b"/>
     <g fill="#3e3e3c">
-      <text x="40" y="55" font-size="14">PROPOSAL · LIGHT</text>
+      <text x="40" y="55" font-size="14">REFINEMENT PROPOSAL · LIGHT</text>
       <text x="40" y="99" font-size="25" font-weight="bold">Make sense of events.</text>
     </g>
     <g fill="#e5e7eb">
-      <text x="512" y="55" font-size="14">PROPOSAL · DARK</text>
+      <text x="512" y="55" font-size="14">REFINEMENT PROPOSAL · DARK</text>
       <text x="512" y="99" font-size="25" font-weight="bold">Make sense of events.</text>
     </g>
     <g font-size="17">
       <text x="40" y="137" fill="#000000">Clear explanations of event-driven architecture.</text>
       <text x="512" y="137" fill="#e5e7eb">Clear explanations of event-driven architecture.</text>
-      <text x="40" y="173" fill="#c2410c" text-decoration="underline">Explore the architecture guides</text>
+      <text x="40" y="173" fill="#9a3412" text-decoration="underline">Explore the architecture guides</text>
       <text x="512" y="173" fill="#fb923c" text-decoration="underline">Explore the architecture guides</text>
     </g>
-    <rect x="40" y="201" width="210" height="44" rx="5" fill="#c2410c"/>
-    <rect x="512" y="201" width="210" height="44" rx="5" fill="#fb923c"/>
-    <text x="62" y="229" fill="#ffffff" font-size="16" font-weight="bold">Explore workshops</text>
-    <text x="534" y="229" fill="#14181b" font-size="16" font-weight="bold">Explore workshops</text>
-    <text x="40" y="276" fill="#706e6b" font-size="14">Link / white: 5.18:1 · candidate pairing</text>
-    <text x="512" y="276" fill="#b1b5bb" font-size="14">Link / charcoal: 7.89:1 · candidate pairing</text>
+    <rect x="40" y="201" width="210" height="44" rx="5" fill="#f97316"/>
+    <rect x="512" y="201" width="210" height="44" rx="5" fill="#f97316"/>
+    <text x="62" y="229" fill="#000000" font-size="16" font-weight="bold">Explore workshops</text>
+    <text x="534" y="229" fill="#000000" font-size="16" font-weight="bold">Explore workshops</text>
+    <text x="40" y="276" fill="#706e6b" font-size="14">PROPOSED LINK / white: 7.31:1</text>
+    <text x="512" y="276" fill="#b1b5bb" font-size="14">Link / charcoal: 7.89:1 · verified colour pair</text>
+    <text x="40" y="293" fill="#706e6b" font-size="12">PROPOSED BUTTON · warmer fill, black text · 7.49:1</text>
+    <text x="512" y="293" fill="#b1b5bb" font-size="12">PROPOSED BUTTON · same fill and text · 7.49:1</text>
     <rect x="40" y="300" width="408" height="88" rx="5" fill="#0c0c0c"/>
     <rect x="512" y="300" width="408" height="88" rx="5" fill="#0c0c0c"/>
     <text x="58" y="329" fill="#ffffff" font-size="14">HERO ACCENT · RETAIN EXISTING YELLOW</text>

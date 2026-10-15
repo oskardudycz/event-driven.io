@@ -1,4 +1,5 @@
 .hero {
+  display: grid;
   container: hero / inline-size;
   background-color: var(--hero-background);
   background-image:
@@ -7,7 +8,7 @@
   background-size: cover;
   color: var(--color-neutral-white);
   min-height: 100svh;
-  padding-top: calc(var(--header-height-homepage) + var(--space-lg));
+  padding: calc(var(--header-height-homepage) + 24px) var(--space-md) 90px;
 }
 
 .copy,
@@ -15,18 +16,104 @@
   grid-area: 1 / 1;
 }
 
+.composition {
+  display: grid;
+  align-items: center;
+  align-self: center;
+}
+
 .copy {
-  align-self: start;
+  display: grid;
+  gap: var(--space-default);
+  min-width: 0;
+  max-width: 50rem;
+  overflow-wrap: anywhere;
+}
+
+.introduction {
+  display: grid;
+  gap: 12px;
+}
+
+.heading {
+  margin: 0;
+  font-size: 1.875rem;
+  font-weight: var(--weight-emphasis);
+  line-height: 1.2;
+  text-transform: uppercase;
+
+  :global(u) {
+    text-decoration-color: var(--color-brand-primary-dark);
+  }
+}
+
+.subheading {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: var(--weight-emphasis);
+  line-height: 1.4;
+}
+
+.biography {
+  display: grid;
+  gap: var(--space-sm);
+  font-size: 1rem;
+  line-height: 1.5;
+
+  p {
+    margin: 0;
+  }
+  a {
+    color: var(--color-brand-primary-dark);
+    text-decoration: underline;
+  }
+}
+
+.subheading a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.subheading :global(.yellow) {
+  color: var(--color-brand-primary-dark);
+}
+
+@media (min-width: 600px) {
+  .hero {
+    padding-right: var(--space-lg);
+    padding-left: var(--space-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    padding-bottom: 24px;
+  }
+  .heading {
+    font-size: 2.25rem;
+  }
+  .subheading {
+    font-size: 1.5rem;
+  }
+  .biography {
+    font-size: 1.125rem;
+  }
 }
 
 .artwork {
   display: none;
   justify-self: end;
   align-self: end;
+  /* The decorative transparent canvas shares space with interactive copy. */
+  pointer-events: none;
 }
 
 /* Measured EN/PL fit, including fallback fonts; side gutters are outside this width. */
 @container hero (min-width: 74em) {
+  .copy {
+    align-self: start;
+  }
   .heading {
     /* Clear the diagonal even when Arial-compatible fallback text wraps later. */
     max-width: 50rem;
@@ -37,6 +124,19 @@
   }
 }
 
+@container hero (min-width: 85em) {
+  .copy {
+    align-self: center;
+  }
+}
+
+/* Preserve readable clearance beside the original-scale diagonal artwork. */
+@container hero (74em <= width < 90em) {
+  .biography {
+    max-width: 36rem;
+  }
+}
+
 /* The wider Polish fallback subheading needs to wrap before the diagonal. */
 @container hero (74em <= width < 75em) {
   .subheading {
@@ -44,17 +144,10 @@
   }
 }
 
-.underline {
-  text-decoration-color: var(--color-brand-primary-dark);
-}
-
-.yellow {
-  color: var(--color-brand-primary-dark);
-}
-
 .services {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-sm);
   margin: 0;
 
@@ -64,11 +157,22 @@
     border-radius: var(--size-radius-small);
     color: var(--color-neutral-black);
     font-weight: var(--weight-emphasis);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
     padding: var(--space-sm) var(--space-md);
+    line-height: 1.4;
+    text-align: center;
   }
 
   a:last-child {
     background: transparent;
+    border-color: transparent;
+    padding-right: 0;
+    padding-left: 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
     color: var(--color-neutral-white);
   }
 
@@ -79,6 +183,7 @@
 }
 
 .elementButton {
+  justify-self: start;
   align-items: center;
   background: transparent;
   border: 0;

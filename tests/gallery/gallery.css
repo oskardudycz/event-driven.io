@@ -15,3 +15,31 @@
   width: 100%;
   height: auto;
 }
+
+.heroPreviewHeader {
+  align-items: center;
+  background: var(--hero-background);
+  color: white;
+  display: flex;
+  gap: 20px;
+  height: 80px;
+  padding: 0 20px;
+  position: absolute;
+  inset: 0 0 auto;
+}
+.heroPreviewHeader img {
+  border-radius: 50%;
+}
+.heroPreviewHeader span {
+  font-size: 22px;
+}
+.heroPreviewHeader small {
+  display: block;
+  font-size: 12px;
+}
+
+@media (min-width: 600px) {
+  .heroPreviewHeader {
+    padding: 0 40px;
+  }
+}

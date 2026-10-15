@@ -5,6 +5,9 @@ import {
 } from '../../../tests/helpers/browser/readiness.ts';
 import { expectArtworkClearOfCopy } from '../../../tests/helpers/browser/hero-geometry.ts';
 
+import english from '../../i18n/locales/en/translation.json' with { type: 'json' };
+import polish from '../../i18n/locales/pl/translation.json' with { type: 'json' };
+
 const viewports = [
   { width: 320, height: 740 },
   { width: 390, height: 844 },
@@ -20,10 +23,50 @@ const viewports = [
   { width: 1280, height: 720 },
   { width: 1280, height: 1000 },
   { width: 1440, height: 900 },
+  { width: 1519, height: 900 },
+  { width: 1520, height: 900 },
   { width: 1920, height: 1080 },
 ];
 
 for (const language of ['en', 'pl']) {
+  const copy = language === 'pl' ? polish : english;
+  for (const destination of ['articles', 'talks']) {
+    test(`${language} hero lead opens ${destination} in the selected language`, async ({
+      page,
+    }) => {
+      await page.goto(`/${language}/`);
+      await expectFonts(page);
+      const lead = page.locator('.hero p').first();
+      const link = lead.locator(`a[href="/${language}/${destination}/"]`);
+      await expect(link).toHaveCSS('text-decoration-line', 'underline');
+      await link.click();
+      await expect(page).toHaveURL(`/${language}/${destination}/`);
+      await expect(
+        page.getByRole('heading', {
+          name:
+            destination === 'articles' ? copy.blog.allTitle : copy.talks.title,
+          exact: true,
+        }),
+      ).toBeVisible();
+    });
+  }
+
+  test(`${language} hero article cue reaches the latest articles`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`/${language}/`);
+    await expectFonts(page);
+    await page.locator('.hero').getByRole('button').click();
+    await expect(
+      page.getByRole('heading', {
+        name: language === 'pl' ? 'Najnowsze artykuły' : 'Latest articles',
+        exact: true,
+      }),
+    ).toBeInViewport();
+    await expect(page).toHaveURL(`/${language}/`);
+  });
+
   test(`${language} homepage reflows on a narrow screen when web fonts are unavailable`, async ({
     page,
   }) => {
@@ -52,6 +95,8 @@ for (const language of ['en', 'pl']) {
           await page.goto(`/${language}/`, { waitUntil: 'domcontentloaded' });
           if (javaScriptEnabled) await expectFonts(page);
           const hero = page.locator('.hero');
+          const heroBounds = (await hero.boundingBox())!;
+          expect(heroBounds.height).toBeGreaterThanOrEqual(viewport.height);
           const header = page.getByRole('banner');
           await expect(header).toHaveCSS('background-color', 'rgb(12, 12, 12)');
           await expect(header).toHaveCSS('height', '80px');
@@ -62,7 +107,18 @@ for (const language of ['en', 'pl']) {
           );
           const topInset = heading.y - headerBounds.y - headerBounds.height;
           expect(topInset).toBeGreaterThanOrEqual(24);
-          expect(topInset).toBeLessThanOrEqual(48);
+          const services = (await hero.getByRole('navigation').boundingBox())!;
+          const articleCue = (await hero.getByRole('button').boundingBox())!;
+          expect(articleCue.x).toBe(heading.x);
+          expect(articleCue.y).toBeGreaterThanOrEqual(
+            services.y + services.height,
+          );
+          expect(
+            articleCue.y - services.y - services.height,
+          ).toBeLessThanOrEqual(24);
+          expect(articleCue.y + articleCue.height).toBeLessThanOrEqual(
+            heroBounds.y + heroBounds.height - 24,
+          );
 
           // Gatsby also renders a noscript fallback when JavaScript is disabled.
           const portrait = hero.locator('img[data-main-image]').last();

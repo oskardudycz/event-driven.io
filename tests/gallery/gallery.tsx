@@ -5,10 +5,12 @@ import '../../src/theme/tailwind.css';
 import '../../src/theme/global.css';
 import './gallery.css';
 import { English, Polish } from './editorial.story.tsx';
+import { HeroExample } from './hero.story.tsx';
 
 // Manual preview only. Tests render the same scenarios through vitest-browser-react.
 const parameters = new URL(location.href).searchParams;
-const polish = parameters.get('story') === 'Editorial/Polish';
+const story = parameters.get('story') || 'Editorial/English';
+const polish = story.endsWith('/Polish');
 document.documentElement.lang = polish ? 'pl' : 'en';
 document.documentElement.dataset.theme =
   parameters.get('theme') === 'dark' ? 'dark' : 'light';
@@ -17,6 +19,12 @@ for (const weight of [400, 600]) {
   if (!fonts.length) throw new Error(`Open Sans ${weight} did not load`);
   document.documentElement.dataset[`font${weight}`] = 'loaded';
 }
-createRoot(document.getElementById('root')!).render(
-  polish ? <Polish /> : <English />,
-);
+let example;
+if (story.startsWith('Hero/')) {
+  example = <HeroExample language={polish ? 'pl' : 'en'} />;
+} else if (polish) {
+  example = <Polish />;
+} else {
+  example = <English />;
+}
+createRoot(document.getElementById('root')!).render(example);

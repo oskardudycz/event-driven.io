@@ -21,7 +21,12 @@ const Search = () => {
   const [status, setStatus] = useState('idle');
   const [retry, setRetry] = useState(0);
   const [page, setPage] = useState(0);
+  const searchInput = useRef<HTMLInputElement>(null);
   const resultsList = useRef<HTMLUListElement>(null);
+  useEffect(() => {
+    // Adopt text entered into the server-rendered field before React attached.
+    if (searchInput.current?.value) setQuery(searchInput.current.value);
+  }, []);
   const copy =
     lang === 'pl'
       ? {
@@ -131,6 +136,7 @@ const Search = () => {
               aria-hidden="true"
             />
             <input
+              ref={searchInput}
               className={`ais-SearchBox-input ${styles.aisSearchBoxInput}`}
               type="search"
               aria-label={copy.search}

@@ -19,7 +19,7 @@
   },
   "hero": {
     "h1": "Szukasz praktycznej wiedzy <linebreak /> o <architecture>architekturze oprogramowania?</architecture>",
-    "h2": "Zapoznaj się z moimi treściami - <formats>od artykułów po wideo</formats>",
+    "h2": "Zapoznaj się z moimi treściami - <formats>od <articles>artykułów</articles> po <videos>wideo</videos></formats>",
     "introExperience": "Nazywam się Oskar Dudycz. Od ponad 18 lat tworzę systemy informatyczne bliskie biznesowi.",
     "introTraining": "Prowadzę warsztaty i szkolenia o Event Sourcingu, CQRS-ie oraz architekturze opartej na zdarzeniach.",
     "introEmmett": "Rozwijam <emmett>Emmett</emmett>, bibliotekę open source ułatwiającą wdrażanie Event Sourcingu.",

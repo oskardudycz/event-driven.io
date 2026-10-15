@@ -5,6 +5,7 @@
   align-items: center;
 
   :global(a) {
+    color: var(--theme-trigger-color, var(--color-text));
     padding: var(--space-inset-s);
     display: flex;
     align-items: center;
@@ -41,12 +42,11 @@
 
     :global(a:hover) {
       color: var(--color-body);
-      background: rgba(255, 255, 255, 0.4);
+      background: var(--color-brand-tint);
     }
 
     :global(.homepage):not(:global(.fixed)) & :global(a:hover) {
       color: var(--color-brand-primary-dark);
-      background: rgba(255, 255, 255, 0.4);
     }
 
     :global(svg) {

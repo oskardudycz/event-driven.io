@@ -1,5 +1,39 @@
 # Homepage proportions and spacing review
 
+## Full-screen requirement and rejected spacing proposal (2026-10-14)
+
+The owner reported excessive space below the desktop composition and actions pushed down on an iPhone. A content-sized proposal removed `min-height: 100svh`, reduced mobile spacing and trimmed 218px at 1920×1080 / 68px on mobile. The owner rejected it: following sections became visible, while the mobile content hierarchy still buried actions. Those hero source changes and the content-height regression test were reverted. **Keep the full-screen hero.** Existing hero checks now assert that its height covers the viewport alongside artwork fit and SSR/hydration checks. Passing geometry tests did not make the rejected composition acceptable.
+
+The owner selected keeping all biography in the hero, then also requested a comparison without the biography, with the full version taking priority. The previous shortened-introduction/moved-biography prototype is superseded. No biography is moved, removed or collapsed in production.
+
+The subsequent full/no-biography gap-adjustment previews were also rejected. Their injected-style diagnostics under `visual-artifacts/hero-full-bio-review/` are historical evidence, not the active recommendation or accepted references.
+
+## Structural revision implemented locally (2026-10-14)
+
+The problem was treating all content as a vertical stack with repeated gaps. Removing the biography left the same top-anchored stack and an unassigned empty region. The revised source groups the introduction, biography and actions. The initial structural revision placed the article cue in a separate bottom row; the owner rejected its centred, detached placement as easy to miss.
+
+- The main composition groups the heading and lead closely, then the biography and service actions. It centres in the available main region; the original portrait shares that region at its native display size. Copy remains top-aligned near the artwork visibility boundary to preserve measured transparent-pixel clearance.
+- The article action now follows the service actions directly and aligns with the copy in the same reading column. Keep the existing label and yellow arrow, with the ordinary group spacing. Do not place it in the page centre or pin it to the viewport bottom.
+- Training is the filled primary action; consulting is an underlined secondary link. Both retain their wording, destinations and usable targets. Actions wrap naturally when their content needs more room.
+- Each biography section is a paragraph using the same 10px gap as after introExperience, following owner feedback. Larger introduction/biography/action groups use 20px separation; no manual line breaks or paragraph-specific spacing overrides.
+- The biography now shares the heading’s available 50rem column instead of stopping at 36rem on wide screens and text-only layouts. Retain the 36rem limit only in the 74–90em container range where the original-scale diagonal needs clearance. Text remains naturally ragged-right; do not justify it or add manual line breaks.
+- The full biography remains visible in production. On short phones the hero grows and scrolls; text is not hidden, collapsed or shrunk to force a single-screen fit. The lower navigation has its own clearance.
+- The owner subsequently ruled out the large no-biography version. That comparison has been removed from the active gallery; full biography is the working composition.
+
+This applies [proximity and grouping](https://www.nngroup.com/articles/gestalt-proximity/), [semantic flow and native responsive layout](https://web.dev/learn/design/macro-layouts), and [small-screen layout and readable measures](https://design-system.service.gov.uk/styles/layout/). These principles inform the composition; passing geometry checks does not establish aesthetic quality or owner acceptance.
+
+`src/components/Hero/HeroView.tsx` owns the real presentation and its CSS Module. `Hero.tsx` retains Gatsby images, links and translations. The gallery imports that same view with native fixture images/anchors; it does not certify Gatsby image processing, routing or the real navigation. No new framework, token pipeline or dependency is introduced. The boundary also keeps the layout portable for a possible Astro migration.
+
+Run `npm run dev:components`, then open `http://localhost:9001/?story=Hero/Polish&theme=dark`. Use `Hero/English` for English. The actual full-biography site is at `http://localhost:9000/pl/` after a production build and `npm run serve`. Diagnostic captures are under `visual-artifacts/hero-structured-review/`, with `site-*` captures showing the real Gatsby navigation and other captures showing the gallery fixture.
+
+The lead now contains separate underlined articles/videos links to the locale-preserving archive and existing video page. Native click tests exposed the decorative portrait’s transparent canvas intercepting the video link; scoped [`pointer-events: none`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/pointer-events) on its aria-hidden artwork lets pointer input reach the copy. This fixes hit testing independently of the existing painted-pixel separation checks.
+
+Source-build, SSR/hydration, artwork fit, mobile navigation, fonts and article-cue evidence are recorded in todo.md. **The revision is implemented locally for review; visual acceptance is pending.** No homepage reference has been updated. Earlier accepted spacing decisions below describe the previous baseline, not a requirement to restore its rejected grouping.
+
+The owner also identified the white lower navigation and newly conspicuous accent borders in the light-mode preview. The homepage's mobile bar now uses the same independently dark surface as its header, white labels and neutral separators/disclosure edges. Other pages retain their theme surface and neutral navigation labels. Search/theme actions retain their existing controls and locations. Local test evidence is recorded in todo.md; these changes have no deployed verification.
+
+## Earlier accepted composition
+
 Reviewed 2026-10-12 against the owner's initial/open-menu/sticky screenshots and the generated local Gatsby site. This is a spacing correction to the current composition. Original artwork pixels and scale, Open Sans, copy, routes and reading-column width remain unchanged. The owner explicitly accepted the revised homepage references on 2026-10-12.
 
 ## Findings and decisions
