@@ -1,7 +1,7 @@
 ---
 title: Obsługa logiki biznesowej
 icon: 🧠
-description: "Ways to structure and compose business logic: slim aggregates, functional composition, idempotent command handling, validation and error handling. Examples in C#, F# and Java."
+description: "Logikę biznesową w dużych klasach trudno czytać i testować. Zobaczysz, jak zapisać ją prostymi funkcjami i typami. Przykłady w C#, F#, Javie i TypeScripcie."
 cover: 2022-08-31-cover.jpg
 articles:
   - slim_your_entities_with_event_sourcing
@@ -17,3 +17,9 @@ articles:
   - writing_and_testing_business_logic_in_fsharp
   - how_to_validate_business_logic
 ---
+
+Logika biznesowa często rozlewa się po dużych klasach, wymieszana z obsługą stanu i kodem bazy danych. Trudno wtedy zobaczyć, jakie decyzje podejmuje kod, a jeszcze trudniej go przetestować. Nauczysz się innego podejścia: możliwe stany i żądania opisujesz jawnymi typami, a każdą decyzję zapisujesz jako małą funkcję, która przyjmuje żądanie i bieżący stan, a zwraca to, co się wydarzyło.
+
+Wiele przykładów korzysta z tego samego koszyka zakupowego, więc łatwo porównać style. Zacznij od pierwszego artykułu: krok po kroku odchudza klasyczny agregat, czyli klasę trzymającą razem dane i reguły. Pozostałe dotyczą tego, co zrobić, gdy to samo żądanie przyjdzie dwa razy, jak zapisać dwie powiązane zmiany w jednej transakcji, jak walidować dane wejściowe i jak zgłaszać niepowodzenia: rzucić wyjątek, zwrócić błąd czy zapisać je jako fakt. Jeden pokazuje, że to podejście działa też ze zwykłą bazą danych.
+
+Kod jest w C#, F#, Javie i TypeScripcie. Wybierz swój język, idee przenoszą się na pozostałe.

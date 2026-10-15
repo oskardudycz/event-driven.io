@@ -1,7 +1,7 @@
 ---
 title: Observability, Auditability and tracing
 icon: 🔭
-description: "Why logs and metrics aren't enough, and how to make your system observable and auditable, with an OpenTelemetry example for Event Sourcing."
+description: "Logs and metrics tell you something broke, not why. You'll learn how observability and tracing help you understand what a running system is actually doing."
 cover: 2024-09-16-cover.jpg
 articles:
   - when-logs-and-metrics-arent-enough

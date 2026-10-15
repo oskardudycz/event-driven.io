@@ -103,6 +103,18 @@ export function searchDocuments(
     .sort((a, b) => a.id.localeCompare(b.id));
 }
 
+const tagFileDescription = (
+  nodes: ArticleNode[],
+  slug: string,
+  language: string,
+) =>
+  nodes.find(
+    ({ fields }) =>
+      fields.source === 'tags' &&
+      fields.tagSlug === slug &&
+      fields.langKey === language,
+  )?.frontmatter.description;
+
 // A tag without a page in the index language leads to the default
 // language's tag page, like an untranslated article.
 export function tagSearchDocuments(
@@ -125,7 +137,11 @@ export function tagSearchDocuments(
       source: 'tags',
       tags: '',
       date: '',
-      content: tagDescription(t, tag),
+      content: tagDescription(
+        t,
+        tag,
+        tagFileDescription(nodes, slug, language),
+      ),
     }))
     .sort((a, b) => a.id.localeCompare(b.id));
 }

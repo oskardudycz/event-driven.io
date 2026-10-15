@@ -123,6 +123,13 @@ export default {
       },
     },
     {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `tags`,
+        path: `${path.resolve(import.meta.dirname, '..')}/content/tags/`,
+      },
+    },
+    {
       resolve: `gatsby-transformer-remark`,
       options: {
         plugins: [

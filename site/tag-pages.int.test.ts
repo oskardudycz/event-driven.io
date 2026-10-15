@@ -2,6 +2,7 @@ import type { Actions } from 'gatsby';
 import type { ArticleEdge } from '../src/types/content.ts';
 import assert from 'node:assert/strict';
 import { test } from 'vitest';
+import { markdownFields } from '../tests/helpers/markdown-fields.ts';
 
 type CreatedPage = {
   path: string;
@@ -77,6 +78,7 @@ test('tag pages live under the article archive in every language with a tagged r
         component: 'TagTemplate.tsx',
         context: {
           tag: 'Event Sourcing',
+          tagSlug: 'event-sourcing',
           lang: 'en',
           langKey: 'en',
           originalPath: '/articles/tag/event-sourcing/',
@@ -89,6 +91,7 @@ test('tag pages live under the article archive in every language with a tagged r
         component: 'TagTemplate.tsx',
         context: {
           tag: 'Cloud',
+          tagSlug: 'cloud',
           lang: 'en',
           langKey: 'en',
           originalPath: '/articles/tag/cloud/',
@@ -101,6 +104,7 @@ test('tag pages live under the article archive in every language with a tagged r
         component: 'TagTemplate.tsx',
         context: {
           tag: 'Event Sourcing',
+          tagSlug: 'event-sourcing',
           lang: 'pl',
           langKey: 'pl',
           originalPath: '/articles/tag/event-sourcing/',
@@ -113,6 +117,7 @@ test('tag pages live under the article archive in every language with a tagged r
         component: 'TagTemplate.tsx',
         context: {
           tag: 'Cloud',
+          tagSlug: 'cloud',
           lang: 'pl',
           langKey: 'pl',
           originalPath: '/articles/tag/cloud/',
@@ -125,6 +130,7 @@ test('tag pages live under the article archive in every language with a tagged r
         component: 'TagTemplate.tsx',
         context: {
           tag: 'Community',
+          tagSlug: 'community',
           lang: 'pl',
           langKey: 'pl',
           originalPath: '/articles/tag/community/',
@@ -137,6 +143,18 @@ test('tag pages live under the article archive in every language with a tagged r
   assert.deepEqual(
     pages.filter(({ path }) => path.includes('/category/')),
     [],
+  );
+});
+
+test('tag description files get a tag slug, but no published route', async () => {
+  assert.deepEqual(
+    await markdownFields('tags', 'event-driven-architecture/index.pl.md'),
+    {
+      tagSlug: 'event-driven-architecture',
+      prefix: '',
+      source: 'tags',
+      langKey: 'pl',
+    },
   );
 });
 

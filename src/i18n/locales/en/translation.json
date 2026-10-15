@@ -38,20 +38,14 @@
   "tags": {
     "articleCount_one": "{{count}} article",
     "articleCount_other": "{{count}} articles",
-    "defaultDescription": "Practical articles about {{tag}}.",
+    "defaultDescription": "Articles tagged {{tag}} on Event-Driven.io, listed from newest to oldest.",
     "seoTitle": "{{tag}} articles",
     "browse": "Browse articles by tag",
-    "metaLabel": "Tags:",
-    "descriptions": {
-      "event-sourcing": "Start with the fundamentals, then move through modelling, business logic, projections, testing, evolution, and the situations where Event Sourcing is the wrong choice.",
-      "event-driven-architecture": "A practical path through distributed processes, delivery guarantees, idempotency, ordering, concurrency, and rebuilding read models safely.",
-      "cqrs": "Learn what CQRS is without the usual ceremony, then see commands, read models, and consistency trade-offs in practical examples.",
-      "architecture": "Pragmatic modelling and architecture guidance: understand the problem, expose assumptions, draw useful boundaries, and keep ownership explicit."
-    }
+    "metaLabel": "Tags:"
   },
   "guides": {
     "title": "Guides",
-    "description": "Reading paths through Event Sourcing, event-driven architecture, CQRS and messaging. Each guide lists articles in a recommended order.",
+    "description": "Articles on Event Sourcing, event-driven architecture, CQRS and messaging, grouped into guides by topic, each with a suggested reading order.",
     "guide": "Guide",
     "articleCount_one": "{{count}} article",
     "articleCount_other": "{{count}} articles",

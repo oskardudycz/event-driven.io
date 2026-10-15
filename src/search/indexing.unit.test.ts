@@ -233,11 +233,23 @@ test('tags are searchable documents that lead to the tag page of the language, o
     ...node(slug, langKey, slug, ''),
     frontmatter: { title: slug, tags, useDefaultLangCanonical: placeholder },
   });
+  const tagFile = (tagSlug: string, langKey: string, description: string) => ({
+    fields: { tagSlug, langKey, source: 'tags', prefix: '' },
+    frontmatter: { title: tagSlug, description },
+    rawMarkdownBody: `${tagSlug} tag intro`,
+  });
   const nodes = [
     tagged('one', 'en', ['CQRS', 'Design Patterns']),
     tagged('one', 'pl', ['CQRS'], true),
-    tagged('two', 'en', ['Cloud']),
-  ];
+    tagged('two', 'en', ['Caching']),
+    tagFile('cqrs', 'pl', 'Artykuły o CQRS po polsku.'),
+    tagFile('cqrs', 'en', 'CQRS articles in English.'),
+    tagFile('design-patterns', 'pl', 'Wzorce projektowe w praktyce.'),
+  ] as unknown as ArticleNode[];
+  assert.deepEqual(
+    searchDocuments(nodes, 'pl').map(({ source }) => source),
+    ['posts', 'posts'],
+  );
   const polish = tagSearchDocuments(nodes, 'pl', i18n.getFixedT('pl'));
   assert.deepEqual(
     polish.map(({ id, title, path, langKey, source, content }) => ({
@@ -250,12 +262,13 @@ test('tags are searchable documents that lead to the tag page of the language, o
     })),
     [
       {
-        id: 'tags:cloud',
-        title: 'Cloud',
-        path: '/en/articles/tag/cloud/',
+        id: 'tags:caching',
+        title: 'Caching',
+        path: '/en/articles/tag/caching/',
         langKey: 'en',
         source: 'tags',
-        content: 'Praktyczne artykuły na temat Cloud.',
+        content:
+          'Artykuły z tagiem Caching na Event-Driven.io, od najnowszych do najstarszych.',
       },
       {
         id: 'tags:cqrs',
@@ -263,7 +276,7 @@ test('tags are searchable documents that lead to the tag page of the language, o
         path: '/pl/articles/tag/cqrs/',
         langKey: 'pl',
         source: 'tags',
-        content: pl.tags.descriptions.cqrs,
+        content: 'Artykuły o CQRS po polsku.',
       },
       {
         id: 'tags:design-patterns',
@@ -271,7 +284,7 @@ test('tags are searchable documents that lead to the tag page of the language, o
         path: '/pl/articles/tag/design-patterns/',
         langKey: 'pl',
         source: 'tags',
-        content: 'Praktyczne artykuły na temat Wzorce projektowe.',
+        content: 'Wzorce projektowe w praktyce.',
       },
     ],
   );
@@ -286,7 +299,7 @@ test('tags are searchable documents that lead to the tag page of the language, o
       ({ path }) => path,
     ),
     [
-      '/en/articles/tag/cloud/',
+      '/en/articles/tag/caching/',
       '/en/articles/tag/cqrs/',
       '/en/articles/tag/design-patterns/',
     ],

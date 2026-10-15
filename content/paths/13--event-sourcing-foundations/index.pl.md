@@ -1,7 +1,7 @@
 ---
 title: Podstawy Event Sourcingu
 icon: 🧱
-description: "The basics of Event Sourcing: how to rebuild state from events, when it pays off and when it doesn't, and how to start with it in an existing system."
+description: "Event Sourcing zapisuje to, co się wydarzyło, zamiast nadpisywać stan. Zrozumiesz, co zyskujesz, kiedy się nie opłaca i jak zacząć w prawdziwym projekcie."
 cover: 2022-03-16-cover.png
 articles:
   - introduction_to_event_sourcing
@@ -18,3 +18,9 @@ articles:
   - on_putting_stream_id_in_event_data
   - whats_the_difference_between_event_and_command
 ---
+
+Większość systemów trzyma tylko bieżący stan i nadpisuje go przy każdej zmianie. Event Sourcing zapisuje każdą zmianę biznesową jako zdarzenie i z tych zdarzeń odtwarza stan. Masz pełną historię tego, co się wydarzyło, a kod bliżej odzwierciedla proces biznesowy. Sam pomysł jest prosty. Trudniej ocenić, gdzie się opłaca, i zacząć tak, żeby się nie sparzyć.
+
+Pierwsze artykuły pokazują, jak to działa, razem z ćwiczeniami do samodzielnego zrobienia. Kolejne pomagają podjąć decyzję: co zyskujesz, nie tracąc danych, kiedy Event Sourcing się nie opłaca i jak wybrać pierwszą funkcjonalność, na której czegoś się nauczysz bez dużego ryzyka. Ostatnie odpowiadają na pytania o modelowanie, które pojawiają się szybko, np. jak przenieść istniejące dane relacyjne na zdarzenia.
+
+Jeśli dopiero zaczynasz, czytaj po kolei. Przechowywaniu zdarzeń poświęcony jest [osobny przewodnik](/pl/guides/how-to-store-events-in-event-sourcing/).

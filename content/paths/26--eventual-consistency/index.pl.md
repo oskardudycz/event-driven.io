@@ -1,7 +1,7 @@
 ---
 title: Spójność ostateczna
 icon: ⏳
-description: "How to deal with eventual consistency in projections and APIs, including idempotent updates and long-polling."
+description: "Jak utrzymać spójność projekcji w MongoDB idempotentnymi aktualizacjami i jak long-polling pozwala pokazać klientom asynchroniczne API jako synchroniczne."
 cover: 2021-11-10-cover.png
 articles:
   - dealing_with_eventual_consistency_and_idempotency_in_mongodb_projections

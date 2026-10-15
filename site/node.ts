@@ -61,6 +61,12 @@ export const onCreateNode: NonNullable<GatsbyNode['onCreateNode']> = ({
           .replace(`/index.${langKey}/`, '')
           .toLowerCase(),
       });
+    } else if (source === 'tags') {
+      createNodeField({
+        node,
+        name: 'tagSlug',
+        value: path.dirname(fileNode.relativePath),
+      });
     } else if (source !== 'parts') {
       const originalSlug =
         `${separtorIndex ? '/' : ''}${slug.substring(shortSlugStart)}`.replace(
@@ -299,6 +305,7 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
               component: tagTemplate,
               context: {
                 tag,
+                tagSlug: slug,
                 lang: language,
                 langKey: language,
                 originalPath: `/articles/tag/${slug}/`,
@@ -910,6 +917,7 @@ export const createSchemaCustomization: NonNullable<
       source: String
       langKey: String
       pathSlug: String
+      tagSlug: String
     }
   `);
 };

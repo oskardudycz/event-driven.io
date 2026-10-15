@@ -2,36 +2,7 @@ import type { ArticleEdge } from '../src/types/content.ts';
 import type { LearningPathNode } from '../src/utils/learning-paths.ts';
 import assert from 'node:assert/strict';
 import { test } from 'vitest';
-
-async function fieldsFor(sourceInstanceName: string, relativePath: string) {
-  const { onCreateNode } = await import('./node.ts');
-  const file = {
-    id: 'file',
-    internal: { type: 'File' },
-    sourceInstanceName,
-    relativePath,
-  };
-  const markdown = {
-    id: 'markdown',
-    parent: 'file',
-    internal: { type: 'MarkdownRemark' },
-  };
-  const fields: Record<string, string> = {};
-  await onCreateNode(
-    {
-      node: markdown,
-      getNode: (id: string) => (id === 'file' ? file : undefined),
-      actions: {
-        createNodeField: ({ name, value }: { name: string; value: string }) => {
-          fields[name] = value;
-        },
-      },
-    } as unknown as Parameters<typeof onCreateNode>[0],
-    { plugins: [] },
-    () => {},
-  );
-  return fields;
-}
+import { markdownFields as fieldsFor } from '../tests/helpers/markdown-fields.ts';
 
 test('learning path files get a path slug and order, but no published route', async () => {
   assert.deepEqual(

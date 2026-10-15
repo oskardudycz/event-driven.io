@@ -167,6 +167,11 @@ test('every canonical article is discoverable and every English article is in RS
       `Missing RSS entry: ${post.route}`,
     );
   }
+  const postUrls = new Set(
+    posts.map((post) => `https://event-driven.io${post.route}`),
+  );
+  for (const link of feedLinks)
+    assert.ok(postUrls.has(link), `RSS entry is not an article: ${link}`);
 });
 
 test('authored local and YouTube text links keep their destinations in rendered content', () => {

@@ -7,6 +7,8 @@ import {
   learningPathProblems,
   type LearningPathNode,
 } from '../../src/utils/learning-paths.ts';
+import en from '../../src/i18n/locales/en/translation.json' with { type: 'json' };
+import pl from '../../src/i18n/locales/pl/translation.json' with { type: 'json' };
 import { publishedContent } from '../helpers/published-content.ts';
 
 const root = join(import.meta.dirname, '../../content/paths');
@@ -15,13 +17,14 @@ const directories = readdirSync(root, { withFileTypes: true })
   .filter((entry) => entry.isDirectory())
   .map((entry) => entry.name);
 
+const frontmatterBlock = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/;
+const readMarkdown = (directory: string, language: string) =>
+  readFileSync(join(root, directory, `index.${language}.md`), 'utf8');
+
 function readPath(directory: string, language: string): LearningPathNode {
   const [prefix = '', pathSlug = ''] = directory.split('--');
-  const markdown = readFileSync(
-    join(root, directory, `index.${language}.md`),
-    'utf8',
-  );
-  const header = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(markdown);
+  const markdown = readMarkdown(directory, language);
+  const header = frontmatterBlock.exec(markdown);
   assert.ok(header, `${directory}/index.${language}.md has no frontmatter`);
   return {
     fields: { pathSlug, langKey: language, prefix },
@@ -79,4 +82,38 @@ test('every learning path has an icon, a description and a cover file of its own
         `${label} cover ${cover} is missing`,
       );
     }
+});
+
+test('every learning path has a Markdown intro in every language', () => {
+  for (const directory of directories)
+    for (const language of languages) {
+      const body = readMarkdown(directory, language).replace(
+        frontmatterBlock,
+        '',
+      );
+      assert.ok(body.trim(), `${directory} (${language}) has no intro`);
+    }
+});
+
+test('every learning path description fits a meta description and is translated', () => {
+  for (const directory of directories) {
+    const descriptions = languages.map(
+      (language) => readPath(directory, language).frontmatter.description ?? '',
+    );
+    for (const [index, description] of descriptions.entries())
+      assert.ok(
+        description.length <= 160,
+        `${directory} (${languages[index]}) description has ${description.length} characters`,
+      );
+    const [english, polish] = descriptions;
+    assert.notEqual(polish, english, `${directory} (pl) is not translated`);
+  }
+});
+
+test('the guides index description fits a meta description in every language', () => {
+  for (const [language, { guides }] of Object.entries({ en, pl }))
+    assert.ok(
+      guides.description.length <= 160,
+      `guides (${language}) description has ${guides.description.length} characters`,
+    );
 });

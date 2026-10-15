@@ -1,7 +1,7 @@
 ---
 title: Modelowanie za pomocą zdarzeń
 icon: 🗺️
-description: "Techniques for discovering and modelling business processes with events, from EventStorming hot spots to mixing modelling methods, plus the common traps to avoid."
+description: "Jak modelować procesy biznesowe zdarzeniami: łączenie EventStormingu, C4 i Context Maps, Hot Spoty i notatki oraz praca w pojedynkę przed wspólną sesją."
 cover: 2024-04-07-kafka.png
 articles:
   - anti-patterns

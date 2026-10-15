@@ -1,7 +1,7 @@
 ---
 title: Events Ordering
 icon: 🔢
-description: "How to handle events that arrive out of order, race conditions and requeuing, and how ordering, grouping and consistency relate in messaging systems."
+description: "Events don't always arrive in the order they happened. You'll learn why, how to handle it without corrupting data, and what message brokers can guarantee."
 cover: 2025-10-20-cover.png
 articles:
   - dealing_with_race_conditions_in_eda_using_read_models

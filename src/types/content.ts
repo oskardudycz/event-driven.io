@@ -16,6 +16,7 @@ export type ArticleFields = {
   source?: string;
   originalSlug?: string;
   pathSlug?: string;
+  tagSlug?: string;
 };
 
 export type Frontmatter = {
@@ -59,6 +60,10 @@ export type GuideStep = {
   next?: { title: string; path: string };
 };
 export type TagLink = { tag: string; path?: string };
+export type TagContentNode = {
+  html?: string;
+  frontmatter: { description?: string };
+};
 export type VideoDetails = {
   VideoId: string;
   Title: string;
@@ -76,6 +81,7 @@ export type SitePageContext = {
   availableLanguages?: string[];
   canonicalLanguages?: string[];
   tag?: string;
+  tagSlug?: string;
   tagLinks?: TagLink[];
   next?: ArticleNode;
   prev?: ArticleNode;
@@ -95,6 +101,7 @@ export type PageData = {
   guides: { nodes: GuideNode[] };
   articles: { edges: ArticleEdge[] };
   tagged: { nodes: ArticleNode[] };
+  tagContent: TagContentNode | null;
   site: { siteMetadata: { facebook: { appId?: string } } };
 };
 export type SitePageProps<Fields extends keyof PageData> = PageProps<

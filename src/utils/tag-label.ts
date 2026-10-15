@@ -8,8 +8,9 @@ export const tagLabel = (t: TFunction, tag: string): string =>
 
 // Descriptions are optional per language. A missing one uses the default
 // description rather than another language's text.
-export const tagDescription = (t: TFunction, tag: string): string =>
-  t(`tags.descriptions.${tagSlug(tag)}`, {
-    fallbackLng: false,
-    defaultValue: t('tags.defaultDescription', { tag: tagLabel(t, tag) }),
-  });
+export const tagDescription = (
+  t: TFunction,
+  tag: string,
+  description?: string,
+): string =>
+  description || t('tags.defaultDescription', { tag: tagLabel(t, tag) });
