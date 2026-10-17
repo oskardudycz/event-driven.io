@@ -26,7 +26,9 @@ test('header navigation and theme control share their desktop threshold with lar
   const theme = header.getByLabel('Theme', { exact: true });
   await expect(theme).toHaveAttribute('aria-disabled', 'false');
   await expect(theme).toBeInViewport();
-  const language = menu.getByRole('link', { name: 'Change language to pl' });
+  const language = menu.getByRole('link', {
+    name: 'Change language to Polish',
+  });
   await expect
     .poll(async () => {
       const languageBounds = (await language.boundingBox())!;

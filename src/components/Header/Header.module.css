@@ -1,7 +1,7 @@
 .frame {
   --header-height: var(--header-height-default);
   position: relative;
-  height: var(--header-height);
+  min-height: var(--header-height);
 }
 
 /* Reserve the bar's space when it becomes fixed, without shifting content.
@@ -18,16 +18,22 @@
   justify-content: flex-start;
   background-color: var(--color-surface);
   display: flex;
-  height: var(--header-height);
+  min-height: var(--header-height);
   position: relative;
   top: 0;
   width: 100%;
   padding: 0 var(--space-md);
 
   :global(a.logoType) {
+    min-width: 0;
     align-items: center;
     display: flex;
     color: var(--color-text);
+
+    :global(.type) {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
 
     :global(.logo).logo {
       flex-shrink: 0;
@@ -61,7 +67,6 @@ h2.elementH2 {
   margin: var(--space-inline-default);
   overflow: hidden;
   width: 44px;
-  transition: all 0.5s;
 
   img.elementImg {
     width: 100%;
@@ -104,10 +109,9 @@ h2.elementH2 {
 @media screen and (min-width: 1024px) {
   :global(.header).header {
     justify-content: space-between;
-    transition: padding 0.5s;
 
     &:global(.fixed).fixed {
-      height: var(--header-height-fixed);
+      min-height: var(--header-height-fixed);
       background-color: var(--color-surface);
       left: 0;
       padding: 0 var(--space-md);

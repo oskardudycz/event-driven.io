@@ -126,7 +126,12 @@ test('training artwork remains transparent across locale navigation', async ({
   await page.goto('/en/szkolenie-granice-spojnosci-i-modelowanie_eda/');
   for (const locale of ['pl', 'en']) {
     await page
-      .getByRole('link', { name: `Change language to ${locale}` })
+      .getByRole('link', {
+        name:
+          locale === 'pl'
+            ? 'Change language to Polish'
+            : 'Zmień język na angielski',
+      })
       .click();
     await expect(page).toHaveURL(
       `/${locale}/szkolenie-granice-spojnosci-i-modelowanie_eda/`,

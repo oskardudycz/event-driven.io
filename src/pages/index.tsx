@@ -12,7 +12,13 @@ export default function IndexPage({ data }: SitePageProps<'posts' | 'site'>) {
   const { t } = useTranslation();
   const separator = useRef<HTMLElement>(null);
   const scrollToContent = () => {
-    separator.current?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    const reducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
+    separator.current?.scrollIntoView({
+      block: 'start',
+      behavior: reducedMotion ? 'instant' : 'smooth',
+    });
   };
   const {
     posts: { edges: posts = [] },

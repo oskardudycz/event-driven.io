@@ -119,7 +119,14 @@ for (const language of ['en', 'pl']) {
       await expect(button).toBeFocused();
 
       await button.click();
-      await menu.getByRole('link', { name: /Change language/ }).focus();
+      await menu
+        .getByRole('link', {
+          name:
+            language === 'pl'
+              ? 'Zmień język na angielski'
+              : 'Change language to Polish',
+        })
+        .focus();
       await page.keyboard.press('Tab');
       await expect(
         menu.getByRole('link', { name: /^(Search|Szukaj)$/ }),
@@ -166,7 +173,10 @@ for (const language of ['en', 'pl']) {
       await expectFonts(page);
       const header = page.getByRole('banner');
       const languageLink = header.getByRole('link', {
-        name: /Change language/,
+        name:
+          language === 'pl'
+            ? 'Zmień język na angielski'
+            : 'Change language to Polish',
       });
       const theme = header.locator('summary');
       const more = header.getByRole('button', {

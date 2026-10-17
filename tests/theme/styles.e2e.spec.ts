@@ -155,7 +155,10 @@ for (const language of ['en', 'pl']) {
       await expect(page.locator('h1')).toHaveCount(1);
       await expect(
         page.getByRole('link', {
-          name: `Change language to ${language === 'en' ? 'pl' : 'en'}`,
+          name:
+            language === 'en'
+              ? 'Change language to Polish'
+              : 'Zmień język na angielski',
         }),
       ).toBeVisible();
     });

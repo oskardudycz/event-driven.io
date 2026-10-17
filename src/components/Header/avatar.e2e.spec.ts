@@ -25,6 +25,36 @@ async function expectCenteredInside(element: Locator, container: Locator) {
 }
 
 for (const language of ['en', 'pl']) {
+  for (const javaScriptEnabled of [false, true]) {
+    test.describe(`${language} enlarged branding, JavaScript ${javaScriptEnabled}`, () => {
+      test.use({ javaScriptEnabled });
+
+      test('header and hero stay clear at 200% text size', async ({ page }) => {
+        for (const width of [320, 390, 640, 1280]) {
+          await page.setViewportSize({ width, height: 900 });
+          await page.goto(`/${language}/`, { waitUntil: 'domcontentloaded' });
+          if (javaScriptEnabled) await expectFonts(page);
+          await page.evaluate(() => {
+            document.documentElement.style.fontSize = '200%';
+          });
+          const header = (await page.getByRole('banner').boundingBox())!;
+          const brand = (await page.locator('a.logoType').boundingBox())!;
+          const heading = (await page.locator('.hero h1').boundingBox())!;
+          expect(brand.y).toBeGreaterThanOrEqual(header.y);
+          expect(brand.y + brand.height).toBeLessThanOrEqual(
+            header.y + header.height,
+          );
+          expect(brand.x + brand.width).toBeLessThanOrEqual(width);
+          expect(heading.y).toBeGreaterThanOrEqual(header.y + header.height);
+          await expect
+            .poll(() =>
+              page.evaluate(() => document.documentElement.scrollWidth),
+            )
+            .toBe(width);
+        }
+      });
+    });
+  }
   for (const width of [320, 390, 768, 978, 1280]) {
     test(`${language} header portrait fits and stays centered at ${width}px`, async ({
       page,

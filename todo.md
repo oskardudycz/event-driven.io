@@ -1,6 +1,18 @@
 # Site implementation and verification
 
-Last updated: 2026-10-16. Current strategy is in [plan.md](plan.md); manual commands/importing/tag reading order/browser reports/snapshot review are in [README.md](README.md). Local, hosted CI and deployed results are separate evidence.
+Last updated: 2026-10-17. Current strategy is in [plan.md](plan.md); manual commands/importing/tag reading order/browser reports/snapshot review are in [README.md](README.md). Local, hosted CI and deployed results are separate evidence.
+
+## Homepage interface review corrections (2026-10-16)
+
+- [x] Article scrolling reads the current reduced-motion preference and jumps instantly when requested. Remove card-cover zoom, moving card separators/arrows, menu expansion/arrow transitions and header size transitions; keep short color/opacity feedback and the hero arrow's existing reduced-motion guard. Follow the native [scrollIntoView behavior](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView) and [motion preference](https://www.w3.org/WAI/WCAG22/Techniques/client-side-script/SCR40) mechanisms.
+- [x] Scale shared header minimum heights in rem and allow branding text to wrap inside its flex item. Default 16px-root dimensions remain 80px/50px.
+- [x] Production regressions expose horizontal overflow from long card titles and the Polish section heading at 320px/200% text. Allow those headings to wrap in their owning CSS Modules; measured page width returns to 320px without hiding content.
+- [x] Translate language-switch accessible names into EN/PL with full destination language names; update existing browser locators without weakening assertions.
+- [x] Add production E2E regressions beside Header/Hero for 200% text sizing in EN/PL, JS/no-JS, and reduced-motion scrolling/card/menu behavior. No visual references or tolerances changed.
+- [x] Local source checks (2026-10-17): image alternatives in 760 Markdown files, 52 unit and 159 integration/component tests, TypeScript and ESLint pass. Tracked-file Prettier passes; full `npm run lint` reports formatting in 84 untracked `.agents` skill files, which are left untouched. Stop the initial production build after discovering a user-started development server sharing its Gatsby cache; run production validation in `/tmp/interface-fixes-validation` instead.
+- [x] Isolated production build and warm CSS rebuild pass. All six focused regressions pass (16.6s), all 68 generated checks pass (106.19s), and the final full E2E run passes 272 tests with two existing skips (7.1m), including unchanged EN/PL homepage references. An initial full run stopped after two English-only regex locators were found on Polish pages; update them to the exact translated names and restart the complete suite. Final controlled browser examples pass 17 tests (6.25s). Preserve native report/results and production logs under `visual-artifacts/interface-fixes-production/`. CSS extraction-order, slow-query, punycode deprecation and inherited NO_COLOR/FORCE_COLOR warnings remain visible; none is suppressed.
+- [x] Final full lint and both TypeScript projects pass in the isolated source copy, which excludes the unrelated untracked skill files. Final plan/todo formatting and `git diff --check` pass in the working checkout.
+- [ ] Hosted CI and deployed verification after publication of these changes.
 
 ## CI repair resumed (2026-10-16)
 

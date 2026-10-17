@@ -103,7 +103,7 @@ test('a tag page switches to the same tag in Polish and keeps Polish article lin
   expect(await articleSlugs(cards)).toContain('introduction_to_event_sourcing');
   await page
     .getByRole('link', {
-      name: 'Change language to pl',
+      name: 'Change language to Polish',
     })
     .click();
   await page.waitForURL('**/pl/articles/tag/event-sourcing/');
@@ -145,7 +145,7 @@ for (const javaScriptEnabled of [true, false]) {
       await page.waitForURL(`**${destination}`);
       await expect(page.locator('html')).toHaveAttribute('lang', 'pl');
       await expect(
-        page.getByRole('link', { name: 'Change language to en' }),
+        page.getByRole('link', { name: 'Zmień język na angielski' }),
       ).toBeVisible();
       await expect(page.locator('h1')).toHaveCount(1);
     });

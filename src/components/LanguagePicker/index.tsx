@@ -1,9 +1,11 @@
 import * as styles from './LanguagePicker.module.css';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from '../Link/index.tsx';
 import { usePageContext } from '../../i18n/page-context.ts';
 
 const LanguagePicker = () => {
+  const { t } = useTranslation();
   const {
     slug,
     originalPath,
@@ -21,7 +23,7 @@ const LanguagePicker = () => {
       <div className={`language-selector-container ${styles.container}`}>
         {languagesToSwitch.map((supportedLang) => (
           <Link
-            aria-label={`Change language to ${supportedLang}`}
+            aria-label={t(`language.switchTo.${supportedLang}`)}
             className={`langSelector ${styles.langSelector}`}
             onClick={() =>
               localStorage.setItem('last-selected-lang', supportedLang)
