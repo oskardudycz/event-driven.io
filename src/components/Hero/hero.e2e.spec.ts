@@ -29,6 +29,50 @@ const viewports = [
 ];
 
 for (const language of ['en', 'pl']) {
+  test(`${language} reduced motion keeps article navigation still`, async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(`/${language}/`);
+    await expectFonts(page);
+    const position = await page.locator('.hero button').evaluate((button) => {
+      if (!(button instanceof HTMLButtonElement)) {
+        throw new Error('The article cue must be a button');
+      }
+      button.click();
+      return {
+        scroll: window.scrollY,
+        viewportHeight: window.innerHeight,
+        target: document
+          .querySelector('#latest-articles')!
+          .getBoundingClientRect().top,
+      };
+    });
+    expect(position.scroll).toBeGreaterThan(0);
+    expect(position.target).toBeGreaterThanOrEqual(0);
+    expect(position.target).toBeLessThan(position.viewportHeight);
+    const card = page.locator('.latestArticles li').first();
+    await card.hover();
+    await expect(card.locator('.gatsby-image-wrapper')).toHaveCSS(
+      'transform',
+      'none',
+    );
+    await page.setViewportSize({ width: 390, height: 844 });
+    const disclosure = page.getByRole('button', {
+      name: /More links|Więcej linków/,
+    });
+    await disclosure.click();
+    await expect(page.locator('nav.menu')).toHaveClass(/open/);
+    await expect(disclosure.locator('svg')).toHaveCSS(
+      'transition-duration',
+      '0s',
+    );
+    await expect(page.locator('nav.menu')).toHaveCSS(
+      'transition-duration',
+      '0s',
+    );
+  });
   const copy = language === 'pl' ? polish : english;
   for (const destination of ['articles', 'talks']) {
     test(`${language} hero lead opens ${destination} in the selected language`, async ({

@@ -39,7 +39,7 @@
   --radius-card: 10px;
   --duration-default: 0.5s;
   --font-line-height-xl: 1.5;
-  --header-height-default: 80px;
+  --header-height-default: 5rem;
   --space-inset-default: 20px;
   --font-size-xxl: 2.2em;
   --text-max-width-tablet: 650px;
@@ -64,7 +64,7 @@
   --space-inline-default: 0 20px 0 0;
   --space-inset-l: 40px;
   --color-neutral-gray-d: #dddbda;
-  --header-height-fixed: 50px;
+  --header-height-fixed: 3.125rem;
   --space-stack-xxs: 0 0 2px 0;
   --hero-background: #0c0c0c;
   --text-color-attention: var(--color-attention);

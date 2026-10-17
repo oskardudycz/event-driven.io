@@ -30,7 +30,6 @@
     }
 
     :global(svg) {
-      transition: all 0.5s;
       transform: rotateZ(180deg);
       fill: var(--color-attention);
     }
@@ -58,7 +57,6 @@
     z-index: 1;
 
     :global(svg) {
-      transition: all var(--duration-default);
     }
 
     :global(.homepage) & {

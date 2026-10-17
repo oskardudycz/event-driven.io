@@ -82,6 +82,12 @@
     "intro": "For consulting, architecture reviews, or training,",
     "bookCall": "book a free introductory call."
   },
+  "language": {
+    "switchTo": {
+      "en": "Change language to English",
+      "pl": "Change language to Polish"
+    }
+  },
   "appearance": {
     "label": "Theme",
     "system": "System",
