@@ -66,6 +66,8 @@ jobs:
         env:
           GATSBY_DISQUS_NAME: ${{ secrets.GATSBY_DISQUS_NAME }}
           GOOGLE_TAG_ID: ${{ secrets.GOOGLE_TAG_ID }}
+          # Gatsby sizes image workers from physical cores; hosted runners expose vCPUs.
+          GATSBY_CPU_COUNT: logical_cores
       - run: npm run test:generated
       - name: Check production browser behavior and reviewed homepage rendering
         run: npm run test:e2e
