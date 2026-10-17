@@ -143,7 +143,7 @@ export const createPages: NonNullable<GatsbyNode['createPages']> = (args) => {
                       width: 240
                       breakpoints: [240, 480]
                       layout: CONSTRAINED
-                      formats: [AUTO, WEBP]
+                      formats: [WEBP]
                       placeholder: DOMINANT_COLOR
                     )
                   }
