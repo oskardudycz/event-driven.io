@@ -12,7 +12,6 @@
   position: fixed;
   width: 100%;
   z-index: 1;
-  transition: all var(--duration-default);
 }
 
 :global(.itemList).itemList {

@@ -89,6 +89,12 @@
     "intro": "W sprawie konsultingu, przeglądu architektury lub szkolenia",
     "bookCall": "umów bezpłatną rozmowę wstępną."
   },
+  "language": {
+    "switchTo": {
+      "en": "Zmień język na angielski",
+      "pl": "Zmień język na polski"
+    }
+  },
   "appearance": {
     "label": "Motyw",
     "system": "Systemowy",

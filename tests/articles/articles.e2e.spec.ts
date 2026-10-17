@@ -187,7 +187,10 @@ test('separate English and Polish pages keep their locale while following recipr
     const language = index === 0 ? 'en' : 'pl';
     const other = language === 'en' ? 'pl' : 'en';
     const switcher = page.getByRole('link', {
-      name: `Change language to ${other}`,
+      name:
+        other === 'pl'
+          ? 'Change language to Polish'
+          : 'Zmień język na angielski',
     });
     await switcher.waitFor({
       state: 'visible',
@@ -225,7 +228,10 @@ test('separate English and Polish pages keep their locale while following recipr
     await expect(page.locator('h1')).toHaveCount(1);
     await page
       .getByRole('link', {
-        name: `Change language to ${other}`,
+        name:
+          other === 'pl'
+            ? 'Change language to Polish'
+            : 'Zmień język na angielski',
       })
       .click();
     await page.waitForURL(`**/${other}/${slug}/`);
@@ -267,7 +273,7 @@ test('tag labels follow the interface language and link to the tag page of that 
   await expect(
     page.locator(`header .meta a[href="/pl/articles/tag/${slug}/"]`),
   ).toHaveText(label);
-  await page.getByRole('link', { name: 'Change language to en' }).click();
+  await page.getByRole('link', { name: 'Zmień język na angielski' }).click();
   const englishPath = path.replace(/^\/pl\//, '/en/');
   await page.waitForURL(`**${englishPath}`);
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');

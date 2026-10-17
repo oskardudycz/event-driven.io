@@ -29,9 +29,7 @@ for (const deviceScaleFactor of [1, 2]) {
         await image.scrollIntoViewIfNeeded();
         await expectImageLoaded(image);
         const result = await image.evaluate((e: HTMLImageElement) => {
-          const picture = e.closest('picture')!;
-          const sizes = picture.querySelector('source')!.sizes || e.sizes;
-          const slots = sizes.split(',').map((s) => s.trim());
+          const slots = e.sizes.split(',').map((s) => s.trim());
           let slot;
           for (const candidate of slots) {
             const conditional = candidate.match(/^(\([^)]*\)) (.+)$/);
@@ -155,7 +153,10 @@ for (const language of ['en', 'pl']) {
       await expect(page.locator('h1')).toHaveCount(1);
       await expect(
         page.getByRole('link', {
-          name: `Change language to ${language === 'en' ? 'pl' : 'en'}`,
+          name:
+            language === 'en'
+              ? 'Change language to Polish'
+              : 'Zmień język na angielski',
         }),
       ).toBeVisible();
     });

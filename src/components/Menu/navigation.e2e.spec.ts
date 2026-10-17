@@ -41,7 +41,7 @@ for (const width of [390, 1280]) {
       await expect(expand).toHaveAttribute('aria-expanded', 'true');
       await menu
         .getByRole('link', {
-          name: 'Change language to pl',
+          name: 'Change language to Polish',
         })
         .click();
       await page.waitForURL('**/pl/articles/');
@@ -84,7 +84,7 @@ for (const width of [390, 1280]) {
       ).toHaveText('Wystąpienia');
       await menu
         .getByRole('link', {
-          name: 'Change language to en',
+          name: 'Zmień język na angielski',
         })
         .click();
       await page.waitForURL('**/en/articles/');
@@ -365,7 +365,7 @@ test('article language switch stays visible before and after scrolling', async (
   const slug = 'fractal-architecture-cognitive-load';
   await page.goto(`/en/${slug}/`);
   const polish = page.getByRole('link', {
-    name: 'Change language to pl',
+    name: 'Change language to Polish',
   });
   await polish.waitFor({
     state: 'visible',
@@ -377,7 +377,7 @@ test('article language switch stays visible before and after scrolling', async (
   await page.waitForURL(`**/pl/${slug}/`);
   await expect(page.locator('html')).toHaveAttribute('lang', 'pl');
   const english = page.getByRole('link', {
-    name: 'Change language to en',
+    name: 'Zmień język na angielski',
   });
   await english.waitFor({
     state: 'visible',

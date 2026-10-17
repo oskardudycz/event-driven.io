@@ -15,7 +15,6 @@ export default defineConfig({
   testDir: resolve(import.meta.dirname, '..'),
   testMatch: ['src/components/**/*.e2e.spec.ts', 'tests/**/*.e2e.spec.ts'],
   testIgnore: ['**/content/**', '**/public/**', '**/.cache/**'],
-  workers: 1,
   ...(development ? { grep: /@dev/ } : {}),
   retries: 0,
   timeout: 60000,

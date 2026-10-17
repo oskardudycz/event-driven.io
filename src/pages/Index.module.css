@@ -7,6 +7,7 @@
 }
 :global(.sectionHeader).sectionHeader h2.elementH2 {
   font-size: var(--font-size-xxl);
+  overflow-wrap: anywhere;
 }
 @media screen and (min-width: 600px) {
   :global(.sectionHeader).sectionHeader {

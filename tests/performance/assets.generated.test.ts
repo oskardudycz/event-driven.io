@@ -81,6 +81,53 @@ test('all other Markdown images retain lazy loading and WebP with a fallback', (
   assert.ok(checked > 0, 'must inspect real generated image output');
 });
 
+test('article card covers are published only as WebP', () => {
+  const srcsetUrls = (srcset = '') =>
+    srcset
+      .split(',')
+      .map((candidate) => candidate.trim().split(/\s+/)[0])
+      .filter((url): url is string => !!url);
+  const pages = new Set<string>();
+  let checked = 0;
+  for (const entry of readdirSync('public', {
+    recursive: true,
+    withFileTypes: true,
+  })) {
+    if (!entry.isFile() || entry.name !== 'index.html') continue;
+    const path = join(entry.parentPath, entry.name);
+    const $ = cheerio.load(readFileSync(path, 'utf8'));
+    $('a.link .gatsby-image-outer-wrapper [data-gatsby-image-wrapper]').each(
+      (_, wrapper) => {
+        const picture = $(wrapper);
+        const image = picture.find('img[data-main-image]');
+        const urls = [
+          image.attr('src') || image.attr('data-src'),
+          ...srcsetUrls(image.attr('srcset') || image.attr('data-srcset')),
+          ...picture
+            .find('source')
+            .map((_, source) =>
+              srcsetUrls(
+                $(source).attr('srcset') || $(source).attr('data-srcset'),
+              ),
+            )
+            .get(),
+        ];
+        assert.ok(urls.length > 1, path);
+        for (const url of urls) assert.match(url ?? '', /\.webp$/, path);
+        pages.add(entry.parentPath);
+        checked++;
+      },
+    );
+  }
+  assert.ok(checked > 0, 'must inspect real generated cover output');
+  for (const listing of [
+    'public/en',
+    'public/en/articles',
+    'public/pl/articles/tag/event-sourcing',
+  ])
+    assert.ok(pages.has(listing), `${listing} must show covers`);
+});
+
 test("Introduction WebP preserves the PNG cover's dimensions and visual detail while reducing bytes", async () => {
   const { default: sharp } = await import('sharp');
   const { default: pixelmatch } = await import('pixelmatch');

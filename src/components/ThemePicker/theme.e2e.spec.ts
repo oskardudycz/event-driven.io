@@ -86,7 +86,7 @@ test(
     await page.reload();
     await expect(themeChoice(page, 'light')).toBeChecked();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-    await page.getByRole('link', { name: 'Change language to pl' }).click();
+    await page.getByRole('link', { name: 'Change language to Polish' }).click();
     await expect(page).toHaveURL(/\/pl\/contact\/$/);
     await expect(themeChoice(page, 'light', 'pl')).toBeChecked();
     await expect(page.locator('html')).toHaveAttribute('lang', 'pl');

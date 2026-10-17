@@ -1,4 +1,8 @@
-# Current change: complete CI repair (2026-10-16)
+# Current change: interface review corrections (2026-10-16)
+
+The three homepage review findings are corrected locally: article scrolling respects reduced motion, unnecessary card/menu movement is removed, shared header minimum heights scale with text, branding wraps, and language-switch accessible names are translated. Production regression checks also exposed long article/section headings overflowing at 320px with doubled text; their owning styles now allow wrapping. The approved default-size composition, main palette, routes and content are preserved. Six focused regressions, all 68 generated checks, and the full production suite (272 passed, two existing skips) pass in an isolated copy, including SSR/hydration, locale navigation and unchanged homepage references. Source and final component checks pass; details and the unrelated untracked-skill formatting limitation are recorded in todo.md. Hosted CI/deployment remain unverified.
+
+# Previous change: complete CI repair (2026-10-16)
 
 The owner explicitly confirms CI repair remains required. Keep the production-matching consulting button and main palette. Repair the demonstrated reading-list and search-control contrast failures and the rollback of the mobile homepage surface using existing variables. Verify the current source, production build, generated output and full E2E suite. Preserve assertions and screenshot thresholds; explicitly review any intentional reference change before updating it. The owner approved the two production homepage captures; only those references are updated. Production build, generated checks, full functional E2E and the subsequent normal homepage comparison pass locally. Hosted verification remains pending publication of this working tree. Separate local results from hosted CI and deployment.
 
