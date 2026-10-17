@@ -46,18 +46,13 @@ for (const lang of ['en', 'pl'] as const) {
       }
     }
     for (const url of assets) {
-      assert.match(url, /^\/static\//);
+      assert.match(url, /^\/static\/.*\.webp$/);
       assert.ok(
         readFileSync(join('public', decodeURIComponent(url))).length,
         `Missing cover asset ${url}`,
       );
     }
 
-    assert.ok(
-      introduction.cover.images.sources!.some(
-        (source) => source.type === 'image/webp',
-      ),
-    );
     for (const image of [
       introduction.cover.images.fallback,
       ...(introduction.cover.images.sources || []),

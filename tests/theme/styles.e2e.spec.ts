@@ -29,9 +29,7 @@ for (const deviceScaleFactor of [1, 2]) {
         await image.scrollIntoViewIfNeeded();
         await expectImageLoaded(image);
         const result = await image.evaluate((e: HTMLImageElement) => {
-          const picture = e.closest('picture')!;
-          const sizes = picture.querySelector('source')!.sizes || e.sizes;
-          const slots = sizes.split(',').map((s) => s.trim());
+          const slots = e.sizes.split(',').map((s) => s.trim());
           let slot;
           for (const candidate of slots) {
             const conditional = candidate.match(/^(\([^)]*\)) (.+)$/);
