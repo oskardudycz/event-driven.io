@@ -38,10 +38,10 @@ for (const javaScriptEnabled of [false, true]) {
           await page.setViewportSize({ width, height: 844 });
           await page.goto(`/${language}/`, { waitUntil: 'domcontentloaded' });
           if (javaScriptEnabled) await expectFonts(page);
-          const menu = page.locator('nav.menu');
+          const menu = page.getByRole('banner').getByRole('navigation');
           if (width < 1024) {
             await expect(menu).toHaveCSS('background-color', 'rgb(12, 12, 12)');
-            await expect(menu.locator('.item a').first()).toHaveCSS(
+            await expect(menu.locator('#navigation-links a').first()).toHaveCSS(
               'color',
               'rgb(255, 255, 255)',
             );
@@ -66,7 +66,9 @@ for (const javaScriptEnabled of [false, true]) {
             await expect(menu.getByRole('radio').first()).toBeInViewport();
             await page.keyboard.press('Escape');
             await page.evaluate(() => window.scrollTo(0, 600));
-            await expect(page.locator('header.header')).toHaveClass(/fixed/);
+            await expect(page.getByRole('banner')).toHaveAttribute(
+              'data-fixed',
+            );
             await expectMatchingActions(search, theme);
           }
 

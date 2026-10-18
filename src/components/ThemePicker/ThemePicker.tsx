@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaDesktop, FaMoon, FaSun } from 'react-icons/fa';
-import * as styles from './ThemePicker.module.css';
 import {
   isThemePreference,
   readThemePreference,
@@ -109,13 +108,13 @@ export default function ThemePicker() {
         onClick={(event) => {
           if (preference === null) event.preventDefault();
         }}
-        className={`${styles.trigger} flex size-11 cursor-pointer list-none items-center justify-center rounded-panel text-[color:var(--theme-trigger-color)] hover:bg-[var(--color-brand-tint)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent`}
+        className="flex size-11 cursor-pointer list-none items-center justify-center rounded-panel text-[color:var(--theme-trigger-color)] hover:bg-[var(--color-brand-tint)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent [&::-webkit-details-marker]:hidden"
       >
         <Icon aria-hidden="true" size={20} />
       </summary>
       <fieldset
         disabled={preference === null}
-        className={`${styles.choices} w-40 rounded-panel border border-solid border-line bg-page p-2 text-caption text-ink shadow-lg`}
+        className="absolute right-0 bottom-full mb-1.25 w-40 rounded-panel border border-solid border-line bg-page p-2 text-caption text-ink shadow-lg lg:top-full lg:bottom-auto lg:mt-1.25 lg:mb-0"
       >
         <legend className="sr-only">{t('appearance.label')}</legend>
         {choices.map(({ value, Icon: ChoiceIcon }) => (

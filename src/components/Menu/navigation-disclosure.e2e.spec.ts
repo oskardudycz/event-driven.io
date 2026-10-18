@@ -10,9 +10,9 @@ test.describe('mobile navigation without JavaScript', () => {
       }) => {
         await page.setViewportSize({ width, height: 740 });
         await page.goto(`/${language}/`, { waitUntil: 'domcontentloaded' });
-        const menu = page.locator('nav.menu');
+        const menu = page.getByRole('banner').getByRole('navigation');
         const bar = (await menu.boundingBox())!;
-        const links = (await menu.locator('.itemList').boundingBox())!;
+        const links = (await menu.locator('#navigation-links').boundingBox())!;
         expect(links.y).toBeGreaterThanOrEqual(bar.y);
         expect(links.y + links.height).toBeLessThanOrEqual(740);
         await menu.locator(`a[href="/${language}/articles/"]`).click();
@@ -30,11 +30,11 @@ for (const language of ['en', 'pl']) {
       await page.setViewportSize({ width, height: 600 });
       await page.goto(`/${language}/`);
       await expectFonts(page);
-      const menu = page.locator('nav.menu');
+      const menu = page.getByRole('banner').getByRole('navigation');
       const button = menu.getByRole('button', {
         name: /More links|Więcej linków/,
       });
-      const panel = menu.locator('.hiddenItemList');
+      const panel = menu.locator('#navigation-overflow');
       await button.focus();
       await page.keyboard.press('Enter');
       await expect(button).toHaveAttribute('aria-expanded', 'true');
@@ -195,7 +195,7 @@ for (const language of ['en', 'pl']) {
         }
         await expect(async () => {
           const wrappedLabels = await header
-            .locator('.itemList .item a:visible')
+            .locator('#navigation-links a:visible')
             .evaluateAll((links) => {
               const wrapped: string[] = [];
               for (const link of links) {
@@ -248,7 +248,9 @@ for (const language of ['en', 'pl']) {
               });
             });
           expect(coveredActions).toEqual([true, true]);
-          await header.locator('a.logoType').click({ trial: true });
+          await header
+            .getByRole('link', { name: 'Event-Driven by Oskar Dudycz' })
+            .click({ trial: true });
         }
       }
     });

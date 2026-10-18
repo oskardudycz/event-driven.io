@@ -38,13 +38,13 @@ for (const language of ['en', 'pl']) {
         waitUntil: 'domcontentloaded',
       });
       await expectFonts(page);
-      const menu = page.locator('nav.menu');
+      const menu = page.getByRole('banner').getByRole('navigation');
       const expand = menu.getByRole('button', {
         name: /More links|Więcej linków/,
       });
       await expand.waitFor();
       if (width < 1024) await expand.click();
-      const link = menu.locator('.itemList a[data-slug="/guides/"]');
+      const link = menu.locator('#navigation-links a[data-slug="/guides/"]');
       await expect(link).toBeVisible();
       await expect(link).toHaveText(menuLabel);
       await expect(link).toHaveAttribute('href', `/${language}/guides/`);

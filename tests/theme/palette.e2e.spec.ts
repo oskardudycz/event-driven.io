@@ -76,7 +76,7 @@ for (const language of ['en', 'pl']) {
         await expectTextContrast(link);
         await link.focus();
         await expectTextContrast(link);
-        const navigationLink = page.locator('.itemList .item a').first();
+        const navigationLink = page.locator('#navigation-links a').first();
         await navigationLink.hover();
         await navigationLink.evaluate(async (element) => {
           await Promise.all(

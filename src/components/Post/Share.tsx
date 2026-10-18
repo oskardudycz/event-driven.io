@@ -1,5 +1,4 @@
 import type { ArticleNode } from '../../types/content.ts';
-import * as styles from './Share.module.css';
 import React from 'react';
 import {
   FacebookShareButton,
@@ -26,9 +25,11 @@ const PostShare = (props: { post: ArticleNode }) => {
 
   return (
     <React.Fragment>
-      <div className={`share ${styles.share}`}>
-        <span className={`label ${styles.label}`}>SHARE</span>
-        <div className={`links ${styles.links}`}>
+      <div className="share flex flex-col items-center justify-center sm:m-10 sm:flex-row">
+        <span className="mx-[1em] mb-[1em] text-[1.2em] sm:mr-5 sm:mb-0 sm:ml-0">
+          SHARE
+        </span>
+        <div className="flex flex-row">
           <XShareButton url={url} text={title} aria-label="X share">
             <XLegacyIcon round size={iconSize} />
           </XShareButton>

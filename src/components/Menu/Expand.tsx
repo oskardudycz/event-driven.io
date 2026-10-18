@@ -15,7 +15,7 @@ const Expand = (props: {
   return (
     <React.Fragment>
       <button
-        className={`more ${styles.more}`}
+        className={styles.more}
         type="button"
         onClick={onClick}
         ref={ref}

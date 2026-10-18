@@ -32,7 +32,7 @@ for (const width of [390, 1280]) {
         'data-font400',
         'loaded',
       );
-      const menu = page.locator('nav.menu');
+      const menu = page.getByRole('banner').getByRole('navigation');
       const expand = menu.getByRole('button', {
         name: /More links|Więcej linków/,
       });
@@ -50,8 +50,8 @@ for (const width of [390, 1280]) {
       await expand.click();
       const visibleItems =
         width < 1024
-          ? menu.locator('.itemList')
-          : menu.locator('.hiddenItemList');
+          ? menu.locator('#navigation-links')
+          : menu.locator('#navigation-overflow');
       const talks = visibleItems.locator('a[data-slug="/talks/"]');
       await expect(talks).toHaveText('Wystąpienia');
       await expect(talks).toHaveAttribute('href', '/pl/talks/');
@@ -75,9 +75,11 @@ for (const width of [390, 1280]) {
       await expand.click();
       const resizedItems =
         width < 1024
-          ? menu.locator('.hiddenItemList')
-          : menu.locator('.itemList');
-      const consulting = menu.locator('.itemList a[href="/pl/consulting/"]');
+          ? menu.locator('#navigation-overflow')
+          : menu.locator('#navigation-links');
+      const consulting = menu.locator(
+        '#navigation-links a[href="/pl/consulting/"]',
+      );
       await expect(consulting).toHaveAttribute('href', '/pl/consulting/');
       await expect(
         resizedItems.locator('a[data-slug="/talks/"]').first(),
@@ -98,7 +100,7 @@ for (const width of [390, 1280]) {
         }),
       ).toHaveText('Talks');
       await expect(
-        menu.locator('.itemList a[href="/en/consulting/"]'),
+        menu.locator('#navigation-links a[href="/en/consulting/"]'),
       ).toHaveAttribute('href', '/en/consulting/');
     });
   });
@@ -118,26 +120,28 @@ test('desktop menu adapts to container resizing without a viewport resize', asyn
       'loaded',
     );
   }
-  const menu = page.locator('nav.menu');
-  const consulting = menu.locator('.itemList a[href="/pl/consulting/"]');
+  const menu = page.getByRole('banner').getByRole('navigation');
+  const consulting = menu.locator(
+    '#navigation-links a[href="/pl/consulting/"]',
+  );
   await expect(consulting).toBeVisible();
 
   // Header padding transitions and translated labels also change this available
   // width without another window resize. Exercise that layout boundary directly.
-  await page.locator('header.header').evaluate((header) => {
+  await page.getByRole('banner').evaluate((header) => {
     header.style.width = '800px';
   });
   await expect(consulting).not.toBeVisible();
   await menu.getByRole('button', { name: /More links|Więcej linków/ }).click();
   await expect(
-    menu.locator('.hiddenItemList a[href="/pl/consulting/"]'),
+    menu.locator('#navigation-overflow a[href="/pl/consulting/"]'),
   ).toBeVisible();
-  await page.locator('header.header').evaluate((header) => {
+  await page.getByRole('banner').evaluate((header) => {
     header.style.width = '';
   });
   await expect(consulting).toBeVisible();
   await expect(
-    menu.locator('.hiddenItemList a[href="/pl/consulting/"]'),
+    menu.locator('#navigation-overflow a[href="/pl/consulting/"]'),
   ).toHaveCount(0);
   expect(errors).toEqual([]);
 });
@@ -335,7 +339,7 @@ test('layout keeps fonts, sticky header and mobile navigation after resizing', a
   await page.evaluate(() => document.fonts.ready);
   await expectFonts(page);
   await page.evaluate(() => window.scrollTo(0, 600));
-  await expect(page.locator('header.header')).toHaveClass(/fixed/);
+  await expect(page.getByRole('banner')).toHaveAttribute('data-fixed');
   await page.setViewportSize({
     width: 390,
     height: 844,
@@ -347,10 +351,18 @@ test('layout keeps fonts, sticky header and mobile navigation after resizing', a
     state: 'visible',
   });
   await expand.click();
-  await expect(page.locator('nav.menu')).toHaveClass(/open/);
-  await page.locator('nav.menu a[data-slug="/contact/"]').click();
+  await expect(
+    page.getByRole('banner').getByRole('navigation'),
+  ).toHaveAttribute('data-open');
+  await page
+    .getByRole('banner')
+    .getByRole('navigation')
+    .locator('a[data-slug="/contact/"]')
+    .click();
   await page.waitForURL('**/en/contact/');
-  await expect(page.locator('nav.menu')).not.toHaveClass(/open/);
+  await expect(
+    page.getByRole('banner').getByRole('navigation'),
+  ).not.toHaveAttribute('data-open');
   await expect(page.locator('h1')).toHaveCount(1);
   await expect(page.locator('footer')).toHaveCount(1);
 });
@@ -371,7 +383,7 @@ test('article language switch stays visible before and after scrolling', async (
     state: 'visible',
   });
   await page.evaluate(() => window.scrollTo(0, 600));
-  await expect(page.locator('header.header')).toHaveClass(/fixed/);
+  await expect(page.getByRole('banner')).toHaveAttribute('data-fixed');
   await expect(polish).toBeVisible();
   await polish.click();
   await page.waitForURL(`**/pl/${slug}/`);
@@ -405,7 +417,10 @@ test('sticky header uses the latest visibility when observer notifications arriv
         >;
         return new Observer((entries, observer) => {
           const latest = entries.at(-1);
-          if (latest?.target.matches('.sensor') && !latest.isIntersecting) {
+          if (
+            latest?.target.matches('header + [aria-hidden="true"]') &&
+            !latest.isIntersecting
+          ) {
             // The API can queue an earlier visible entry and a later hidden
             // entry for the same target in one callback.
             const earlier: IntersectionObserverEntry = {
@@ -429,7 +444,7 @@ test('sticky header uses the latest visibility when observer notifications arriv
   await page.goto('/pl/');
   await expectFonts(page);
   await page.evaluate(() => window.scrollTo(0, 1200));
-  const header = page.locator('header.header');
+  const header = page.getByRole('banner');
   await expect(header).toHaveCSS('position', 'fixed');
   await page.evaluate(() => window.scrollTo(0, 0));
   await expect(header).toHaveCSS('height', '80px');
@@ -448,14 +463,16 @@ for (const observer of ['native', 'unavailable']) {
     await page.setViewportSize({ width: 1280, height: 900 });
     for (const path of ['/en/', '/pl/', '/en/articles/', '/pl/articles/']) {
       await page.goto(path, { waitUntil: 'domcontentloaded' });
-      const header = page.locator('header.header');
-      await expect(header).not.toHaveClass(/\bfixed\b/);
+      const header = page.getByRole('banner');
+      await expect(header).not.toHaveAttribute('data-fixed');
       await page.evaluate(() => window.scrollTo(0, 1200));
-      await expect(header).toHaveClass(/\bfixed\b/);
+      await expect(header).toHaveAttribute('data-fixed');
       await expect(header).toHaveCSS('position', 'fixed');
-      await expect(header.locator('a.logoType')).toBeVisible();
+      await expect(
+        header.getByRole('link', { name: 'Event-Driven by Oskar Dudycz' }),
+      ).toBeVisible();
       await page.evaluate(() => window.scrollTo(0, 0));
-      await expect(header).not.toHaveClass(/\bfixed\b/);
+      await expect(header).not.toHaveAttribute('data-fixed');
       await expect(header).toHaveCSS('height', '80px');
       await expect.poll(async () => (await header.boundingBox())?.y).toBe(0);
     }
@@ -485,7 +502,11 @@ for (const language of ['en', 'pl']) {
             const header = page.getByRole('banner');
             const heading = page.locator('main h1');
             await expect(heading).toHaveCount(1);
-            await expect(header.locator('a.logoType')).toBeVisible();
+            await expect(
+              header.getByRole('link', {
+                name: 'Event-Driven by Oskar Dudycz',
+              }),
+            ).toBeVisible();
             const headerBounds = (await header.boundingBox())!;
             const headingBounds = (await heading.boundingBox())!;
             if (route) {
@@ -543,7 +564,9 @@ for (const language of ['en', 'pl']) {
     await page.evaluate(() => window.scrollTo(0, 0));
     await expect(header).toHaveCSS('height', '80px');
     expect(await documentTop()).toBe(originalTop);
-    await header.locator('a.logoType').click();
+    await header
+      .getByRole('link', { name: 'Event-Driven by Oskar Dudycz' })
+      .click();
     await expect(page).toHaveURL(`/${language}/`);
     await expect(header).toHaveCSS('height', '80px');
     expect((await page.locator('.hero').boundingBox())?.y).toBe(0);

@@ -195,7 +195,9 @@ test('approved text colors maintain contrast on actual white surfaces and intera
   expect(await colors(link)).toEqual(expected);
   await link.focus();
   expect(await colors(link)).toEqual(expected);
-  expect(await colors(page.locator('footer.footer li').first())).toEqual({
+  expect(
+    await colors(page.getByRole('contentinfo').locator('li').first()),
+  ).toEqual({
     color: 'rgb(112, 110, 107)',
     background: 'rgb(255, 255, 255)',
   });
@@ -222,7 +224,7 @@ for (const [language, javaScriptEnabled] of [
         waitUntil: 'domcontentloaded',
       });
       const summary = page.locator('.standfirst');
-      const footer = page.locator('footer.footer');
+      const footer = page.getByRole('contentinfo');
       if (language === 'en') await summary.waitFor();
       else await expect(summary).toHaveCount(0);
       const values = (element: Element) => {

@@ -30,6 +30,7 @@ import config from '../../../content/meta/config.ts';
 
 type MenuProps = {
   path: string;
+  homepage: boolean;
   fixed: boolean;
   screenWidth: number;
   fontLoaded: boolean;
@@ -202,14 +203,17 @@ class Menu extends React.Component<MenuProps, MenuState> {
   };
 
   render() {
-    const { screenWidth } = this.props;
+    const { screenWidth, homepage, fixed } = this.props;
     const { open, hiddenIndexes, measuring } = this.state;
     const items = this.items;
 
     return (
       <React.Fragment>
         <nav
-          className={`menu ${styles.menu} ${open ? `open ${styles.open}` : ''}`}
+          className={styles.menu}
+          data-homepage={homepage || undefined}
+          data-fixed={fixed || undefined}
+          data-open={open || undefined}
           rel="js-menu"
           ref={this.container}
           onBlur={this.handleBlur}
@@ -217,7 +221,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
         >
           <ul
             id="navigation-links"
-            className={`itemList ${styles.itemList}`}
+            className={styles.itemList}
             ref={this.itemList}
           >
             {items.map((item, i) => (
@@ -243,7 +247,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
           {screenWidth >= 1024 && (
             <ul
               id="navigation-overflow"
-              className={`hiddenItemList ${styles.hiddenItemList}`}
+              className={styles.hiddenItemList}
               hidden={!open}
             >
               {hiddenIndexes.map((index) => {
@@ -270,7 +274,7 @@ function SearchLink() {
     <Link
       to="/search/"
       aria-label={t('menu.search')}
-      className={`${styles.searchLink} flex size-11 shrink-0 items-center justify-center rounded-panel`}
+      className="flex size-11 shrink-0 items-center justify-center rounded-panel text-[color:var(--theme-trigger-color)] hover:bg-[var(--color-brand-tint)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand)]"
     >
       <FaSearch size={20} aria-hidden="true" />
     </Link>

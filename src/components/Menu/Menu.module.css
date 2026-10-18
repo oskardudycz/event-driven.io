@@ -1,20 +1,36 @@
-:global(.menu).menu {
+/* The navigation owns its color roles. Items, the expand button and the header
+   controls read these properties instead of the header's state. */
+.menu {
   --theme-trigger-color: var(--color-text);
+  --nav-hover-ink: var(--color-body);
+  --menu-surface: var(--color-surface);
+  --menu-border: var(--color-border);
+  --menu-max-height: 50px;
+  --nav-control-surface: transparent;
+  --nav-control-hover-surface: transparent;
+  --nav-control-border: var(--color-border);
+  --nav-expanded-surface: var(--color-menu-overlay);
+  --nav-panel-surface: var(--color-surface);
+  --nav-panel-ink: var(--color-text);
   align-items: center;
-  background: var(--menu-surface, var(--color-surface));
+  background: var(--menu-surface);
   bottom: 0;
   display: flex;
   flex-grow: 1;
   gap: var(--space-sm);
   left: 0;
-  max-height: var(--menu-max-height, 50px);
+  max-height: var(--menu-max-height);
   padding: 0 var(--space-inset-s);
   position: fixed;
   width: 100%;
   z-index: 1;
+
+  &[data-open] {
+    --menu-max-height: 1000px;
+  }
 }
 
-:global(.itemList).itemList {
+.itemList {
   display: flex;
   flex-wrap: nowrap;
   justify-content: flex-start;
@@ -26,22 +42,8 @@
   min-width: 0;
 }
 
-.searchLink {
-  color: var(--theme-trigger-color);
-
-  &:hover {
-    color: var(--theme-trigger-color);
-    background: var(--color-brand-tint);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--color-brand);
-    outline-offset: 2px;
-  }
-}
-
 @media screen and (max-width: 1023px) {
-  :global(.homepage) :global(.menu).menu {
+  .menu[data-homepage] {
     --theme-trigger-color: var(--color-neutral-white);
     --menu-surface: var(--hero-background);
     --menu-border: var(--color-neutral-gray-k);
@@ -52,7 +54,7 @@
     scrollbar-width: thin;
   }
 
-  :global(.menu).menu {
+  .menu {
     &::after {
       position: absolute;
       content: '';
@@ -60,10 +62,10 @@
       right: var(--space-md);
       top: 0;
       height: 1px;
-      background: var(--menu-border, var(--color-border));
+      background: var(--menu-border);
     }
 
-    &:global(.open).open {
+    &[data-open] {
       padding: var(--space-inset-m);
       flex-wrap: wrap;
       justify-content: flex-end;
@@ -81,7 +83,7 @@
 }
 
 @media screen and (min-width: 1024px) {
-  :global(.menu).menu {
+  .menu {
     border-top: none;
     background: transparent;
     display: flex;
@@ -90,13 +92,24 @@
     min-width: 0;
     padding: 0 0 0 var(--space-lg);
     transition: none;
-
-    :global(.homepage):not(:global(.fixed)) & {
-      --theme-trigger-color: var(--color-neutral-white);
-    }
   }
 
-  :global(.itemList).itemList {
+  .menu[data-homepage] {
+    --nav-control-surface: rgba(255, 255, 255, 0.1);
+    --nav-control-hover-surface: rgba(255, 255, 255, 0.4);
+  }
+
+  /* The homepage bar is transparent over the hero until it becomes fixed. */
+  .menu[data-homepage]:not([data-fixed]) {
+    --theme-trigger-color: var(--color-neutral-white);
+    --nav-hover-ink: var(--color-highlight);
+    --nav-control-border: transparent;
+    --nav-expanded-surface: var(--hero-background);
+    --nav-panel-surface: var(--hero-background);
+    --nav-panel-ink: var(--color-neutral-white);
+  }
+
+  .itemList {
     flex: 1;
     min-width: 0;
     justify-content: flex-end;
@@ -104,15 +117,15 @@
     width: auto;
   }
 
-  :global(.hiddenItemList).hiddenItemList {
+  .hiddenItemList {
     &[hidden] {
       display: none;
     }
     list-style: none;
     margin: 0;
     position: absolute;
-    background: var(--color-surface);
-    color: var(--color-text);
+    background: var(--nav-panel-surface);
+    color: var(--nav-panel-ink);
     border: 1px solid var(--color-border);
     top: calc(100% + var(--space-sm));
     right: var(--space-sm);
@@ -125,14 +138,5 @@
     overscroll-behavior: contain;
     border-radius: var(--size-radius-small);
     box-shadow: 0 8px 24px rgb(0 0 0 / 30%);
-
-    :global(.homepage):not(:global(.fixed)) & {
-      background: var(--hero-background);
-      color: var(--color-neutral-white);
-    }
   }
-}
-
-:global(.menu).menu:global(.open).open {
-  --menu-max-height: 1000px;
 }

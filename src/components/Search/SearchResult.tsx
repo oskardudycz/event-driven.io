@@ -1,6 +1,7 @@
 import type { SearchHit } from '../../search/types.ts';
 import * as styles from './Hit.module.css';
-import React, { type ComponentProps, type ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
+import { anchor, type RenderLink } from '../Link/anchor.tsx';
 import { highlightParts, snippet } from '../../search/snippets.ts';
 
 const Highlight = ({ text, terms }: { text: string; terms: string[] }) =>
@@ -17,8 +18,6 @@ const Highlight = ({ text, terms }: { text: string; terms: string[] }) =>
     ),
   );
 
-const anchor = (props: ComponentProps<'a'>) => <a {...props} />;
-
 export default function SearchResult({
   hit,
   lang,
@@ -28,11 +27,7 @@ export default function SearchResult({
   hit: SearchHit;
   lang: string;
   cover?: ReactNode;
-  renderLink?: (
-    _props: Pick<ComponentProps<'a'>, 'children' | 'className'> & {
-      href: string;
-    },
-  ) => ReactNode;
+  renderLink?: RenderLink;
 }) {
   const sourceLabels: Record<string, string> =
     lang === 'pl'

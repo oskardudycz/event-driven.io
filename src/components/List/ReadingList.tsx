@@ -1,4 +1,5 @@
-import React, { type ComponentProps, type ReactNode } from 'react';
+import React from 'react';
+import { anchor, type RenderLink } from '../Link/anchor.tsx';
 import * as styles from './ReadingList.module.css';
 
 type ReadingItem = {
@@ -14,14 +15,8 @@ type ReadingListProps = {
   items: ReadingItem[];
   ordered?: boolean;
   showImages?: boolean;
-  renderLink?: (
-    _props: Pick<ComponentProps<'a'>, 'className' | 'children'> & {
-      href: string;
-    },
-  ) => ReactNode;
+  renderLink?: RenderLink;
 };
-
-const anchor = (props: ComponentProps<'a'>) => <a {...props} />;
 
 export default function ReadingList({
   items,

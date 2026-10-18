@@ -1,4 +1,0 @@
-.body :global(img.gatsby-resp-image-image) {
-  /* Imported article diagrams need a light canvas for their dark lettering. */
-  background-color: var(--color-image-canvas);
-}
