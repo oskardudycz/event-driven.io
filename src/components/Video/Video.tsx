@@ -1,4 +1,3 @@
-import * as styles from './Video.module.css';
 import React, { useState } from 'react';
 
 const youtubeIdFrom = (value: string) => {
@@ -32,7 +31,7 @@ const Video = ({
   if (!embedId) return null;
 
   return (
-    <div className={`video ${styles.video}`}>
+    <div className="relative overflow-hidden bg-[#111] pt-[56.25%]">
       {playing ? (
         <iframe
           src={`https://www.youtube-nocookie.com/embed/${embedId}?autoplay=1`}
@@ -41,14 +40,14 @@ const Video = ({
           allowFullScreen
           loading="lazy"
           title={videoTitle}
-          className={styles.elementIframe}
+          className="absolute top-0 left-0 size-full border-0"
         />
       ) : (
         <button
           type="button"
           onClick={() => setPlaying(true)}
           aria-label={playLabel}
-          className={styles.elementButton}
+          className="group absolute top-0 left-0 size-full cursor-pointer border-0 bg-[#111] p-0"
         >
           <img
             src={`https://i.ytimg.com/vi/${embedId}/hqdefault.jpg`}
@@ -56,9 +55,12 @@ const Video = ({
             loading="lazy"
             width="480"
             height="360"
-            className={styles.elementImg}
+            className="absolute top-0 left-0 size-full object-cover"
           />
-          <span aria-hidden="true" className={styles.elementSpan}>
+          <span
+            aria-hidden="true"
+            className="absolute top-1/2 left-1/2 flex size-16 items-center justify-center rounded-[50%] bg-black/75 pl-[0.2rem] text-[1.8rem] text-white [transform:translate(-50%,-50%)] group-hover:bg-[#d00] group-focus:bg-[#d00]"
+          >
             ▶
           </span>
         </button>

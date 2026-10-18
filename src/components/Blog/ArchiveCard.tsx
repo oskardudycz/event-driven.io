@@ -1,5 +1,6 @@
-import React, { type ComponentProps, type ReactNode } from 'react';
-import * as styles from './Item.module.css';
+import React, { type ReactNode } from 'react';
+import { anchor, type RenderLink } from '../Link/anchor.tsx';
+import * as styles from './ArchiveCard.module.css';
 import { FaArrowRight, FaCalendar, FaTag, FaUser } from 'react-icons/fa';
 
 type ArchiveCardProps = {
@@ -10,13 +11,8 @@ type ArchiveCardProps = {
   tags: string[];
   excerpt: string;
   cover: ReactNode;
-  renderLink?: (
-    _props: Pick<ComponentProps<'a'>, 'children' | 'className'> & {
-      href: string;
-    },
-  ) => ReactNode;
+  renderLink?: RenderLink;
 };
-const anchor = (props: ComponentProps<'a'>) => <a {...props} />;
 
 export default function ArchiveCard({
   href,
@@ -29,35 +25,33 @@ export default function ArchiveCard({
   renderLink = anchor,
 }: ArchiveCardProps) {
   return (
-    <React.Fragment>
-      <li className={styles.elementLi}>
-        {renderLink({
-          href,
-          className: `link ${styles.link}`,
-          children: (
-            <>
-              <div className={'gatsby-image-outer-wrapper'}>{cover}</div>
-              <h2 className={styles.elementH2}>
-                {title} <FaArrowRight className={'arrow'} />
-              </h2>
-              <p className={`meta ${styles.meta}` + ' ' + styles.elementP}>
-                <span className={styles.elementSpan}>
-                  <FaCalendar size={18} /> {date}
+    <li className={styles.card}>
+      {renderLink({
+        href,
+        className: `link ${styles.link}`,
+        children: (
+          <>
+            <div className={styles.cover}>{cover}</div>
+            <h2 className={styles.title}>
+              {title} <FaArrowRight className={styles.arrow} />
+            </h2>
+            <p className={`meta ${styles.text} ${styles.meta}`}>
+              <span className={styles.entry}>
+                <FaCalendar size={18} /> {date}
+              </span>
+              <span className={styles.entry}>
+                <FaUser size={18} /> {author}
+              </span>
+              {tags.map((tag) => (
+                <span key={tag} className={styles.entry}>
+                  <FaTag size={18} /> {tag}
                 </span>
-                <span className={styles.elementSpan}>
-                  <FaUser size={18} /> {author}
-                </span>
-                {tags.map((tag) => (
-                  <span key={tag} className={styles.elementSpan}>
-                    <FaTag size={18} /> {tag}
-                  </span>
-                ))}
-              </p>
-              <p className={styles.elementP}>{excerpt}</p>
-            </>
-          ),
-        })}
-      </li>
-    </React.Fragment>
+              ))}
+            </p>
+            <p className={styles.text}>{excerpt}</p>
+          </>
+        ),
+      })}
+    </li>
   );
 }

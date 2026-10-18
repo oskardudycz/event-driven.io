@@ -63,12 +63,14 @@ for (const language of ['en', 'pl']) {
       name: /More links|Więcej linków/,
     });
     await disclosure.click();
-    await expect(page.locator('nav.menu')).toHaveClass(/open/);
+    await expect(
+      page.getByRole('banner').getByRole('navigation'),
+    ).toHaveAttribute('data-open');
     await expect(disclosure.locator('svg')).toHaveCSS(
       'transition-duration',
       '0s',
     );
-    await expect(page.locator('nav.menu')).toHaveCSS(
+    await expect(page.getByRole('banner').getByRole('navigation')).toHaveCSS(
       'transition-duration',
       '0s',
     );

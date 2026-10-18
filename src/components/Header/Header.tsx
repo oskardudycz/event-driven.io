@@ -55,23 +55,25 @@ const Header = ({ pages, path }: { pages: ArticleEdge[]; path: string }) => {
   return (
     <div className={`${styles.frame} ${homepage ? styles.overlay : ''}`}>
       <header
-        className={`header ${styles.header} ${homepage ? `homepage ${styles.homepage}` : ''} ${fixed ? `fixed ${styles.fixed}` : ''}`}
+        className={styles.header}
+        data-homepage={homepage || undefined}
+        data-fixed={fixed || undefined}
       >
-        <Link to="/" className={'logoType'}>
-          <div className={`logo ${styles.logo}`}>
+        <Link to="/" className={styles.brand}>
+          <div className={styles.portrait}>
             <img
               src={avatar}
               alt={config.siteTitle}
               width="180"
               height="180"
-              className={styles.elementImg}
+              className={styles.avatar}
             />
           </div>
-          <div className={'type'}>
-            <span className={`siteTitle ${styles.siteTitle}`}>
+          <div className={styles.titles}>
+            <span className={styles.siteTitle}>
               {t('header.title') || config.headerTitle}
             </span>
-            <h2 className={styles.elementH2}>
+            <h2 className={styles.subtitle}>
               {t('header.subTitle') || config.headerSubTitle}
             </h2>
           </div>
@@ -82,6 +84,7 @@ const Header = ({ pages, path }: { pages: ArticleEdge[]; path: string }) => {
               {(width) => (
                 <Menu
                   path={path}
+                  homepage={homepage}
                   fixed={fixed}
                   screenWidth={width}
                   fontLoaded={loaded}
@@ -92,11 +95,7 @@ const Header = ({ pages, path }: { pages: ArticleEdge[]; path: string }) => {
           )}
         </FontLoadedContext.Consumer>
       </header>
-      <div
-        ref={sensorRef}
-        aria-hidden="true"
-        className={`sensor ${styles.sensor}`}
-      />
+      <div ref={sensorRef} aria-hidden="true" className={styles.sensor} />
     </div>
   );
 };

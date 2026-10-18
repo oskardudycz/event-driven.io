@@ -13,7 +13,7 @@
   width: 100%;
 }
 
-:global(.header).header {
+.header {
   align-items: center;
   justify-content: flex-start;
   background-color: var(--color-surface);
@@ -24,42 +24,25 @@
   width: 100%;
   padding: 0 var(--space-md);
 
-  :global(a.logoType) {
-    min-width: 0;
-    align-items: center;
-    display: flex;
-    color: var(--color-text);
-
-    :global(.type) {
-      min-width: 0;
-      overflow-wrap: anywhere;
-    }
-
-    :global(.logo).logo {
-      flex-shrink: 0;
-    }
-  }
-
-  &:global(.homepage).homepage {
+  &[data-homepage] {
     background-color: var(--hero-background);
   }
 }
 
-:global(.siteTitle).siteTitle {
-  display: block;
-  font-size: var(--font-size-summary);
-  font-weight: var(--font-weight-standard);
-  margin: var(--space-stack-xs);
+.brand {
+  min-width: 0;
+  align-items: center;
+  display: flex;
+  color: var(--color-text);
 }
 
-h2.elementH2 {
-  font-weight: var(--font-weight-standard);
-  font-size: var(--font-size-small);
-  letter-spacing: 0;
-  margin: 0;
+.titles {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
-:global(.logo).logo {
+.portrait {
+  flex-shrink: 0;
   border-radius: 65% 75%;
   border: 1px solid #eee;
   display: inline-block;
@@ -67,14 +50,28 @@ h2.elementH2 {
   margin: var(--space-inline-default);
   overflow: hidden;
   width: 44px;
-
-  img.elementImg {
-    width: 100%;
-    height: auto;
-  }
 }
 
-:global(.sensor).sensor {
+.avatar {
+  width: 100%;
+  height: auto;
+}
+
+.siteTitle {
+  display: block;
+  font-size: var(--font-size-summary);
+  font-weight: var(--font-weight-standard);
+  margin: var(--space-stack-xs);
+}
+
+.subtitle {
+  font-weight: var(--font-weight-standard);
+  font-size: var(--font-size-small);
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.sensor {
   display: block;
   position: absolute;
   left: 0;
@@ -85,32 +82,32 @@ h2.elementH2 {
 }
 
 @media screen and (min-width: 600px) {
-  :global(.header).header {
+  .header {
     padding: 0 var(--space-inset-l);
   }
 }
 
 @media screen and (max-width: 1023px) {
-  :global(.header).header:global(.homepage).homepage {
-    :global(.logo).logo {
+  .header[data-homepage] {
+    .portrait {
       border: none;
     }
 
-    :global(a.logoType),
-    :global(.siteTitle).siteTitle {
+    .brand {
       color: var(--color-neutral-white);
     }
-    h2.elementH2 {
+
+    .subtitle {
       color: var(--color-neutral-gray-d);
     }
   }
 }
 
 @media screen and (min-width: 1024px) {
-  :global(.header).header {
+  .header {
     justify-content: space-between;
 
-    &:global(.fixed).fixed {
+    &[data-fixed] {
       min-height: var(--header-height-fixed);
       background-color: var(--color-surface);
       left: 0;
@@ -120,48 +117,44 @@ h2.elementH2 {
       width: 100%;
       z-index: 1;
 
-      :global(.siteTitle).siteTitle {
+      .siteTitle {
         margin: var(--space-stack-xxs);
       }
 
-      h2.elementH2 {
+      .subtitle {
         display: none;
+      }
+
+      .portrait {
+        height: 36px;
+        width: 36px;
       }
     }
 
-    &:global(.homepage).homepage:not(:global(.fixed).fixed) {
-      :global(a.logoType),
-      :global(.siteTitle).siteTitle {
+    /* The homepage bar is transparent over the hero until it becomes fixed. */
+    &[data-homepage]:not([data-fixed]) {
+      .portrait {
+        border: none;
+      }
+
+      .brand {
         color: var(--color-neutral-white);
       }
-      h2.elementH2 {
+
+      .subtitle {
         color: var(--color-neutral-gray-d);
       }
     }
   }
 
-  :global(.header).header :global(a.logoType) {
+  .brand {
     text-align: left;
     flex-direction: row;
     flex-shrink: 0;
     width: auto;
   }
 
-  :global(.logo).logo {
-    :global(.fixed).fixed & {
-      height: 36px;
-      width: 36px;
-    }
-
-    :global(.header).header:global(.homepage).homepage:not(
-        :global(.fixed).fixed
-      )
-      & {
-      border: none;
-    }
-  }
-
-  h2.elementH2 {
+  .subtitle {
     animation-duration: var(--duration-default);
     animation-name: h2Entry;
   }

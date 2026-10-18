@@ -32,11 +32,11 @@ const NextPrev = (props: {
         {nextSlug && (
           <Link to={nextSlug}>
             <FaArrowRight />
-            <span className="linkContent">
-              <span className={`direction ${styles.direction}`}>
+            <span>
+              <span className={styles.direction}>
                 {t('articleNavigation.later')}
               </span>
-              <span className={`title ${styles.title}`}>{nextTitle}</span>
+              <span className={styles.title}>{nextTitle}</span>
               <time className={styles.date}>{nextPrefix}</time>
             </span>
           </Link>
@@ -44,11 +44,11 @@ const NextPrev = (props: {
         {prevSlug && (
           <Link to={prevSlug}>
             <FaArrowLeft />
-            <span className="linkContent">
-              <span className={`direction ${styles.direction}`}>
+            <span>
+              <span className={styles.direction}>
                 {t('articleNavigation.earlier')}
               </span>
-              <span className={`title ${styles.title}`}>{prevTitle}</span>
+              <span className={styles.title}>{prevTitle}</span>
               <time className={styles.date}>{prevPrefix}</time>
             </span>
           </Link>

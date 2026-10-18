@@ -115,7 +115,7 @@ test('article navigation includes existing placeholder languages without adverti
     const target = language === 'en' ? 'pl' : 'en';
     const destination = route.replace(`/${language}/`, `/${target}/`);
     assert.equal(
-      $(`.language-selector-container a[href="${destination}"]`).length,
+      $(`header a[hreflang][href="${destination}"]`).length,
       fs.existsSync(path.join(publicRoot, destination, 'index.html')) ? 1 : 0,
       `Incorrect language destination: ${route}`,
     );
@@ -169,7 +169,7 @@ test('available blog references use relative URLs and social links follow the co
     fs.readFileSync(path.join(publicRoot, 'en/articles/index.html'), 'utf8'),
   );
   assert.deepEqual(
-    $('nav .itemList a[href^="http"]')
+    $('nav #navigation-links a[href^="http"]')
       .map((_, item) => $(item).attr('href'))
       .get(),
     [

@@ -1,6 +1,7 @@
 import type { GatsbyNode, Node, Actions, SourceNodesArgs } from 'gatsby';
 import type { ArticleNode, ArticleEdge } from '../src/types/content.ts';
 import type { IGatsbyImageData } from 'gatsby-plugin-image';
+import type { Configuration } from 'webpack';
 type CreateRedirectArgs = Parameters<Actions['createRedirect']>[0];
 type BuildArticle = Node & ArticleNode;
 type PagesQuery = {
@@ -657,9 +658,15 @@ export const onCreatePage: NonNullable<GatsbyNode['onCreatePage']> = (
 
 export const onCreateWebpackConfig: NonNullable<
   GatsbyNode['onCreateWebpackConfig']
-> = ({ stage, actions }) => {
+> = ({ stage, actions, getConfig }) => {
   switch (stage) {
-    case `build-javascript`:
+    case `build-javascript`: {
+      // Gatsby merges all CSS into one chunk, forcing every template to agree
+      // on one module order. Keep each template's stylesheet with its chunk.
+      const config = (getConfig as () => Configuration)();
+      const splitChunks = config.optimization?.splitChunks;
+      if (splitChunks) delete splitChunks.cacheGroups?.styles;
+      actions.replaceWebpackConfig(config);
       if (process.env.ANALYZE === 'true') {
         actions.setWebpackConfig({
           plugins: [
@@ -674,6 +681,7 @@ export const onCreateWebpackConfig: NonNullable<
         });
       }
       break;
+    }
   }
 };
 

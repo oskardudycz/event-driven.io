@@ -38,7 +38,7 @@ for (const lang of ['en', 'pl']) {
         assert.equal($(font).attr('crossorigin'), 'anonymous');
         assert.ok(existsSync(join('public', $(font).attr('href')!)));
       });
-      const portrait = $('header .logo img');
+      const portrait = $('header img[alt="Event-Driven by Oskar Dudycz"]');
       assert.equal(portrait.attr('width'), '180');
       assert.equal(portrait.attr('height'), '180');
     });
@@ -96,28 +96,26 @@ test('article card covers are published only as WebP', () => {
     if (!entry.isFile() || entry.name !== 'index.html') continue;
     const path = join(entry.parentPath, entry.name);
     const $ = cheerio.load(readFileSync(path, 'utf8'));
-    $('a.link .gatsby-image-outer-wrapper [data-gatsby-image-wrapper]').each(
-      (_, wrapper) => {
-        const picture = $(wrapper);
-        const image = picture.find('img[data-main-image]');
-        const urls = [
-          image.attr('src') || image.attr('data-src'),
-          ...srcsetUrls(image.attr('srcset') || image.attr('data-srcset')),
-          ...picture
-            .find('source')
-            .map((_, source) =>
-              srcsetUrls(
-                $(source).attr('srcset') || $(source).attr('data-srcset'),
-              ),
-            )
-            .get(),
-        ];
-        assert.ok(urls.length > 1, path);
-        for (const url of urls) assert.match(url ?? '', /\.webp$/, path);
-        pages.add(entry.parentPath);
-        checked++;
-      },
-    );
+    $('a.link [data-gatsby-image-wrapper]').each((_, wrapper) => {
+      const picture = $(wrapper);
+      const image = picture.find('img[data-main-image]');
+      const urls = [
+        image.attr('src') || image.attr('data-src'),
+        ...srcsetUrls(image.attr('srcset') || image.attr('data-srcset')),
+        ...picture
+          .find('source')
+          .map((_, source) =>
+            srcsetUrls(
+              $(source).attr('srcset') || $(source).attr('data-srcset'),
+            ),
+          )
+          .get(),
+      ];
+      assert.ok(urls.length > 1, path);
+      for (const url of urls) assert.match(url ?? '', /\.webp$/, path);
+      pages.add(entry.parentPath);
+      checked++;
+    });
   }
   assert.ok(checked > 0, 'must inspect real generated cover output');
   for (const listing of [

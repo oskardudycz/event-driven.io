@@ -1,4 +1,4 @@
-:global(.bodytext).bodytext {
+.bodytext {
   animation-name: bodytextEntry;
   animation-duration: var(--time-duration-long);
 

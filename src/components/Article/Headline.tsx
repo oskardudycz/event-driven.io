@@ -1,4 +1,3 @@
-import * as styles from './Headline.module.css';
 import React from 'react';
 
 const Headline = (
@@ -7,13 +6,9 @@ const Headline = (
   const { title, children } = props;
 
   return (
-    <React.Fragment>
-      {title ? (
-        <h1 className={styles.elementH1}>{title}</h1>
-      ) : (
-        <h1 className={styles.elementH1}>{children}</h1>
-      )}
-    </React.Fragment>
+    <h1 className="mb-10 animate-headline-entry text-[length:var(--font-size-xxl)] sm:text-[length:calc(var(--font-size-xl)*1.2)] lg:text-[length:calc(var(--font-size-xl)*1.4)] [&_svg]:h-[0.75em] [&_svg]:fill-[var(--color-brand)]">
+      {title || children}
+    </h1>
   );
 };
 

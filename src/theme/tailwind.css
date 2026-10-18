@@ -32,4 +32,14 @@
   --text-caption--line-height: var(--line-height-summary);
   --text-body: var(--font-size-body-large);
   --leading-summary: var(--line-height-summary);
+  --animate-headline-entry: headline-entry var(--time-duration-long);
+
+  @keyframes headline-entry {
+    from {
+      opacity: 0.5;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 }

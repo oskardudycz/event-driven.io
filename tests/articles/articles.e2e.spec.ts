@@ -239,7 +239,7 @@ test('separate English and Polish pages keep their locale while following recipr
       other === 'pl' ? 'Powiązane artykuły' : 'Related articles',
     );
     await expect(page.locator('html')).toHaveAttribute('lang', other);
-    await expect(page.locator('footer.footer')).toHaveCount(1);
+    await expect(page.getByRole('contentinfo')).toHaveCount(1);
   }
 });
 

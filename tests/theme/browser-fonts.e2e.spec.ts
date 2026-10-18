@@ -22,7 +22,7 @@ test('header navigation and theme control share their desktop threshold with lar
   await expectFonts(page);
   await expect(page.locator('body')).toHaveCSS('font-size', '24px');
   const header = page.getByRole('banner');
-  const menu = header.locator('nav.menu');
+  const menu = header.getByRole('navigation');
   const theme = header.getByLabel('Theme', { exact: true });
   await expect(theme).toHaveAttribute('aria-disabled', 'false');
   await expect(theme).toBeInViewport();
@@ -56,7 +56,9 @@ test('homepage copy and artwork stay separate with larger browser fonts in both 
     await expect(hero.locator('img[data-main-image]')).not.toBeVisible();
     const header = page.getByRole('banner');
     const headerBounds = (await header.boundingBox())!;
-    const title = (await header.locator('a.logoType').boundingBox())!;
+    const title = (await header
+      .getByRole('link', { name: 'Event-Driven by Oskar Dudycz' })
+      .boundingBox())!;
     expect(title.y).toBeGreaterThanOrEqual(headerBounds.y);
     expect(title.y + title.height).toBeLessThanOrEqual(
       headerBounds.y + headerBounds.height,

@@ -5,7 +5,7 @@ import type {
   TagLink,
 } from '../../types/content.ts';
 import React from 'react';
-import * as styles from './Post.module.css';
+import { Link } from '../Link/index.tsx';
 import 'prismjs/themes/prism-okaidia.css';
 
 import asyncComponent from '../AsyncComponent/index.ts';
@@ -62,9 +62,19 @@ const Post = (props: {
       <header>
         <Headline title={title} />
         <Summary>{summary}</Summary>
-        <Meta prefix={prefix} author={author} tags={tagLinks} guides={guides} />
+        <Meta
+          prefix={prefix}
+          author={author}
+          tags={tagLinks}
+          guides={guides}
+          renderLink={({ href, ...props }) => <Link {...props} to={href} />}
+        />
       </header>
-      <Bodytext html={html} className={styles.body} />
+      {/* Imported article diagrams need a light canvas for their dark lettering. */}
+      <Bodytext
+        html={html}
+        className="[&_img.gatsby-resp-image-image]:bg-[var(--color-image-canvas)]"
+      />
       <footer>
         <Substack />
         <GuideSteps guides={guides} />

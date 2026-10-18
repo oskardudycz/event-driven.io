@@ -38,7 +38,10 @@ for (const language of ['en', 'pl']) {
             document.documentElement.style.fontSize = '200%';
           });
           const header = (await page.getByRole('banner').boundingBox())!;
-          const brand = (await page.locator('a.logoType').boundingBox())!;
+          const brand = (await page
+            .getByRole('banner')
+            .getByRole('link', { name: 'Event-Driven by Oskar Dudycz' })
+            .boundingBox())!;
           const heading = (await page.locator('.hero h1').boundingBox())!;
           expect(brand.y).toBeGreaterThanOrEqual(header.y);
           expect(brand.y + brand.height).toBeLessThanOrEqual(
@@ -63,21 +66,25 @@ for (const language of ['en', 'pl']) {
       for (const path of [`/${language}/`, `/${language}/articles/`]) {
         await page.goto(path, { waitUntil: 'domcontentloaded' });
         await expectFonts(page);
-        const header = page.locator('header.header');
-        const portrait = header.locator('.logo');
-        const image = portrait.locator('img');
+        const header = page.getByRole('banner');
+        const image = header.getByRole('img', {
+          name: 'Event-Driven by Oskar Dudycz',
+        });
+        const portrait = image.locator('..');
         await expectImageLoaded(image);
         await page.evaluate(() => window.scrollTo(0, 0));
-        await expect(header).not.toHaveClass(/\bfixed\b/);
+        await expect(header).not.toHaveAttribute('data-fixed');
         if (path === `/${language}/`) {
-          const brand = (await header.locator('a.logoType').boundingBox())!;
+          const brand = (await header
+            .getByRole('link', { name: 'Event-Driven by Oskar Dudycz' })
+            .boundingBox())!;
           const heading = (await page.locator('.hero h1').boundingBox())!;
           expect(brand.x).toBeCloseTo(heading.x, 0);
         }
 
         for (const scroll of [0, 600]) {
           await page.evaluate((offset) => window.scrollTo(0, offset), scroll);
-          if (scroll > 0) await expect(header).toHaveClass(/\bfixed\b/);
+          if (scroll > 0) await expect(header).toHaveAttribute('data-fixed');
           await expect(async () => {
             await expectCenteredInside(portrait, header);
             await expectCenteredInside(image, portrait);

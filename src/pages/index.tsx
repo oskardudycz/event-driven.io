@@ -1,5 +1,4 @@
 import type { SitePageProps } from '../types/content.ts';
-import * as styles from './Index.module.css';
 import React, { useRef } from 'react';
 import { graphql } from 'gatsby';
 
@@ -29,12 +28,14 @@ export default function IndexPage({ data }: SitePageProps<'posts' | 'site'>) {
       <Hero scrollToContent={scrollToContent} />
 
       <section
-        className={`latestArticles ${styles.latestArticles}`}
+        className="latestArticles scroll-mt-[var(--header-height-default)]"
         id="latest-articles"
         ref={separator}
       >
-        <header className={`sectionHeader ${styles.sectionHeader}`}>
-          <h2 className={styles.elementH2}>{t('blog.latestTitle')}</h2>
+        <header className="mx-auto px-5 pt-10 sm:max-w-[var(--text-max-width-tablet)] sm:px-0 lg:max-w-[var(--text-max-width-desktop)]">
+          <h2 className="text-[length:var(--font-size-xxl)] wrap-anywhere">
+            {t('blog.latestTitle')}
+          </h2>
         </header>
         <Blog posts={posts} browseAllPath="/articles/" compactTop />
       </section>

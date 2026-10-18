@@ -1,4 +1,3 @@
-import * as styles from './LanguagePicker.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from '../Link/index.tsx';
@@ -19,24 +18,23 @@ const LanguagePicker = () => {
   );
 
   return (
-    <React.Fragment>
-      <div className={`language-selector-container ${styles.container}`}>
-        {languagesToSwitch.map((supportedLang) => (
-          <Link
-            aria-label={t(`language.switchTo.${supportedLang}`)}
-            className={`langSelector ${styles.langSelector}`}
-            onClick={() =>
-              localStorage.setItem('last-selected-lang', supportedLang)
-            }
-            key={supportedLang}
-            to={pagePath}
-            language={supportedLang}
-          >
-            {supportedLang === 'en' ? '🇬🇧' : '🇵🇱'}
-          </Link>
-        ))}
-      </div>
-    </React.Fragment>
+    <div className="flex shrink-0">
+      {languagesToSwitch.map((supportedLang) => (
+        <Link
+          aria-label={t(`language.switchTo.${supportedLang}`)}
+          className="flex min-h-11 min-w-11 items-center justify-center"
+          onClick={() =>
+            localStorage.setItem('last-selected-lang', supportedLang)
+          }
+          key={supportedLang}
+          to={pagePath}
+          language={supportedLang}
+          hrefLang={supportedLang}
+        >
+          {supportedLang === 'en' ? '🇬🇧' : '🇵🇱'}
+        </Link>
+      ))}
+    </div>
   );
 };
 

@@ -173,7 +173,7 @@ for (const language of ['en', 'pl'] as const) {
     }) => {
       await page.setViewportSize({ width, height: 740 });
       await page.goto(`/${language}/`);
-      const menu = page.locator('nav.menu');
+      const menu = page.getByRole('banner').getByRole('navigation');
       const trigger = themeControl(page, language);
       await expect(trigger).toHaveAttribute('aria-disabled', 'false');
       await expect(trigger).toBeInViewport();
@@ -246,7 +246,9 @@ for (const language of ['en', 'pl'] as const) {
           }),
         ).toBeVisible();
         const bounds = await control.boundingBox();
-        const logo = await header.locator('a.logoType').boundingBox();
+        const logo = await header
+          .getByRole('link', { name: 'Event-Driven by Oskar Dudycz' })
+          .boundingBox();
         if (width >= 1024) {
           expect(bounds && logo && bounds.x >= logo.x + logo.width).toBe(true);
         } else {
@@ -256,7 +258,10 @@ for (const language of ['en', 'pl'] as const) {
         await page.keyboard.press('Enter');
         await expect(themeChoice(page, 'light', language)).toBeVisible();
         if (width < 1024) {
-          const choices = page.locator('nav.menu fieldset');
+          const choices = page
+            .getByRole('banner')
+            .getByRole('navigation')
+            .locator('fieldset');
           const panel = (await choices.boundingBox())!;
           expect(panel.y).toBeGreaterThanOrEqual(0);
           expect(panel.y + panel.height).toBeLessThanOrEqual(bounds!.y);
