@@ -67,7 +67,10 @@
     "verify:cache": "node scripts/verify-gatsby-cache.ts",
     "verify:cache:css": "node scripts/verify-gatsby-css-cache.ts",
     "verify:publication": "npm run smoke && npm run lint && npm run typecheck && npm run check:edit && npm run build && npm run test:generated && npm run test:e2e",
-    "verify:search:dev": "node scripts/verify-search-development.ts"
+    "verify:search:dev": "node scripts/verify-search-development.ts",
+    "build:astro": "astro build",
+    "serve:astro": "astro preview",
+    "compare:builds": "node scripts/compare-builds.ts"
   },
   "dependencies": {
     "@weknow/gatsby-remark-twitter": "^0.2.3",
@@ -110,6 +113,8 @@
     "gatsby"
   ],
   "devDependencies": {
+    "@astrojs/markdown-remark": "7.3.3",
+    "@astrojs/react": "7.1.0",
     "@eslint/js": "10.0.1",
     "@playwright/browser-chromium": "1.64.0",
     "@playwright/test": "1.64.0",
@@ -126,6 +131,7 @@
     "@typescript/native": "npm:typescript@7.0.2",
     "@vitejs/plugin-react": "6.1.2",
     "@vitest/browser-playwright": "5.0.4",
+    "astro": "7.4.1",
     "cheerio": "1.2.0",
     "escape-html": "1.0.3",
     "eslint": "10.12.0",

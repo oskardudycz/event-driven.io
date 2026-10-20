@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { readPageHead } from './head-contract.ts';
 
 function verifySeoBuild(publicDirectory: string) {
   const failures: string[] = [];
@@ -132,13 +133,13 @@ function verifySeoBuild(publicDirectory: string) {
   if (fs.existsSync(publicDirectory)) verifyHeadings(publicDirectory);
 
   for (const html of [consultingEn, consultingPl]) {
-    expectContains(
-      'consulting language alternates',
-      html,
-      'hrefLang="x-default"',
+    const languages = readPageHead(html).alternates.map(
+      ({ language }) => language,
     );
-    expectContains('consulting language alternates', html, 'hrefLang="en"');
-    expectContains('consulting language alternates', html, 'hrefLang="pl"');
+    for (const language of ['x-default', 'en', 'pl']) {
+      if (!languages.includes(language))
+        failures.push(`consulting language alternates missing: ${language}`);
+    }
   }
 
   const robots = read('robots.txt');

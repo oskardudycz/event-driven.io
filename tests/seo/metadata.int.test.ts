@@ -25,3 +25,21 @@ test('SEO verification covers the guide index, guides and tag pages in both lang
   ])
     assert.ok(failures.includes(expected), `Not reported: ${expected}`);
 });
+
+test('language alternates are checked as HTML regardless of attribute spelling', () => {
+  const fixture = temporaryDirectory('seo-serialization-');
+  const check = (attribute: string) => {
+    for (const language of ['en', 'pl']) {
+      mkdirSync(join(fixture, language, 'consulting'), { recursive: true });
+      writeFileSync(
+        join(fixture, language, 'consulting/index.html'),
+        `<html><head>${['en', 'pl', 'x-default'].map((locale) => `<link rel="alternate" ${attribute}="${locale}" href="https://event-driven.io/${locale}/consulting/">`).join('')}</head><body><h1>Consulting</h1></body></html>`,
+      );
+    }
+    return verifySeoBuild(fixture).filter((failure) =>
+      failure.includes('language alternates'),
+    );
+  };
+  assert.deepEqual(check('hrefLang'), []);
+  assert.deepEqual(check('hreflang'), []);
+});

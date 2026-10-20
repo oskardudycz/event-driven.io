@@ -8,17 +8,9 @@ export type BuildContract = {
 };
 import fs from 'fs';
 import path from 'path';
+import { publishedPages } from './published-pages.ts';
 
 const FEED_FILES = ['rss.xml', 'newsletter-pl-rss.xml'];
-
-function walkFiles(directory: string): string[] {
-  if (!fs.existsSync(directory)) return [];
-
-  return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
-    const entryPath = path.join(directory, entry.name);
-    return entry.isDirectory() ? walkFiles(entryPath) : [entryPath];
-  });
-}
 
 function readRequired(publicDirectory: string, relativePath: string) {
   const filePath = path.join(publicDirectory, relativePath);
@@ -44,30 +36,31 @@ function extractXmlValues(xml: string, tagName: string) {
 
 function collectRoutes(publicDirectory: string) {
   return uniqueSorted(
-    walkFiles(path.join(publicDirectory, 'page-data'))
-      .filter((filePath) => path.basename(filePath) === 'page-data.json')
-      .map(
-        (filePath) =>
-          (JSON.parse(fs.readFileSync(filePath, 'utf8')) as { path: string })
-            .path,
-      )
-      .filter(Boolean),
+    publishedPages(publicDirectory).map(({ route }) => route),
   );
+}
+
+export function collectRedirectRules(publicDirectory: string): string[] {
+  return readRequired(publicDirectory, '_redirects')
+    .split(/\r?\n/)
+    .map((line) => line.trim().replace(/\s+/g, ' '))
+    .filter((line) => line && !line.startsWith('#'));
 }
 
 function collectRedirects(publicDirectory: string) {
-  return uniqueSorted(
-    readRequired(publicDirectory, '_redirects')
-      .split(/\r?\n/)
-      .map((line) => line.trim().replace(/\s+/g, ' '))
-      .filter((line) => line && !line.startsWith('#')),
-  );
+  return uniqueSorted(collectRedirectRules(publicDirectory));
 }
 
 function collectSitemapUrls(publicDirectory: string) {
-  const sitemapDirectory = path.join(publicDirectory, 'sitemap');
+  const sitemapDirectory = fs.existsSync(
+    path.join(publicDirectory, 'sitemap-index.xml'),
+  )
+    ? publicDirectory
+    : path.join(publicDirectory, 'sitemap');
   return uniqueSorted(
-    walkFiles(sitemapDirectory)
+    fs
+      .readdirSync(sitemapDirectory)
+      .map((file) => path.join(sitemapDirectory, file))
       .filter((filePath) => /^sitemap-\d+\.xml$/.test(path.basename(filePath)))
       .flatMap((filePath) =>
         extractXmlValues(fs.readFileSync(filePath, 'utf8'), 'loc'),
