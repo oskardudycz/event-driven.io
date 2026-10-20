@@ -2,6 +2,19 @@
 
 Last updated: 2026-10-18. Current strategy is in [plan.md](plan.md); manual commands/importing/tag reading order/browser reports/snapshot review are in [README.md](README.md). Local, hosted CI and deployed results are separate evidence.
 
+## Slow listing queries and migration preparation (2026-10-20)
+
+Patch notes: [placeholder sharing](docs/gatsby-sharp-placeholder-patch.md). Migration findings: [readiness recheck](docs/gatsby-starter-comparison.md#12-migration-readiness-recheck-2026-10-20).
+
+- [x] Measure a local cold build with a timing hook: 12 queries over 15s, all tag pages; 1,296 BLURRED placeholder requests for 332 covers, all with identical arguments from the four listing queries.
+- [x] Failing test first: `tests/images/placeholders.int.test.ts` recorded 4 generations for 4 concurrent requests of one cover. `patches/gatsby-plugin-sharp+5.16.0.patch` shares the pending result; the test passes with one generation and identical data URIs. gatsby-plugin-sharp is pinned to 5.16.0; `npm run postinstall` applies both patches.
+- [x] Patched cold build of the same copy: query phase 233.6s → 140.7s, warnings 12 → 9, slowest query 140s → 64s; build completes. One run each on 2 cores.
+- [x] Typecheck, ESLint/Prettier on changed files, unit (52) and integration/component (160) tests pass.
+- [ ] Remaining 9 warnings (tag pages) overlap Gatsby's 564s of image-processing jobs; cause not proven. Options for the owner: placeholder strategy, smaller cover sources. Not suppressed.
+- [ ] Full production build, generated checks and E2E in the working checkout; hosted CI and deployment.
+- [x] Migration recheck: AstroPaper/Gatsby blog commits unchanged; Astro's Markdown processor reproduces all 1,975 article heading ids on 627 built posts. Sitemap location needs an owner decision.
+- [ ] Gatsby-side preparation (not started): framework-neutral build contract, per-URL head contract, redirects as data, search input without Gatsby nodes, portable remark plugins.
+
 ## CSS extraction order and component ownership (2026-10-18)
 
 Cause, mechanism and decisions: [the CSS review](docs/gatsby-css-review.md#per-template-stylesheets-and-component-ownership--2026-10-18).
@@ -15,7 +28,8 @@ Cause, mechanism and decisions: [the CSS review](docs/gatsby-css-review.md#per-t
 - [x] New `tests/theme/navigation-styles.e2e.spec.ts`: client navigation across post, tag, guide and homepage templates matches server-rendered styles at 390/1280px (8 tests pass).
 - [x] Final local build: 0 "Conflicting order" warnings and no other warning lines on the warm build. Smoke (119 files, 19 queries), lint, both TypeScript projects, unit (52) and integration/component (159) tests, generated tests (16 files/69 tests), build contract (773 routes, 284 redirects, 469 sitemap URLs) and SEO verification pass. Full E2E: 280 passed, 2 existing Firefox-only skips (8.0m); no visual references or tolerances changed.
 - [x] `npm run verify:cache:css`: module, global and utility-class edits and restorations pass before and after hydration. Its seven builds have 0 extraction-order warnings; each still shows the existing Node `punycode` [DEP0040] deprecation from a dependency.
-- [ ] Hosted CI and deployed verification. Development-mode extraction warnings were not re-checked.
+- [x] Hosted CI ([run 39121262412](https://github.com/oskardudycz/event-driven.io/actions/runs/39121262412), pull request, commit `4e36317`): smoke, lint, typecheck, unit (52), integration/component (159), build, generated checks and production browser checks (280 passed, 2 skipped) pass. The log has 0 "Conflicting order" warnings; it still shows punycode `[DEP0040]` and the known queries over 15s. The Netlify step published a draft preview only, not production.
+- [ ] Development mode still reports 7 "Conflicting order" warnings in Gatsby's merged `commons` stylesheet. They involve the layout CSS (tokens, Tailwind, global, Header, Menu, Expand, Footer) against `Bodytext.module.css`: the guide template reaches Bodytext before the layout, while the post and tag templates reach the layout first. Gatsby's development renderer links only `/commons.css` (`gatsby/cache-dir/develop-static-entry.js`), so per-template stylesheets would need a change to its development renderer. Measured effect: 69 computed-style captures of `gatsby develop` against the production build show no geometry or cascade differences. The only differences are development-only DOM, the absolute hero image URL, and the remark-images load fade (`transition: opacity 0.5s`), which is set by the plugin's script, not by CSS order. Open: decide whether to leave the warnings documented or handle development separately.
 
 ## Homepage interface review corrections (2026-10-16)
 

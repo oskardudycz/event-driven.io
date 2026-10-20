@@ -9,6 +9,7 @@ Research date: 2026-10-10. Project baseline: `5a2554226afe491fda20509b6f5f34da6b
 3. **AstroPaper is the primary modern Tailwind reference.** It is popular, recently maintained, uses Tailwind 4, native modules and typed content, and is directly relevant to the possible later Astro migration. The popular Tailwind Next.js Starter Blog supplies a second, richer React reference. Its architecture is modern, but its pinned Next/React/tool versions are not today's latest: copy individual patterns after verification, not its manifest.
 4. Our direct upgrades passed earlier application checks; that does **not** mean the dependency cleanup, peer compatibility or security work is complete. Several overrides compensate for unsupported peer ranges; vulnerable nested packages remain despite current root versions. The previous acceptance wording overstated the result.
 5. The owner has now authorized retiring the inactive form. Its component, CSS, barrel, unused translation keys and Ant Design dependency are removed. The live EN/PL contact pages still offer Calendly. The subsequent portable-foundation implementation is recorded below. A replacement form, theme redesign, search replacement and framework migration are not implemented by this review.
+6. The 2026-10-20 recheck confirms the AstroPaper and Gatsby blog commits are unchanged and AstroPaper remains the blog reference. Astro supports our locale-prefixed, trailing-slash URLs and reproduces every article heading anchor; the SEO head, sitemap location, redirects and search input need porting or decisions. See [Migration readiness recheck](#12-migration-readiness-recheck-2026-10-20).
 
 ## 1. Sample selection and provenance
 
@@ -344,3 +345,46 @@ The version inventory remains in [dependency-review.md](dependency-review.md). T
 | vite                               | Vitest/React test integration configuration                                         | Keep explicit tooling owner; not the Gatsby site bundler                                                                                |
 | vitest                             | `tests/seo.test.tsx:4` / `tests/search-hit.test.tsx:3`                              | Keep; active direct API use                                                                                                             |
 | webpack-bundle-analyzer            | Configured bundle profiling integration                                             | Keep manual profiling capability                                                                                                        |
+
+## 12. Migration readiness recheck (2026-10-20)
+
+Goal: prepare a later Astro migration that keeps the same URLs, SEO and look, then migrate the layout. Samples were cloned again into a disposable scratch directory; nothing was installed into this application. No Astro site build is claimed.
+
+### Research still current
+
+| Source               | 2026-10-10 review                                       | 2026-10-20 recheck                                      |
+| -------------------- | ------------------------------------------------------- | ------------------------------------------------------- |
+| AstroPaper           | `35cfa7f`, Astro ^7.0.3, Tailwind ^4.3.2, TypeScript ^6 | Same commit on the default branch                       |
+| Official Gatsby blog | `d750522`                                               | Same commit                                             |
+| Starlight            | `67de740`, package 0.42.6                               | Default branch `b77aca9` (2026-10-15); npm still 0.42.6 |
+| Astro                | 7.x                                                     | npm latest 7.4.1                                        |
+
+AstroPaper now has a `src/i18n/` folder, but it translates interface text only and configures `locales: ["en"]`. It still does not model bilingual routing, so the earlier conclusion stands: it is a structural reference, not a source for our look or localization.
+
+### URL and SEO parity
+
+| Contract                         | Current Gatsby output                                                                                                      | Astro mechanism                                                                 | Status                                                                 |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| Locale prefixes `/en/…`, `/pl/…` | `gatsby-plugin-react-i18next` and site hooks                                                                               | `i18n.routing.prefixDefaultLocale: true`                                        | Supported                                                              |
+| Trailing slashes                 | `trailingSlash: 'always'`                                                                                                  | `trailingSlash: 'always'` with default `build.format: 'directory'`              | Supported                                                              |
+| Heading anchors                  | `gatsby-remark-autolink-headers` (github-slugger 1.5)                                                                      | Built-in heading ids (github-slugger 2)                                         | **Verified identical** (below)                                         |
+| Prism highlighting, smartypants  | Gatsby remark plugins                                                                                                      | `markdown.syntaxHighlight: 'prism'`; smartypants enabled by default             | Supported; compare output before switching                             |
+| Sitemap location                 | `/sitemap/sitemap-index.xml` (robots.txt)                                                                                  | `@astrojs/sitemap` 3.7.4 writes to the output root; `filenameBase` renames only | **Decision:** 301 the old path or update robots.txt and Search Console |
+| Sitemap alternates               | Pages carry hreflang links                                                                                                 | Sitemap `i18n` option adds `xhtml:link` alternates                              | Optional addition                                                      |
+| Head metadata                    | `Seo.tsx`: canonical, hreflang with `x-default`, `og:locale`, article time/section, JSON-LD by page type                   | AstroPaper: canonical, basic Open Graph/Twitter only                            | Port our `Seo` logic; do not adopt the template head                   |
+| Redirects (284)                  | `createRedirect` calls in `site/node.ts` and frontmatter `redirectFrom`/`redirectAliases`, written to Netlify `_redirects` | Netlify `_redirects` is framework-independent                                   | Extract the redirect list as data                                      |
+| Feeds                            | `rss.xml`, `newsletter-pl-rss.xml` with original-slug GUIDs                                                                | `@astrojs/rss`                                                                  | Port; the build contract already pins entries                          |
+
+Heading anchors were checked by running `@astrojs/markdown-remark` 7.3.3 (Astro's own processor) over every post source and comparing ids with this site's built HTML: 627 built post pages, 1,975 article heading ids, **0 differences**. The only Gatsby-only id is the template's `related-title` heading. Two newest-article pages were absent from the local build and were skipped.
+
+### Preparation that can be done in Gatsby
+
+1. Make the build contract framework-neutral: routes are currently collected from Gatsby's `page-data.json`; collect them from generated HTML so the same 773 routes, 284 redirects, 469 sitemap URLs and feed entries can check another build.
+2. Record a per-URL head contract (title, description, canonical, hreflang set, Open Graph/Twitter, parsed JSON-LD) from the current build. The SEO verifier spot-checks about a dozen pages and string-matches React's `hrefLang=` spelling, which correct Astro output (`hreflang=`) would fail.
+3. Extract redirects into a function that returns data, used by Gatsby now and by any `_redirects` writer later.
+4. Separate search-index input from Gatsby `MarkdownRemark` nodes and `IGatsbyImageData` covers.
+5. Port the local remark plugins (video, tweet embeds, image priority) behind plain unified plugin adapters; Gatsby passes `{ markdownAST }` instead of a unified tree.
+
+Look: production visual and style checks already run against a `baseURL`, so they can check another build unchanged. Gatsby coupling is concentrated in 23 of 102 non-test source files (14 GraphQL queries, 6 `gatsby-plugin-image` users); components and CSS Modules port as they are. The heading-anchor probe is a migration-time check, not a permanent test.
+
+Blurred cover placeholders are a Gatsby image feature; Astro has no built-in equivalent, so the placeholder strategy becomes a design decision during migration.

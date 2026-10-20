@@ -1,3 +1,9 @@
+# Slow listing queries and migration preparation (2026-10-20)
+
+Cold builds report page queries over 15s on tag and archive pages. A local cold build measured the cause: listing pages request the same BLURRED cover placeholder concurrently, and `gatsby-plugin-sharp` generates it once per request because its cache is written only after generation (1,296 placeholder requests for 332 covers). The owner approved a local `gatsby-plugin-sharp` patch that shares pending placeholder work; it does not change image output, query arguments or visuals, and is verified by a cold-build comparison. Placeholder strategy and cover source sizes remain owner decisions.
+
+The owner also wants a later Astro migration to keep URLs, SEO and look before the layout migrates. The [migration readiness recheck](docs/gatsby-starter-comparison.md#12-migration-readiness-recheck-2026-10-20) confirms the earlier research and lists Gatsby-side preparation: a framework-neutral build contract, a per-URL head contract, redirects as data, search input independent of Gatsby nodes and portable remark plugins. None of these is implemented yet; the sitemap location needs an owner decision.
+
 # CSS extraction order and component ownership (2026-10-18)
 
 Production templates keep separate stylesheets, so the cascade no longer depends on which template meets the layout's CSS first. Components style only their own elements, with parent state passed through props, data attributes or custom properties; utilities replace short modules, and modules remain where CSS is clearer. The build emits 0 extraction-order warnings (10 before). Computed styles and geometry match the prior build at 390/600/601/1023/1024/1025/1280px; the remaining differences are invisible. Details and evidence: [the CSS review](docs/gatsby-css-review.md#per-template-stylesheets-and-component-ownership--2026-10-18) and todo.md. Hosted CI/deployment remain unverified.
