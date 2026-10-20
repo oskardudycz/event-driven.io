@@ -54,6 +54,7 @@ typings/
 .env
 
 .cache/
+.astro/
 .DS_Store
 public/
 

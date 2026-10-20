@@ -13,6 +13,7 @@ export default defineConfig([
     ignores: [
       'node_modules/**',
       '.cache/**',
+      '.astro/**',
       'public/**',
       'static/**',
       'content/**',

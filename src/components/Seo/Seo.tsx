@@ -76,7 +76,7 @@ export const createHead = <Data extends HeadData = HeadData>(
     );
   };
 
-const Seo = (props: SeoProps) => {
+export const seoMetadata = (props: SeoProps) => {
   const t = headI18n.getFixedT(
     props.pageContext.lang || DEFAULT_OPTIONS.defaultLanguage,
   );
@@ -248,6 +248,12 @@ const Seo = (props: SeoProps) => {
       : []),
   ];
 
+  return { lang, title, metaTags, linkTags, structuredData, noIndex };
+};
+
+const Seo = (props: SeoProps) => {
+  const { lang, title, metaTags, linkTags, structuredData, noIndex } =
+    seoMetadata(props);
   return (
     <React.Fragment>
       <html lang={lang} />

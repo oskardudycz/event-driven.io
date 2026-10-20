@@ -8,6 +8,8 @@
     "types": ["node", "react", "react-dom"]
   },
   "include": [
+    "astro/src/**/*.ts",
+    "astro/src/**/*.tsx",
     "src/**/*.ts",
     "src/**/*.tsx",
     "site/**/*.ts",
