@@ -1,9 +1,6 @@
 import type { ArticleNode } from '../types/content.ts';
-import { temporaryDirectory } from '../../tests/helpers/temporary-directory.ts';
 import assert from 'node:assert/strict';
 import { test } from 'vitest';
-import { readFileSync, readdirSync } from 'node:fs';
-import { join } from 'node:path';
 import MiniSearch from 'minisearch';
 import i18next from 'i18next';
 import en from '../i18n/locales/en/translation.json' with { type: 'json' };
@@ -16,7 +13,7 @@ import {
 import { indexOptions } from './options.ts';
 import { loadIndex } from './runtime.ts';
 import { highlightParts, snippet } from './snippets.ts';
-import { writeSearchIndexes } from '../../scripts/build-search-index.ts';
+import { createSearchIndex } from './build.ts';
 
 const node = (
   slug: string,
@@ -95,27 +92,17 @@ test('canonical locale selection, Polish diacritics, identifiers, prefix/fuzzy m
     docs.length,
   );
 });
-test('rebuilding indexes replaces modified/deleted documents and removes obsolete assets', async () => {
-  const directory = temporaryDirectory('local-search-update-');
+test('rebuilding indexes replaces modified and deleted documents', async () => {
   const nodes = [
     node('one', 'en', 'First', 'olduniqueterm'),
     node('two', 'en', 'Second', 'deleteduniqueterm'),
   ];
-  await writeSearchIndexes(nodes, directory);
-  const before = JSON.parse(
-    readFileSync(join(directory, 'search-index/manifest.json'), 'utf8'),
-  ) as Record<'en' | 'pl', string>;
-  assert.ok(nodes[0]);
-  nodes[0].rawMarkdownBody = 'newuniqueterm';
+  const before = createSearchIndex(nodes, 'en').json;
+  nodes[0]!.rawMarkdownBody = 'newuniqueterm';
   nodes.pop();
-  await writeSearchIndexes(nodes, directory);
-  const after = JSON.parse(
-    readFileSync(join(directory, 'search-index/manifest.json'), 'utf8'),
-  ) as Record<'en' | 'pl', string>;
-  assert.notEqual(before.en, after.en);
-  const index = await loadIndex(
-    readFileSync(join(directory, after.en), 'utf8'),
-  );
+  const after = createSearchIndex(nodes, 'en').json;
+  assert.notEqual(before, after);
+  const index = await loadIndex(after);
   assert.equal(
     index.search('olduniqueterm', { fuzzy: false, prefix: false }).length,
     0,
@@ -125,7 +112,6 @@ test('rebuilding indexes replaces modified/deleted documents and removes obsolet
     0,
   );
   assert.equal(index.search('newuniqueterm').length, 1);
-  assert.equal(readdirSync(join(directory, 'search-index')).length, 3);
 });
 test('canonical cover data follows the selected genuine translation and stays optional', async () => {
   const english = { ...node('one', 'en', 'English', 'content'), id: 'english' };
@@ -306,15 +292,12 @@ test('tags are searchable documents that lead to the tag page of the language, o
   );
 });
 
-test('written search indexes include tag documents', async () => {
-  const directory = temporaryDirectory('local-search-tags-');
-  await writeSearchIndexes([node('one', 'en', 'First', 'content')], directory);
-  const manifest = JSON.parse(
-    readFileSync(join(directory, 'search-index/manifest.json'), 'utf8'),
-  ) as Record<'en' | 'pl', string>;
-  const index = await loadIndex(
-    readFileSync(join(directory, manifest.en), 'utf8'),
+test('built search indexes include tag documents', async () => {
+  const { json } = createSearchIndex(
+    [node('one', 'en', 'First', 'content')],
+    'en',
   );
+  const index = await loadIndex(json);
   assert.equal(
     index.search('distributed tracing').find(({ source }) => source === 'tags')
       ?.path,

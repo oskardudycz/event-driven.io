@@ -14,7 +14,7 @@ export function readThemePreference(): ThemePreference {
   return 'system';
 }
 
-// Runs in Gatsby's document head before paint. Keep this small and independent
+// Runs in the document head before paint. Keep this small and independent
 // of React so the same initialization can be used in an Astro layout.
 export const themeInitialization = `
 (() => {

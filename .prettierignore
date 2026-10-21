@@ -3,7 +3,7 @@ node_modules/
 .astro/
 public/
 static/
-content/
+/content/
 report/
 visual-artifacts/
 tests/fixtures/

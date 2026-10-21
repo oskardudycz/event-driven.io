@@ -5,6 +5,7 @@
 @import 'tailwindcss/utilities.css' layer(utilities) source(none);
 
 @source '../';
+@source '../../astro/src';
 /* Colocated test fixtures must not generate production utilities. */
 @source not '../**/*.test.*';
 @source not '../**/*.spec.*';

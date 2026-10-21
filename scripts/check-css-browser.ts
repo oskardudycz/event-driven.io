@@ -4,7 +4,7 @@ import { extname, resolve, sep } from 'node:path';
 import { chromium } from 'playwright';
 
 // Serve the current output through Playwright routes, without a shared preview
-// server or live analytics/widgets. Local Gatsby scripts still hydrate normally.
+// server or live analytics/widgets. Local site scripts still hydrate normally.
 export async function checkCssBrowser(
   expectedColor?: string,
   mainHeightVh = 80,

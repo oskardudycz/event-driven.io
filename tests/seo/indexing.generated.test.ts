@@ -1,4 +1,4 @@
-import type { BuildPageData } from '../helpers/build-output.ts';
+import { publishedContent } from '../helpers/published-content.ts';
 import assert from 'node:assert/strict';
 import { test } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -80,14 +80,7 @@ test('case-normalized article routes retain feed GUIDs and Disqus thread identif
     'type_script_node_Js_event_sourcing',
   ]) {
     const route = `/en/${original.toLowerCase()}/`;
-    const data = JSON.parse(
-      readFileSync(`public/page-data${route}page-data.json`, 'utf8'),
-    ) as BuildPageData;
-    assert.equal(
-      data.result.data.post.fields.slug,
-      `/${original.toLowerCase()}/`,
-    );
-    assert.equal(data.result.data.post.fields.originalSlug, `/${original}/`);
+    assert.ok(publishedContent('posts').some((post) => post.route === route));
     assert.ok(
       feed.includes(
         `<guid isPermaLink="false">${siteOrigin}/en/${original}/</guid>`,

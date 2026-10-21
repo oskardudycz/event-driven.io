@@ -1,4 +1,4 @@
-import type { HeadProps } from 'gatsby';
+import type { HeadProps } from '../../types/content.ts';
 import type { TFunction } from 'i18next';
 import type {
   ArticleFields,
@@ -44,7 +44,7 @@ const normalizePath = (path?: string) => {
 const absoluteUrl = (host: string, path?: string) =>
   path && path.startsWith('http') ? path : `${host}${path || ''}`;
 
-// Head renders outside wrapPageElement. Use its explicit page context and a
+// Metadata is also rendered outside the page provider tree. Use its explicit page context and a
 // fixed-language translator so parallel SSR and navigation cannot mix locales.
 const headI18n = i18next.createInstance();
 void headI18n.init({ ...DEFAULT_OPTIONS.i18nextConfig, initAsync: false });

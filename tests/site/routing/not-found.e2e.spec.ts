@@ -16,6 +16,9 @@ for (const javaScriptEnabled of [false, true]) {
         await page.goto(`/${language}/404/`, {
           waitUntil: 'domcontentloaded',
         });
+        await expect(page).toHaveTitle(
+          `${language === 'pl' ? 'Nie znaleziono strony' : 'Page not found'} - Event-Driven.io`,
+        );
         const heading = page.locator('h1');
         await expect(heading).toHaveCount(1);
         await expect(heading).toContainText(
@@ -54,17 +57,15 @@ test.describe('root 404 without JavaScript', () => {
 for (const language of ['en', 'pl']) {
   test(`${language} unknown URLs show localized recovery and preserve the missing address`, async ({
     page,
-    baseURL,
   }) => {
     const response = await page.goto(`/${language}/__missing_page__/`, {
       waitUntil: 'domcontentloaded',
     });
-    // Gatsby serve returns 200 for matchPath fallbacks. Netlify's explicit 404 rewrites
-    // are also checked by test:404 against the generated deployment rules.
-    const localGatsby = ['127.0.0.1', 'localhost'].includes(
-      new URL(baseURL!).hostname,
+    // Gatsby's comparison server returns 200 for localized matchPath fallbacks;
+    // Astro and the production Netlify rewrites retain the error status.
+    expect(response?.status()).toBe(
+      process.env.TEST_PUBLISHER === 'gatsby' ? 200 : 404,
     );
-    expect(response?.status()).toBe(localGatsby ? 200 : 404);
     await expect(page.locator('h1')).toContainText(
       language === 'pl' ? 'Ups!' : 'Oops!',
       {

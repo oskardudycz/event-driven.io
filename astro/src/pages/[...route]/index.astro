@@ -1,0 +1,16 @@
+---
+import { sitePages } from '../../lib/site.ts';
+import Document from '../../layouts/Document.astro';
+export async function getStaticPaths() {
+  const pages = await sitePages();
+  return pages
+    .filter((page) => !page.route.endsWith('.html'))
+    .map((page) => ({
+      params: { route: page.route.slice(1).replace(/\/$/, '') },
+      props: { page },
+    }));
+}
+const { page } = Astro.props;
+---
+
+<Document page={page} />

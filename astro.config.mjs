@@ -2,24 +2,34 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import { unified } from '@astrojs/markdown-remark';
 
-// An isolated migration trial. Gatsby still owns public/ and publication.
+// Static publication; ASTRO_OUTPUT_DIR optionally isolates a comparison build.
 export default defineConfig({
   site: 'https://event-driven.io',
   srcDir: './astro/src',
   publicDir: './static',
-  outDir: './visual-artifacts/astro',
+  outDir: process.env.ASTRO_OUTPUT_DIR || './public',
   cacheDir: './.cache/astro',
   trailingSlash: 'always',
+  build: { format: 'preserve' },
+  image: {
+    service: {
+      entrypoint: 'astro/assets/services/sharp',
+      config: { png: { compressionLevel: 9 }, jpeg: { progressive: true } },
+    },
+  },
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'pl'],
     routing: { prefixDefaultLocale: true },
   },
   integrations: [react()],
-  markdown: { processor: unified({ syntaxHighlight: 'prism' }) },
+  markdown: { processor: unified(), syntaxHighlight: false },
   vite: {
+    server: {
+      watch: {
+        ignored: ['**/visual-artifacts/**', '**/.cache/**', '**/public/**'],
+      },
+    },
     css: { modules: { localsConvention: 'camelCaseOnly' } },
-    // Gatsby hoists cookie 0.5; bundle Astro's own cookie 2 at its importer.
-    environments: { prerender: { resolve: { noExternal: ['cookie'] } } },
   },
 });

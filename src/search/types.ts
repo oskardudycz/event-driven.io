@@ -1,4 +1,4 @@
-import type { IGatsbyImageData } from 'gatsby-plugin-image';
+import type { ImageData } from '../types/image.ts';
 import type { SearchResult } from 'minisearch';
 export type SearchDocument = {
   id: string;
@@ -9,7 +9,7 @@ export type SearchDocument = {
   tags: string;
   date: string;
   content: string;
-  cover?: IGatsbyImageData | null;
+  cover?: ImageData | null;
 };
 export type SearchHit = Omit<SearchDocument, 'id' | 'date' | 'tags'> &
   Partial<Pick<SearchDocument, 'id' | 'date'>> & {

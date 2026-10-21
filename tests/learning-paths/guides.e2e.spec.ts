@@ -107,13 +107,20 @@ for (const language of ['en', 'pl']) {
     expect((await paragraphs.allTextContents()).map(plainQuotes)).toEqual(
       introParagraphs(guide.body),
     );
-    const introBottom = await page
-      .locator('main .bodytext')
-      .evaluate((element) => element.getBoundingClientRect().bottom);
-    const listTop = await page
-      .locator('main ol.ordered')
-      .evaluate((element) => element.getBoundingClientRect().top);
-    expect(introBottom).toBeLessThanOrEqual(listTop);
+    await expectFonts(page);
+    await expect
+      .poll(() =>
+        page.evaluate(() => {
+          const intro = document
+            .querySelector('main .bodytext')!
+            .getBoundingClientRect();
+          const list = document
+            .querySelector('main ol.ordered')!
+            .getBoundingClientRect();
+          return intro.bottom - list.top;
+        }),
+      )
+      .toBeLessThanOrEqual(0);
     await expect(page.locator('meta[name="description"]')).toHaveAttribute(
       'content',
       guide.metadata.description,

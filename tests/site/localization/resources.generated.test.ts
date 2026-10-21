@@ -1,44 +1,25 @@
-import type { BuildPageData } from '../../helpers/build-output.ts';
 import assert from 'node:assert/strict';
 import { test } from 'vitest';
-import { globSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
+import { load } from 'cheerio';
+import { publishedPages } from '../../../scripts/published-pages.ts';
 
-test('every built page has matching editorial and plugin language with queried translations', () => {
+test('every built page renders its editorial language and translated navigation', () => {
   const languages = new Set();
-  for (const file of globSync('public/page-data/**/page-data.json')) {
-    const { path, result } = JSON.parse(
-      readFileSync(file, 'utf8'),
-    ) as BuildPageData;
-    const language = path.split('/')[1];
+  for (const { route, file } of publishedPages('public')) {
+    const language = route.split('/')[1];
     if (language !== 'en' && language !== 'pl') continue;
     languages.add(language);
-    const context = result.pageContext;
-    assert.equal(context.lang, language, path);
-    assert.equal(context.langKey, language, path);
-    assert.equal(context.language, language, path);
-    assert.equal(context.i18n.language, language, path);
-    assert.equal(context.i18n.generateDefaultLanguagePage, true, path);
-    assert.equal(context.i18n.routed, true, path);
-    assert.equal(context.i18n.originalPath, context.originalPath, path);
-    const locales: { language: string; ns: string; data: string }[] =
-      result.data.locales.edges.map(
-        ({ node }: { node: { language: string; ns: string; data: string } }) =>
-          node,
-      );
-    assert.deepEqual(
-      locales.map(({ language }) => language).sort(),
-      language === 'en' ? ['en'] : ['en', 'pl'],
-      path,
-    );
-    const resource = locales.find((node) => node.language === language);
-    assert.ok(resource);
-    assert.equal(resource.ns, 'translation', path);
+    const $ = load(readFileSync(file, 'utf8'));
+    assert.equal($('html').attr('lang'), language, route);
+    const articles = $('header nav a[data-slug="/articles/"]');
+    assert.equal(articles.length, 1, route);
     assert.equal(
-      (JSON.parse(resource.data) as { menu: { articles: string } }).menu
-        .articles,
+      articles.text().trim(),
       language === 'en' ? 'Articles' : 'Artykuły',
-      path,
+      route,
     );
+    assert.equal(articles.attr('href'), `/${language}/articles/`, route);
   }
   assert.deepEqual([...languages].sort(), ['en', 'pl']);
 });

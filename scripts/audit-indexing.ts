@@ -127,10 +127,10 @@ async function pool<T>(values: T[], run: (_value: T) => Promise<void>) {
 const robots = await get('/robots.txt');
 if (
   robots.status !== 200 ||
-  !robots.body.includes(`Sitemap: ${siteOrigin}/sitemap/sitemap-index.xml`)
+  !robots.body.includes(`Sitemap: ${siteOrigin}/sitemap-index.xml`)
 )
   failures.push('robots.txt does not serve the expected sitemap declaration');
-const sitemapIndex = await get('/sitemap/sitemap-index.xml');
+const sitemapIndex = await get('/sitemap-index.xml');
 const locations = (body: string) =>
   [...body.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1] || '');
 if (sitemapIndex.status !== 200 || !/xml/.test(sitemapIndex.contentType))

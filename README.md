@@ -44,53 +44,21 @@ Playwright starts and stops the local production server automatically; it can al
 VISUAL_BASE_URL=https://your-preview.netlify.app npm run test:e2e
 ```
 
-`build` generates `llms.txt`, feeds, sitemaps and search indexes. Theme tokens are edited directly in CSS. Tests that inspect generated output require a completed production build. Do not edit content or run another Gatsby process during a build or cache check. To rebuild from an empty cache, run `npm run clean` before `npm run build`. Do this when changing React or Gatsby's JSX runtime so previously compiled runtime artifacts cannot affect verification.
-
-If Gatsby logs an unidentified Node warning, include its dependency stack with:
-
-```bash
-NODE_OPTIONS=--trace-warnings env -u DEBUG npm run build
-```
+`build` uses Astro to generate `public/`, including feeds, root sitemaps, search indexes, redirects, headers and the legacy service-worker retirement response. `npm run serve -- --port 9000` previews this output through Netlify's local static server, including redirect and localized 404 rules. `astro preview` alone does not apply those hosting rules. Do not edit content or run development/build/cache checks concurrently. `npm run clean` removes generated output and the Astro cache.
 
 ## TypeScript and modules
 
-Application components, pages, layouts and Gatsby browser/SSR hooks use `.tsx`; plain browser modules use `.ts`. Node scripts, importers, tests, local remark plugins and build implementations use native ESM `.ts`. Run scripts with Node 24 directly; no ts-node, tsx loader or Babel registration is needed. Use erasable TypeScript syntax (types/interfaces, not runtime enums or parameter properties) and explicit file extensions in Node imports. Gatsby owns JSX compilation and uses its default runtime for Head API compatibility; Vitest uses the automatic JSX runtime.
+The repository uses native ESM and Node 24 TypeScript. Astro owns routing and document rendering in `astro/src`; shared React components and CSS Modules live in `src`. Astro's built-in deferred `glob()` loader stores validated metadata and raw bodies; the explicit Unified pipeline preserves the existing Markdown dialect, heading links, Prism directives, typography and embeds. Astro owns image optimization/caching through `astro:assets`; Vite imports publish unprocessed attachments. Generated filenames may change. Publication data uses native static endpoints and the official RSS helper. The root package declares `type: module`; no Gatsby runtime, plugins or installation patches remain.
 
-Gatsby 5 discovers native ESM configuration and Node hooks through `gatsby-config.mjs` and `gatsby-node.mjs`. Those entry points export the typed implementation from `site/*.ts`. ESLint, lint-staged and PostCSS retain their standard `.mjs` configuration entry points. The root package deliberately has no `type: module`: Gatsby still emits CommonJS SSR bundles into `.cache`. Source package scopes (`src`, `content/meta`, `site`, `scripts`, `import`, `tests` and the local plugins) declare `type: module` for `.ts` modules without changing Gatsby-generated files. Gatsby owns application compilation; `npm run typecheck` separately checks all application, tooling and test TypeScript without emitting files. Browser/Vite code uses bundler resolution in `tsconfig.json`; native Node code also passes NodeNext resolution in `tsconfig.node.json`, which catches missing runtime extensions and incompatible module imports. Both run in CI before the build; type checking is separate from transformed test execution.
+Use erasable TypeScript syntax and explicit file extensions in Node imports. `npm run typecheck` runs strict application/bundler and native NodeNext checks, followed by the official Astro checker. Tests transform TypeScript separately and do not replace type checking. The TypeScript 7 native checker supplies `tsc`; the `typescript` import is the TS6 compiler-API compatibility package for tooling. Editor tasks and recommended extensions are in `.vscode`.
 
-The tooling configuration starts from Pongo: `tsconfig.shared.json`, `.prettierrc.json` and `.editorconfig` are copied; ESLint retains its general recommended/type-checked/Prettier/type-only-import configuration. Gatsby overrides add browser/JSX support, no-emit checking and this repository's source/output locations. React hooks and image accessibility checks are enabled for site code; Pongo's database/Cloudflare rules do not apply here. The copied strict optional-property and indexed-access checks remain enabled. Browser and native Node configurations extend the same shared settings.
-
-The native TypeScript 7 checker supplies `tsc`; the `typescript` import is Microsoft's TS6 compatibility alias for Gatsby, ESLint and compiler-API tools. Install the recommended TypeScript native VS Code extension to use the matching editor service. Do not point the editor at the compatibility package's missing tsserver.
-
-VS Code settings, extension recommendations, tasks and the component-test debugger also start from Pongo, with root paths, Node 24 and npm. TypeScript formatting runs through ESLint's Prettier integration; imports are organized on save. `npm run typecheck:watch` runs the editor's watch task. Select “Debug Current Vitest File” for any Node/React Vitest test. Use the Playwright extension or `--debug` for full-site tests. `npm run fix` applies formatting and lint fixes manually; lint-staged checks staged code and article image descriptions.
-
-ESLint anchors its project path to the configuration directory, so opening `src` or a component folder in the editor does not change tsconfig resolution. Vitest's TypeScript configuration lives in the ESM `tests` scope; group commands and the debugger select it explicitly.
-
-Shared content/query types live in `src/types/content.ts`. Keep each page's data type limited to its query. Use published dependency types where available; the narrow declarations in `src/types/vendors.d.ts` cover untyped integrations.
+ESLint, Prettier, PostCSS and Tailwind use their checked-in native configuration. Component CSS Modules stay with their owner. `src/types/content.ts` and `src/types/image.ts` describe the portable content/image contracts; some serialized field and CSS names retain their published legacy spelling.
 
 ## Dependency maintenance
 
-Scoped npm overrides retain the tested ESLint/localization versions where upstream peer ranges lag behind and replace pinned vulnerable Lodash/Immutable utilities with patched versions. Their owners, rationale and validation are in [the dependency review](docs/dependency-review.md); installations use normal peer resolution without `--force` or `--legacy-peer-deps`.
+Install with `npm ci`; use normal peer resolution. After dependency changes, review the manifest and lockfile, repeat a clean install, and run `npm run verify:publication`. Existing visual references must pass without regeneration. `npm explain <package>` identifies transitive owners; do not delete the lockfile or apply forced audit fixes as routine maintenance.
 
-Run `npm outdated` to compare installed, wanted and latest registry versions. [The dependency review](docs/dependency-review.md) records tested upgrades and remaining compatibility work. Check imports, Gatsby/PostCSS configuration, scripts and peer requirements before removing a dependency. `npm explain <package>` shows which packages still require it transitively; an unused root declaration can be removed even when Gatsby retains its own dependency. Gatsby supplies its compiler configuration; the project uses TypeScript for smoke/lint parsing and Vitest for component rendering tests, with no direct Babel setup. npm runs patch-package from the postinstall lifecycle to apply the Gatsby CSS cache correction and the gatsby-plugin-sharp placeholder correction; the Yarn-only postinstall-postinstall helper is removed.
-
-After changing dependencies:
-
-```bash
-npm install
-npm ci
-npm run smoke
-npm run lint
-npm run clean
-env -u DEBUG npm run build
-CI=true npm test
-```
-
-Review both package.json and package-lock.json. Dependency cleanup should pass existing screenshots without regenerating them.
-
-Run `npm audit` to inspect advisories and `npm audit fix --dry-run` to preview compatible fixes. Review the proposed updates before applying them, then repeat installation/build/test checks. Some remaining Gatsby dependencies require upstream changes; the audit's `--force` suggestion can downgrade Gatsby plugins and is not a safe routine update.
-
-Use `npm ls --all` to diagnose invalid or stale transitive resolutions and `npm explain <package>` to find their owners. A successful install alone does not establish a consistent tree. Gatsby's published router and legacy lint dependencies still have incompatible peer declarations; see the dependency review for the remaining upstream limitations. Do not routinely delete the lockfile: any fresh resolution needs its own reviewed lock diff, clean install and full acceptance checks.
+The Astro-only clean install on 2026-10-21 installed 1,930 packages and reported 18 advisories (2 moderate, 16 high), plus two upstream deprecation warnings. These remain unresolved; removing Gatsby does not establish that every dependency is secure. Earlier dependency and Gatsby patch investigations in `docs/` are historical records.
 
 ## Tests
 
@@ -106,7 +74,7 @@ Tests live beside their owning components/modules. Cross-feature and generated-s
 | `npm test`               | Yes           | All four groups in order: unit → integration/components → generated → E2E                                          |
 | `npm run test:watch`     | No            | Live Vitest reruns for unit, integration and component browser projects                                            |
 | `npm run typecheck`      | No            | Strict application, tooling and all test types; separate from test execution                                       |
-| `npm run smoke`          | No            | Source syntax, configuration and GraphQL queries                                                                   |
+| `npm run smoke`          | No            | Source syntax and Astro configuration                                                                              |
 
 `npm run check:edit` adds source image checks to the two no-build groups. For the full local publication gate use `npm run verify:publication`: smoke/lint/types, quick checks, one build, generated-output checks and production E2E. CI runs the same boundaries without repeating the quick suites after the build. Ordinary text edits use `npm run dev` and live feedback; they do not require a production build or screenshot updates.
 
@@ -124,27 +92,11 @@ npm run test:watch -- search
 npm run test:e2e -- search.e2e.spec.ts
 ```
 
-For quick real-site interactions without a production build, run `npm run test:e2e:dev`. It starts Gatsby development on port 8001 and runs the existing `@dev` theme/storage/keyboard/locale cases. If `npm run dev -- -H 127.0.0.1 -p 8001` is already running, it reuses that server locally for Fast Refresh and repeat checks. CI mode proves fresh startup and uses Gatsby’s explicit query-on-demand-in-CI setting so it retains normal development semantics. Stop development before building or validating `public`: Gatsby dev/build share generated directories. Development checks do not replace the final production gate.
+For quick real-site interactions, run `npm run test:e2e:dev`. It starts Astro development and runs existing `@dev` theme/storage/keyboard/locale cases. A locally running `npm run dev -- --host 127.0.0.1 --port 8001` can be reused; CI proves cold startup. The regular development URL is `http://localhost:4321/en/`. Content edits invalidate rendered content and images; unchanged visits reuse cached work. Production serves prebuilt static output and does not run Markdown or Sharp per request.
 
-Vitest owns its native browser server and React cleanup; Playwright Test owns the full-site server, visitor contexts, reports and traces. Both use Playwright Chromium from the same locked installation. Full-site tests remain separate because Vitest Browser Mode is component testing, not a replacement for website E2E. See [testing guidance](docs/testing-guidance.md#using-vitest-and-playwright-together) for the researched Astro-compatible boundary.
+Vitest owns controlled component rendering; Playwright Test owns website navigation, SSR/hydration and the production server lifecycle. See [testing guidance](docs/testing-guidance.md#using-vitest-and-playwright-together) and [Astro implementation notes](astro/README.md).
 
-Local measurements for the testing refactor (2026-10-13): unit checks were about 2s, controlled Chromium component checks about 6s, and the eight development interactions took 15.8s with a running server. Cold managed Gatsby development needed 91s to reach HTTP readiness; the complete cold dev check took 1.8m. Initial content-graph/webpack work still costs time. Use the component gallery/Vitest watch for the smallest feedback loop, and reuse Gatsby development while editing site content.
-
-Internal discovery links (archive, related cards, category reading lists and search) preserve the current interface language when that article route exists. An untranslated `/pl/` copy can still declare its English original as canonical; canonical metadata does not change the navigation destination. Search labels the actual content language. When there is no route in the selected language, links use the available version.
-
-Cache checks temporarily modify/delete/restore existing source files and rebuild. Stop development/preview servers and pause content edits first. Wait for the checks to finish before staging, committing or deploying, so temporary edits/deletions are not included:
-
-```bash
-env -u DEBUG npm run verify:cache
-env -u DEBUG npm run verify:cache:css
-npm run test
-```
-
-Run browser checks against the restored build afterward. Cache logs are saved in temporary directories printed by each command.
-
-To check search refresh in development, start `npm run dev -- -H 127.0.0.1 -p 8001`, then run `npm run verify:search:dev` in another terminal. This check also temporarily modifies and restores an article. Set `DEV_SEARCH_BASE_URL` to use another address. Reload the search page after its index changes.
-
-### Browser test commands and helpers
+## Browser test commands and helpers
 
 Full-site tests live beside their features as `tests/**/*.e2e.spec.ts` and run with Playwright Test. All other suites use the named Vitest projects in `tests/vitest.config.ts`. `npm run typecheck` includes both runners and their configurations.
 
@@ -211,7 +163,7 @@ Only `url` is required. `tags` defaults to `["Architecture"]`; the first tag is 
 
 Imports create `content/posts/YYYY-MM-DD--slug/index.en.md` and `index.pl.md`, download images into that directory and record provenance in `article-source.txt` or `substack-source.txt`. Both files initially have the same body; the Polish file uses `useDefaultLangCanonical: true`. Translate the body and image descriptions, then remove that flag.
 
-The importer adds `redirectFrom: /source-slug/` and, for custom slugs, `redirectAliases`. Gatsby generates permanent redirects to the English article. Links to available blog versions become relative URLs; references without a blog version retain their source URL. Code labels use TypeScript for JavaScript/TypeScript examples and preserve other languages.
+The importer adds `redirectFrom: /source-slug/` and, for custom slugs, `redirectAliases`. Astro generates permanent redirects to the English article. Links to available blog versions become relative URLs; references without a blog version retain their source URL. Code labels use TypeScript for JavaScript/TypeScript examples and preserve other languages.
 
 Existing posts are never overwritten. A failed batch retains earlier successful imports; retry with a manifest containing only unfinished entries. Review images, captions, code labels, source links and interactive embeds, then run:
 
@@ -248,7 +200,7 @@ decorativeImages:
   - ./separator.png
 ```
 
-Use `![](./separator.png)` for that image. Raw HTML images require an explicit `alt` attribute; use `alt=""` only when decorative. JSX linting checks native images, `GatsbyImage` and `StaticImage`.
+Use `![](./separator.png)` for that image. Raw HTML images require an explicit `alt` attribute; use `alt=""` only when decorative. JSX linting checks native images, `ResponsiveImage`.
 
 ```bash
 npm run check:images
@@ -300,7 +252,7 @@ Use `publishedAt: '2026-10-05T12:34:56+02:00'` when the source publication time 
 `youtube: [Video title](https://www.youtube.com/watch?v=sQbkUl7-z_U&start=30)`
 ```
 
-Use this format for a player. The importer and normalization command automatically convert only standalone images linked to YouTube videos. Text links stay links, including standalone links, reading lists, bare URLs and inline references. Existing explicit players and mapped webinar recordings retain their embeds. Players use the configured Gatsby video plugin; no handwritten iframe is needed. Preserve the `strict-origin-when-cross-origin` referrer policy in Gatsby/Netlify configuration to avoid YouTube error 153.
+Use this format for a player. The importer and normalization command automatically convert only standalone images linked to YouTube videos. Text links stay links, including standalone links, reading lists, bare URLs and inline references. Existing explicit players and mapped webinar recordings retain their embeds. Players use the shared Markdown video transform; no handwritten iframe is needed. Preserve the `strict-origin-when-cross-origin` referrer policy in generated Netlify headers to avoid YouTube error 153.
 
 Check or convert existing Markdown:
 
@@ -314,13 +266,13 @@ Future article imports perform the same normalization automatically.
 
 ## Mermaid diagrams
 
-Gatsby doesn't render Mermaid. Articles embed diagrams as PNG files, named `YYYY-MM-DD-mermaidN.png` and placed next to `index.en.md`:
+The Markdown pipeline does not render Mermaid. Articles embed diagrams as PNG files, named `YYYY-MM-DD-mermaidN.png` and placed next to `index.en.md`:
 
 ```md
 ![mermaid1](./2026-10-12-mermaid1.png)
 ```
 
-Keep the Mermaid sources in the article folder, as `.mmd` files whose names start with the diagram number, for example `1-session-mode.mmd`. They can live in any subfolder; the Gatsby `posts` source ignores `code/` folders, so `code/diagrams/` is a good place. Then render them all:
+Keep the Mermaid sources in the article folder, as `.mmd` files whose names start with the diagram number, for example `1-session-mode.mmd`. They can live in any subfolder; the `posts` content loader ignores `code/` folders, so `code/diagrams/` is a good place. Then render them all:
 
 ```sh
 npm run render-diagrams content/posts/2026-10-12--connection-pooler-modes-advisory-locks
@@ -373,7 +325,7 @@ Optional introduction in Markdown.
 
 Edit component-owned `.module.css` files, `src/theme/global.css` for the shared reset, and `src/theme/tokens.css` for colors, spacing and other design tokens. Tokens are ordinary CSS variables; no generator is needed.
 
-Tailwind 4 runs through Gatsby's PostCSS pipeline. `site/config.ts` passes the plugins from `postcss.config.mjs` directly to the loader: the installed loader does not unwrap ESM default exports during file discovery. Shared styling configuration lives in `src/theme/tailwind.css`; it imports the theme and utilities while preserving the existing reset. Use literal utility classes in `.tsx` files, such as `min-h-[80vh]`, `text-accent` or `gap-gutter`. Avoid constructing class names from string fragments: Tailwind scans complete names. Existing component CSS Modules remain supported. Prefer direct CSS variables in modules; utilities do not need to be copied into modules with `@apply`.
+Tailwind 4 runs through Astro/Vite's PostCSS pipeline (`postcss.config.mjs`). Shared styling configuration lives in `src/theme/tailwind.css`; it imports the theme and utilities while preserving the existing reset. Use literal utility classes in `.tsx` files, such as `min-h-[80vh]`, `text-accent` or `gap-gutter`. Avoid constructing class names from string fragments: Tailwind scans complete names. Existing component CSS Modules remain supported. Prefer direct CSS variables in modules; utilities do not need to be copied into modules with `@apply`.
 
 The styling baseline is Safari 16.4+, Chrome 111+ and Firefox 128+. The existing reset is in the `base` cascade layer so utilities can override it deliberately. Unlayered component CSS takes precedence over layered utilities, so remove an old property from its module when deliberately moving that property to a utility. A new reset and broader visual redesign remain separate work.
 
@@ -383,7 +335,7 @@ Edit light values in `:root` and dark overrides in `:root[data-theme='dark']` in
 
 For a manual appearance review, run `npm run build` and `npm run serve`, then use the theme icon in the desktop header or lower mobile navigation on the home page, an article, a category and search. Review the dark palette, image canvases and mobile navigation. Switch EN/PL and reload to check persistence; open a second tab to check synchronized selection. Choose **System / Systemowy** and change your OS appearance to check automatic updates. Third-party comments, newsletter and calendar embeds keep their own provider styling.
 
-Use named CSS exports, for example `import * as styles from './Component.module.css'` and `className={styles.container}`. Dashed local selectors are exported in camel case. Keep Gatsby data/routing adapters separate from reusable presentation components where needed; the reading-list view accepts a link renderer and owns its stylesheet.
+Use named CSS exports, for example `import * as styles from './Component.module.css'` and `className={styles.container}`. Dashed local selectors are exported in camel case. Keep data/routing adapters separate from reusable presentation components where needed; the reading-list view accepts a link renderer and owns its stylesheet.
 
 After styling changes, run `npm run build`, `npm run test:generated -- theme`, `npm run test:e2e` and `npm run verify:cache:css`.
 
@@ -393,50 +345,48 @@ Run `npm run test:e2e -- hero.e2e.spec.ts navigation-disclosure.e2e.spec.ts` for
 
 Native buttons and form fields inherit the page font family in `src/theme/global.css`, so interface text uses Open Sans once loaded. Component sizes/weights remain local. Run `npm run test:e2e -- fonts.e2e.spec.ts` for EN/PL mobile/desktop checks and `npm run test:e2e -- styles.e2e.spec.ts --grep 'usable fallback'` to verify controls remain readable when either font weight fails. Append `--browser firefox` to repeat these cases in Firefox.
 
-Gatsby 5.16.1 requires the checked-in CSS cache correction in `patches/`. npm applies it automatically during installation; after `--ignore-scripts`, run `npm run postinstall` before building. The cache check temporarily edits/restores module CSS, global CSS and a literal Tailwind class, then verifies generated output and computed styles before and after hydration. It rebuilds the restored sources in `finally`; do not run other builds or edit those files concurrently. Upgrade/removal instructions are in [the patch notes](docs/gatsby-css-cache-patch.md).
-
-gatsby-plugin-sharp 5.16.0 is pinned for a second patch that shares pending placeholder work between parallel page queries. `npm run test:file -- tests/images/placeholders.int.test.ts` checks it; maintenance notes are in [the placeholder patch notes](docs/gatsby-sharp-placeholder-patch.md).
+`npm run verify:cache` checks content modification/deletion/restoration and refreshed search output across repeated builds. `npm run verify:cache:css` edits/restores module CSS, global CSS and a literal Tailwind class, then checks published styles and browser rendering. Both restore and rebuild in `finally`; run them without concurrent editing or other builds. Gatsby-specific patch investigations remain in `docs/` as historical evidence; the patches and plugins have been removed.
 
 For a focused menu check, use `npm run test:e2e -- --grep 'persistent menu'`. It checks language switching, localized destinations, overflow icons, opening/closing and mobile/desktop resizing. Run the full browser suite before publishing changes.
 
 ## Editing articles and biographies
 
-Keep the development server running while editing Markdown. Gatsby automatically refreshes content; no production build or reference update is needed after each edit.
+Keep the development server running while editing Markdown. Astro automatically refreshes content; no production build or reference update is needed after each edit.
 
 ```sh
 npm run dev
-# Open http://localhost:8000/en/ or http://localhost:8000/pl/.
+# Open http://localhost:4321/en/ or http://localhost:4321/pl/.
 ```
 
-For quick automated checks without a Gatsby build:
+For quick automated checks without a production build:
 
 ```sh
 npm run check:edit
 ```
 
-This checks source image descriptions, isolated React behavior and browser rendering of controlled English/Polish author, archive, related and search examples. It starts/stops the component gallery automatically. The pre-commit hook also checks image descriptions in staged Markdown. Actual current article content, generated links, SEO and Gatsby hydration are verified after the production build in CI.
+This checks source image descriptions, isolated React behavior and browser rendering of controlled English/Polish author, archive, related and search examples. It starts/stops the component gallery automatically. The pre-commit hook also checks image descriptions in staged Markdown. Actual current article content, generated links, SEO and Astro hydration are verified after the production build in CI.
 
 | Command                      | Purpose                                                                                                  |
 | ---------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `npm run dev`                | Live article/bio preview at localhost:8000                                                               |
+| `npm run dev`                | Live article/bio preview at localhost:4321                                                               |
 | `npm run check:content`      | Source image-description checks only; no build                                                           |
-| `npm run check:edit`         | Source, unit, integration and component browser checks; no Gatsby build                                  |
+| `npm run check:edit`         | Source, unit, integration and component browser checks; no production build                              |
 | `npm run dev:components`     | Live component/style preview at localhost:9001                                                           |
 | `npm run test:browser`       | Compare controlled components; failure paths and traces are printed in the terminal                      |
 | `npm run test:e2e:report`    | Open the production browser report and traces                                                            |
 | `npm run verify:publication` | Run smoke/lint/types, quick checks, one build, generated output and production browsers; stop on failure |
 
-To preview the controlled components, start `dev:components`, then open `http://127.0.0.1:9001/?story=Editorial/English` or `?story=Editorial/Polish`. These are test examples, not production pages. CSS and component edits refresh immediately. Their fixed text/cover keeps visual comparisons independent of editorial changes; real Gatsby cover loading and routing have separate production-page checks.
+To preview the controlled components, start `dev:components`, then open `http://127.0.0.1:9001/?story=Editorial/English` or `?story=Editorial/Polish`. These are test examples, not production pages. CSS and component edits refresh immediately. Their fixed text/cover keeps visual comparisons independent of editorial changes; real responsive cover loading and routing have separate production-page checks.
 
 ### Guide heading review
 
-The component gallery includes `?story=Guides/English&theme=light` and `?story=Guides/Polish&theme=dark` for the real heading and numbered reading-card components. These use controlled content and native images/anchors, not the Gatsby guide adapter. Review the icon alignment and current palette alongside the existing hero/editorial examples.
+The component gallery includes `?story=Guides/English&theme=light` and `?story=Guides/Polish&theme=dark` for the real heading and numbered reading-card components. These use controlled content and native images/anchors, independently of the page adapter. Review the icon alignment and current palette alongside the existing hero/editorial examples.
 
-Hero design review uses `?story=Hero/English` or `?story=Hero/Polish`, with optional `&theme=dark`. These examples render the actual HeroView and its owned styles, with current UI translations and original portrait. The gallery header is preview context; it does not reproduce production navigation. The website keeps the full biography, Gatsby image loading and routing; verify those through the site tests. Hero examples are review material, not automatically accepted screenshot references.
+Hero design review uses `?story=Hero/English` or `?story=Hero/Polish`, with optional `&theme=dark`. These examples render the actual HeroView and its owned styles, with current UI translations and original portrait. The gallery header is preview context; it does not reproduce production navigation. The website keeps the full biography, responsive image loading and routing; verify those through the site tests. Hero examples are review material, not automatically accepted screenshot references.
 
 For normal publishing, edit/import → preview locally → commit/push the PR → inspect its Netlify preview → merge. GitHub Actions runs quick checks before the build, then all project/production browser checks. It deploys the preview after passing validation; merging to main automatically publishes production and notifies IndexNow. No manual snapshot-update or deploy command is required for article/bio wording changes. Superseded PR runs are cancelled; production runs stay sequential. This requires the existing repository Netlify credentials. `verify:publication` reproduces the validation locally without publishing; it is optional during editing and never updates references.
 
-Static production output still needs a build. CI caches npm downloads and compatible Gatsby outputs, but there is no promise of instant production builds. Do not validate new source against old `public` output. Do not edit content or run competing builds during production/cache validation.
+Static production output still needs a build. CI caches npm downloads and compatible Astro image caches, but there is no promise of instant production builds. Do not validate new source against old `public` output. Do not edit content or run competing builds during production/cache validation.
 
 ## Updating fixtures
 
@@ -496,7 +446,7 @@ npm run audit:indexing -- --base-url https://event-driven.io --output report/ind
 
 Use a Netlify preview origin to audit an unpublished deployment. Optional `--urls-file /path/to/urls.json` accepts a JSON array of Search Console example URLs. The audit checks robots, sitemaps, HTTP statuses, canonicals, headings, reciprocal alternates and direct localized 404 responses. It does not submit URLs to Google.
 
-Netlify serves unknown `/en/*` and `/pl/*` addresses with localized recovery pages and HTTP 404, preserving the requested URL. Gatsby's local server can return 200 for its localized client fallback; check actual HTTP error/query routing on Netlify. Editorial redirects precede the final error rules.
+Netlify serves unknown `/en/*` and `/pl/*` addresses with localized recovery pages and HTTP 404, preserving the requested URL. The Netlify local preview applies these same hosting rules; raw Astro preview does not. Verify hosted HTTP behavior after deployment. Editorial redirects precede the final error rules.
 
 In Search Console:
 

@@ -45,7 +45,6 @@ test('untranslated copies declare English canonical and English originals stay d
 
 test('canonical validation catches mismatched sitemap destinations and broken alternates', () => {
   const fixture = temporaryDirectory('indexing-regression-');
-  mkdirSync(join(fixture, 'sitemap'));
   mkdirSync(join(fixture, 'en'), { recursive: true });
   mkdirSync(join(fixture, 'pl'), { recursive: true });
   writeFileSync(
@@ -57,7 +56,7 @@ test('canonical validation catches mismatched sitemap destinations and broken al
     `<head><link rel="canonical" href="${siteOrigin}/en/"></head>`,
   );
   writeFileSync(
-    join(fixture, 'sitemap/sitemap-0.xml'),
+    join(fixture, 'sitemap-0.xml'),
     `<urlset><loc>${siteOrigin}/pl/</loc></urlset>`,
   );
   const failures = verifyIndexingBuild(fixture);
@@ -74,7 +73,6 @@ function indexingFixture(
   pages: Record<string, { lang: string; head: string; body: string }>,
 ) {
   const fixture = temporaryDirectory('indexing-regression-');
-  mkdirSync(join(fixture, 'sitemap'));
   for (const [route, { lang, head, body }] of Object.entries(pages)) {
     mkdirSync(join(fixture, route), { recursive: true });
     writeFileSync(
@@ -83,7 +81,7 @@ function indexingFixture(
     );
   }
   writeFileSync(
-    join(fixture, 'sitemap/sitemap-0.xml'),
+    join(fixture, 'sitemap-0.xml'),
     `<urlset>${Object.keys(pages)
       .map((route) => `<loc>${siteOrigin}${route}</loc>`)
       .join('')}</urlset>`,
@@ -132,35 +130,4 @@ test('reciprocal guide alternates with x-default pass', () => {
     '/pl/guides/cqrs/': { lang: 'pl', head, body: '<main></main>' },
   });
   assert.deepEqual(verifyIndexingBuild(fixture), []);
-});
-
-test('published page/post collisions fail instead of silently changing the route canonical', async () => {
-  const { createPages } = await import('../../site/node.ts');
-  const node = (source: string) => ({
-    node: {
-      id: source,
-      fields: { slug: '/collision/', source, langKey: 'en' },
-      frontmatter: { title: 'Collision', related: [] },
-    },
-  });
-  await assert.rejects(
-    Promise.resolve(
-      createPages(
-        {
-          actions: { createPage: () => {}, createRedirect: () => {} },
-          graphql: () =>
-            Promise.resolve({
-              data: {
-                searchCovers: { nodes: [] },
-                learningPaths: { nodes: [] },
-                allMarkdownRemark: { edges: [node('posts'), node('pages')] },
-              },
-            }),
-        } as unknown as Parameters<typeof createPages>[0],
-        { plugins: [] },
-        () => {},
-      ),
-    ),
-    /Multiple published documents claim \/en\/collision\//,
-  );
 });

@@ -1,10 +1,8 @@
-import type { IGatsbyImageData } from 'gatsby-plugin-image';
-import type { PageProps } from 'gatsby';
-import type { WithTranslation } from 'react-i18next';
+import type { ImageData } from './image.ts';
 
 export type ImageFile = {
   childImageSharp?: {
-    gatsbyImageData?: IGatsbyImageData;
+    gatsbyImageData?: ImageData;
     resize?: { src: string };
   };
 };
@@ -104,9 +102,11 @@ export type PageData = {
   tagContent: TagContentNode | null;
   site: { siteMetadata: { facebook: { appId?: string } } };
 };
-export type SitePageProps<Fields extends keyof PageData> = PageProps<
-  Pick<PageData, Fields>,
-  SitePageContext
->;
-export type TranslatedPageProps<Fields extends keyof PageData> =
-  SitePageProps<Fields> & WithTranslation;
+export type HeadProps<Data = object, Context = Partial<SitePageContext>> = {
+  data: Data;
+  pageContext: Context;
+};
+export type SitePageProps<Fields extends keyof PageData> = {
+  data: Pick<PageData, Fields>;
+  pageContext: SitePageContext;
+};

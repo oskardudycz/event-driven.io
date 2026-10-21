@@ -40,8 +40,9 @@ for (const language of ['en', 'pl']) {
     });
     const indexRequests: string[] = [];
     const engineRequests: string[] = [];
+    let searching = false;
     page.on('request', (request) => {
-      if (request.url().includes('/local-search-engine-'))
+      if (searching && request.resourceType() === 'script')
         engineRequests.push(request.url());
       if (request.url().includes('/search-index/'))
         indexRequests.push(request.url());
@@ -70,6 +71,9 @@ for (const language of ['en', 'pl']) {
         ? 'Wpisz wyszukiwaną frazę.'
         : 'Start typing to search.',
     );
+    // Hydration and fonts establish the initial module graph. One new script
+    // on the first query proves the engine is lazy without pinning a bundler name.
+    searching = true;
     await input.fill('introduction event sourcing');
     const result = page.locator('.search-hit').filter({
       has: page.locator(

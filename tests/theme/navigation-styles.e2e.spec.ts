@@ -53,6 +53,9 @@ const properties = [
 
 async function renderedStyles(page: Page) {
   await expectFonts(page);
+  // Fonts initialize before React. Compare hydrated visits on both paths;
+  // the theme fieldset becomes enabled when its real client state is ready.
+  await expect(page.locator('header fieldset')).toBeEnabled();
   await page.mouse.move(0, 0);
   return page.evaluate((properties) => {
     for (const animation of document.getAnimations()) {

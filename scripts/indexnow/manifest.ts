@@ -83,9 +83,9 @@ export function changedUrls(previous: Manifest, current: Manifest): string[] {
 }
 export async function prepare(directory = 'public'): Promise<Manifest> {
   const pages: Record<string, string> = {};
-  const sitemapDirectory = join(directory, 'sitemap');
+  const sitemapDirectory = directory;
   for (const name of (await readdir(sitemapDirectory)).sort()) {
-    if (!name.endsWith('.xml') || name === 'sitemap-index.xml') continue;
+    if (!/^sitemap-\d+\.xml$/.test(name)) continue;
     const xml = cheerio.load(
       await readFile(join(sitemapDirectory, name), 'utf8'),
       {

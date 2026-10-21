@@ -3,6 +3,7 @@ import { lintTsxFixtures } from '../helpers/lint-tsx-fixtures.ts';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { test } from 'vitest';
+import path from 'node:path';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { readdir, readFile, rm } from 'node:fs/promises';
@@ -72,33 +73,38 @@ test('import alternatives preserve descriptions and require intentional override
     /must be strings/,
   );
 });
-test('image component linting requires explicit alt on native and Gatsby images', async () => {
+test('image component linting requires explicit alt on native and responsive images', async () => {
+  const component = path.resolve('src/components/Image/ResponsiveImage.tsx');
   const source = `import React from 'react';
-import { GatsbyImage, StaticImage } from 'gatsby-plugin-image';
-
+import ResponsiveImage from '${component}';
+const image = {
+  layout: 'fullWidth' as const,
+  width: 100,
+  height: 100,
+  images: { fallback: { src: 'photo.jpg' } },
+};
 export const Example = () => (
   <>
     <img src="photo.jpg" />
-    <GatsbyImage image={{}} />
-    <StaticImage src="photo.jpg" />
+    <ResponsiveImage image={image} />
   </>
 );
 `;
   const [invalid, valid] = await lintTsxFixtures({
     'Invalid.tsx': source,
     'Valid.tsx': source
-      .replaceAll('src="photo.jpg"', 'src="photo.jpg" alt="A workshop"')
-      .replace('image={{}}', 'image={{}} alt=""'),
+      .replace('src="photo.jpg"', 'src="photo.jpg" alt="A workshop"')
+      .replace('image={image}', 'image={image} alt=""'),
   });
-  assert.ok(invalid, 'Missing ESLint result');
+  assert.ok(invalid);
   assert.equal(invalid.fatalErrorCount, 0, JSON.stringify(invalid.messages));
   assert.equal(
     invalid.messages.filter((message) => message.ruleId === 'jsx-a11y/alt-text')
       .length,
-    3,
+    2,
     JSON.stringify(invalid.messages),
   );
-  assert.ok(valid, 'Missing ESLint result');
+  assert.ok(valid);
   assert.equal(valid.errorCount, 0, JSON.stringify(valid.messages));
 });
 test('imports reject undescribed images without partial posts; manifest overrides survive in both languages', async () => {

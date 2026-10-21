@@ -58,9 +58,7 @@ export default defineConfig({
           name: 'unit',
           sequence: { groupOrder: 0 },
           environment: 'node',
-          include: [
-            '{src,site,scripts,import,plugins,tests}/**/*.unit.test.ts',
-          ],
+          include: ['{astro,src,scripts,import,tests}/**/*.unit.test.ts'],
         },
       },
       {
@@ -69,11 +67,9 @@ export default defineConfig({
           name: 'integration',
           sequence: { groupOrder: 1 },
           environment: 'node',
-          // Node-owned plugins use native Node CJS interop, as in Gatsby.
+          // Node-owned Markdown tools use native Node CommonJS interop.
           deps: { interopDefault: false },
-          include: [
-            '{src,site,scripts,import,plugins,tests}/**/*.int.test.{ts,tsx}',
-          ],
+          include: ['{astro,src,scripts,import,tests}/**/*.int.test.{ts,tsx}'],
         },
       },
       {

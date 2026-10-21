@@ -1,6 +1,6 @@
 import React from 'react';
 import type { ArticleNode } from '../../types/content.ts';
-import { GatsbyImage, getImage } from 'gatsby-plugin-image';
+import ResponsiveImage from '../Image/ResponsiveImage.tsx';
 import { Link } from '../Link/index.tsx';
 import ArchiveCard from './ArchiveCard.tsx';
 import { useTranslation } from 'react-i18next';
@@ -22,11 +22,13 @@ export default function Item({ post }: { post: ArticleNode }) {
       tags={tags.map((tag) => tagLabel(t, tag))}
       excerpt={excerpt}
       cover={
-        <GatsbyImage
-          image={getImage(cover?.childImageSharp?.gatsbyImageData || null)!}
-          alt={title}
-          sizes="(min-width: 1025px) 846px, (min-width: 1024px) 646px, (min-width: 690px) 606px, (min-width: 600px) calc(100vw - 84px), calc(100vw - 64px)"
-        />
+        cover?.childImageSharp?.gatsbyImageData && (
+          <ResponsiveImage
+            image={cover.childImageSharp.gatsbyImageData}
+            alt={title}
+            sizes="(min-width: 1025px) 846px, (min-width: 1024px) 646px, (min-width: 690px) 606px, (min-width: 600px) calc(100vw - 84px), calc(100vw - 64px)"
+          />
+        )
       }
       renderLink={({ href, ...props }) => <Link {...props} to={href} />}
     />

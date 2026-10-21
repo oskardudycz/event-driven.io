@@ -1,10 +1,9 @@
 import { defineConfig } from '@playwright/test';
 import { resolve } from 'node:path';
 
-const development = process.env.GATSBY_TEST_MODE === 'development';
-const localURL = development
-  ? 'http://127.0.0.1:8001'
-  : 'http://127.0.0.1:9000';
+const development = process.env.SITE_TEST_MODE === 'development';
+const port = process.env.SITE_TEST_PORT || (development ? '8001' : '9000');
+const localURL = `http://127.0.0.1:${port}`;
 const baseURL = process.env.VISUAL_BASE_URL || localURL;
 const artifacts = resolve(
   import.meta.dirname,
@@ -46,14 +45,10 @@ export default defineConfig({
     : {
         webServer: {
           command: development
-            ? 'env -u DEBUG npm run dev -- -H 127.0.0.1 -p 8001'
-            : 'env -u DEBUG npm run serve -- -H 127.0.0.1 -p 9000',
+            ? `env -u DEBUG npm run dev -- --host 127.0.0.1 --port ${port}`
+            : `env -u DEBUG npm run serve -- --port ${port}`,
           cwd: resolve(import.meta.dirname, '..'),
-          // Gatsby disables development query-on-demand in CI by default.
-          // Exercise normal development behavior; production validates all pages.
-          ...(development
-            ? { env: { GATSBY_ENABLE_QUERY_ON_DEMAND_IN_CI: '1' } }
-            : {}),
+          ...(development ? { env: { ASTRO_DEV_BACKGROUND: '0' } } : {}),
           url: `${baseURL}/en/articles/`,
           reuseExistingServer: !process.env.CI,
           timeout: development ? 180000 : 30000,

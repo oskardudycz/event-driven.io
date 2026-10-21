@@ -435,5 +435,5 @@ Oskar Dudycz is an independent software architect, consultant, trainer, conferen
 
 ## Feeds and discovery
 
-- [XML sitemap](https://event-driven.io/sitemap/sitemap-index.xml)
+- [XML sitemap](https://event-driven.io/sitemap-index.xml)
 - [English RSS feed](https://event-driven.io/rss.xml)
