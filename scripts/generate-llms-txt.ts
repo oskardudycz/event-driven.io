@@ -171,7 +171,7 @@ const output = [
   formatSection('Polish articles', byLanguage('pl')),
   '## Feeds and discovery',
   '',
-  `- [XML sitemap](${siteUrl}/sitemap/sitemap-index.xml)`,
+  `- [XML sitemap](${siteUrl}/sitemap-index.xml)`,
   `- [English RSS feed](${siteUrl}/rss.xml)`,
   '',
 ].join('\n');

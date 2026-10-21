@@ -1,9 +1,15 @@
 import type { GuideStep } from '../../types/content.ts';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from '../Link/index.tsx';
+import { anchor, type RenderLink } from '../Link/anchor.tsx';
 
-const GuideSteps = ({ guides = [] }: { guides?: GuideStep[] | undefined }) => {
+const GuideSteps = ({
+  guides = [],
+  renderLink = anchor,
+}: {
+  guides?: GuideStep[] | undefined;
+  renderLink?: RenderLink;
+}) => {
   const { t } = useTranslation();
   if (guides.length === 0) return null;
 
@@ -16,16 +22,24 @@ const GuideSteps = ({ guides = [] }: { guides?: GuideStep[] | undefined }) => {
         {guides.map((guide) => (
           <li key={guide.path}>
             {t('guides.guide')}:{' '}
-            <Link to={guide.path} className="underline">
-              {guide.title}
-            </Link>{' '}
+            {renderLink({
+              href: guide.path,
+              className: 'underline',
+              children: <>{guide.title}</>,
+            })}{' '}
             — {t('guides.step', { step: guide.step, total: guide.total })}
             {guide.next && (
               <>
                 {' · '}
-                <Link to={guide.next.path} className="underline">
-                  {t('guides.next')}: {guide.next.title}
-                </Link>
+                {renderLink({
+                  href: guide.next.path,
+                  className: 'underline',
+                  children: (
+                    <>
+                      {t('guides.next')}: {guide.next.title}
+                    </>
+                  ),
+                })}
               </>
             )}
           </li>

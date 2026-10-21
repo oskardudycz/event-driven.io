@@ -19,3 +19,28 @@ for (const language of ['en', 'pl']) {
     });
   }
 }
+
+for (const language of ['en', 'pl']) {
+  test(`${language} fonts and navigation work before external JavaScript loads`, async ({
+    page,
+  }) => {
+    let blockedScripts = 0;
+    await page.route('**/*', (route) => {
+      if (route.request().resourceType() === 'script') {
+        blockedScripts++;
+        return route.abort();
+      }
+      return route.fallback();
+    });
+    await page.goto(`/${language}/`, { waitUntil: 'domcontentloaded' });
+    await expectFonts(page);
+    await expect.poll(() => blockedScripts).toBeGreaterThan(0);
+    await page
+      .locator(`header a[href="/${language}/articles/"]`)
+      .first()
+      .click();
+    await page.waitForURL(`**/${language}/articles/`);
+    await expectFonts(page);
+    await expect(page.locator('main h1')).toHaveCount(1);
+  });
+}

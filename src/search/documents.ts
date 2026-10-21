@@ -1,5 +1,5 @@
 import type { ArticleNode } from '../types/content.ts';
-import type { IGatsbyImageData } from 'gatsby-plugin-image';
+import type { ImageData } from '../types/image.ts';
 import type { TFunction } from 'i18next';
 import { tagsForLanguage } from '../utils/tag-posts.ts';
 import { tagSlug } from '../utils/tag-slug.ts';
@@ -41,7 +41,7 @@ export function searchDocuments(
   nodes: ArticleNode[],
   language: string,
   defaultLanguage = 'en',
-  covers: Map<string, IGatsbyImageData> = new Map(),
+  covers: Map<string, ImageData> = new Map(),
 ) {
   const groups = new Map<string, ArticleNode[]>();
   for (const node of nodes) {

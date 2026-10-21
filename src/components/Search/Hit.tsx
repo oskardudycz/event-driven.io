@@ -1,7 +1,7 @@
 import React from 'react';
 import type { SearchHit } from '../../search/types.ts';
-import { Link } from 'gatsby';
-import { GatsbyImage } from 'gatsby-plugin-image';
+import { Link } from '../Link/index.tsx';
+import ResponsiveImage from '../Image/ResponsiveImage.tsx';
 import { usePageContext } from '../../i18n/page-context.ts';
 import SearchResult from './SearchResult.tsx';
 
@@ -13,13 +13,12 @@ export default function Hit({ hit }: { hit: SearchHit }) {
       lang={lang}
       cover={
         hit.cover ? (
-          <GatsbyImage
+          <ResponsiveImage
             image={hit.cover}
             alt=""
-            loading="lazy"
-            objectFit="contain"
+            contain
+            fill
             sizes="(max-width: 599px) 88px, 180px"
-            style={{ width: '100%', height: '100%' }}
           />
         ) : null
       }

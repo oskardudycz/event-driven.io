@@ -12,6 +12,10 @@ for (const [file, lang] of [
   test(`${file} provides localized, index-excluded recovery links without JavaScript`, () => {
     const $ = cheerio.load(readFileSync(file, 'utf8'));
     assert.equal($('html').attr('lang'), lang);
+    assert.equal(
+      $('title').text(),
+      `${lang === 'pl' ? 'Nie znaleziono strony' : 'Page not found'} - Event-Driven.io`,
+    );
     assert.equal($('h1').length, 1);
     assert.match($('h1').text(), lang === 'pl' ? /Ups!/ : /Oops!/);
     assert.match($('meta[name="robots"]').attr('content')!, /noindex/);
@@ -44,17 +48,4 @@ test('fallback rewrites preserve HTTP 404 and follow all specific redirects', as
     !lines.some((line) => /^\/404(?:\/|\.html) /.test(line)),
     'Root error pages must not redirect to themselves or another error route',
   );
-  const matches = JSON.parse(
-    readFileSync('.cache/match-paths.json', 'utf8'),
-  ) as {
-    path: string;
-    matchPath: string;
-  }[];
-  for (const lang of ['en', 'pl'])
-    assert.ok(
-      matches.some(
-        (page: { path: string; matchPath: string }) =>
-          page.path === `/${lang}/404/` && page.matchPath === `/${lang}/*`,
-      ),
-    );
 });

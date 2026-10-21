@@ -1,5 +1,5 @@
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import type { BuildPageData } from '../helpers/build-output.ts';
+import { readFileSync } from 'node:fs';
+import { expectedArticleLinks } from '../helpers/article-expectations.ts';
 import { test, expect } from '../helpers/browser/fixtures.ts';
 import {
   expectFonts,
@@ -10,6 +10,7 @@ import {
   introParagraphs,
   plainQuotes,
   publishedTagFile,
+  publishedContent,
 } from '../helpers/published-content.ts';
 
 test('author biography renders a readable note and loaded portrait', async ({
@@ -64,18 +65,9 @@ test('related articles and publication navigation remain usable', async ({
     expect(gap).toBeGreaterThanOrEqual(0);
     expect(gap).toBeLessThanOrEqual(30);
   }
-  const data = JSON.parse(
-    readFileSync(
-      'public/page-data/en/vertical-slices-and-dependencies/page-data.json',
-      'utf8',
-    ),
-  ) as BuildPageData;
-  const expectedLinks = data.result.pageContext.relatedIds.map((id) => {
-    const post = data.result.data.relatedPosts.edges.find(
-      ({ node }) => node.id === id,
-    )!.node;
-    return `/${post.fields.langKey}${post.fields.slug}`;
-  });
+  const expectedLinks = expectedArticleLinks(
+    '/en/vertical-slices-and-dependencies/',
+  ).related;
   expect(
     await page
       .locator('.related a')
@@ -248,19 +240,14 @@ function polishArticleWithTranslatedTag() {
     readFileSync('src/i18n/locales/pl/translation.json', 'utf8'),
   ) as { tags: { labels: Record<string, string> } };
   const labels = Object.entries(translation.tags.labels);
-  for (const entry of readdirSync('public/page-data/pl', {
-    withFileTypes: true,
-  })) {
-    const file = `public/page-data/pl/${entry.name}/page-data.json`;
-    if (!entry.isDirectory() || !existsSync(file)) continue;
-    const { path, result } = JSON.parse(
-      readFileSync(file, 'utf8'),
-    ) as BuildPageData;
-    const tags = result.data.post?.frontmatter.tags || [];
+  for (const post of publishedContent('posts').filter(
+    (post) => post.language === 'pl',
+  )) {
     const translated = labels.find(([slug]) =>
-      tags.some((tag) => tagSlug(tag) === slug),
+      (post.metadata.tags || []).some((tag) => tagSlug(tag) === slug),
     );
-    if (translated) return { path, slug: translated[0], label: translated[1] };
+    if (translated)
+      return { path: post.route, slug: translated[0], label: translated[1] };
   }
   throw new Error('Expected a Polish article with a translated tag');
 }
@@ -344,13 +331,7 @@ for (const language of ['en', 'pl']) {
       page,
     }) => {
       const route = `/${language}/idempotent_command_handling/`;
-      const { pageContext } = (
-        JSON.parse(
-          readFileSync(`public/page-data${route}page-data.json`, 'utf8'),
-        ) as BuildPageData
-      ).result;
-      const tagLinks = (pageContext.tagLinks || []).filter(({ path }) => path);
-      const guides = pageContext.guides || [];
+      const { tagLinks, guides } = expectedArticleLinks(route);
       expect(guides.length).toBeGreaterThan(0);
       await page.setViewportSize({ width, height: 900 });
       await page.goto(route, { waitUntil: 'domcontentloaded' });
@@ -376,7 +357,7 @@ for (const language of ['en', 'pl']) {
         guides.map(({ title, step, total }) => `${title} (${step}/${total})`),
       );
       const destinations = [
-        ...tagLinks.map(({ path }) => path!),
+        ...tagLinks.map(({ path }) => path),
         ...guides.map(({ path }) => path),
       ];
       expect(

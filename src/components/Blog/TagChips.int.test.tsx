@@ -3,20 +3,9 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { load } from 'cheerio';
 import i18next from 'i18next';
 import { I18nextProvider } from 'react-i18next';
-import { expect, test, vi } from 'vitest';
+import { expect, test } from 'vitest';
 import en from '../../i18n/locales/en/translation.json';
 import pl from '../../i18n/locales/pl/translation.json';
-
-vi.mock('gatsby', () => ({
-  Link: ({ to, children }: { to: string; children: React.ReactNode }) => (
-    <a href={to}>{children}</a>
-  ),
-}));
-vi.mock('gatsby-plugin-react-i18next', () => ({
-  Link: ({ to, children }: { to: string; children: React.ReactNode }) => (
-    <a href={to}>{children}</a>
-  ),
-}));
 
 import TagChips from './TagChips.tsx';
 

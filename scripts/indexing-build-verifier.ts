@@ -98,9 +98,9 @@ export function verifyIndexingBuild(directory: string): string[] {
             );
     }
   }
-  const sitemapFiles = files(join(directory, 'sitemap')).filter((file) =>
-    /sitemap-\d+\.xml$/.test(file),
-  );
+  const sitemapFiles = readdirSync(directory)
+    .filter((file) => /^sitemap-\d+\.xml$/.test(file))
+    .map((file) => join(directory, file));
   const sitemapUrls = sitemapFiles.flatMap((file) =>
     [...readFileSync(file, 'utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map(
       (match) => match[1] || '',

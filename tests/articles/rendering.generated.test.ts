@@ -1,5 +1,5 @@
-import type { BuildPageData } from '../helpers/build-output.ts';
-import type { ArticleNode } from '../../src/types/content.ts';
+import { publishedContent } from '../helpers/published-content.ts';
+import { expectedArticleLinks } from '../helpers/article-expectations.ts';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -11,26 +11,11 @@ import {
   isSubscriptionPromotion,
 } from '../../import/article-content.ts';
 const publicRoot = path.resolve(import.meta.dirname, '../../public');
-const articles = fs
-  .readdirSync(path.join(publicRoot, 'page-data'), {
-    recursive: true,
-    withFileTypes: true,
-  })
-  .filter((entry) => entry.isFile() && entry.name === 'page-data.json')
-  .flatMap((entry) => {
-    const { path: route, result } = JSON.parse(
-      fs.readFileSync(path.join(entry.parentPath, entry.name), 'utf8'),
-    ) as BuildPageData;
-    if (result.data?.post?.fields.source !== 'posts') return [];
-    const related = result.pageContext.relatedIds.map((id: string) => {
-      const post = result.data.relatedPosts.edges.find(
-        ({ node }: { node: ArticleNode }) => node.id === id,
-      )?.node;
-      assert(post, `Missing related article data: ${route}: ${id}`);
-      return `/${post.fields.langKey}${post.fields.slug}`;
-    });
-    return [{ route, language: result.data.post.fields.langKey, related }];
-  });
+const articles = publishedContent('posts').map((post) => ({
+  route: post.route,
+  language: post.language,
+  related: expectedArticleLinks(post.route).related,
+}));
 
 test('published articles have localized metadata, blog cross-links and working video markup', () => {
   assert(articles.length > 0, 'Expected published article output');
@@ -213,16 +198,12 @@ test('related article cards follow current editorial data and preserve available
           'utf8',
         ),
       );
-      const pageData = JSON.parse(
-        fs.readFileSync(
-          path.join(publicRoot, 'page-data', destination, 'page-data.json'),
-          'utf8',
-        ),
-      ) as BuildPageData;
+      const source = publishedContent('posts').find(
+        (post) => post.route === destination,
+      )!;
       let canonicalPath = destination;
-      if (pageData.result.data.post.frontmatter.useDefaultLangCanonical) {
+      if (source.metadata.useDefaultLangCanonical)
         canonicalPath = destination.replace(/^\/pl\//, '/en/');
-      }
       assert.equal(
         target('head link[rel="canonical"]').attr('href'),
         `https://event-driven.io${canonicalPath}`,

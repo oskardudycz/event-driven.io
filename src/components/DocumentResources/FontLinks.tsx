@@ -1,5 +1,4 @@
 import React from 'react';
-import { withPrefix } from 'gatsby';
 
 export default function FontLinks({ language }: { language: string }) {
   const subsets = language === 'pl' ? ['latin', 'latin-ext'] : ['latin'];
@@ -18,15 +17,13 @@ export default function FontLinks({ language }: { language: string }) {
             as="font"
             type="font/woff2"
             crossOrigin="anonymous"
-            href={withPrefix(
-              `/fonts/open-sans/files/open-sans-${subset}-${weight}.woff2`,
-            )}
+            href={`/fonts/open-sans/files/open-sans-${subset}-${weight}.woff2`}
           />
         )),
       )}
       <link
         rel="stylesheet"
-        href={withPrefix('/fonts/open-sans/index.css')}
+        href="/fonts/open-sans/index.css"
         id="site-fonts"
       />
     </>

@@ -35,21 +35,13 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: npm
           cache-dependency-path: package-lock.json
-      - name: Compute Gatsby cache compatibility
-        id: gatsby-cache-key
-        run: node scripts/gatsby-cache-key.ts
-        env:
-          GATSBY_DISQUS_NAME: ${{ secrets.GATSBY_DISQUS_NAME }}
-          GOOGLE_TAG_ID: ${{ secrets.GOOGLE_TAG_ID }}
-      - name: Restore Gatsby build cache
+      - name: Restore Astro image cache
         uses: actions/cache/restore@v6
         with:
-          path: |
-            .cache
-            public
-          key: gatsby-${{ runner.os }}-${{ steps.gatsby-cache-key.outputs.compatibility }}-${{ github.sha }}
+          path: .cache/astro
+          key: astro-${{ runner.os }}-${{ hashFiles('package-lock.json', 'astro/src/lib/images.ts') }}-${{ github.sha }}
           restore-keys: |
-            gatsby-${{ runner.os }}-${{ steps.gatsby-cache-key.outputs.compatibility }}-
+            astro-${{ runner.os }}-${{ hashFiles('package-lock.json', 'astro/src/lib/images.ts') }}-
       - name: Use npm 11.9.0 (matching the Pongo baseline)
         run: npm install --global npm@11.9.0
       # install dependencies
@@ -59,25 +51,21 @@ jobs:
       - run: npm run typecheck
       - name: Install Chromium for component and production checks
         run: npm run browsers:install:ci
-      - name: Check source, unit and integration tests without a Gatsby build
+      - name: Check source, unit and integration tests without a site build
         run: npm run check:edit
       # build
       - run: npm run build
         env:
           GATSBY_DISQUS_NAME: ${{ secrets.GATSBY_DISQUS_NAME }}
           GOOGLE_TAG_ID: ${{ secrets.GOOGLE_TAG_ID }}
-          # Gatsby sizes image workers from physical cores; hosted runners expose vCPUs.
-          GATSBY_CPU_COUNT: logical_cores
       - run: npm run test:generated
       - name: Check production browser behavior and reviewed homepage rendering
         run: npm run test:e2e
-      - name: Save validated Gatsby build cache
+      - name: Save validated Astro image cache
         uses: actions/cache/save@v6
         with:
-          path: |
-            .cache
-            public
-          key: gatsby-${{ runner.os }}-${{ steps.gatsby-cache-key.outputs.compatibility }}-${{ github.sha }}
+          path: .cache/astro
+          key: astro-${{ runner.os }}-${{ hashFiles('package-lock.json', 'astro/src/lib/images.ts') }}-${{ github.sha }}
       - name: Upload visual comparison screenshots
         if: always()
         uses: actions/upload-artifact@v7

@@ -69,12 +69,12 @@ export default defineConfig([
     },
   },
   {
-    files: ['src/**/*.{ts,tsx}', 'gatsby-browser.tsx', 'gatsby-ssr.tsx'],
+    files: ['src/**/*.{ts,tsx}', 'astro/src/**/*.{ts,tsx}'],
     languageOptions: { globals: globals.browser },
     plugins: { react, 'react-hooks': hooks, 'jsx-a11y': a11y },
     settings: {
       react: { version: React.version },
-      'jsx-a11y': { components: { GatsbyImage: 'img', StaticImage: 'img' } },
+      'jsx-a11y': { components: { ResponsiveImage: 'img' } },
     },
     rules: {
       'jsx-a11y/alt-text': 'error',

@@ -148,17 +148,17 @@ function verifySeoBuild(publicDirectory: string) {
   expectContains(
     'robots.txt',
     robots,
-    'Sitemap: https://event-driven.io/sitemap/sitemap-index.xml',
+    'Sitemap: https://event-driven.io/sitemap-index.xml',
   );
 
-  const sitemapIndex = read('sitemap/sitemap-index.xml');
+  const sitemapIndex = read('sitemap-index.xml');
   expectContains(
     'sitemap index',
     sitemapIndex,
-    '<loc>https://event-driven.io/sitemap/sitemap-0.xml</loc>',
+    '<loc>https://event-driven.io/sitemap-0.xml</loc>',
   );
 
-  const sitemap = read('sitemap/sitemap-0.xml');
+  const sitemap = read('sitemap-0.xml');
   const sitemapUrls = Array.from(
     sitemap.matchAll(/<loc>([^<]+)<\/loc>/g),
     (match) => match[1] || '',
@@ -213,11 +213,7 @@ function verifySeoBuild(publicDirectory: string) {
     llms,
     'https://event-driven.io/en/introduction_to_event_sourcing/',
   );
-  expectContains(
-    'llms.txt',
-    llms,
-    'https://event-driven.io/sitemap/sitemap-index.xml',
-  );
+  expectContains('llms.txt', llms, 'https://event-driven.io/sitemap-index.xml');
 
   const headers = read('_headers');
   expectContains('_headers', headers, 'X-Frame-Options: DENY');

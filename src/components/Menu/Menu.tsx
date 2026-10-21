@@ -2,7 +2,7 @@ import type { ArticleEdge } from '../../types/content.ts';
 import * as styles from './Menu.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from '../Link/index.tsx';
+import { anchor, type RenderLink } from '../Link/anchor.tsx';
 
 import {
   FaBookOpen,
@@ -29,6 +29,7 @@ import { getOverflowedIndexes } from './overflow.ts';
 import config from '../../../content/meta/config.ts';
 
 type MenuProps = {
+  renderLink?: RenderLink;
   path: string;
   homepage: boolean;
   fixed: boolean;
@@ -206,6 +207,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
     const { screenWidth, homepage, fixed } = this.props;
     const { open, hiddenIndexes, measuring } = this.state;
     const items = this.items;
+    const renderLink = this.props.renderLink || anchor;
 
     return (
       <React.Fragment>
@@ -226,6 +228,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
           >
             {items.map((item, i) => (
               <Item
+                renderLink={renderLink}
                 item={item}
                 key={item.to || i}
                 overflowHidden={
@@ -253,14 +256,19 @@ class Menu extends React.Component<MenuProps, MenuState> {
               {hiddenIndexes.map((index) => {
                 const item = items[index];
                 return item ? (
-                  <Item item={item} key={item.to} hiddenItem />
+                  <Item
+                    renderLink={renderLink}
+                    item={item}
+                    key={item.to}
+                    hiddenItem
+                  />
                 ) : null;
               })}
             </ul>
           )}
 
-          <LanguagePicker />
-          <SearchLink />
+          <LanguagePicker renderLink={renderLink} />
+          <SearchLink renderLink={renderLink} />
           <ThemePicker />
         </nav>
       </React.Fragment>
@@ -268,17 +276,15 @@ class Menu extends React.Component<MenuProps, MenuState> {
   }
 }
 
-function SearchLink() {
+function SearchLink({ renderLink }: { renderLink: RenderLink }) {
   const { t } = useTranslation();
-  return (
-    <Link
-      to="/search/"
-      aria-label={t('menu.search')}
-      className="flex size-11 shrink-0 items-center justify-center rounded-panel text-[color:var(--theme-trigger-color)] hover:bg-[var(--color-brand-tint)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand)]"
-    >
-      <FaSearch size={20} aria-hidden="true" />
-    </Link>
-  );
+  return renderLink({
+    href: '/search/',
+    'aria-label': t('menu.search'),
+    className:
+      'flex size-11 shrink-0 items-center justify-center rounded-panel text-[color:var(--theme-trigger-color)] hover:bg-[var(--color-brand-tint)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand)]',
+    children: <FaSearch size={20} aria-hidden="true" />,
+  });
 }
 
 export default Menu;

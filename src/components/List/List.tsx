@@ -2,9 +2,9 @@ import type { ArticleEdge } from '../../types/content.ts';
 import React from 'react';
 import { Link } from '../Link/index.tsx';
 import ReadingList from './ReadingList';
+import { readingItems } from './reading-items.ts';
 
-// This adapter owns Gatsby's data shape and routing. The view owns its markup
-// and CSS and can be reused with an ordinary anchor in another framework.
+// Map editorial nodes to the shared reading view and localized native links.
 const List = ({
   edges,
   ordered = false,
@@ -14,14 +14,7 @@ const List = ({
   ordered?: boolean;
   showImages?: boolean;
 }) => {
-  const items = edges.map(({ node }) => ({
-    id: node.fields.slug,
-    href: `/${node.fields.langKey}${node.fields.slug}`,
-    title: node.frontmatter.title,
-    date: node.fields.prefix,
-    excerpt: node.excerpt,
-    image: node.frontmatter.cover?.childImageSharp?.resize,
-  }));
+  const items = readingItems(edges);
 
   return (
     <ReadingList

@@ -273,7 +273,7 @@ for (const language of ['en', 'pl'] as const) {
         await expect(control).toBeFocused();
         await control.click();
         // The open panel can cover the heading's center on narrow screens.
-        await page.locator('h1').click({ position: { x: 5, y: 5 } });
+        await page.locator('main h1').click({ position: { x: 5, y: 5 } });
         await expect(themeChoice(page, 'light', language)).toBeHidden();
         await chooseTheme(page, 'dark', language);
         await expect(page.locator('html')).toHaveAttribute(

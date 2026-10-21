@@ -82,7 +82,7 @@ test('every guide is published in both languages with its articles in order and 
       route,
     );
     const image = $('meta[property="og:image"]').attr('content') || '';
-    assert.ok(image.startsWith(`${origin}/static/`), `${route}: ${image}`);
+    assert.ok(image.startsWith(`${origin}/`), `${route}: ${image}`);
     assert.ok(
       existsSync(join('public', decodeURI(image.slice(origin.length)))),
       `${route}: missing ${image}`,
@@ -134,14 +134,17 @@ test('the guide index lists every guide in order with its icon, cover, descripti
         `${route}: ${metadata.title} count`,
       );
       const cover = $(tile).find('img').attr('src') || '';
-      assert.ok(cover.startsWith('/static/'), `${metadata.title}: ${cover}`);
+      assert.ok(
+        cover.startsWith('/') && !cover.startsWith('//'),
+        `${metadata.title}: ${cover}`,
+      );
       assert.ok(existsSync(join('public', decodeURI(cover))), cover);
     });
   }
 });
 
 test('guides are discoverable through the sitemap, search and llms.txt', async () => {
-  const sitemap = readBuild('sitemap/sitemap-0.xml');
+  const sitemap = readBuild('sitemap-0.xml');
   const llms = readBuild('llms.txt');
   const manifest = JSON.parse(
     readBuild('search-index/manifest.json'),

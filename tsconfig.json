@@ -8,17 +8,13 @@
     "types": ["node", "react", "react-dom"]
   },
   "include": [
-    "astro/src/**/*.ts",
+    "astro/**/*.ts",
     "astro/src/**/*.tsx",
     "src/**/*.ts",
     "src/**/*.tsx",
-    "site/**/*.ts",
     "content/meta/config.ts",
-    "gatsby-browser.tsx",
-    "gatsby-ssr.tsx",
     "scripts/**/*.ts",
     "import/**/*.ts",
-    "plugins/**/*.ts",
     "tests/**/*.ts",
     "tests/**/*.tsx"
   ],

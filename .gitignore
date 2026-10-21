@@ -52,11 +52,20 @@ typings/
 
 # dotenv environment variables file
 .env
+.env.*
+!.env.example
+!.env.*.example
+!.env.template
 
 .cache/
 .astro/
 .DS_Store
 public/
+*.tsbuildinfo
+
+# Default Playwright output (configured suites use visual-artifacts/)
+/playwright-report/
+/test-results/
 
 # editors
 .idea/
@@ -68,7 +77,6 @@ public/
 
 # other
 report/
-/.env.development
 content/newsletter-pl/
 content/architecture-weekly/
 temp/
@@ -78,3 +86,6 @@ temp/
 
 # IndexNow acknowledgement state (retained separately by production CI)
 .indexnow/
+
+# Local Netlify preview state
+.netlify/

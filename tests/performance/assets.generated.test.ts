@@ -1,4 +1,5 @@
-import type { BuildPageData } from '../helpers/build-output.ts';
+import { publishedContent } from '../helpers/published-content.ts';
+import { publishedStyles } from '../helpers/published-styles.ts';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -208,26 +209,17 @@ test('published metadata matches article dates and newsletter defers its iframe'
     await import('../../src/utils/publication-date.ts');
   for (const lang of ['en', 'pl']) {
     const $ = html(`${lang}/introduction_to_event_sourcing`);
-    const data = JSON.parse(
-      readFileSync(
-        `public/page-data/${lang}/introduction_to_event_sourcing/page-data.json`,
-        'utf8',
-      ),
-    ) as BuildPageData;
+    const post = publishedContent('posts').find(
+      (post) => post.route === `/${lang}/introduction_to_event_sourcing/`,
+    )!;
     assert.equal(
       (JSON.parse($('#page-schema').text()) as { datePublished: string })
         .datePublished,
-      publicationDate(
-        data.result.data.post.frontmatter.publishedAt,
-        data.result.data.post.fields.prefix,
-      ),
+      publicationDate(post.metadata.publishedAt, post.date),
     );
     assert.equal(
       $('meta[property="article:published_time"]').attr('content'),
-      publicationDate(
-        data.result.data.post.frontmatter.publishedAt,
-        data.result.data.post.fields.prefix,
-      ),
+      publicationDate(post.metadata.publishedAt, post.date),
     );
     assert.equal($('#substack iframe[src]').length, 0);
     assert.equal($('#substack iframe').attr('height'), '320');
@@ -240,7 +232,7 @@ test('published metadata matches article dates and newsletter defers its iframe'
 
 for (const theme of ['light', 'dark'])
   test(`${theme} brand and muted text meet 4.5:1 against the page background`, () => {
-    const stylesheet = postcss.parse(html('en')('style[data-href]').text());
+    const stylesheet = postcss.parse(publishedStyles('public/en/index.html'));
     const tokens = new Map<string, string>();
     stylesheet.walkDecls((declaration) => {
       if (

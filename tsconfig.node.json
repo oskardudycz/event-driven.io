@@ -5,10 +5,8 @@
     "moduleResolution": "NodeNext"
   },
   "include": [
-    "site/**/*.ts",
     "scripts/**/*.ts",
     "import/**/*.ts",
-    "plugins/**/*.ts",
     "tests/**/*.ts",
     "src/types/**/*.d.ts",
     "src/**/*.unit.test.ts"

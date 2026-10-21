@@ -46,7 +46,7 @@ for (const lang of ['en', 'pl'] as const) {
       }
     }
     for (const url of assets) {
-      assert.match(url, /^\/static\/.*\.webp$/);
+      assert.match(url, /^\/(?!\/).+\.webp$/);
       assert.ok(
         readFileSync(join('public', decodeURIComponent(url))).length,
         `Missing cover asset ${url}`,
@@ -61,7 +61,7 @@ for (const lang of ['en', 'pl'] as const) {
       for (const variant of image.srcSet.split(', ')) {
         const url = variant.split(' ')[0];
         assert.ok(url);
-        assert.match(url, /^\/static\//);
+        assert.match(url, /^\/(?!\/).+\.webp$/);
         assert.ok(readFileSync(join('public', decodeURI(url))).length);
       }
     }

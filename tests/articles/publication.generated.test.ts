@@ -110,7 +110,10 @@ for (const language of ['en', 'pl']) {
       assert.equal(cover.length, 1, post.route);
       assert.equal(cover.attr('alt'), post.metadata.title, post.route);
       const source = cover.attr('src') || cover.attr('data-src');
-      assert.ok(source?.startsWith('/static/'), post.route);
+      assert.ok(
+        source?.startsWith('/') && !source.startsWith('//'),
+        post.route,
+      );
       assert.ok(
         statSync(join('public', decodeURI(source!))).size > 0,
         `Missing cover: ${post.route}`,

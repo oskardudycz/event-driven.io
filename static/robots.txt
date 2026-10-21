@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://event-driven.io/sitemap/sitemap-index.xml
+Sitemap: https://event-driven.io/sitemap-index.xml
