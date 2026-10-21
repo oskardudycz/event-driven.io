@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import * as cheerio from 'cheerio';
 
 test('every generated page has explicit image alternatives and named image-only links', () => {
-  const directory = 'public';
+  const directory = 'dist';
   const pages = readdirSync(directory, {
     recursive: true,
     withFileTypes: true,

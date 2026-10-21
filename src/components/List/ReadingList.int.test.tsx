@@ -47,7 +47,7 @@ test('reading list preserves editorial order and usable destinations without a r
   expect($('img').length).toBe(1);
 });
 
-test('Gatsby reading-list adapter preserves available locale routes independently of canonical identity', () => {
+test('reading-list view preserves available locale routes independently of canonical identity', () => {
   const edges = [
     {
       node: {

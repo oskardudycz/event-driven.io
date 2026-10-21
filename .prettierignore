@@ -1,8 +1,8 @@
 node_modules/
 .cache/
 .astro/
+dist/
 public/
-static/
 /content/
 report/
 visual-artifacts/

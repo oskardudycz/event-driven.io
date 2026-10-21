@@ -19,9 +19,9 @@ export default function imagePriority({
     return;
   let promoted = false;
   visit(markdownAST, 'html', (node: Html) => {
-    if (promoted || !node.value.includes('gatsby-resp-image-image')) return;
+    if (promoted || !node.value.includes('article-image-content')) return;
     const $ = cheerio.load(node.value, null, false);
-    const cover = $('img.gatsby-resp-image-image[src*="2022-03-16-cover"]');
+    const cover = $('img.article-image-content[src*="2022-03-16-cover"]');
     if (!cover.length) return;
     cover.first().attr('loading', 'eager').attr('fetchpriority', 'high');
     node.value = $.html();

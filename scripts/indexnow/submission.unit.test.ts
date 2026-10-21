@@ -274,7 +274,7 @@ test('the static verification file contains the configured public key', () => {
   };
   assert.match(settings.key, /^[a-zA-Z0-9-]{8,128}$/);
   assert.equal(
-    readFileSync(`static/${settings.key}.txt`, 'utf8').trim(),
+    readFileSync(`public/${settings.key}.txt`, 'utf8').trim(),
     settings.key,
   );
 });

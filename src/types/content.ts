@@ -1,10 +1,8 @@
 import type { ImageData } from './image.ts';
 
-export type ImageFile = {
-  childImageSharp?: {
-    gatsbyImageData?: ImageData;
-    resize?: { src: string };
-  };
+export type CoverImage = {
+  src: string;
+  responsive?: ImageData;
 };
 
 export type ArticleFields = {
@@ -22,7 +20,7 @@ export type Frontmatter = {
   description?: string;
   summary?: string;
   tags?: string[];
-  cover?: ImageFile;
+  cover?: CoverImage;
   author?: string;
   publishedAt?: string;
   disqusId?: string;
@@ -42,7 +40,6 @@ export type ArticleNode = {
   html?: string;
   excerpt?: string;
   rawMarkdownBody?: string;
-  internal?: { content?: string };
 };
 export type ArticleEdge = { node: ArticleNode };
 export type GuideNode = {
@@ -100,11 +97,6 @@ export type PageData = {
   articles: { edges: ArticleEdge[] };
   tagged: { nodes: ArticleNode[] };
   tagContent: TagContentNode | null;
-  site: { siteMetadata: { facebook: { appId?: string } } };
-};
-export type HeadProps<Data = object, Context = Partial<SitePageContext>> = {
-  data: Data;
-  pageContext: Context;
 };
 export type SitePageProps<Fields extends keyof PageData> = {
   data: Pick<PageData, Fields>;

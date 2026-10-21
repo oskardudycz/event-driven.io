@@ -7,7 +7,7 @@ import {
   compareBuildContracts,
 } from './build-contract.ts';
 
-const publicDirectory = path.resolve(import.meta.dirname, '../public');
+const publicDirectory = path.resolve(import.meta.dirname, '../dist');
 const baselinePath = path.resolve(
   import.meta.dirname,
   '../tests/fixtures/build-contract.json',

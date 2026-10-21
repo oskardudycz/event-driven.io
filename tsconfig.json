@@ -5,19 +5,22 @@
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
-    "types": ["node", "react", "react-dom"]
+    "types": ["node", "react", "react-dom"],
+    "exactOptionalPropertyTypes": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
+    "moduleDetection": "force",
+    "erasableSyntaxOnly": true,
+    "rewriteRelativeImportExtensions": true
   },
   "include": [
-    "astro/**/*.ts",
-    "astro/src/**/*.tsx",
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "content/meta/config.ts",
+    ".astro/types.d.ts",
+    "src/**/*",
     "scripts/**/*.ts",
     "import/**/*.ts",
     "tests/**/*.ts",
     "tests/**/*.tsx"
   ],
-  "exclude": ["node_modules", "public", ".cache", "tests/fixtures"],
-  "extends": "./tsconfig.shared.json"
+  "exclude": ["node_modules", "dist", ".cache", "tests/fixtures"],
+  "extends": "astro/tsconfigs/strict"
 }

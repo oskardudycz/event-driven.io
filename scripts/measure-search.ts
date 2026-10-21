@@ -17,7 +17,7 @@ import { join } from 'node:path';
 import { chromium } from 'playwright';
 
 const manifest = JSON.parse(
-  readFileSync('public/search-index/manifest.json', 'utf8'),
+  readFileSync('dist/search-index/manifest.json', 'utf8'),
 ) as Record<'en' | 'pl', string>;
 const browser = await chromium.launch();
 const metrics: Record<
@@ -101,7 +101,7 @@ try {
             documents: measuredIndex.documentCount,
           };
         },
-        readFileSync(join('public', manifest[lang]), 'utf8'),
+        readFileSync(join('dist', manifest[lang]), 'utf8'),
       );
       await cdp.send('HeapProfiler.collectGarbage');
       const after = await cdp.send('Performance.getMetrics');

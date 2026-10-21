@@ -98,16 +98,12 @@ for (const locale of ['en', 'pl']) {
                 );
                 await expectClearCorner(portrait, colorScheme);
               }
-              const artwork = page
-                .locator('.gatsby-resp-image-wrapper')
-                .filter({
-                  has: page.locator(
-                    'img[alt="Jakub Pilimon"], img[alt="Sign up!"], img[alt="Zapisz się!"]',
-                  ),
-                });
-              const backgrounds = artwork.locator(
-                '.gatsby-resp-image-background-image',
-              );
+              const artwork = page.locator('.article-image').filter({
+                has: page.locator(
+                  'img[alt="Jakub Pilimon"], img[alt="Sign up!"], img[alt="Zapisz się!"]',
+                ),
+              });
+              const backgrounds = artwork.locator('.article-image-placeholder');
               for (const background of await backgrounds.all()) {
                 await expect(background).toHaveCSS('background-image', 'none');
               }

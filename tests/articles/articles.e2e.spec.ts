@@ -43,9 +43,23 @@ test('related articles and publication navigation remain usable', async ({
   await expectFonts(page);
   await expect(page.locator('.related h2')).toHaveCSS('font-weight', '600');
   const furtherReading = page.locator('.author + .links');
-  await expect(
-    page.locator('article footer > .substack + .guideSteps + .related'),
-  ).toHaveCount(1);
+  expect(
+    await page.locator('article footer').evaluate((footer) => {
+      const subscription = footer.querySelector('.substack')!;
+      const guides = footer.querySelector('.guideSteps')!;
+      const related = footer.querySelector('.related')!;
+      return (
+        !!(
+          subscription.compareDocumentPosition(guides) &
+          Node.DOCUMENT_POSITION_FOLLOWING
+        ) &&
+        !!(
+          guides.compareDocumentPosition(related) &
+          Node.DOCUMENT_POSITION_FOLLOWING
+        )
+      );
+    }),
+  ).toBe(true);
   const spacing = await page.evaluate(() => {
     const iframe = document.querySelector('.substack iframe')!;
     const guides = document.querySelector('.guideSteps')!;

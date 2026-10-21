@@ -10,12 +10,12 @@ import { builtRedirects } from '../helpers/redirects.ts';
 import { collectBuildContract } from '../../scripts/build-contract.ts';
 
 test('every generated canonical, sitemap URL and reciprocal alternate resolves consistently', () => {
-  assert.deepEqual(verifyIndexingBuild('public'), []);
+  assert.deepEqual(verifyIndexingBuild('dist'), []);
 });
 
 test('known legacy category queries use literal query conditions, with 404 fallbacks last', async () => {
   const redirects = await builtRedirects();
-  const routes = new Set(collectBuildContract('public').routes);
+  const routes = new Set(collectBuildContract('dist').routes);
   const queries = redirects.filter((rule) => rule.query.category);
   assert.ok(
     queries.length > 0,
@@ -51,7 +51,7 @@ test('known legacy category queries use literal query conditions, with 404 fallb
 });
 
 test('confirmed reported aliases lead directly to a generated canonical article', () => {
-  const rules = collectBuildContract('public').redirects;
+  const rules = collectBuildContract('dist').redirects;
   for (const [source, destination] of [
     ['/en/risk_of_ignoring_risks/', '/en/the_risk_of_ignoring_risks/'],
     [
@@ -65,14 +65,14 @@ test('confirmed reported aliases lead directly to a generated canonical article'
   ]) {
     assert.ok(rules.includes(`${source} ${destination} 301`));
     assert.match(
-      readFileSync(`public${destination}index.html`, 'utf8'),
+      readFileSync(`dist${destination}index.html`, 'utf8'),
       new RegExp(`href="${siteOrigin}${destination}"`),
     );
   }
 });
 
 test('case-normalized article routes retain feed GUIDs and Disqus thread identifiers', () => {
-  const feed = readFileSync('public/rss.xml', 'utf8');
+  const feed = readFileSync('dist/rss.xml', 'utf8');
   for (const original of [
     '12_things_I_learned_on_last_pull_request_review',
     'how_to_do_snapshots_in_Marten',

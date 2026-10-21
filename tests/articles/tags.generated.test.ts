@@ -26,9 +26,9 @@ await translations.init({
   resources: { en: { translation: en }, pl: { translation: pl } },
   fallbackLng: 'en',
 });
-const readBuild = (file: string) => readFileSync(join('public', file), 'utf8');
+const readBuild = (file: string) => readFileSync(join('dist', file), 'utf8');
 const page = (route: string) => cheerio.load(readBuild(`${route}index.html`));
-const routes = new Set(collectBuildContract('public').routes);
+const routes = new Set(collectBuildContract('dist').routes);
 const articleSlug = (post: PublishedDocument) => post.route.split('/')[2]!;
 
 type ExpectedTagPage = {
@@ -157,7 +157,7 @@ test('every tag page lists its articles newest first with its heading, descripti
 });
 
 test('tag pages are in the sitemap and no category URL is published', () => {
-  const sitemap = collectBuildContract('public').sitemapUrls;
+  const sitemap = collectBuildContract('dist').sitemapUrls;
   for (const route of tagRoutes)
     assert.ok(
       sitemap.includes(`${origin}${route}`),
@@ -184,7 +184,7 @@ const searchPaths = (language: string) => {
 };
 
 test('tag files publish no page, sitemap entry or search document of their own', () => {
-  const sitemap = new Set(collectBuildContract('public').sitemapUrls);
+  const sitemap = new Set(collectBuildContract('dist').sitemapUrls);
   const documents = new Set(
     [...posts, ...publishedContent('pages')].map(({ route }) => route),
   );
@@ -279,8 +279,8 @@ test('every internal tag link in the built site leads to a built tag page, and a
   const rules = await builtRedirects();
   let links = 0;
   for (const file of globSync([
-    'public/en/**/index.html',
-    'public/pl/**/index.html',
+    'dist/en/**/index.html',
+    'dist/pl/**/index.html',
   ])) {
     const $ = cheerio.load(readFileSync(file, 'utf8'));
     $('a[href]').each((_, link) => {
@@ -294,7 +294,7 @@ test('every internal tag link in the built site leads to a built tag page, and a
       if (!/^\/(en|pl)\/articles\/tag\//.test(href)) return;
       links++;
       assert.ok(
-        existsSync(join('public', href, 'index.html')),
+        existsSync(join('dist', href, 'index.html')),
         `${file}: ${href}`,
       );
     });

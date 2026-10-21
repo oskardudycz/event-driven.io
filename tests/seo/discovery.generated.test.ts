@@ -8,11 +8,11 @@ const origin = 'https://event-driven.io';
 
 test('robots and llms name the published root sitemap and its shards exist', () => {
   const indexUrl = `${origin}/sitemap-index.xml`;
-  expect(readFileSync('public/robots.txt', 'utf8')).toContain(
+  expect(readFileSync('dist/robots.txt', 'utf8')).toContain(
     `Sitemap: ${indexUrl}`,
   );
-  expect(readFileSync('public/llms.txt', 'utf8')).toContain(`(${indexUrl})`);
-  const index = load(readFileSync('public/sitemap-index.xml', 'utf8'), {
+  expect(readFileSync('dist/llms.txt', 'utf8')).toContain(`(${indexUrl})`);
+  const index = load(readFileSync('dist/sitemap-index.xml', 'utf8'), {
     xml: true,
   });
   const urls = index('sitemap > loc')
@@ -22,7 +22,7 @@ test('robots and llms name the published root sitemap and its shards exist', () 
   for (const url of urls) {
     expect(new URL(url).origin).toBe(origin);
     expect(new URL(url).pathname).toMatch(/^\/sitemap-\d+\.xml$/);
-    expect(existsSync(join('public', new URL(url).pathname))).toBe(true);
+    expect(existsSync(join('dist', new URL(url).pathname))).toBe(true);
   }
 });
 
@@ -32,7 +32,7 @@ test('legacy sitemap files redirect once to the published root files for every v
     for (const language of [undefined, 'en', 'pl', 'de']) {
       const rule = firstRedirect(redirects, `/sitemap/${file}`, { language });
       expect(rule).toMatchObject({ to: `/${file}`, status: 301, force: true });
-      expect(existsSync(join('public', file))).toBe(true);
+      expect(existsSync(join('dist', file))).toBe(true);
     }
   }
 });

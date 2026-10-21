@@ -26,7 +26,7 @@ function parsedRedirect(value: unknown): Redirect {
 // Narrow that boundary once so route assertions can use its normalized rules.
 export async function builtRedirects(): Promise<Redirect[]> {
   const { redirects, errors } = await parseAllRedirects({
-    redirectsFiles: ['public/_redirects'],
+    redirectsFiles: ['dist/_redirects'],
     netlifyConfigPath: 'netlify.toml',
     configRedirects: [],
     minimal: true,

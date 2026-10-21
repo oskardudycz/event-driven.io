@@ -1,4 +1,3 @@
-import type { HeadProps } from '../types/content.ts';
 import type { SitePageProps } from '../types/content.ts';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -9,14 +8,7 @@ import { expect, test } from 'vitest';
 import en from '../i18n/locales/en/translation.json';
 import pl from '../i18n/locales/pl/translation.json';
 
-import TagTemplate, { Head } from './Tag.tsx';
-
-const renderHead = (pageContext: Record<string, unknown>, data = {}) =>
-  load(
-    renderToStaticMarkup(
-      <>{Head({ data, pageContext } as unknown as HeadProps<never, never>)}</>,
-    ),
-  );
+import TagTemplate from './Tag.tsx';
 
 type TagContent = { html: string; frontmatter: { description: string } };
 
@@ -56,82 +48,6 @@ const renderPage = async (
     ),
   );
 };
-
-test.each(['en', 'pl'])(
-  '%s tag page is a self-canonical collection with reciprocal alternates',
-  (language) => {
-    const $ = renderHead({
-      lang: language,
-      tag: 'Event Sourcing',
-      originalPath: '/articles/tag/event-sourcing/',
-      availableLanguages: ['en', 'pl'],
-    });
-    expect($('link[rel=canonical]').attr('href')).toBe(
-      `https://event-driven.io/${language}/articles/tag/event-sourcing/`,
-    );
-    expect(
-      $('link[rel=alternate]')
-        .map((_, link) => `${$(link).attr('hreflang')} ${$(link).attr('href')}`)
-        .get(),
-    ).toEqual([
-      'x-default https://event-driven.io/en/articles/tag/event-sourcing/',
-      'en https://event-driven.io/en/articles/tag/event-sourcing/',
-      'pl https://event-driven.io/pl/articles/tag/event-sourcing/',
-    ]);
-    expect(
-      (JSON.parse($('#page-schema').text()) as Record<string, string>)['@type'],
-    ).toBe('CollectionPage');
-    expect($('meta[name=robots]').length).toBe(0);
-  },
-);
-
-test('a tag page in one language advertises no alternates', () => {
-  const $ = renderHead({
-    lang: 'pl',
-    tag: 'Community',
-    originalPath: '/articles/tag/community/',
-    availableLanguages: ['pl'],
-  });
-  expect($('link[rel=canonical]').attr('href')).toBe(
-    'https://event-driven.io/pl/articles/tag/community/',
-  );
-  expect($('link[rel=alternate]').length).toBe(0);
-});
-
-test.each([
-  ['en', 'CQRS articles - Event-Driven.io', 'CQRS in English.'],
-  ['pl', 'CQRS — artykuły - Event-Driven.io', 'CQRS po polsku.'],
-])(
-  '%s tag page title uses the tag translations and its description the tag file',
-  (language, title, description) => {
-    const $ = renderHead(
-      {
-        lang: language,
-        tag: 'CQRS',
-        originalPath: '/articles/tag/cqrs/',
-        availableLanguages: ['en', 'pl'],
-      },
-      { tagContent: { html: '<p>Intro</p>', frontmatter: { description } } },
-    );
-    expect($('title').text()).toBe(title);
-    expect($('meta[name=description]').attr('content')).toBe(description);
-  },
-);
-
-test('a tag without a file uses the localized default description', () => {
-  const $ = renderHead(
-    {
-      lang: 'pl',
-      tag: 'Caching',
-      originalPath: '/articles/tag/caching/',
-      availableLanguages: ['en', 'pl'],
-    },
-    { tagContent: null },
-  );
-  expect($('meta[name=description]').attr('content')).toBe(
-    'Artykuły z tagiem Caching na Event-Driven.io, od najnowszych do najstarszych.',
-  );
-});
 
 test.each([
   ['en', 1, '1 article'],

@@ -8,12 +8,11 @@
     "scripts/**/*.ts",
     "import/**/*.ts",
     "tests/**/*.ts",
-    "src/types/**/*.d.ts",
-    "src/**/*.unit.test.ts"
+    "src/types/**/*.d.ts"
   ],
   "exclude": [
     "node_modules",
-    "public",
+    "dist",
     ".cache",
     "tests/fixtures",
     "tests/**/*.e2e.spec.ts",

@@ -2,7 +2,7 @@ import React from 'react';
 import { expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
 import Share from './Share.tsx';
-import config from '../../../content/meta/config.ts';
+import config from '../../config.ts';
 
 for (const language of ['en', 'pl']) {
   test(`${language} sharing sends the current title and localized article URL`, async () => {

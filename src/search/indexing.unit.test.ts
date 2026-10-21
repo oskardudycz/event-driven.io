@@ -146,7 +146,7 @@ test('canonical cover data follows the selected genuine translation and stays op
   );
 });
 test('guides are searchable by title and description and lead to the guide page in the reader language', () => {
-  // Gatsby's guide nodes have no slug, unlike the articles ArticleNode models.
+  // Guide records use pathSlug instead of an article slug.
   const guide = (langKey: string, title: string, id: string) =>
     ({
       id,

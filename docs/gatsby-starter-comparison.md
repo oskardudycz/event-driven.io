@@ -1,3 +1,5 @@
+> Current follow-up: [AstroPaper structure and native-feature review](astro-native-review.md) addresses the temporary app boundary, output directories, whole-page hydration and remaining Gatsby-shaped APIs. Earlier sections retain the evidence for their historical implementation.
+
 # Gatsby and modern Tailwind blog comparison
 
 Research date: 2026-10-10. Project baseline: `5a2554226afe491fda20509b6f5f34da6b3961ed`. This is a source, configuration, registry and dependency-resolution review, not a starter build benchmark. Sample sources and raw evidence are downloaded under `/tmp/gatsby-starter-research-2026-10-10/`; nothing from a starter was installed into this application.
@@ -418,11 +420,11 @@ Keep existing React presentation for the first complete parity build. Converting
 
 `astro.config.mjs` uses the existing `static` assets and an isolated `visual-artifacts/astro` output. `astro/src` loads the real EN/PL consulting Markdown through a typed content collection, renders the owning Article/Page/Bodytext components and shared theme CSS, and uses the same `seoMetadata` data as Gatsby's Head renderer. A localized appearance island exercises the existing ThemePicker with its own translation instance. Gatsby remains `npm run build`, Netlify still publishes `public`, and no visual reference or tolerance is changed.
 
-This is a content/SEO/hydration feasibility trial, not a replacement site or an accepted layout. Its small language/appearance navigation is a trial harness; the production Header/Menu/Footer are not ported. Articles, guides, image processing, search and publication integrations remain work. Commands, evidence and open gates are in todo.md and [the trial README](../astro/README.md).
+This is a content/SEO/hydration feasibility trial, not a replacement site or an accepted layout. Its small language/appearance navigation is a trial harness; the production Header/Menu/Footer are not ported. Articles, guides, image processing, search and publication integrations remain work. Commands, evidence and open gates are in todo.md and [the trial README](astro.md).
 
 ## 14. Shared shell, article/guide slice and root sitemap (2026-10-20)
 
-The consulting-only trial is superseded by the [40-route reading slice](../astro/README.md). Gatsby remains the publisher. The slice includes the EN/PL Event Sourcing foundations and Event-Driven Architecture guides, every article they list in each available language, and consulting. The full catalog supplies editorial language/canonical availability, related posts, tags, guide steps and publication-date neighbours; routes outside the slice remain absent.
+The consulting-only trial is superseded by the [40-route reading slice](astro.md). Gatsby remains the publisher. The slice includes the EN/PL Event Sourcing foundations and Event-Driven Architecture guides, every article they list in each available language, and consulting. The full catalog supplies editorial language/canonical availability, related posts, tags, guide steps and publication-date neighbours; routes outside the slice remain absent.
 
 ### Implementation boundaries
 
@@ -451,4 +453,4 @@ The original readiness plan required these additions: actual all-route/head/cont
 
 Before removal, a fresh same-source Gatsby baseline and its real browser checks passed. The complete Astro candidate matched all 775 routes and page heads, 286 ordered redirects, 470 sitemap URLs and feed identities; normalized main text/headings also matched. Separate processes compared the old/native Markdown pipelines across all 701 source documents with no text, anchor, highlighted-code or video-attribute differences. Clean Astro-only installation succeeded. Post-removal verification passes locally: 775-route/head/publication parity, full main text/headings, 79 unit, 162 integration/component and 72 generated tests, 288 production E2E (two existing Firefox-only skips), 74 affected hero/homepage checks after the final portrait correction, and 56 paired visual captures. The comparison exposed and corrected the native fixed portrait wrapper’s extra inline baseline gap without changing artwork or Hero CSS. Local production navigation/hydration measures 0.42–0.64s; repeated development navigation about 1s. Detailed scopes/timings are recorded in todo.md; no hosted CI, deployment, live account verification or IndexNow submission is claimed. Existing visual references and tolerances remain unchanged.
 
-Official Astro MCP documentation informed the implementation. Context7 tools were not available in the exposed session tool catalog. See [Astro implementation notes](../astro/README.md) and [testing responsibilities](testing-guidance.md).
+Official Astro MCP documentation informed the implementation. Context7 tools were not available in the exposed session tool catalog. See [Astro implementation notes](astro.md) and [testing responsibilities](testing-guidance.md).

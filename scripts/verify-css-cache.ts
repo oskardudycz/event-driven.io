@@ -15,7 +15,7 @@ import { checkCssBrowser } from './check-css-browser.ts';
 // Opt-in integration check: edit CSS declarations and a literal utility class,
 // keeping publication sources unchanged. Always rebuild restored styles.
 const logs = mkdtempSync(join(tmpdir(), 'css-cache-'));
-const page = 'public/en/introduction_to_event_sourcing/index.html';
+const page = 'dist/en/introduction_to_event_sourcing/index.html';
 function build(label: string) {
   const log = join(logs, `${label}.log`);
   const fd = openSync(log, 'w');
@@ -62,7 +62,7 @@ function inlineStyles() {
     ...$('link[rel=stylesheet][href]')
       .toArray()
       .map((element) =>
-        readFileSync(join('public', $(element).attr('href')!), 'utf8'),
+        readFileSync(join('dist', $(element).attr('href')!), 'utf8'),
       ),
   ].join('\n');
 }
@@ -107,7 +107,7 @@ for (const change of [
   );
   await checkCssBrowser(baselineColor);
 }
-const layout = 'src/layouts/LayoutView.tsx';
+const layout = 'src/layouts/Document.astro';
 const originalLayout = readFileSync(layout, 'utf8');
 const changedLayout = originalLayout.replace('min-h-[80vh]', 'min-h-[81vh]');
 assert.notEqual(changedLayout, originalLayout, 'Main utility probe is missing');

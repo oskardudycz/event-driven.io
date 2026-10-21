@@ -21,7 +21,7 @@ await translations.init({
   resources: { en: { translation: en }, pl: { translation: pl } },
   fallbackLng: 'en',
 });
-const readBuild = (file: string) => readFileSync(join('public', file), 'utf8');
+const readBuild = (file: string) => readFileSync(join('dist', file), 'utf8');
 
 test('every source article is published with its current title, locale and canonical', () => {
   assert.ok(posts.length, 'No source articles found');
@@ -57,7 +57,7 @@ test('every article links its localized tags to the tag page of its language, or
         .get(),
       tags.map((tag) => {
         const own = `/${post.language}/articles/tag/${tagSlug(tag)}/`;
-        const route = existsSync(join('public', own, 'index.html'))
+        const route = existsSync(join('dist', own, 'index.html'))
           ? own
           : `/en/articles/tag/${tagSlug(tag)}/`;
         return `${route} ${tagLabel(t, tag)}`;
@@ -115,7 +115,7 @@ for (const language of ['en', 'pl']) {
         post.route,
       );
       assert.ok(
-        statSync(join('public', decodeURI(source!))).size > 0,
+        statSync(join('dist', decodeURI(source!))).size > 0,
         `Missing cover: ${post.route}`,
       );
     });

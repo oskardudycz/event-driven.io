@@ -5,7 +5,7 @@ import videoData from '../../data/videos.json' with { type: 'json' };
 
 for (const language of ['en', 'pl']) {
   test(`${language} talks publish current video metadata in editorial order`, () => {
-    const $ = load(readFileSync(`public/${language}/talks/index.html`, 'utf8'));
+    const $ = load(readFileSync(`dist/${language}/talks/index.html`, 'utf8'));
     const cards = $('.videoGrid > li').toArray();
     const expected = videoData.toSorted(
       (left, right) => left.Order - right.Order,

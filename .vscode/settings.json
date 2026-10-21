@@ -16,8 +16,7 @@
     "**/node_modules/": true,
     "**/dist/": true,
     "**/*.tsbuildinfo": true,
-    ".cache/": true,
-    "public/": true
+    ".cache/": true
   },
   "files.eol": "\n",
   "typescript.preferences.importModuleSpecifier": "relative",

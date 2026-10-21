@@ -17,7 +17,7 @@ test('article archive hydrates once and displays its real cover image', async ({
   });
   expect(response?.status()).toBe(200);
   const firstCover = page
-    .locator('.gatsby-image-wrapper img[data-main-image]')
+    .locator('.responsive-image img[data-main-image]')
     .first();
   await expectImageLoaded(firstCover, 200);
   await expect(firstCover).toHaveCSS('opacity', '1');
@@ -83,7 +83,7 @@ test('client-side archive navigation keeps a single page at the top', async ({
   await page.locator('a[href="/en/articles/"]').first().click();
   await page.waitForURL('**/en/articles/');
   await page
-    .locator('.gatsby-image-wrapper img[data-main-image]')
+    .locator('.responsive-image img[data-main-image]')
     .first()
     .waitFor();
   expect(await page.evaluate(() => window.scrollY)).toBeLessThan(5);

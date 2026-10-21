@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import Article from '../components/Article/index.ts';
 import Headline from '../components/Article/Headline.tsx';
 import { Link } from '../components/Link/index.tsx';
-import { createHead } from '../components/Seo/index.ts';
 
 const GuidesTemplate = (props: SitePageProps<'guides'>) => {
   const { t } = useTranslation();
@@ -22,7 +21,7 @@ const GuidesTemplate = (props: SitePageProps<'guides'>) => {
         </header>
         <ul className="grid list-none gap-gutter sm:grid-cols-2">
           {guides.nodes.map(({ fields, frontmatter }) => {
-            const cover = frontmatter.cover?.childImageSharp?.resize;
+            const cover = frontmatter.cover;
             return (
               <li key={fields.pathSlug}>
                 <Link
@@ -65,9 +64,3 @@ const GuidesTemplate = (props: SitePageProps<'guides'>) => {
 };
 
 export default GuidesTemplate;
-
-export const Head = createHead(({ t }) => ({
-  title: t('guides.title'),
-  description: t('guides.description'),
-  schemaType: 'CollectionPage',
-}));

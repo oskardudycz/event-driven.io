@@ -28,7 +28,7 @@ assert(
   polish.includes('useDefaultLangCanonical: true'),
   'Deletion check must use a non-indexed placeholder',
 );
-const index = fs.readFileSync('static/llms.txt');
+const index = fs.readFileSync('public/llms.txt');
 const logDirectory = fs.mkdtempSync(
   path.join(os.tmpdir(), 'build-cache-check-'),
 );
@@ -36,10 +36,10 @@ const marker = 'buildcachemodificationverificationtoken';
 const searchId = `posts:/${slug}/`;
 function searchIndex(language: 'en' | 'pl') {
   const manifest = JSON.parse(
-    fs.readFileSync('public/search-index/manifest.json', 'utf8'),
+    fs.readFileSync('dist/search-index/manifest.json', 'utf8'),
   ) as Record<'en' | 'pl', string>;
   return MiniSearch.loadJSON(
-    fs.readFileSync(path.join('public', manifest[language]), 'utf8'),
+    fs.readFileSync(path.join('dist', manifest[language]), 'utf8'),
     indexOptions,
   );
 }
@@ -58,8 +58,8 @@ function build(label: string) {
   }
 }
 assert.ok(slug, 'Cache-check slug not found');
-const articleHtml = path.join('public/en', slug, 'index.html');
-const polishHtml = path.join('public/pl', slug, 'index.html');
+const articleHtml = path.join('dist/en', slug, 'index.html');
+const polishHtml = path.join('dist/pl', slug, 'index.html');
 try {
   fs.writeFileSync(englishFile, `${english}\n\n${marker}\n`);
   fs.unlinkSync(polishFile);
@@ -80,7 +80,7 @@ try {
   }
   assert(!fs.existsSync(polishHtml), 'Warm cache retained deleted HTML');
   assert.deepEqual(
-    fs.readFileSync('static/llms.txt'),
+    fs.readFileSync('public/llms.txt'),
     index,
     'Cache check changed the publication index',
   );
@@ -94,11 +94,11 @@ try {
 } finally {
   fs.writeFileSync(englishFile, english);
   fs.writeFileSync(polishFile, polish);
-  fs.writeFileSync('static/llms.txt', index);
+  fs.writeFileSync('public/llms.txt', index);
   try {
     build('restored');
   } finally {
-    fs.writeFileSync('static/llms.txt', index);
+    fs.writeFileSync('public/llms.txt', index);
   }
 }
 assert(
@@ -118,7 +118,7 @@ for (const language of ['en', 'pl'] as const) {
     'Warm search index retained removed text',
   );
 }
-assert.deepEqual(fs.readFileSync('static/llms.txt'), index);
+assert.deepEqual(fs.readFileSync('public/llms.txt'), index);
 console.log(
   'Warm-cache modification, deletion and restoration passed; publication sources and index unchanged.',
 );

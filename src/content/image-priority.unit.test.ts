@@ -5,7 +5,7 @@ import { test } from 'vitest';
 
 test('image priority ignores unrelated articles, external HTML and later images', () => {
   const value =
-    '<picture><img class="gatsby-resp-image-image" src="/2022-03-16-cover.png" loading="lazy"></picture>';
+    '<picture><img class="article-image-content" src="/2022-03-16-cover.png" loading="lazy"></picture>';
   const ast: { type: 'root'; children: Html[] } = {
     type: 'root',
     children: [{ type: 'html', value }],

@@ -15,7 +15,7 @@ const FEED_FILES = ['rss.xml', 'newsletter-pl-rss.xml'];
 function readRequired(publicDirectory: string, relativePath: string) {
   const filePath = path.join(publicDirectory, relativePath);
   if (!fs.existsSync(filePath)) {
-    throw new Error(`Missing generated file: public/${relativePath}`);
+    throw new Error(`Missing generated file: dist/${relativePath}`);
   }
   return fs.readFileSync(filePath, 'utf8');
 }

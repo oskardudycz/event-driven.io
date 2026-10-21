@@ -8,13 +8,13 @@ import { builtRedirects, firstRedirect } from '../../helpers/redirects.ts';
 const site = 'https://event-driven.io';
 
 function builtHtmlFiles(): string[] {
-  return readdirSync('public', { recursive: true, withFileTypes: true })
+  return readdirSync('dist', { recursive: true, withFileTypes: true })
     .filter((entry) => entry.isFile() && entry.name.endsWith('.html'))
     .map((entry) => join(entry.parentPath, entry.name));
 }
 
 function pageUrl(file: string): string {
-  return `${site}/${relative('public', file).replace(/index\.html$/, '')}`;
+  return `${site}/${relative('dist', file).replace(/index\.html$/, '')}`;
 }
 
 function internalDestination(href: string, page: string): URL | undefined {
@@ -26,7 +26,7 @@ function internalDestination(href: string, page: string): URL | undefined {
 }
 
 function isBuiltPage(path: string): boolean {
-  return existsSync(join('public', path, 'index.html'));
+  return existsSync(join('dist', path, 'index.html'));
 }
 
 function trailingSlashVariants(path: string): string[] {

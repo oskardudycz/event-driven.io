@@ -14,7 +14,7 @@ import { test } from 'vitest';
 
 test('lint-staged formats code, preserves article formatting and blocks lint or image errors', () => {
   const root = resolve('.');
-  const fixture = temporaryDirectory('gatsby-lint-staged-');
+  const fixture = temporaryDirectory('site-lint-staged-');
   const env = {
     ...process.env,
     PATH: `${join(root, 'node_modules/.bin')}${delimiter}${process.env.PATH}`,
@@ -43,11 +43,7 @@ test('lint-staged formats code, preserves article formatting and blocks lint or 
   );
   symlinkSync(join(root, 'node_modules'), join(fixture, 'node_modules'), 'dir');
   mkdirSync(join(fixture, 'scripts'));
-  for (const file of [
-    'package.json',
-    'check-image-alternatives.ts',
-    'image-alternatives.ts',
-  ])
+  for (const file of ['check-image-alternatives.ts', 'image-alternatives.ts'])
     copyFileSync(join(root, 'scripts', file), join(fixture, 'scripts', file));
   assert.equal(run('git', ['init', '--quiet']).status, 0);
   mkdirSync(join(fixture, 'content'));

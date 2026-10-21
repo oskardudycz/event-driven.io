@@ -10,7 +10,7 @@ import {
   sourceKey,
   isSubscriptionPromotion,
 } from '../../import/article-content.ts';
-const publicRoot = path.resolve(import.meta.dirname, '../../public');
+const publicRoot = path.resolve(import.meta.dirname, '../../dist');
 const articles = publishedContent('posts').map((post) => ({
   route: post.route,
   language: post.language,

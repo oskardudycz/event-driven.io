@@ -30,6 +30,7 @@ for (const guide of guides) {
       page.on('pageerror', (error) => errors.push(error.message));
       await page.goto(guide.route);
       await expectFonts(page);
+      await expect(page.locator('header fieldset')).toBeEnabled();
       const cards = page.locator('main ol.ordered > li');
       await expect(cards).toHaveCount(guide.metadata.articles.length);
       await expectImageLoaded(cards.first().locator('img'), 200);
@@ -61,9 +62,11 @@ for (const guide of guides) {
       await expect(page.locator('html')).toHaveAttribute('lang', language);
       await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
       await expectFonts(page);
+      await expect(page.locator('nav input[value="dark"]')).toBeChecked();
       await page.reload();
       await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
       await expectFonts(page);
+      await expect(page.locator('nav input[value="dark"]')).toBeChecked();
       const translatedGuide = guides.find(
         (candidate) => candidate.language === language,
       )!;

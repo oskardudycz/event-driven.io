@@ -7,7 +7,7 @@ import * as cheerio from 'cheerio';
 import postcss from 'postcss';
 
 test('production CSS contains working layout utilities and no uncompiled directives', () => {
-  const root = postcss.parse(publishedStyles('public/en/talks/index.html'));
+  const root = postcss.parse(publishedStyles('dist/en/talks/index.html'));
   root.walkAtRules((rule) => {
     assert.ok(
       !['tailwind', 'source', 'theme', 'apply'].includes(rule.name),
@@ -26,8 +26,8 @@ test('production CSS contains working layout utilities and no uncompiled directi
 // Old CSS assets may legitimately remain on disk after a warm build. Compare
 // with the current compilation, not just with whichever file the HTML names.
 test('every generated page publishes its referenced stylesheets and retains current inline CSS', () => {
-  const stats = existsSync('public/webpack.stats.json')
-    ? (JSON.parse(readFileSync('public/webpack.stats.json', 'utf8')) as {
+  const stats = existsSync('dist/webpack.stats.json')
+    ? (JSON.parse(readFileSync('dist/webpack.stats.json', 'utf8')) as {
         assetsByChunkName: Record<string, string[]>;
       })
     : { assetsByChunkName: {} };
@@ -36,7 +36,7 @@ test('every generated page publishes its referenced stylesheets and retains curr
   );
   const css = new Map<string, string>();
   let checked = 0;
-  for (const entry of readdirSync('public', {
+  for (const entry of readdirSync('dist', {
     recursive: true,
     withFileTypes: true,
   })) {
@@ -52,7 +52,7 @@ test('every generated page publishes its referenced stylesheets and retains curr
     $('link[rel=stylesheet][href]').each((_, element) => {
       const asset = $(element).attr('href')!;
       assert.ok(
-        readFileSync(join('public', asset), 'utf8').length > 0,
+        readFileSync(join('dist', asset), 'utf8').length > 0,
         `${file}: missing/empty stylesheet ${asset}`,
       );
       checked++;
@@ -64,7 +64,7 @@ test('every generated page publishes its referenced stylesheets and retains curr
         `${file} references obsolete CSS: ${asset}`,
       );
       if (!css.has(asset))
-        css.set(asset, readFileSync(join('public', asset), 'utf8'));
+        css.set(asset, readFileSync(join('dist', asset), 'utf8'));
       assert.ok(
         $(element).text() === css.get(asset),
         `${file} embeds stale CSS: ${asset}`,

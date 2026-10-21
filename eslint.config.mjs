@@ -14,8 +14,8 @@ export default defineConfig([
       'node_modules/**',
       '.cache/**',
       '.astro/**',
+      'dist/**',
       'public/**',
-      'static/**',
       'content/**',
       'report/**',
       'visual-artifacts/**',
@@ -69,7 +69,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['src/**/*.{ts,tsx}', 'astro/src/**/*.{ts,tsx}'],
+    files: ['src/**/*.{ts,tsx}'],
     languageOptions: { globals: globals.browser },
     plugins: { react, 'react-hooks': hooks, 'jsx-a11y': a11y },
     settings: {

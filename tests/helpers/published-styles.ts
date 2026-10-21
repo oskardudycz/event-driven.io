@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { load } from 'cheerio';
-export function publishedStyles(file: string, directory = 'public') {
+export function publishedStyles(file: string, directory = 'dist') {
   const $ = load(readFileSync(file, 'utf8'));
   return [
     ...$('style')

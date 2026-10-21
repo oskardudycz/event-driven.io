@@ -44,15 +44,15 @@ Playwright starts and stops the local production server automatically; it can al
 VISUAL_BASE_URL=https://your-preview.netlify.app npm run test:e2e
 ```
 
-`build` uses Astro to generate `public/`, including feeds, root sitemaps, search indexes, redirects, headers and the legacy service-worker retirement response. `npm run serve -- --port 9000` previews this output through Netlify's local static server, including redirect and localized 404 rules. `astro preview` alone does not apply those hosting rules. Do not edit content or run development/build/cache checks concurrently. `npm run clean` removes generated output and the Astro cache.
+`build` uses Astro to generate `dist/`, including feeds, root sitemaps, search indexes, redirects, headers and the legacy service-worker retirement response. `npm run serve -- --port 9000` previews this output through Netlify's local static server, including redirect and localized 404 rules. `astro preview` alone does not apply those hosting rules. Do not edit content or run development/build/cache checks concurrently. `npm run clean` removes generated output and the Astro cache.
 
 ## TypeScript and modules
 
-The repository uses native ESM and Node 24 TypeScript. Astro owns routing and document rendering in `astro/src`; shared React components and CSS Modules live in `src`. Astro's built-in deferred `glob()` loader stores validated metadata and raw bodies; the explicit Unified pipeline preserves the existing Markdown dialect, heading links, Prism directives, typography and embeds. Astro owns image optimization/caching through `astro:assets`; Vite imports publish unprocessed attachments. Generated filenames may change. Publication data uses native static endpoints and the official RSS helper. The root package declares `type: module`; no Gatsby runtime, plugins or installation patches remain.
+The repository uses native ESM and Node 24 TypeScript. Astro owns routing and document rendering in `src/pages` and `src/layouts`; React components and their CSS Modules live in `src/components`. Static content is server-rendered; native islands hydrate the menu/theme shell and interactive widgets. `public/` contains assets copied unchanged, `content/` contains the editorial collections, and `dist/` is disposable generated output. Astro's built-in deferred `glob()` loader stores validated metadata and raw bodies; the explicit Unified pipeline preserves the existing Markdown dialect, heading links, Prism directives, typography and embeds. Astro owns image optimization/caching through `astro:assets`; Vite imports publish unprocessed attachments. Generated filenames may change. Publication data uses native static endpoints and the official RSS helper. The root package declares `type: module`; no Gatsby runtime, plugins or installation patches remain.
 
 Use erasable TypeScript syntax and explicit file extensions in Node imports. `npm run typecheck` runs strict application/bundler and native NodeNext checks, followed by the official Astro checker. Tests transform TypeScript separately and do not replace type checking. The TypeScript 7 native checker supplies `tsc`; the `typescript` import is the TS6 compiler-API compatibility package for tooling. Editor tasks and recommended extensions are in `.vscode`.
 
-ESLint, Prettier, PostCSS and Tailwind use their checked-in native configuration. Component CSS Modules stay with their owner. `src/types/content.ts` and `src/types/image.ts` describe the portable content/image contracts; some serialized field and CSS names retain their published legacy spelling.
+ESLint, Prettier, PostCSS and Tailwind use their checked-in native configuration. Component CSS Modules stay with their owner. `src/types/content.ts` and `src/types/image.ts` describe the portable content/image contracts; image transformations use native `astro:assets` metadata.
 
 ## Dependency maintenance
 
@@ -94,7 +94,7 @@ npm run test:e2e -- search.e2e.spec.ts
 
 For quick real-site interactions, run `npm run test:e2e:dev`. It starts Astro development and runs existing `@dev` theme/storage/keyboard/locale cases. A locally running `npm run dev -- --host 127.0.0.1 --port 8001` can be reused; CI proves cold startup. The regular development URL is `http://localhost:4321/en/`. Content edits invalidate rendered content and images; unchanged visits reuse cached work. Production serves prebuilt static output and does not run Markdown or Sharp per request.
 
-Vitest owns controlled component rendering; Playwright Test owns website navigation, SSR/hydration and the production server lifecycle. See [testing guidance](docs/testing-guidance.md#using-vitest-and-playwright-together) and [Astro implementation notes](astro/README.md).
+Vitest owns controlled component rendering; Playwright Test owns website navigation, SSR/hydration and the production server lifecycle. See [testing guidance](docs/testing-guidance.md#using-vitest-and-playwright-together) and [Astro implementation notes](docs/astro.md).
 
 ## Browser test commands and helpers
 
@@ -119,7 +119,7 @@ npm run lint
 npm run fix
 ```
 
-Individual commands: `lint:eslint`, `lint:prettier`, `fix:eslint`, `fix:prettier`. `lint:modern` aliases the ESLint check. ESLint uses TypeScript type information for lint rules; `npm run typecheck` reports compiler diagnostics.
+Individual commands: `lint:eslint`, `lint:prettier`, `fix:eslint`, `fix:prettier`. ESLint uses TypeScript type information for lint rules; `npm run typecheck` reports compiler diagnostics.
 
 Installation configures Husky. The pre-commit hook runs `npm run lint-staged` against staged files. VS Code settings and extension recommendations are in `.vscode/`. Generated output, imported content and fixtures are excluded from bulk formatting.
 
@@ -213,7 +213,7 @@ The source check runs before production builds and on staged Markdown. The gener
 
 The production workflow prepares a content manifest, deploys, verifies the public key/manifest and changed pages, then notifies IndexNow. Preview deployments never submit. The first production deployment establishes a baseline without sending the historical archive; later deployments submit added, changed and deleted canonical URLs. Content/metadata/link/image changes affect fingerprints; CSS classes, inline styles and client scripts do not.
 
-The public verification key is configured in `data/indexnow.json`; its matching UTF-8 file is in `static/`. It needs no repository secret or Bing account setup. Deployment must publish both the key and `indexnow-manifest.json` before submission. IndexNow acknowledgement is not a guarantee of indexing; retain the sitemap and Search Console workflow.
+The public verification key is configured in `data/indexnow.json`; its matching UTF-8 file is in `public/`. It needs no repository secret or Bing account setup. Deployment must publish both the key and `indexnow-manifest.json` before submission. IndexNow acknowledgement is not a guarantee of indexing; retain the sitemap and Search Console workflow.
 
 For manual deployment:
 
@@ -240,7 +240,7 @@ Repeat `--url` for multiple pages. One-off notifications do not acknowledge othe
 
 ## Article configuration
 
-Content lives in `content/posts/` and `content/pages/`. UI translations live in `src/i18n/locales/en/translation.json` and `src/i18n/locales/pl/translation.json`. Edit site metadata and social links in `content/meta/config.ts`.
+Content lives in `content/posts/` and `content/pages/`. UI translations live in `src/i18n/locales/en/translation.json` and `src/i18n/locales/pl/translation.json`. Edit site metadata and social links in `src/config.ts`.
 
 An article's `related` frontmatter array contains article slugs without locale/date prefixes. Missing references fail the build. The card links to the article's route in the visitor's interface language, including an untranslated copy. It uses another available language only when that route does not exist. Canonical tags remain independent of this navigation choice.
 

@@ -1,6 +1,7 @@
 import { test, expect } from '../../../tests/helpers/browser/fixtures.ts';
 import {
   expectFonts,
+  expectStyles,
   expectImageLoaded,
 } from '../../../tests/helpers/browser/readiness.ts';
 import { expectArtworkClearOfCopy } from '../../../tests/helpers/browser/hero-geometry.ts';
@@ -54,7 +55,7 @@ for (const language of ['en', 'pl']) {
     expect(position.target).toBeLessThan(position.viewportHeight);
     const card = page.locator('.latestArticles li').first();
     await card.hover();
-    await expect(card.locator('.gatsby-image-wrapper')).toHaveCSS(
+    await expect(card.locator('.responsive-image')).toHaveCSS(
       'transform',
       'none',
     );
@@ -139,6 +140,7 @@ for (const language of ['en', 'pl']) {
         }) => {
           await page.setViewportSize(viewport);
           await page.goto(`/${language}/`, { waitUntil: 'domcontentloaded' });
+          await expectStyles(page);
           if (javaScriptEnabled) await expectFonts(page);
           const hero = page.locator('.hero');
           const heroBounds = (await hero.boundingBox())!;
@@ -166,7 +168,7 @@ for (const language of ['en', 'pl']) {
             heroBounds.y + heroBounds.height - 20,
           );
 
-          // Gatsby also renders a noscript fallback when JavaScript is disabled.
+          // The responsive image includes a no-JavaScript fallback.
           const portrait = hero.locator('img[data-main-image]').last();
           if (viewport.width < 1264) {
             await expect(portrait).not.toBeVisible();

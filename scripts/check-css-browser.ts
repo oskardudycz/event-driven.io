@@ -10,7 +10,7 @@ export async function checkCssBrowser(
   mainHeightVh = 80,
 ) {
   const browser = await chromium.launch();
-  const root = resolve('public');
+  const root = resolve('dist');
   const origin = 'http://css-cache.test';
   const types: Record<string, string> = {
     '.html': 'text/html',

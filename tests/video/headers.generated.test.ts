@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { expect, test } from 'vitest';
 test('published hosting headers send the referrer YouTube requires and retain security/discovery headers', () => {
-  const headers = readFileSync('public/_headers', 'utf8');
+  const headers = readFileSync('dist/_headers', 'utf8');
   expect(headers).toMatch(
     /\/\*\n(?: {2}[^\n]+\n)* {2}Referrer-Policy: strict-origin-when-cross-origin\n/,
   );
