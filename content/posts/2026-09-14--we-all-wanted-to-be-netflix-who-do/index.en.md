@@ -2,6 +2,7 @@
 title: We all wanted to be Netflix, who do we want to be next?
 tags:
   - Architecture
+  - Artificial Intelligence
 cover: 2026-09-14-cover.jpg
 author: oskar dudycz
 redirectFrom: /we-all-wanted-to-be-netflix-who-do/

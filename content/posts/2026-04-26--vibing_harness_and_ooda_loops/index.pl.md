@@ -2,6 +2,7 @@
 title: Vibing, Harness and OODA loop
 tags:
   - Architecture
+  - Artificial Intelligence
 cover: 2026-04-26-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

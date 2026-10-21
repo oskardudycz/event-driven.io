@@ -2,6 +2,8 @@
 title: You can fork a package, but can you own it?
 tags:
   - Architecture
+  - Open Source
+  - Artificial Intelligence
 cover: 2026-06-08-cover.jpg
 author: oskar dudycz
 useDefaultLangCanonical: true

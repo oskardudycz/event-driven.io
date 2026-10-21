@@ -2,6 +2,7 @@
 title: Why Open Source Isn't Always Fair. Dual licenses explained
 tags:
   - Architecture
+  - Open Source
 cover: 2025-08-04-cover.jpg
 author: oskar dudycz
 redirectFrom: /why-open-source-isnt-always-fair/

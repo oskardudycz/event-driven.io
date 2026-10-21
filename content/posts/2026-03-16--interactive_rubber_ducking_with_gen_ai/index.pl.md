@@ -2,6 +2,7 @@
 title: Interactive Rubber Ducking with GenAI
 tags:
   - Architecture
+  - Artificial Intelligence
 cover: 2026-03-16-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

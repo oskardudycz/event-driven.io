@@ -2,6 +2,7 @@
 title: Don't overestimate domain expertise
 tags:
   - Architecture
+  - Artificial Intelligence
 cover: 2026-05-11-cover.png
 author: oskar dudycz
 redirectFrom: /should_we_trust_domain_experts/

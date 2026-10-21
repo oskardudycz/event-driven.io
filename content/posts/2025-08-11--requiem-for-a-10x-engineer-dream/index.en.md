@@ -2,6 +2,7 @@
 title: Requiem for a 10x Engineer Dream
 tags:
   - Architecture
+  - Artificial Intelligence
 cover: 2025-08-11-cover.jpg
 author: oskar dudycz
 redirectFrom: /requiem-for-a-10x-engineer-dream/

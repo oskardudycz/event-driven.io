@@ -2,6 +2,7 @@
 title: The End of Coding? Wrong Question
 tags:
   - Architecture
+  - Artificial Intelligence
 cover: 2026-03-09-cover.png
 author: oskar dudycz
 useDefaultLangCanonical: true

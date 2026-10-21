@@ -1,6 +1,7 @@
 ---
 title: ChatGPT, revolution or not?
 tags:
+  - Artificial Intelligence
   - Coding Life
 cover: 2023-04-02-cover.png
 author: oskar dudycz
