@@ -24,7 +24,7 @@ The owner requested restoring main’s colour values while retaining variables. 
 | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Implemented colours, typography and spacing      | [Tokens](src/theme/tokens.css), [global styles](src/theme/global.css), [Tailwind aliases](src/theme/tailwind.css)                                   |
 | Component behaviour and scoped styles            | Owning component and its CSS Module under `src/components/`                                                                                         |
-| Logo, hero artwork and fonts                     | [Image/font inventory](docs/imagery-and-typography-review.md), [hero sources and exports](assets/hero-exports.md), `static/icons/`, `static/fonts/` |
+| Logo, hero artwork and fonts                     | [Image/font inventory](docs/imagery-and-typography-review.md), [hero sources and exports](assets/hero-exports.md), `public/icons/`, `public/fonts/` |
 | Rendered component examples                      | Existing [Vite gallery](tests/gallery/gallery.tsx); run `npm run dev:components`                                                                    |
 | Colour rationale, evidence and open alternatives | [Branding guide](docs/branding-guide.md)                                                                                                            |
 | Current tasks and verification                   | [plan.md](plan.md), [todo.md](todo.md)                                                                                                              |
@@ -45,7 +45,7 @@ Keep one component catalogue. Add a lean Storybook when ongoing component work j
 
 Figma is optional for exploring and reviewing pages. Import current rendered pages when useful; imports do not recover responsive rules or React APIs automatically. Keep tokens and approved assets in the repository rather than maintaining a second independent design system. See the [tooling review](docs/llm-design-consistency-review.md).
 
-Keep CSS, native ESM/TypeScript, plain data and presentation views portable for a possible Astro migration. Gatsby routing, images and data stay in adapters where a real boundary is useful. Evaluate Astro separately with a representative bilingual article/guide slice and route, SEO, content and interaction parity; measure payloads and build cost before claiming an improvement. Follow the [Astro testing boundary](docs/testing-guidance.md#astro-compatibility).
+Keep component-owned CSS, native ESM/TypeScript, plain data and presentation views portable. Astro owns routing, document metadata and asset generation. Preserve route, SEO, content and interaction parity; measure payloads and build cost before claiming an improvement. Follow the [Astro testing boundary](docs/testing-guidance.md#astro-compatibility).
 
 ## Priority order
 

@@ -4,12 +4,11 @@ import ts from 'typescript';
 import config from '../astro.config.mjs';
 assert.equal(config.trailingSlash, 'always');
 assert.equal(config.site, 'https://event-driven.io');
-assert.equal(config.srcDir, './astro/src');
 const webfinger = JSON.parse(
-  readFileSync('static/.well-known/webfinger', 'utf8'),
+  readFileSync('public/.well-known/webfinger', 'utf8'),
 ) as { subject: string };
 assert.equal(webfinger.subject, 'acct:oskardudycz@hachyderm.io');
-const files = globSync('{src,astro/src}/**/*.{ts,tsx}').filter(
+const files = globSync('src/**/*.{ts,tsx}').filter(
   (file) => !file.endsWith('.d.ts'),
 );
 for (const file of files) {

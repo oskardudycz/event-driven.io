@@ -9,7 +9,7 @@ import {
   LinkedinLegacyIcon,
 } from 'react-share';
 
-import config from '../../../content/meta/config.ts';
+import config from '../../config.ts';
 
 const PostShare = (props: { post: ArticleNode }) => {
   const {

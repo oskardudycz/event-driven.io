@@ -6,7 +6,7 @@ import { publishedPages } from '../../../scripts/published-pages.ts';
 
 test('every built page renders its editorial language and translated navigation', () => {
   const languages = new Set();
-  for (const { route, file } of publishedPages('public')) {
+  for (const { route, file } of publishedPages('dist')) {
     const language = route.split('/')[1];
     if (language !== 'en' && language !== 'pl') continue;
     languages.add(language);

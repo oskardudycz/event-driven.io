@@ -110,7 +110,7 @@ test('saved dark theme applies before React loads and diagrams keep a readable c
     'background-color',
     'rgb(20, 24, 27)',
   );
-  await expect(page.locator('.gatsby-resp-image-image').first()).toHaveCSS(
+  await expect(page.locator('.article-image-content').first()).toHaveCSS(
     'background-color',
     'rgb(255, 255, 255)',
   );

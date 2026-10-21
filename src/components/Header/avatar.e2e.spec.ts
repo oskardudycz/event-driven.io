@@ -1,6 +1,7 @@
 import { test, expect } from '../../../tests/helpers/browser/fixtures.ts';
 import {
   expectFonts,
+  expectStyles,
   expectImageLoaded,
 } from '../../../tests/helpers/browser/readiness.ts';
 import type { Locator } from '@playwright/test';
@@ -33,6 +34,7 @@ for (const language of ['en', 'pl']) {
         for (const width of [320, 390, 640, 1280]) {
           await page.setViewportSize({ width, height: 900 });
           await page.goto(`/${language}/`, { waitUntil: 'domcontentloaded' });
+          await expectStyles(page);
           if (javaScriptEnabled) await expectFonts(page);
           await page.evaluate(() => {
             document.documentElement.style.fontSize = '200%';

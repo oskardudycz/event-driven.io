@@ -5,9 +5,9 @@ import * as cheerio from 'cheerio';
 import { builtRedirects } from '../../helpers/redirects.ts';
 
 for (const [file, lang] of [
-  ['public/404.html', 'en'],
-  ['public/en/404/index.html', 'en'],
-  ['public/pl/404/index.html', 'pl'],
+  ['dist/404.html', 'en'],
+  ['dist/en/404/index.html', 'en'],
+  ['dist/pl/404/index.html', 'pl'],
 ] as const) {
   test(`${file} provides localized, index-excluded recovery links without JavaScript`, () => {
     const $ = cheerio.load(readFileSync(file, 'utf8'));
@@ -28,12 +28,12 @@ for (const [file, lang] of [
       `/${lang}/search/`,
     ]);
     for (const link of links)
-      assert.ok(existsSync(`public${link}index.html`), link);
+      assert.ok(existsSync(`dist${link}index.html`), link);
   });
 }
 
 test('fallback rewrites preserve HTTP 404 and follow all specific redirects', async () => {
-  const lines = readFileSync('public/_redirects', 'utf8')
+  const lines = readFileSync('dist/_redirects', 'utf8')
     .split('\n')
     .map((line) => line.trim().replace(/\s+/g, ' '))
     .filter((line) => line && !line.startsWith('#'));

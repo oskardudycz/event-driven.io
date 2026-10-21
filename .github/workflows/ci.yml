@@ -39,9 +39,9 @@ jobs:
         uses: actions/cache/restore@v6
         with:
           path: .cache/astro
-          key: astro-${{ runner.os }}-${{ hashFiles('package-lock.json', 'astro/src/lib/images.ts') }}-${{ github.sha }}
+          key: astro-${{ runner.os }}-${{ hashFiles('package-lock.json', 'src/lib/images.ts') }}-${{ github.sha }}
           restore-keys: |
-            astro-${{ runner.os }}-${{ hashFiles('package-lock.json', 'astro/src/lib/images.ts') }}-
+            astro-${{ runner.os }}-${{ hashFiles('package-lock.json', 'src/lib/images.ts') }}-
       - name: Use npm 11.9.0 (matching the Pongo baseline)
         run: npm install --global npm@11.9.0
       # install dependencies
@@ -65,7 +65,7 @@ jobs:
         uses: actions/cache/save@v6
         with:
           path: .cache/astro
-          key: astro-${{ runner.os }}-${{ hashFiles('package-lock.json', 'astro/src/lib/images.ts') }}-${{ github.sha }}
+          key: astro-${{ runner.os }}-${{ hashFiles('package-lock.json', 'src/lib/images.ts') }}-${{ github.sha }}
       - name: Upload visual comparison screenshots
         if: always()
         uses: actions/upload-artifact@v7

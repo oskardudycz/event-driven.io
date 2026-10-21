@@ -9,10 +9,10 @@ import { loadIndex, searchIndex } from '../../src/search/runtime.ts';
 for (const lang of ['en', 'pl'] as const) {
   test(`${lang} generated index includes canonical searchable content once with valid relative links`, async () => {
     const manifest = JSON.parse(
-      readFileSync('public/search-index/manifest.json', 'utf8'),
+      readFileSync('dist/search-index/manifest.json', 'utf8'),
     ) as Record<'en' | 'pl', string>;
     const index = await loadIndex(
-      readFileSync(join('public', manifest[lang]), 'utf8'),
+      readFileSync(join('dist', manifest[lang]), 'utf8'),
     );
     const results = searchIndex(index, 'event sourcing');
     assert.ok(results.length > 0, 'Expected matching indexed articles');
@@ -48,7 +48,7 @@ for (const lang of ['en', 'pl'] as const) {
     for (const url of assets) {
       assert.match(url, /^\/(?!\/).+\.webp$/);
       assert.ok(
-        readFileSync(join('public', decodeURIComponent(url))).length,
+        readFileSync(join('dist', decodeURIComponent(url))).length,
         `Missing cover asset ${url}`,
       );
     }
@@ -62,20 +62,20 @@ for (const lang of ['en', 'pl'] as const) {
         const url = variant.split(' ')[0];
         assert.ok(url);
         assert.match(url, /^\/(?!\/).+\.webp$/);
-        assert.ok(readFileSync(join('public', decodeURI(url))).length);
+        assert.ok(readFileSync(join('dist', decodeURI(url))).length);
       }
     }
     for (const result of results) {
       assert.match(result.path, /^\/(en|pl)\//);
       const localPath = result.path.replace(/^\/(en|pl)\//, `/${lang}/`);
-      if (existsSync(join('public', localPath, 'index.html'))) {
+      if (existsSync(join('dist', localPath, 'index.html'))) {
         assert.equal(
           result.path,
           localPath,
           'Search must preserve an available locale route',
         );
       }
-      assert.ok(readFileSync(join('public', result.path, 'index.html')).length);
+      assert.ok(readFileSync(join('dist', result.path, 'index.html')).length);
     }
   });
 }

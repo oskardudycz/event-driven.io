@@ -11,7 +11,7 @@ export type LearningPathNode = {
     articles?: string[];
     icon?: string;
     description?: string;
-    // A file name in Markdown; Gatsby resolves it to a File node or null.
+    // An authored cover path; the content pipeline resolves it before rendering.
     cover?: string | { id: string } | null;
   };
 };

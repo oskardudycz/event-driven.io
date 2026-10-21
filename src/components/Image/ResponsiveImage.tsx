@@ -1,8 +1,8 @@
 import React from 'react';
 import type { ImageData } from '../../types/image.ts';
 
-// The serialized image shape is shared with the search index. Rendering and
-// loading use native pictures; no Gatsby runtime is needed by Astro.
+// The serialized responsive data is shared with the search index. Astro supplies
+// optimized URLs; this portable component owns the picture markup.
 export default function ResponsiveImage({
   image,
   alt = '',
@@ -29,8 +29,8 @@ export default function ResponsiveImage({
   };
   return (
     <div
-      data-gatsby-image-wrapper=""
-      className="gatsby-image-wrapper"
+      data-responsive-image=""
+      className="responsive-image"
       style={{
         position: 'relative',
         overflow: 'hidden',

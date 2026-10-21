@@ -15,10 +15,10 @@ test('SEO verification covers the guide index, guides and tag pages in both lang
   const failures = verifySeoBuild(fixture);
   for (const expected of [
     'en/guides/index.html does not contain: "@type":"CollectionPage"',
-    'Missing generated file: public/pl/guides/index.html',
-    'Missing generated file: public/en/guides/event-sourcing-foundations/index.html',
-    'Missing generated file: public/pl/guides/event-sourcing-foundations/index.html',
-    'Missing generated file: public/pl/articles/tag/event-sourcing/index.html',
+    'Missing generated file: dist/pl/guides/index.html',
+    'Missing generated file: dist/en/guides/event-sourcing-foundations/index.html',
+    'Missing generated file: dist/pl/guides/event-sourcing-foundations/index.html',
+    'Missing generated file: dist/pl/articles/tag/event-sourcing/index.html',
     'sitemap does not contain: <loc>https://event-driven.io/en/guides/</loc>',
     'sitemap does not contain: <loc>https://event-driven.io/pl/guides/event-sourcing-foundations/</loc>',
     'sitemap does not contain: <loc>https://event-driven.io/pl/articles/tag/event-sourcing/</loc>',

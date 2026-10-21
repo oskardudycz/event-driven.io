@@ -39,10 +39,10 @@ test('code aliases and highlighted lines retain the existing Prism markup', asyn
   );
   const $ = load(code);
   expect(
-    $('.gatsby-highlight[data-language="bash"] code.language-bash').text(),
+    $('.code-highlight[data-language="bash"] code.language-bash').text(),
   ).toContain('echo "hello"');
   expect(
-    $('.gatsby-highlight[data-language="csharp"] .gatsby-highlight-code-line'),
+    $('.code-highlight[data-language="csharp"] .code-highlight-code-line'),
   ).toHaveLength(1);
   expect($('.token')).not.toHaveLength(0);
 });
@@ -60,5 +60,5 @@ test('YouTube embeds retain start parameters, privacy host and responsive access
   expect(frame.attr('title')).toBeTruthy();
   expect(frame.attr('referrerpolicy')).toBe('strict-origin-when-cross-origin');
   expect(frame.attr('loading')).toBe('lazy');
-  expect(frame.closest('.gatsby-resp-iframe-wrapper')).toHaveLength(1);
+  expect(frame.closest('.responsive-iframe')).toHaveLength(1);
 });

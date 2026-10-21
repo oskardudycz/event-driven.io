@@ -9,7 +9,7 @@ function verifySeoBuild(publicDirectory: string) {
     const filePath = path.join(publicDirectory, relativePath);
 
     if (!fs.existsSync(filePath)) {
-      failures.push(`Missing generated file: public/${relativePath}`);
+      failures.push(`Missing generated file: dist/${relativePath}`);
       return '';
     }
 

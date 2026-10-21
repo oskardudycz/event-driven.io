@@ -75,7 +75,7 @@ export function lineDirectives(code: string, highlights: number[] = []) {
     .filter((line) => !line.hide)
     .map((line, index, visible) =>
       line.highlight
-        ? `<span class="gatsby-highlight-code-line">${line.code}</span>`
+        ? `<span class="code-highlight-code-line">${line.code}</span>`
         : line.code + (index === visible.length - 1 ? '' : '\n'),
     )
     .join('');

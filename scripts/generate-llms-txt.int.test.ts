@@ -42,7 +42,7 @@ test('llms.txt lists every guide with its URL and description, per language, in 
   );
   assert.equal(result.status, 0, result.stderr);
   assert.equal(result.stderr, '');
-  const output = readFileSync(join(root, 'static/llms.txt'), 'utf8');
+  const output = readFileSync(join(root, 'public/llms.txt'), 'utf8');
   assert.deepEqual(section(output, 'English guides'), guideLines('en'));
   assert.deepEqual(section(output, 'Polish guides'), guideLines('pl'));
 });

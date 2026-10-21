@@ -22,9 +22,9 @@ export default function Item({ post }: { post: ArticleNode }) {
       tags={tags.map((tag) => tagLabel(t, tag))}
       excerpt={excerpt}
       cover={
-        cover?.childImageSharp?.gatsbyImageData && (
+        cover?.responsive && (
           <ResponsiveImage
-            image={cover.childImageSharp.gatsbyImageData}
+            image={cover.responsive}
             alt={title}
             sizes="(min-width: 1025px) 846px, (min-width: 1024px) 646px, (min-width: 690px) 606px, (min-width: 600px) calc(100vw - 84px), calc(100vw - 64px)"
           />

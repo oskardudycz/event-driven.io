@@ -24,7 +24,7 @@ export function responsiveFrames(tree: Root) {
       .removeAttr('width')
       .removeAttr('height');
     node.value =
-      `<div class="gatsby-resp-iframe-wrapper" style="padding-bottom: ${(height / width) * 100}%; position: relative; height: 0; overflow: hidden; margin-bottom: 2em"> ${$('body').html() || ''} </div>`
+      `<div class="responsive-iframe" style="padding-bottom: ${(height / width) * 100}%; position: relative; height: 0; overflow: hidden; margin-bottom: 2em"> ${$('body').html() || ''} </div>`
         .replace(/\s+/g, ' ')
         .trim();
   });

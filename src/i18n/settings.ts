@@ -1,4 +1,4 @@
-import config from '../../content/meta/config.ts';
+import config from '../config.ts';
 
 export const DEFAULT_OPTIONS_BASE = {
   supportedLanguages: ['en', 'pl'],

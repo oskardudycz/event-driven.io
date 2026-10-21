@@ -7,6 +7,6 @@ export function readingItems(edges: ArticleEdge[]) {
     title: node.frontmatter.title,
     date: node.fields.prefix,
     excerpt: node.excerpt,
-    image: node.frontmatter.cover?.childImageSharp?.resize,
+    image: node.frontmatter.cover,
   }));
 }

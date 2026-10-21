@@ -1,11 +1,10 @@
-import type { ArticleEdge, PageData, SitePageProps } from '../types/content.ts';
+import type { ArticleEdge, SitePageProps } from '../types/content.ts';
 import React from 'react';
 
 import Article from '../components/Article/index.ts';
 import Headline from '../components/Article/Headline.tsx';
 import Bodytext from '../components/Article/Bodytext.tsx';
 import List from '../components/List/index.ts';
-import { createHead } from '../components/Seo/index.ts';
 
 const GuideTemplate = (props: SitePageProps<'guide' | 'articles'>) => {
   const {
@@ -33,10 +32,3 @@ const GuideTemplate = (props: SitePageProps<'guide' | 'articles'>) => {
 };
 
 export default GuideTemplate;
-
-export const Head = createHead<Pick<PageData, 'guide' | 'site'>>(
-  ({ data }) => ({
-    data: data.guide,
-    schemaType: 'CollectionPage',
-  }),
-);

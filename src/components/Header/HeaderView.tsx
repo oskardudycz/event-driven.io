@@ -3,8 +3,7 @@ import * as styles from './Header.module.css';
 import { anchor, type RenderLink } from '../Link/anchor.tsx';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { ScreenWidthContext, FontLoadedContext } from '../../layouts/contexts';
-import config from '../../../content/meta/config.ts';
+import config from '../../config.ts';
 import Menu from '../Menu/index.ts';
 
 import { usePageContext } from '../../i18n/index.ts';
@@ -22,6 +21,37 @@ const Header = ({
   renderLink?: RenderLink;
 }) => {
   const { t } = useTranslation();
+  const [font400loaded, setFont400Loaded] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(0);
+
+  useEffect(() => {
+    const updateFontState = () => {
+      setFont400Loaded(document.documentElement.dataset.font400 === 'loaded');
+    };
+    updateFontState();
+    document.addEventListener('site:fonts-loaded', updateFontState);
+    return () =>
+      document.removeEventListener('site:fonts-loaded', updateFontState);
+  }, []);
+
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    const updateWidth = () => setScreenWidth(window.innerWidth);
+    const onResize = () => {
+      if (timeout !== undefined) return;
+      timeout = setTimeout(() => {
+        timeout = undefined;
+        updateWidth();
+      }, 100);
+    };
+    updateWidth();
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      clearTimeout(timeout);
+    };
+  }, []);
+
   const [fixed, setFixed] = useState(false);
   const sensorRef = useRef<HTMLDivElement>(null);
   const { lang } = usePageContext();
@@ -90,23 +120,15 @@ const Header = ({
             </>
           ),
         })}
-        <FontLoadedContext.Consumer>
-          {(loaded) => (
-            <ScreenWidthContext.Consumer>
-              {(width) => (
-                <Menu
-                  renderLink={renderLink}
-                  path={path}
-                  homepage={homepage}
-                  fixed={fixed}
-                  screenWidth={width}
-                  fontLoaded={loaded}
-                  pages={filteredPages}
-                />
-              )}
-            </ScreenWidthContext.Consumer>
-          )}
-        </FontLoadedContext.Consumer>
+        <Menu
+          renderLink={renderLink}
+          path={path}
+          homepage={homepage}
+          fixed={fixed}
+          screenWidth={screenWidth}
+          fontLoaded={font400loaded}
+          pages={filteredPages}
+        />
       </header>
       <div ref={sensorRef} aria-hidden="true" className={styles.sensor} />
     </div>

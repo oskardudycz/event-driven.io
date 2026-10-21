@@ -1,5 +1,5 @@
 import React from 'react';
-import config from '../../../content/meta/config.ts';
+import config from '../../config.ts';
 import AuthorView from './AuthorView.tsx';
 
 export default function Author({ note }: { note: string }) {

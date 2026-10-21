@@ -1,7 +1,7 @@
 import path from 'path';
 import { verifySeoBuild } from './seo-build-verifier.ts';
 
-const publicDirectory = path.resolve(import.meta.dirname, '../public');
+const publicDirectory = path.resolve(import.meta.dirname, '../dist');
 const failures = verifySeoBuild(publicDirectory);
 
 if (failures.length > 0) {

@@ -71,7 +71,7 @@ export function highlightCode(tree: Root) {
       numberClass = ' line-numbers';
       const count = highlighted
         ? highlighted.split('\n').length +
-          (highlighted.match(/gatsby-highlight-code-line/g) || []).length
+          (highlighted.match(/code-highlight-code-line/g) || []).length
         : 0;
       numbers = `<span aria-hidden="true" class="line-numbers-rows" style="white-space: normal; width: auto; left: 0;">${'<span></span>'.repeat(count)}</span>`;
     }
@@ -94,7 +94,7 @@ export function highlightCode(tree: Root) {
           .join('') +
         '</span>';
     }
-    const wrapper = `gatsby-highlight${settings.highlights.length ? ' has-highlighted-lines' : ''}`;
+    const wrapper = `code-highlight${settings.highlights.length ? ' has-highlighted-lines' : ''}`;
     Object.assign(node, {
       type: 'html',
       value: `<div class="${wrapper}" data-language="${language}"><pre${style} class="${className}${numberClass}"><code class="${className}">${prompts}${highlighted}</code>${numbers}</pre></div>`,

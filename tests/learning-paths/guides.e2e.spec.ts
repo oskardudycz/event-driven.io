@@ -21,7 +21,7 @@ const labels: Record<string, { menu: string; next: string; box: string }> = {
   },
 };
 const articleRoute = (slug: string, language: string) =>
-  existsSync(join('public', language, slug, 'index.html'))
+  existsSync(join('dist', language, slug, 'index.html'))
     ? `/${language}/${slug}/`
     : `/en/${slug}/`;
 
@@ -222,13 +222,13 @@ for (const [width, gap] of [
     const box = page.getByRole('complementary', { name: labels.en!.box });
     const share = page.locator('article footer .share');
     await expect(share).toBeVisible();
-    const next = await box.evaluate((element) => ({
-      className: element.nextElementSibling!.className,
-      distance:
-        element.nextElementSibling!.getBoundingClientRect().top -
-        element.getBoundingClientRect().bottom,
-    }));
-    expect(next.className).toMatch(/\bshare\b/);
-    expect(next.distance).toBe(gap);
+    const distance = await box.evaluate((element) => {
+      const share = element.closest('footer')!.querySelector('.share')!;
+      return (
+        share.getBoundingClientRect().top -
+        element.getBoundingClientRect().bottom
+      );
+    });
+    expect(distance).toBe(gap);
   });
 }

@@ -91,7 +91,7 @@ async function main() {
     return;
   }
   const current = validateManifest(
-    JSON.parse(await readFile('public/indexnow-manifest.json', 'utf8')),
+    JSON.parse(await readFile('dist/indexnow-manifest.json', 'utf8')),
   );
   const { key }: { key: string } = JSON.parse(
     await readFile('data/indexnow.json', 'utf8'),

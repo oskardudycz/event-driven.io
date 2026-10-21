@@ -45,7 +45,7 @@
     "prebuild": "npm run check:images && node ./scripts/generate-llms-txt.ts",
     "prepare": "husky",
     "render-diagrams": "node ./scripts/render-mermaid.ts",
-    "serve": "netlify dev --offline --framework '#static' --dir public --no-open --skip-gitignore",
+    "serve": "netlify dev --offline --framework '#static' --dir dist --no-open --skip-gitignore",
     "smoke": "node ./scripts/smoke.ts",
     "test": "npm run test:unit && npm run test:int && npm run test:generated && npm run test:e2e",
     "test:browser": "vitest run --config tests/vitest.config.ts --project browser",
@@ -67,9 +67,8 @@
     "verify:cache:css": "node scripts/verify-css-cache.ts",
     "verify:publication": "npm run smoke && npm run lint && npm run typecheck && npm run check:edit && npm run build && npm run test:generated && npm run test:e2e",
     "verify:search:dev": "node scripts/verify-search-development.ts",
-    "build:astro": "npm run build",
     "compare:builds": "node scripts/compare-builds.ts",
-    "typecheck:astro": "astro check --tsconfig astro/tsconfig.json"
+    "typecheck:astro": "astro check"
   },
   "dependencies": {
     "disqus-react": "^1.1.7",

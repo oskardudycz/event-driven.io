@@ -13,10 +13,10 @@ import {
 const origin = 'https://event-driven.io';
 const languages = ['en', 'pl'];
 const guides = publishedGuides();
-const readBuild = (file: string) => readFileSync(join('public', file), 'utf8');
+const readBuild = (file: string) => readFileSync(join('dist', file), 'utf8');
 const page = (route: string) => cheerio.load(readBuild(`${route}index.html`));
 const published = (route: string) =>
-  existsSync(join('public', route, 'index.html'));
+  existsSync(join('dist', route, 'index.html'));
 
 // A guide links to the article in its own language, or to the English original.
 const articleRoute = (slug: string, language: string) =>
@@ -84,7 +84,7 @@ test('every guide is published in both languages with its articles in order and 
     const image = $('meta[property="og:image"]').attr('content') || '';
     assert.ok(image.startsWith(`${origin}/`), `${route}: ${image}`);
     assert.ok(
-      existsSync(join('public', decodeURI(image.slice(origin.length)))),
+      existsSync(join('dist', decodeURI(image.slice(origin.length)))),
       `${route}: missing ${image}`,
     );
     assert.equal(
@@ -138,7 +138,7 @@ test('the guide index lists every guide in order with its icon, cover, descripti
         cover.startsWith('/') && !cover.startsWith('//'),
         `${metadata.title}: ${cover}`,
       );
-      assert.ok(existsSync(join('public', decodeURI(cover))), cover);
+      assert.ok(existsSync(join('dist', decodeURI(cover))), cover);
     });
   }
 });

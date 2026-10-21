@@ -11,6 +11,7 @@ declare global {
 import { test, expect } from '../../../tests/helpers/browser/fixtures.ts';
 import {
   expectFonts,
+  expectStyles,
   expectImageLoaded,
 } from '../../../tests/helpers/browser/readiness.ts';
 
@@ -192,7 +193,7 @@ test('normalized article links hydrate with clean canonicals and keep existing c
   const link = page
     .locator('.bodytext a[href="/en/type_script_node_js_event_sourcing/"]')
     .first();
-  // Follow a real Markdown link through Gatsby's client-side navigation.
+  // Follow a real Markdown link through client navigation.
   await link.click();
   await page.waitForURL('**/en/type_script_node_js_event_sourcing/');
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
@@ -277,7 +278,7 @@ for (const language of ['en', 'pl']) {
   });
 }
 
-test('Gatsby Head replaces metadata during navigation and keeps language-specific titles', async ({
+test('Client navigation replaces metadata during navigation and keeps language-specific titles', async ({
   page,
 }) => {
   for (const [language, title] of [
@@ -499,6 +500,7 @@ for (const language of ['en', 'pl']) {
             await page.goto(`/${language}/${route}`, {
               waitUntil: 'domcontentloaded',
             });
+            await expectStyles(page);
             const header = page.getByRole('banner');
             const heading = page.locator('main h1');
             await expect(heading).toHaveCount(1);

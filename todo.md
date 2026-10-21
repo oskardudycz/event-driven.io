@@ -1,3 +1,18 @@
+# AstroPaper structure and islands review (2026-10-21)
+
+The owner requested another complete idiom/leftovers review and approved following AstroPaper where appropriate. [Review and template evidence](docs/astro-native-review.md); [current implementation](docs/astro.md). The sections below this record describe earlier implementations and their verification.
+
+- [x] Inspect the original pinned AstroPaper and Next starter sources and official Astro documentation. Consolidate application source/configuration and use Astro defaults for source/public/output.
+- [x] Replace full-page hydration with static content and focused native islands. Remove the asynchronous sharing class, GraphQL-shaped cover fields and React Head factories; keep pure SEO checks and component ownership.
+- [x] Update hosting/tooling/tests/clean behavior with the directory change. Preserve authored public assets; a focused safety check passes. No accepted screenshot or tolerance changed.
+- [x] Current local quick gate: 91 unit checks and 149 integration/component checks pass. Strict TypeScript and Astro checking passes (289 files, zero errors/warnings/hints). Lint passes; staged Astro files use the native Prettier plugin. Removing redundant package manifests exposed one fixture copying a deleted manifest; 148/149 checks passed in that run, and all three checks in the corrected tooling selection pass.
+- [x] Native production build: 1m 38s with warm caches; 775 HTML routes, 286 redirects, 470 sitemap URLs. Contract/SEO pass; final generated suite: 19 files / 73 checks, 90.20s. Exact routes/heads/feeds/sitemap/ordered redirects and all main text match the preceding native baseline (excluding the retired sharing placeholder/widget markup).
+- [x] First complete final browser run: 286 pass / 2 fail / 2 existing skips. Correct the demonstrated No-JavaScript stylesheet-readiness gap and wait for actual header/theme hydration in the hydrated reading journey. All 64 affected hero/reading checks pass (44.5s), followed by a complete final production run: 288 pass / 2 existing skips, 3.9m. Preserve assertions and visual tolerances.
+- [x] Cold native development startup and all eight shared interaction cases pass (24.7s).
+- [ ] Intermittent React #424 on an interrupted pre-hydration root remains documented in the review. The retained trace shows the official React renderer's unmount callback during the first guide-card navigation. No suppression, package patch or speculative upgrade was applied.
+- [x] Live-source probe: addition, modification, deletion, restoration and cleanup pass for both native article HTML and search. Use an unreferenced temporary article so deletion retains strict guide validation. Exact source bytes and absence of probe files verified; no authored content or visual fixture diff remains.
+- [ ] Hosted CI rerun, deployed smoke checks and live configured provider accounts. No deployment or IndexNow submission performed.
+
 # Native Astro feature review after hosted CI (2026-10-21)
 
 The owner requested replacing unnecessary migration machinery with supported Astro features. The first hosted run failed one generated check because a Polish archive cover existed with zero bytes. The application-owned cache exposed non-atomic writes/copies; local concurrent probes did not establish the exact CI interleaving. Do not attribute this to Astro or claim a reproduced race.
@@ -6,6 +21,7 @@ The owner requested replacing unnecessary migration machinery with supported Ast
 - [x] Replace the custom Sharp generator/cache and legacy URL hashes with imported images and `astro:assets` `getImage()`. Replace copied SVG/GIF/download assets with Vite URL imports. Remove the unused hashing dependency. Generated image/attachment filenames intentionally change; appearance, meaningful authored links and complete published assets remain required.
 - [x] Use Astro's built-in deferred `glob()` loader instead of the custom loader and filesystem revision markers. Keep validated source metadata/raw bodies and use current collection/import dependencies for derived development caches.
 - [x] Move feeds, sitemap, search, redirects and manifest into static endpoints; use official `@astrojs/rss`. Route discovery no longer renders the entire website or writes publication output. Remove generated-asset Vite middleware and the post-build 404 rewrite.
+- [x] Inspect hosted run `39603281089`: 37 integration/component files / 160 checks pass; 71 generated checks pass and only the two search checks fail on the obsolete `/static/` URL prefix. Change both to require a local WebP URL while retaining all referenced-file existence/nonempty checks. This does not change production image handling or snapshot tolerances.
 - [ ] Verify native routes/recovery aliases, all generated assets, EN/PL browser behavior and unchanged screenshots, development source refresh, lint/types and production output. Current work is local; hosted rerun and deployment remain unverified.
 
 Retain the content-specific remark plugins and excerpt behavior, official React islands/client navigation, document-head theme/font initialization, and Netlify hosting tests. These implement authored semantics or visible behavior rather than duplicate an Astro feature. Native `glob()` reports the intentionally empty newsletter collection; the warning remains visible.
@@ -46,7 +62,7 @@ Historical stages through 2026-10-20. Current strategy is in [plan.md](plan.md);
 
 ## Astro shared shell, reading slice and root sitemap (2026-10-20)
 
-Implementation follows [the execution review](docs/gatsby-starter-comparison.md#14-shared-shell-articleguide-slice-and-root-sitemap-2026-10-20); [scope/commands](astro/README.md). Gatsby remains the publisher. The full migration is unfinished.
+Implementation follows [the execution review](docs/gatsby-starter-comparison.md#14-shared-shell-articleguide-slice-and-root-sitemap-2026-10-20); [scope/commands](docs/astro.md). Gatsby remains the publisher. The full migration is unfinished.
 
 - [x] Extract shared content file identities (normalized routes, original feed/comment casing, date/order prefix), available/canonical languages, related-post fallback and article aliases. Gatsby uses these same functions. Move the video mdast transform into shared content code, retaining the Gatsby adapter.
 - [x] Extract Layout/Header/Post views with explicit `renderLink` and host resources. Shared Menu, locale/theme controls, guide steps, reading lists and footer stay together with i18next/editorial/width/font contexts. Gatsby imports stay in adapters; Astro uses localized native links with current-page semantics. Preserve component-owned styles and the production publisher.
@@ -65,7 +81,7 @@ Implementation follows [the execution review](docs/gatsby-starter-comparison.md#
 
 ## Astro execution review and initial trial (2026-10-20)
 
-The owner authorizes attempting the migration in this session. [Review and revised sequence](docs/gatsby-starter-comparison.md#13-execution-review-and-astro-trial-2026-10-20); [trial scope and commands](astro/README.md). This supersedes earlier statements that Astro was not authorized, while retaining the parity-before-cutover requirement.
+The owner authorizes attempting the migration in this session. [Review and revised sequence](docs/gatsby-starter-comparison.md#13-execution-review-and-astro-trial-2026-10-20); [trial scope and commands](docs/astro.md). This supersedes earlier statements that Astro was not authorized, while retaining the parity-before-cutover requirement.
 
 - [x] Cross-check official Astro Gatsby migration, Markdown processors, React hydration/island state, i18n, image and sitemap documentation against installed Astro 7.4.1. Correct the readiness plan: explicitly select Unified; prove full markup/behavior rather than heading ids or source portability; include providers, all page families and hosting/publication integrations in the cutover gate.
 - [x] Collect routes from generated HTML instead of Gatsby page-data; exclude data/fragment directories and filesystem directories ending in `.html`. Keep the existing historical publication fixture unchanged and continue allowing new content. Read either the root or existing nested sitemap layout during the transition.

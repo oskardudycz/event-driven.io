@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { readFile, readdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import * as cheerio from 'cheerio';
-import config from '../../content/meta/config.ts';
+import config from '../../src/config.ts';
 
 export const origin = config.siteUrl;
 export type Manifest = {
@@ -81,7 +81,7 @@ export function changedUrls(previous: Manifest, current: Manifest): string[] {
     .filter((url) => previous.pages[url] !== current.pages[url])
     .sort();
 }
-export async function prepare(directory = 'public'): Promise<Manifest> {
+export async function prepare(directory = 'dist'): Promise<Manifest> {
   const pages: Record<string, string> = {};
   const sitemapDirectory = directory;
   for (const name of (await readdir(sitemapDirectory)).sort()) {

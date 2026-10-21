@@ -26,7 +26,7 @@ import Item from './Item.tsx';
 import BlueskyIcon from './BlueskyIcon.tsx';
 import Expand from './Expand.tsx';
 import { getOverflowedIndexes } from './overflow.ts';
-import config from '../../../content/meta/config.ts';
+import config from '../../config.ts';
 
 type MenuProps = {
   renderLink?: RenderLink;
@@ -48,7 +48,7 @@ class Menu extends React.Component<MenuProps, MenuState> {
 
   state: MenuState = { open: false, hiddenIndexes: [], measuring: false };
 
-  // Gatsby preserves the layout during navigation. Read the current localized
+  // Client navigation can preserve the layout. Read the current localized
   // page models rather than retaining a copy of the first page's props.
   get items() {
     const pages = this.props.pages.map((page) => ({

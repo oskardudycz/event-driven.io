@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 
 export default defineConfig({
   root: import.meta.dirname,
-  publicDir: '../../static',
+  publicDir: '../../public',
   plugins: [react()],
   css: { modules: { localsConvention: 'camelCaseOnly' } },
   server: {

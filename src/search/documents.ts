@@ -35,7 +35,7 @@ const searchableContent = (node: ArticleNode) =>
     ? searchableText(
         [node.frontmatter.description, node.rawMarkdownBody].join('\n'),
       )
-    : searchableText(node.rawMarkdownBody || node.internal?.content);
+    : searchableText(node.rawMarkdownBody);
 
 export function searchDocuments(
   nodes: ArticleNode[],

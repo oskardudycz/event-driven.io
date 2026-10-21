@@ -56,6 +56,15 @@ async function renderedStyles(page: Page) {
   // Fonts initialize before React. Compare hydrated visits on both paths;
   // the theme fieldset becomes enabled when its real client state is ready.
   await expect(page.locator('header fieldset')).toBeEnabled();
+  // Hydration enables theme controls before the menu has measured overflow.
+  // Wait for the visible navigation to fit before comparing its styles.
+  await expect
+    .poll(() =>
+      page
+        .locator('header #navigation-links')
+        .evaluate((list) => list.scrollWidth - list.clientWidth),
+    )
+    .toBeLessThanOrEqual(1);
   await page.mouse.move(0, 0);
   return page.evaluate((properties) => {
     for (const animation of document.getAnimations()) {
@@ -66,7 +75,7 @@ async function renderedStyles(page: Page) {
       }
     }
     // Images and third-party embeds change as they load, not with stylesheets.
-    const changing = '[data-gatsby-image-wrapper], iframe, #disqus_thread';
+    const changing = '[data-responsive-image], iframe, #disqus_thread';
     return Array.from(
       document.querySelectorAll('header, main, footer, main *, header *'),
     )

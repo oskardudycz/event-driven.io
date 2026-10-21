@@ -8,7 +8,7 @@ import { visit } from 'unist-util-visit';
 
 // Preserve the author's existing Markdown interpretation (including lazy list
 // continuation and inline notes). Astro still owns the rendering pipeline;
-// this parser has no filesystem or Gatsby APIs.
+// this parser is a pure remark plugin.
 const parser = unified()
   .use(parse)
   .use(gfm)

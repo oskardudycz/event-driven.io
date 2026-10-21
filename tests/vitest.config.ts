@@ -15,7 +15,7 @@ export default defineConfig({
     projects: [
       {
         plugins: [react()],
-        publicDir: resolve('static'),
+        publicDir: resolve('public'),
         css: { modules: { localsConvention: 'camelCaseOnly' } },
         test: {
           name: 'browser',
@@ -58,7 +58,7 @@ export default defineConfig({
           name: 'unit',
           sequence: { groupOrder: 0 },
           environment: 'node',
-          include: ['{astro,src,scripts,import,tests}/**/*.unit.test.ts'],
+          include: ['{src,scripts,import,tests}/**/*.unit.test.ts'],
         },
       },
       {
@@ -69,7 +69,7 @@ export default defineConfig({
           environment: 'node',
           // Node-owned Markdown tools use native Node CommonJS interop.
           deps: { interopDefault: false },
-          include: ['{astro,src,scripts,import,tests}/**/*.int.test.{ts,tsx}'],
+          include: ['{src,scripts,import,tests}/**/*.int.test.{ts,tsx}'],
         },
       },
       {

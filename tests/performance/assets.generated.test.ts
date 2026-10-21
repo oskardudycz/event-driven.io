@@ -8,12 +8,12 @@ import * as cheerio from 'cheerio';
 import postcss from 'postcss';
 
 const html = (route: string) =>
-  cheerio.load(readFileSync(join('public', route, 'index.html'), 'utf8'));
+  cheerio.load(readFileSync(join('dist', route, 'index.html'), 'utf8'));
 
 for (const lang of ['en', 'pl']) {
   test(`${lang} Introduction has a priority cover, WebP fallback and lazy later images`, () => {
     const $ = html(`${lang}/introduction_to_event_sourcing`);
-    const images = $('img.gatsby-resp-image-image');
+    const images = $('img.article-image-content');
     assert.ok(images.length >= 1);
     assert.equal(images.first().attr('loading'), 'eager');
     assert.equal(images.first().attr('fetchpriority'), 'high');
@@ -37,7 +37,7 @@ for (const lang of ['en', 'pl']) {
       assert.equal(extended.length, lang === 'pl' ? 2 : 0);
       fonts.each((_, font) => {
         assert.equal($(font).attr('crossorigin'), 'anonymous');
-        assert.ok(existsSync(join('public', $(font).attr('href')!)));
+        assert.ok(existsSync(join('dist', $(font).attr('href')!)));
       });
       const portrait = $('header img[alt="Event-Driven by Oskar Dudycz"]');
       assert.equal(portrait.attr('width'), '180');
@@ -48,7 +48,7 @@ for (const lang of ['en', 'pl']) {
 
 test('all other Markdown images retain lazy loading and WebP with a fallback', () => {
   let checked = 0;
-  for (const entry of readdirSync('public', {
+  for (const entry of readdirSync('dist', {
     recursive: true,
     withFileTypes: true,
   })) {
@@ -60,7 +60,7 @@ test('all other Markdown images retain lazy loading and WebP with a fallback', (
       continue;
     const path = join(entry.parentPath, entry.name);
     const $ = cheerio.load(readFileSync(path, 'utf8'));
-    $('img.gatsby-resp-image-image').each((_, image) => {
+    $('img.article-image-content').each((_, image) => {
       const img = $(image);
       if (img.attr('fetchpriority') === 'high') {
         assert.match(path, /introduction_to_event_sourcing/);
@@ -90,14 +90,14 @@ test('article card covers are published only as WebP', () => {
       .filter((url): url is string => !!url);
   const pages = new Set<string>();
   let checked = 0;
-  for (const entry of readdirSync('public', {
+  for (const entry of readdirSync('dist', {
     recursive: true,
     withFileTypes: true,
   })) {
     if (!entry.isFile() || entry.name !== 'index.html') continue;
     const path = join(entry.parentPath, entry.name);
     const $ = cheerio.load(readFileSync(path, 'utf8'));
-    $('a.link [data-gatsby-image-wrapper]').each((_, wrapper) => {
+    $('a.link [data-responsive-image]').each((_, wrapper) => {
       const picture = $(wrapper);
       const image = picture.find('img[data-main-image]');
       const urls = [
@@ -120,9 +120,9 @@ test('article card covers are published only as WebP', () => {
   }
   assert.ok(checked > 0, 'must inspect real generated cover output');
   for (const listing of [
-    'public/en',
-    'public/en/articles',
-    'public/pl/articles/tag/event-sourcing',
+    'dist/en',
+    'dist/en/articles',
+    'dist/pl/articles/tag/event-sourcing',
   ])
     assert.ok(pages.has(listing), `${listing} must show covers`);
 });
@@ -131,7 +131,7 @@ test("Introduction WebP preserves the PNG cover's dimensions and visual detail w
   const { default: sharp } = await import('sharp');
   const { default: pixelmatch } = await import('pixelmatch');
   const $ = html('en/introduction_to_event_sourcing');
-  const picture = $('img.gatsby-resp-image-image').first().closest('picture');
+  const picture = $('img.article-image-content').first().closest('picture');
   const asset = (type: string) => {
     const candidate = picture
       .find(`source[type="${type}"]`)
@@ -140,7 +140,7 @@ test("Introduction WebP preserves the PNG cover's dimensions and visual detail w
       .map((value) => value.trim().split(/\s+/))
       .find(([, width]) => width === '800w');
     assert.ok(candidate?.[0], `${type} 800px candidate`);
-    return readFileSync(join('public', candidate[0]));
+    return readFileSync(join('dist', candidate[0]));
   };
   const png = asset('image/png');
   const webp = asset('image/webp');
@@ -175,7 +175,7 @@ test("Introduction WebP preserves the PNG cover's dimensions and visual detail w
 });
 
 test('font CSS includes basic and extended Latin files for every weight/style', () => {
-  const css = readFileSync('public/fonts/open-sans/index.css', 'utf8');
+  const css = readFileSync('dist/fonts/open-sans/index.css', 'utf8');
   const faces = [...css.matchAll(/@font-face\s*\{([^}]+)\}/g)].map(
     (match) => match[1] || '',
   );
@@ -197,7 +197,7 @@ test('font CSS includes basic and extended Latin files for every weight/style', 
       for (const face of matching) {
         for (const [, file] of face.matchAll(/url\('\.\/(.*?)'\)/g)) {
           assert.ok(file);
-          assert.ok(existsSync(join('public/fonts/open-sans', file)), file);
+          assert.ok(existsSync(join('dist/fonts/open-sans', file)), file);
         }
       }
     }
@@ -232,7 +232,7 @@ test('published metadata matches article dates and newsletter defers its iframe'
 
 for (const theme of ['light', 'dark'])
   test(`${theme} brand and muted text meet 4.5:1 against the page background`, () => {
-    const stylesheet = postcss.parse(publishedStyles('public/en/index.html'));
+    const stylesheet = postcss.parse(publishedStyles('dist/en/index.html'));
     const tokens = new Map<string, string>();
     stylesheet.walkDecls((declaration) => {
       if (
@@ -275,7 +275,7 @@ for (const theme of ['light', 'dark'])
   });
 
 test('generated pages never reference local filesystem URLs in resource/link attributes', () => {
-  const pages = readdirSync('public', { recursive: true, withFileTypes: true })
+  const pages = readdirSync('dist', { recursive: true, withFileTypes: true })
     .filter((entry) => entry.isFile() && entry.name.endsWith('.html'))
     .map((entry) => join(entry.parentPath, entry.name));
   assert.ok(pages.length > 0, 'build the production site first');

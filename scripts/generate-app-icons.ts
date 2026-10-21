@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import sharp from 'sharp';
 
 const source = 'src/images/app-icons/favicon.png';
-const destination = process.argv[2] || 'static/icons';
+const destination = process.argv[2] || 'public/icons';
 const sizes = {
   favicon: [16, 32, 96],
   icon: [48, 96, 144, 192, 256, 384, 512],
@@ -33,6 +33,6 @@ directory.writeUInt32LE(directory.length, 18);
 const favicon = Buffer.concat([directory, png]);
 await writeFile(join(destination, 'favicon.ico'), favicon);
 if (process.argv[2] === undefined) {
-  await writeFile('static/favicon.ico', favicon);
+  await writeFile('public/favicon.ico', favicon);
 }
 console.log(`Generated PNG and ICO icons in ${destination}`);

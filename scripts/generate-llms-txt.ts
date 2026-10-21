@@ -7,7 +7,7 @@ import { markdownLabel } from './markdown-label.ts';
 
 const projectRoot = path.resolve(import.meta.dirname, '..');
 const contentRoot = path.join(projectRoot, 'content');
-const outputPath = path.join(projectRoot, 'static', 'llms.txt');
+const outputPath = path.join(projectRoot, 'public', 'llms.txt');
 const siteUrl = 'https://event-driven.io';
 const supportedLanguages = new Set(['en', 'pl']);
 

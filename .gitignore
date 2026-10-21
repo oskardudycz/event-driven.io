@@ -60,7 +60,7 @@ typings/
 .cache/
 .astro/
 .DS_Store
-public/
+dist/
 *.tsbuildinfo
 
 # Default Playwright output (configured suites use visual-artifacts/)
