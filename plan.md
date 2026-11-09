@@ -235,3 +235,7 @@ Correct the premature photo disappearance at the reported 1264px CSS viewport by
 ## IndexNow bounded submission retries (2026-10-13)
 
 Retry each unaccepted batch up to four attempts after local production key/manifest/page verification. Retry network failures, HTTP 403, 429 and 5xx with 5/10/20 second backoff; honor valid Retry-After seconds/dates up to 60 seconds and leave longer waits pending for a later run. Accepted batches are not replayed within the run. Keep acknowledgement after all batches succeed. Use a small native loop with an injectable wait rather than add a dependency. IndexNow documents 403 as key validation failure, not generic overload (https://www.indexnow.org/documentation); bounded 403 retries allow another validation attempt but do not establish or repair crawler access. Persistent 403 diagnostics identify the key-file URL. Hosted API success remains unverified.
+
+## Generated tag files and pre-commit content checks (2026-11-09)
+
+A new tag failed hosted CI because its `content/tags` files were missing. `npm run generate` now creates missing tag files with empty frontmatter (never overwriting existing ones) and regenerates `public/llms.txt`. `prebuild` runs it, and the pre-commit hook runs both generators, stages the new tag files and `llms.txt`, then runs lint-staged and `npm run test:content`. The hook does not build. The tag test requires only that each tag page has a file; descriptions and intros are optional and use `tags.defaultDescription` when absent. Evidence is in todo.md.

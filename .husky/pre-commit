@@ -1,1 +1,5 @@
+created_tag_files=$(node scripts/generate-tag-files.ts)
+node scripts/generate-llms-txt.ts
+git add public/llms.txt $created_tag_files
 npm run lint-staged
+npm run test:content

@@ -104,8 +104,11 @@ export function publishedTagFile(
   );
   if (!existsSync(file)) return undefined;
   const markdown = readFileSync(file, 'utf8');
-  const frontmatter = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(markdown);
-  const metadata = (yaml.load(frontmatter?.[1] ?? '') ?? {}) as {
+  const frontmatter = /^---\r?\n(?:([\s\S]*?)\r?\n)?---(?:\r?\n|$)/.exec(
+    markdown,
+  );
+  const block = frontmatter?.[1];
+  const metadata = ((block ? yaml.load(block) : undefined) ?? {}) as {
     description?: string;
   };
   return {

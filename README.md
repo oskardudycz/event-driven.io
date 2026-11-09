@@ -121,7 +121,7 @@ npm run fix
 
 Individual commands: `lint:eslint`, `lint:prettier`, `fix:eslint`, `fix:prettier`. ESLint uses TypeScript type information for lint rules; `npm run typecheck` reports compiler diagnostics.
 
-Installation configures Husky. The pre-commit hook runs `npm run lint-staged` against staged files. VS Code settings and extension recommendations are in `.vscode/`. Generated output, imported content and fixtures are excluded from bulk formatting.
+Installation configures Husky. The pre-commit hook runs the generators from `npm run generate` and stages what they create, then runs `npm run lint-staged` against staged files and `npm run test:content` (tag and related-article checks). It does not build the site. VS Code settings and extension recommendations are in `.vscode/`. Generated output, imported content and fixtures are excluded from bulk formatting.
 
 ## Importing articles
 
@@ -294,12 +294,12 @@ When merging tags, add the former value to `mergedTags` in `src/utils/tag-redire
 
 Each tag has a page at `/{en,pl}/articles/tag/{slug}/` listing its articles, newest first. A language has the page when at least one of the tag's articles has a route in that language, including an English copy published under `/pl/`. Article tag links point to the page in the article's language, or to the English page when there is no Polish one. `/{en,pl}/articles/` links to every tag page of its language, most used first.
 
-To describe a tag, add a sentence under `tags.descriptions`, keyed by the tag's URL slug, in `src/i18n/locales/{en,pl}/translation.json`. It is shown below the heading and used as the page's meta description. A language without a description uses `tags.defaultDescription`; descriptions do not fall back to the other language.
+Every tag page has a file, `content/tags/{slug}/index.{en,pl}.md`. `npm run generate` creates the missing ones with empty frontmatter and never changes existing files; `prebuild` and the pre-commit hook run it, and the hook stages the new files. To describe a tag, add `description` to its frontmatter: it is shown below the heading and used as the page's meta description. An intro below the frontmatter replaces that sentence on the page. Both are optional. A language without a description uses `tags.defaultDescription`; descriptions do not fall back to the other language.
 
-```json
-"descriptions": {
-  "event-sourcing": "Learn Event Sourcing from the fundamentals to production."
-}
+```markdown
+---
+description: 'Event Sourcing stores what happened instead of overwriting state.'
+---
 ```
 
 Former `/category/` URLs redirect permanently to the tag pages, and `/{en,pl}/category/` to the guides. Run `npm run build`, `npm run test:file -- tests/articles/tags.generated.test.ts` and inspect `/en/articles/tag/event-sourcing/` and `/pl/articles/tag/event-sourcing/`.

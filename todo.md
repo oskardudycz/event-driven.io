@@ -540,3 +540,13 @@ Further TSX lint-fixture redesign, new contact form, Giscus/custom guest comment
 - [x] Resolved 2026-10-18 by per-template stylesheets and component ownership; the import reorder is dropped. Original note: existing extraction issue remains unresolved by this review: the pre-existing uncommitted `TagTemplate` change reorders Bodytext before Blog to influence extraction. The documented routing/presentation dependency remains; follow the reproduced-cause approach in `docs/gatsby-css-review.md`, preserving CSS ownership. Historical warnings were not reproduced with a fresh production build in this review.
 
 No fresh full-site build/E2E, hosted CI or deployment results are claimed for this review.
+
+## Generated tag files and pre-commit content checks evidence (2026-11-09)
+
+- [x] Hosted CI run 42600099457 failed on missing `content/tags/{modelling,event-storming}/index.{en,pl}.md`. The changed tag test reproduced it locally before the generator existed.
+- [x] `scripts/generate-tag-files.int.test.ts` (3 tests) covers new tags per language, English-only posts and unchanged existing files. `npm run generate` created exactly the four files.
+- [x] The tag test helper read empty frontmatter (`---\n---\n`) as a YAML error; it now treats it as empty, matching Astro's parser.
+- [x] Pre-commit hook verified in a scratch clone: it created and staged the four tag files and `public/llms.txt`, passed lint-staged and `test:content` (4 tests, about 2s), and exited 1 when a post's tags differed between languages.
+- [x] Local: lint, typecheck (291 files, 0 errors/warnings/hints), `check:edit` (91 unit, 152 integration), build (778 pages), `test:generated` (73 tests). The empty generated tag pages use `tags.defaultDescription`.
+- [ ] The build warns that `content/newsletter-pl` (ignored imported content) has no files; this predates the change.
+- [ ] Hosted CI and deployment not yet run.

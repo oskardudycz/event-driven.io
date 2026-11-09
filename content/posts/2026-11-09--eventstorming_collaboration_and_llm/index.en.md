@@ -9,8 +9,6 @@ author: oskar dudycz
 
 ---
 
-![cover](2026-11-09-explains-all.png)
-
 It’s interesting how things change; for many years, Alberto Brandolini said the best way to do remote EventStorming is to buy a plane ticket. But then COVID happened; now the advent of LLMs has happened. First, we were thinking about how to avoid face-to-face collaboration in favour of remote; now, we’re trying to avoid collaboration with fellow humans entirely. No, I don’t count chatting with GPT as collaboration. It’s more like sitting inside our own heads.
 
 If we’re just sitting inside our own heads, then even if we’re super smart, we can end up with the [local maximum](https://en.wikipedia.org/wiki/Maximum_and_minimum) at best. Diversity of thoughts, experiences and perspectives, and crunching them, then getting a feedback loop this is what makes the best range of solutions. I wrote about that, e.g. in:
