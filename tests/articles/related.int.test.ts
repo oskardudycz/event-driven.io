@@ -13,9 +13,6 @@ const slugOf = (post: PublishedDocument) => {
   return slug;
 };
 
-const findPost = (slug: string, language: string) =>
-  posts.find((post) => slugOf(post) === slug && post.language === language);
-
 test('related articles point to existing articles other than themselves', () => {
   const slugs = new Set(posts.map(slugOf));
   const unresolved = posts.flatMap((post) =>
@@ -24,15 +21,4 @@ test('related articles point to existing articles other than themselves', () => 
       .map((slug) => `${post.route} → ${slug}`),
   );
   assert.deepEqual(unresolved, []);
-});
-
-test('related articles link back to each other in the same language', () => {
-  const missingBackReferences = posts.flatMap((post) =>
-    (post.metadata.related || []).flatMap((slug) => {
-      const target = findPost(slug, post.language);
-      if (!target || target.metadata.related?.includes(slugOf(post))) return [];
-      return [`${target.route} should list ${slugOf(post)}`];
-    }),
-  );
-  assert.deepEqual(missingBackReferences, []);
 });

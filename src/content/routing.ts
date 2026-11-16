@@ -38,36 +38,66 @@ export function articleLanguages(nodes: ArticleNode[], article: ArticleNode) {
   };
 }
 
+function findRelated(
+  nodes: ArticleNode[],
+  article: ArticleNode,
+  route: string,
+  defaultLanguage: string,
+) {
+  const candidates = nodes.filter(
+    (candidate) =>
+      candidate.id !== article.id &&
+      candidate.fields.slug === route &&
+      candidate.fields.source === article.fields.source,
+  );
+  return (
+    candidates.find(
+      ({ fields }) => fields.langKey === article.fields.langKey,
+    ) ||
+    candidates.find(
+      ({ fields, frontmatter }) =>
+        fields.langKey === defaultLanguage &&
+        !frontmatter.useDefaultLangCanonical,
+    ) ||
+    candidates.find(({ frontmatter }) => !frontmatter.useDefaultLangCanonical)
+  );
+}
+
+function routesReferencing(nodes: ArticleNode[], article: ArticleNode) {
+  const referrers = nodes.filter(
+    ({ fields, frontmatter }) =>
+      fields.source === article.fields.source &&
+      (frontmatter.related || []).some(
+        (slug) => `/${slug}/` === article.fields.slug,
+      ),
+  );
+  const newestFirst = referrers.sort((a, b) =>
+    (b.fields.prefix || '').localeCompare(a.fields.prefix || ''),
+  );
+  return new Set(newestFirst.map(({ fields }) => fields.slug));
+}
+
 export function relatedArticles(
   nodes: ArticleNode[],
   article: ArticleNode,
   defaultLanguage = 'en',
 ) {
-  return (article.frontmatter.related || []).map((slug) => {
-    const candidates = nodes.filter(
-      (candidate) =>
-        candidate.id !== article.id &&
-        candidate.fields.slug === `/${slug}/` &&
-        candidate.fields.source === article.fields.source,
-    );
-    const match =
-      candidates.find(
-        ({ fields }) => fields.langKey === article.fields.langKey,
-      ) ||
-      candidates.find(
-        ({ fields, frontmatter }) =>
-          fields.langKey === defaultLanguage &&
-          !frontmatter.useDefaultLangCanonical,
-      ) ||
-      candidates.find(
-        ({ frontmatter }) => !frontmatter.useDefaultLangCanonical,
-      );
+  const explicit = (article.frontmatter.related || []).map((slug) => {
+    const match = findRelated(nodes, article, `/${slug}/`, defaultLanguage);
     if (!match)
       throw new Error(
         `Invalid related article "${slug}" for ${article.fields.langKey}${article.fields.slug}`,
       );
     return match;
   });
+  const explicitRoutes = new Set(explicit.map(({ fields }) => fields.slug));
+  const backReferences: ArticleNode[] = [];
+  for (const route of routesReferencing(nodes, article)) {
+    if (explicitRoutes.has(route)) continue;
+    const match = findRelated(nodes, article, route, defaultLanguage);
+    if (match) backReferences.push(match);
+  }
+  return [...explicit, ...backReferences];
 }
 
 export function articleAliases(article: ArticleNode) {

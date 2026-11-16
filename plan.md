@@ -180,7 +180,7 @@ Local implementation and full validation are complete: locked installation, smok
 
 ## Editorial discovery rules
 
-Tag pages list articles newest first; recommended reading order belongs to the guides. Related articles require explicit related frontmatter and valid published targets; there is no broad tag fallback. Chronological earlier/later navigation is separate. Use genuine translations for editorial clarity without forcing visitors from Polish routes to English.
+Tag pages list articles newest first; recommended reading order belongs to the guides. Related articles require explicit related frontmatter and valid published targets; there is no broad tag fallback. Articles that list a post are appended to its related list after its own entries, newest first, without a cap, so authors do not edit older posts to link back. Chronological earlier/later navigation is separate. Use genuine translations for editorial clarity without forcing visitors from Polish routes to English.
 
 ## Content frontmatter conventions
 
